@@ -194,8 +194,8 @@ class QConv2d(AQCNNLayer):
             sys.stdout = original_stdout
 
         # Create model parameters
-        self.phi_x = 2 * np.pi * nn.Parameter(torch.rand(num_params_x))
-        self.phi_y = 2 * np.pi * nn.Parameter(torch.rand(num_params_y))
+        self.phi_x = nn.Parameter(2 * np.pi * torch.rand(num_params_x))
+        self.phi_y = nn.Parameter(2 * np.pi * torch.rand(num_params_y))
 
     def forward(self, rho, adjoint=False):
         self._check_input_shape(rho)
