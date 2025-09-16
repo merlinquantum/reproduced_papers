@@ -1,5 +1,10 @@
+"""
+Modified version of qcnn.py to more accurately reproduce the architecture from the reference paper.
+"""
+
 import io
 import math
+import random
 import re
 import sys
 from collections.abc import Generator
@@ -10,9 +15,64 @@ import sympy as sp
 import torch
 from merlin import CircuitConverter
 from merlin import build_slos_distribution_computegraph as build_slos_graph
-from perceval import catalog
-from perceval.components import Circuit, GenericInterferometer
+from perceval import (
+    BS,
+    PS,
+    Circuit,
+    GenericInterferometer,
+    InterferometerShape,
+    P,
+    catalog,
+)
 from torch import Tensor, nn
+
+
+def get_circuit(m: int, type: str = "MZI"):
+    """
+    Generate different types of quantum circuits for photonic quantum computing.
+
+    Args:
+        m: Number of modes in the circuit
+        type: Type of circuit to generate. Options are:
+            - 'MZI': Mach-Zehnder interferometer with phase shifts
+            - 'BS': Beam splitter based interferometer
+            - 'BS_random_PS': Beam splitter with random phase shifts
+            - 'paper_6modes': Specific 6-mode circuit from the paper
+
+    Returns:
+        Circuit: The generated quantum circuit
+
+    Raises:
+        ValueError: If circuit type is not recognized
+    """
+    if type == "MZI":
+        return GenericInterferometer(m, catalog["mzi phase first"].generate)
+    elif type == "BS":
+        return GenericInterferometer(
+            m,
+            lambda i: BS.Ry(theta=-2 * P(f"phi_{i}")),
+            shape=InterferometerShape.TRIANGLE,
+        )
+    elif type == "BS_random_PS":
+        return GenericInterferometer(
+            m,
+            lambda i: BS.Ry(theta=-2 * P(f"phi_{i}"))
+            // PS(phi=2 * np.pi * random.random()),
+            shape=InterferometerShape.TRIANGLE,
+        )
+    elif type == "paper_6modes":
+        c = Circuit(6)
+        c.add(2, BS.Ry(theta=-2 * P("phi_0")))
+        c.add(1, BS.Ry(theta=-2 * P("phi_1")))
+        c.add(3, BS.Ry(theta=-2 * P("phi_2")))
+        c.add(0, BS.Ry(theta=-2 * P("phi_3")))
+        c.add(2, BS.Ry(theta=-2 * P("phi_4")))
+        c.add(4, BS.Ry(theta=-2 * P("phi_5")))
+        c.add(1, BS.Ry(theta=-2 * P("phi_6")))
+        c.add(3, BS.Ry(theta=-2 * P("phi_7")))
+        return c
+    else:
+        raise ValueError(f"Unknown circuit type {type}")
 
 
 def generate_all_fock_states(m, n) -> Generator:
@@ -36,6 +96,13 @@ def generate_all_fock_states(m, n) -> Generator:
     for i in range(n + 1):
         for state in generate_all_fock_states(m - 1, n - i):
             yield (i,) + state
+
+
+def generate_all_fock_states_list(m, n, true_order=True) -> list:
+    states_list = list(generate_all_fock_states(m, n))
+    if true_order:
+        states_list.reverse()
+    return states_list
 
 
 class OneHotEncoder(nn.Module):
@@ -144,6 +211,7 @@ class QConv2d(AQCNNLayer):
         kernel_size: Size of universal interferometer.
         stride: Stride of the universal interferometer across the
             modes.
+        circuit: Circuit type to use for convolutions.
     """
 
     def __init__(
@@ -151,6 +219,7 @@ class QConv2d(AQCNNLayer):
         dims,
         kernel_size: int,
         stride: int = None,
+        circuit: str = "MZI",
     ):
         super().__init__(dims)
         self.kernel_size = kernel_size
@@ -159,9 +228,7 @@ class QConv2d(AQCNNLayer):
         # Define filters
         filters = []
         for _ in range(2):
-            filter = GenericInterferometer(
-                kernel_size, catalog["mzi phase first"].generate
-            )
+            filter = get_circuit(kernel_size, circuit)
             self._set_param_names(filter)
             filters.append(filter)
 
@@ -194,8 +261,8 @@ class QConv2d(AQCNNLayer):
             sys.stdout = original_stdout
 
         # Create model parameters
-        self.phi_x = 2 * np.pi * nn.Parameter(torch.rand(num_params_x))
-        self.phi_y = 2 * np.pi * nn.Parameter(torch.rand(num_params_y))
+        self.phi_x = nn.Parameter(2 * np.pi * torch.rand(num_params_x))
+        self.phi_y = nn.Parameter(2 * np.pi * torch.rand(num_params_y))
 
     def forward(self, rho, adjoint=False):
         self._check_input_shape(rho)
@@ -405,13 +472,38 @@ class QDense(AQCNNLayer):
         m (int | list[int]): Size of the dense layers placed in
             succession. If `None`, a single universal dense layer is
             applied.
+        circuit (str): Circuit type to use in dense layer.
+        add_modes (int): Number of modes to add to the dense layer.
     """
 
-    def __init__(self, dims, m: Union[int, list[int]] = None, device=None):
+    def __init__(
+        self,
+        dims,
+        m: Union[int, list[int]] = None,
+        circuit: str = "MZI",
+        add_modes: int = 0,
+        device=None,
+    ):
         super().__init__(dims)
+        self.dims = dims
+        self.add_modes = add_modes
+
+        # Even number of modes to add
+        if add_modes % 2 == 0 and add_modes > 0:
+            insertion_x = [-i for i in range(int(add_modes / 2))]
+            insertion_y = [i - 1 + self.dims[0] * 2 for i in range(int(add_modes / 2))]
+            insertion = insertion_x + insertion_y
+            self.add_modes_layer = _InsertMainModes(self.dims, insertion)
+            self.dims = (
+                self.dims[0] + len(insertion_x),
+                self.dims[1] + len(insertion_y),
+            )
+        # Odd number of modes to add
+        elif add_modes != 0:
+            raise NotImplementedError("Asymmetric insertions not supported yet.")
 
         self.device = device
-        m = m if m is not None else sum(dims)
+        m = m if m is not None else sum(self.dims)
         self.m = [m]
 
         # Construct circuit and circuit graph
@@ -419,7 +511,11 @@ class QDense(AQCNNLayer):
 
         self.circuit = Circuit(max(self.m))
         for m in self.m:
-            gi = GenericInterferometer(m, catalog["mzi phase first"].generate)
+            # Implement the same circuit from the paper if the conditions meet
+            if circuit == "BS" and add_modes == 2 and m == 6:
+                circuit = "paper_6modes"
+
+            gi = get_circuit(m, circuit)
             self._set_param_names(gi)
             self.circuit.add(0, gi)
 
@@ -433,10 +529,10 @@ class QDense(AQCNNLayer):
 
         # Set up input states & SLOS graphs
         self._input_states = [
-            tuple(int(i == x) for i in range(dims[0]))
-            + tuple(int(i == y) for i in range(dims[1]))
-            for x in range(dims[1])
-            for y in range(dims[0])
+            tuple(int(i == x) for i in range(self.dims[0]))
+            + tuple(int(i == y) for i in range(self.dims[1]))
+            for x in range(self.dims[1])
+            for y in range(self.dims[0])
         ]
 
         self._slos_graph = build_slos_graph(
@@ -451,8 +547,11 @@ class QDense(AQCNNLayer):
         self.phi = nn.Parameter(2 * np.pi * torch.rand(num_params))
 
     def forward(self, rho):
-        self._check_input_shape(rho)
+        # Add modes
+        if self.add_modes != 0:
+            rho = self.add_modes_layer(rho)
         b = len(rho)
+        self._check_input_shape(rho)
 
         # Run SLOS & extract amplitudes.
         unitary = self._circuit_graph.to_tensor(self.phi)
@@ -509,14 +608,25 @@ class Measure(nn.Module):
         self.subset = subset
 
         if subset is not None:
-            all_states = list(generate_all_fock_states(m, 2))
+            all_states = generate_all_fock_states_list(m, n, true_order=True)
             reduced_states = []
             for i in range(n + 1):
-                reduced_states += list(generate_all_fock_states(subset, i))
+                reduced_states += generate_all_fock_states_list(
+                    subset, i, true_order=True
+                )
 
-            self.indices = torch.tensor(
-                [reduced_states.index(state[:subset]) for state in all_states]
-            )
+            # To reproduce paper, measure from center if 6 modes and measure from start otherwise
+            if m == 6:
+                self.indices = torch.tensor(
+                    [
+                        reduced_states.index(state[2 : 2 + subset])
+                        for state in all_states
+                    ]
+                )
+            else:
+                self.indices = torch.tensor(
+                    [reduced_states.index(state[:subset]) for state in all_states]
+                )
 
     def forward(self, rho):
         b = len(rho)
@@ -524,8 +634,11 @@ class Measure(nn.Module):
 
         if self.subset is not None:
             indices = self.indices.unsqueeze(0).expand(b, -1)
+            # Keep output of size (batch_size, subset_states_length)
             probs_output = torch.zeros(
-                indices.shape, device=probs.device, dtype=probs.dtype
+                (b, len(torch.unique(self.indices))),
+                device=probs.device,
+                dtype=probs.dtype,
             )
             probs_output.scatter_add_(dim=1, index=indices, src=probs)
             return probs_output
@@ -599,10 +712,11 @@ class _InsertMainModes(torch.nn.Module):
         f_flat = f_grid.flatten()
         h_flat = h_grid.flatten()
 
-        # Repeat i, j, l, m to match the flattened channel meshgrid size
+        # Repeat i, j, m, n to match the flattened channel meshgrid size
         i = i.repeat(len(h))
         j = j.repeat(len(h))
         m = m.repeat_interleave(len(f))
+        n = n.repeat_interleave(len(f))
 
         # Calculate new density matrix coordinates
         self._new_x = i * self._new_d + j + f_flat * self._new_d**2
@@ -613,7 +727,6 @@ class _InsertMainModes(torch.nn.Module):
         self._mask_coords = (x_flat, y_flat)
 
     def forward(self, rho):
-        # Create batch indices
         b = len(rho)
         b_indices = torch.arange(b).repeat_interleave(len(self._new_x))
 
