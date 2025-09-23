@@ -1,0 +1,23 @@
+name: Enforce version-only PRs to main
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+    branches: [main]
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR source branch pattern
+        run: |
+          ALLOWED_REGEX='^(release-*)$'
+          echo "Base: ${GITHUB_BASE_REF} | Head: ${GITHUB_HEAD_REF}"
+          if [[ "${GITHUB_BASE_REF}" == "main" ]]; then
+            if [[ "${GITHUB_HEAD_REF}" =~ ${ALLOWED_REGEX} ]]; then
+              echo "✅ Allowed source branch."
+            else
+              echo "❌ Only release branches matching ${ALLOWED_REGEX} may target main."
+              exit 1
+            fi
+          fi
