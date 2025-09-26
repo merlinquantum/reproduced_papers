@@ -10,15 +10,16 @@ __pycache__/
 # Jupyter
 .ipynb_checkpoints/
 *.ipynb
+!notebook.ipynb
 
 # Data, models & outputs
-/data/
+/data/*
 !data/.gitkeep
-/models/
+/models/*
 !models/.gitkeep
-/results/
+/results/*
 !results/.gitkeep
-/outdir/
+/outdir/*
 !outdir/.gitkeep
 
 # Logs & temp
