@@ -1,0 +1,9 @@
+merlinquantum
+torch
+torchvision
+tqdm
+matplotlib
+torchsummary
+qiskit
+qiskit-aer
+numpy

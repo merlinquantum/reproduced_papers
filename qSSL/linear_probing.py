@@ -10,10 +10,10 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
-from data_utils import load_finetuning_data
-from model import QSSL
+from lib.data_utils import load_finetuning_data
+from lib.model import QSSL
+from lib.training_utils import linear_evaluation
 from torchsummary import summary
-from training_utils import linear_evaluation
 
 # Command-line argument parser for configuring the experiment
 parser = argparse.ArgumentParser(description="PyTorch Quantum self-sup training")
