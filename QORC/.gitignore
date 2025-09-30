@@ -1,0 +1,27 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+.venv/
+.env/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Data, models & outputs
+/data/
+!data/.gitkeep
+/models/
+!models/.gitkeep
+/results/
+!results/.gitkeep
+/outdir/
+!outdir/.gitkeep
+
+# Logs & temp
+logs/
+*.log
+.DS_Store
