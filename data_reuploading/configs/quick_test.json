@@ -1,0 +1,28 @@
+{
+  "seed": 42,
+  "outdir": "results",
+  "device": "cpu",
+  "dataset": {
+    "name": "circles",
+    "batch_size": 400,
+    "train_size": 400,
+    "test_size": 100
+  },
+  "experiment": {
+    "type": "figure_5",
+    "dataset": "circles",
+    "alpha": 0.31415926535897934,
+    "tau": 1.0,
+    "max_layers": 3,
+    "repetitions": 1
+  },
+  "training": {
+    "epochs": 100,
+    "lr": 0.001,
+    "patience": 50
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

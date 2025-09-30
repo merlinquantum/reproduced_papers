@@ -1,0 +1,29 @@
+{
+  "seed": 42,
+  "outdir": "results",
+  "device": "cpu",
+  "dataset": {
+    "name": "overhead",
+    "batch_size": 1776,
+    "train_size": 1776,
+    "test_size": 222
+  },
+  "experiment": {
+    "type": "figure_5",
+    "dataset": "overhead",
+    "alpha": 0.31415926535897934,
+    "tau": 1.0,
+    "max_layers": 4,
+    "min_layers": 4,
+    "repetitions": 5
+  },
+  "training": {
+    "epochs": 10000,
+    "lr": 0.001,
+    "patience": 1000
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

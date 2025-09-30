@@ -1,0 +1,28 @@
+{
+  "seed": 42,
+  "outdir": "results",
+  "device": "cpu",
+  "dataset": {
+    "name": "moons",
+    "batch_size": 400,
+    "train_size": 400,
+    "test_size": 100
+  },
+  "experiment": {
+    "type": "design_benchmark",
+    "dataset": "moons",
+    "alpha": 0.31415926535897934,
+    "tau": 1.0,
+    "depths": [1, 2, 3, 4, 5],
+    "designs": ["AA", "AB", "AC", "BA", "BB", "BC", "CA", "CB", "CC"]
+  },
+  "training": {
+    "epochs": 10000,
+    "lr": 0.001,
+    "patience": 1000
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}
