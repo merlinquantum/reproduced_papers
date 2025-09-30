@@ -17,6 +17,7 @@
     "__f_in_test": "./data/fashion-mnist_test.csv",
 
     "b_get_keras_mnist" : false,
+    "__b_get_keras_mnist" : true,
 
     "n_fold": 5,
     "fold_index": 0,
@@ -56,6 +57,8 @@
     "pin_memory": false,
 
     "f_out_weights": "f_weights_out.pth",
+    "__f_out_results_training_csv" : "f_out_results_training.csv",
+    "f_out_results_training_csv" : "",
 
     "__b_no_bunching" : false,
     "b_no_bunching" : true,
@@ -63,8 +66,8 @@
     "b_use_tensorboard": false,
     "__b_use_tensorboard": true,
 
-    "__device_name": "cuda:0",
-    "device_name": "cpu",
+    "__device": "cuda:0",
+    "device": "cpu",
 
     "outdir" : "outdir"
 }

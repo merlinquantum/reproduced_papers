@@ -1,0 +1,27 @@
+{
+    "__n_photons" : 2,
+    "__n_photons" : 3,
+    "__n_photons" : 4,
+    "n_photons" : [2, 3],
+
+    "n_modes"   : 10,
+    "__n_modes"   : 12,
+    "__n_modes"   : 20,
+
+    "seed" : 42,
+
+    "fold_index": 0,
+
+    "n_epochs": 2,
+    "__n_epochs": 10,
+    "__n_epochs": 100,
+    "__n_epochs": 1000,
+
+    "batch_size": 100,
+    "__batch_size": 1000,
+    "__batch_size": 10000,
+    "__batch_size": 60000,
+
+    "f_out_results_training_csv" : "f_out_results_training.csv",
+    "__f_out_results_training_csv" : ""
+}
