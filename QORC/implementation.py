@@ -10,6 +10,7 @@ CLI entry-point for the quantum reservoir article
 # $ micromamba activate qml-cpu
 # $ python implementation.py
 # $ python implementation.py --epochs 100 --batch-size 100 --learning-rate 0.05 --seed 42 --n-photons 3 --n-modes 12 --b-no-bunching False
+# $ python implementation.py --config configs/overloading.json
 
 
 ##########################################################
@@ -23,11 +24,14 @@ import json
 import logging
 import os
 from pathlib import Path
+from typing import List
 
 from lib.config import deep_update, load_config
 
 from lib.lib_qorc_encoding_and_linear_training import qorc_encoding_and_linear_training
 from lib.lib_datasets import download_and_save_mnist_with_keras_if_missing_files
+
+import pandas as pd
 
 
 def configure_logging(level: str = "info", log_file: Path | None = None) -> None:
@@ -81,10 +85,12 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--epochs", type=int, default=None)
     p.add_argument("--batch-size", type=int, default=None)
     p.add_argument("--learning-rate", type=float, default=None)
-    p.add_argument("--seed", type=int, help="Random seed", default=None)
 
     p.add_argument("--n-photons", type=int, default=None)
     p.add_argument("--n-modes", type=int, default=None)
+    p.add_argument("--seed", type=int, help="Random seed", default=None)
+    p.add_argument("--fold-index", type=int, default=None)
+
     p.add_argument("--b-no-bunching", type=bool, default=None)
 
     return p
@@ -139,38 +145,156 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         download_and_save_mnist_with_keras_if_missing_files(
             cfg["f_in_train"], cfg["f_in_test"], logger
         )
+    
+    n_photons  = cfg["n_photons"]
+    n_modes    = cfg["n_modes"]
+    seed       = cfg["seed"]
+    fold_index = cfg["fold_index"]
 
-    outputs = qorc_encoding_and_linear_training(
-        # Main parameters
-        n_photons=cfg["n_photons"],
-        n_modes=cfg["n_modes"],
-        seed=cfg["seed"],
-        # Dataset parameters
-        f_in_train=cfg["f_in_train"],
-        f_in_test=cfg["f_in_test"],
-        fold_index=cfg["fold_index"],
-        n_fold=cfg["n_fold"],
-        n_pixels=cfg["n_pixels"],
-        n_outputs=cfg["n_outputs"],
-        # Training parameters
-        n_epochs=cfg["n_epochs"],
-        batch_size=cfg["batch_size"],
-        learning_rate=cfg["learning_rate"],
-        reduce_lr_patience=cfg["reduce_lr_patience"],
-        reduce_lr_factor=cfg["reduce_lr_factor"],
-        num_workers=cfg["num_workers"],
-        pin_memory=cfg["pin_memory"],
-        f_out_weights=cfg["f_out_weights"],
-        # Other parameters
-        b_no_bunching=cfg["b_no_bunching"],
-        b_use_tensorboard=cfg["b_use_tensorboard"],
-        device_name=cfg["device_name"],
-        run_dir=run_dir,
-        logger=logger,
-    )
+    # Run with 4 loops over photons, modes, seed, fold
+    if (   isinstance(fold_index, List) \
+        or isinstance(seed, List) \
+        or isinstance(n_photons, List) \
+        or isinstance(n_modes, List)):
 
-    (run_dir / "done.txt").write_text(str(outputs))
-    logger.info("Written file: %s", run_dir / "done.txt")
+        logger.info("Entering loop training over fold/seed/photons/modes:")
+        f_out_results_training_csv = cfg["f_out_results_training_csv"]
+        assert len(f_out_results_training_csv) > 0, "Error: Empty f_out_results_training_csv"
+        f_out_results_training_csv = os.path.join(run_dir, f_out_results_training_csv)
+
+        if (not isinstance(fold_index, List)):
+            fold_index = [fold_index]
+
+        if (not isinstance(seed, List)):
+            seed = [seed]
+
+        if (not isinstance(n_photons, List)):
+            n_photons = [n_photons]
+
+        if (not isinstance(n_modes, List)):
+            n_modes = [n_modes]
+
+        # Structure to be fed
+        df = pd.DataFrame()
+        for i,current_fold_index in enumerate(fold_index):
+            for j,current_seed in enumerate(seed):
+                for k,current_n_photons in enumerate(n_photons):
+                    for l,current_n_modes in enumerate(n_modes):
+                        logger.info("loop index: fold {}/{}, seed {}/{}, n_photons {}/{}, n_modes {}/{}".format(
+                            i + 1,
+                            len(fold_index),
+                            j + 1,
+                            len(seed),
+                            k + 1,
+                            len(n_photons),
+                            l + 1,
+                            len(n_modes)
+                            )
+                        )
+
+                        logger.info("values: fold {}, seed {}, n_photons {}, n_modes {}".format(
+                            current_fold_index,
+                            current_seed,
+                            current_n_photons,
+                            current_n_modes
+                            )
+                        )
+
+                        # Sigle run per iteration
+                        [train_acc,
+                        val_acc,
+                        test_acc,
+                        qorc_output_size,
+                        n_train_epochs,
+                        duration_qfeatures,
+                        duration_train,
+                        best_val_epoch] = qorc_encoding_and_linear_training(
+                                    # Main parameters
+                                    n_photons=current_n_photons,
+                                    n_modes=current_n_modes,
+                                    seed=current_seed,
+                                    # Dataset parameters
+                                    f_in_train=cfg["f_in_train"],
+                                    f_in_test=cfg["f_in_test"],
+                                    fold_index=current_fold_index,
+                                    n_fold=cfg["n_fold"],
+                                    n_pixels=cfg["n_pixels"],
+                                    n_outputs=cfg["n_outputs"],
+                                    # Training parameters
+                                    n_epochs=cfg["n_epochs"],
+                                    batch_size=cfg["batch_size"],
+                                    learning_rate=cfg["learning_rate"],
+                                    reduce_lr_patience=cfg["reduce_lr_patience"],
+                                    reduce_lr_factor=cfg["reduce_lr_factor"],
+                                    num_workers=cfg["num_workers"],
+                                    pin_memory=cfg["pin_memory"],
+                                    f_out_weights=cfg["f_out_weights"],
+                                    # Other parameters
+                                    b_no_bunching=cfg["b_no_bunching"],
+                                    b_use_tensorboard=cfg["b_use_tensorboard"],
+                                    device_name=cfg["device"],
+                                    run_dir=run_dir,
+                                    logger=logger,
+                                )
+
+                        # Save outputs in the dataFrame and then save the current dataframe
+                        output_fields = {
+                            "n_photons": current_n_photons,
+                            "n_modes": current_n_modes,
+                            "seed": current_seed,
+                            "fold_index": current_fold_index,
+                            "train_acc": train_acc,
+                            "val_acc": val_acc,
+                            "test_acc": test_acc,
+                            "qorc_output_size": qorc_output_size,
+                            "n_train_epochs": n_train_epochs,
+                            "duration_qfeatures": duration_qfeatures,
+                            "duration_train": duration_train,
+                            "best_val_epoch": best_val_epoch,
+                        }
+                        df_line = pd.DataFrame([output_fields])
+
+                        if df.empty:
+                            df = df_line
+                        else:
+                            df = pd.concat([df, df_line], ignore_index=True)
+                        df.to_csv(f_out_results_training_csv, index=False)
+                        logger.info("Written file: %s", f_out_results_training_csv)
+
+        
+    else:
+        # Single run
+        outputs = qorc_encoding_and_linear_training(
+            # Main parameters
+            n_photons=cfg["n_photons"],
+            n_modes=cfg["n_modes"],
+            seed=cfg["seed"],
+            # Dataset parameters
+            f_in_train=cfg["f_in_train"],
+            f_in_test=cfg["f_in_test"],
+            fold_index=cfg["fold_index"],
+            n_fold=cfg["n_fold"],
+            n_pixels=cfg["n_pixels"],
+            n_outputs=cfg["n_outputs"],
+            # Training parameters
+            n_epochs=cfg["n_epochs"],
+            batch_size=cfg["batch_size"],
+            learning_rate=cfg["learning_rate"],
+            reduce_lr_patience=cfg["reduce_lr_patience"],
+            reduce_lr_factor=cfg["reduce_lr_factor"],
+            num_workers=cfg["num_workers"],
+            pin_memory=cfg["pin_memory"],
+            f_out_weights=cfg["f_out_weights"],
+            # Other parameters
+            b_no_bunching=cfg["b_no_bunching"],
+            b_use_tensorboard=cfg["b_use_tensorboard"],
+            device_name=cfg["device"],
+            run_dir=run_dir,
+            logger=logger,
+        )
+
+        (run_dir / "done.txt").write_text(str(outputs))
+        logger.info("Written file: %s", run_dir / "done.txt")
 
 
 def main(argv: list[str] | None = None) -> int:
