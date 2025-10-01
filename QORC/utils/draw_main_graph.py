@@ -15,27 +15,24 @@ import pandas as pd
 # - File -> Read it as a csv file
 # - Folder -> Aggregate results from subfolders csv file
 # Return: A dataframe containing the results
-def gather_results_csv_files_in_dataframe(f_in_csv_or_outdir):
-    df_result = None
-    if os.path.isfile(f_in_csv_or_outdir):
-        df_result = pd.read_csv(f_in_csv_or_outdir)
-    elif os.path.isdir(f_in_csv_or_outdir):
-        dataframes = []
-        for root, _dirs, files in os.walk(f_in_csv_or_outdir):
-            for file in files:
-                if "f_out_results_training" in file:
-                    filepath = os.path.join(root, file)
-                    df = pd.read_csv(filepath)
-                    dataframes.append(df)
-        if dataframes:
-            df_result = pd.concat(dataframes, ignore_index=True)
-            df_result = df_result.drop_duplicates()
-
-    return df_result
+def aggregate_results_csv_files(outdir, f_out_aggregated_csv):
+    dataframes = []
+    for root, _dirs, files in os.walk(outdir):
+        for file in files:
+            if "f_out_results_training" in file:
+                filepath = os.path.join(root, file)
+                df = pd.read_csv(filepath)
+                dataframes.append(df)
+    if dataframes:
+        df_result = pd.concat(dataframes, ignore_index=True)
+        df_result = df_result.drop_duplicates()
+        df_result = df_result.sort_values(by=df_result.columns.tolist())
+        df_result.to_csv(f_out_aggregated_csv, index=False)
+        print("Saved aggregated results to csv:", f_out_aggregated_csv)
 
 
 def draw_main_graph(
-    df,
+    f_in_aggregated_results_csv,
     figsize_list,
     b_train_acc,
     b_test_acc,
@@ -45,6 +42,8 @@ def draw_main_graph(
     y_max,
     f_out_img,
 ):
+    df = pd.read_csv(f_in_aggregated_results_csv)
+
     disk_size_ratio = 0.5
     legend_disk_size_list = [800, 1600, 2400, 3200, 4000, 4800]
     figsize = (figsize_list[0], figsize_list[1])
@@ -156,12 +155,10 @@ def draw_main_graph(
 # Main script
 
 if __name__ == "__main__":
-    # f_in_stats= "outdir/run_f_out_results_training_aggrege.csv"
-    # df = gather_results_csv_files_in_dataframe(f_in_stats)
-
-    # outdir= "outdir"
+    #outdir = "outdir"
     outdir = "outdir_ScaleWay/"
-    df = gather_results_csv_files_in_dataframe(outdir)
+    f_in_aggregated_results_csv = "results/f_out_results_training.csv"
+    aggregate_results_csv_files(outdir, f_in_aggregated_results_csv)
 
     f_out_img = "results/main_graph.png"
 
@@ -176,7 +173,7 @@ if __name__ == "__main__":
     [y_min, y_max] = [0.92, 1.0]
 
     draw_main_graph(
-        df,
+        f_in_aggregated_results_csv,
         figsize_list,
         b_train_acc,
         b_test_acc,
