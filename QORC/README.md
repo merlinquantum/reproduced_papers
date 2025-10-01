@@ -21,17 +21,6 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Install MNIST dataset
-
-* Using keras: Run the main script `implementation.py` with parameter `b_get_keras_mnist = True`
-
-* External download: Get the MNIST csv files from [Kaggle](https://www.kaggle.com/datasets/oddrationale/mnist-in-csv) and place them in the data folder:
-
-```
-/data/mnist_train.csv
-/data/mnist_test.csv
-```
-
 ### Command-line interface
 
 Main entry point: `implementation.py`
