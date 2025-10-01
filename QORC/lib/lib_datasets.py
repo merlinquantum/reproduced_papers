@@ -1,14 +1,11 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-import os
 import random
 import numpy as np
 
 import torch
 from torch.utils.data import Dataset
-
-import pandas as pd
 
 
 class tensor_dataset(Dataset):
@@ -68,14 +65,6 @@ def get_dataloader(dataset, batch_size, shuffle, num_workers, pin_memory, seed=4
     )
 
 
-def load_mnist_csv_to_numpy(f_in_csv):
-    df = pd.read_csv(f_in_csv)
-    label = df["label"].values.astype(np.int64)  # NumPy array pour les labels
-    pixel_columns = [col for col in df.columns if col.startswith("pixel")]
-    data = df[pixel_columns].values.astype(np.float32) / 255.0  # NumPy array for data
-    return label, data
-
-
 def split_fold_numpy(label, data, n_fold, fold_index, split_seed=-1):
     if split_seed >= 0:
         np.random.seed(split_seed)
@@ -93,40 +82,3 @@ def split_fold_numpy(label, data, n_fold, fold_index, split_seed=-1):
         label[train_indices],
         data[train_indices],
     )
-
-
-def download_and_save_mnist_with_keras_if_missing_files(
-    f_out_train, f_out_test, logger
-):
-    # Extra dependacy to keras
-    from keras.datasets import mnist
-
-    if os.path.exists(f_out_train) and os.path.exists(f_out_test):
-        return
-
-    logger.info("Load mnist data with Keras and save them as csv.")
-    os.makedirs(os.path.dirname(f_out_train), exist_ok=True)
-
-    # Load MNIST data
-    (
-        (mnist_train_features, mnist_train_labels),
-        (mnist_test_features, mnist_test_labels),
-    ) = mnist.load_data()
-
-    # Flatten images (28x28 -> 784)
-    mnist_train_features = mnist_train_features.reshape(-1, 784)
-    mnist_test_features = mnist_test_features.reshape(-1, 784)
-
-    # Store as pandas dataframes
-    columns = ["label"] + [f"pixel{i}" for i in range(1, 785)]
-    mnist_val_train = pd.DataFrame(
-        np.column_stack((mnist_train_labels, mnist_train_features)), columns=columns
-    )
-    mnist_test = pd.DataFrame(
-        np.column_stack((mnist_test_labels, mnist_test_features)), columns=columns
-    )
-
-    # Save as CSV
-    mnist_val_train.to_csv(f_out_train, index=False, header=True)
-    mnist_test.to_csv(f_out_test, index=False, header=True)
-    logger.info("Saved files: {}, {}".format(f_out_train, f_out_test))

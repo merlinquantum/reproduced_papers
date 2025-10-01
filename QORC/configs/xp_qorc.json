@@ -9,11 +9,6 @@
     "f_out_results_training_csv" : "f_out_results_training.csv",
     "device": "cpu",
 
-    "f_in_train": "./data/mnist_train.csv",
-    "f_in_test": "./data/mnist_test.csv",
-
-    "b_get_keras_mnist" : false,
-
     "n_fold": 5,
     "n_pixels": 784,
     "n_outputs": 10,

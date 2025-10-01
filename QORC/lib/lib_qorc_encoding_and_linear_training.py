@@ -13,11 +13,11 @@ import torch.nn as nn
 
 import perceval as pcvl
 import merlin as ML
+from merlin.datasets.mnist_digits import get_data_train_original, get_data_test_original
 
 from lib.lib_datasets import (
     tensor_dataset,
     get_dataloader,
-    load_mnist_csv_to_numpy,
     split_fold_numpy,
 )
 from lib.lib_learning import get_device, model_eval, model_fit
@@ -95,8 +95,6 @@ def qorc_encoding_and_linear_training(
     n_modes,
     seed,
     # Dataset parameters
-    f_in_train,
-    f_in_test,
     fold_index,
     n_fold,
     n_pixels,
@@ -139,13 +137,18 @@ def qorc_encoding_and_linear_training(
     )
     time_t1 = time.time()
 
-    logger.info("Loading MNIST csv files...")
-    val_train_label, val_train_data = load_mnist_csv_to_numpy(f_in_train)
+    logger.info("Loading MNIST data...")
+    val_train_data, val_train_label, _ = get_data_train_original()
+    val_train_data = (
+        val_train_data.reshape(val_train_data.shape[0], -1).astype(np.float32) / 255.0
+    )
+
     val_label, val_data, train_label, train_data = split_fold_numpy(
         val_train_label, val_train_data, n_fold, fold_index, split_seed=run_seed
     )
 
-    test_label, test_data = load_mnist_csv_to_numpy(f_in_test)
+    test_data, test_label, _ = get_data_test_original()
+    test_data = test_data.reshape(test_data.shape[0], -1).astype(np.float32) / 255.0
 
     logger.info("Datasets sizes:")
     logger.info(train_label.shape)  # (48000,)
