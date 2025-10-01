@@ -86,6 +86,10 @@ Place configuration files in `configs/`.
 
 ## Results and Analysis
 
+Main graph exposing quantum reservoir performances (test accuracy) on MNIST.
+
+![MNIST quantum reservoir performances](results/main_graph.png)
+
 ## Extensions and Next Steps
 
 ## Reproducibility Notes
