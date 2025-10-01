@@ -227,13 +227,25 @@ def qorc_encoding_and_linear_training(
 
     dtype = torch.float32
     all_train_data = torch.cat(
-        (torch.tensor(train_data, dtype=dtype, device=compute_device), train_data_qorc_norm), dim=1
+        (
+            torch.tensor(train_data, dtype=dtype, device=compute_device),
+            train_data_qorc_norm,
+        ),
+        dim=1,
     )
     all_val_data = torch.cat(
-        (torch.tensor(val_data, dtype=dtype, device=compute_device), val_data_qorc_norm), dim=1
+        (
+            torch.tensor(val_data, dtype=dtype, device=compute_device),
+            val_data_qorc_norm,
+        ),
+        dim=1,
     )
     all_test_data = torch.cat(
-        (torch.tensor(test_data, dtype=dtype, device=compute_device), test_data_qorc_norm), dim=1
+        (
+            torch.tensor(test_data, dtype=dtype, device=compute_device),
+            test_data_qorc_norm,
+        ),
+        dim=1,
     )
 
     ####################################################

@@ -2,7 +2,6 @@
 
 # $ micromamba activate qml-cpu
 # $ python utils/draw_main_graph.py
-# $ scp -r root@51.159.162.193:/home/ubuntu/workarea/pipeline_generique/1_sources/3_scripts/version_reproduced_papers/Git/reproduced_papers/QORC/outdir outdir_ScaleWay
 
 ##########################################################
 # Librairies loading and functions definitions
@@ -46,7 +45,6 @@ def draw_main_graph(
     y_max,
     f_out_img,
 ):
-
     disk_size_ratio = 0.5
     legend_disk_size_list = [800, 1600, 2400, 3200, 4000, 4800]
     figsize = (figsize_list[0], figsize_list[1])
@@ -55,50 +53,71 @@ def draw_main_graph(
     s_qorc_output_size_name = "qorc_output_size"
 
     # Compute avg and StDev per couple (n_photons, n_modes)
-    grouped = df.groupby(['n_photons', 'n_modes']).agg(
-        mean_train_acc=('train_acc', 'mean'),
-        std_train_acc=('train_acc', 'std'),
-        mean_test_acc=('test_acc', 'mean'),
-        std_test_acc=('test_acc', 'std'),
-        mean_qorc_output_size=('qorc_output_size', 'mean')
-    ).reset_index()
+    grouped = (
+        df.groupby(["n_photons", "n_modes"])
+        .agg(
+            mean_train_acc=("train_acc", "mean"),
+            std_train_acc=("train_acc", "std"),
+            mean_test_acc=("test_acc", "mean"),
+            std_test_acc=("test_acc", "std"),
+            mean_qorc_output_size=("qorc_output_size", "mean"),
+        )
+        .reset_index()
+    )
 
     plt.figure(figsize=figsize)
 
     # train_acc curves
     if b_train_acc:
-        for i, n_photon in enumerate(grouped['n_photons'].unique()):
-            subset = grouped[grouped['n_photons'] == n_photon]
+        for i, n_photon in enumerate(grouped["n_photons"].unique()):
+            subset = grouped[grouped["n_photons"] == n_photon]
             color = colors[i % len(colors)]
-            marker='o'
-            plt.errorbar(subset['n_modes'], subset['mean_train_acc'],
-                        yerr=subset['std_train_acc'],
-                        marker=marker, color=color, label=f'Train Acc (n_photons={n_photon})', linestyle='-',
-                        capsize=5)
+            marker = "o"
+            plt.errorbar(
+                subset["n_modes"],
+                subset["mean_train_acc"],
+                yerr=subset["std_train_acc"],
+                marker=marker,
+                color=color,
+                label=f"Train Acc (n_photons={n_photon})",
+                linestyle="-",
+                capsize=5,
+            )
 
     # test_acc curves
     if b_test_acc:
-        for i, n_photon in enumerate(grouped['n_photons'].unique()):
-            subset = grouped[grouped['n_photons'] == n_photon]
+        for i, n_photon in enumerate(grouped["n_photons"].unique()):
+            subset = grouped[grouped["n_photons"] == n_photon]
             color = colors[i % len(colors)]
-            marker='o'
-            plt.errorbar(subset['n_modes'], subset['mean_test_acc'],
-                        yerr=subset['std_test_acc'],
-                        marker=marker, color=color, label=f'Test Acc (n_photons={n_photon})', linestyle='--',
-                        capsize=5)
+            marker = "o"
+            plt.errorbar(
+                subset["n_modes"],
+                subset["mean_test_acc"],
+                yerr=subset["std_test_acc"],
+                marker=marker,
+                color=color,
+                label=f"Test Acc (n_photons={n_photon})",
+                linestyle="--",
+                capsize=5,
+            )
 
         for _, row in grouped.iterrows():
-            n_photon = row['n_photons']
-            i = list(grouped['n_photons'].unique()).index(n_photon)
+            n_photon = row["n_photons"]
+            i = list(grouped["n_photons"].unique()).index(n_photon)
             color = colors[i % len(colors)]
-            plt.scatter(row['n_modes'], row['mean_test_acc'],
-                        s=row['mean_qorc_output_size'] * disk_size_ratio,
-                        color=color, alpha=0.15, edgecolors='none')
+            plt.scatter(
+                row["n_modes"],
+                row["mean_test_acc"],
+                s=row["mean_qorc_output_size"] * disk_size_ratio,
+                color=color,
+                alpha=0.15,
+                edgecolors="none",
+            )
 
     # Configure graph
-    plt.xscale('log')
-    plt.xlabel('n_modes (log scale)')
-    plt.ylabel('Accuracy')
+    plt.xscale("log")
+    plt.xlabel("n_modes (log scale)")
+    plt.ylabel("Accuracy")
     s_title = "Accuracy vs n_modes"
     if b_test_acc:
         s_title = "Test " + s_title
@@ -110,14 +129,21 @@ def draw_main_graph(
     plt.grid(True, which="both", ls="--")
 
     # Legends
-    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.legend(bbox_to_anchor=(1.05, 1), loc="upper left")
     for size in legend_disk_size_list:
-        plt.scatter([], [], s=size * disk_size_ratio, color='gray', alpha=0.3, label=s_qorc_output_size_name + '=' + str(size))
-    plt.legend(bbox_to_anchor=(1.05, 0.7), loc='upper left', title='Disk Size')
+        plt.scatter(
+            [],
+            [],
+            s=size * disk_size_ratio,
+            color="gray",
+            alpha=0.3,
+            label=s_qorc_output_size_name + "=" + str(size),
+        )
+    plt.legend(bbox_to_anchor=(1.05, 0.7), loc="upper left", title="Disk Size")
 
     plt.tight_layout()
 
-    if (len(f_out_img) > 2):
+    if len(f_out_img) > 2:
         dossier_parent = os.path.dirname(f_out_img)
         os.makedirs(dossier_parent, exist_ok=True)
         plt.savefig(f_out_img)
@@ -126,25 +152,24 @@ def draw_main_graph(
     plt.show()
 
 
-
 ##########################################################
 # Main script
 
 if __name__ == "__main__":
-    #f_in_stats= "outdir/run_f_out_results_training_aggrege.csv"
-    #df = gather_results_csv_files_in_dataframe(f_in_stats)
+    # f_in_stats= "outdir/run_f_out_results_training_aggrege.csv"
+    # df = gather_results_csv_files_in_dataframe(f_in_stats)
 
-    #outdir= "outdir"
-    outdir= "outdir_ScaleWay/"
+    # outdir= "outdir"
+    outdir = "outdir_ScaleWay/"
     df = gather_results_csv_files_in_dataframe(outdir)
 
     f_out_img = "results/main_graph.png"
 
     figsize_list = [15, 9]
 
-    #b_train_acc = False
+    # b_train_acc = False
     b_train_acc = True
-    #b_test_acc = False
+    # b_test_acc = False
     b_test_acc = True
 
     [x_min, x_max] = [9.2, 220.0]
