@@ -29,7 +29,6 @@ from typing import List
 from lib.config import deep_update, load_config
 
 from lib.lib_qorc_encoding_and_linear_training import qorc_encoding_and_linear_training
-from lib.lib_datasets import download_and_save_mnist_with_keras_if_missing_files
 
 import pandas as pd
 
@@ -138,13 +137,6 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
     logger.info("Starting training")
     logger.debug("Resolved config: %s", json.dumps(cfg, indent=2))
 
-    b_get_keras_mnist = cfg["b_get_keras_mnist"]
-    if b_get_keras_mnist:
-        # Requires an extra dependancy to Keras
-        download_and_save_mnist_with_keras_if_missing_files(
-            cfg["f_in_train"], cfg["f_in_test"], logger
-        )
-
     n_photons = cfg["n_photons"]
     n_modes = cfg["n_modes"]
     seed = cfg["seed"]
@@ -220,8 +212,6 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                             n_modes=current_n_modes,
                             seed=current_seed,
                             # Dataset parameters
-                            f_in_train=cfg["f_in_train"],
-                            f_in_test=cfg["f_in_test"],
                             fold_index=current_fold_index,
                             n_fold=cfg["n_fold"],
                             n_pixels=cfg["n_pixels"],
@@ -275,8 +265,6 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
             n_modes=cfg["n_modes"],
             seed=cfg["seed"],
             # Dataset parameters
-            f_in_train=cfg["f_in_train"],
-            f_in_test=cfg["f_in_test"],
             fold_index=cfg["fold_index"],
             n_fold=cfg["n_fold"],
             n_pixels=cfg["n_pixels"],

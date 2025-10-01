@@ -27,8 +27,11 @@ def aggregate_results_csv_files(outdir, f_out_aggregated_csv):
         df_result = pd.concat(dataframes, ignore_index=True)
         df_result = df_result.drop_duplicates()
         df_result = df_result.sort_values(by=df_result.columns.tolist())
-        df_result.to_csv(f_out_aggregated_csv, index=False)
-        print("Saved aggregated results to csv:", f_out_aggregated_csv)
+        if not os.path.exists(f_out_aggregated_csv):
+            df_result.to_csv(f_out_aggregated_csv, index=False)
+            print("Saved aggregated results to csv:", f_out_aggregated_csv)
+        else:
+            print("Warning: File exists.")
 
 
 def draw_main_graph(
@@ -155,7 +158,7 @@ def draw_main_graph(
 # Main script
 
 if __name__ == "__main__":
-    #outdir = "outdir"
+    # outdir = "outdir"
     outdir = "outdir_ScaleWay/"
     f_in_aggregated_results_csv = "results/f_out_results_training.csv"
     aggregate_results_csv_files(outdir, f_in_aggregated_results_csv)
