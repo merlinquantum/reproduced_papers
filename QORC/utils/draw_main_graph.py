@@ -11,15 +11,11 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-# Depending on the type of f_in_csv_or_outdir:
-# - File -> Read it as a csv file
-# - Folder -> Aggregate results from subfolders csv file
-# Return: A dataframe containing the results
 def aggregate_results_csv_files(outdir, f_out_aggregated_csv):
     dataframes = []
     for root, _dirs, files in os.walk(outdir):
         for file in files:
-            if "f_out_results_training" in file:
+            if "f_out_results_training_qorc" in file:
                 filepath = os.path.join(root, file)
                 df = pd.read_csv(filepath)
                 dataframes.append(df)
@@ -160,7 +156,7 @@ def draw_main_graph(
 if __name__ == "__main__":
     # outdir = "outdir"
     outdir = "outdir_ScaleWay/"
-    f_in_aggregated_results_csv = "results/f_out_results_training.csv"
+    f_in_aggregated_results_csv = "results/f_out_results_training_qorc.csv"
     aggregate_results_csv_files(outdir, f_in_aggregated_results_csv)
 
     f_out_img = "results/main_graph.png"
