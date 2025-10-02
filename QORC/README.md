@@ -79,6 +79,11 @@ Main graph exposing quantum reservoir performances (test accuracy) on MNIST.
 
 ![MNIST quantum reservoir performances](results/main_graph.png)
 
+Graph comparing quantum reservoir and classical method (RFF, a fast-approximation of RBF)
+
+![MNIST quantum reservoir versus RFF](results/graph_qorc_vs_rff.png)
+
+
 ## Extensions and Next Steps
 
 ## Reproducibility Notes
