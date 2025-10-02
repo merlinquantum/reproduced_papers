@@ -1,0 +1,16 @@
+{
+    "xp_type" : "rff",
+
+    "n_rff_features" : 1140,
+    "sigma" : 10,
+    "regularization_c" : 1.0,
+    "seed" : 42,
+
+    "b_optim_via_sgd" : true,
+    "max_iter_sgd" : 1000,
+
+    "n_pixels": 784,
+    "n_outputs": 10,
+
+    "outdir" : "outdir"
+}
