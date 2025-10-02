@@ -1,10 +1,12 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
-"""This module provides standard code for deep learning : train deep learning models, compute predictions over a given dataset
+"""
+This module provides standard code for deep learning: train deep learning models, compute predictions over a given dataset.
+Original authors: Vincent Espitalier <vincent.espitalier@cirad.fr>
+                  Hervé Goëau <herve.goeau@cirad.fr>
 
-Author: Vincent Espitalier <vincent.espitalier@cirad.fr>
-        Hervé Goëau <herve.goeau@cirad.fr>
+Modified by: Vincent Espitalier <vincent.espitalier@quandela.com>
 """
 
 import sys

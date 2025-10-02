@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
+# Aggregate qorc results from outdir to single csv file
 def aggregate_results_csv_files(outdir, f_out_aggregated_csv):
     dataframes = []
     for root, _dirs, files in os.walk(outdir):
@@ -163,8 +164,8 @@ if __name__ == "__main__":
 
     figsize_list = [15, 9]
 
-    # b_train_acc = False
-    b_train_acc = True
+    b_train_acc = False
+    # b_train_acc = True
     # b_test_acc = False
     b_test_acc = True
 

@@ -73,7 +73,7 @@ def create_qorc_quantum_layer(
         trainable_parameters=[],  # Circuit is not trainable
         input_parameters=params_prefix,  # Input encoding parameters
         input_state=qorc_input_state,  # Initial photon state
-        output_mapping_strategy=ML.OutputMappingStrategy.NONE,  # Output: Get all Fock states
+        output_mapping_strategy=ML.OutputMappingStrategy.NONE,  # Output: Get all Fock states probas
         # See: https://merlinquantum.ai/user_guide/output_mappings.html
         no_bunching=b_no_bunching,
         device=torch.device(device_name),
