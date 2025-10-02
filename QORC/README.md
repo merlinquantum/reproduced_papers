@@ -70,7 +70,6 @@ Note:
 
 Place configuration files in `configs/`.
 
-- `defaults.json` shows the structure and defaults.
 - Keys typically include: n_photons, n_modes, seed, n_epochs, batch_size, learning_rate
 
 ## Results and Analysis

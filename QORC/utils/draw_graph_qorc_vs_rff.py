@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
+# Aggregate rff results from outdir to single csv file
 def aggregate_results_csv_files(outdir, f_out_aggregated_csv):
     dataframes = []
     for root, _dirs, files in os.walk(outdir):
@@ -35,6 +36,8 @@ def draw_graph_qorc_vs_rff(
     f_in_rff_aggregated_results_csv,
     features_scale,
     figsize_list,
+    b_train_acc,
+    b_test_acc,
     f_out_img,
 ):
     df_qorc = pd.read_csv(f_in_qorc_aggregated_results_csv)
@@ -43,23 +46,19 @@ def draw_graph_qorc_vs_rff(
     df_qorc = df_qorc.rename(columns={"qorc_output_size": "n_features"})
     df_rff = df_rff.rename(columns={"n_rff_features": "n_features"})
 
-    # Filtrer df1 pour ne garder que les lignes avec n_photons == 3
+    # Filter df1 to keep only rows where n_photons == 3
     df_qorc_filt = df_qorc[df_qorc["n_photons"] == 3]
 
-    # Trouver les valeurs communes de n_features entre les deux dataframes
+    # Filtrer df1 pour ne garder que les lignes avec n_photons == 3
     common_features = set(df_qorc_filt["n_features"]).intersection(
         set(df_rff["n_features"])
     )
 
-    # Filtrer les deux dataframes pour ne garder que les valeurs communes
+    # Filter both dataframes to keep only common values
     df_qorc_common = df_qorc_filt[df_qorc_filt["n_features"].isin(common_features)]
     df_rff_common = df_rff[df_rff["n_features"].isin(common_features)]
 
-    # Trier par n_features pour un tracé propre
-    # df_qorc_common = df_qorc_common.sort_values('n_features')
-    # df_rff_common  = df_rff_common.sort_values('n_features')
-
-    # Calculer moyenne et écart-type pour QORC
+    # Compute avg and StDev per n_feature, for qorc
     grouped_qorc = (
         df_qorc_common.groupby("n_features")
         .agg(
@@ -71,7 +70,7 @@ def draw_graph_qorc_vs_rff(
         .reset_index()
     )
 
-    # Calculer moyenne et écart-type pour RFF
+    # Compute avg and StDev per n_feature, for RFF
     grouped_rff = (
         df_rff_common.groupby("n_features")
         .agg(
@@ -83,59 +82,62 @@ def draw_graph_qorc_vs_rff(
         .reset_index()
     )
 
-    # Tracer les courbes
     figsize = (figsize_list[0], figsize_list[1])
     plt.figure(figsize=figsize)
 
-    # plt.plot(df_qorc_common['n_features'], df_qorc_common['train_acc'], label='Train Acc qorc', marker='o')
-    # plt.plot(df_qorc_common['n_features'], df_qorc_common['test_acc'], label='Test Acc qorc', marker='o')
-    # plt.plot(df_rff_common['n_features'], df_rff_common['train_acc'], label='Train Acc RFF', marker='s')
-    # plt.plot(df_rff_common['n_features'], df_rff_common['test_acc'], label='Test Acc RFF', marker='s')
-    # QORC
-    plt.errorbar(
-        grouped_qorc["n_features"],
-        grouped_qorc["mean_train_acc"],
-        yerr=grouped_qorc["std_train_acc"],
-        label="Train Acc QORC",
-        marker="o",
-        linestyle="-",
-        capsize=5,
-    )
-    plt.errorbar(
-        grouped_qorc["n_features"],
-        grouped_qorc["mean_test_acc"],
-        yerr=grouped_qorc["std_test_acc"],
-        label="Test Acc QORC",
-        marker="o",
-        linestyle="--",
-        capsize=5,
-    )
+    # QORC curves
+    if b_train_acc:
+        plt.errorbar(
+            grouped_qorc["n_features"],
+            grouped_qorc["mean_train_acc"],
+            yerr=grouped_qorc["std_train_acc"],
+            label="Train Acc QORC",
+            marker="o",
+            linestyle="-",
+            capsize=5,
+        )
+    if b_test_acc:
+        plt.errorbar(
+            grouped_qorc["n_features"],
+            grouped_qorc["mean_test_acc"],
+            yerr=grouped_qorc["std_test_acc"],
+            label="Test Acc QORC",
+            marker="o",
+            linestyle="--",
+            capsize=5,
+        )
 
-    # RFF
-    plt.errorbar(
-        grouped_rff["n_features"],
-        grouped_rff["mean_train_acc"],
-        yerr=grouped_rff["std_train_acc"],
-        label="Train Acc RFF",
-        marker="s",
-        linestyle="-",
-        capsize=5,
-    )
-    plt.errorbar(
-        grouped_rff["n_features"],
-        grouped_rff["mean_test_acc"],
-        yerr=grouped_rff["std_test_acc"],
-        label="Test Acc RFF",
-        marker="s",
-        linestyle="--",
-        capsize=5,
-    )
+    # RFF curves
+    if b_train_acc:
+        plt.errorbar(
+            grouped_rff["n_features"],
+            grouped_rff["mean_train_acc"],
+            yerr=grouped_rff["std_train_acc"],
+            label="Train Acc RFF",
+            marker="s",
+            linestyle="-",
+            capsize=5,
+        )
+    if b_test_acc:
+        plt.errorbar(
+            grouped_rff["n_features"],
+            grouped_rff["mean_test_acc"],
+            yerr=grouped_rff["std_test_acc"],
+            label="Test Acc RFF",
+            marker="s",
+            linestyle="--",
+            capsize=5,
+        )
 
-    # Ajouter des labels et une légende
     plt.xlabel("n_features")
     plt.ylabel("Accuracy")
-    plt.title("Train and Test Accuracies vs n_features")
-    plt.ylim(0.88, 1.00)  # Ajustement de l'échelle Y pour voir 1.00
+    s_title = "Accuracy vs n_features"
+    if b_test_acc:
+        s_title = "Test " + s_title
+    if b_train_acc:
+        s_title = "Train " + s_title
+    plt.title(s_title)
+    plt.ylim(0.88, 1.00)
     plt.xticks(features_scale)
     plt.legend(loc="lower right")
     plt.grid(True)
@@ -146,7 +148,6 @@ def draw_graph_qorc_vs_rff(
         plt.savefig(f_out_img)
         print("Saved file:", f_out_img)
 
-    # Afficher le graphe
     plt.show()
 
 
@@ -166,10 +167,17 @@ if __name__ == "__main__":
     features_scale = list(range(2000, 6001, 2000))
     figsize_list = [8, 6]
 
+    b_train_acc = False
+    # b_train_acc = True
+    # b_test_acc = False
+    b_test_acc = True
+
     draw_graph_qorc_vs_rff(
         f_in_qorc_aggregated_results_csv,
         f_in_rff_aggregated_results_csv,
         features_scale,
         figsize_list,
+        b_train_acc,
+        b_test_acc,
         f_out_img,
     )

@@ -54,7 +54,7 @@ def rff_encoding_and_linear_training(
     logger.info(test_label.shape)  # (10000,)
     logger.info(test_data.shape)  # (10000, 784)
 
-    # Normalisation des données mnist, en entrée
+    # MNIST data normalization
     scaler = StandardScaler()
     scaler.fit(train_data)
     scaled_train_data = scaler.transform(train_data)
@@ -62,7 +62,7 @@ def rff_encoding_and_linear_training(
 
     time_t2 = time.time()
 
-    # Transformation RFF
+    # RFF features computation
     rff = RBFSampler(
         gamma=1.0 / (2 * sigma**2), n_components=n_rff_features, random_state=run_seed
     )
@@ -72,43 +72,40 @@ def rff_encoding_and_linear_training(
 
     time_t3 = time.time()
 
-    # Aggréger les rff features avec mnist brut
+    # Build full training dataset (aggregate MNIST + RFF features)
     all_train_data = np.hstack(
         [scaled_train_data, train_data_rff]
     )  # Shape: [n_samples, 28x28 + n_rff_features]
     all_test_data = np.hstack([scaled_test_data, test_data_rff])
 
-    # Scaler avant linear training
     scaler_rff = StandardScaler()
     scaler_rff.fit(all_train_data)
     scaled_all_train_data = scaler_rff.transform(all_train_data)
     scaled_all_test_data = scaler_rff.transform(all_test_data)
 
-    # Fitter une SVM linéaire
+    # Linear SVC with/without SGD
     if b_optim_via_sgd:
         # Source: LeChat / MistralAI
 
         print("Fit de la SVM (via SGD et hinge loss)")
-        # Entraînement accéléré avec SGD
         n_samples = scaled_all_train_data.shape[0]
         clf = SGDClassifier(
-            loss="hinge",  # Équivalent à LinearSVC
+            loss="hinge",  # Similar to LinearSVC
             alpha=1.0
-            / (1.0 * n_samples * regularization_c),  # 1/(n_samples * C), avec C=1.0
-            max_iter=max_iter_sgd,  # Réduit le nombre d'itérations
-            tol=1e-2,  # Tolérance plus grande
+            / (1.0 * n_samples * regularization_c),  # 1/(n_samples * C), with C=1.0
+            max_iter=max_iter_sgd,
+            tol=1e-2,  # tolerance
             random_state=run_seed,
-            n_jobs=-1,  # Parallélise si possible
+            n_jobs=-1,  # parrallel computing if possible
         )
 
     else:
         print("Fit de la SVM (LinearSVC)")
         clf = LinearSVC(
             multi_class="ovr", random_state=run_seed, C=regularization_c
-        )  # One-Versus-Rest: Entrainer 1 classifier binaire par classe puis choisir la classe de marge max
+        )  # One-Versus-Rest: Train one binary classifier per class then select highest margin class
 
     clf.fit(scaled_all_train_data, train_label)
-    # Calcul des prédictions de la SVM
     train_model_pred = clf.predict(scaled_all_train_data)
     test_model_pred = clf.predict(scaled_all_test_data)
 
