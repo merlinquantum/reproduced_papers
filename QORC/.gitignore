@@ -25,3 +25,6 @@ __pycache__/
 logs/
 *.log
 .DS_Store
+
+# vim swap files
+*.swp

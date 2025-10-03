@@ -140,102 +140,6 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
 
     xp_type = cfg["xp_type"]
 
-    if xp_type == "rff":
-        n_rff_features = cfg["n_rff_features"]
-        seed = cfg["seed"]
-
-        if isinstance(seed, List) or isinstance(n_rff_features, List):
-            logger.info("Entering loop training over seed/n_rff_features:")
-            f_out_results_training_csv = cfg["f_out_results_training_csv"]
-            assert len(f_out_results_training_csv) > 0, (
-                "Error: Empty f_out_results_training_csv"
-            )
-            f_out_results_training_csv = os.path.join(
-                run_dir, f_out_results_training_csv
-            )
-
-            if not isinstance(seed, List):
-                seed = [seed]
-
-            if not isinstance(n_rff_features, List):
-                n_rff_features = [n_rff_features]
-
-            # Structure to be fed
-            df = pd.DataFrame()
-            for i, current_seed in enumerate(seed):
-                for j, current_n_rff_features in enumerate(n_rff_features):
-                    logger.info(
-                        "loop index: seed {}/{}, n_rff_features {}/{}".format(
-                            i + 1,
-                            len(seed),
-                            j + 1,
-                            len(n_rff_features),
-                        )
-                    )
-
-                    logger.info(
-                        "values: seed {}, n_rff_features {}".format(
-                            current_seed,
-                            current_n_rff_features,
-                        )
-                    )
-
-                    [
-                        train_acc,
-                        test_acc,
-                        duration_calcul_rff_features,
-                        duration_train,
-                    ] = rff_encoding_and_linear_training(
-                        # Main parameters
-                        n_rff_features=current_n_rff_features,
-                        sigma=cfg["sigma"],
-                        regularization_c=cfg["regularization_c"],
-                        seed=current_seed,
-                        b_optim_via_sgd=cfg["b_optim_via_sgd"],
-                        max_iter_sgd=cfg["max_iter_sgd"],
-                        # Dataset parameters
-                        n_pixels=cfg["n_pixels"],
-                        n_outputs=cfg["n_outputs"],
-                        run_dir=run_dir,
-                        logger=logger,
-                    )
-
-                    # Save outputs in the dataFrame and then save the current dataframe
-                    output_fields = {
-                        "n_rff_features": current_n_rff_features,
-                        "seed": current_seed,
-                        "train_acc": train_acc,
-                        "test_acc": test_acc,
-                        "duration_calcul_rff_features": duration_calcul_rff_features,
-                        "duration_train": duration_train,
-                    }
-                    df_line = pd.DataFrame([output_fields])
-
-                    if df.empty:
-                        df = df_line
-                    else:
-                        df = pd.concat([df, df_line], ignore_index=True)
-                    df.to_csv(f_out_results_training_csv, index=False)
-                    logger.info("Written file: %s", f_out_results_training_csv)
-
-        else:
-            outputs = rff_encoding_and_linear_training(
-                # Main parameters
-                n_rff_features=cfg["n_rff_features"],
-                sigma=cfg["sigma"],
-                regularization_c=cfg["regularization_c"],
-                seed=cfg["seed"],
-                b_optim_via_sgd=cfg["b_optim_via_sgd"],
-                max_iter_sgd=cfg["max_iter_sgd"],
-                # Dataset parameters
-                n_pixels=cfg["n_pixels"],
-                n_outputs=cfg["n_outputs"],
-                run_dir=run_dir,
-                logger=logger,
-            )
-            (run_dir / "done.txt").write_text(str(outputs))
-            logger.info("Written file: %s", run_dir / "done.txt")
-
     if xp_type == "qorc":
         n_photons = cfg["n_photons"]
         n_modes = cfg["n_modes"]
@@ -244,10 +148,10 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
 
         # Run with 4 loops over photons, modes, seed, fold
         if (
-            isinstance(fold_index, List)
-            or isinstance(seed, List)
-            or isinstance(n_photons, List)
+            isinstance(n_photons, List)
             or isinstance(n_modes, List)
+            or isinstance(fold_index, List)
+            or isinstance(seed, List)
         ):
             logger.info("Entering loop training over fold/seed/photons/modes:")
             f_out_results_training_csv = cfg["f_out_results_training_csv"]
@@ -258,43 +162,43 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                 run_dir, f_out_results_training_csv
             )
 
-            if not isinstance(fold_index, List):
-                fold_index = [fold_index]
-
-            if not isinstance(seed, List):
-                seed = [seed]
-
             if not isinstance(n_photons, List):
                 n_photons = [n_photons]
 
             if not isinstance(n_modes, List):
                 n_modes = [n_modes]
 
+            if not isinstance(fold_index, List):
+                fold_index = [fold_index]
+
+            if not isinstance(seed, List):
+                seed = [seed]
+
             # Structure to be fed
             df = pd.DataFrame()
-            for i, current_fold_index in enumerate(fold_index):
-                for j, current_seed in enumerate(seed):
-                    for k, current_n_photons in enumerate(n_photons):
-                        for l, current_n_modes in enumerate(n_modes):
+            for i, current_n_photons in enumerate(n_photons):
+                for j, current_n_modes in enumerate(n_modes):
+                    for k, current_fold_index in enumerate(fold_index):
+                        for l, current_seed in enumerate(seed):
                             logger.info(
-                                "loop index: fold {}/{}, seed {}/{}, n_photons {}/{}, n_modes {}/{}".format(
+                                "loop index: n_photons {}/{}, n_modes {}/{}, fold_index {}/{}, seed {}/{}".format(
                                     i + 1,
-                                    len(fold_index),
-                                    j + 1,
-                                    len(seed),
-                                    k + 1,
                                     len(n_photons),
-                                    l + 1,
+                                    j + 1,
                                     len(n_modes),
+                                    k + 1,
+                                    len(fold_index),
+                                    l + 1,
+                                    len(seed),
                                 )
                             )
 
                             logger.info(
-                                "values: fold {}, seed {}, n_photons {}, n_modes {}".format(
-                                    current_fold_index,
-                                    current_seed,
+                                "values: n_photons {}, n_modes {}, fold_index {}, seed {}".format(
                                     current_n_photons,
                                     current_n_modes,
+                                    current_fold_index,
+                                    current_seed,
                                 )
                             )
 
@@ -388,6 +292,103 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                 logger=logger,
             )
 
+            (run_dir / "done.txt").write_text(str(outputs))
+            logger.info("Written file: %s", run_dir / "done.txt")
+
+
+    if xp_type == "rff":
+        n_rff_features = cfg["n_rff_features"]
+        seed = cfg["seed"]
+
+        if isinstance(seed, List) or isinstance(n_rff_features, List):
+            logger.info("Entering loop training over seed/n_rff_features:")
+            f_out_results_training_csv = cfg["f_out_results_training_csv"]
+            assert len(f_out_results_training_csv) > 0, (
+                "Error: Empty f_out_results_training_csv"
+            )
+            f_out_results_training_csv = os.path.join(
+                run_dir, f_out_results_training_csv
+            )
+
+            if not isinstance(n_rff_features, List):
+                n_rff_features = [n_rff_features]
+
+            if not isinstance(seed, List):
+                seed = [seed]
+
+            # Structure to be fed
+            df = pd.DataFrame()
+            for i, current_n_rff_features in enumerate(n_rff_features):
+                for j, current_seed in enumerate(seed):
+                    logger.info(
+                        "loop index: n_rff_features {}/{}, seed {}/{}".format(
+                            i + 1,
+                            len(n_rff_features),
+                            j + 1,
+                            len(seed),
+                        )
+                    )
+
+                    logger.info(
+                        "values: n_rff_features {}, seed {}/{}".format(
+                            current_n_rff_features,
+                            current_seed,
+                        )
+                    )
+
+                    [
+                        train_acc,
+                        test_acc,
+                        duration_calcul_rff_features,
+                        duration_train,
+                    ] = rff_encoding_and_linear_training(
+                        # Main parameters
+                        n_rff_features=current_n_rff_features,
+                        sigma=cfg["sigma"],
+                        regularization_c=cfg["regularization_c"],
+                        seed=current_seed,
+                        b_optim_via_sgd=cfg["b_optim_via_sgd"],
+                        max_iter_sgd=cfg["max_iter_sgd"],
+                        # Dataset parameters
+                        n_pixels=cfg["n_pixels"],
+                        n_outputs=cfg["n_outputs"],
+                        run_dir=run_dir,
+                        logger=logger,
+                    )
+
+                    # Save outputs in the dataFrame and then save the current dataframe
+                    output_fields = {
+                        "n_rff_features": current_n_rff_features,
+                        "seed": current_seed,
+                        "train_acc": train_acc,
+                        "test_acc": test_acc,
+                        "duration_calcul_rff_features": duration_calcul_rff_features,
+                        "duration_train": duration_train,
+                    }
+                    df_line = pd.DataFrame([output_fields])
+
+                    if df.empty:
+                        df = df_line
+                    else:
+                        df = pd.concat([df, df_line], ignore_index=True)
+                    df.to_csv(f_out_results_training_csv, index=False)
+                    logger.info("Written file: %s", f_out_results_training_csv)
+
+        else:
+            outputs = rff_encoding_and_linear_training(
+                # Main parameters
+                n_rff_features=cfg["n_rff_features"],
+                sigma=cfg["sigma"],
+                regularization_c=cfg["regularization_c"],
+                seed=cfg["seed"],
+                b_optim_via_sgd=cfg["b_optim_via_sgd"],
+                max_iter_sgd=cfg["max_iter_sgd"],
+                # Dataset parameters
+                n_pixels=cfg["n_pixels"],
+                n_outputs=cfg["n_outputs"],
+                run_dir=run_dir,
+                logger=logger,
+            )
             (run_dir / "done.txt").write_text(str(outputs))
             logger.info("Written file: %s", run_dir / "done.txt")
 
