@@ -97,8 +97,6 @@ def qorc_encoding_and_linear_training(
     # Dataset parameters
     fold_index,
     n_fold,
-    n_pixels,
-    n_outputs,
     # Training parameters
     n_epochs,
     batch_size,
@@ -149,6 +147,8 @@ def qorc_encoding_and_linear_training(
 
     test_data, test_label, _ = get_data_test_original()
     test_data = test_data.reshape(test_data.shape[0], -1).astype(np.float32) / 255.0
+    n_pixels = 28 * 28  # MNIST images size
+    n_classes = 10      # 10 classes, one for each figure
 
     logger.info("Datasets sizes:")
     logger.info(train_label.shape)  # (48000,)
@@ -297,7 +297,7 @@ def qorc_encoding_and_linear_training(
     n_model_input_features = n_pixels + qorc_output_size
     logger.info("n_model_input_features: {}".format(n_model_input_features))
     linear = nn.Linear(
-        n_model_input_features, n_outputs, bias=True, device=compute_device
+        n_model_input_features, n_classes, bias=True, device=compute_device
     )
 
     nn.init.xavier_uniform_(linear.weight)  # Xavier uniforme init (Glorot)
