@@ -23,8 +23,6 @@ def rff_encoding_and_linear_training(
     b_optim_via_sgd,
     max_iter_sgd,
     # Dataset parameters
-    n_pixels,
-    n_outputs,
     run_dir,
     logger,
 ):

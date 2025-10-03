@@ -81,17 +81,29 @@ def build_arg_parser() -> argparse.ArgumentParser:
         "--device", type=str, help="Device string (cpu, cuda:0, mps)", default=None
     )
 
-    # Specific parameters
-    p.add_argument("--epochs", type=int, default=None)
-    p.add_argument("--batch-size", type=int, default=None)
-    p.add_argument("--learning-rate", type=float, default=None)
-
-    p.add_argument("--n-photons", type=int, default=None)
-    p.add_argument("--n-modes", type=int, default=None)
+    # Specific parameters to qorc
+    p.add_argument("--n-photons", type=int, default=None, help="Number of photons")
+    p.add_argument("--n-modes", type=int, default=None, help="Number of modes")
     p.add_argument("--seed", type=int, help="Random seed", default=None)
-    p.add_argument("--fold-index", type=int, default=None)
+    p.add_argument("--fold-index", type=int, default=None, help="Split train/val fold index")
+    p.add_argument("--n-fold", type=int, default=None, help="Split train/val number of folds")
+    p.add_argument("--epochs", type=int, default=None, help="Number of training epochs")
+    p.add_argument("--batch-size", type=int, default=None, help="Batch size")
+    p.add_argument("--learning-rate", type=float, default=None, help="Learning rate")
+    p.add_argument("--reduce-lr-patience", type=int, default=None, help="Reduce learning rate patience")
+    p.add_argument("--reduce-lr-factor", type=float, default=None, help="Reduce learning rate factor")
+    p.add_argument("--num-workers", type=int, default=None, help="Number of dataloader workers")
+    p.add_argument("--pin-memory", type=bool, default=None, help="Enable pin memory")
+    p.add_argument("--f-out-weights", type=str, default=None, help="Model checkpoint filepath")
+    p.add_argument("--b-no-bunching", type=bool, default=None, help="Disable bunching")
+    p.add_argument("--b-use-tensorboard", type=bool, default=None, help="Enable TensorBoard logging")
 
-    p.add_argument("--b-no-bunching", type=bool, default=None)
+    # Specific parameters to rff
+    p.add_argument("--n-rff-features", type=int, default=None, help="Number of RFF features")
+    p.add_argument("--sigma", type=float, default=None, help="RBF kernel bandwidth")
+    p.add_argument("--regularization-c", type=float, default=None, help="Regularization strength (C)")
+    p.add_argument("--b-optim-via-sgd", type=bool, default=None, help="Use SGD for optimization")
+    p.add_argument("--max-iter-sgd", type=int, default=None, help="Max SGD iterations")
 
     return p
 
@@ -110,22 +122,51 @@ def resolve_config(args: argparse.Namespace):
     if args.device is not None:
         cfg["device"] = args.device
 
-    # Specific parameters
+    # Specific parameters to qorc
+    if args.n_photons is not None:
+        cfg["n_photons"] = args.n_photons
+    if args.n_modes is not None:
+        cfg["n_modes"] = args.n_modes
+    if args.seed is not None:
+        cfg["seed"] = args.seed
+    if args.fold_index is not None:
+        cfg["fold_index"] = args.fold_index
+    if args.n_fold is not None:
+        cfg["n_fold"] = args.n_fold
     if args.epochs is not None:
         cfg["n_epochs"] = args.epochs
     if args.batch_size is not None:
         cfg["batch_size"] = args.batch_size
     if args.learning_rate is not None:
         cfg["learning_rate"] = args.learning_rate
-    if args.seed is not None:
-        cfg["seed"] = args.seed
-
-    if args.n_photons is not None:
-        cfg["n_photons"] = args.n_photons
-    if args.n_modes is not None:
-        cfg["n_modes"] = args.n_modes
+    if args.reduce_lr_patience is not None:
+        cfg["reduce_lr_patience"] = args.reduce_lr_patience
+    if args.reduce_lr_factor is not None:
+        cfg["reduce_lr_factor"] = args.reduce_lr_factor
+    if args.num_workers is not None:
+        cfg["num_workers"] = args.num_workers
+    if args.pin_memory is not None:
+        cfg["pin_memory"] = args.pin_memory
+    if args.f_out_weights is not None:
+        cfg["f_out_weights"] = args.f_out_weights
     if args.b_no_bunching is not None:
         cfg["b_no_bunching"] = args.b_no_bunching
+    if args.b_use_tensorboard is not None:
+        cfg["b_use_tensorboard"] = args.b_use_tensorboard
+    if args.device is not None:
+        cfg["device"] = args.device
+
+    # Specific parameters to rff
+    if args.n_rff_features is not None:
+        cfg["n_rff_features"] = args.n_rff_features
+    if args.sigma is not None:
+        cfg["sigma"] = args.sigma
+    if args.regularization_c is not None:
+        cfg["regularization_c"] = args.regularization_c
+    if args.b_optim_via_sgd is not None:
+        cfg["b_optim_via_sgd"] = args.b_optim_via_sgd
+    if args.max_iter_sgd is not None:
+        cfg["max_iter_sgd"] = args.max_iter_sgd
 
     return cfg
 
@@ -220,8 +261,6 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                                 # Dataset parameters
                                 fold_index=current_fold_index,
                                 n_fold=cfg["n_fold"],
-                                n_pixels=cfg["n_pixels"],
-                                n_outputs=cfg["n_outputs"],
                                 # Training parameters
                                 n_epochs=cfg["n_epochs"],
                                 batch_size=cfg["batch_size"],
@@ -273,8 +312,6 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                 # Dataset parameters
                 fold_index=cfg["fold_index"],
                 n_fold=cfg["n_fold"],
-                n_pixels=cfg["n_pixels"],
-                n_outputs=cfg["n_outputs"],
                 # Training parameters
                 n_epochs=cfg["n_epochs"],
                 batch_size=cfg["batch_size"],
@@ -330,7 +367,7 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                     )
 
                     logger.info(
-                        "values: n_rff_features {}, seed {}/{}".format(
+                        "values: n_rff_features {}, seed {}".format(
                             current_n_rff_features,
                             current_seed,
                         )
@@ -350,8 +387,6 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                         b_optim_via_sgd=cfg["b_optim_via_sgd"],
                         max_iter_sgd=cfg["max_iter_sgd"],
                         # Dataset parameters
-                        n_pixels=cfg["n_pixels"],
-                        n_outputs=cfg["n_outputs"],
                         run_dir=run_dir,
                         logger=logger,
                     )
@@ -384,8 +419,6 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                 b_optim_via_sgd=cfg["b_optim_via_sgd"],
                 max_iter_sgd=cfg["max_iter_sgd"],
                 # Dataset parameters
-                n_pixels=cfg["n_pixels"],
-                n_outputs=cfg["n_outputs"],
                 run_dir=run_dir,
                 logger=logger,
             )
