@@ -9,7 +9,43 @@
 
 ## Overview
 
-This repository provides a reproducible implementation of the quantum reservoir experiment using the MerLin quantum machine learning framework. The included source code enables the replication of performance results obtained with quantum features derived from the QORC experiment, thereby demonstrating a proof-of-concept for the advantages of quantum reservoirs in machine learning tasks.
+This repository provides a reproducible implementation of the **quantum reservoir computing (QRC) experiment** using the **MerLin quantum machine learning framework**. The code replicates the performance results of quantum feature-based classification on the **MNIST dataset**, demonstrating the proof-of-concept advantages of quantum reservoirs in machine learning tasks.
+
+### Key Components
+- **Dataset**: Classic MNIST (10-class image classification, 28x28 pixels, 60,000 training + 10,000 test images).
+- **Models**:
+  - **QORC (Quantum Optical Reservoir Computing)**:
+    - **Nb photons and modes**: To be selected by the user.
+    - **Pre-circuit and Reservoir circuits**: Both use the same Haar-random unitary matrix representation.
+    - **Input State**: Photons are distributed over modes.
+    - **Training**: Only the linear classifier is trained; circuit parameters are fixed.
+    - **Bunching Control**: Configurable (with `b_no_bunching`).
+    - **Dimensionality Reduction**: PCA applied to MNIST images before feeding into QORC.
+    - **Optimizer**: AdaGrad with cross-entropy loss and Xavier Glorot weight initialization.
+    - **Learning Strategy**: `ReduceLROnPlateau` with gradient clipping (norm=1.0) for stability.
+    - **Normalization**:
+      - MNIST: Scaled to `[0, 1]` by dividing by 255.
+      - PCA: Global min-max normalization to preserve variance ratios.
+      - QORC features: StandardScaler.
+  - **RFF (Random Fourier Features)**:
+    - **Features**: RBF kernel with configurable bandwidth (`sigma`) and number of components.
+    - **Optimizer**: SGD or `LinearSVC` (hinge loss).
+    - **Normalization**: StandardScaler for both MNIST and RFF features.
+
+### Technical Choices
+- **Hardware**: Compatible with CPU and GPU (`device: cpu/cuda:0`).
+- **Reproducibility**: Seed control for all random number generators (RNGs). Set `seed=-1` for random behavior; positive seeds ensure determinism.
+- **Training**:
+  - **QORC**: Uses train/val split with k-fold cross-validation (default: 5 folds). Validation set is only used for model selection.
+  - **RFF**: Configurable via SGD or direct `LinearSVC` optimization.
+- **Logging**: TensorBoard support and computation duration tracking for benchmarking.
+- **No Data Augmentation**: Not required for this proof-of-concept.
+
+### Deviations/Assumptions
+- **Circuit Design**: Pre-circuit and reservoir share the same Haar-random unitary matrix, as in the original paper.
+- **Determinism**: Fully deterministic when `seed > 0`. Random behavior if `seed=-1`.
+
+
 
 ## How to Run
 
@@ -68,14 +104,28 @@ python implementation.py --help
 Example runs:
 
 ```bash
-# From a JSON config
+# To run the default qorc experiment
 python implementation.py --config configs/xp_qorc.json
+
+# To run the default RFF experiment
+python implementation.py --config configs/xp_rff.json
 
 # Override some parameters inline
 python implementation.py --config configs/xp_qorc.json --epochs 50 --lr 1e-3
 ```
 
 The script saves a snapshot of the resolved config alongside results and logs.
+
+To reproduce the graphs:
+
+```bash
+# To plot the main graph
+$ python utils/draw_main_graph.py
+
+# To plot the graph comparing qorc and rff
+python utils/draw_graph_qorc_vs_rff.py
+```
+
 
 ### Output directory and generated files
 
@@ -86,7 +136,7 @@ At each run, a timestamped folder is created under the base `outdir` (default: `
 ├── config_snapshot.json                    # Resolved configuration used for the run
 ├── run.log                                 # Log output (stdout/stderr)
 ├── f_out_results_training_{qorc,rff}.csv   # Training metrics (accuracy, duration, etc.)
-│                                       # Example: `f_out_results_training_qorc.csv`
+│                                           # Example: `f_out_results_training_qorc.csv`
 └── f_weights_out.pth                       # Trained model weights (linear layer)
 ```
 
@@ -105,6 +155,8 @@ Main graph exposing quantum reservoir performances (test accuracy) on MNIST.
 
 ![MNIST quantum reservoir performances](results/main_graph.png)
 
+In the precedent graph, bunching was manually disabled when the condition `n_photons * n_photons < n_modes` was met, to ensure more precise calculations.
+
 Graph comparing quantum reservoir and classical method (RFF, a fast-approximation of RBF)
 
 ![MNIST quantum reservoir versus RFF](results/graph_qorc_vs_rff.png)
@@ -112,7 +164,30 @@ Graph comparing quantum reservoir and classical method (RFF, a fast-approximatio
 
 ## Extensions and Next Steps
 
+- **Circuit Depth Ablation**: Study how test accuracy evolves with deeper/shallower quantum circuits.
+- **Robustness**: Evaluate performance on **Fashion-MNIST** and **K-MNIST**.
+
+
 ## Reproducibility Notes
+
+### Random Seed Control
+- Set `seed` to a positive integer for full determinism.
+- `seed=-1` disables control (random behavior).
+
+### Determinism Settings
+- All RNGs (NumPy, PyTorch, Perceval) are seeded if `seed > 0`.
+
+### Library Versions
+```bash
+numpy==2.3.3
+scikit_learn==1.7.1
+pandas==2.3.1
+torch==2.7.1
+perceval_quandela==0.13.2
+merlinquantum==0.1.0
+```
+
+
 
 ## Testing
 
