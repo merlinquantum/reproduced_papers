@@ -82,25 +82,59 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--n-photons", type=int, default=None, help="Number of photons")
     p.add_argument("--n-modes", type=int, default=None, help="Number of modes")
     p.add_argument("--seed", type=int, help="Random seed", default=None)
-    p.add_argument("--fold-index", type=int, default=None, help="Split train/val fold index")
-    p.add_argument("--n-fold", type=int, default=None, help="Split train/val number of folds")
+    p.add_argument(
+        "--fold-index", type=int, default=None, help="Split train/val fold index"
+    )
+    p.add_argument(
+        "--n-fold", type=int, default=None, help="Split train/val number of folds"
+    )
     p.add_argument("--epochs", type=int, default=None, help="Number of training epochs")
     p.add_argument("--batch-size", type=int, default=None, help="Batch size")
     p.add_argument("--learning-rate", type=float, default=None, help="Learning rate")
-    p.add_argument("--reduce-lr-patience", type=int, default=None, help="Reduce learning rate patience")
-    p.add_argument("--reduce-lr-factor", type=float, default=None, help="Reduce learning rate factor")
-    p.add_argument("--num-workers", type=int, default=None, help="Number of dataloader workers")
+    p.add_argument(
+        "--reduce-lr-patience",
+        type=int,
+        default=None,
+        help="Reduce learning rate patience",
+    )
+    p.add_argument(
+        "--reduce-lr-factor",
+        type=float,
+        default=None,
+        help="Reduce learning rate factor",
+    )
+    p.add_argument(
+        "--num-workers", type=int, default=None, help="Number of dataloader workers"
+    )
     p.add_argument("--pin-memory", type=bool, default=None, help="Enable pin memory")
-    p.add_argument("--f-out-weights", type=str, default=None, help="Model checkpoint filepath")
+    p.add_argument(
+        "--f-out-weights", type=str, default=None, help="Model checkpoint filepath"
+    )
     p.add_argument("--b-no-bunching", type=bool, default=None, help="Disable bunching")
-    p.add_argument("--b-use-tensorboard", type=bool, default=None, help="Enable TensorBoard logging")
-    p.add_argument("--device", type=str, help="Device string (cpu, cuda:0, mps)", default=None)
+    p.add_argument(
+        "--b-use-tensorboard",
+        type=bool,
+        default=None,
+        help="Enable TensorBoard logging",
+    )
+    p.add_argument(
+        "--device", type=str, help="Device string (cpu, cuda:0, mps)", default=None
+    )
 
     # Specific parameters to rff
-    p.add_argument("--n-rff-features", type=int, default=None, help="Number of RFF features")
+    p.add_argument(
+        "--n-rff-features", type=int, default=None, help="Number of RFF features"
+    )
     p.add_argument("--sigma", type=float, default=None, help="RBF kernel bandwidth")
-    p.add_argument("--regularization-c", type=float, default=None, help="Regularization strength (C)")
-    p.add_argument("--b-optim-via-sgd", type=bool, default=None, help="Use SGD for optimization")
+    p.add_argument(
+        "--regularization-c",
+        type=float,
+        default=None,
+        help="Regularization strength (C)",
+    )
+    p.add_argument(
+        "--b-optim-via-sgd", type=bool, default=None, help="Use SGD for optimization"
+    )
     p.add_argument("--max-iter-sgd", type=int, default=None, help="Max SGD iterations")
 
     return p
@@ -327,7 +361,6 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
 
             (run_dir / "done.txt").write_text(str(outputs))
             logger.info("Written file: %s", run_dir / "done.txt")
-
 
     if xp_type == "rff":
         n_rff_features = cfg["n_rff_features"]
