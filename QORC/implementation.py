@@ -77,9 +77,6 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(description="Paper reproduction runner")
     p.add_argument("--config", type=str, help="Path to JSON config", default=None)
     p.add_argument("--outdir", type=str, help="Base output directory", default=None)
-    p.add_argument(
-        "--device", type=str, help="Device string (cpu, cuda:0, mps)", default=None
-    )
 
     # Specific parameters to qorc
     p.add_argument("--n-photons", type=int, default=None, help="Number of photons")
@@ -97,6 +94,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--f-out-weights", type=str, default=None, help="Model checkpoint filepath")
     p.add_argument("--b-no-bunching", type=bool, default=None, help="Disable bunching")
     p.add_argument("--b-use-tensorboard", type=bool, default=None, help="Enable TensorBoard logging")
+    p.add_argument("--device", type=str, help="Device string (cpu, cuda:0, mps)", default=None)
 
     # Specific parameters to rff
     p.add_argument("--n-rff-features", type=int, default=None, help="Number of RFF features")
@@ -119,8 +117,6 @@ def resolve_config(args: argparse.Namespace):
     # Apply CLI overrides
     if args.outdir is not None:
         cfg["outdir"] = args.outdir
-    if args.device is not None:
-        cfg["device"] = args.device
 
     # Specific parameters to qorc
     if args.n_photons is not None:
