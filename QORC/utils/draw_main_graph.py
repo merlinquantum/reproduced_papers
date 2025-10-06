@@ -44,7 +44,7 @@ def draw_main_graph(
 ):
     df = pd.read_csv(f_in_aggregated_results_csv)
 
-    disk_size_ratio = 0.5
+    disk_size_ratio = 0.3
     legend_disk_size_list = [800, 1600, 2400, 3200, 4000, 4800]
     figsize = (figsize_list[0], figsize_list[1])
 
@@ -109,7 +109,7 @@ def draw_main_graph(
                 row["mean_test_acc"],
                 s=row["mean_qorc_output_size"] * disk_size_ratio,
                 color=color,
-                alpha=0.15,
+                alpha=0.30,
                 edgecolors="none",
             )
 
@@ -138,7 +138,7 @@ def draw_main_graph(
             alpha=0.3,
             label=s_qorc_output_size_name + "=" + str(size),
         )
-    plt.legend(bbox_to_anchor=(1.05, 0.7), loc="upper left", title="Disk Size")
+    plt.legend(bbox_to_anchor=(1.05, 0.9), loc="upper left", title="Disk Size", labelspacing=2.7)
 
     plt.tight_layout()
 
