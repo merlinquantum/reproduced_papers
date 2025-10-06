@@ -40,6 +40,7 @@ This repository provides a reproducible implementation of the **quantum reservoi
   - **RFF**: Configurable via SGD or direct `LinearSVC` optimization.
 - **Logging**: TensorBoard support and computation duration tracking for benchmarking.
 - **No Data Augmentation**: Not required for this proof-of-concept.
+- **Looping**: Supports automated iteration over parameter ranges (e.g., n_photons, n_modes) for batch experimentation.
 
 ### Deviations/Assumptions
 - **Circuit Design**: Pre-circuit and reservoir share the same Haar-random unitary matrix, as in the original paper.
@@ -114,7 +115,6 @@ python implementation.py --config configs/xp_rff.json
 python implementation.py --config configs/xp_qorc.json --epochs 50 --lr 1e-3
 ```
 
-The script saves a snapshot of the resolved config alongside results and logs.
 
 To reproduce the graphs:
 
@@ -126,6 +126,7 @@ $ python utils/draw_main_graph.py
 python utils/draw_graph_qorc_vs_rff.py
 ```
 
+The script saves a snapshot of the resolved config alongside results and logs.
 
 ### Output directory and generated files
 
@@ -147,7 +148,14 @@ Note:
 
 Place configuration files in `configs/`.
 
-- Keys typically include: n_photons, n_modes, seed, n_epochs, batch_size, learning_rate
+- **`xp_qorc.json`**: Defines the structure and default parameters for the **QORC experiment**.
+
+- **`xp_rff.json`**: Defines the structure and default parameters for the **RFF experiment**.
+
+- Typical keys for the QORC experiment include n_photons, n_modes, seed, n_epochs, batch_size, and learning_rate, while the RFF experiment includes keys such as n_rff_features.
+
+- **Looping Support**: Some parameters can be provided as lists (e.g., `n_photons`, `n_modes`, `seed`, `fold_index`, `n_rff_features`). In such cases, the script will automatically loop over all provided values **in a grid-search manner**.
+
 
 ## Results and Analysis
 
@@ -166,6 +174,7 @@ Graph comparing quantum reservoir and classical method (RFF, a fast-approximatio
 
 - **Circuit Depth Ablation**: Study how test accuracy evolves with deeper/shallower quantum circuits.
 - **Robustness**: Evaluate performance on **Fashion-MNIST** and **K-MNIST**.
+- **Photon/Mode Scaling**: Evaluate performance with higher photon counts and mode dimensions, leveraging HPC resources (e.g., GENCI/Jean Zay) for large-scale simulations.
 
 
 ## Reproducibility Notes
