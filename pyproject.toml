@@ -16,6 +16,9 @@ select = [
 ignore = [
     "E501",  # line too long (handled by line-length)
     "B008",  # do not perform function calls in argument defaults
+    "N802",  # function naming rules
+    "N803",  # argument naming rules
+    "N806",  # variable naming rules
 ]
 
 [tool.ruff.lint.per-file-ignores]

@@ -1,0 +1,28 @@
+{
+  "seed": 42,
+  "outdir": "results",
+  "device": "cpu",
+  "dataset": {
+    "name": "<DATASET_NAME>",
+    "root": "data",
+    "split": "train",
+    "batch_size": 32
+  },
+  "model": {
+    "name": "<MODEL_NAME>",
+    "params": {
+      "hidden_dim": 128,
+      "layers": 2
+    }
+  },
+  "training": {
+    "epochs": 10,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "weight_decay": 0.0
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

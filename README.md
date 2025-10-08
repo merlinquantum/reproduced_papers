@@ -16,17 +16,60 @@ Each paper reproduction is designed to be accessible, well-documented, and easy 
 
 We encourage contributions of new quantum ML paper reproductions. Please follow the guidelines below:
 
-### Recommended structure for a reproduction
+### Mandatory structure for a reproduction
 
 ```
-paper_reproduction/
-├── README.md             # Paper overview and results
-├── implementation.py     # Core implementation
+NAME/                     # Non-ambiguous acronym or fullname of the reproduced paper
+├── .gitignore            # specific .gitignore rules for clean repository
+├── implementation.py     # Main engine to train a model - the cli can accept parameters or config file
 ├── notebook.ipynb        # Interactive exploration of key concepts
-├── data/                 # Datasets and preprocessing
-├── results/              # Figures and analysis
-└── tests/                # Validation tests
+├── README.md             # Paper overview and results overview
+├── requirements.txt      # additional requirements for the scripts
+├── configs/              # predefined configurations to train models
+├── data/                 # Datasets and preprocessing if any
+├── lib/                  # code used by implementation.py and notebook.ipynb - as a integrated library
+├── models/               # Trained models 
+├── results/              # Selected generated figures, tables, or outputs from trained models
+├── tests/                # Validation tests
+└── utils/                # additional commandline utilities for visualization, launch of multiple trainings, etc...
 ```
+
+### Reproduction template (starter kit)
+
+Use the ready-to-go template in `reproduction_template/` to bootstrap a new paper folder that follows the structure above.
+
+Quick start:
+
+```bash
+# 1) Create your paper folder (replace NAME with a short, unambiguous id)
+cp -R reproduction_template NAME
+
+cd NAME
+
+# 2) Create and activate a virtual environment
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# 3) Run with the example config (JSON-only)
+python implementation.py --config configs/example.json
+
+# 4) See outputs (default base outdir is `outdir/`)
+ls outdir
+
+# 5) Run tests (from inside NAME/)
+pytest -q
+```
+
+Then edit the placeholders in:
+- `README.md` — paper reference/authors, reproduction details, CLI options, results analysis
+- `configs/example.json` — dataset/model/training defaults (extend or add more configs)
+- `implementation.py` and `lib/` — actual dataset/model/training logic
+
+Notes:
+- Configs are JSON-only in the template.
+- Each run creates a timestamped folder under the base `outdir` (default `outdir/`): `run_YYYYMMDD-HHMMSS/` with `config_snapshot.json` and your artifacts.
+- Tests are intended to be run from inside the paper folder (e.g., `cd NAME && PYTHONPATH=. pytest -q`).
 
 ### Submission process
 
