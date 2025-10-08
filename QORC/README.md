@@ -165,7 +165,7 @@ Main graph exposing quantum reservoir performances (test accuracy) on MNIST.
 
 In the precedent graph, bunching was manually disabled when the condition `n_photons * n_photons < n_modes` was met, to ensure more precise calculations.
 
-Graph comparing quantum reservoir and classical method (RFF, a fast-approximation of RBF)
+Graph comparing the quantum reservoir computing (QRC) method with the classical Random Fourier Features (RFF) method, a fast approximation of the Radial Basis Function (RBF) kernel. For the QRC, the number of photons is fixed at 3, as specified in the reference paper.
 
 ![MNIST quantum reservoir versus RFF](results/graph_qorc_vs_rff.png)
 
