@@ -1,0 +1,22 @@
+{
+  "seed": 123,
+  "device": "cpu",
+  "outdir": "./runs_mnist",
+  "dataset": {
+    "name": "mnist",
+    "n_components": 8
+  },
+  "training": {
+    "n_repeats": 10
+  },
+  "experiments": [
+    {
+      "classes": [0, 1],
+      "n_samples": 40
+    },
+    {
+      "classes": [2, 7],
+      "n_samples": 40
+    }
+  ]
+}

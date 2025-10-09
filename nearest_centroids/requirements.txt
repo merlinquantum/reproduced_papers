@@ -1,0 +1,8 @@
+# Add paper-specific dependencies here
+
+cirq==1.6.1
+scikit-learn==1.7.1
+merlinquantum
+matplotlib==3.10.3
+torchvision==0.22.1
+

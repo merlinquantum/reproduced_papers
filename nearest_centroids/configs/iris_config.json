@@ -1,0 +1,22 @@
+{
+  "seed": 123,
+  "device": "cpu",
+  "outdir": "./runs_iris",
+  "dataset": {
+    "name": "iris",
+    "n_components": 2
+  },
+  "training": {
+    "n_repeats": 10
+  },
+  "experiments": [
+    {
+      "classes": [0, 1],
+      "n_samples": 25
+    },
+    {
+      "classes": [1, 2],
+      "n_samples": 25
+    }
+  ]
+}
