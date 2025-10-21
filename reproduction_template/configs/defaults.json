@@ -1,4 +1,6 @@
 {
+    "description" : "Default parameters",
+
     "seed": 42,
     "outdir": "outdir",
     "device": "cpu",
