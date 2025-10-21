@@ -22,29 +22,3 @@ def deep_update(base, updates):
         else:
             base[k] = v
     return base
-
-
-def default_config():
-    """Return default configuration as a plain dictionary."""
-    return {
-        "seed": 42,
-        "outdir": "outdir",
-        "device": "cpu",
-        "dataset": {
-            "name": "<DATASET_NAME>",
-            "root": "data",
-            "split": "train",
-            "batch_size": 32,
-        },
-        "model": {
-            "name": "<MODEL_NAME>",
-            "params": {"hidden_dim": 128, "layers": 2},
-        },
-        "training": {
-            "epochs": 10,
-            "optimizer": "adam",
-            "lr": 1e-3,
-            "weight_decay": 0.0,
-        },
-        "logging": {"level": "info", "save_config_snapshot": True},
-    }

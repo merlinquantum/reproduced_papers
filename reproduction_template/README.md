@@ -78,7 +78,8 @@ Notes:
 
 Place configuration files in `configs/`.
 
-- `example.json` shows the structure and defaults.
+- `defaults.json` defines the default parameter values.
+- `example.json` shows the structure for a specific experiment.
 - Keys typically include: dataset, model, training, evaluation, logging.
 
 ## Results and Analysis

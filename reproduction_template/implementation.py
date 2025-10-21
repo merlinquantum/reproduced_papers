@@ -16,7 +16,7 @@ import os
 import random
 from pathlib import Path
 
-from lib.config import deep_update, default_config, load_config
+from lib.config import deep_update, load_config
 
 # -----------------------------
 # Core placeholders
@@ -105,7 +105,7 @@ def configure_logging(level: str = "info", log_file: Path | None = None) -> None
 
 
 def resolve_config(args: argparse.Namespace):
-    cfg = default_config()
+    cfg = load_config(Path("./configs/defaults.json"))
 
     # Load from file if provided
     if args.config:
