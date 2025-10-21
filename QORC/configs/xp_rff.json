@@ -1,4 +1,6 @@
 {
+    "description" : "Parameters for the RFF experiment",
+
     "xp_type" : "rff",
 
     "n_rff_features" : [10, 20, 30, 120, 220, 364, 560, 1140, 2024, 4060, 4960, 9880],

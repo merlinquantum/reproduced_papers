@@ -141,7 +141,7 @@ def build_arg_parser() -> argparse.ArgumentParser:
 
 
 def resolve_config(args: argparse.Namespace):
-    cfg = {}
+    cfg = load_config(Path("./configs/defaults.json"))
 
     # Load from file if provided
     if args.config:

@@ -1,5 +1,5 @@
 {
-    "description" : "Parameters for the Qorc experiment",
+    "description" : "Default parameters",
 
     "xp_type" : "qorc",
 
@@ -29,6 +29,14 @@
 
     "b_use_tensorboard": false,
 
+    "n_rff_features" : [10, 20, 30, 120, 220, 364, 560, 1140, 2024, 4060, 4960, 9880],
+    "sigma" : 10,
+    "regularization_c" : 1.0,
+
+    "b_optim_via_sgd" : true,
+    "max_iter_sgd" : 1000,
+
     "outdir" : "outdir"
 
 }
+
