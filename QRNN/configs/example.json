@@ -1,0 +1,44 @@
+{
+  "description": "Example experiment for the QRNN baseline on weather sequences",
+  "seed": 1337,
+  "outdir": "results",
+  "device": "cpu",
+  "dataset": {
+    "name": "weather_prediction",
+    "path": "data/sample_weather.csv",
+    "kaggle_dataset": "thedevastator/weather-prediction",
+    "use_kagglehub": false,
+    "target_column": "temperature",
+    "feature_columns": ["temperature", "humidity"],
+    "time_column": "timestamp",
+    "sequence_length": 12,
+    "prediction_horizon": 1,
+    "train_ratio": 0.75,
+    "val_ratio": 0.15,
+    "batch_size": 8,
+    "num_workers": 0,
+    "shuffle": true
+  },
+  "model": {
+    "name": "rnn_baseline",
+    "params": {
+      "hidden_dim": 32,
+      "layers": 1,
+      "dropout": 0.0
+    }
+  },
+  "training": {
+    "epochs": 3,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "clip_grad_norm": 1.0
+  },
+  "evaluation": {
+    "metrics": ["mse"]
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}
