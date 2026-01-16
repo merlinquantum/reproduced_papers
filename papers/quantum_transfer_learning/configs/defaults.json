@@ -1,0 +1,59 @@
+{
+  "description": "Default configuration for Quantum Transfer Learning paper reproduction (Mari et al. 2020)",
+  "seed": 42,
+  "outdir": "outdir",
+  "logging": {
+    "level": "info"
+  },
+  "device": "auto",
+  "dtype": "float32",
+
+  "dataset": {
+    "name": "spiral",
+    "n_samples": 2200,
+    "n_train": 2000,
+    "n_test": 200,
+    "noise": 0.0
+  },
+
+  "feature_extractor": {
+    "model": "resnet18",
+    "pretrained": true,
+    "freeze": true,
+    "n_features": 512
+  },
+
+  "model": {
+    "type": "dressed_quantum",
+    "n_qubits": 4,
+    "q_depth": 5,
+    "n_inputs": 2,
+    "n_outputs": 2,
+    "n_photons": 2,
+    "computation_space": "unbunched",
+    "merlin_depth": 1,
+    "scale_type": "learned"
+  },
+
+  "training": {
+    "epochs": 20,
+    "batch_size": 10,
+    "learning_rate": 0.01,
+    "optimizer": "adam",
+    "loss": "cross_entropy",
+    "lr_schedule": null
+  },
+
+  "classical_baseline": {
+    "type": "mlp",
+    "hidden_sizes": [4, 4],
+    "activation": "tanh"
+  },
+
+  "options": {
+    "use_merlin": true,
+    "compare_classical": false,
+    "save_model": false,
+    "generate_figures": true
+  }
+}

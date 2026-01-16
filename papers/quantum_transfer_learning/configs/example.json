@@ -1,0 +1,36 @@
+{
+  "experiment": "spiral",
+  "description": "Quick test config with reduced parameters",
+
+  "dataset": {
+    "name": "spiral",
+    "n_samples": 220,
+    "n_train": 200,
+    "n_test": 20,
+    "noise": 0.0
+  },
+
+  "model": {
+    "type": "dressed_quantum",
+    "n_qubits": 4,
+    "q_depth": 2,
+    "n_inputs": 2,
+    "n_outputs": 2,
+    "n_photons": 2,
+    "computation_space": "unbunched"
+  },
+
+  "training": {
+    "epochs": 5,
+    "batch_size": 10,
+    "learning_rate": 0.01,
+    "optimizer": "adam"
+  },
+
+  "options": {
+    "use_merlin": true,
+    "compare_classical": false,
+    "save_model": false,
+    "generate_figures": false
+  }
+}
