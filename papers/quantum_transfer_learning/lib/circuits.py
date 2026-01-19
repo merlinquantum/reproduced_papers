@@ -118,7 +118,7 @@ def create_merlin_deep_circuit(n_modes: int, n_features: int, depth: int) -> pcv
             for i in range(min(n_features, n_modes)):
                 mode = start_mode + i
                 if mode < n_modes:
-                    circuit.add(mode, pcvl.PS(pcvl.P(f"x{i}")))
+                    circuit.add(mode, pcvl.PS(pcvl.P(f"x{layer}_{i}")))
 
     return circuit
 
@@ -364,17 +364,11 @@ class MerLinSimpleLayer(nn.Module):
         """
         super().__init__()
 
-        # Parse computation space
-        comp_space = ComputationSpace.coerce(computation_space)
-
         self.quantum_layer = QuantumLayer.simple(
             input_size=input_size,
             n_params=n_params,
             output_size=output_size,
-            computation_space=comp_space,
-            measurement_strategy=MeasurementStrategy.PROBABILITIES,
         )
-
         self._output_size = self.quantum_layer.output_size
 
     @property
