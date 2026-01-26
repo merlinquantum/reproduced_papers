@@ -138,9 +138,9 @@ def create_quantum_layer_for_ascella(n_photons, logger):
         qorc_input_state[index] = 1
 
     device_name = "cpu"
+    input_size=n_modes - 1,  # Nb input features = 11 pour ascella (le premier mode n'a pas de PS)
     qorc_quantum_layer = ML.QuantumLayer(
-        input_size=n_modes
-        - 1,  # Nb input features = 11 pour ascella (le premier mode n'a pas de PS)
+        input_size=input_size,
         output_size=qorc_output_size,  # Nb output classes = nb modes
         circuit=qorc_circuit,  # QORC quantum circuit
         trainable_parameters=[],  # Circuit is not trainable
@@ -206,19 +206,19 @@ def create_qorc_quantum_layer(
         qorc_output_size = math.comb(n_photons + n_modes - 1, n_photons)
 
     logger.info("MerLin QuantumLayer creation:")
+    measurement_strategy = ML.MeasurementStrategy.PROBABILITIES
     qorc_quantum_layer = ML.QuantumLayer(
         input_size=n_modes,  # Nb input features = nb modes
-        output_size=qorc_output_size,  # Nb output classes = nb modes
         circuit=qorc_circuit,  # QORC quantum circuit
-        trainable_parameters=[],  # Circuit is not trainable
+        trainable_parameters=[],
         input_parameters=params_prefix,  # Input encoding parameters
         input_state=qorc_input_state,  # Initial photon state
-        output_mapping_strategy=ML.OutputMappingStrategy.NONE,  # Output: Get all Fock states probas
-        # See: https://merlinquantum.ai/user_guide/output_mappings.html
+        measurement_strategy=measurement_strategy,
         no_bunching=b_no_bunching,
         device=torch.device(device_name),
     )
     qorc_quantum_layer.eval()  # Put the layer in eval (do not compute gradiants)
+
 
     # Verify there are no trainable parameters
     params = qorc_quantum_layer.parameters()
@@ -375,13 +375,14 @@ def qorc_encoding_and_linear_training(
     logger.info("Computation of the quantum features...")
     time_t2 = time.time()
     train_tensor = torch.tensor(
-        train_data_pca_norm, dtype=torch.float32, device=compute_device
+        # MerLin v0.2 requires Pi factor (as opposed to MerLin v0.1, which performs the product implicitly)
+        np.pi * train_data_pca_norm, dtype=torch.float32, device=compute_device
     )
     val_tensor = torch.tensor(
-        val_data_pca_norm, dtype=torch.float32, device=compute_device
+        np.pi * val_data_pca_norm, dtype=torch.float32, device=compute_device
     )
     test_tensor = torch.tensor(
-        test_data_pca_norm, dtype=torch.float32, device=compute_device
+        np.pi * test_data_pca_norm, dtype=torch.float32, device=compute_device
     )
 
     if qpu_device_name == "none" or qpu_device_name == "":

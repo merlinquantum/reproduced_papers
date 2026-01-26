@@ -3,8 +3,8 @@
 
     "xp_type" : "qorc",
 
-    "n_photons" : 2,
-    "n_modes"   : 10,
+    "n_photons" : 3,
+    "n_modes"   : 20,
     "seed"      : 42,
     "fold_index": 0,
 
