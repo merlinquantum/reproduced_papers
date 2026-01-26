@@ -9,6 +9,9 @@ import sys
 from pathlib import Path
 from typing import Any
 
+import perceval as pcvl
+import merlin as ML
+
 from .cli import apply_cli_overrides, build_cli_parser
 from .config import deep_update, load_config
 from .data_paths import ENV_DATA_ROOT, resolve_data_root
@@ -44,6 +47,9 @@ def _log_run_banner(project_dir: Path, cfg: dict[str, Any]) -> None:
     project_name = project_dir.name
     logger.info("Starting %s run", project_name)
     logger.debug("Resolved config: %s", json.dumps(cfg, indent=2))
+    logger.info("Python version %s", sys.version.split()[0])
+    logger.info("Perceval version %s", pcvl.__version__)
+    logger.info("MerLin version %s", ML.__version__)
 
 
 def _purge_project_modules() -> None:
