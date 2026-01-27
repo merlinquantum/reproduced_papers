@@ -5,7 +5,7 @@
 
     "n_photons" : 3,
     "n_modes"   : 20,
-    "seed"      : 42,
+    "run_seed"  : 42,
     "fold_index": 0,
 
     "n_epochs": 100,
