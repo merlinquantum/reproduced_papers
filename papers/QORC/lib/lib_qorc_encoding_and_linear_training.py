@@ -138,7 +138,9 @@ def create_quantum_layer_for_ascella(n_photons, logger):
         qorc_input_state[index] = 1
 
     device_name = "cpu"
-    input_size=n_modes - 1,  # Nb input features = 11 pour ascella (le premier mode n'a pas de PS)
+    input_size = (
+        n_modes - 1,
+    )  # Nb input features = 11 pour ascella (le premier mode n'a pas de PS)
     qorc_quantum_layer = ML.QuantumLayer(
         input_size=input_size,
         output_size=qorc_output_size,  # Nb output classes = nb modes
@@ -218,7 +220,6 @@ def create_qorc_quantum_layer(
         device=torch.device(device_name),
     )
     qorc_quantum_layer.eval()  # Put the layer in eval (do not compute gradiants)
-
 
     # Verify there are no trainable parameters
     params = qorc_quantum_layer.parameters()
@@ -376,7 +377,9 @@ def qorc_encoding_and_linear_training(
     time_t2 = time.time()
     train_tensor = torch.tensor(
         # MerLin v0.2 requires Pi factor (as opposed to MerLin v0.1, which performs the product implicitly)
-        np.pi * train_data_pca_norm, dtype=torch.float32, device=compute_device
+        np.pi * train_data_pca_norm,
+        dtype=torch.float32,
+        device=compute_device,
     )
     val_tensor = torch.tensor(
         np.pi * val_data_pca_norm, dtype=torch.float32, device=compute_device

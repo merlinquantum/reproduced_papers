@@ -110,6 +110,8 @@ def rff_encoding_and_linear_training(
 
     train_acc = int(10000.0 * accuracy_score(train_label, train_model_pred)) / 10000.0
     test_acc = int(10000.0 * accuracy_score(test_label, test_model_pred)) / 10000.0
+    logger.info("train accuracy: {}".format(train_acc))
+    logger.info("test accuracy: {}".format(test_acc))
 
     duration_calcul_rff_features = int(100.0 * (time_t3 - time_t2)) / 100.0
     logger.info(

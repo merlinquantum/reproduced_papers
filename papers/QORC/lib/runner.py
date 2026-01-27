@@ -31,12 +31,12 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
 def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
     n_photons = cfg["n_photons"]
     n_modes = cfg["n_modes"]
-    seeds = cfg["seed"]
+    seed = cfg["run_seed"]
     fold_index = cfg["fold_index"]
 
     if any(
         isinstance(val, Sequence) and not isinstance(val, (str, bytes))
-        for val in (n_photons, n_modes, seeds, fold_index)
+        for val in (n_photons, n_modes, seed, fold_index)
     ):
         logger.info("Entering sweep over photons/modes/folds/seeds")
         out_csv = cfg.get("f_out_results_training_csv")
@@ -47,10 +47,10 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
         photons_list = _as_list(n_photons)
         modes_list = _as_list(n_modes)
         folds_list = _as_list(fold_index)
-        seeds_list = _as_list(seeds)
-        for i, photons in enumerate(photons_list):
-            for j, modes in enumerate(modes_list):
-                for k, fold in enumerate(folds_list):
+        seeds_list = _as_list(seed)
+        for i, n_photons in enumerate(photons_list):
+            for j, n_modes in enumerate(modes_list):
+                for k, fold_index in enumerate(folds_list):
                     for l, seed in enumerate(seeds_list):
                         logger.info(
                             "Loop indices: n_photons %s/%s, n_modes %s/%s, fold %s/%s, seed %s/%s",
@@ -65,9 +65,9 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
                         )
                         logger.info(
                             "Values: n_photons %s, n_modes %s, fold_index %s, seed %s",
-                            photons,
-                            modes,
-                            fold,
+                            n_photons,
+                            n_modes,
+                            fold_index,
                             seed,
                         )
                         (
@@ -82,7 +82,7 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
                         ) = qorc_encoding_and_linear_training(
                             n_photons=n_photons,
                             n_modes=n_modes,
-                            seed=seeds,
+                            seed=seed,
                             dataset_name=cfg["dataset_name"],
                             fold_index=fold_index,
                             n_fold=cfg["n_fold"],
@@ -106,10 +106,10 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
                         df_line = pd.DataFrame(
                             [
                                 {
-                                    "n_photons": photons,
-                                    "n_modes": modes,
+                                    "n_photons": n_photons,
+                                    "n_modes": n_modes,
                                     "seed": seed,
-                                    "fold_index": fold,
+                                    "fold_index": fold_index,
                                     "train_acc": train_acc,
                                     "val_acc": val_acc,
                                     "test_acc": test_acc,
@@ -129,7 +129,7 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
     outputs = qorc_encoding_and_linear_training(
         n_photons=n_photons,
         n_modes=n_modes,
-        seed=seeds,
+        seed=seed,
         dataset_name=cfg["dataset_name"],
         fold_index=fold_index,
         n_fold=cfg["n_fold"],
@@ -156,11 +156,11 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
 
 def _run_rff(cfg, run_dir: Path, logger: logging.Logger) -> None:
     n_rff_features = cfg["n_rff_features"]
-    seeds = cfg["seed"]
+    seed = cfg["run_seed"]
 
     if any(
         isinstance(val, Sequence) and not isinstance(val, (str, bytes))
-        for val in (n_rff_features, seeds)
+        for val in (n_rff_features, seed)
     ):
         logger.info("Entering sweep over n_rff_features/seed")
         out_csv = cfg.get("f_out_results_training_csv")
@@ -169,7 +169,7 @@ def _run_rff(cfg, run_dir: Path, logger: logging.Logger) -> None:
         csv_path = run_dir / out_csv
         df = pd.DataFrame()
         features_list = _as_list(n_rff_features)
-        seeds_list = _as_list(seeds)
+        seeds_list = _as_list(seed)
         for i, features in enumerate(features_list):
             for j, seed in enumerate(seeds_list):
                 logger.info(
@@ -192,6 +192,7 @@ def _run_rff(cfg, run_dir: Path, logger: logging.Logger) -> None:
                     seed=seed,
                     b_optim_via_sgd=cfg["b_optim_via_sgd"],
                     max_iter_sgd=cfg["max_iter_sgd"],
+                    dataset_name=cfg["dataset_name"],
                     run_dir=run_dir,
                     logger=logger,
                 )
@@ -216,9 +217,10 @@ def _run_rff(cfg, run_dir: Path, logger: logging.Logger) -> None:
         n_rff_features=n_rff_features,
         sigma=cfg["sigma"],
         regularization_c=cfg["regularization_c"],
-        seed=seeds,
+        seed=seed,
         b_optim_via_sgd=cfg["b_optim_via_sgd"],
         max_iter_sgd=cfg["max_iter_sgd"],
+        dataset_name=cfg["dataset_name"],
         run_dir=run_dir,
         logger=logger,
     )

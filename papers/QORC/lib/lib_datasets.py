@@ -20,7 +20,6 @@ if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
 
-
 class tensor_dataset(Dataset):
     def __init__(self, np_x, np_y, device, dtype, transform=None, n_side_pixels=None):
         if isinstance(np_x, torch.Tensor):
@@ -104,4 +103,3 @@ __all__ = [
     "split_fold_numpy",
     "get_mnist_variant",
 ]
-
