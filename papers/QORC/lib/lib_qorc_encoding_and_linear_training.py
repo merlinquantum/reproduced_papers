@@ -98,7 +98,7 @@ def create_quantum_layer_for_ascella(n_photons, logger):
     specs = remote_processor.specs
     spec_circuit = specs["specific_circuit"]
     d_current, depths = get_circuit_physical_depth(spec_circuit)
-    print("circuit depths:", d_current, depths)
+    # print("circuit depths:", d_current, depths)
 
     # Ascella: On cherche les PS du milieu, pour les 11 derniers modes, car le premier mode n'a pas de PhaseShifter
     input_param_names = []
@@ -107,9 +107,9 @@ def create_quantum_layer_for_ascella(n_photons, logger):
         ps_name, depth_cour = get_PS_name_for_mode_and_depth(
             spec_circuit, mode_cour, depth_target
         )
-        print(mode_cour, depth_target, depth_cour, ps_name)
+        # print(mode_cour, depth_target, depth_cour, ps_name)
         input_param_names.append(ps_name)
-    print("Liste des paramètres d'input:", input_param_names)
+    # print("Liste des paramètres d'input:", input_param_names)
 
     # On construit un circuit identique, avec des phases fixes pour les non-input
     qorc_circuit = pcvl.Circuit(n_modes)
@@ -139,16 +139,16 @@ def create_quantum_layer_for_ascella(n_photons, logger):
 
     device_name = "cpu"
     input_size = (
-        n_modes - 1,
+        n_modes - 1
     )  # Nb input features = 11 pour ascella (le premier mode n'a pas de PS)
+    measurement_strategy = ML.MeasurementStrategy.PROBABILITIES
     qorc_quantum_layer = ML.QuantumLayer(
         input_size=input_size,
-        output_size=qorc_output_size,  # Nb output classes = nb modes
         circuit=qorc_circuit,  # QORC quantum circuit
         trainable_parameters=[],  # Circuit is not trainable
         input_parameters=input_param_names,  # Input encoding parameters
         input_state=qorc_input_state,  # Initial photon state
-        output_mapping_strategy=ML.OutputMappingStrategy.NONE,  # Output: Get all Fock states probas
+        measurement_strategy=measurement_strategy,  # MerLin v2
         # See: https://merlinquantum.ai/user_guide/output_mappings.html
         no_bunching=False,
         device=torch.device(device_name),
