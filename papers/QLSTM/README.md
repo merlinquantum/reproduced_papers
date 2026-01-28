@@ -44,7 +44,7 @@ Stack: PyTorch, PennyLane, MerLin, NumPy/SciPy, scikit‑learn, matplotlib.
 
 ## Folder Structure
 
-- `../implementation.py --paper QLSTM` — Repository-level CLI entry point powered by this folder's `configs/cli.json`
+- `../implementation.py --paper QLSTM` — Repository-level CLI entry point powered by this folder's `cli.json`
 - `lib/model.py` — Classical LSTM, QLSTM (gate VQCs), sequence wrapper
 - `lib/dataset.py` — Synthetic generators + CSV loader (delegates to `papers/shared/QLSTM/dataset.py`)
 - `lib/rendering.py` — Plotting and pickle helpers
@@ -64,13 +64,13 @@ pip install -r requirements.txt
 
 ## Command-line Interface
 
-Main entry point: repository root `implementation.py` with `--paper QLSTM`. The available arguments live in `configs/cli.json`, so you can extend the CLI by editing JSON rather than Python.
+Main entry point: repository root `implementation.py` with `--paper QLSTM`. The available arguments live in `cli.json`, so you can extend the CLI by editing JSON rather than Python.
 
 ```bash
 python implementation.py --paper QLSTM --help
 ```
 
-Highlights (see `configs/cli.json` for the authoritative list):
+Highlights (see `cli.json` for the authoritative list):
 
 - `--config PATH`: merge an additional JSON config into `configs/defaults.json` (deep merge).
 - `--seed INT`, `--outdir DIR`, `--device STR`: generic runtime overrides.
@@ -142,7 +142,7 @@ Place JSON files in `configs/`.
 - `defaults.json` is the base experiment (sine generator with QLSTM).
 - Dataset/model presets (e.g., `sine_qlstm.json`) can be layered via `--config`.
 - `cli.json` defines every CLI argument, its type, and the config key it overrides.
-- The shared runtime automatically reads `configs/defaults.json`, `configs/cli.json`, and imports `lib/runner.py::train_and_evaluate`.
+- The shared runtime automatically reads `configs/defaults.json`, `cli.json`, and imports `lib/runner.py::train_and_evaluate`.
 - Keys follow the same structure as before: `experiment`, `model`, `training`, `logging`, etc. CLI overrides mutate these dictionaries via the dot-paths defined in `cli.json`.
 
 ## Available Generators

@@ -116,7 +116,7 @@ pip install -r requirements.txt
 
 ### Command-line interface
 
-Main entry point: the paper-level `lib/runner.py`. The CLI is entirely described in `configs/cli.json`, so updating/adding arguments does not require editing Python code.
+Main entry point: the paper-level `lib/runner.py`. The CLI is entirely described in `cli.json`, so updating/adding arguments does not require editing Python code.
 
 ```bash
 # From inside papers/reproduction_template
@@ -126,7 +126,7 @@ python l../../implementation.py  --help
 python implementation.py --paper DQNN --help
 ```
 
-Example overrides (see `configs/cli.json` for the authoritative list):
+Example overrides (see `cli.json` for the authoritative list):
 
 - `--config CONFIG_NAME` Load an additional JSON config (merged over `defaults.json`). The config path is automatically handled by the code.
 

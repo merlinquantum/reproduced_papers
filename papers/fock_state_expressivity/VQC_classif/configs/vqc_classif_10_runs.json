@@ -21,7 +21,7 @@
     "regularization_target": "linear"
   },
   "training": {
-    "num_runs": 3,
+    "num_runs": 10,
     "epochs": 150,
     "batch_size": 30,
     "learning_rate": 0.02,

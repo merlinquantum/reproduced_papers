@@ -4,21 +4,52 @@
 from __future__ import annotations
 
 import argparse
+import copy
+import json
 import sys
 from pathlib import Path
 
 from runtime_lib import run_from_project
+from runtime_lib.cli import build_cli_parser
 
 PAPERS_DIRNAME = "papers"
 PROJECT_MARKERS = (
     Path("configs") / "defaults.json",
-    Path("configs") / "cli.json",
+    Path("cli.json"),
     Path("lib") / "runner.py",
 )
+GLOBAL_CLI_SCHEMA = Path("runtime_lib") / "global_cli.json"
 
 
 def _find_repo_root() -> Path:
     return Path(__file__).resolve().parent
+
+
+def _load_json(path: Path) -> dict[str, object]:
+    with path.open("r", encoding="utf-8") as handle:
+        return json.load(handle)
+
+
+def _build_project_parser(project_dir: Path, repo_root: Path) -> argparse.ArgumentParser:
+    cli_schema_path = project_dir / "cli.json"
+    cli_schema = _load_json(cli_schema_path)
+    cli_schema.setdefault("arguments", [])
+    global_schema_path = repo_root / GLOBAL_CLI_SCHEMA
+    if global_schema_path.exists():
+        global_schema = _load_json(global_schema_path)
+        cli_schema["arguments"].extend(
+            copy.deepcopy(global_schema.get("arguments", []))
+        )
+    parser, _ = build_cli_parser(cli_schema)
+    return parser
+
+
+def _format_help_without_usage(parser: argparse.ArgumentParser) -> str:
+    help_text = parser.format_help()
+    lines = help_text.splitlines()
+    if lines and lines[0].lower().startswith("usage:"):
+        lines = lines[1:]
+    return "\n".join(lines).rstrip()
 
 
 def _is_project_dir(path: Path) -> bool:
@@ -29,7 +60,7 @@ def _is_project_dir(path: Path) -> bool:
 
 
 def _iter_project_dirs(repo_root: Path) -> list[Path]:
-    """Return all project dirs (configs/defaults.json, configs/cli.json, lib/runner.py).
+    """Return all project dirs (configs/defaults.json, cli.json, lib/runner.py).
 
     Searches recursively under `papers/` (to capture nested subprojects such as
     fock_state_expressivity/*) and also at the repository root.
@@ -94,7 +125,7 @@ def _require_project_dir(
         )
     if not _is_project_dir(project_dir):
         parser.error(
-            "Invalid paper directory (expected configs/defaults.json, configs/cli.json, "
+            "Invalid paper directory (expected configs/defaults.json, cli.json, "
             f"and lib/runner.py): {project_dir}"
         )
     return project_dir.resolve()
@@ -102,6 +133,13 @@ def _require_project_dir(
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(add_help=False)
+    parser.add_argument(
+        "-h",
+        "--help",
+        action="store_true",
+        dest="show_help",
+        help="Show help (includes paper options when available)",
+    )
     parser.add_argument(
         "--paper",
         "--paper-name",
@@ -123,7 +161,7 @@ def main(argv: list[str] | None = None) -> int:
         dest="list_papers",
         help=(
             "List available paper folders that contain configs/defaults.json, "
-            "configs/cli.json, and lib/runner.py"
+            "cli.json, and lib/runner.py"
         ),
     )
     parser.add_argument(
@@ -149,6 +187,51 @@ def main(argv: list[str] | None = None) -> int:
     known, remaining = parser.parse_known_args(argv)
 
     repo_root = _find_repo_root()
+    if known.show_help:
+        project_dir: Path | None
+        if known.paper:
+            project_dir = _resolve_named_project(repo_root, known.paper)
+            if project_dir is None:
+                print(
+                    f"Error: unknown paper '{known.paper}'. Use --list-papers to list available papers.",
+                    file=sys.stderr,
+                )
+                return 2
+        elif known.paper_dir:
+            project_dir = Path(known.paper_dir).expanduser().resolve()
+            if not project_dir.exists():
+                print(
+                    f"Error: paper directory does not exist: {project_dir}",
+                    file=sys.stderr,
+                )
+                return 2
+        else:
+            project_dir = _find_enclosing_project_dir(Path.cwd(), repo_root)
+        if project_dir and not _is_project_dir(project_dir):
+            print(
+                "Error: invalid paper directory (expected configs/defaults.json, cli.json, "
+                f"and lib/runner.py): {project_dir}",
+                file=sys.stderr,
+            )
+            return 2
+        if project_dir and _is_project_dir(project_dir):
+            project_parser = _build_project_parser(project_dir, repo_root)
+            prog = Path(sys.argv[0]).name
+            paper_name = project_dir.name
+            print(
+                f"Options for paper {paper_name} (includes global options)."
+            )
+            print(f"usage: {prog} --paper {paper_name} [options]")
+            help_body = _format_help_without_usage(project_parser)
+            if help_body:
+                print(help_body)
+        else:
+            parser.print_help()
+            print(
+                "\nTip: use --paper NAME --help to show paper-specific options."
+            )
+            print("\nTip: use --list-papers to list available papers.")
+        return 0
     if known.list_papers:
         for path in _iter_project_dirs(repo_root):
             print(path.relative_to(repo_root))

@@ -13,7 +13,7 @@
     "no_bunching": false
   },
   "training": {
-    "num_runs": 1,
+    "num_runs": 3,
     "epochs": 200,
     "batch_size": 32,
     "learning_rate": 0.02,

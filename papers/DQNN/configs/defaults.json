@@ -4,9 +4,9 @@
     "exp_to_run": "DEFAULT",
     "bond_dim": 7,
     "num_training_rounds": 2,
-    "num_epochs": 5,
-    "num_qnn_train_step": 12,
-    "classical_epochs": 5,
+    "num_epochs": 2,
+    "num_qnn_train_step": 5,
+    "classical_epochs": 2,
     "pruning_amount": 0.5,
     "shared_rows": 10,
     "dont_generate_graph":"True"

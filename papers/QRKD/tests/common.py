@@ -15,14 +15,17 @@ from runtime_lib.config import load_config  # noqa: E402
 from runtime_lib.dtypes import resolve_config_dtypes  # noqa: E402
 
 
-_CLI_SCHEMA_PATH = PROJECT_DIR / "configs" / "cli.json"
+_CLI_SCHEMA_PATH = PROJECT_DIR / "cli.json"
 _DEFAULTS_PATH = PROJECT_DIR / "configs" / "defaults.json"
 
 
 def build_project_cli_parser():
     """Return the ArgumentParser (and CLI defs) for the QRKD project."""
 
-    schema = json.loads(_CLI_SCHEMA_PATH.read_text())
+    schema_path = _CLI_SCHEMA_PATH
+    if not schema_path.exists():
+        schema_path = PROJECT_DIR / "configs" / "cli.json"
+    schema = json.loads(schema_path.read_text())
     schema.setdefault("arguments", [])
     return build_cli_parser(schema)
 

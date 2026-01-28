@@ -218,7 +218,7 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-The CLI schema is defined in `configs/cli.json`. Default values are in `configs/defaults.json`. Model-specific configs are in `configs/[model-name].json`.
+The CLI schema is defined in `cli.json`. Default values are in `configs/defaults.json`. Model-specific configs are in `configs/[model-name].json`.
 
 ## Output Directory and Config Snapshot
 

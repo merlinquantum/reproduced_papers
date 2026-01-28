@@ -53,7 +53,7 @@ You can either run a simple QNN model using `--model single` or a quantum convol
 
 ![QCNN](Photonic_QConv.png)
 
-Key options to run these models (see `configs/cli.json`, `model/`, and `utils/` for the full list):
+Key options to run these models (see `cli.json`, `model/`, and `utils/` for the full list):
 
 - `--model {qconv,single}` switch between the quantum pseudo-convolution and a single Gaussian interferometer baseline.
 - `--nb_kernels`, `--kernel_size`, `--stride`, `--kernel_modes`: quantum kernel topology.

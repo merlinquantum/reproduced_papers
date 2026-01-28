@@ -45,7 +45,7 @@ Universal CLI flags provided by the shared runner:
 - `--dtype STR` Force a global tensor dtype before model-specific overrides.
 - `--device STR` Torch device string (`cpu`, `cuda:0`, `mps`, ...).
 - `--log-level LEVEL` Runtime logging verbosity (`INFO` by default).
-Project-specific `configs/cli.json` files only declare the extra paper knobs; the runner injects the global options automatically.
+Project-specific `cli.json` files only declare the extra paper knobs; the runner injects the global options automatically.
 
 ### Smoke-test all papers quickly
 
@@ -71,7 +71,8 @@ papers/NAME/            # Non-ambiguous acronym or fullname of the reproduced pa
 ├── notebook.ipynb        # Interactive exploration of key concepts
 ├── README.md             # Paper overview and results overview
 ├── requirements.txt      # additional requirements for the scripts
-├── configs/              # defaults + CLI/runtime descriptors consumed by the repo root runner
+├── configs/              # defaults + experiment configs consumed by the repo root runner
+├── cli.json              # CLI schema for the shared runner
 ├── lib/                  # code used by the shared runner and notebooks - as an integrated library (import shared data helpers from papers/shared/<paper>/)
 ├── models/               # Trained models
 ├── results/              # Selected generated figures, tables, or outputs from trained models
@@ -120,7 +121,7 @@ python implementation.py --paper NAME --config configs/example.json
 Then edit the placeholders in:
 - `README.md` — paper reference/authors, reproduction details, CLI options, results analysis
 - `configs/example.json` — dataset/model/training defaults (extend or add more configs)
-- `configs/defaults.json` + `configs/cli.json` — default parameters plus the CLI schema consumed by the shared runner (every project must expose `lib.runner.train_and_evaluate`, which the runtime imports automatically)
+- `configs/defaults.json` + `cli.json` — default parameters plus the CLI schema consumed by the shared runner (every project must expose `lib.runner.train_and_evaluate`, which the runtime imports automatically)
 - Any `dtype` entries in those configs (top-level or nested) are normalized at runtime into `(label, torch.dtype)` pairs via `runtime_lib.dtypes`, so projects can rely on validated torch dtypes without re-implementing alias logic.
 - `lib/runner.py` and supporting modules inside `lib/` — dataset/model/training logic invoked by the shared runner
 - `runtime_lib.config.load_config` / `.deep_update` handle JSON loading and overrides globally; the template already wires `lib.config` to these helpers so you must not add a custom `lib/config.py` (JSON is the only supported format).

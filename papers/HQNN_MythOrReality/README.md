@@ -48,7 +48,7 @@ The paper investigates whether hybrid quantum neural networks (HQNNs) can surpas
 
 ## Configuration
 
-- JSON files under `configs/` encode feature grids, training regimes, and HQNN search bounds; `configs/defaults.json` mirrors the paper’s setup, `configs/cli.json` defines exposed overrides, and the shared runtime automatically calls `lib/runner.train_and_evaluate`.
+- JSON files under `configs/` encode feature grids, training regimes, and HQNN search bounds; `configs/defaults.json` mirrors the paper’s setup, `cli.json` defines exposed overrides, and the shared runtime automatically calls `lib/runner.train_and_evaluate`.
 - CLI overrides (`--lr`, `--feature-grid`, `--accuracy-threshold`, etc.) merge with the JSON defaults via the runtime layer and are recorded with each run.
 
 ## Dataset
