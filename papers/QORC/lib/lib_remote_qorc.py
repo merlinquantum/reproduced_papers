@@ -118,7 +118,7 @@ def forward_remote_qorc_quantum_layer(
             logger.info("Durée (s): {}".format(duration))
 
         case "sim:ascella" | "qpu:ascella":
-            # Parralléliser les 3 jobs
+            # Parrallelize the 3 jobs
             logger.info(
                 "qpu_device_name={}  - Compute train/val/test".format(qpu_device_name)
             )
@@ -136,7 +136,7 @@ def forward_remote_qorc_quantum_layer(
             logger.info("Duration (s): {}".format(duration))
 
         case _:
-            # Cas général: On lance les calculs par défaut
+            # General case: Run default computation.
             logger.info(
                 "Qorc: (case else) of remote processor: {} - Compute train/val/test".format(
                     qpu_device_name
