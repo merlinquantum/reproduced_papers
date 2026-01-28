@@ -101,59 +101,19 @@ def forward_remote_qorc_quantum_layer(
     data_tensor = torch.cat([train_tensor, val_tensor, test_tensor], dim=0)
     logger.info("data_tensor.shape:{}".format(str(data_tensor.shape)))
 
-    match qpu_device_name:
-        case "sim:slos":
-            logger.info("qpu_device_name=sim:slos  - Compute train/val/test")
-            time_cour = time.time()
-
-            fut = proc.forward_async(
-                qorc_quantum_layer, data_tensor, nsample=qpu_device_nsample
-            )
-            _spin_until_with_ctrlc(
-                lambda: len(fut.job_ids) > 0 or fut.done(), timeout_s=qpu_device_timeout
-            )
-            processed_data_tensor = fut.wait()
-
-            duration = time.time() - time_cour
-            logger.info("Durée (s): {}".format(duration))
-
-        case "sim:ascella" | "qpu:ascella":
-            # Parrallelize the 3 jobs
-            logger.info(
-                "qpu_device_name={}  - Compute train/val/test".format(qpu_device_name)
-            )
-            time_cour = time.time()
-
-            fut = proc.forward_async(
-                qorc_quantum_layer, data_tensor, nsample=qpu_device_nsample
-            )
-            _spin_until_with_ctrlc(
-                lambda: len(fut.job_ids) > 0 or fut.done(), timeout_s=qpu_device_timeout
-            )
-            processed_data_tensor = fut.wait()
-
-            duration = time.time() - time_cour
-            logger.info("Duration (s): {}".format(duration))
-
-        case _:
-            # General case: Run default computation.
-            logger.info(
-                "Qorc: (case else) of remote processor: {} - Compute train/val/test".format(
-                    qpu_device_name
-                )
-            )
-            time_cour = time.time()
-
-            fut = proc.forward_async(
-                qorc_quantum_layer, data_tensor, nsample=qpu_device_nsample
-            )
-            _spin_until_with_ctrlc(
-                lambda: len(fut.job_ids) > 0 or fut.done(), timeout_s=qpu_device_timeout
-            )
-            processed_data_tensor = fut.wait()
-
-            duration = time.time() - time_cour
-            logger.info("Duration (s): {}".format(duration))
+    logger.info(
+        f"Qorc: Call to forward async for remote processor: {qpu_device_name} - Compute train/val/test"
+    )
+    time_cour = time.time()
+    fut = proc.forward_async(
+        qorc_quantum_layer, data_tensor, nsample=qpu_device_nsample
+    )
+    _spin_until_with_ctrlc(
+        lambda: len(fut.job_ids) > 0 or fut.done(), timeout_s=qpu_device_timeout
+    )
+    processed_data_tensor = fut.wait()
+    duration = time.time() - time_cour
+    logger.info(f"Duration (s): {duration}")
 
     train_data_qorc = processed_data_tensor[:train_size]
     val_data_qorc = processed_data_tensor[train_size : (train_size + val_size)]
