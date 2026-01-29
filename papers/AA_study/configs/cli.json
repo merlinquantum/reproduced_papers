@@ -1,0 +1,11 @@
+{
+  "description": "CLI schema for the data encoding study",
+  "arguments": [
+    {
+      "flags": ["--exp_to_run"],
+      "help": "Which experiment to run between ...  (default: '...')",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "exp_to_run"}
+    }]
+}

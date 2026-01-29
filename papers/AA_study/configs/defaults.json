@@ -1,0 +1,5 @@
+{
+    "description": "Defaults for DQNN experiments.",
+    "outdir": "results",
+    "exp_to_run": "DEFAULT"
+}
