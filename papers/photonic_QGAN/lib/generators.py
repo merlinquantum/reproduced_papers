@@ -6,6 +6,8 @@ import torch.nn as nn
 from utils.mappings import get_output_map, map_generator_output
 from utils.pqc import ParametrizedQuantumCircuit
 
+import merlin as ML
+
 
 class ClassicalGenerator(nn.Module):
     def __init__(self):
@@ -30,8 +32,127 @@ class ClassicalGenerator(nn.Module):
         return img
 
 
-#TODO: where the QuantumLayer of MerLin should be used
-class PatchGenerator:
+class PatchGenerator(nn.Module):
+    def __init__(
+        self,
+        image_size,
+        gen_count,
+        gen_arch,
+        input_state,
+        pnr,
+        lossy,
+        remote_token=None,
+        use_clements=False,
+        sim = False
+    ):
+        self.image_size = image_size
+        self.gen_count = gen_count
+        self.input_state = input_state
+
+        # Here I have replaced the list of ParametrizedQuantumCircuit 
+        # By a list of quantum layers based on these circuits
+        self.models = []
+        for _ in range(gen_count):
+            pcvl_circuit = ParametrizedQuantumCircuit(input_state.m, gen_arch, use_clements)
+            circuit_var_params = ParametrizedQuantumCircuit.var_param_names
+            circuit_enc_params = ParametrizedQuantumCircuit.enc_param_names
+            num_enc_params = len(circuit_enc_params)
+            
+            layer = ML.QuantumLayer(
+                input_size=num_enc_params,
+                circuit=pcvl_circuit,
+                input_parameters=circuit_enc_params,
+                trainable_parameters=circuit_var_params,
+                input_state=self.input_state,
+                measurement_strategy=ML.MeasurementStrategy.PROBABILITIES,
+                computation_space = ComputationSpace.FOCK
+            )
+            
+            self.models.append(layer)
+
+        # Define mapping
+        all_keys = self.models[0].final_keys
+        rev_map = {}
+        possible_outputs = []
+
+        def state_to_int(state, pnr):
+            m = len(state)
+            res = 0
+            for i in range(m):
+                if pnr:
+                    res += state[i] * (m + 1) ** (m - i)
+                elif state[i] != 0:
+                    res += 2 ** (m - i)
+            return res
+
+        for key in all_keys:
+            int_state = state_to_int(key, pnr)
+            if int_state in rev_map.keys():
+                rev_map[int_state].append(key)
+            else:
+                rev_map[int_state] = [key]
+            if int_state not in possible_outputs:
+                possible_outputs.append(int_state)
+
+        self.output_map = {}
+        for index, int_state in enumerate(sorted(list(possible_outputs))):
+            for basic_state in rev_map[int_state]:
+                self.output_map[basic_state] = index
+
+        self.bin_count = np.max(list(self.output_map.values())) + 1
+        self.expected_size = self.image_size * self.image_size // self.gen_count
+
+
+    def dist_to_image(self, raw_results_list):
+        # for each of the generators results, rearrange prob distribution according to get_output_map
+        patches = []
+        for res in raw_results_list:
+            gen_out = torch.zeros(self.bin_count)
+
+            if len(res) == 0:
+                total_count = torch.tensor(0.0)
+            else:
+                idx = torch.tensor([self.output_map[k] for k in res.keys()], device=device, dtype=torch.long)
+                vals = torch.tensor([res[k] for k in res.keys()], device=device, dtype=dtype)
+                gen_out.index_add_(0, idx, vals)
+                total_count = vals.sum()
+
+            # Normalize to distribution (avoid divide-by-zero)
+            gen_out = gen_out / (total_count + 1e-8)
+
+            # map to the right number of pixels with map_generator_output
+            surplus_half = abs((gen_out_len - expected_len) // 2)
+
+            if gen_out_len > expected_len:
+                img_gen = gen_out[surplus_half : surplus_half + expected_len]
+            else:
+                img_gen = torch.zeros(expected_len)
+                img_gen[surplus_half : surplus_half + gen_out_len] = gen_out
+
+            # Normalize patch by its max (avoid divide-by-zero)
+            img_gen = img_gen / (img_gen.max() + 1e-8)
+            patches.append(img_gen)
+
+        # Concatenate into one long "img_patch" tensor
+        if len(patches) == 0:
+            return torch.empty(0)
+    
+        return torch.cat(patches, dim=0)
+
+    
+    def forward(self, z):
+        # Get results from each generator which is a quantum layer
+        raw_results_list = [model(z) for model in self.models]
+
+        # Map to image 
+        img = dist_to_image_map(raw_results_list)
+
+        return img
+
+
+
+
+class PatchGeneratorLegacy:
     def __init__(
         self,
         image_size,
@@ -118,6 +239,12 @@ class PatchGenerator:
         return iteration_list
 
     def generate(self, noise=None, it_list=None):
+        # Do the mapping to get an image
+        # what the mapping does: 
+        # for 1 item in a batch, get results for all generators in the patchgenerator
+        # for each of them, rearrange prob distribution according to get_output_map
+        # then map to the right number of pixels with map_generator_output
+        # then concatenate all in one array --> that's one image
         if noise is not None:
             self.noise = noise
 
@@ -145,6 +272,8 @@ class PatchGenerator:
         out_map = self.output_map
         fake_data = []
         for noise_item in result_list:
+            # There are (n_batch, n_generators) items in the whole list
+            # We create one data sample per batch item, based on all generators
             fake_data_sample = []
             for gen_item in noise_item:
                 res = gen_item["results"]
@@ -159,9 +288,13 @@ class PatchGenerator:
                         pass
                 # print(np.sum(gen_out / self.sample_count), np.sum(gen_out / total_count))
                 gen_out /= total_count
+                # The probabilities are re-ordered according to the mapping
+                # gen_out is a np array of the re-ordered probabilities of size bin_count
+                # map_generator_output then maps gen_out to the right number of pixels
                 out_modes = map_generator_output(
                         gen_out, self.image_size * self.image_size // self.gen_count
                 )
+                # add linearly to fake data sample
                 fake_data_sample.extend(out_modes / np.max(out_modes))
 
             fake_data.append(fake_data_sample)
