@@ -64,6 +64,15 @@ class single_qubit_model(nn.Module):
         return circuit, parameters
 
 
+# TODO IMPLEMENT
+class qiskit_QCNN(nn.Module):
+    def __init__(
+        self,
+    ):
+        super().__init__()
+        pass
+
+
 def _simulate_outputs(
     model: "single_qubit_model", params: torch.Tensor, inputs: torch.Tensor
 ) -> torch.Tensor:
