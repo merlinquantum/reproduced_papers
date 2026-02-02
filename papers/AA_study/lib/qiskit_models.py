@@ -1,10 +1,30 @@
 import qiskit as qu
 import torch
 import torch.nn as nn
-from qiskit.quantum_info import Statevector
 from qiskit.circuit import Parameter
 import numpy as np
 from typing import List, Optional
+
+from pathlib import Path
+import sys
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(REPO_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from papers.AA_study.utils.qiskit_utils import (
+    ParameterShiftFunction,
+    U_gate,
+    reshape_input,
+)
+
+# from qiskit_machine_learning.connectors import TorchConnector
+# from qiskit_machine_learning.neural_networks import EstimatorQNN
+
+
+# TorchConnector()
+# OR FROM QLLM
 
 
 class single_qubit_model(nn.Module):
@@ -17,28 +37,7 @@ class single_qubit_model(nn.Module):
         self.output_strategy = output_strategy
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        if len(x.shape) == 1:
-            x = x.unsqueeze(0)
-        """
-        bind_dict = {p: float(v) for p, v in zip(self.q_params, self.params)}
-        circuit_to_run = self.circuit.assign_parameters(bind_dict, inplace=False)
-
-        outputs = []
-        for input in x:
-            circuit_per_input = circuit_to_run.copy()
-            circuit_per_input.initialize(input, normalize=True)
-            statevector = Statevector.from_instruction(circuit_per_input)
-            if self.output_strategy == "statevector":
-                outputs.append(statevector.data)
-            elif self.output_strategy == "probabilities":
-                outputs.append(statevector.probabilities())
-            else:
-                raise ValueError(
-                    f"Unknown output '{self.output_strategy}'. Use 'statevector' or 'probabilities'."
-                )
-            return torch.tensor(np.array(outputs))
-        """
-        # TODO Modify so that gradients update
+        x = reshape_input(x)
         return ParameterShiftFunction.apply(x, self.params, self)
 
     # TODO Optimize angle encoding parametrizing
@@ -64,90 +63,65 @@ class single_qubit_model(nn.Module):
         return circuit, parameters
 
 
-# TODO IMPLEMENT
 class qiskit_QCNN(nn.Module):
     def __init__(
         self,
+        num_qubits: int = 10,
     ):
         super().__init__()
-        pass
+        # TODO find the formula
+        self.num_qubits = num_qubits
 
+        self.num_params = 0
+        num_qubits_alive = num_qubits
+        while num_qubits_alive > 1:
+            self.num_params += 9 * (num_qubits_alive - 1)
+            self.num_params += num_qubits_alive // 2
+            num_qubits_alive = num_qubits_alive - (num_qubits_alive // 2)
 
-def _simulate_outputs(
-    model: "single_qubit_model", params: torch.Tensor, inputs: torch.Tensor
-) -> torch.Tensor:
-    bind_dict = {p: float(v) for p, v in zip(model.q_params, params)}
-    circuit_to_run = model.circuit.assign_parameters(bind_dict, inplace=False)
+        self.params = nn.Parameter(2 * np.pi * torch.rand(self.num_params))
 
-    outputs = []
-    for state in inputs:
-        circuit_per_input = qu.QuantumCircuit(circuit_to_run.num_qubits)
-        circuit_per_input.initialize(state.detach().cpu().numpy(), normalize=True)
-        circuit_per_input.compose(circuit_to_run, inplace=True)
-        statevector = Statevector.from_instruction(circuit_per_input)
-        if model.output_strategy == "statevector":
-            outputs.append(statevector.data)
-        elif model.output_strategy == "probabilities":
-            outputs.append(statevector.probabilities())
-        else:
-            raise ValueError(
-                f"Unknown output '{model.output_strategy}'. Use 'statevector' or 'probabilities'."
-            )
+        self.output_strategy = "first_qubit_probabilities"
+        self.circuit, self.q_params = self._CNN_circuit()
 
-    out_np = np.stack(outputs, axis=0)
-    if model.output_strategy == "statevector":
-        return torch.from_numpy(out_np).to(dtype=torch.complex64)
-    return torch.from_numpy(out_np).to(dtype=torch.float32)
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x = reshape_input(x)
+        return ParameterShiftFunction.apply(x, self.params, self)
 
+    # TODO Optimize angle encoding parametrizing
+    def _CNN_circuit(self):
+        """
+        Must be exactly to features
+        features=List[complex]
+        """
+        circuit = qu.QuantumCircuit(self.num_qubits)
+        width = len(str(self.num_params - 1))
+        parameters = [Parameter(f"phi{i:0{width}d}") for i in range(self.num_params)]
+        param_index = 0
+        qubits_alive = [i for i in range(self.num_qubits)]
+        while len(qubits_alive) > 1:
+            for i in range(0, len(qubits_alive) - 1, 2):
+                circuit = circuit.compose(
+                    U_gate(parameters=parameters[param_index : param_index + 9]),
+                    [qubits_alive[i], qubits_alive[i + 1]],
+                )
+                param_index += 9
+            for i in range(1, len(qubits_alive) - 1, 2):
+                circuit = circuit.compose(
+                    U_gate(parameters=parameters[param_index : param_index + 9]),
+                    [qubits_alive[i], qubits_alive[i + 1]],
+                )
+                param_index += 9
 
-def _parameter_shift_vjp(
-    model: "single_qubit_model",
-    params: torch.Tensor,
-    inputs: torch.Tensor,
-    grad_output: torch.Tensor,
-    shift: float = np.pi / 2,
-) -> torch.Tensor:
-    grad_output_np = grad_output.detach().cpu().numpy()
-    grad_params = np.zeros(params.numel(), dtype=np.float64)
+            for i in range(1, len(qubits_alive), 2):
+                circuit.crx(
+                    parameters[param_index], qubits_alive[i], qubits_alive[i - 1]
+                )
+                param_index += 1
 
-    for i in range(params.numel()):
-        params_plus = params.clone()
-        params_minus = params.clone()
-        params_plus[i] = params_plus[i] + shift
-        params_minus[i] = params_minus[i] - shift
+            qubits_alive = qubits_alive[::2]
 
-        out_plus = _simulate_outputs(model, params_plus, inputs).detach().cpu().numpy()
-        out_minus = (
-            _simulate_outputs(model, params_minus, inputs).detach().cpu().numpy()
-        )
-
-        grad_out = 0.5 * (out_plus - out_minus)
-        vjp = np.sum(grad_output_np * grad_out)
-        if np.iscomplexobj(vjp):
-            vjp = np.real(vjp)
-        grad_params[i] = vjp
-
-    return torch.tensor(grad_params, dtype=params.dtype, device=params.device)
-
-
-class ParameterShiftFunction(torch.autograd.Function):
-    @staticmethod
-    def forward(
-        ctx,
-        inputs: torch.Tensor,
-        params: torch.Tensor,
-        model: "single_qubit_model",
-    ) -> torch.Tensor:
-        outputs = _simulate_outputs(model, params, inputs)
-        ctx.save_for_backward(inputs, params)
-        ctx.model = model
-        return outputs
-
-    @staticmethod
-    def backward(ctx, grad_output: torch.Tensor):
-        inputs, params = ctx.saved_tensors
-        grad_params = _parameter_shift_vjp(ctx.model, params, inputs, grad_output)
-        return None, grad_params, None
+        return circuit, parameters
 
 
 import torch.optim as optim
@@ -158,12 +132,13 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
-from papers.AA_study.utils.datasets import generate_fig_1_dataset, get_data_loader
+from papers.AA_study.utils.datasets import create_known_datasets
 
-test_model = single_qubit_model()
+test_model = qiskit_QCNN()
+print("Model created")
 optimizer = optim.Adam(test_model.parameters(), lr=0.1)
 
-data_loader = get_data_loader(generate_fig_1_dataset(num_samples_per_class=400))
+data_loader = create_known_datasets()[2]
 criterion = nn.CrossEntropyLoss()
 
 

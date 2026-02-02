@@ -1,7 +1,7 @@
 import numpy as np
 from numpy.typing import NDArray
 import torch
-from typing import List
+from typing import Tuple, List
 
 
 def trace_distance(A: NDArray, B: NDArray) -> NDArray:
