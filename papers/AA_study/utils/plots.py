@@ -1,5 +1,8 @@
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Tuple
+from torch.utils.data import TensorDataset
+
+import numpy as np
 
 import matplotlib.pyplot as plt
 
@@ -59,3 +62,57 @@ def plot_bas_run(
         plt.savefig(output_path, format="pdf", bbox_inches="tight")
     else:
         plt.savefig(run_dir / "bas_run_graph.pdf", format="pdf", bbox_inches="tight")
+
+
+def plot_amplitude_encoding_limitations(
+    distances: List[float] | List[List[float]],
+    dataset_unshuffled: TensorDataset,
+    num_samples_per_class: int = 2000,
+    fig_simulated: int = 1,
+    run_dir: Optional[Path] = None,
+) -> Tuple[np.ndarray, np.ndarray]:
+    """ """
+    class1 = dataset_unshuffled.tensors[0][:num_samples_per_class]
+    class2 = dataset_unshuffled.tensors[0][num_samples_per_class:]
+
+    fig, (ax_scatter, ax_trace) = plt.subplots(1, 2, figsize=(10, 3.6))
+
+    ax_scatter.scatter(class1[:, 0], class1[:, 1], s=10, color="tab:blue", alpha=0.7)
+    ax_scatter.scatter(class2[:, 0], class2[:, 1], s=10, color="tab:red", alpha=0.7)
+    ax_scatter.set_xlabel("x1")
+    ax_scatter.set_ylabel("x2")
+    ax_scatter.set_title("(a)")
+
+    x_axis = np.arange(1, num_samples_per_class + 1)
+
+    if fig_simulated == 1 or fig_simulated == 2:
+        ax_trace.plot(x_axis, distances[0], color="tab:blue", lw=2, label="Class 1")
+        ax_trace.plot(
+            x_axis,
+            distances[1],
+            color="tab:red",
+            lw=2,
+            linestyle=":",
+            label="Class 2",
+        )
+        ax_trace.legend(frameon=False)
+    elif fig_simulated == 3:
+        ax_trace.plot(x_axis, distances, color="tab:purple", lw=2)
+    ax_trace.set_xlabel("Sample size per class")
+    ax_trace.set_ylabel("Trace distance")
+    ax_trace.set_title("(b)")
+
+    plt.tight_layout()
+    if run_dir is None:
+        output_path = (
+            Path(__file__).parent.parent.resolve()
+            / "results"
+            / f"fig{fig_simulated}_amplitude_encoding.pdf"
+        )
+        plt.savefig(output_path, format="pdf", bbox_inches="tight")
+    else:
+        plt.savefig(
+            run_dir / f"fig{fig_simulated}_amplitude_encoding.pdf",
+            format="pdf",
+            bbox_inches="tight",
+        )

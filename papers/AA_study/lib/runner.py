@@ -23,7 +23,7 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
             batch_size=cfg.get("batch_size", 50),
             num_epochs=cfg.get("num_epochs", 20),
             classical_epochs=cfg.get("classical_epochs", 20),
-            lr=cfg.get("num_epochs", 0.01),
+            lr=cfg.get("lr", 0.01),
             run_dir=run_dir,
             generate_graph=generate_graph,
         )

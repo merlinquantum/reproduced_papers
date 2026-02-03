@@ -65,7 +65,7 @@ python ../../implementation.py  --config configs/defaults.json
 python ../../implementation.py  --config configs/defaults.json --TODO 50 
 
 # Equivalent from the repo root
-python implementation.py --paper DQNN --config configs/defaults.json --TODO 50
+python implementation.py --paper AA_study --config configs/defaults.json --TODO 50
 ```
 
 ## Project structure --> TODO
