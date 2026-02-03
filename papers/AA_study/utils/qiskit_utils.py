@@ -27,14 +27,24 @@ def _simulate_outputs(
             # Marginal probabilities for qubit 0; output shape (2,)
             probs = statevector.probabilities()
             p0 = 0.0
-            p1 = 0.0
             for idx, p in enumerate(probs):
                 bit = (idx >> 0) & 1
                 if bit == 0:
                     p0 += p
-                else:
-                    p1 += p
-            outputs.append([p0, p1])
+
+            ### TODO CHECK IF LEGIT
+            """
+            Spliting the probability spectra into num_classes parts and calculating the distance between p0 and the center of the part
+            
+            """
+
+            probability_class_vector = [
+                1 - abs(((i / model.num_classes) + (1 / (2 * model.num_classes))) - p0)
+                for i in range(model.num_classes)
+            ]
+            outputs.append(
+                probability_class_vector / np.linalg.norm(probability_class_vector)
+            )
         else:
             raise ValueError(
                 f"Unknown output '{model.output_strategy}'. Use 'statevector', "

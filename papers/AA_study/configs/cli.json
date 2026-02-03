@@ -7,5 +7,42 @@
       "type": "str",
       "default": null,
       "apply": {"kind": "config_path", "path": "exp_to_run"}
-    }]
+    },
+    {
+      "flags": ["--batch_size"],
+      "help": "The number of tests data per batch  (default: 50)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "batch_size"}
+    },
+    {
+      "flags": ["--num_epochs"],
+      "help": "Number of epochs for training (default: 20)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_epochs"}
+    },
+    {
+      "flags": ["--classical_epochs"],
+      "help": "Number of epochs for classical CNN training (default: 1)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "classical_epochs"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "The learning rate of the optimizers (default: 0.01",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "lr"}
+    },
+    {
+      "flags": ["--dont_generate_graph"],
+      "help": "Disable weight sharing experiment",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dont_generate_graph"}
+    }  
+  
+  ]
 }

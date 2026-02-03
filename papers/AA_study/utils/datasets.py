@@ -7,6 +7,7 @@ import pandas as pd
 import regex as re
 from typing import Tuple
 from torch.utils.data import DataLoader
+import pennylane as qml
 
 
 def generate_fig_1_dataset(
@@ -78,7 +79,7 @@ def generate_fig_3_dataset(
     class_1 = [[i, j] for i, j in zip(class_1_x_1, class_1_x_2)]
 
     class_2_x_1 = np.random.uniform(1, 3, num_samples_per_class)
-    class_2_x_2 = np.random.normal(10, 11, num_samples_per_class)
+    class_2_x_2 = np.random.normal(2, 1, num_samples_per_class)
     class_2 = [[i, j] for i, j in zip(class_2_x_1, class_2_x_2)]
 
     features = np.vstack([class_1, class_2])
@@ -97,9 +98,38 @@ def generate_fig_3_dataset(
     return TensorDataset(features_tensor, labels_tensor)
 
 
+def get_bas():
+    try:
+        [ds] = qml.data.load("other", name="bars-and-stripes")
+        x_train = np.array(ds.train["4"]["inputs"])
+        y_train = np.array(ds.train["4"]["labels"])
+        x_test = np.array(ds.test["4"]["inputs"])
+        y_test = np.array(ds.test["4"]["labels"])
+
+        x_train, x_test = (
+            x_train[:400].reshape(400, 4, 4),
+            x_test[:200].reshape(200, 4, 4),
+        )
+        y_train, y_test = y_train[:400], y_test[:200]
+
+        y_train[y_train == -1] = 0
+        y_test[y_test == -1] = 0
+
+        return TensorDataset(
+            torch.tensor(x_train).unsqueeze(dim=1),
+            torch.tensor(y_train),
+        ), TensorDataset(torch.tensor(x_test).unsqueeze(dim=1), torch.tensor(y_test))
+
+    except Exception as exc:
+        print(f"Error loading PennyLane BAS dataset: {exc}")
+        raise
+
+
 def get_data_loader(
-    dataset: TensorDataset, batch_size: int = 50, shuffle: bool = True
+    dataset: TensorDataset, batch_size: int = None, shuffle: bool = True
 ) -> DataLoader:
+    if batch_size is None:
+        return DataLoader(dataset, shuffle=shuffle)
     return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
 
 
@@ -109,7 +139,7 @@ class HFImageDataset(Dataset):
     """
 
     def __init__(self, dataset, transform: callable = None):
-        self.dataset = pd.DataFrame(dataset)
+        self.dataset = pd.DataFrame(dataset)[:500]
         self.transform = transform
 
     def __len__(self) -> int:

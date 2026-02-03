@@ -64,16 +64,15 @@ class single_qubit_model(nn.Module):
 
 
 class qiskit_QCNN(nn.Module):
-    def __init__(
-        self,
-        num_qubits: int = 10,
-    ):
+    def __init__(self, num_qubits: int = 10, num_classes: int = 2):
         super().__init__()
         # TODO find the formula
         self.num_qubits = num_qubits
+        self.num_classes = num_classes
 
         self.num_params = 0
         num_qubits_alive = num_qubits
+
         while num_qubits_alive > 1:
             self.num_params += 9 * (num_qubits_alive - 1)
             self.num_params += num_qubits_alive // 2
@@ -82,14 +81,14 @@ class qiskit_QCNN(nn.Module):
         self.params = nn.Parameter(2 * np.pi * torch.rand(self.num_params))
 
         self.output_strategy = "first_qubit_probabilities"
-        self.circuit, self.q_params = self._CNN_circuit()
+        self.circuit, self.q_params = self._QCNN_circuit()
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x = reshape_input(x)
         return ParameterShiftFunction.apply(x, self.params, self)
 
     # TODO Optimize angle encoding parametrizing
-    def _CNN_circuit(self):
+    def _QCNN_circuit(self):
         """
         Must be exactly to features
         features=List[complex]
@@ -97,6 +96,7 @@ class qiskit_QCNN(nn.Module):
         circuit = qu.QuantumCircuit(self.num_qubits)
         width = len(str(self.num_params - 1))
         parameters = [Parameter(f"phi{i:0{width}d}") for i in range(self.num_params)]
+
         param_index = 0
         qubits_alive = [i for i in range(self.num_qubits)]
         while len(qubits_alive) > 1:
@@ -124,41 +124,40 @@ class qiskit_QCNN(nn.Module):
         return circuit, parameters
 
 
-import torch.optim as optim
-from pathlib import Path
-import sys
+# import torch.optim as optim
+# from pathlib import Path
+# import sys
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-REPO_ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO_ROOT))
-sys.path.insert(0, str(PROJECT_ROOT))
-from papers.AA_study.utils.datasets import create_known_datasets
+# PROJECT_ROOT = Path(__file__).resolve().parents[1]
+# REPO_ROOT = Path(__file__).resolve().parents[3]
+# sys.path.insert(0, str(REPO_ROOT))
+# sys.path.insert(0, str(PROJECT_ROOT))
+# from papers.AA_study.utils.datasets import create_known_datasets
 
-test_model = qiskit_QCNN()
-print("Model created")
-optimizer = optim.Adam(test_model.parameters(), lr=0.1)
+# test_model = qiskit_QCNN(num_classes=10)
+# print("Model created")
+# optimizer = optim.Adam(test_model.parameters(), lr=0.1)
 
-data_loader = create_known_datasets()[2]
-criterion = nn.CrossEntropyLoss()
+# data_loader = create_known_datasets()[2]
+# criterion = nn.CrossEntropyLoss()
 
+# test_model.train()
+# for epoch in range(15):
+#     tot_loss = 0
+#     correct = 0
+#     total = 0
+#     for features, labels in data_loader:
+#         labels = labels.long()
+#         optimizer.zero_grad()
+#         logits = test_model(features)
+#         loss = criterion(logits, labels)
+#         loss.backward()
 
-test_model.train()
-for epoch in range(15):
-    tot_loss = 0
-    correct = 0
-    total = 0
-    for features, labels in data_loader:
-        labels = labels.long()
-        optimizer.zero_grad()
-        logits = test_model(features)
-        loss = criterion(logits, labels)
-        loss.backward()
+#         optimizer.step()
+#         tot_loss += loss.item()
+#         preds = torch.clone(logits).detach().argmax(dim=1)
+#         correct += (preds == labels).sum().item()
+#         total += labels.size(0)
 
-        optimizer.step()
-        tot_loss += loss.item()
-        preds = torch.clone(logits).detach().argmax(dim=1)
-        correct += (preds == labels).sum().item()
-        total += labels.size(0)
-
-    accuracy = correct / total
-    print(f"Epoch {epoch} had a loss of {tot_loss} and accuracy of {accuracy}")
+#     accuracy = correct / total
+#     print(f"Epoch {epoch} had a loss of {tot_loss} and accuracy of {accuracy}")
