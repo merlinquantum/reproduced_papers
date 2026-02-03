@@ -97,4 +97,4 @@ def run_bas(
         )
 
 
-run_bas(num_epochs=20, generate_graph=True)
+# run_bas(num_epochs=20, generate_graph=True)
