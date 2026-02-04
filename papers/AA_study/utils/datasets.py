@@ -1,4 +1,5 @@
 import numpy as np
+import random
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 from datasets import load_dataset
@@ -8,6 +9,10 @@ import regex as re
 from typing import Tuple
 from torch.utils.data import DataLoader
 import pennylane as qml
+from torchvision import datasets
+from torchvision.transforms import Compose, Resize, ToTensor
+import medmnist
+from medmnist import INFO
 
 
 def generate_fig_1_dataset(
@@ -176,7 +181,7 @@ class HFImageDataset(Dataset):
         return img_square, label
 
 
-def create_known_datasets(
+def get_perceval_challenge_MNIST(
     batch_size: int = 600,
 ) -> Tuple[Dataset, Dataset, DataLoader, DataLoader]:
     """
@@ -201,3 +206,191 @@ def create_known_datasets(
     val_loader = DataLoader(val_dataset, batch_size, shuffle=False)
 
     return train_dataset, val_dataset, train_loader, val_loader
+
+
+def _to_int_label(y):
+    if torch.is_tensor(y):
+        y = y.reshape(-1)[0].item()
+    try:
+        y = y.item()
+    except Exception:
+        pass
+    return int(y)
+
+
+class BinaryBalancedSubset(Dataset):
+    """
+    Keep exactly n_per_class samples for two labels,
+    remap them to {0,1}, and optionally shuffle order.
+    """
+
+    def __init__(self, base_dataset, keep_labels, n_per_class, seed=0, shuffle=True):
+        assert len(keep_labels) == 2, "keep_labels must have exactly 2 labels"
+
+        self.ds = base_dataset
+        self.keep = list(keep_labels)
+        self.map = {self.keep[0]: 0, self.keep[1]: 1}
+
+        per = {self.keep[0]: [], self.keep[1]: []}
+
+        # collect indices per class
+        for i in range(len(self.ds)):
+            _, y = self.ds[i]
+            y = _to_int_label(y)
+            if y in per:
+                per[y].append(i)
+
+        a, b = self.keep
+        if len(per[a]) < n_per_class or len(per[b]) < n_per_class:
+            raise ValueError(
+                f"Not enough samples for requested n_per_class={n_per_class}. "
+                f"Available: {a}->{len(per[a])}, {b}->{len(per[b])}."
+            )
+
+        rng = random.Random(seed)
+        rng.shuffle(per[a])
+        rng.shuffle(per[b])
+
+        # pick exactly n_per_class from each
+        chosen_a = per[a][:n_per_class]
+        chosen_b = per[b][:n_per_class]
+
+        # ordering depends on shuffle flag
+        if shuffle:
+            chosen = chosen_a + chosen_b
+            rng.shuffle(chosen)
+        else:
+            # first all class0, then all class1
+            chosen = chosen_a + chosen_b
+
+        self.indices = chosen
+
+    def __len__(self):
+        return len(self.indices)
+
+    def __getitem__(self, idx):
+        x, y = self.ds[self.indices[idx]]
+        y = _to_int_label(y)
+        return x, self.map[y]
+
+
+def dataset_to_tensordataset(dataset):
+    X_list, Y_list = [], []
+    for x, y in dataset:
+        X_list.append(x)
+        Y_list.append(int(y))
+
+    X = torch.stack(X_list)
+    Y = torch.tensor(Y_list).long()
+    return TensorDataset(X, Y)
+
+
+def get_binary_dataset(
+    name: str = "MNIST",
+    num_samples_per_class: int = 2000,
+    eval_samples_per_class: int = 50,
+    root: str = "./data/AA_study/",
+    seed: int = 0,
+    shuffle: bool = True,
+):
+    """
+    Returns (train_tensor_ds, eval_tensor_ds) as TensorDataset objects.
+
+    shuffle:
+      - True  -> mixed order of both classes
+      - False -> first all class0 samples, then all class1 samples
+
+    Notes:
+      - num_samples_per_class controls train size only.
+      - eval_samples_per_class controls eval/test size only.
+    """
+
+    name_l = name.strip().lower()
+    transform_32 = Compose([Resize((32, 32)), ToTensor()])
+
+    # ---- MNIST ----
+    if name_l == "mnist":
+        train_base = datasets.MNIST(
+            root=root, train=True, download=True, transform=transform_32
+        )
+        eval_base = datasets.MNIST(
+            root=root, train=False, download=True, transform=transform_32
+        )
+        keep = [0, 1]
+
+        train_bin = BinaryBalancedSubset(
+            train_base, keep, num_samples_per_class, seed=seed, shuffle=shuffle
+        )
+        eval_bin = BinaryBalancedSubset(
+            eval_base, keep, eval_samples_per_class, seed=seed + 1, shuffle=shuffle
+        )
+
+        return dataset_to_tensordataset(train_bin), dataset_to_tensordataset(eval_bin)
+
+    # ---- CIFAR-10 ----
+    if name_l in ["cifar10", "cifar-10"]:
+        train_base = datasets.CIFAR10(
+            root=root, train=True, download=True, transform=transform_32
+        )
+        eval_base = datasets.CIFAR10(
+            root=root, train=False, download=True, transform=transform_32
+        )
+        keep = [0, 2]  # airplane vs bird
+
+        train_bin = BinaryBalancedSubset(
+            train_base, keep, num_samples_per_class, seed=seed, shuffle=shuffle
+        )
+        eval_bin = BinaryBalancedSubset(
+            eval_base, keep, eval_samples_per_class, seed=seed + 1, shuffle=shuffle
+        )
+
+        return dataset_to_tensordataset(train_bin), dataset_to_tensordataset(eval_bin)
+
+    # ---- EuroSAT ----
+    if name_l in ["eurosat", "euro_sat", "euro-sat"]:
+        base = datasets.EuroSAT(root=root, download=True, transform=transform_32)
+
+        forest_idx = base.class_to_idx["Forest"]
+        sealake_idx = base.class_to_idx["SeaLake"]
+        keep = [forest_idx, sealake_idx]
+
+        train_bin = BinaryBalancedSubset(
+            base, keep, num_samples_per_class, seed=seed, shuffle=shuffle
+        )
+        eval_bin = BinaryBalancedSubset(
+            base, keep, eval_samples_per_class, seed=seed + 1, shuffle=shuffle
+        )
+
+        return dataset_to_tensordataset(train_bin), dataset_to_tensordataset(eval_bin)
+
+    # ---- PathMNIST ----
+    if name_l in ["pathmnist", "path_mnist", "path-mnist"]:
+        info = INFO["pathmnist"]
+        DataClass = getattr(medmnist, info["python_class"])
+
+        train_base = DataClass(
+            split="train", download=True, root=root, transform=transform_32
+        )
+        eval_base = DataClass(
+            split="test", download=True, root=root, transform=transform_32
+        )
+
+        # find adipose/background indices
+        label_map = info["label"]
+        inv = {str(v).lower(): int(k) for k, v in label_map.items()}
+
+        adipose_idx = inv["adipose"]
+        background_idx = inv["background"]
+
+        keep = [adipose_idx, background_idx]
+
+        train_bin = BinaryBalancedSubset(
+            train_base, keep, num_samples_per_class, seed=seed, shuffle=shuffle
+        )
+        eval_bin = BinaryBalancedSubset(
+            eval_base, keep, eval_samples_per_class, seed=seed + 1, shuffle=shuffle
+        )
+
+        return dataset_to_tensordataset(train_bin), dataset_to_tensordataset(eval_bin)
+
+    raise ValueError("Unknown dataset name. Use MNIST, CIFAR10, EuroSAT, or PathMNIST.")

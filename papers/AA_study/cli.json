@@ -3,7 +3,7 @@
   "arguments": [
     {
       "flags": ["--exp_to_run"],
-      "help": "Which experiment to run between ...  (default: '...')",
+      "help": "Which experiment to run between 'DEFAULT', 'BAS', 'FIG1', 'FIG2', 'FIG3' and 'FIG4'  (default: 'DEFAULT')",
       "type": "str",
       "default": null,
       "apply": {"kind": "config_path", "path": "exp_to_run"}
@@ -31,8 +31,15 @@
     },
     {
       "flags": ["--lr"],
-      "help": "The learning rate of the optimizers (default: 0.01",
+      "help": "The learning rate of the optimizers (default: 0.01)",
       "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "lr"}
+    },
+      {
+      "flags": ["--num_samples_per_class"],
+      "help": "The number of samples to create per class from the synthetic datasets of the paper (default: 2000)",
+      "type": "int",
       "default": null,
       "apply": {"kind": "config_path", "path": "lr"}
     },

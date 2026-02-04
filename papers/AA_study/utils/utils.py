@@ -6,6 +6,8 @@ import torch.optim as optim
 import torch.nn as nn
 from torch.utils.data import DataLoader
 import argparse
+from math import comb
+import warnings
 
 
 device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
@@ -23,8 +25,46 @@ def state_vector_to_density_matrix(x: NDArray | List | torch.Tensor) -> NDArray:
     return np.tensordot(x, x.conjugate(), axes=0)
 
 
+def find_mode_photon_config(
+    num_features: int,
+    max_modes: int = 20,
+) -> tuple[int, int]:
+    """
+    Find (n_modes, n_photons) with smallest n_modes such that
+    C(n_modes + n_photons - 1, n_photons) >= num_features and
+    n_photons <= n_modes // 2.
+    """
+    if num_features <= 0:
+        raise ValueError("num_features must be positive.")
+
+    best = None
+    for n_modes in range(1, max_modes + 1):
+        for n_photons in range(1, (n_modes // 2) + 1):
+            dim = comb(n_modes + n_photons - 1, n_photons)
+            if dim >= num_features:
+                candidate = (n_modes, n_photons)
+                if best is None or candidate[0] < best[0]:
+                    best = candidate
+                break
+        if best is not None and best[0] == n_modes:
+            break
+
+    if best is None:
+        warnings.warn(
+            "System too large for simulation: no valid (n_modes, n_photons) "
+            "found with max_modes=20.",
+            RuntimeWarning,
+        )
+        raise ValueError("System too large for simulation with max_modes=20.")
+    return best
+
+
 def basic_model_training(
-    model: nn.Module, data_loader: DataLoader, lr: float = 0.01, num_epochs: int = 10
+    model: nn.Module,
+    data_loader: DataLoader,
+    lr: float = 0.01,
+    num_epochs: int = 10,
+    test_loader: DataLoader = None,
 ) -> Tuple[nn.Module, List[float], List[float]]:
     model = model.to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
@@ -35,9 +75,10 @@ def basic_model_training(
     loss_per_epoch = []
 
     for epoch in range(num_epochs):
-        tot_loss = 0
+        tot_loss = 0.0
         correct = 0
         total = 0
+        num_batches = 0
         for features, labels in data_loader:
             features = features.to(device)
             if features.dtype != next(model.parameters()).dtype:
@@ -45,19 +86,26 @@ def basic_model_training(
             labels = labels.to(device).long()
             optimizer.zero_grad()
             logits = model(features)
-            loss = criterion(logits, labels)
+            log_probs = torch.log_softmax(logits, dim=1)
+            loss = criterion(log_probs, labels)
             loss.backward()
 
             optimizer.step()
             tot_loss += loss.item()
+            num_batches += 1
             preds = torch.clone(logits).detach().argmax(dim=1)
             correct += (preds == labels).sum().item()
             total += labels.size(0)
 
-        accuracy = correct / total
+        if test_loader is None:
+            accuracy = correct / total
+        else:
+            accuracy = evaluate_model(model, test_loader)[0]
+            model.train()
         accuracy_per_epoch.append(accuracy)
-        loss_per_epoch.append(tot_loss)
-        print(f"Epoch {epoch+1} had a loss of {tot_loss} and accuracy of {accuracy}")
+        avg_loss = tot_loss / max(num_batches, 1)
+        loss_per_epoch.append(avg_loss)
+        print(f"Epoch {epoch+1} had a loss of {avg_loss} and accuracy of {accuracy}")
 
     return model, accuracy_per_epoch, loss_per_epoch
 
@@ -66,7 +114,7 @@ def evaluate_model(
     model: nn.Module,
     data_loader: DataLoader,
 ) -> Tuple[float, float]:
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.NLLLoss()
     model = model.to(device)
     model.eval()
     correct = 0
@@ -80,7 +128,8 @@ def evaluate_model(
                 images = images.to(dtype=next(model.parameters()).dtype)
             labels = labels.to(device).long()
             outputs = model(images)
-            loss_test = criterion(outputs, labels).cpu().detach().numpy()
+            log_probs = torch.log_softmax(outputs, dim=1)
+            loss_test = criterion(log_probs, labels).cpu().detach().numpy()
             loss_test_list.append(loss_test)
             _, predicted = torch.max(outputs.data, 1)
             total += labels.size(0)
@@ -134,7 +183,7 @@ def parse_args():
         "--exp_to_run",
         type=str,
         default="DEFAULT",
-        help="Which experiment to run between 'DEFAULT' and 'BAS' (default: 'DEFAULT')",
+        help="Which experiment to run between 'DEFAULT', 'BAS', 'FIG1', 'FIG2', 'FIG3' and 'FIG4'  (default: 'DEFAULT')",
     )
     parser.add_argument(
         "--batch_size",
@@ -159,6 +208,12 @@ def parse_args():
         type=float,
         default=0.01,
         help="The learning rate of the optimizers (default: 0.01)",
+    )
+    parser.add_argument(
+        "--num_samples_per_class",
+        type=int,
+        default=2000,
+        help="The number of samples to create per class from the synthetic datasets of the paper (default: 2000)",
     )
     parser.add_argument(
         "--config",

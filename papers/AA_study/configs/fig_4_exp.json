@@ -1,0 +1,9 @@
+{
+    "description": "Run the FIG4 experiment",
+    "outdir": "results",
+    "exp_to_run": "FIG4",
+    "batch_size":50,
+    "num_epochs":20,
+    "lr":0.01,
+    "num_samples_per_class":2000
+}

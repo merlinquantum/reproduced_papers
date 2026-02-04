@@ -38,7 +38,7 @@ def run_bas(
         output_formatting="Lex_grouping",
         num_classes=2,
     )
-    classical_model = CNN(input_image_size=4, num_layers=1, kernel_size=2)
+    classical_model = CNN(input_image_size=4, num_layers=2, kernel_size=2)
 
     print("Classical model:")
     (classical_model, classical_model_accuracies, classical_model_losses) = (
