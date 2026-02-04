@@ -2,6 +2,7 @@ import numpy as np
 import perceval as pcvl
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 
 from utils.mappings import get_output_map, map_generator_output
 from utils.pqc import ParametrizedQuantumCircuit
@@ -45,33 +46,34 @@ class PatchGenerator(nn.Module):
         use_clements=False,
         sim = False
     ):
+        super().__init__()
         self.image_size = image_size
         self.gen_count = gen_count
         self.input_state = input_state
 
         # Here I have replaced the list of ParametrizedQuantumCircuit 
         # By a list of quantum layers based on these circuits
-        self.models = []
+        self.models = nn.ModuleList()
         for _ in range(gen_count):
-            pcvl_circuit = ParametrizedQuantumCircuit(input_state.m, gen_arch, use_clements)
-            circuit_var_params = ParametrizedQuantumCircuit.var_param_names
-            circuit_enc_params = ParametrizedQuantumCircuit.enc_param_names
+            pcvl_circuit = ParametrizedQuantumCircuit(len(input_state), gen_arch, use_clements)
+            circuit_var_params = pcvl_circuit.var_param_names
+            circuit_enc_params = pcvl_circuit.enc_param_names
             num_enc_params = len(circuit_enc_params)
             
             layer = ML.QuantumLayer(
                 input_size=num_enc_params,
-                circuit=pcvl_circuit,
+                circuit=pcvl_circuit.circuit,
                 input_parameters=circuit_enc_params,
                 trainable_parameters=circuit_var_params,
                 input_state=self.input_state,
                 measurement_strategy=ML.MeasurementStrategy.PROBABILITIES,
-                computation_space = ComputationSpace.FOCK
+                computation_space = ML.ComputationSpace.FOCK
             )
             
             self.models.append(layer)
 
         # Define mapping
-        all_keys = self.models[0].final_keys
+        self.output_keys = self.models[0].output_keys
         rev_map = {}
         possible_outputs = []
 
@@ -85,7 +87,7 @@ class PatchGenerator(nn.Module):
                     res += 2 ** (m - i)
             return res
 
-        for key in all_keys:
+        for key in self.output_keys:
             int_state = state_to_int(key, pnr)
             if int_state in rev_map.keys():
                 rev_map[int_state].append(key)
@@ -104,48 +106,68 @@ class PatchGenerator(nn.Module):
 
 
     def dist_to_image(self, raw_results_list):
-        # for each of the generators results, rearrange prob distribution according to get_output_map
         patches = []
-        for res in raw_results_list:
-            gen_out = torch.zeros(self.bin_count)
+        B = None
+        K = len(self.output_keys)
+        idx_cpu = torch.tensor([self.output_map[k] for k in self.output_keys], dtype=torch.long)
 
-            if len(res) == 0:
-                total_count = torch.tensor(0.0)
-            else:
-                idx = torch.tensor([self.output_map[k] for k in res.keys()], device=device, dtype=torch.long)
-                vals = torch.tensor([res[k] for k in res.keys()], device=device, dtype=dtype)
-                gen_out.index_add_(0, idx, vals)
-                total_count = vals.sum()
+        for res in raw_results_list:
+            # res: [B, K]
+            if res.numel() == 0:
+                continue
+            
+            # for each of the generators results, rearrange prob distribution according to get_output_map
+            if res.shape[1] != K:
+                raise ValueError(f"res has K={res.shape[1]} cols but len(output_keys)={K}")
+
+            if B is None:
+                B = res.shape[0]
+            elif res.shape[0] != B:
+                raise ValueError(f"Batch size mismatch: got {res.shape[0]} vs expected {B}")
+
+            device = res.device
+            dtype = res.dtype
+            idx = idx_cpu.to(device=device)
+
+            gen_out = torch.zeros((B, self.bin_count), device=device, dtype=dtype)
+            gen_out.index_add_(1, idx, res)
 
             # Normalize to distribution (avoid divide-by-zero)
+            total_count = res.sum(dim=1, keepdim=True)  # [B, 1]
             gen_out = gen_out / (total_count + 1e-8)
 
             # map to the right number of pixels with map_generator_output
-            surplus_half = abs((gen_out_len - expected_len) // 2)
-
+            gen_out_len = gen_out.shape[1]
+            expected_len = self.expected_size
+            
             if gen_out_len > expected_len:
-                img_gen = gen_out[surplus_half : surplus_half + expected_len]
+                surplus_half = (gen_out_len - expected_len) // 2
+                img_gen = gen_out[:, surplus_half:surplus_half + expected_len]
             else:
-                img_gen = torch.zeros(expected_len)
-                img_gen[surplus_half : surplus_half + gen_out_len] = gen_out
+                left = (expected_len - gen_out_len) // 2
+                right = expected_len - gen_out_len - left
+                img_gen = F.pad(gen_out, (left, right))
 
             # Normalize patch by its max (avoid divide-by-zero)
-            img_gen = img_gen / (img_gen.max() + 1e-8)
+            mx = img_gen.max(dim=1, keepdim=True).values
+            img_gen = img_gen / (mx + 1e-8)
+
+            # Concatenate into one long "img_patch" tensor
             patches.append(img_gen)
 
-        # Concatenate into one long "img_patch" tensor
+        # Concatenate into one patch
         if len(patches) == 0:
             return torch.empty(0)
     
-        return torch.cat(patches, dim=0)
+        return torch.cat(patches, dim=1)
 
     
     def forward(self, z):
         # Get results from each generator which is a quantum layer
-        raw_results_list = [model(z) for model in self.models]
+        raw_results_list = [m(z) for m in self.models]
 
         # Map to image 
-        img = dist_to_image_map(raw_results_list)
+        img = self.dist_to_image(raw_results_list)
 
         return img
 

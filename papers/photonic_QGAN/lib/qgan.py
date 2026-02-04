@@ -38,90 +38,92 @@ class QGAN:
         )
         self.D = Discriminator(image_size)
         self.batch_size = batch_size
-        self.fake_data = []
-
-    def get_G_loss(self, fake_data=None):
-
-        if fake_data is None:
-            fake = self.G.forward()
-        else:
-            fake = fake_data
-
-        pred_fake = self.D(fake)
-        G_loss = -torch.mean(torch.log(pred_fake + 1e-8))
-
-        return G_loss
 
         
     def fit(self, dataloader, lrD, lrG, opt_params, silent=False, callback=None):
         opt_iter_num = opt_params["opt_iter_num"]
 
-        params_prog = []
         fake_progress = []
 
-        criterion = nn.BCELoss()
+        criterion = nn.BCEWithLogitsLoss()
         D_params = self.D.parameters()
-        G_params = self.G.init_params()
+        G_params = self.G.parameters()
 
-        real_labels = torch.full((self.batch_size,), 1.0, dtype=torch.float)
-        fake_labels = torch.full((self.batch_size,), 0.0, dtype=torch.float)
+        device = next(self.D.parameters()).device
+        fixed_noise = torch.normal(0, 2 * torch.pi, (self.batch_size, self.noise_dim), device=device)
+        with torch.no_grad():
+            fake_progress.append(self.G(fixed_noise).detach().cpu())
 
-        fixed_noise = np.random.normal(0, 2 * np.pi, (self.batch_size, self.noise_dim))
-        fake_progress.extend(self.G.generate(fixed_noise))
 
-        optD = optim.SGD(D_params, lr=lrD)
-        optG = optim.SGD(G_params, lr=lrG)
+        optD = optim.Adam(self.D.parameters(), lr=lrD, betas=(0.5, 0.999))
+        optG = optim.Adam(self.G.parameters(), lr=lrG, betas=(0.5, 0.999))
 
         G_loss_prog = []
         D_loss_prog = []
 
         for i, (data, _) in enumerate(dataloader):
-            real_data = data.reshape(-1, self.image_size * self.image_size)
-            noise = np.random.normal(0, 2 * np.pi, (self.batch_size, self.noise_dim))
-            fake_data = self.G.generate(noise)
-            self.fake_data = fake_data
+            real_data = data.reshape(data.size(0), -1)
+
+            real_data = real_data.to(device)
+
+            B = real_data.size(0)
+            noise = torch.normal(0, 2 * torch.pi, (B, self.noise_dim), device=device)
+
+            real_labels = torch.ones(B, device=device)
+            fake_labels = torch.zeros(B, device=device)
+
+            fake_data = self.G(noise)
 
             # discriminator training
             self.D.zero_grad()
-            outD_real = self.D(real_data).view(-1)
-            outD_fake = self.D(fake_data).view(-1)
+            outD_real = self.D(real_data).view(-1)                 # logits
+            outD_fake = self.D(fake_data.detach()).view(-1)        # logits, detached
 
-            errD_real = criterion(outD_real, real_labels)
-            errD_fake = criterion(outD_fake, fake_labels)
-
-            errD_real.backward()
-            errD_fake.backward()
-
-            errD = errD_real + errD_fake
+            errD = criterion(outD_real, real_labels) + criterion(outD_fake, fake_labels)
+            errD.backward()
             optD.step()
+            
             D_loss = errD.detach().item()
 
-            # generator training
-            G_loss_function = self.get_G_loss
-            self.G.zero_grad()
-            G_loss_function.backward()
-            optG.step()
-            G_loss = G_loss_function() 
+            # freeze discriminator
+            for p in self.D.parameters():
+                p.requires_grad_(False)
 
+            # generator training
+            self.G.zero_grad()
+            fake_data = self.G(noise)
+            outD_fake_for_G = self.D(fake_data).view(-1)           # logits, NOT detached
+            G_loss = criterion(outD_fake_for_G, real_labels)
+            G_loss.backward()
+            optG.step()
+
+            # unfreeze
+            for p in self.D.parameters():
+                p.requires_grad_(True)
+            
+            G_loss_val = G_loss.detach().item()
+            
             # log and display results
             D_loss_prog.append(D_loss)
-            G_loss_prog.append(G_loss)
-            params_prog.append(G_params)
+            G_loss_prog.append(G_loss_val)
 
             if not silent:
                 print("it", i)
                 print("D_loss", D_loss)
-                print("G_loss", G_loss)
+                print("G_loss", G_loss_val)
 
             fake_samples = None
             step_interval = max(1, opt_iter_num // 100)
             if i % step_interval == 0:
-                fake_samples = self.G.forward(fixed_noise)
-                fake_progress.extend(fake_samples)
+                with torch.no_grad():
+                    fake_samples = self.G(fixed_noise.to(device)).detach().cpu()
+                fake_progress.append(fake_samples)
 
             if callback is not None:
                 callback(
-                    i, D_loss, G_loss, G_params, self.D.state_dict(), fake_samples, optG
+                    i, D_loss, G_loss_val, self.G.state_dict(), self.D.state_dict(), fake_samples, optG
                 )
 
-        return D_loss_prog, G_loss_prog, params_prog, fake_progress
+        final_G_params = self.G.state_dict()
+
+        return D_loss_prog, G_loss_prog, final_G_params, fake_progress
