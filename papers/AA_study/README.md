@@ -10,25 +10,60 @@
 ## Overview
 
 ### 🎯 Main goal 
->
+> Explore the limitations of amplitude encoding whileseeing if the same results appear with angle encoding.
 
 ### Main result
 
->
+> “We have investigated the concentration phenomenon induced by amplitude encoding and the resulting loss barrier phenomenon. Since encoding is a necessary and crucial step in leveraging QML to address classical problems, our findings indicate that the direct use of amplitude encoding may undermine the potential advantages of QML. Therefore, more effort should be devoted to developing more efficient encoding strategies to fully unlock the potential of QML.”
 
+A loss function barrier seems to appear with angle encoding for most of the complex datasets. If the features are not espacially sparse, the loss will plateau. 
 
-### Main contributions of the paper
+Talking about the concentration phenomena:
 
-> 
+> “However, our numerical simulations reveal that under amplitude encoding as the amount of training data increases, although the generalization error decreases, the training error increases counterintuitively, resulting in overall poor prediction performance.”
+
+### Main theorems and propositions of the paper
+> **Theorem**:  For a K-class classification, we employ the cross-entropy loss function $LS(\theta)$ [...]. The quantum classifier is trained on a balanced training set $S = \{(x (m) , y(m) )\}^M_{ m=1}$, where each class contains M/K samples. Suppose the eigenvalues of each observable $H_k$ belong to [-1, 1], for k = 1, ..., K. If the trace distance between the expectations of encoded states of any different classes is less than $\epsilon$, then for any PQC U($\theta$) and optimization algorithm, we have $LS(\theta) \geq \ln [K - 4(K - 1)\epsilon]$ with probability at least $1 - 8e^{-M\epsilon^2/8K}$.
+
+> **Proposition**: Assume that all elements in the feature $x \in \mathbb{R}^{2^n}$ have the same sign, and the elements satisfy $|x_i| \in [m, M]$. If $|\frac{m}{M}-1|<\epsilon$, then after amplitude encoding, we have
+$$ T\bigg(\rho(x), \frac{1}{2^n}\ket{+}^{\otimes n}\bra{+}^{\otimes n}\bigg)$$
+where $T(\rho_1,\rho_2)=\frac{1}{2}||\rho_1-\rho_2||_1$, the Schatten-1 norm.
+
+Here we see that no mater the distribution, the encoded state, no matter the associated class will converge towards rge same state.
+
+> The other two proposition are more refined that the previous one. The first one says that if a feature as a symetric density function and a mean value of zero, the encoded state will converge to the completly mixed state. The other one says that if the density function of a feature for two classes for a point x is oppsoite sign-wise, the expected encoded state will be the same for both classes
 
 ### Their framework
+1. The data is encoding via amplitude encoding
+2. The trainable layer:
+  a. For one qubit, one layer is composed of RZ, RX, RZ. We use L of them
+  b. For multiple qubits (here 10): a gate-based qcnn is used.
+
+  ![](images/qiskit_qcnn.png)
+  Source: X. Wang, Y. Wang, B. Qi, and R. Wu, “Limitations of Amplitude Encoding on Quantum Classification,” Mar. 03, 2025, arXiv: arXiv:2503.01545. doi: [10.48550/arXiv.2503.01545](https://arxiv.org/abs/2503.01545).
+
 
 ### Difference in framework
+In a MerLin point of view, we can not directly adopt gate based circuits to photnics. Instead we inspired ourselves from their models to create our own.
+
+1. The data is encoded via amplitude encoding.
+2. The trainable layer:
+   1. For one qubit, one layer is composed of random phase shifters. We use `L` of them.
+   2. For multiple qubits:
+      1. If it's a simple model, we add `L` layers of `CircuitBuilder.add_entangling_layer()`.
+      2. If it is a QCNN model, we use the hybrid model presented in the [photonic_QCNN folder](../photonic_QCNN/).
+
+
+
+For simple layers, the angle amplitud emodel was also implemented.
+1. A ``CircuitBuilder.add_entangling_layer()`` or, if their is one single mode a ``CircuitBuilder.add_rotations()`` is added at the start of the circuit.
+2. The data is encoding via amplitude encoding
+3. We add L-1 layers of ``CircuitBuilder.add_entangling_layer()`` or ``CircuitBuilder.add_rotations()`` depending on the number of modes.
 
 ### Their results
-
+TODO
 ### Our results
-
+TODO
 ## How to Run
 
 ### Install dependencies
