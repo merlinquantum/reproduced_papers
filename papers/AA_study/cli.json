@@ -3,10 +3,17 @@
   "arguments": [
     {
       "flags": ["--exp_to_run"],
-      "help": "Which experiment to run between 'DEFAULT', 'BAS', 'FIG1', 'FIG2', 'FIG3' and 'FIG4'  (default: 'DEFAULT')",
+      "help": "Which experiment to run between 'BAS', 'FIG1', 'FIG2', 'FIG3', 'FIG4', 'FIG5' and 'FIG7'   (default: 'BAS')",
       "type": "str",
       "default": null,
       "apply": {"kind": "config_path", "path": "exp_to_run"}
+    },
+    {
+      "flags": ["--dataset_to_run"],
+      "help": "Which dataset to use in the 'FIG7' experiment. Choose between 'MNIST', 'CIFAR-10','PathMNIST' and 'EuroSAT'  (default: 'MNIST')",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_to_run"}
     },
     {
       "flags": ["--batch_size"],
@@ -43,6 +50,13 @@
       "default": null,
       "apply": {"kind": "config_path", "path": "lr"}
     },
+      {
+      "flags": ["--sample_size_per_class_to_test"],
+      "help":"The number of samples to get from the dataset for each run analyzed (default: [1,10,100,1000])",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "sample_size_per_class_to_test"}
+    },  
     {
       "flags": ["--dont_generate_graph"],
       "help": "Disable weight sharing experiment",

@@ -1,0 +1,10 @@
+{
+    "description": "Run the FIG7 experiment",
+    "outdir": "results",
+    "exp_to_run": "FIG7",
+    "dataset_to_run":"MNIST",
+    "batch_size":50,
+    "num_epochs":20,
+    "lr":0.01,
+    "sample_size_per_class_to_test":[1,10,100,1000]
+}

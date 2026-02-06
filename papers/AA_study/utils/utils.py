@@ -4,7 +4,7 @@ import torch
 from typing import Tuple, List
 import torch.optim as optim
 import torch.nn as nn
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, TensorDataset
 import argparse
 from math import comb
 import warnings
@@ -14,7 +14,7 @@ device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("
 
 
 def trace_distance(A: NDArray, B: NDArray) -> NDArray:
-    return np.linalg.norm(A - B, ord="nuc") / np.shape(A)[0]
+    return np.linalg.norm(A - B, ord="nuc") / 2
 
 
 def state_vector_to_density_matrix(x: NDArray | List | torch.Tensor) -> NDArray:
@@ -57,6 +57,17 @@ def find_mode_photon_config(
         )
         raise ValueError("System too large for simulation with max_modes=20.")
     return best
+
+
+def normalize_features(
+    features: TensorDataset, min_per_feature: List[float], max_per_feature: List[float]
+):
+    for tensor in features.tensors[0]:
+        for i, feature in enumerate(tensor):
+            tensor[i] = (feature - min_per_feature[i]) / (
+                max_per_feature[i] - min_per_feature[i]
+            )
+    return features
 
 
 def basic_model_training(
@@ -161,6 +172,19 @@ def int_list(arg):
     return list(map(int, arg.split(",")))
 
 
+def _parse_sample_size_per_class_to_test(value):
+    if value is None:
+        return None
+    if isinstance(value, list):
+        return value
+    if isinstance(value, tuple):
+        return list(value)
+    if isinstance(value, str):
+        parts = [chunk.strip() for chunk in value.split(",") if chunk.strip()]
+        return [int(part) for part in parts]
+    return value
+
+
 def str_to_bool(s: str) -> bool:
     if isinstance(s, bool):
         return s
@@ -182,8 +206,14 @@ def parse_args():
     parser.add_argument(
         "--exp_to_run",
         type=str,
-        default="DEFAULT",
-        help="Which experiment to run between 'DEFAULT', 'BAS', 'FIG1', 'FIG2', 'FIG3' and 'FIG4'  (default: 'DEFAULT')",
+        default="BAS",
+        help="Which experiment to run between 'BAS', 'FIG1', 'FIG2', 'FIG3' and 'FIG4'  (default: 'BAS')",
+    )
+    parser.add_argument(
+        "--dataset_to_run",
+        type=str,
+        default="MNIST",
+        help="Which dataset to use in the 'FIG7' experiment. Choose between 'MNIST', 'CIFAR-10','PathMNIST' and 'EuroSAT'  (default: 'MNIST')",
     )
     parser.add_argument(
         "--batch_size",
@@ -214,6 +244,12 @@ def parse_args():
         type=int,
         default=2000,
         help="The number of samples to create per class from the synthetic datasets of the paper (default: 2000)",
+    )
+    parser.add_argument(
+        "--sample_size_per_class_to_test",
+        type=int_list,
+        default=[1, 10, 100, 1000],
+        help="The number of samples to get from the dataset for each run analyzed (default: [1,10,100,1000])",
     )
     parser.add_argument(
         "--config",

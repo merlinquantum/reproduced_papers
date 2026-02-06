@@ -27,7 +27,7 @@ def run_bas(
     train_loader = get_data_loader(train_dataset, batch_size=batch_size)
     test_loader = get_data_loader(test_dataset, batch_size=200)
 
-    qiskit_model = qiskit_QCNN(num_qubits=4, num_classes=2)
+    qiskit_model = qiskit_QCNN(num_qubits=4)
     merlin_model = PhotonicQCNN(
         dims=(4, 4),
         conv_circuit="MZI",
@@ -97,4 +97,4 @@ def run_bas(
         )
 
 
-# run_bas(num_epochs=20, generate_graph=True)
+run_bas(num_epochs=20, generate_graph=True)

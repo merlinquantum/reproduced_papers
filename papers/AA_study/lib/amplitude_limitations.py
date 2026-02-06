@@ -2,6 +2,7 @@ import json
 import numpy as np
 import sys
 from pathlib import Path
+from copy import deepcopy
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -32,6 +33,7 @@ from papers.AA_study.utils.utils import (
     trace_distance,
     state_vector_to_density_matrix,
     basic_model_training,
+    normalize_features,
 )
 from typing import List
 
@@ -179,45 +181,51 @@ def reproduce_fig_4(
     amplitude_accuracies = [[], [], []]
     angle_accuracies = [[], [], []]
 
-    dataset_loader_1 = get_data_loader(
-        generate_fig_1_dataset(num_samples_per_class=num_samples_per_class),
-        batch_size=batch_size,
-    )
-    dataset_loader_2 = get_data_loader(
-        generate_fig_2_dataset(num_samples_per_class=num_samples_per_class),
-        batch_size=batch_size,
-    )
-    dataset_loader_3 = get_data_loader(
-        generate_fig_3_dataset(num_samples_per_class=num_samples_per_class),
-        batch_size=batch_size,
-    )
+    fig_1_dataset = generate_fig_1_dataset(num_samples_per_class=num_samples_per_class)
+    fig_2_dataset = generate_fig_2_dataset(num_samples_per_class=num_samples_per_class)
+    fig_3_dataset = generate_fig_3_dataset(num_samples_per_class=num_samples_per_class)
+
+    amplitude_loaders = [
+        get_data_loader(deepcopy(fig_1_dataset), batch_size=batch_size),
+        get_data_loader(deepcopy(fig_2_dataset), batch_size=batch_size),
+        get_data_loader(deepcopy(fig_3_dataset), batch_size=batch_size),
+    ]
+    angle_loaders = [
+        get_data_loader(
+            normalize_features(fig_1_dataset, [4, 4], [6.5, 6.5]), batch_size=batch_size
+        ),
+        get_data_loader(
+            normalize_features(fig_2_dataset, [-5, -5], [5, 5]), batch_size=batch_size
+        ),
+        get_data_loader(
+            normalize_features(fig_3_dataset, [-3, -5], [3, 5]), batch_size=batch_size
+        ),
+    ]
 
     for L in [1, 10, 30]:
         print(f"Testing {L} layers")
-        for i, loader in enumerate(
-            [dataset_loader_1, dataset_loader_2, dataset_loader_3]
-        ):
+        for i in range(3):
             qiskit_model = single_qubit_model(num_layers=L)
             amplitude_model = amplitude_encoding_simple(num_features=2, num_layers=L)
             angle_model = angle_encoding_simple(num_features=2, num_layers=L)
 
             print("Qiskit model:")
             _, accuracies, losses = basic_model_training(
-                qiskit_model, loader, lr=lr, num_epochs=num_epochs
+                qiskit_model, amplitude_loaders[i], lr=lr, num_epochs=num_epochs
             )
             qiskit_accuracies[i].append(accuracies)
             qiskit_losses[i].append(losses)
 
             print("Amplitude model:")
             _, accuracies, losses = basic_model_training(
-                amplitude_model, loader, lr=lr, num_epochs=num_epochs
+                amplitude_model, amplitude_loaders[i], lr=lr, num_epochs=num_epochs
             )
             amplitude_accuracies[i].append(accuracies)
             amplitude_losses[i].append(losses)
 
             print("Angle model:")
             _, accuracies, losses = basic_model_training(
-                angle_model, loader, lr=lr, num_epochs=num_epochs
+                angle_model, angle_loaders[i], lr=lr, num_epochs=num_epochs
             )
             angle_accuracies[i].append(accuracies)
             angle_losses[i].append(losses)
@@ -259,37 +267,73 @@ def reproduce_fig_4(
 
 
 def reproduce_fig_5(
-    num_max_samples: int = 750,
+    num_max_samples: int = 250,
     run_dir: Path = None,
 ):
     distance_between_classes = [[], [], [], []]
-    for sample_per_class in range(1, num_max_samples + 1):
 
-        for dataset_name in ["MNIST", "CIFAR-10", "PathMNIST", "EuroSAT"]:
-            print(f"Doing the {dataset_name} analysis")
-            dataset = get_binary_dataset(
-                name=dataset_name, num_samples_per_class=sample_per_class, shuffle=False
-            )[0]
-            class_1_features = dataset.tensors[0][:sample_per_class]
-            normalized_class_1_features = [
-                features.flatten() / np.linalg.norm(features.flatten())
-                for features in class_1_features
-            ]
-            class_1_density_matrices = [
-                state_vector_to_density_matrix(x) for x in normalized_class_1_features
-            ]
-            class_1_expected_state = np.mean(class_1_density_matrices, axis=0)
+    dataset_mnist = get_binary_dataset(
+        name="MNIST", num_samples_per_class=num_max_samples, shuffle=False
+    )[0]
+    dataset_cifar_10 = get_binary_dataset(
+        name="CIFAR-10", num_samples_per_class=num_max_samples, shuffle=False
+    )[0]
+    dataset_pathmnist = get_binary_dataset(
+        name="PathMNIST", num_samples_per_class=num_max_samples, shuffle=False
+    )[0]
+    dataset_eurosat = get_binary_dataset(
+        name="EuroSAT", num_samples_per_class=num_max_samples, shuffle=False
+    )[0]
 
-            class_2_features = dataset.tensors[0][sample_per_class:]
-            normalized_class_2_features = [
-                features.flatten() / np.linalg.norm(features.flatten())
-                for features in class_2_features
-            ]
-            class_2_density_matrices = [
-                state_vector_to_density_matrix(x) for x in normalized_class_2_features
-            ]
-            class_2_expected_state = np.mean(class_2_density_matrices, axis=0)
-            distance_between_classes.append(
+    datasets = [dataset_mnist, dataset_cifar_10, dataset_pathmnist, dataset_eurosat]
+
+    for dataset_index, dataset in enumerate(datasets):
+        print()
+        print(f"Doing dataset {dataset_index+1}/{4}")
+        print("Printing the dataset")
+
+        class_1_features = dataset.tensors[0][:num_max_samples]
+        class_2_features = dataset.tensors[0][num_max_samples:]
+
+        # Initialize expected states lazily to avoid huge allocations up front.
+        class_1_expected_state = None
+        class_2_expected_state = None
+        eps = 1e-12
+        for sample_per_class in range(1, num_max_samples + 1):
+            print(f"Doing sample {sample_per_class} / {num_max_samples}.")
+            f1 = (
+                class_1_features[sample_per_class - 1]
+                .detach()
+                .cpu()
+                .numpy()
+                .astype(np.float64)
+            )
+            f2 = (
+                class_2_features[sample_per_class - 1]
+                .detach()
+                .cpu()
+                .numpy()
+                .astype(np.float64)
+            )
+            v1 = f1.flatten()
+            v2 = f2.flatten()
+            n1 = np.linalg.norm(v1)
+            n2 = np.linalg.norm(v2)
+            v1 = v1 / (n1 + eps)
+            v2 = v2 / (n2 + eps)
+            rho1 = state_vector_to_density_matrix(v1)
+            rho2 = state_vector_to_density_matrix(v2)
+
+            if class_1_expected_state is None:
+                class_1_expected_state = np.zeros_like(rho1)
+                class_2_expected_state = np.zeros_like(rho2)
+            class_1_expected_state = (
+                class_1_expected_state * (sample_per_class - 1) + rho1
+            ) / sample_per_class
+            class_2_expected_state = (
+                class_2_expected_state * (sample_per_class - 1) + rho2
+            ) / sample_per_class
+            distance_between_classes[dataset_index].append(
                 trace_distance(
                     class_1_expected_state,
                     class_2_expected_state,
@@ -341,6 +385,7 @@ def reproduce_fig_7(
             output_proba_type="state",
             output_formatting="Lex_grouping",
             num_classes=2,
+            measure_subset=None,
         )
 
         print("Qiskit model:")
@@ -410,6 +455,6 @@ def reproduce_fig_7(
 # reproduce_fig_1()
 # reproduce_fig_2()
 # reproduce_fig_3()
-# reproduce_fig_4(num_epochs=5)
-reproduce_fig_5()
+# reproduce_fig_4()
+# reproduce_fig_5()
 # reproduce_fig_7()

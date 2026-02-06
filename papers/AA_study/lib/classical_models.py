@@ -40,12 +40,18 @@ class CNN(nn.Module):
                 ]
             )
 
+        feature_extractor = nn.Sequential(*layers)
+        with torch.no_grad():
+            dummy = torch.zeros(
+                1, input_channels, input_image_size, input_image_size
+            )
+            flat_dim = feature_extractor(dummy).view(1, -1).shape[1]
+
         layers.extend(
             [
                 nn.Flatten(),
                 nn.Linear(
-                    (input_image_size ** (2 * input_channels))
-                    // (2 ** (num_layers + 1)),
+                    flat_dim,
                     2 * num_classes,
                 ),
                 nn.ReLU(),

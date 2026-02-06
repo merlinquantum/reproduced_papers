@@ -10,6 +10,23 @@ from typing import List
 def _simulate_outputs(
     model: nn.Module, params: torch.Tensor, inputs: torch.Tensor
 ) -> torch.Tensor:
+    """
+    Run the Qiskit circuit for each input state and collect outputs.
+
+    Parameters
+    ----------
+    model : torch.nn.Module
+        Model carrying the Qiskit circuit, parameters, and output strategy.
+    params : torch.Tensor
+        Trainable parameters to bind into the circuit.
+    inputs : torch.Tensor
+        Input state vectors (one per sample).
+
+    Returns
+    -------
+    torch.Tensor
+        Batched outputs based on the model output strategy.
+    """
     bind_dict = {p: float(v) for p, v in zip(model.q_params, params)}
     circuit_to_run = model.circuit.assign_parameters(bind_dict, inplace=False)
 
@@ -64,6 +81,27 @@ def _parameter_shift_vjp(
     grad_output: torch.Tensor,
     shift: float = np.pi / 2,
 ) -> torch.Tensor:
+    """
+    Compute vector-Jacobian product via parameter-shift rule.
+
+    Parameters
+    ----------
+    model : torch.nn.Module
+        Model carrying the Qiskit circuit.
+    params : torch.Tensor
+        Trainable parameters to differentiate with respect to.
+    inputs : torch.Tensor
+        Input state vectors.
+    grad_output : torch.Tensor
+        Upstream gradient.
+    shift : float, optional
+        Parameter-shift value in radians.
+
+    Returns
+    -------
+    torch.Tensor
+        Gradient with respect to params.
+    """
     grad_output_np = grad_output.detach().cpu().numpy()
     grad_params = np.zeros(params.numel(), dtype=np.float64)
 
@@ -95,6 +133,25 @@ class ParameterShiftFunction(torch.autograd.Function):
         params: torch.Tensor,
         model: nn.Module,
     ) -> torch.Tensor:
+        """
+        Forward pass with Qiskit simulation.
+
+        Parameters
+        ----------
+        ctx : torch.autograd.Function
+            Autograd context.
+        inputs : torch.Tensor
+            Input state vectors.
+        params : torch.Tensor
+            Trainable parameters to bind into the circuit.
+        model : torch.nn.Module
+            Model carrying the Qiskit circuit.
+
+        Returns
+        -------
+        torch.Tensor
+            Batched outputs from Qiskit simulation.
+        """
         outputs = _simulate_outputs(model, params, inputs)
         ctx.save_for_backward(inputs, params)
         ctx.model = model
@@ -102,12 +159,40 @@ class ParameterShiftFunction(torch.autograd.Function):
 
     @staticmethod
     def backward(ctx, grad_output: torch.Tensor):
+        """
+        Backward pass using parameter-shift VJP.
+
+        Parameters
+        ----------
+        ctx : torch.autograd.Function
+            Autograd context with saved tensors.
+        grad_output : torch.Tensor
+            Upstream gradient.
+
+        Returns
+        -------
+        tuple
+            Gradients for (inputs, params, model). Only params has gradients.
+        """
         inputs, params = ctx.saved_tensors
         grad_params = _parameter_shift_vjp(ctx.model, params, inputs, grad_output)
         return None, grad_params, None
 
 
 def U_gate(parameters: List[Parameter]) -> qu.QuantumCircuit:
+    """
+    Build a 2-qubit U gate composed of fixed sub-gates.
+
+    Parameters
+    ----------
+    parameters : list[qiskit.circuit.Parameter]
+        Parameters for the 9 sub-gates.
+
+    Returns
+    -------
+    qiskit.QuantumCircuit
+        Two-qubit circuit implementing the U gate.
+    """
     qcirc = qu.QuantumCircuit(2)
     qcirc.rxx(parameters[0], 0, 1)
     qcirc.ryy(parameters[1], 0, 1)
@@ -124,6 +209,19 @@ def U_gate(parameters: List[Parameter]) -> qu.QuantumCircuit:
 
 
 def reshape_input(x: torch.Tensor) -> torch.Tensor:
+    """
+    Flatten and pad inputs to a power-of-two length.
+
+    Parameters
+    ----------
+    x : torch.Tensor
+        Input tensor.
+
+    Returns
+    -------
+    torch.Tensor
+        Flattened and zero-padded tensor with feature dimension a power of two.
+    """
     with torch.no_grad():
         if len(x.shape) > 2:
             x = x.squeeze()

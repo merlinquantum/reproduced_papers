@@ -17,18 +17,24 @@ def plot_bas_run(
     run_dir: Optional[Path] = None,
 ):
     """
-    Plot training accuracy and loss curves side by side. The plot is
-    saved as a PDF file: results/training_metrics_graph.pdf (or to run_dir if set).
+    Plot BAS training accuracy and loss curves side by side.
 
     Parameters
     ----------
-    loss_list_epoch : list[float]
-        Training loss per epoch.
-    acc_list_epoch : list[float]
-        Training accuracy per epoch.
+    accuracy_classical : list[float]
+        Classical model accuracy per epoch.
+    accuracy_qiskit : list[float]
+        Qiskit model accuracy per epoch.
+    accuracy_merlin : list[float]
+        Merlin model accuracy per epoch.
+    loss_classical : list[float]
+        Classical model loss per epoch.
+    loss_qiskit : list[float]
+        Qiskit model loss per epoch.
+    loss_merlin : list[float]
+        Merlin model loss per epoch.
     run_dir : pathlib.Path, optional
-        Output directory for the PDF when running via the shared runtime. If None,
-        the plot is saved under the local results folder.
+        Output directory for the PDF. If None, saves under the local results folder.
 
     Returns
     -------
@@ -71,7 +77,28 @@ def plot_amplitude_encoding_limitations(
     fig_simulated: int = 1,
     run_dir: Optional[Path] = None,
 ) -> Tuple[np.ndarray, np.ndarray]:
-    """ """
+    """
+    Plot the amplitude-encoding limitation curves for Figs. 1 to 3.
+
+    Parameters
+    ----------
+    distances : list[float] or list[list[float]]
+        Trace-distance series. For Fig. 1 and Fig. 2 use a list of two curves.
+        For Fig. 3 use a single curve.
+    dataset_unshuffled : torch.utils.data.TensorDataset
+        Dataset in class-ordered (unshuffled) form.
+    num_samples_per_class : int, optional
+        Number of samples per class used for the plot.
+    fig_simulated : int, optional
+        Figure index (1, 2, or 3) to control plotting style.
+    run_dir : pathlib.Path, optional
+        Output directory for the PDF. If None, saves under the local results folder.
+
+    Returns
+    -------
+    tuple[numpy.ndarray, numpy.ndarray]
+        Arrays corresponding to the class-1 and class-2 sample coordinates.
+    """
     class1 = dataset_unshuffled.tensors[0][:num_samples_per_class]
     class2 = dataset_unshuffled.tensors[0][num_samples_per_class:]
 
@@ -139,13 +166,30 @@ def plot_fig_4(
     run_dir: Optional[Path] = None,
 ):
     """
-    Fig. 4(b)-style plots: training loss vs epoch.
+    Plot Fig. 4(b)-style grids of loss/accuracy over epochs.
 
-    Each model_losses is a list over datasets (1, 2, 3).
-    Each dataset entry is a list over layers_tested.
-    Each layer entry is either:
-      - a single loss curve (list[float]), or
-      - multiple loss curves (list[list[float]]) for multiple runs.
+    Parameters
+    ----------
+    layers_tested : list[int]
+        Layer counts evaluated for each dataset.
+    qiskit_accuracies : Sequence
+        Accuracy curves for Qiskit models (datasets × layers × epochs).
+    amplitude_accuracies : Sequence
+        Accuracy curves for amplitude-encoding models.
+    angle_accuracies : Sequence
+        Accuracy curves for angle-encoding models.
+    qiskit_losses : Sequence
+        Loss curves for Qiskit models.
+    amplitude_losses : Sequence
+        Loss curves for amplitude-encoding models.
+    angle_losses : Sequence
+        Loss curves for angle-encoding models.
+    run_dir : pathlib.Path, optional
+        Output directory for the PDFs. If None, saves under the local results folder.
+
+    Returns
+    -------
+    None
     """
 
     def _summarize_runs(
@@ -275,10 +319,28 @@ def plot_fig_5(
     add_inset: bool = True,
 ) -> None:
     """
-    Reproduce Fig. 5: trace distance between averaged encoded states of
-    class 1 and class 2 for different datasets.
+    Plot Fig. 5: trace distance between averaged encoded states.
 
-    Inputs are the four trace-distance lists for the datasets below.
+    Parameters
+    ----------
+    sample_sizes : Sequence[int]
+        Sample sizes per class.
+    MNIST_trace_distances : list[float]
+        Trace-distance curve for MNIST.
+    CIFAR_10_trace_distances : list[float]
+        Trace-distance curve for CIFAR-10.
+    PathMNIST_trace_distances : list[float]
+        Trace-distance curve for PathMNIST.
+    EuroSAT_trace_distances : list[float]
+        Trace-distance curve for EuroSAT.
+    run_dir : pathlib.Path, optional
+        Output directory for the PDF. If None, saves under the local results folder.
+    add_inset : bool, optional
+        Whether to include a small inset plot for early samples.
+
+    Returns
+    -------
+    None
     """
     fig, ax = plt.subplots(1, 1, figsize=(5.2, 3.6))
 
@@ -301,15 +363,15 @@ def plot_fig_5(
 
     ax.set_xlabel("Sample size per class")
     ax.set_ylabel("Trace distance")
-    ax.set_xticks([sample_sizes[0], sample_sizes[-2], sample_sizes[-1]])
-    ax.set_ylim(0.0, 0.9)
+    ax.set_xticks([sample_sizes[0], sample_sizes[-1]])
+    ax.set_ylim(0.0, 1.0)
     ax.legend(frameon=False)
 
     if add_inset:
         try:
             from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
-            axins = inset_axes(ax, width="40%", height="40%", loc="lower left")
+            axins = inset_axes(ax, width="40%", height="40%", loc="center right")
             for _, values, color in series:
                 axins.plot(
                     sample_sizes,
@@ -322,7 +384,7 @@ def plot_fig_5(
             axins.set_xlim(sample_sizes[0], sample_sizes[-2])
             axins.set_ylim(0.0, 0.03)
             axins.set_xticks([sample_sizes[0], sample_sizes[-2]])
-            axins.set_yticks([0.01, 0.023])
+            axins.set_yticks([0.01, 0.15])
         except Exception:
             pass
 
@@ -343,13 +405,26 @@ def plot_fig_7(
     run_dir: Optional[Path] = None,
 ) -> None:
     """
-    Reproduce Fig. 7: MNIST performance under amplitude encoding.
+    Plot Fig. 7: MNIST performance under amplitude encoding.
 
-    Inputs:
-      - sample_sizes: list like [1, 10, 100, 1000]
-      - training_losses: list of loss curves, one per sample size
-      - generalization_errors: list of scalar errors, one per sample size
-      - testing_accuracies: list of accuracy curves, one per sample size
+    Parameters
+    ----------
+    sample_sizes : Sequence[int]
+        Sample sizes per class.
+    training_losses : Sequence[Sequence[float]]
+        Training loss curves, one per sample size.
+    generalization_errors : Sequence[float]
+        Generalization error per sample size.
+    testing_accuracies : Sequence[Sequence[float]]
+        Testing accuracy curves, one per sample size.
+    model_name : str, optional
+        Model label used in the output filename.
+    run_dir : pathlib.Path, optional
+        Output directory for the PDF. If None, saves under the local results folder.
+
+    Returns
+    -------
+    None
     """
     fig, axes = plt.subplots(1, 3, figsize=(10.8, 3.2))
 
