@@ -1,14 +1,6 @@
-import qiskit as qu
 import torch
-import torch.nn as nn
-from qiskit.circuit import Parameter
-import numpy as np
-import torch.nn.functional as F
-from typing import List, Optional
-
 from pathlib import Path
 import sys
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -18,12 +10,6 @@ sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(TORCHQUANTUM_ROOT))
 
-
-from papers.AA_study.utils.qiskit_utils import (
-    ParameterShiftFunction,
-    U_gate,
-    reshape_input,
-)
 
 import torchquantum as tq
 import torchquantum.functional as tqf
@@ -48,13 +34,14 @@ class single_qubit_model(tq.QuantumModule):
         @tq.static_support
         def forward(self, q_device: tq.QuantumDevice):
             """
-            1. To convert tq QuantumModule to qiskit or run in the static
-            model, need to:
-                (1) add @tq.static_support before the forward
-                (2) make sure to add
-                    static=self.static_mode and
-                    parent_graph=self.graph
-                    to all the tqf functions, such as tqf.hadamard below
+            Apply the parameterized single-qubit gate sequence.
+
+            Notes
+            -----
+            When using static mode or exporting to Qiskit:
+            1) Add `@tq.static_support` before `forward`.
+            2) Pass `static=self.static_mode` and `parent_graph=self.graph`
+               to all `tqf` functional calls.
             """
             self.q_device = q_device
 
@@ -63,6 +50,16 @@ class single_qubit_model(tq.QuantumModule):
                 gates(self.q_device, wires=0)
 
     def __init__(self, num_layers: int = 10, return_probs: bool = True):
+        """
+        Build a single-qubit TorchQuantum (Qiskit) model.
+
+        Parameters
+        ----------
+        num_layers : int, optional
+            Number of repeated gate blocks.
+        return_probs : bool, optional
+            Whether `forward` returns probabilities instead of logits.
+        """
         super().__init__()
         self.n_wires = 1
         self.q_device = tq.QuantumDevice(n_wires=self.n_wires)
@@ -72,10 +69,21 @@ class single_qubit_model(tq.QuantumModule):
         self.measure = tq.MeasureAll(tq.PauliZ)
         self.return_probs = return_probs
 
-    def forward(
-        self,
-        x,
-    ):
+    def forward(self, x):
+        """
+        Run a forward pass.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Input features.
+
+        Returns
+        -------
+        torch.Tensor
+            If `return_probs=True`, probabilities of shape (N, 2);
+            otherwise logits of shape (N, 2).
+        """
         self.encoder(self.q_device, x)
         self.q_layer(self.q_device)
         x = self.measure(self.q_device)
@@ -95,6 +103,14 @@ import torchquantum as tq
 class qiskit_QCNN(tq.QuantumModule):
     class QiskitQCNNQLayer(tq.QuantumModule):
         def __init__(self, num_qubits: int = 10):
+            """
+            Build the QCNN quantum layer.
+
+            Parameters
+            ----------
+            num_qubits : int, optional
+                Number of qubits/wires in the circuit.
+            """
             super().__init__()
 
             num_u_gates = 0
@@ -130,13 +146,14 @@ class qiskit_QCNN(tq.QuantumModule):
         @tq.static_support
         def forward(self, q_device: tq.QuantumDevice):
             """
-            1. To convert tq QuantumModule to qiskit or run in the static
-            model, need to:
-                (1) add @tq.static_support before the forward
-                (2) make sure to add
-                    static=self.static_mode and
-                    parent_graph=self.graph
-                    to all the tqf functions, such as tqf.hadamard below
+            Apply the QCNN layer to the quantum device.
+
+            Notes
+            -----
+            When using static mode or exporting to Qiskit:
+            1) Add `@tq.static_support` before `forward`.
+            2) Pass `static=self.static_mode` and `parent_graph=self.graph`
+               to all `tqf` functional calls.
             """
             self.q_device = q_device
 
@@ -183,6 +200,16 @@ class qiskit_QCNN(tq.QuantumModule):
                 qubits_alive = qubits_alive[::2]
 
     def __init__(self, num_qubits: int = 10, return_probs: bool = True):
+        """
+        Build the (Qiskit) QCNN model.
+
+        Parameters
+        ----------
+        num_qubits : int, optional
+            Number of qubits/wires in the circuit.
+        return_probs : bool, optional
+            Whether `forward` returns probabilities instead of logits.
+        """
         super().__init__()
         self.n_wires = num_qubits
         self.q_device = tq.QuantumDevice(n_wires=self.n_wires)
@@ -193,6 +220,19 @@ class qiskit_QCNN(tq.QuantumModule):
         self.return_probs = return_probs
 
     def _preprocess_input(self, x):
+        """
+        Flatten and truncate inputs to match the circuit width.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Input tensor.
+
+        Returns
+        -------
+        torch.Tensor
+            Flattened tensor of shape (N, <= 2**n_wires).
+        """
         if x.dim() > 2:
             x = x.view(x.shape[0], -1)
         max_dim = 2**self.n_wires
@@ -201,6 +241,19 @@ class qiskit_QCNN(tq.QuantumModule):
         return x
 
     def _first_qubit_probs(self, x):
+        """
+        Measure all qubits and return probabilities of qubit 0.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Preprocessed input tensor.
+
+        Returns
+        -------
+        torch.Tensor
+            Probabilities of shape (N, 2) for the first qubit.
+        """
         self.encoder(self.q_device, x)
         self.q_layer(self.q_device)
         x = self.measure(self.q_device)
@@ -210,107 +263,37 @@ class qiskit_QCNN(tq.QuantumModule):
         return torch.stack([(1.0 + z) / 2.0, (1.0 - z) / 2.0], dim=1)
 
     def forward(self, x):
+        """
+        Run a forward pass returning first-qubit probabilities.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Input tensor.
+
+        Returns
+        -------
+        torch.Tensor
+            Probabilities of shape (N, 2).
+        """
         x = self._preprocess_input(x)
         return self._first_qubit_probs(x)
 
     def forward_logits(self, x):
+        """
+        Run a forward pass returning logits derived from the first qubit.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Input tensor.
+
+        Returns
+        -------
+        torch.Tensor
+            Logits of shape (N, 2).
+        """
         x = self._preprocess_input(x)
         probs = self._first_qubit_probs(x)
         z = probs[:, 0] - probs[:, 1]
         return torch.stack([z, -z], dim=1)
-
-
-# class single_qubit_model(nn.Module):
-#     def __init__(self, num_layers: int = 10, output_strategy: str = "probabilities"):
-#         super().__init__()
-
-#         self.params = nn.Parameter(2 * np.pi * torch.rand(num_layers * 3))
-
-#         self.circuit, self.q_params = self._single_qubit_model_circuit(num_layers)
-#         self.output_strategy = output_strategy
-
-#     def forward(self, x: torch.Tensor) -> torch.Tensor:
-#         x = reshape_input(x)
-#         return ParameterShiftFunction.apply(x, self.params, self)
-
-#     # TODO Optimize angle encoding parametrizing
-#     def _single_qubit_model_circuit(self, num_layers: int = 10):
-#         """
-#         Must be exactly to features
-#         features=List[complex]
-#         """
-#         circuit = qu.QuantumCircuit(1)
-#         parameters = []
-#         for layer in range(num_layers):
-#             parameters.extend(
-#                 [
-#                     Parameter(f"theta_{layer}"),
-#                     Parameter(f"gamma_{layer}"),
-#                     Parameter(f"phi_{layer}"),
-#                 ]
-#             )
-#             circuit.rz(parameters[-3], 0)
-#             circuit.rx(parameters[-2], 0)
-#             circuit.rz(parameters[-1], 0)
-
-#         return circuit, parameters
-
-"""
-class qiskit_QCNN(nn.Module):
-    def __init__(self, num_qubits: int = 10, num_classes: int = 2):
-        super().__init__()
-        # TODO find the formula
-        self.num_qubits = num_qubits
-        self.num_classes = num_classes
-
-        self.num_params = 0
-        num_qubits_alive = num_qubits
-
-        while num_qubits_alive > 1:
-            self.num_params += 9 * (num_qubits_alive - 1)
-            self.num_params += num_qubits_alive // 2
-            num_qubits_alive = num_qubits_alive - (num_qubits_alive // 2)
-
-        self.params = nn.Parameter(2 * np.pi * torch.rand(self.num_params))
-
-        self.output_strategy = "first_qubit_probabilities"
-        self.circuit, self.q_params = self._QCNN_circuit()
-
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        x = reshape_input(x)
-        return ParameterShiftFunction.apply(x, self.params, self)
-
-    # TODO Optimize angle encoding parametrizing
-    def _QCNN_circuit(self):
-
-        circuit = qu.QuantumCircuit(self.num_qubits)
-        width = len(str(self.num_params - 1))
-        parameters = [Parameter(f"phi{i:0{width}d}") for i in range(self.num_params)]
-
-        param_index = 0
-        qubits_alive = [i for i in range(self.num_qubits)]
-        while len(qubits_alive) > 1:
-            for i in range(0, len(qubits_alive) - 1, 2):
-                circuit = circuit.compose(
-                    U_gate(parameters=parameters[param_index : param_index + 9]),
-                    [qubits_alive[i], qubits_alive[i + 1]],
-                )
-                param_index += 9
-            for i in range(1, len(qubits_alive) - 1, 2):
-                circuit = circuit.compose(
-                    U_gate(parameters=parameters[param_index : param_index + 9]),
-                    [qubits_alive[i], qubits_alive[i + 1]],
-                )
-                param_index += 9
-
-            for i in range(1, len(qubits_alive), 2):
-                circuit.crx(
-                    parameters[param_index], qubits_alive[i], qubits_alive[i - 1]
-                )
-                param_index += 1
-
-            qubits_alive = qubits_alive[::2]
-
-        return circuit, parameters
-
-"""

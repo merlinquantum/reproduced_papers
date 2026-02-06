@@ -23,6 +23,20 @@ from papers.AA_study.lib.amplitude_limitations import (
 
 
 def train_and_evaluate(cfg, run_dir: Path) -> None:
+    """
+    Dispatch experiment execution based on a config dictionary.
+
+    Parameters
+    ----------
+    cfg : dict
+        Experiment configuration values.
+    run_dir : pathlib.Path
+        Output directory for plots and artifacts.
+
+    Returns
+    -------
+    None
+    """
     exp_to_run = cfg.get("exp_to_run", "DEFAULT")
     generate_graph = not str_to_bool(cfg.get("dont_generate_graph", False))
 

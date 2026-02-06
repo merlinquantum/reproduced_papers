@@ -13,7 +13,22 @@ class CNN(nn.Module):
         num_layers: int = 2,
     ):
         """
-        input_image_size: only one side, images must be squares
+        Simple CNN for square images.
+
+        Parameters
+        ----------
+        input_channels : int, optional
+            Number of input channels.
+        input_image_size : int, optional
+            Spatial size (width) of square inputs.
+        num_classes : int, optional
+            Number of output classes.
+        kernel_size : int, optional
+            Convolution and pooling kernel size.
+        stride : int, optional
+            Stride for the first max-pooling layer.
+        num_layers : int, optional
+            Number of convolutional blocks.
         """
         super().__init__()
         layers = []
@@ -42,9 +57,7 @@ class CNN(nn.Module):
 
         feature_extractor = nn.Sequential(*layers)
         with torch.no_grad():
-            dummy = torch.zeros(
-                1, input_channels, input_image_size, input_image_size
-            )
+            dummy = torch.zeros(1, input_channels, input_image_size, input_image_size)
             flat_dim = feature_extractor(dummy).view(1, -1).shape[1]
 
         layers.extend(
@@ -61,6 +74,19 @@ class CNN(nn.Module):
         self.model = nn.Sequential(*layers)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """
+        Run a forward pass of the CNN.
+
+        Parameters
+        ----------
+        x : torch.Tensor
+            Input tensor of shape (N, C, H, W).
+
+        Returns
+        -------
+        torch.Tensor
+            Logits of shape (N, num_classes).
+        """
         if x.dtype != next(self.parameters()).dtype:
             x = x.to(dtype=next(self.parameters()).dtype)
         return self.model(x)

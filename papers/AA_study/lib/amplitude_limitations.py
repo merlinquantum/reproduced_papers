@@ -42,6 +42,22 @@ def reproduce_fig_1(
     num_max_samples: int = 2000,
     run_dir: Path = None,
 ):
+    """
+    Reproduce Fig. 1 by computing trace distance of the amplitude encoding of dataset 1
+    to the superposition state.
+
+    Parameters
+    ----------
+    num_max_samples : int, optional
+        Maximum number of samples per class to evaluate.
+    run_dir : pathlib.Path, optional
+        Output directory for the plot.
+
+    Returns
+    -------
+    list[list[float]]
+        Trace-distance curves for class 1 and class 2.
+    """
     SUP_STATE = superposition_state(1)
     distance_from_sup_state = [[], []]
     for sample_per_class in range(1, num_max_samples + 1):
@@ -85,6 +101,22 @@ def reproduce_fig_2(
     num_max_samples: int = 2000,
     run_dir: Path = None,
 ):
+    """
+    Reproduce Fig. 2 by computing trace distance of the amplitude encoding of dataset 2
+    to the mixed state.
+
+    Parameters
+    ----------
+    num_max_samples : int, optional
+        Maximum number of samples per class to evaluate.
+    run_dir : pathlib.Path, optional
+        Output directory for the plot.
+
+    Returns
+    -------
+    list[list[float]]
+        Trace-distance curves for class 1 and class 2.
+    """
     MIXED_STATE = mixed_state(1)
     distance_from_mixed_state = [[], []]
     for sample_per_class in range(1, num_max_samples + 1):
@@ -128,6 +160,21 @@ def reproduce_fig_3(
     num_max_samples: int = 2000,
     run_dir: Path = None,
 ):
+    """
+    Reproduce Fig. 3 by computing inter-class amplitude encoding trace distance of dataset 3.
+
+    Parameters
+    ----------
+    num_max_samples : int, optional
+        Maximum number of samples per class to evaluate.
+    run_dir : pathlib.Path, optional
+        Output directory for the plot.
+
+    Returns
+    -------
+    list[float]
+        Trace-distance curve between class-averaged states.
+    """
     distance_between_classes = []
     for sample_per_class in range(1, num_max_samples + 1):
         dataset = generate_fig_3_dataset(
@@ -173,6 +220,27 @@ def reproduce_fig_4(
     num_samples_per_class: int = 2000,
     run_dir: Path = None,
 ):
+    """
+    Reproduce Fig. 4 by training Qiskit, amplitude, and angle models on datasets 1,2 and 3.
+
+    Parameters
+    ----------
+    batch_size : int, optional
+        Training batch size.
+    num_epochs : int, optional
+        Number of training epochs.
+    lr : float, optional
+        Learning rate.
+    num_samples_per_class : int, optional
+        Samples per class for synthetic datasets.
+    run_dir : pathlib.Path, optional
+        Output directory for plots and JSON data.
+
+    Returns
+    -------
+    tuple[list, list, list]
+        (qiskit_losses, amplitude_losses, angle_losses).
+    """
     qiskit_losses = [[], [], []]
     amplitude_losses = [[], [], []]
     angle_losses = [[], [], []]
@@ -270,6 +338,21 @@ def reproduce_fig_5(
     num_max_samples: int = 250,
     run_dir: Path = None,
 ):
+    """
+    Reproduce Fig. 5 by computing inter-class trace distances with the features endoded as amplitudes across datasets.
+
+    Parameters
+    ----------
+    num_max_samples : int, optional
+        Maximum number of samples per class to evaluate.
+    run_dir : pathlib.Path, optional
+        Output directory for the plot.
+
+    Returns
+    -------
+    list[list[float]]
+        Trace-distance curves for MNIST, CIFAR-10, PathMNIST, and EuroSAT.
+    """
     distance_between_classes = [[], [], [], []]
 
     dataset_mnist = get_binary_dataset(
@@ -358,6 +441,29 @@ def reproduce_fig_7(
     lr: float = 0.01,
     run_dir: Path = None,
 ):
+    """
+    Reproduce Fig. 7 by training Qiskit and Merlin QCNN models across different sample sizes.
+
+    Parameters
+    ----------
+    dataset_to_run : str, optional
+        Dataset name (e.g., "MNIST").
+    sample_size_per_class : list[int], optional
+        Sample sizes per class to evaluate.
+    batch_size : int, optional
+        Training batch size.
+    num_epochs : int, optional
+        Number of training epochs.
+    lr : float, optional
+        Learning rate.
+    run_dir : pathlib.Path, optional
+        Output directory for plots and JSON data.
+
+    Returns
+    -------
+    tuple
+        Metrics for qiskit and merlin models.
+    """
     qiskit_accuracies = []
     qiskit_losses = []
     qiskit_gen_error = []
@@ -457,4 +563,4 @@ def reproduce_fig_7(
 # reproduce_fig_3()
 # reproduce_fig_4()
 # reproduce_fig_5()
-# reproduce_fig_7()
+reproduce_fig_7()

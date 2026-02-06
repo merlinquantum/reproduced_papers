@@ -23,6 +23,28 @@ def run_bas(
     run_dir: Path = None,
     generate_graph: bool = False,
 ):
+    """
+    Train classical, Qiskit, and Merlin models on Bars-and-Stripes.
+
+    Parameters
+    ----------
+    batch_size : int, optional
+        Training batch size.
+    num_epochs : int, optional
+        Number of epochs for quantum and Merlin models.
+    classical_epochs : int, optional
+        Number of epochs for the classical CNN.
+    lr : float, optional
+        Learning rate.
+    run_dir : pathlib.Path, optional
+        Output directory for plots.
+    generate_graph : bool, optional
+        Whether to save training curves as a PDF.
+
+    Returns
+    -------
+    None
+    """
     train_dataset, test_dataset = get_bas()
     train_loader = get_data_loader(train_dataset, batch_size=batch_size)
     test_loader = get_data_loader(test_dataset, batch_size=200)
@@ -97,4 +119,4 @@ def run_bas(
         )
 
 
-run_bas(num_epochs=20, generate_graph=True)
+# run_bas(num_epochs=20, generate_graph=True)

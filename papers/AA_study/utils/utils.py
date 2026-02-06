@@ -14,10 +14,38 @@ device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("
 
 
 def trace_distance(A: NDArray, B: NDArray) -> NDArray:
+    """
+    Compute the trace distance between two density matrices (0.5*|A-B|_1).
+
+    Parameters
+    ----------
+    A : numpy.ndarray
+        First density matrix.
+    B : numpy.ndarray
+        Second density matrix.
+
+    Returns
+    -------
+    numpy.ndarray
+        Trace distance value.
+    """
     return np.linalg.norm(A - B, ord="nuc") / 2
 
 
 def state_vector_to_density_matrix(x: NDArray | List | torch.Tensor) -> NDArray:
+    """
+    Convert a state vector into a density matrix.
+
+    Parameters
+    ----------
+    x : numpy.ndarray | list | torch.Tensor
+        State vector.
+
+    Returns
+    -------
+    numpy.ndarray
+        Density matrix.
+    """
     if isinstance(x, torch.Tensor):
         x = x.cpu().detach().numpy()
     if isinstance(x, list):
@@ -33,6 +61,18 @@ def find_mode_photon_config(
     Find (n_modes, n_photons) with smallest n_modes such that
     C(n_modes + n_photons - 1, n_photons) >= num_features and
     n_photons <= n_modes // 2.
+
+    Parameters
+    ----------
+    num_features : int
+        Required feature dimension.
+    max_modes : int, optional
+        Maximum number of modes to search.
+
+    Returns
+    -------
+    tuple[int, int]
+        (n_modes, n_photons) configuration.
     """
     if num_features <= 0:
         raise ValueError("num_features must be positive.")
@@ -62,6 +102,23 @@ def find_mode_photon_config(
 def normalize_features(
     features: TensorDataset, min_per_feature: List[float], max_per_feature: List[float]
 ):
+    """
+    Min-max normalize a TensorDataset in-place.
+
+    Parameters
+    ----------
+    features : torch.utils.data.TensorDataset
+        Dataset whose first tensor is normalized in-place.
+    min_per_feature : list[float]
+        Minimum values per feature.
+    max_per_feature : list[float]
+        Maximum values per feature.
+
+    Returns
+    -------
+    torch.utils.data.TensorDataset
+        The normalized dataset (same object).
+    """
     for tensor in features.tensors[0]:
         for i, feature in enumerate(tensor):
             tensor[i] = (feature - min_per_feature[i]) / (
@@ -77,6 +134,32 @@ def basic_model_training(
     num_epochs: int = 10,
     test_loader: DataLoader = None,
 ) -> Tuple[nn.Module, List[float], List[float]]:
+    """
+    Train a model and return per-epoch accuracy and loss.
+
+    Parameters
+    ----------
+    model : torch.nn.Module
+        Model to train.
+    data_loader : torch.utils.data.DataLoader
+        Training data loader.
+    lr : float, optional
+        Learning rate.
+    num_epochs : int, optional
+        Number of training epochs.
+    test_loader : torch.utils.data.DataLoader, optional
+        Optional evaluation loader used for accuracy per epoch.
+
+    Returns
+    -------
+    tuple[torch.nn.Module, list[float], list[float]]
+        (model, accuracy_per_epoch, loss_per_epoch)
+
+    Notes
+    -----
+    If `test_loader` is provided, `accuracy_per_epoch` is computed on the
+    test_loader each epoch; otherwise it is computed on the training data.
+    """
     model = model.to(device)
     optimizer = optim.Adam(model.parameters(), lr=lr)
     criterion = nn.CrossEntropyLoss()
@@ -84,6 +167,8 @@ def basic_model_training(
 
     accuracy_per_epoch = []
     loss_per_epoch = []
+    accuracy_test_per_epoch = []
+    loss_test_per_epoch = []
 
     for epoch in range(num_epochs):
         tot_loss = 0.0
@@ -108,23 +193,48 @@ def basic_model_training(
             correct += (preds == labels).sum().item()
             total += labels.size(0)
 
-        if test_loader is None:
-            accuracy = correct / total
-        else:
-            accuracy = evaluate_model(model, test_loader)[0]
+        accuracy = correct / total
+        if test_loader is not None:
+            accuracy_test, loss_test = evaluate_model(model, test_loader)
+            accuracy_test_per_epoch.append(accuracy_test)
+            loss_test_per_epoch.append(loss_test)
             model.train()
+
         accuracy_per_epoch.append(accuracy)
         avg_loss = tot_loss / max(num_batches, 1)
         loss_per_epoch.append(avg_loss)
         print(f"Epoch {epoch+1} had a loss of {avg_loss} and accuracy of {accuracy}")
 
-    return model, accuracy_per_epoch, loss_per_epoch
+    if test_loader is None:
+        return model, accuracy_per_epoch, loss_per_epoch
+    else:
+        return (
+            model,
+            accuracy_test_per_epoch,
+            loss_per_epoch,
+            np.array(loss_test_per_epoch) - np.array(loss_per_epoch),
+        )
 
 
 def evaluate_model(
     model: nn.Module,
     data_loader: DataLoader,
 ) -> Tuple[float, float]:
+    """
+    Evaluate a model and return accuracy and loss.
+
+    Parameters
+    ----------
+    model : torch.nn.Module
+        Model to evaluate.
+    data_loader : torch.utils.data.DataLoader
+        Evaluation data loader.
+
+    Returns
+    -------
+    tuple[float, float]
+        (accuracy_percent, mean_loss)
+    """
     criterion = nn.NLLLoss()
     model = model.to(device)
     model.eval()
@@ -173,6 +283,19 @@ def int_list(arg):
 
 
 def _parse_sample_size_per_class_to_test(value):
+    """
+    Parse sample size values from multiple input types.
+
+    Parameters
+    ----------
+    value : Any
+        Input value (None, list, tuple, or comma-separated string).
+
+    Returns
+    -------
+    Any
+        Parsed list or original value.
+    """
     if value is None:
         return None
     if isinstance(value, list):
@@ -186,6 +309,19 @@ def _parse_sample_size_per_class_to_test(value):
 
 
 def str_to_bool(s: str) -> bool:
+    """
+    Convert a string to boolean.
+
+    Parameters
+    ----------
+    s : str
+        Input string.
+
+    Returns
+    -------
+    bool
+        Parsed boolean value.
+    """
     if isinstance(s, bool):
         return s
     if s == "True":
