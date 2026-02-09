@@ -46,8 +46,8 @@ def forward_remote_qorc_quantum_layer(
     # max_batch_size    = 64
     # max_batch_size    = 128
     # max_batch_size    = 1024
-    # max_batch_size    = 10240  # 10k images à la fois => 7/8 batchs par run  => En pratique plus long
-    max_batch_size = 102400  # 100k images à la fois => un seul batch
+    # max_batch_size    = 10240  # 10k images in a row => Takes more time
+    max_batch_size = 102400  # 100k images in a row => only one batch
 
     logger.info("Call to remote_qorc_quantum_layer ")
     logger.info(
@@ -64,7 +64,7 @@ def forward_remote_qorc_quantum_layer(
         )
         qpu_device_name = qpu_device_name.replace(LOCAL_STR, "")
         logger.info(
-            "'{}' détecté: Traitement local du remote processor".format(LOCAL_STR)
+            "'{}' detected: local treatment of remote processor".format(LOCAL_STR)
         )
 
     valid_qpu_device_name_list = [
@@ -92,7 +92,7 @@ def forward_remote_qorc_quantum_layer(
     proc = MerlinProcessor(
         remote_processor,
         chunk_concurrency=chunk_concurrency,
-        max_batch_size=max_batch_size,
+        microbatch_size=max_batch_size,
     )
 
     train_size = train_tensor.shape[0]
@@ -101,61 +101,19 @@ def forward_remote_qorc_quantum_layer(
     data_tensor = torch.cat([train_tensor, val_tensor, test_tensor], dim=0)
     logger.info("data_tensor.shape:{}".format(str(data_tensor.shape)))
 
-    match qpu_device_name:
-        case "sim:slos":
-            logger.info("qpu_device_name=sim:slos  - Calcule le train/val/test")
-            time_cour = time.time()
-
-            fut = proc.forward_async(
-                qorc_quantum_layer, data_tensor, nsample=qpu_device_nsample
-            )
-            _spin_until_with_ctrlc(
-                lambda: len(fut.job_ids) > 0 or fut.done(), timeout_s=qpu_device_timeout
-            )
-            processed_data_tensor = fut.wait()
-
-            duration = time.time() - time_cour
-            logger.info("Durée (s): {}".format(duration))
-
-        case "sim:ascella" | "qpu:ascella":
-            # Parralléliser les 3 jobs
-            logger.info(
-                "qpu_device_name={}  - Calcule le train/val/test".format(
-                    qpu_device_name
-                )
-            )
-            time_cour = time.time()
-
-            fut = proc.forward_async(
-                qorc_quantum_layer, data_tensor, nsample=qpu_device_nsample
-            )
-            _spin_until_with_ctrlc(
-                lambda: len(fut.job_ids) > 0 or fut.done(), timeout_s=qpu_device_timeout
-            )
-            processed_data_tensor = fut.wait()
-
-            duration = time.time() - time_cour
-            logger.info("Durée (s): {}".format(duration))
-
-        case _:
-            # Cas général: On lance les calculs par défaut
-            logger.info(
-                "Qorc: Traitement général (case else) du remote processor: {} - Calcule le train/val/test".format(
-                    qpu_device_name
-                )
-            )
-            time_cour = time.time()
-
-            fut = proc.forward_async(
-                qorc_quantum_layer, data_tensor, nsample=qpu_device_nsample
-            )
-            _spin_until_with_ctrlc(
-                lambda: len(fut.job_ids) > 0 or fut.done(), timeout_s=qpu_device_timeout
-            )
-            processed_data_tensor = fut.wait()
-
-            duration = time.time() - time_cour
-            logger.info("Durée (s): {}".format(duration))
+    logger.info(
+        f"Qorc: Call to forward async for remote processor: {qpu_device_name} - Compute train/val/test"
+    )
+    time_cour = time.time()
+    fut = proc.forward_async(
+        qorc_quantum_layer, data_tensor, nsample=qpu_device_nsample
+    )
+    _spin_until_with_ctrlc(
+        lambda: len(fut.job_ids) > 0 or fut.done(), timeout_s=qpu_device_timeout
+    )
+    processed_data_tensor = fut.wait()
+    duration = time.time() - time_cour
+    logger.info(f"Duration (s): {duration}")
 
     train_data_qorc = processed_data_tensor[:train_size]
     val_data_qorc = processed_data_tensor[train_size : (train_size + val_size)]

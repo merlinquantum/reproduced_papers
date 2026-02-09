@@ -48,18 +48,18 @@ def get_circuit_physical_depth(circuit: pcvl.Circuit):
                 return d_current, depths
             else:
                 raise ValueError(
-                    "Erreur dans get_circuit_physical_depth: Le circuit n'est pas composite."
+                    "Error in get_circuit_physical_depth: The circuit is not 'composite' type."
                 )
         case _:
             raise ValueError(
-                f"Erreur dans get_circuit_physical_depth: Type de circuit non géré: {t}"
+                f"Error in get_circuit_physical_depth: Wrong type of circuit: {t}"
             )
-    raise ValueError("Erreur dans get_circuit_physical_depth (interne).")
+    raise ValueError("Error in get_circuit_physical_depth (internal).")
 
 
 def get_PS_name_for_mode_and_depth(circuit: pcvl.Circuit, mode: int, depth: int):
     if not circuit.is_composite():
-        raise ValueError("Erreur: Circuit pas composite")
+        raise ValueError("Error: The circuit is not 'composite' type.")
 
     depths = [0] * circuit.m
     for modes, comp in circuit._components:  # type: ignore[attr-defined]
@@ -72,7 +72,7 @@ def get_PS_name_for_mode_and_depth(circuit: pcvl.Circuit, mode: int, depth: int)
         if isinstance(comp, pcvl.components.PS):
             add_depth = 0
         if add_depth is None:
-            raise ValueError("Erreur: Composant non reconnu")
+            raise ValueError("Error: Component not recognized.")
 
         for m in modes:
             depths[m] = d_current + add_depth
@@ -83,7 +83,7 @@ def get_PS_name_for_mode_and_depth(circuit: pcvl.Circuit, mode: int, depth: int)
                     ps_name = comp.get_variables()["phi"]
                     return ps_name, depths[mode]
 
-    # Pas de Phaseshifter trouvé avec une profondeur en BS suffisante (la depth demandée est trop élevée pour le circuit)
+    # No Phaseshifter found with requested BS depth (requested depth too high)
     return None, None
 
 
@@ -98,20 +98,19 @@ def create_quantum_layer_for_ascella(n_photons, logger):
     specs = remote_processor.specs
     spec_circuit = specs["specific_circuit"]
     d_current, depths = get_circuit_physical_depth(spec_circuit)
-    print("circuit depths:", d_current, depths)
+    # print("circuit depths:", d_current, depths)
 
-    # Ascella: On cherche les PS du milieu, pour les 11 derniers modes, car le premier mode n'a pas de PhaseShifter
+    # Ascella: We look for PS in the middle-depth of the circuit, for the last 11 modes, as first mode does not contain any PhaseShifter
     input_param_names = []
     for mode_cour in range(1, 12):
         depth_target = depths[mode_cour] // 2
         ps_name, depth_cour = get_PS_name_for_mode_and_depth(
             spec_circuit, mode_cour, depth_target
         )
-        print(mode_cour, depth_target, depth_cour, ps_name)
+        # print(mode_cour, depth_target, depth_cour, ps_name)
         input_param_names.append(ps_name)
-    print("Liste des paramètres d'input:", input_param_names)
 
-    # On construit un circuit identique, avec des phases fixes pour les non-input
+    # Build an identical circuit, with fixed phases for non-inputs
     qorc_circuit = pcvl.Circuit(n_modes)
     np.random.seed(run_seed)
     for modes, comp in spec_circuit._components:  # type: ignore[attr-defined]
@@ -138,15 +137,17 @@ def create_quantum_layer_for_ascella(n_photons, logger):
         qorc_input_state[index] = 1
 
     device_name = "cpu"
+    input_size = (
+        n_modes - 1
+    )  # Nb input features = 11 for ascella (first mode does not have PS)
+    measurement_strategy = ML.MeasurementStrategy.PROBABILITIES
     qorc_quantum_layer = ML.QuantumLayer(
-        input_size=n_modes
-        - 1,  # Nb input features = 11 pour ascella (le premier mode n'a pas de PS)
-        output_size=qorc_output_size,  # Nb output classes = nb modes
+        input_size=input_size,
         circuit=qorc_circuit,  # QORC quantum circuit
         trainable_parameters=[],  # Circuit is not trainable
         input_parameters=input_param_names,  # Input encoding parameters
         input_state=qorc_input_state,  # Initial photon state
-        output_mapping_strategy=ML.OutputMappingStrategy.NONE,  # Output: Get all Fock states probas
+        measurement_strategy=measurement_strategy,  # MerLin v2
         # See: https://merlinquantum.ai/user_guide/output_mappings.html
         no_bunching=False,
         device=torch.device(device_name),
@@ -206,15 +207,14 @@ def create_qorc_quantum_layer(
         qorc_output_size = math.comb(n_photons + n_modes - 1, n_photons)
 
     logger.info("MerLin QuantumLayer creation:")
+    measurement_strategy = ML.MeasurementStrategy.PROBABILITIES
     qorc_quantum_layer = ML.QuantumLayer(
         input_size=n_modes,  # Nb input features = nb modes
-        output_size=qorc_output_size,  # Nb output classes = nb modes
         circuit=qorc_circuit,  # QORC quantum circuit
-        trainable_parameters=[],  # Circuit is not trainable
+        trainable_parameters=[],
         input_parameters=params_prefix,  # Input encoding parameters
         input_state=qorc_input_state,  # Initial photon state
-        output_mapping_strategy=ML.OutputMappingStrategy.NONE,  # Output: Get all Fock states probas
-        # See: https://merlinquantum.ai/user_guide/output_mappings.html
+        measurement_strategy=measurement_strategy,
         no_bunching=b_no_bunching,
         device=torch.device(device_name),
     )
@@ -265,14 +265,20 @@ def qorc_encoding_and_linear_training(
     if "ascella" in qpu_device_name:
         n_modes = 12
         n_components = 11  # Ascella first mode does not contain any phaseShifter -> 11 inputs instead of 12
+        assert n_photons <= 6, (
+            "Error: The number of photons should not exceed 6 for ascella qpu."
+        )
         logger.info(
             "Warning: ascella architecture detectd in qpu_device_name. Forcing n_modes=12 and n_components=11."
         )
     if "belenos" in qpu_device_name:
         n_modes = 24
         n_components = 24
+        assert n_photons <= 12, (
+            "Error: The number of photons should not exceed 12 for belenos qpu."
+        )
         logger.info(
-            "Warning: ascella architecture detectd in qpu_device_name. Forcing n_modes=24 and n_components=24."
+            "Warning: belenos architecture detectd in qpu_device_name. Forcing n_modes=24 and n_components=24."
         )
 
     run_seed = seed
@@ -375,13 +381,16 @@ def qorc_encoding_and_linear_training(
     logger.info("Computation of the quantum features...")
     time_t2 = time.time()
     train_tensor = torch.tensor(
-        train_data_pca_norm, dtype=torch.float32, device=compute_device
+        # MerLin v0.2 requires Pi factor (as opposed to MerLin v0.1, which performs the product implicitly)
+        np.pi * train_data_pca_norm,
+        dtype=torch.float32,
+        device=compute_device,
     )
     val_tensor = torch.tensor(
-        val_data_pca_norm, dtype=torch.float32, device=compute_device
+        np.pi * val_data_pca_norm, dtype=torch.float32, device=compute_device
     )
     test_tensor = torch.tensor(
-        test_data_pca_norm, dtype=torch.float32, device=compute_device
+        np.pi * test_data_pca_norm, dtype=torch.float32, device=compute_device
     )
 
     if qpu_device_name == "none" or qpu_device_name == "":
