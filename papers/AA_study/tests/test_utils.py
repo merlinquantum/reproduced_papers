@@ -9,8 +9,12 @@ sys.path.insert(0, str(PROJECT_ROOT))
 import pytest
 import numpy as np
 import torch
-from papers.AA_study.utils.utils import state_vector_to_density_matrix
-from papers.AA_study.utils.qiskit_utils import reshape_input
+from papers.AA_study.utils.utils import (
+    state_vector_to_density_matrix,
+    normalize_features,
+    find_mode_photon_config,
+)
+from papers.AA_study.utils.datasets import generate_fig_2_dataset
 
 
 def test_state_vector_to_density_matrix():
@@ -28,18 +32,22 @@ def test_state_vector_to_density_matrix():
     )
 
 
-def test_reshape_input():
-    one_input_tensor = torch.rand((21))
-    assert reshape_input(one_input_tensor).shape == (1, 32)
+def test_normalize_features():
+    dataset = generate_fig_2_dataset()
+    norm_dataset = normalize_features(dataset, [-5, -5], [5, 5])
 
-    perfect_input_tensor = torch.rand((13, 8))
-    assert reshape_input(perfect_input_tensor).shape == (13, 8)
+    for i in norm_dataset:
+        assert i >= 0
+        assert i <= 1
 
-    only_one_dim_input_tensor = torch.rand((8))
-    assert reshape_input(only_one_dim_input_tensor).shape == (1, 8)
 
-    bad_input_tensor = torch.rand((22, 1, 3, 4, 1, 8))
-    assert reshape_input(bad_input_tensor).shape == (22, 128)
-
-    bad_input_tensor = torch.rand((22, 1, 32, 32))
-    assert reshape_input(bad_input_tensor).shape == (22, 1024)
+def test_find_mode_photon_config():
+    m, n = find_mode_photon_config(num_features=2004)
+    assert m == 10
+    assert n == 5
+    m, n = find_mode_photon_config(num_features=2001)
+    assert m == 9
+    assert n == 4
+    m, n = find_mode_photon_config(num_features=56)
+    assert m == 6
+    assert n == 3

@@ -96,9 +96,6 @@ class single_qubit_model(tq.QuantumModule):
         return logits
 
 
-import torchquantum as tq
-
-
 # TODO Add a num_classes parameter
 class qiskit_QCNN(tq.QuantumModule):
     class QiskitQCNNQLayer(tq.QuantumModule):
