@@ -514,9 +514,9 @@ def reproduce_fig_7(
             num_epochs=num_epochs,
             test_loader=test_loader,
         )
-        qiskit_accuracies.append(accuracy)
-        qiskit_losses.append(loss)
-        qiskit_gen_error.append(gen_error)
+        merlin_accuracies.append(accuracy)
+        merlin_losses.append(loss)
+        merlin_gen_error.append(gen_error)
 
         json_payload = {
             "qiskit_accuracies": [[float(v) for v in t] for t in qiskit_accuracies],

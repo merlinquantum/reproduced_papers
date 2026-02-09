@@ -61,7 +61,87 @@ For simple layers, the angle amplitud emodel was also implemented.
 3. We add L-1 layers of ``CircuitBuilder.add_entangling_layer()`` or ``CircuitBuilder.add_rotations()`` depending on the number of modes.
 
 ### Their results
-TODO
+#### Limitations of amplitude encoding on synthetic datasets
+
+The authors presented three datasets used respectively in the next three figures. The datasets only have two features ($x_1$ and $x_2$) each.
+
+- For class 1, $x_1$ and $x_2$ follow the uniform distribution $\mathcal{U}[4,5]$. For class 2, $x_1$ and $x_2$ follow the uniform distribution $\mathcal{U}[5.5,6.5]$.
+- For class 1, $x_1$ and $x_2$ follow the uniform distribution $\mathcal{U}[-1,1]$. For class 2, $x_1$ and $x_2$ follow the uniform distribution $\mathcal{U}[[-5,-3]\cup[3,5]]$.
+- For class 1, $x_1$ follows the uniform distribution $\mathcal{U}[-3,-1]$ and $x_2$ follows the normal distribution $\mathcal{N}(-2,1)$. For class 2, $x_1$ follows the uniform distribution $\mathcal{U}[1,3]$ and $x_2$ follows the normal distribution $\mathcal{N}(2,1)$.
+
+##### Figure 1 (First dataset)
+
+Here the average encoded state ($\mathbb{E}[\rho(x_1,x_2)]$.) via amplitude encoding is compared for each class to the $\ket{+}\bra{+}$ state via the trace distance operator $T$ defined in the earlier proposition.
+
+  ![](images/fig-1-paper.png)
+
+  Source: X. Wang, Y. Wang, B. Qi, and R. Wu, “Limitations of Amplitude Encoding on Quantum Classification,” Mar. 03, 2025, arXiv: arXiv:2503.01545. doi: [10.48550/arXiv.2503.01545](https://arxiv.org/abs/2503.01545).
+
+  We observe that, even though the dataset is easily linearly separable, the normalization limitation of amplitude encoding makes the encoded state in the computer the same for both classes.
+
+##### Figure 2 (Second dataset)
+
+Here the average encoded state via amplitude encoding is compared for each class to the $\mathbb{I}/2$ state via the trace distance operator $T$ defined in the earlier proposition.
+
+  ![](images/fig-2-paper.png)
+
+  Source: X. Wang, Y. Wang, B. Qi, and R. Wu, “Limitations of Amplitude Encoding on Quantum Classification,” Mar. 03, 2025, arXiv: arXiv:2503.01545. doi: [10.48550/arXiv.2503.01545](https://arxiv.org/abs/2503.01545).
+
+  The same conclusion from figure 1 can be done here.
+
+  ##### Figure 3 (Third dataset)
+
+Here the average encoded state via amplitude encoding is compared between classes via the trace distance operator $T$ defined in the earlier proposition.
+
+  ![](images/fig-3-paper.png)
+
+  Source: X. Wang, Y. Wang, B. Qi, and R. Wu, “Limitations of Amplitude Encoding on Quantum Classification,” Mar. 03, 2025, arXiv: arXiv:2503.01545. doi: [10.48550/arXiv.2503.01545](https://arxiv.org/abs/2503.01545).
+
+  The same conclusion from figure 1 can be done here.
+
+  #### Figure 4: Loss plateau on synthetic datasets
+
+  Here a 10 layer one qubit layer circuit is trained to classify the three datasets presented in the previous figures.
+
+  ![](images/fig-4b-paper.png)
+
+  Source: X. Wang, Y. Wang, B. Qi, and R. Wu, “Limitations of Amplitude Encoding on Quantum Classification,” Mar. 03, 2025, arXiv: arXiv:2503.01545. doi: [10.48550/arXiv.2503.01545](https://arxiv.org/abs/2503.01545).
+
+  We show that a loss plateau can be observed at $\ln(2)$ for all the datasets. This confirms the intuitions of the authors for datasets that are now seperable via amplitude encoding.
+
+  #### Figure 5: Trace distance between classes on known datasets.
+
+  Using the same methodology as figure 3, the distance between the expected encoded states of the binary version of known datasets is done here.
+  - The MNIST dataset while using only the 0 and 1 digits.
+  - The CIFAR-10 dataset with only airplanes and birds.
+  - The PathMNIST dataset with adipose and backgroud pictures.
+  - The EuroSAT dataset with forest and sea lakes.
+
+  All of the pictures we transformed to be in a 32x32 format.
+
+  ![](images/fig-5-paper.png)
+
+  Source: X. Wang, Y. Wang, B. Qi, and R. Wu, “Limitations of Amplitude Encoding on Quantum Classification,” Mar. 03, 2025, arXiv: arXiv:2503.01545. doi: [10.48550/arXiv.2503.01545](https://arxiv.org/abs/2503.01545).
+
+  We observe here that only the MNIST dataset is well suited for amplitude encoding. The other datasets pretty much have the same expected encoded state.
+
+#### Figure 6: Classification of the known datasets - bad
+  Here, an experiment with the QCNN model was done on the EuroSAT dataset while varying the number of sample size per class. 
+
+  ![](images/fig-6-paper.png)
+
+  Source: X. Wang, Y. Wang, B. Qi, and R. Wu, “Limitations of Amplitude Encoding on Quantum Classification,” Mar. 03, 2025, arXiv: arXiv:2503.01545. doi: [10.48550/arXiv.2503.01545](https://arxiv.org/abs/2503.01545).
+
+  We see that the dataset is not well suited for the model. The similar results were observed for the CIFAR-10 and PathMNIST datasets.
+
+#### Figure 7: Classification of the known datasets - good
+  Here, an experiment with the QCNN model was done on the MNIST dataset while varying the number of sample size per class. 
+
+  ![](images/fig-7-paper.png)
+
+  Source: X. Wang, Y. Wang, B. Qi, and R. Wu, “Limitations of Amplitude Encoding on Quantum Classification,” Mar. 03, 2025, arXiv: arXiv:2503.01545. doi: [10.48550/arXiv.2503.01545](https://arxiv.org/abs/2503.01545).
+
+  We see that the dataset is well suited for this model as it converges to godd testing accuracy.
 ### Our results
 TODO
 ## How to Run
@@ -83,7 +163,7 @@ Main entry point: the paper-level `lib/runner.py`. The CLI is entirely described
 python l../../implementation.py  --help
 
 # From the repo root
-python implementation.py --paper DQNN --help
+python implementation.py --paper AA_study --help
 ```
 
 Example overrides (see `cli.json` for the authoritative list):
@@ -97,25 +177,28 @@ Example runs:
 python ../../implementation.py  --config configs/defaults.json
 
 # Override some parameters inline
-python ../../implementation.py  --config configs/defaults.json --TODO 50 
+python ../../implementation.py  --config configs/defaults.json --batch_size 50 
 
 # Equivalent from the repo root
-python implementation.py --paper AA_study --config configs/defaults.json --TODO 50
+python implementation.py --paper AA_study --config configs/defaults.json --batch_size 50
 ```
 
 ## Project structure --> TODO
-- `papers.DQNN.lib/runner.py` — The file to run for every experiment.
-- `papers.DQNN.lib/` — core papers.DQNN.library modules used by scripts.
-  - `torchmps/` — Repository to instanciate a MPS tensor module in Torch.
-  - `ablation_exp.py`, `bond_dimension_exp.py`, `default_exp.py`- Files containing the function to run the corresponding experiment.
-  - `boson_sampler.py` - The file containg the class managing the quantum layers.
-  - `classical_utils.py`, `photonic_qt_utils.py` - Files containing utility functions.
-  - `model.py` — The torch module implementing the quantum train algorithm.
-- `configs/` — Experiment configs + CLI schema consumed by the shared runner. The available ones are below.
-  - `defaults.json`, `cli.json`, `bond_dim_exp.json`, `ablation_exp.json`
+- `papers/AA_study/lib/runner.py` — The file to run for every experiment.
+- `papers/AA_study/lib/` — core papers.AA_study.library modules used by scripts.
+  - `torchquantum/` — Repository used for gate-based models.
+  - `amplitude_limitations.py`, `run_bas.py`- Files containing the function to run the corresponding experiment. `amplitude_limitations.py` contains all of the functions of the figure reproductions.
+  - `classical_models.py`: A classical CNN used for comparaison in the BAS experiment.
+  - `qiskit_models.py`: Gate-based models used in the figures.
+  - `qlayers.py`: The MerLin modules used for the reproduction of the figures.
+- `configs/` — Experiment configs consumed by the shared runner. The available ones are below.
+  - `defaults.json`, `BAS_exp.json`, `fig_1_exp.json`, `fig_2_exp.json`, `fig_3_exp.json`, `fig_4_exp.json`, `fig_5_exp.json`, `fig_6_exp.json`, `fig_7_exp.json`
+- `cli.json` - The description of all of the changeable parameters of the runs.
+- `aa_study.ipynb` - A notebook explaining the workflow of the paper.
 - Other
+  - `images/` - Images used in the ReadMe.
   - `requirements.txt` — Python dependencies.
-  - `tests/` - Unitary tests to make sure the papers.DQNN.library works correctly.
+  - `tests/` - Unitary tests to make sure the papers.AA_study.lib works correctly.
   - `utils/` — Containing the `utils.py` file used for plotting and repo utility functions.
 
 ## Results and Analysis
@@ -123,13 +206,19 @@ python implementation.py --paper AA_study --config configs/defaults.json --TODO 
 - The results are stored in the [results](results/) folder. Logs and figures will be saved in the [outdir](outdir/) directory.
 - To reproduce the experiments, simply call these lines at the paper level:
  
- For just a basic training and evaluation:
+ For just a basic training and evaluation on the BAS dataset:
  >``python3 ../../implementation.py  --config defaults.json``
+
+  For the BAS dataset experiment :
+ >``python3 ../../implementation.py  --config BAS_exp.json``
+
+   To reproduce figure i between $\{1,2,3,4,5,7\}$ :
+ >``python3 ../../implementation.py  --config fig_i_exp.json``
 
 
 
 ## Extensions and Next Steps
-
+We will explore a photonic based, angle-encoding QCNN to classify the data that can not be classified by the amplitude encoding version.
 
 ## Testing
 
