@@ -282,4 +282,4 @@ Notes:
 
 ## Acknowledgments
 
-We used repository developped by Hanrui Wang for gate-based models. Here is the [link](https://github.com/mit-han-lab/torchquantum) to the repo.
+We used teh torchquantum repository developped by Hanrui Wang for gate-based models. Here is the [link](https://github.com/mit-han-lab/torchquantum) to the repo.

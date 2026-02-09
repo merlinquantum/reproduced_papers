@@ -358,38 +358,20 @@ def get_binary_dataset(
     name: str = "MNIST",
     num_samples_per_class: int = 2000,
     eval_samples_per_class: int = 50,
-    root: str = "./data/AA_study/",
+    root: str = "../data/AA_study/",
     seed: int = 0,
     shuffle: bool = True,
 ):
     """
-    Build a binary (two-class) dataset split into train and eval TensorDatasets.
+    Returns (train_tensor_ds, eval_tensor_ds) as TensorDataset objects.
 
-    Parameters
-    ----------
-    name : str, optional
-        Dataset name. Supported: "MNIST", "CIFAR-10", "EuroSAT", "PathMNIST".
-    num_samples_per_class : int, optional
-        Number of training samples per class.
-    eval_samples_per_class : int, optional
-        Number of evaluation samples per class.
-    root : str, optional
-        Dataset download/root directory.
-    seed : int, optional
-        RNG seed used for sampling and shuffling.
-    shuffle : bool, optional
-        Whether to interleave samples from both classes in the returned datasets.
+    shuffle:
+      - True  -> mixed order of both classes
+      - False -> first all class0 samples, then all class1 samples
 
-    Returns
-    -------
-    tuple[torch.utils.data.TensorDataset, torch.utils.data.TensorDataset]
-        (train_tensor_ds, eval_tensor_ds) with labels mapped to {0, 1}.
-
-    Notes
-    -----
-    - `num_samples_per_class` controls the train size only.
-    - `eval_samples_per_class` controls the eval/test size only.
-    - If `shuffle=False`, the ordering is class 0 followed by class 1.
+    Notes:
+      - num_samples_per_class controls train size only.
+      - eval_samples_per_class controls eval/test size only.
     """
 
     name_l = name.strip().lower()
