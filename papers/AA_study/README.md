@@ -55,10 +55,12 @@ In a MerLin point of view, we can not directly adopt gate based circuits to phot
 
 
 
-For simple layers, the angle amplitud emodel was also implemented.
+For simple layers, the angle amplitude model was also implemented.
 1. A ``CircuitBuilder.add_entangling_layer()`` or, if their is one single mode a ``CircuitBuilder.add_rotations()`` is added at the start of the circuit.
 2. The data is encoding via amplitude encoding
 3. We add L-1 layers of ``CircuitBuilder.add_entangling_layer()`` or ``CircuitBuilder.add_rotations()`` depending on the number of modes.
+
+For angle encoding, the featires are normalized between 0 and 1 to have meaningful phase shifts in the circuit.
 
 ### Their results
 #### Limitations of amplitude encoding on synthetic datasets
@@ -141,9 +143,55 @@ Here the average encoded state via amplitude encoding is compared between classe
 
   Source: X. Wang, Y. Wang, B. Qi, and R. Wu, “Limitations of Amplitude Encoding on Quantum Classification,” Mar. 03, 2025, arXiv: arXiv:2503.01545. doi: [10.48550/arXiv.2503.01545](https://arxiv.org/abs/2503.01545).
 
-  We see that the dataset is well suited for this model as it converges to godd testing accuracy.
+  We see that the dataset is well suited for this model as it converges to good testing accuracy.
 ### Our results
-TODO
+#### Limitations of amplitude encoding on synthetic datasets
+##### Reproduction of figure 1
+![](images/fig1.png)
+
+##### Reproduction of figure 2
+![](images/fig2.png)
+
+##### Reproduction of figure 3
+![](images/fig3.png)
+
+We can see that we observe the same results as the one presented in the paper.
+
+#### Figure 4: Loss plateau on synthetic datasets
+
+For our reproduction of figure 4, we decided to run the experiment for 1,10 and 100 layers and for three different models.
+
+##### Gate-based model (like the paper)
+![](images/fig4b_qiskit.png)
+
+We observe the same loss plateau at $\ln(2)$ across all layer numbers and that the accuracy is indeed the same as a random guesser.
+
+##### Merlin amplitude encoding model
+
+Here we tried our MerLin model with amplitude encoding.
+
+![](images/fig4b_amp.png)
+
+Without a big suprise, we obtain the same results as the gate based model.
+
+##### Merlin angle encoding model
+To show that that not one encoding is strictly better than the other, we tried the same experiment but with an angle encoding model.
+
+![](images/fig4b_angle.png)
+
+The results can be significally better with this type of encoding showing that, the power of the encoding is really tied to the caracteristics of the models **and the studied dataset**. Indeed, the loss goes lower than the $ln(2)$ plateau observed on amplitude encoding models. 
+
+It is also possible to realize that even here, dataset 1 is not being classified better with the angle encoding. Another encoding would be need here.
+
+#### Figure 5: Trace distance between classes on known datasets.
+
+![](images/fig5.png)
+
+Here we observe the same results as the one presented in the paper.
+
+#### Figure 6-7: Classification of the known datasets
+**The results are to come!**
+
 ## How to Run
 
 ### Install dependencies
@@ -186,7 +234,7 @@ python implementation.py --paper AA_study --config configs/defaults.json --batch
 ## Project structure --> TODO
 - `papers/AA_study/lib/runner.py` — The file to run for every experiment.
 - `papers/AA_study/lib/` — core papers.AA_study.library modules used by scripts.
-  - `torchquantum/` — Repository used for gate-based models.
+  - `torchquantum/` — Repository used for gate-based models. Here is the [link](https://github.com/mit-han-lab/torchquantum) to the repo.
   - `amplitude_limitations.py`, `run_bas.py`- Files containing the function to run the corresponding experiment. `amplitude_limitations.py` contains all of the functions of the figure reproductions.
   - `classical_models.py`: A classical CNN used for comparaison in the BAS experiment.
   - `qiskit_models.py`: Gate-based models used in the figures.
@@ -233,3 +281,5 @@ Notes:
 - If `pytest` is not installed: `pip install pytest`.
 
 ## Acknowledgments
+
+We used repository developped by Hanrui Wang for gate-based models. Here is the [link](https://github.com/mit-han-lab/torchquantum) to the repo.

@@ -292,19 +292,19 @@ def plot_fig_4(
     _plot_grid(
         qiskit_losses,
         qiskit_accuracies,
-        title="Qiskit Model - Training Loss (Fig. 4b Style)",
+        title="Qiskit Model - Training Loss",
         output_name="fig4b_qiskit.pdf",
     )
     _plot_grid(
         amplitude_losses,
         amplitude_accuracies,
-        title="Amplitude Encoding - Training Loss (Fig. 4b Style)",
+        title="Amplitude Encoding - Training Loss",
         output_name="fig4b_amplitude.pdf",
     )
     _plot_grid(
         angle_losses,
         angle_accuracies,
-        title="Angle Encoding - Training Loss (Fig. 4b Style)",
+        title="Angle Encoding - Training Loss",
         output_name="fig4b_angle.pdf",
     )
 
