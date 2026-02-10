@@ -1,6 +1,7 @@
-import torch
-from pathlib import Path
 import sys
+from pathlib import Path
+
+import torch
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -11,11 +12,10 @@ sys.path.insert(0, str(PROJECT_ROOT))
 sys.path.insert(0, str(TORCHQUANTUM_ROOT))
 
 
-import torchquantum as tq
-import torchquantum.functional as tqf
+import torchquantum as tq  # noqa: E402
 
 
-class single_qubit_model(tq.QuantumModule):
+class single_qubit_model(tq.QuantumModule):  # noqa: N801
     class SingleQubitModelQLayer(tq.QuantumModule):
         def __init__(self, num_layers: int = 10):
             super().__init__()
@@ -97,7 +97,7 @@ class single_qubit_model(tq.QuantumModule):
 
 
 # TODO Add a num_classes parameter
-class qiskit_QCNN(tq.QuantumModule):
+class qiskit_QCNN(tq.QuantumModule):  # noqa: N801
     class QiskitQCNNQLayer(tq.QuantumModule):
         def __init__(self, num_qubits: int = 10):
             """
@@ -156,7 +156,7 @@ class qiskit_QCNN(tq.QuantumModule):
 
             u_gate_index = 0
             v_gate_index = 0
-            qubits_alive = [i for i in range(self.n_wires)]
+            qubits_alive = list(range(self.n_wires))
 
             while len(qubits_alive) > 1:
                 for i in range(0, len(qubits_alive) - 1, 2):

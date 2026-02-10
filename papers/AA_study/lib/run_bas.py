@@ -1,18 +1,21 @@
 import json
-from pathlib import Path
 import sys
+from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from papers.AA_study.lib.qiskit_models import qiskit_QCNN
-from papers.AA_study.lib.qlayers import PhotonicQCNN
-from papers.AA_study.lib.classical_models import CNN
-from papers.AA_study.utils.datasets import get_bas, get_data_loader
-from papers.AA_study.utils.plots import plot_bas_run
-from papers.AA_study.utils.utils import basic_model_training, evaluate_model
+from papers.AA_study.lib.classical_models import CNN  # noqa: E402
+from papers.AA_study.lib.qiskit_models import qiskit_QCNN  # noqa: E402
+from papers.AA_study.lib.qlayers import PhotonicQCNN  # noqa: E402
+from papers.AA_study.utils.datasets import get_bas, get_data_loader  # noqa: E402
+from papers.AA_study.utils.plots import plot_bas_run  # noqa: E402
+from papers.AA_study.utils.utils import (  # noqa: E402
+    basic_model_training,
+    evaluate_model,
+)
 
 
 def run_bas(

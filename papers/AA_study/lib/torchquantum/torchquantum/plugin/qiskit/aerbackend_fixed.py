@@ -71,13 +71,13 @@ class AerBackend(Backend, ABC):
         """
         # Store original configuration for compatibility
         self._configuration = configuration
-        
+
         # For BackendV2, we need to extract and pass the required attributes
         super().__init__(
             provider=provider,
             name=configuration.backend_name,
             description=getattr(configuration, "description", ""),
-            backend_version=configuration.backend_version
+            backend_version=configuration.backend_version,
         )
 
         # Initialize backend properties and pulse defaults.

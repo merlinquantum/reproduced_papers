@@ -1,20 +1,20 @@
-from pathlib import Path
 import sys
+from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
-import pytest
-import numpy as np
-import torch
-from papers.AA_study.utils.utils import (
-    state_vector_to_density_matrix,
-    normalize_features,
+import numpy as np  # noqa: E402
+import torch  # noqa: E402
+
+from papers.AA_study.utils.datasets import generate_fig_2_dataset  # noqa: E402
+from papers.AA_study.utils.utils import (  # noqa: E402
     find_mode_photon_config,
+    normalize_features,
+    state_vector_to_density_matrix,
 )
-from papers.AA_study.utils.datasets import generate_fig_2_dataset
 
 
 def test_state_vector_to_density_matrix():
@@ -34,20 +34,22 @@ def test_state_vector_to_density_matrix():
 
 def test_normalize_features():
     dataset = generate_fig_2_dataset()
-    norm_dataset = normalize_features(dataset, [-5, -5], [5, 5])
+    norm_dataset = normalize_features(dataset, [-5, -5], [5, 5]).tensors[0]
 
     for i in norm_dataset:
-        assert i >= 0
-        assert i <= 1
+        assert i[0] >= 0
+        assert i[0] <= 1
+        assert i[1] >= 0
+        assert i[1] <= 1
 
 
 def test_find_mode_photon_config():
     m, n = find_mode_photon_config(num_features=2004)
-    assert m == 10
+    assert m == 11
     assert n == 5
     m, n = find_mode_photon_config(num_features=2001)
-    assert m == 9
-    assert n == 4
+    assert m == 10
+    assert n == 5
     m, n = find_mode_photon_config(num_features=56)
     assert m == 6
     assert n == 3

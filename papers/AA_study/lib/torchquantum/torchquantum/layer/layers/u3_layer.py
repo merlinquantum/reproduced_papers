@@ -35,6 +35,7 @@ from torchpack.utils.logging import logger
 from .layers import LayerTemplate0, Op1QAllLayer
 from ..entanglement.op2_layer import Op2QAllLayer
 
+
 class U3CU3Layer0(LayerTemplate0):
     """
     Layer template with U3 and CU3 blocks.

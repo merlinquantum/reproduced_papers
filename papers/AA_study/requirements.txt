@@ -1,0 +1,15 @@
+merlinquantum
+pytest
+regex
+medmnist
+pennylane
+opt_einsum
+pylatexenc>=2.10
+qiskit==1.4.3
+qiskit_ibm_runtime
+qiskit-aer
+torchpack
+pathos
+torchdiffeq
+requests
+aiohttp

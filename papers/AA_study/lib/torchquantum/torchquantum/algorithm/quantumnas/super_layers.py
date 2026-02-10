@@ -82,11 +82,11 @@ def get_combs(inset: List, n=None) -> List[List]:
 
 class SuperQuantumModule(tq.QuantumModule):
     """A super module for quantum computations.
-    
+
     Attributes:
         n_wires (int): Number of wires in the quantum module.
         sample_arch: The sample architecture for the quantum module.
-        
+
     Methods:
         set_sample_arch(sample_arch): Sets the sample architecture for the quantum module.
         count_sample_params(): Counts the number of sample parameters in the quantum module.
@@ -94,11 +94,11 @@ class SuperQuantumModule(tq.QuantumModule):
 
     def __init__(self, n_wires):
         """Initializes the SuperQuantumModule.
-        
+
         Args:
             n_wires (int): Number of wires in the quantum module.
         """
-        
+
         super().__init__()
         self.n_wires = n_wires
         self.sample_arch = None
@@ -108,7 +108,7 @@ class SuperQuantumModule(tq.QuantumModule):
 
         Args:
             sample_arch: The sample architecture for the quantum module.
-            
+
         Returns:
             None.
         """

@@ -74,10 +74,10 @@ class VowelRecognition(VisionDataset):
         download: bool = False,
     ) -> None:
         """Initialize the Vowel Recognition dataset.
-        
+
         Args:
             root (str): Root directory of the dataset.
-            train (bool, optional): Determines whether to load the training set or the test set. 
+            train (bool, optional): Determines whether to load the training set or the test set.
                 Defaults to True (training set).
             transform (callable, optional): A function/transform that takes in the raw data and returns a transformed version.
                 Defaults to None.
@@ -173,7 +173,7 @@ class VowelRecognition(VisionDataset):
             >>> targets.shape
             torch.Size([528])
         """
-        
+
         data = []
         targets = []
         with open(os.path.join(self.root, "raw", self.filename), "r") as f:
@@ -355,7 +355,7 @@ class VowelRecognition(VisionDataset):
             >>> dataset._check_integrity()
             True
         """
-        
+
         return os.path.exists(os.path.join(self.root, "raw", self.filename))
 
     def __len__(self):
@@ -405,7 +405,7 @@ class VowelRecognition(VisionDataset):
 
 class VowelRecognitionDataset:
     """Vowel Recognition dataset.
-    
+
     Attributes:
         root (str): Root directory of the dataset.
         split (str): Split name ('train', 'valid', or 'test').
@@ -431,7 +431,7 @@ class VowelRecognitionDataset:
         digits_of_interest: List[int],
     ):
         """Initialize Vowel Recognition dataset.
-        
+
         Args:
             root (str): Root directory of the dataset.
             split (str): Split name ('train', 'valid', or 'test').
@@ -441,10 +441,10 @@ class VowelRecognitionDataset:
             binarize (bool): Whether to binarize the input data.
             binarize_threshold (float): Threshold value for binarization.
             digits_of_interest (List[int]): List of digits of interest.
-            
+
         Returns:
             None.
-        
+
         Raises:
             AssertionError: If `test_ratio` is not within the range (0, 1).
 
@@ -460,7 +460,7 @@ class VowelRecognitionDataset:
             >>>     digits_of_interest=[0, 1, 2],
             >>> )
         """
-        
+
         self.root = root
         self.split = split
         self.test_ratio = test_ratio
@@ -479,7 +479,7 @@ class VowelRecognitionDataset:
 
     def load(self):
         """Load the dataset based on the split and other parameters.
-        
+
         Returns:
             None.
         """
@@ -578,13 +578,13 @@ class VowelRecognitionDataset:
         Examples:
             >>> instance = dataset(0)
         """
-        
+
         return self.__getitem__(index)
 
 
 class Vowel(Dataset):
     """Vowel dataset.
-    
+
     Attributes:
         root (str): Root directory of the dataset.
         splits (Dict[str, VowelRecognitionDataset]): Dictionary of dataset splits.
@@ -614,10 +614,10 @@ class Vowel(Dataset):
                 Defaults to 0.1307.
             digits_of_interest (Tuple[int], optional): Tuple of digits to include.
                 Defaults to tuple(range(10)).
-            
+
         Returns:
             None.
-        
+
         Examples:
             >>> dataset = Vowel(root='data', test_ratio=0.2, train_valid_split_ratio=[0.8, 0.2])
         """
@@ -643,7 +643,7 @@ class Vowel(Dataset):
 
 def test_vowel():
     """Test the Vowel dataset.
-    
+
     Returns:
         None.
 

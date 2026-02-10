@@ -267,9 +267,9 @@ class EntanglementLayer(tq.QuantumModule):
 
         self.entanglement_class = entanglement_to_class.get(entanglement, None)
 
-        assert (
-            self.entanglement_class is not None
-        ), f"invalid entanglement type {entanglement}"
+        assert self.entanglement_class is not None, (
+            f"invalid entanglement type {entanglement}"
+        )
 
         self.entanglement_class.__init__(
             op=op,

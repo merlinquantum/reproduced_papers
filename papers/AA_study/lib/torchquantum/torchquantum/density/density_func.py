@@ -31,14 +31,92 @@ from ..macro import C_DTYPE, ABC, ABC_ARRAY, INV_SQRT2
 from ..util.utils import pauli_eigs, diag
 from torchpack.utils.logging import logger
 from torchquantum.util import normalize_statevector
-from ..functional import  (hadamard,shadamard,paulix,pauliy,pauliz,i,s,t,sx,cnot,
-                           cz,cy,swap,sswap,cswap,toffoli,multicnot,multixcnot,rx,ry,rz,rxx,ryy,rzz,rzx,
-                           phaseshift,rot,multirz,crx,cry,crz,crot,u1,u2,u3, cu,cu1, cu2, cu3, qubitunitary,
-                           qubitunitaryfast,qubitunitarystrict,singleexcitation,h,sh,x,y,z,xx,yy,zz,zx,cx,ccnot, ccx,
-                           u,cu, p,cp,cr,cphase,ecr,echoedcrossresonance,qft,sdg,iswap,cs, csdg,csx,chadamard,ccz,
-                           dcx,xxminyy,xxplusyy,c3x,tdg,sxdg,ch,r,c4x,rccx,rc3x,globalphase,c3sx)
-
-
+from ..functional import (
+    hadamard,
+    shadamard,
+    paulix,
+    pauliy,
+    pauliz,
+    i,
+    s,
+    t,
+    sx,
+    cnot,
+    cz,
+    cy,
+    swap,
+    sswap,
+    cswap,
+    toffoli,
+    multicnot,
+    multixcnot,
+    rx,
+    ry,
+    rz,
+    rxx,
+    ryy,
+    rzz,
+    rzx,
+    phaseshift,
+    rot,
+    multirz,
+    crx,
+    cry,
+    crz,
+    crot,
+    u1,
+    u2,
+    u3,
+    cu,
+    cu1,
+    cu2,
+    cu3,
+    qubitunitary,
+    qubitunitaryfast,
+    qubitunitarystrict,
+    singleexcitation,
+    h,
+    sh,
+    x,
+    y,
+    z,
+    xx,
+    yy,
+    zz,
+    zx,
+    cx,
+    ccnot,
+    ccx,
+    u,
+    cu,
+    p,
+    cp,
+    cr,
+    cphase,
+    ecr,
+    echoedcrossresonance,
+    qft,
+    sdg,
+    iswap,
+    cs,
+    csdg,
+    csx,
+    chadamard,
+    ccz,
+    dcx,
+    xxminyy,
+    xxplusyy,
+    c3x,
+    tdg,
+    sxdg,
+    ch,
+    r,
+    c4x,
+    rccx,
+    rc3x,
+    globalphase,
+    c3sx,
+)
 
 
 __all__ = [
@@ -97,7 +175,7 @@ def apply_unitary_density_einsum(density, mat, wires):
 
     # All affected indices will be summed over, so we need the same number
     # of new indices
-    new_indices = ABC[total_wires: total_wires + len(device_wires)]
+    new_indices = ABC[total_wires : total_wires + len(device_wires)]
     print("new_indices", new_indices)
 
     # The new indices of the state are given by the old ones with the
@@ -118,7 +196,7 @@ def apply_unitary_density_einsum(density, mat, wires):
     # We now put together the indices in the notation numpy einsum
     # requires
     einsum_indices = (
-        f"{new_indices}{affected_indices}," f"{density_indices}->{new_density_indices}"
+        f"{new_indices}{affected_indices},{density_indices}->{new_density_indices}"
     )
     print("einsum_indices", einsum_indices)
 
@@ -141,7 +219,7 @@ def apply_unitary_density_einsum(density, mat, wires):
 
     # All affected indices will be summed over, so we need the same number
     # of new indices
-    new_indices = ABC[total_wires: total_wires + len(device_wires)]
+    new_indices = ABC[total_wires : total_wires + len(device_wires)]
     print("new_indices", new_indices)
 
     # The new indices of the state are given by the old ones with the
@@ -161,7 +239,7 @@ def apply_unitary_density_einsum(density, mat, wires):
     # We now put together the indices in the notation numpy einsum
     # requires
     einsum_indices = (
-        f"{density_indices}," f"{affected_indices}{new_indices}->{new_density_indices}"
+        f"{density_indices},{affected_indices}{new_indices}->{new_density_indices}"
     )
     print("einsum_indices", einsum_indices)
 
@@ -192,7 +270,9 @@ def apply_unitary_density_bmm(density, mat, wires):
     permute_to = permute_to[:1] + devices_dims + permute_to[1:]
     permute_back = list(np.argsort(permute_to))
     original_shape = density.shape
-    permuted = density.permute(permute_to).reshape([original_shape[0], mat.shape[-1], -1])
+    permuted = density.permute(permute_to).reshape(
+        [original_shape[0], mat.shape[-1], -1]
+    )
 
     if len(mat.shape) > 2:
         # both matrix and state are in batch mode
@@ -203,7 +283,7 @@ def apply_unitary_density_bmm(density, mat, wires):
         expand_shape = [bsz] + list(mat.shape)
         new_density = mat.expand(expand_shape).bmm(permuted)
     new_density = new_density.view(original_shape).permute(permute_back)
-    _matrix = torch.reshape(new_density[0], [2 ** n_qubit] * 2)
+    _matrix = torch.reshape(new_density[0], [2**n_qubit] * 2)
     """
     Compute \rho U^\dagger 
     """
@@ -217,7 +297,9 @@ def apply_unitary_density_bmm(density, mat, wires):
     permute_to_dag = permute_to_dag + devices_dims_dag
     permute_back_dag = list(np.argsort(permute_to_dag))
     original_shape = new_density.shape
-    permuted_dag = new_density.permute(permute_to_dag).reshape([original_shape[0], -1, matdag.shape[0]])
+    permuted_dag = new_density.permute(permute_to_dag).reshape(
+        [original_shape[0], -1, matdag.shape[0]]
+    )
 
     if len(matdag.shape) > 2:
         # both matrix and state are in batch mode
@@ -230,17 +312,18 @@ def apply_unitary_density_bmm(density, mat, wires):
     new_density = new_density.view(original_shape).permute(permute_back_dag)
     return new_density
 
+
 def gate_wrapper(
-        name,
-        mat,
-        method,
-        q_device: tq.NoiseDevice,
-        wires,
-        params=None,
-        n_wires=None,
-        static=False,
-        parent_graph=None,
-        inverse=False,
+    name,
+    mat,
+    method,
+    q_device: tq.NoiseDevice,
+    wires,
+    params=None,
+    n_wires=None,
+    static=False,
+    parent_graph=None,
+    inverse=False,
 ):
     """Perform the phaseshift gate.
 
@@ -333,7 +416,7 @@ def reset(q_device: tq.NoiseDevice, wires, inverse=False) -> None:
     Args:
         q_device (tq.QuantumDevice): The quantum device.
         wires (int or list): The target wire(s) to reset.
-        inverse (bool, optional): If True, performs an inverse reset operation. 
+        inverse (bool, optional): If True, performs an inverse reset operation.
             Defaults to False.
 
     Returns:

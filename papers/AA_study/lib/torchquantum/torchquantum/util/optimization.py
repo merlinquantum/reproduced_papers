@@ -53,7 +53,7 @@ def acquisition(x_scaled, hyper_param, model, min_Y):  # x_scaled: 1 * dim
         >>> min_Y = 0.1
         >>> acquisition_value = acquisition(x, hyper_param, model, min_Y)
     """
-    
+
     x_scaled = x_scaled.reshape(1, -1)
     if "LCB" in hyper_param[0]:
         mean, std = model.predict(x_scaled, return_std=True)
@@ -140,7 +140,6 @@ def bayes_opt(
     # Goes into real Bayesian Optimization
     cur_count, cur_best_w, cur_best_y = N_initial, None, 1e10
     while cur_count < N_sim:
-
         # build gaussian process on the normalized data
         wrk_mean, wrk_std = X.mean(axis=0), X.std(axis=0)
         model = GPR(
@@ -183,8 +182,9 @@ def bayes_opt(
         cur_count += 1
         newY = func(newX)
         end_time = time.time()
-        X, Y = np.concatenate((X, newX.reshape(1, -1)), axis=0), np.concatenate(
-            (Y, [newY]), axis=0
+        X, Y = (
+            np.concatenate((X, newX.reshape(1, -1)), axis=0),
+            np.concatenate((Y, [newY]), axis=0),
         )
 
         # save and display information

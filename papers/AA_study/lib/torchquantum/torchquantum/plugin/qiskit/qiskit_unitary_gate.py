@@ -25,6 +25,7 @@ from qiskit.circuit._utils import _compute_control_matrix
 from qiskit.circuit.library.standard_gates import UGate
 from qiskit.quantum_info.operators.predicates import matrix_equal
 from qiskit.quantum_info.operators.predicates import is_unitary_matrix
+
 # The synthesis module has been reorganized in Qiskit 1.0+
 from qiskit.synthesis import OneQubitEulerDecomposer
 from qiskit.synthesis import two_qubit_cnot_decompose
@@ -61,13 +62,13 @@ class UnitaryGate(Gate):
             data = data.to_operator().data
         # Convert to numpy array in case not already an array
         data = numpy.array(data, dtype=complex)
-        
+
         # Determine number of qubits if not given
         if num_qubits is None:
             # Check input is unitary first
             if check_input and not is_unitary_matrix(data, atol=1e-5):
                 raise QiskitError("Input matrix is not unitary.")
-            
+
             # Check input is N-qubit matrix
             input_dim, output_dim = data.shape
             n_qubits = int(numpy.log2(input_dim))
@@ -160,7 +161,7 @@ class UnitaryGate(Gate):
         """
         # In Qiskit 1.4, Operator is still in quantum_info
         from qiskit.quantum_info import Operator
-        
+
         ctrl_gate = ControlledGate(
             "c-unitary",
             num_qubits=self.num_qubits + num_ctrl_qubits,
@@ -170,11 +171,13 @@ class UnitaryGate(Gate):
             ctrl_state=ctrl_state,
             base_gate=self.copy(),
         )
-        
+
         # The definition will be automatically generated when needed
-        
+
         if annotated:
-            return AnnotatedOperation(self, modifier={"control": num_ctrl_qubits, "ctrl_state": ctrl_state})
+            return AnnotatedOperation(
+                self, modifier={"control": num_ctrl_qubits, "ctrl_state": ctrl_state}
+            )
         return ctrl_gate
 
     def qasm(self):
@@ -204,7 +207,6 @@ class UnitaryGate(Gate):
 
         gates_def = ""
         for gate in self.definition.data:
-
             # add regs from this gate to the overall set of params
             for reg in gate[1] + gate[2]:
                 if reg not in reg_to_qasm:
@@ -239,8 +241,7 @@ class UnitaryGate(Gate):
             return parameter
         else:
             raise CircuitError(
-                "invalid param type {0} in gate "
-                "{1}".format(type(parameter), self.name)
+                "invalid param type {0} in gate {1}".format(type(parameter), self.name)
             )
 
 

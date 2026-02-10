@@ -255,13 +255,13 @@ python implementation.py --paper AA_study --config configs/defaults.json --batch
 - To reproduce the experiments, simply call these lines at the paper level:
  
  For just a basic training and evaluation on the BAS dataset:
- >``python3 ../../implementation.py  --config defaults.json``
+ >``python3 implementation.py --paper AA_study  --config configs/defaults.json``
 
   For the BAS dataset experiment :
- >``python3 ../../implementation.py  --config BAS_exp.json``
+ >``python3 implementation.py --paper AA_study --config configs/BAS_exp.json``
 
    To reproduce figure i between $\{1,2,3,4,5,7\}$ :
- >``python3 ../../implementation.py  --config fig_i_exp.json``
+ >``python3 implementation.py --paper AA_study --config configs/fig_i_exp.json``
 
 
 
@@ -282,4 +282,4 @@ Notes:
 
 ## Acknowledgments
 
-We used teh torchquantum repository developped by Hanrui Wang for gate-based models. Here is the [link](https://github.com/mit-han-lab/torchquantum) to the repo.
+We used the torchquantum repository developped by Hanrui Wang for gate-based models. Here is the [link](https://github.com/mit-han-lab/torchquantum) to the repo.

@@ -76,10 +76,11 @@ IBMQ_NAMES = [
     "ibm_peekskill",
     "ibm_perth",
     "ibm_washington",
-    "ibm_rensselaer"
+    "ibm_rensselaer",
 ]
 
 IBMQ_PNAMES = [
     "FakeArmonkV2",
-    "FakeBogotaV2", "FakeQuitoV2",
+    "FakeBogotaV2",
+    "FakeQuitoV2",
 ]

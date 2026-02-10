@@ -1,16 +1,18 @@
-import merlin as ml
-import torch.nn as nn
-
 import sys
 from pathlib import Path
+
+import merlin as ml
+import torch.nn as nn
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from papers.photonic_QCNN.lib.src.merlin_pqcnn import HybridModel as PhotonicQCNN
-from papers.AA_study.utils.utils import find_mode_photon_config
+from papers.AA_study.utils.utils import find_mode_photon_config  # noqa: E402
+from papers.photonic_QCNN.lib.src.merlin_pqcnn import (  # noqa: E402
+    HybridModel as PhotonicQCNN,
+)
 
 
 def angle_encoding_simple(
@@ -101,3 +103,7 @@ def amplitude_encoding_simple(
         measurement_strategy=measurement_strategy,
     )
     return nn.Sequential(qlayer, ml.LexGrouping(qlayer.output_size, num_classes))
+
+
+# For ruff reasons
+_ = PhotonicQCNN

@@ -1,16 +1,13 @@
-import numpy as np
 import random
-import torch
-from torch.utils.data import DataLoader, TensorDataset, Dataset
-from datasets import load_dataset
-import pandas as pd
-import regex as re
-from typing import Tuple
+
+import medmnist
+import numpy as np
 import pennylane as qml
+import torch
+from medmnist import INFO
+from torch.utils.data import DataLoader, Dataset, TensorDataset
 from torchvision import datasets
 from torchvision.transforms import Compose, Resize, ToTensor
-import medmnist
-from medmnist import INFO
 
 
 def generate_fig_1_dataset(
@@ -163,7 +160,7 @@ def get_bas():
     """
     try:
         [ds] = qml.data.load(
-            "other", name="bars-and-stripes", folder_path=str("data/AA_study/")
+            "other", name="bars-and-stripes", folder_path="../../data/AA_study/"
         )
         x_train = np.array(ds.train["4"]["inputs"])
         y_train = np.array(ds.train["4"]["labels"])
@@ -358,7 +355,7 @@ def get_binary_dataset(
     name: str = "MNIST",
     num_samples_per_class: int = 2000,
     eval_samples_per_class: int = 50,
-    root: str = "../data/AA_study/",
+    root: str = "../../data/AA_study/",
     seed: int = 0,
     shuffle: bool = True,
 ):

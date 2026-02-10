@@ -65,7 +65,6 @@ def circ2pulse(circuits, name):
         pulse_tq.draw()
     """
 
-
     """
     The entire Qiskit Pulse package is being deprecated and will be moved to the Qiskit Dynamics repository.
     """

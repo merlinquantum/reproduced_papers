@@ -1,14 +1,13 @@
-import numpy as np
-from numpy.typing import NDArray
-import torch
-from typing import Tuple, List
-import torch.optim as optim
-import torch.nn as nn
-from torch.utils.data import DataLoader, TensorDataset
 import argparse
-from math import comb
 import warnings
+from math import comb
 
+import numpy as np
+import torch
+import torch.nn as nn
+import torch.optim as optim
+from numpy.typing import NDArray
+from torch.utils.data import DataLoader, TensorDataset
 
 device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -32,7 +31,7 @@ def trace_distance(A: NDArray, B: NDArray) -> NDArray:
     return np.linalg.norm(A - B, ord="nuc") / 2
 
 
-def state_vector_to_density_matrix(x: NDArray | List | torch.Tensor) -> NDArray:
+def state_vector_to_density_matrix(x: NDArray | list | torch.Tensor) -> NDArray:
     """
     Convert a state vector into a density matrix.
 
@@ -94,13 +93,14 @@ def find_mode_photon_config(
             "System too large for simulation: no valid (n_modes, n_photons) "
             "found with max_modes=20.",
             RuntimeWarning,
+            stacklevel=2,
         )
         raise ValueError("System too large for simulation with max_modes=20.")
     return best
 
 
 def normalize_features(
-    features: TensorDataset, min_per_feature: List[float], max_per_feature: List[float]
+    features: TensorDataset, min_per_feature: list[float], max_per_feature: list[float]
 ):
     """
     Min-max normalize a TensorDataset in-place.
@@ -133,7 +133,7 @@ def basic_model_training(
     lr: float = 0.01,
     num_epochs: int = 10,
     test_loader: DataLoader = None,
-) -> Tuple[nn.Module, List[float], List[float]]:
+) -> tuple[nn.Module, list[float], list[float]]:
     """
     Train a model and return per-epoch accuracy and loss.
 
@@ -203,7 +203,7 @@ def basic_model_training(
         accuracy_per_epoch.append(accuracy)
         avg_loss = tot_loss / max(num_batches, 1)
         loss_per_epoch.append(avg_loss)
-        print(f"Epoch {epoch+1} had a loss of {avg_loss} and accuracy of {accuracy}")
+        print(f"Epoch {epoch + 1} had a loss of {avg_loss} and accuracy of {accuracy}")
 
     if test_loader is None:
         return model, accuracy_per_epoch, loss_per_epoch
@@ -219,7 +219,7 @@ def basic_model_training(
 def evaluate_model(
     model: nn.Module,
     data_loader: DataLoader,
-) -> Tuple[float, float]:
+) -> tuple[float, float]:
     """
     Evaluate a model and return accuracy and loss.
 
@@ -282,7 +282,7 @@ def int_list(arg):
     return list(map(int, arg.split(",")))
 
 
-def _parse_sample_size_per_class_to_test(value):
+def parse_sample_size_per_class_to_test(value):
     """
     Parse sample size values from multiple input types.
 

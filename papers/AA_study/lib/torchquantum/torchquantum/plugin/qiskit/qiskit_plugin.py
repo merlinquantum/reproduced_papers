@@ -88,9 +88,13 @@ def qiskit2tq_op_history(circ):
         wires = [p2v[wire] for wire in wires]
         # sometimes the gate.params is ParameterExpression class
         init_params = (
-            list(map(float, gate.operation.params)) if len(gate.operation.params) > 0 else None
+            list(map(float, gate.operation.params))
+            if len(gate.operation.params) > 0
+            else None
         )
-        print(op_name,)
+        print(
+            op_name,
+        )
 
         if op_name in [
             "h",
@@ -109,12 +113,12 @@ def qiskit2tq_op_history(circ):
         ]:
             ops.append(
                 {
-                "name": op_name,  # type: ignore
-                "wires": np.array(wires),
-                "params": None,
-                "inverse": False,
-                "trainable": False,
-            }
+                    "name": op_name,  # type: ignore
+                    "wires": np.array(wires),
+                    "params": None,
+                    "inverse": False,
+                    "trainable": False,
+                }
             )
         elif op_name in [
             "rx",
@@ -143,12 +147,13 @@ def qiskit2tq_op_history(circ):
         ]:
             ops.append(
                 {
-                "name": op_name,  # type: ignore
-                "wires": np.array(wires),
-                "params": init_params,
-                "inverse": False,
-                "trainable": True
-            })
+                    "name": op_name,  # type: ignore
+                    "wires": np.array(wires),
+                    "params": init_params,
+                    "inverse": False,
+                    "trainable": True,
+                }
+            )
         elif op_name in ["barrier", "measure"]:
             continue
         else:
@@ -206,9 +211,16 @@ def append_parameterized_gate(func, circ, input_idx, params, wires):
     elif func == "u1":
         circ.p(theta=params[input_idx[0]], qubit=wires[0])
     elif func == "cu1":
-        circ.cp(theta=params[input_idx[0]], control_qubit=wires[0], target_qubit=wires[1])
+        circ.cp(
+            theta=params[input_idx[0]], control_qubit=wires[0], target_qubit=wires[1]
+        )
     elif func == "u2":
-        circ.u(theta=np.pi/2, phi=params[input_idx[0]], lam=params[input_idx[1]], qubit=wires[0])
+        circ.u(
+            theta=np.pi / 2,
+            phi=params[input_idx[0]],
+            lam=params[input_idx[1]],
+            qubit=wires[0],
+        )
     elif func == "u3":
         circ.u(
             theta=params[input_idx[0]],
@@ -227,7 +239,7 @@ def append_parameterized_gate(func, circ, input_idx, params, wires):
         )
     else:
         raise NotImplementedError(
-            f"{func} cannot be converted to " f"parameterized Qiskit QuantumCircuit"
+            f"{func} cannot be converted to parameterized Qiskit QuantumCircuit"
         )
 
 
@@ -297,7 +309,7 @@ def append_fixed_gate(circ, func, params, wires, inverse):
     elif func in ["cu1", "cp", "cr", "cphase"]:
         circ.cp(params, *wires)
     elif func == "u2":
-        circ.u(np.pi/2, params[0], params[1], *wires)
+        circ.u(np.pi / 2, params[0], params[1], *wires)
     elif func == "u3":
         circ.u(*list(params), *wires)
     elif func == "cu3":
@@ -309,29 +321,33 @@ def append_fixed_gate(circ, func, params, wires, inverse):
     ):
         mat = np.array(params)
         mat = switch_little_big_endian_matrix(mat)
-        
+
         # Special handling for two-qubit unitaries to prevent diagonalization errors
         if len(wires) == 2 and mat.shape == (4, 4):
             print(f"\n==== HANDLING 2-QUBIT UNITARY IN APPEND_FIXED_GATE ====")
             print(f"Gate type: {func}")
             print(f"Wires: {wires}")
             print(f"Matrix shape: {mat.shape}")
-            
+
             # Check initial unitarity
-            initial_deviation = np.max(np.abs(np.conjugate(mat.T) @ mat - np.eye(mat.shape[0])))
+            initial_deviation = np.max(
+                np.abs(np.conjugate(mat.T) @ mat - np.eye(mat.shape[0]))
+            )
             print(f"Initial deviation from unitarity: {initial_deviation}")
-            
+
             # Apply ultra_precise_unitary
             mat = ultra_precise_unitary(mat)
-            
+
             # Check final unitarity
-            final_deviation = np.max(np.abs(np.conjugate(mat.T) @ mat - np.eye(mat.shape[0])))
+            final_deviation = np.max(
+                np.abs(np.conjugate(mat.T) @ mat - np.eye(mat.shape[0]))
+            )
             print(f"Final deviation from unitarity: {final_deviation}")
             print(f"==== END HANDLING 2-QUBIT UNITARY ====\n")
         else:
             # Standard unitarity enforcement for other cases
             mat = ensure_unitary(mat)
-            
+
         circ.append(UnitaryGate(mat, check_input=False), wires, [])
     elif func == "multicnot":
         circ.mcx(wires[:-1], wires[-1])  # type: ignore
@@ -358,20 +374,20 @@ def append_fixed_gate(circ, func, params, wires, inverse):
         last_gate = last_instruction[0]
         qubits = last_instruction[1]
         clbits = last_instruction[2] if len(last_instruction) > 2 else []
-        
+
         # Special handling for UnitaryGate to avoid unitarity checking errors
         if isinstance(last_gate, UnitaryGate):
             # Manually create the adjoint (conjugate transpose) without validation
             inverse_matrix = last_gate.to_matrix()
             inverse_matrix = np.conjugate(inverse_matrix.T)
-            
+
             # Special handling for two-qubit unitaries
             if inverse_matrix.shape == (4, 4) and len(qubits) == 2:
                 inverse_matrix = ultra_precise_unitary(inverse_matrix)
             else:
                 # Standard unitarity enforcement
                 inverse_matrix = ensure_unitary(inverse_matrix)
-                
+
             inverse_gate = UnitaryGate(inverse_matrix, check_input=False)
             circ.append(inverse_gate, qubits, clbits)
         else:
@@ -494,7 +510,7 @@ def tq2qiskit(
         if debug:
             print(f"\nModule name: {module.name}")
             print(f"Module wires: {module.wires}")
-            if hasattr(module, 'params') and module.params is not None:
+            if hasattr(module, "params") and module.params is not None:
                 print(f"Module params: {module.params}")
 
         # Ensure module.wires is always iterable
@@ -592,7 +608,12 @@ def tq2qiskit(
             circ.cp(module.params[0][0].item(), *wires)
         elif module.name == "U2":
             # U2(φ,λ) = U(π/2,φ,λ)
-            circ.u(np.pi/2, module.params[0].data.cpu().numpy()[0], module.params[0].data.cpu().numpy()[1], *wires)
+            circ.u(
+                np.pi / 2,
+                module.params[0].data.cpu().numpy()[0],
+                module.params[0].data.cpu().numpy()[1],
+                *wires,
+            )
         elif module.name == "U3":
             circ.u(*list(module.params[0].data.cpu().numpy()), *wires)
         elif module.name == "CU3":
@@ -605,26 +626,30 @@ def tq2qiskit(
         ):
             mat = module.params[0].data.cpu().numpy()
             mat = switch_little_big_endian_matrix(mat)
-            
+
             # Special handling for two-qubit unitaries to prevent diagonalization errors
             if len(wires) == 2 and mat.shape == (4, 4):
                 print(f"\n==== HANDLING 2-QUBIT UNITARY IN TQ2QISKIT ====")
                 print(f"Module name: {module.name}")
                 print(f"Wires: {wires}")
                 print(f"Matrix shape: {mat.shape}")
-                
+
                 # Check initial unitarity
-                initial_deviation = np.max(np.abs(np.conjugate(mat.T) @ mat - np.eye(mat.shape[0])))
+                initial_deviation = np.max(
+                    np.abs(np.conjugate(mat.T) @ mat - np.eye(mat.shape[0]))
+                )
                 print(f"Initial deviation from unitarity: {initial_deviation}")
-                
+
                 # Apply ultra_precise_unitary
                 mat = ultra_precise_unitary(mat)
-                
+
                 # Check final unitarity
-                final_deviation = np.max(np.abs(np.conjugate(mat.T) @ mat - np.eye(mat.shape[0])))
+                final_deviation = np.max(
+                    np.abs(np.conjugate(mat.T) @ mat - np.eye(mat.shape[0]))
+                )
                 print(f"Final deviation from unitarity: {final_deviation}")
                 print(f"==== END HANDLING 2-QUBIT UNITARY ====\n")
-                
+
                 if debug:
                     print(f"Applied ultra_precise_unitary for two-qubit gate")
                     # Verify unitarity after correction
@@ -632,30 +657,34 @@ def tq2qiskit(
                     product = np.matmul(conj_transpose, mat)
                     identity = np.eye(mat.shape[0], dtype=complex)
                     max_diff = np.max(np.abs(product - identity))
-                    print(f"Maximum deviation after ultra-precision correction: {max_diff}")
+                    print(
+                        f"Maximum deviation after ultra-precision correction: {max_diff}"
+                    )
             else:
                 # Check if the matrix is unitary
                 conj_transpose = np.conjugate(mat.T)
                 product = np.matmul(conj_transpose, mat)
                 identity = np.eye(mat.shape[0], dtype=complex)
-                
+
                 max_diff = np.max(np.abs(product - identity))
                 if debug:
                     print(f"Maximum deviation from identity: {max_diff}")
-                
+
                 # If not nearly unitary, force unitarity using SVD
                 if not np.allclose(product, identity, atol=1e-5):
                     if debug:
-                        print(f"Matrix not exactly unitary, enforcing unitarity with SVD")
+                        print(
+                            f"Matrix not exactly unitary, enforcing unitarity with SVD"
+                        )
                     mat = ensure_unitary(mat)
-                    
+
                     # Verify unitarity after correction
                     conj_transpose = np.conjugate(mat.T)
                     product = np.matmul(conj_transpose, mat)
                     max_diff_after = np.max(np.abs(product - identity))
                     if debug:
                         print(f"Maximum deviation after correction: {max_diff_after}")
-            
+
             circ.append(UnitaryGate(mat, check_input=False), wires, [])
         elif module.name == "MultiCNOT":
             circ.mcx(wires[:-1], wires[-1])
@@ -682,20 +711,20 @@ def tq2qiskit(
             last_gate = last_instruction[0]
             qubits = last_instruction[1]
             clbits = last_instruction[2] if len(last_instruction) > 2 else []
-            
+
             # Special handling for UnitaryGate to avoid unitarity checking errors
             if isinstance(last_gate, UnitaryGate):
                 # Manually create the adjoint (conjugate transpose) without validation
                 inverse_matrix = last_gate.to_matrix()
                 inverse_matrix = np.conjugate(inverse_matrix.T)
-                
+
                 # Special handling for two-qubit unitaries
                 if inverse_matrix.shape == (4, 4) and len(qubits) == 2:
                     inverse_matrix = ultra_precise_unitary(inverse_matrix)
                 else:
                     # Standard unitarity enforcement
                     inverse_matrix = ensure_unitary(inverse_matrix)
-                    
+
                 inverse_gate = UnitaryGate(inverse_matrix, check_input=False)
                 circ.append(inverse_gate, qubits, clbits)
             else:
@@ -709,7 +738,7 @@ def tq2qiskit(
 
     if n_removed_ops > 0:
         logger.warning(
-            f"Remove {n_removed_ops} operations with small " f"parameter magnitude."
+            f"Remove {n_removed_ops} operations with small parameter magnitude."
         )
 
     return circ
@@ -775,6 +804,7 @@ def op_history2qasm(n_wires, op_history):
     """
     circ = op_history2qiskit(n_wires, op_history)
     from qiskit.qasm2 import dumps
+
     return dumps(circ)
 
 
@@ -796,11 +826,9 @@ def op_history2qiskit_expand_params(n_wires, op_history, bsz):
                 param = op["params"][i]
             else:
                 param = None
-            
-            append_fixed_gate(
-                circ, op["name"], param, op["wires"], op["inverse"]
-            )
-            
+
+            append_fixed_gate(circ, op["name"], param, op["wires"], op["inverse"])
+
         circs_all.append(circ)
 
     return circs_all
@@ -818,26 +846,33 @@ def qiskit2tq_Operator(circ: QuantumCircuit):
             try:
                 p2v_orig = layout.initial_layout.get_physical_bits().copy()
             except AttributeError:
-                 try:
-                     p2v_orig = layout.get_physical_bits().copy()
-                 except AttributeError:
-                     logger.warning("Could not get physical bits from layout. Assuming default 1-to-1 mapping.")
-                     p2v_orig = None # Signal to use default below
+                try:
+                    p2v_orig = layout.get_physical_bits().copy()
+                except AttributeError:
+                    logger.warning(
+                        "Could not get physical bits from layout. Assuming default 1-to-1 mapping."
+                    )
+                    p2v_orig = None  # Signal to use default below
 
         if p2v_orig is not None:
-            circuit_qubits = circ.qubits # Get the list of Qubit objects
-            for p, v_qubit in p2v_orig.items(): # p is physical index, v_qubit is the Qubit object
+            circuit_qubits = circ.qubits  # Get the list of Qubit objects
+            for (
+                p,
+                v_qubit,
+            ) in p2v_orig.items():  # p is physical index, v_qubit is the Qubit object
                 try:
                     # Find the virtual index of the Qubit object v_qubit in the circuit's list
                     v_idx = circuit_qubits.index(v_qubit)
                     p2v[p] = v_idx
                 except ValueError:
-                    logger.warning(f"Qubit {v_qubit} from layout not found in circuit.qubits. Skipping mapping for physical bit {p}.")
+                    logger.warning(
+                        f"Qubit {v_qubit} from layout not found in circuit.qubits. Skipping mapping for physical bit {p}."
+                    )
             # Removed old logic checking v.register.name
         else:
-             # Fallback if p2v_orig could not be determined
-             for p_idx in range(circ.num_qubits):
-                 p2v[p_idx] = p_idx
+            # Fallback if p2v_orig could not be determined
+            for p_idx in range(circ.num_qubits):
+                p2v[p_idx] = p_idx
     else:
         # Default 1-to-1 mapping if layout is None
         for p_idx in range(circ.num_qubits):
@@ -850,7 +885,9 @@ def qiskit2tq_Operator(circ: QuantumCircuit):
         wires = [p2v[wire] for wire in wires]
         # sometimes the gate.params is ParameterExpression class
         init_params = (
-            list(map(float, gate.operation.params)) if len(gate.operation.params) > 0 else None
+            list(map(float, gate.operation.params))
+            if len(gate.operation.params) > 0
+            else None
         )
 
         if op_name in [
@@ -908,7 +945,7 @@ def qiskit2tq_Operator(circ: QuantumCircuit):
             raise NotImplementedError(
                 f"{op_name} conversion to tq is currently not supported."
             )
-    
+
     return ops
 
 
@@ -942,7 +979,7 @@ def test_qiskit2tq():
     circ.cx(control_qubit=0, target_qubit=2)
     circ.x(2)
     circ.x(3)
-    circ.u(theta=np.pi/2, phi=-0.2, lam=-0.9, qubit=3)
+    circ.u(theta=np.pi / 2, phi=-0.2, lam=-0.9, qubit=3)
     circ.x(0)
 
     m = qiskit2tq(circ)
@@ -960,44 +997,59 @@ def test_qiskit2tq():
     phase = find_global_phase(unitary_tq, unitary_qiskit, 1e-4)
 
     circ_from_m = tq2qiskit(q_dev, m)
-    
+
     # Debug printouts to understand the difference
     print("Original Circuit:")
     print(circ)
     print("\nConverted Circuit:")
     print(circ_from_m)
-    
+
     # Compare gate by gate
     print("\nComparison of gates:")
     all_gates_match = True
     for i, (orig_gate, conv_gate) in enumerate(zip(circ.data, circ_from_m.data)):
         print(f"Gate {i}:")
-        print(f"  Original: {orig_gate[0].name}, qubits: {[q._index for q in orig_gate[1]]}, params: {orig_gate[0].params}")
-        print(f"  Converted: {conv_gate[0].name}, qubits: {[q._index for q in conv_gate[1]]}, params: {conv_gate[0].params}")
-        
+        print(
+            f"  Original: {orig_gate[0].name}, qubits: {[q._index for q in orig_gate[1]]}, params: {orig_gate[0].params}"
+        )
+        print(
+            f"  Converted: {conv_gate[0].name}, qubits: {[q._index for q in conv_gate[1]]}, params: {conv_gate[0].params}"
+        )
+
         # Check gate type and target qubits
-        gates_match = orig_gate[0].name == conv_gate[0].name and [q._index for q in orig_gate[1]] == [q._index for q in conv_gate[1]]
-        
+        gates_match = orig_gate[0].name == conv_gate[0].name and [
+            q._index for q in orig_gate[1]
+        ] == [q._index for q in conv_gate[1]]
+
         # Check parameters with tolerance
         params_match = True
-        if len(orig_gate[0].params) == len(conv_gate[0].params) and len(orig_gate[0].params) > 0:
-            params_match = np.allclose(orig_gate[0].params, conv_gate[0].params, atol=1e-5)
-        
+        if (
+            len(orig_gate[0].params) == len(conv_gate[0].params)
+            and len(orig_gate[0].params) > 0
+        ):
+            params_match = np.allclose(
+                orig_gate[0].params, conv_gate[0].params, atol=1e-5
+            )
+
         if not (gates_match and params_match):
             print("  *** MISMATCH ***")
             all_gates_match = False
-    
+
     # Check if circuit lengths are different
     if len(circ.data) != len(circ_from_m.data):
         all_gates_match = False
-        print(f"\nCIRCUIT LENGTH MISMATCH: Original: {len(circ.data)}, Converted: {len(circ_from_m.data)}")
+        print(
+            f"\nCIRCUIT LENGTH MISMATCH: Original: {len(circ.data)}, Converted: {len(circ_from_m.data)}"
+        )
         # If converted circuit is longer, show the extra gates
         if len(circ_from_m.data) > len(circ.data):
             print("Extra gates in converted circuit:")
             for i in range(len(circ.data), len(circ_from_m.data)):
                 gate = circ_from_m.data[i]
-                print(f"  Gate {i}: {gate[0].name}, qubits: {[q._index for q in gate[1]]}, params: {gate[0].params}")
-    
+                print(
+                    f"  Gate {i}: {gate[0].name}, qubits: {[q._index for q in gate[1]]}, params: {gate[0].params}"
+                )
+
     # We won't use direct circuit equality since parameters have floating-point precision differences
     # Instead, check if gates match and if unitaries are equivalent
     print("\nCircuit Gate Comparison Result:")
@@ -1005,7 +1057,7 @@ def test_qiskit2tq():
         print("All gates match (considering parameter tolerance)!")
     else:
         print("Gates don't match exactly due to parameter precision differences.")
-    
+
     print("\nUnitary Matrix Comparison Result:")
     if np.allclose(unitary_tq * phase, unitary_qiskit, atol=1e-6):
         print("Circuits are functionally equivalent! (unitaries match)")
@@ -1014,7 +1066,7 @@ def test_qiskit2tq():
 
     # This is what really matters - that the unitaries are functionally equivalent
     assert np.allclose(unitary_tq * phase, unitary_qiskit, atol=1e-6)
-    
+
     # Instead of comparing circuits directly, we manually verified gates match
     # so we can comment out this assertion
     # assert circ_from_m == circ  # This will fail due to floating-point differences
@@ -1056,7 +1108,7 @@ class TestModule(tq.QuantumModule):
         self.n_gate = 10
         # Set n_wires attribute to fix get_unitary() call
         self.n_wires = 10 if q_device is None else q_device.n_wires
-        
+
         self.gate0 = tq.CNOT()
         # self.gate1 = tq.CNOT()
         self.submodules = tq.QuantumModuleList()
@@ -1077,13 +1129,17 @@ class TestModule(tq.QuantumModule):
         self.gate6 = tq.RY(has_params=True, trainable=True)
         self.gate7 = tq.RX()
         self.gate8 = tq.U2(has_params=True, trainable=True)
-        
+
         # Initialize TrainableUnitary with a known unitary matrix (e.g., identity matrix)
         # For a 3-wire gate, we need a 2^3 x 2^3 matrix = 8x8 matrix
         dim = 2**3  # 3 wires = 8x8 matrix
-        unitary_matrix = torch.eye(dim, dtype=torch.complex64)  # Identity matrix is unitary
-        self.gate9 = tq.TrainableUnitary(has_params=True, trainable=True, n_wires=3, init_params=unitary_matrix)
-        
+        unitary_matrix = torch.eye(
+            dim, dtype=torch.complex64
+        )  # Identity matrix is unitary
+        self.gate9 = tq.TrainableUnitary(
+            has_params=True, trainable=True, n_wires=3, init_params=unitary_matrix
+        )
+
         self.gate10 = tq.MultiXCNOT(n_wires=5)
         self.gate11 = tq.MultiCNOT(n_wires=3)
 
@@ -1135,7 +1191,7 @@ class TestModuleParameterized(tq.QuantumModule):
         super().__init__()
         # Set n_wires based on the maximum wire index in func_list
         self.n_wires = 4  # As we're using wires 0-3 in func_list
-        
+
         # self.func_list = [
         #     {'input_idx': [0], 'func': 'ry', 'wires': [0]},
         #     {'input_idx': [1], 'func': 'ry', 'wires': [1]},
@@ -1172,8 +1228,6 @@ class TestModuleParameterized(tq.QuantumModule):
         self.encoder(q_device, x)
 
 
-
-
 def test_tq2qiskit_parameterized():
     # import pdb
 
@@ -1182,17 +1236,17 @@ def test_tq2qiskit_parameterized():
     inputs = torch.randn((1, 16))
     q_dev = tq.QuantumDevice(n_wires=4)
     test_module = TestModuleParameterized()
-    
+
     print("Running TorchQuantum module...")
     test_module(q_dev, inputs)
-    
+
     # Get unitary from TorchQuantum
     print("Calculating TorchQuantum unitary...")
     # Check if test_module.n_wires is set
     if test_module.n_wires is None:
         print("Warning: test_module.n_wires is None, setting it to 4")
         test_module.n_wires = 4
-    
+
     # Try getting the unitary - first with inputs, then with q_dev and inputs if needed
     try:
         unitary_tq = test_module.get_unitary(inputs)
@@ -1204,19 +1258,19 @@ def test_tq2qiskit_parameterized():
         except Exception as e:
             print(f"Error using get_unitary(q_dev, inputs): {str(e)}")
             raise
-    
+
     unitary_tq = switch_little_big_endian_matrix(unitary_tq.data.numpy())
 
     print("Creating Qiskit parameterized circuit...")
     circuit, params = tq2qiskit_parameterized(q_dev, test_module.encoder.func_list)
-    
+
     print("Parameter binding for Qiskit circuit...")
     binds = {}
     for k, x in enumerate(inputs[0]):
         binds[params[k]] = x.item()
-    
+
     print(f"Number of parameters: {len(binds)}")
-    
+
     print("Running Qiskit simulation...")
     simulator = UnitarySimulator()
     circuit = transpile(circuit, simulator)
@@ -1227,19 +1281,19 @@ def test_tq2qiskit_parameterized():
 
     print("\nCircuit details:")
     print(circuit.draw())
-    
+
     print("\nComparing unitaries...")
     # Check if shapes match
     if unitary_tq.shape != unitary_qiskit.shape:
         print(f"Shape mismatch: TQ {unitary_tq.shape} vs Qiskit {unitary_qiskit.shape}")
-    
+
     # Calculate max absolute difference
     max_diff = np.max(np.abs(unitary_tq - unitary_qiskit))
     print(f"Maximum absolute difference between unitaries: {max_diff}")
-    
+
     is_close = np.allclose(unitary_qiskit, unitary_tq, atol=1e-6)
     print(f"Unitaries match within tolerance: {is_close}")
-    
+
     if not is_close:
         # Find locations of significant differences
         significant_diffs = np.where(np.abs(unitary_tq - unitary_qiskit) > 1e-6)
@@ -1249,20 +1303,22 @@ def test_tq2qiskit_parameterized():
             for i in range(min(5, len(significant_diffs[0]))):
                 idx = (significant_diffs[0][i], significant_diffs[1][i])
                 print(f"  At {idx}: TQ={unitary_tq[idx]}, Qiskit={unitary_qiskit[idx]}")
-            
+
             # Try with phase adjustment
             print("Attempting phase adjustment...")
             phase = find_global_phase(unitary_tq, unitary_qiskit, 1e-4)
             print(f"Phase adjustment factor: {phase}")
-            is_close_with_phase = np.allclose(unitary_tq * phase, unitary_qiskit, atol=1e-6)
+            is_close_with_phase = np.allclose(
+                unitary_tq * phase, unitary_qiskit, atol=1e-6
+            )
             print(f"Unitaries match with phase adjustment: {is_close_with_phase}")
-            
+
             if is_close_with_phase:
                 print("Success! Circuits are equivalent up to a global phase.")
                 # Update for the assertion
                 unitary_tq = unitary_tq * phase
                 is_close = True
-    
+
     # Final assertion
     assert is_close, "Unitaries don't match within tolerance!"
     print("Test passed successfully!")
@@ -1301,10 +1357,10 @@ def ensure_unitary(matrix):
     """
     Ensures a matrix is exactly unitary by using SVD decomposition.
     This is useful for fixing numerical precision issues before passing to Qiskit.
-    
+
     Args:
         matrix (np.ndarray): Input matrix that should be unitary
-        
+
     Returns:
         np.ndarray: A unitary matrix close to the input matrix
     """
@@ -1317,36 +1373,30 @@ def ensure_unitary(matrix):
 def custom_transpile(circuit, backend, opt_level=1):
     """
     Custom transpilation function to handle issues with two-qubit unitary decomposition.
-    
+
     Args:
         circuit (QuantumCircuit): The quantum circuit to transpile
         backend (Backend): The backend to transpile for
         opt_level (int): Optimization level (default: 1)
-        
+
     Returns:
         QuantumCircuit: The transpiled circuit
     """
     # Define basis gates that avoid problematic decompositions
-    basis_gates = ['u1', 'u2', 'u3', 'cx', 'id']
-    
+    basis_gates = ["u1", "u2", "u3", "cx", "id"]
+
     try:
         # First try normal transpilation with reduced optimization
         return transpile(
-            circuit, 
-            backend, 
-            optimization_level=opt_level,
-            basis_gates=basis_gates
+            circuit, backend, optimization_level=opt_level, basis_gates=basis_gates
         )
     except Exception as e:
         logger.warning(f"Standard transpilation failed: {str(e)}")
-        
+
         # If that fails, try with even more conservative settings
         try:
             return transpile(
-                circuit, 
-                backend, 
-                optimization_level=0,
-                basis_gates=basis_gates
+                circuit, backend, optimization_level=0, basis_gates=basis_gates
             )
         except Exception as e2:
             logger.error(f"Conservative transpilation also failed: {str(e2)}")

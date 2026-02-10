@@ -220,7 +220,7 @@ class MNISTDataset:
 
                 self.data = test
                 logger.warning(
-                    f"Only use the front {self.n_test_samples} " f"images as TEST set."
+                    f"Only use the front {self.n_test_samples} images as TEST set."
                 )
 
     def __getitem__(self, index: int):

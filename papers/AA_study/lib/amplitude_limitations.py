@@ -1,41 +1,47 @@
 import json
-import numpy as np
 import sys
-from pathlib import Path
 from copy import deepcopy
+from pathlib import Path
+
+import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from papers.AA_study.lib.qlayers import (
-    angle_encoding_simple,
-    amplitude_encoding_simple,
-    PhotonicQCNN,
+from papers.AA_study.lib.qiskit_models import (  # noqa: E402
+    qiskit_QCNN,
+    single_qubit_model,
 )
-from papers.AA_study.lib.qiskit_models import single_qubit_model, qiskit_QCNN
-from papers.AA_study.utils.datasets import (
+from papers.AA_study.lib.qlayers import (  # noqa: E402
+    PhotonicQCNN,
+    amplitude_encoding_simple,
+    angle_encoding_simple,
+)
+from papers.AA_study.utils.datasets import (  # noqa: E402
     generate_fig_1_dataset,
     generate_fig_2_dataset,
     generate_fig_3_dataset,
-    get_data_loader,
     get_binary_dataset,
+    get_data_loader,
 )
-from papers.AA_study.utils.states import superposition_state, mixed_state
-from papers.AA_study.utils.plots import (
+from papers.AA_study.utils.plots import (  # noqa: E402
     plot_amplitude_encoding_limitations,
     plot_fig_4,
     plot_fig_5,
     plot_fig_7,
 )
-from papers.AA_study.utils.utils import (
-    trace_distance,
-    state_vector_to_density_matrix,
+from papers.AA_study.utils.states import (  # noqa: E402
+    mixed_state,
+    superposition_state,
+)
+from papers.AA_study.utils.utils import (  # noqa: E402
     basic_model_training,
     normalize_features,
+    state_vector_to_density_matrix,
+    trace_distance,
 )
-from typing import List
 
 
 def reproduce_fig_1(
@@ -300,21 +306,29 @@ def reproduce_fig_4(
 
         json_payload = {
             "qiskit_accuracies": [
-                [[float(v) for v in t] for t in l] for l in qiskit_accuracies
+                [[float(v) for v in t] for t in layer_list]
+                for layer_list in qiskit_accuracies
             ],
             "amplitude_accuracies": [
-                [[float(v) for v in t] for t in l] for l in amplitude_accuracies
+                [[float(v) for v in t] for t in layer_list]
+                for layer_list in amplitude_accuracies
             ],
             "angle_accuracies": [
-                [[float(v) for v in t] for t in l] for l in angle_accuracies
+                [[float(v) for v in t] for t in layer_list]
+                for layer_list in angle_accuracies
             ],
             "qiskit_losses": [
-                [[float(v) for v in t] for t in l] for l in qiskit_losses
+                [[float(v) for v in t] for t in layer_list]
+                for layer_list in qiskit_losses
             ],
             "amplitude_losses": [
-                [[float(v) for v in t] for t in l] for l in amplitude_losses
+                [[float(v) for v in t] for t in layer_list]
+                for layer_list in amplitude_losses
             ],
-            "angle_losses": [[[float(v) for v in t] for t in l] for l in angle_losses],
+            "angle_losses": [
+                [[float(v) for v in t] for t in layer_list]
+                for layer_list in angle_losses
+            ],
         }
 
         json_str = json.dumps(json_payload, indent=4)
@@ -372,7 +386,7 @@ def reproduce_fig_5(
 
     for dataset_index, dataset in enumerate(datasets):
         print()
-        print(f"Doing dataset {dataset_index+1}/{4}")
+        print(f"Doing dataset {dataset_index + 1}/{4}")
         print("Printing the dataset")
 
         class_1_features = dataset.tensors[0][:num_max_samples]
@@ -423,7 +437,7 @@ def reproduce_fig_5(
                 )
             )
     plot_fig_5(
-        sample_sizes=[i for i in range(1, num_max_samples + 1)],
+        sample_sizes=list(range(1, num_max_samples + 1)),
         MNIST_trace_distances=distance_between_classes[0],
         CIFAR_10_trace_distances=distance_between_classes[1],
         PathMNIST_trace_distances=distance_between_classes[2],
@@ -435,7 +449,7 @@ def reproduce_fig_5(
 
 def reproduce_fig_7(
     dataset_to_run: str = "MNIST",
-    sample_size_per_class: List[int] = [1, 10, 100, 1000],
+    sample_size_per_class: list[int] | None = None,
     batch_size: int = 50,
     num_epochs: int = 1000,
     lr: float = 0.01,
@@ -472,8 +486,10 @@ def reproduce_fig_7(
     merlin_losses = []
     merlin_gen_error = []
 
-    for sampler_size in sample_size_per_class:
+    if sample_size_per_class is None:
+        sample_size_per_class = [1, 10, 100, 1000]
 
+    for sampler_size in sample_size_per_class:
         train_dataset, test_dataset = get_binary_dataset(
             name=dataset_to_run,
             num_samples_per_class=sampler_size,
@@ -563,4 +579,4 @@ def reproduce_fig_7(
 # reproduce_fig_3()
 # reproduce_fig_4()
 # reproduce_fig_5()
-reproduce_fig_7()
+# reproduce_fig_7()

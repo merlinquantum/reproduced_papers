@@ -1,19 +1,19 @@
+from collections.abc import Sequence
 from pathlib import Path
-from typing import List, Optional, Tuple, Sequence, Union
-from torch.utils.data import TensorDataset
-
-import numpy as np
+from typing import Optional, Union
 
 import matplotlib.pyplot as plt
+import numpy as np
+from torch.utils.data import TensorDataset
 
 
 def plot_bas_run(
-    accuracy_classical: List[float],
-    accuracy_qiskit: List[float],
-    accuracy_merlin: List[float],
-    loss_classical: List[float],
-    loss_qiskit: List[float],
-    loss_merlin: List[float],
+    accuracy_classical: list[float],
+    accuracy_qiskit: list[float],
+    accuracy_merlin: list[float],
+    loss_classical: list[float],
+    loss_qiskit: list[float],
+    loss_merlin: list[float],
     run_dir: Optional[Path] = None,
 ):
     """
@@ -71,12 +71,12 @@ def plot_bas_run(
 
 
 def plot_amplitude_encoding_limitations(
-    distances: List[float] | List[List[float]],
+    distances: list[float] | list[list[float]],
     dataset_unshuffled: TensorDataset,
     num_samples_per_class: int = 2000,
     fig_simulated: int = 1,
     run_dir: Optional[Path] = None,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray]:
     """
     Plot the amplitude-encoding limitation curves for Figs. 1 to 3.
 
@@ -146,7 +146,7 @@ def plot_amplitude_encoding_limitations(
 
 
 def plot_fig_4(
-    layers_tested: List[int],
+    layers_tested: list[int],
     qiskit_accuracies: Sequence[
         Sequence[Union[Sequence[float], Sequence[Sequence[float]]]]
     ],
@@ -194,7 +194,7 @@ def plot_fig_4(
 
     def _summarize_runs(
         losses: Union[Sequence[float], Sequence[Sequence[float]]],
-    ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         arr = np.asarray(losses, dtype=float)
         if arr.ndim == 1:
             arr = arr[None, :]
@@ -311,10 +311,10 @@ def plot_fig_4(
 
 def plot_fig_5(
     sample_sizes: Sequence[int],
-    MNIST_trace_distances: List[float],
-    CIFAR_10_trace_distances: List[float],
-    PathMNIST_trace_distances: List[float],
-    EuroSAT_trace_distances: List[float],
+    MNIST_trace_distances: list[float],
+    CIFAR_10_trace_distances: list[float],
+    PathMNIST_trace_distances: list[float],
+    EuroSAT_trace_distances: list[float],
     run_dir: Optional[Path] = None,
     add_inset: bool = True,
 ) -> None:
