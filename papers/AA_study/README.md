@@ -73,7 +73,7 @@ The authors presented three datasets used respectively in the next three figures
 
 ##### Figure 1 (First dataset)
 
-Here the average encoded state ($\mathbb{E}[\rho(x_1,x_2)]$.) via amplitude encoding is compared for each class to the $\ket{+}\bra{+}$ state via the trace distance operator $T$ defined in the earlier proposition.
+Here, the average encoded state ($\mathbb{E}[\rho(x_1,x_2)]$) via amplitude encoding is compared for each class to the $\ket{+}\bra{+}$ state via the trace distance operator $T$ defined in the earlier proposition.
 
   ![](images/fig-1-paper.png)
 
@@ -83,27 +83,27 @@ Here the average encoded state ($\mathbb{E}[\rho(x_1,x_2)]$.) via amplitude enco
 
 ##### Figure 2 (Second dataset)
 
-Here the average encoded state via amplitude encoding is compared for each class to the $\mathbb{I}/2$ state via the trace distance operator $T$ defined in the earlier proposition.
+Here, the average encoded state via amplitude encoding is compared for each class to the $\mathbb{I}/2$ state via the trace distance operator $T$ defined in the earlier proposition.
 
   ![](images/fig-2-paper.png)
 
   Source: X. Wang, Y. Wang, B. Qi, and R. Wu, “Limitations of Amplitude Encoding on Quantum Classification,” Mar. 03, 2025, arXiv: arXiv:2503.01545. doi: [10.48550/arXiv.2503.01545](https://arxiv.org/abs/2503.01545).
 
-  The same conclusion from figure 1 can be done here.
+  The same conclusion from figure 1 can be observed here.
 
   ##### Figure 3 (Third dataset)
 
-Here the average encoded state via amplitude encoding is compared between classes via the trace distance operator $T$ defined in the earlier proposition.
+Here, the average encoded state via amplitude encoding is compared between classes via the trace distance operator $T$ defined in the earlier proposition.
 
   ![](images/fig-3-paper.png)
 
   Source: X. Wang, Y. Wang, B. Qi, and R. Wu, “Limitations of Amplitude Encoding on Quantum Classification,” Mar. 03, 2025, arXiv: arXiv:2503.01545. doi: [10.48550/arXiv.2503.01545](https://arxiv.org/abs/2503.01545).
 
-  The same conclusion from figure 1 can be done here.
+  The same conclusion from figure 1 can be observed here.
 
   #### Figure 4: Loss plateau on synthetic datasets
 
-  Here a 10 layer one qubit layer circuit is trained to classify the three datasets presented in the previous figures.
+  Here, a 10 layer one qubit layer circuit is trained to classify the three datasets presented in the previous figures (dataset one is on the left, two in the middle and three on the right).
 
   ![](images/fig-4b-paper.png)
 
@@ -111,7 +111,7 @@ Here the average encoded state via amplitude encoding is compared between classe
 
   We show that a loss plateau can be observed at $\ln(2)$ for all the datasets. This confirms the intuitions of the authors for datasets that are now seperable via amplitude encoding.
 
-  #### Figure 5: Trace distance between classes on known datasets.
+  #### Figure 5: Trace distance between classes on known datasets
 
   Using the same methodology as figure 3, the distance between the expected encoded states of the binary version of known datasets is done here.
   - The MNIST dataset while using only the 0 and 1 digits.
