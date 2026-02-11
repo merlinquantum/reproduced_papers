@@ -16,7 +16,7 @@
 
 > “We have investigated the concentration phenomenon induced by amplitude encoding and the resulting loss barrier phenomenon. Since encoding is a necessary and crucial step in leveraging QML to address classical problems, our findings indicate that the direct use of amplitude encoding may undermine the potential advantages of QML. Therefore, more effort should be devoted to developing more efficient encoding strategies to fully unlock the potential of QML.”
 
-A loss function barrier seems to appear with angle encoding for most of the complex datasets. If the features are not espacially sparse, the loss will plateau. 
+A loss function barrier seems to appear with angle encoding for most of the complex datasets. If the features are not especially sparse, the loss will plateau. 
 
 Talking about the concentration phenomena:
 
@@ -31,7 +31,7 @@ where $T(\rho_1,\rho_2)=\frac{1}{2}||\rho_1-\rho_2||_1$, the Schatten-1 norm.
 
 Here we see that no mater the distribution, the encoded state, no matter the associated class will converge towards rge same state.
 
-> The other two proposition are more refined that the previous one. The first one says that if a feature as a symetric density function and a mean value of zero, the encoded state will converge to the completly mixed state. The other one says that if the density function of a feature for two classes for a point x is oppsoite sign-wise, the expected encoded state will be the same for both classes
+> The other two proposition are more refined that the previous one. The first one says that if a feature as a symmetric density function and a mean value of zero, the encoded state will converge to the completely mixed state. The other one says that if the density function of a feature for two classes for a point x is opposite sign-wise, the expected encoded state will be the same for both classes
 
 ### Their framework
 1. The data is encoding via amplitude encoding
@@ -44,7 +44,7 @@ Here we see that no mater the distribution, the encoded state, no matter the ass
 
 
 ### Difference in framework
-In a MerLin point of view, we can not directly adopt gate based circuits to photnics. Instead we inspired ourselves from their models to create our own.
+In a MerLin point of view, we can not directly adopt gate based circuits to photonics. Instead we inspired ourselves from their models to create our own.
 
 1. The data is encoded via amplitude encoding.
 2. The trainable layer:
@@ -109,14 +109,14 @@ Here, the average encoded state via amplitude encoding is compared between class
 
   Source: X. Wang, Y. Wang, B. Qi, and R. Wu, “Limitations of Amplitude Encoding on Quantum Classification,” Mar. 03, 2025, arXiv: arXiv:2503.01545. doi: [10.48550/arXiv.2503.01545](https://arxiv.org/abs/2503.01545).
 
-  We show that a loss plateau can be observed at $\ln(2)$ for all the datasets. This confirms the intuitions of the authors for datasets that are now seperable via amplitude encoding.
+  We show that a loss plateau can be observed at $\ln(2)$ for all the datasets. This confirms the intuitions of the authors for datasets that are now separable via amplitude encoding.
 
   #### Figure 5: Trace distance between classes on known datasets
 
   Using the same methodology as figure 3, the distance between the expected encoded states of the binary version of known datasets is done here.
   - The MNIST dataset while using only the 0 and 1 digits.
   - The CIFAR-10 dataset with only airplanes and birds.
-  - The PathMNIST dataset with adipose and backgroud pictures.
+  - The PathMNIST dataset with adipose and background pictures.
   - The EuroSAT dataset with forest and sea lakes.
 
   All of the pictures we transformed to be in a 32x32 format.
@@ -179,7 +179,7 @@ To show that that not one encoding is strictly better than the other, we tried t
 
 ![](images/fig4b_angle.png)
 
-The results can be significally better with this type of encoding showing that, the power of the encoding is really tied to the caracteristics of the models **and the studied dataset**. Indeed, the loss goes lower than the $ln(2)$ plateau observed on amplitude encoding models. 
+The results can be significally better with this type of encoding showing that, the power of the encoding is really tied to the characteristics of the models **and the studied dataset**. Indeed, the loss goes lower than the $ln(2)$ plateau observed on amplitude encoding models. 
 
 It is also possible to realize that even here, dataset 1 is not being classified better with the angle encoding. Another encoding would be need here.
 
@@ -282,4 +282,4 @@ Notes:
 
 ## Acknowledgments
 
-We used the torchquantum repository developped by Hanrui Wang for gate-based models. Here is the [link](https://github.com/mit-han-lab/torchquantum) to the repo.
+We used the torchquantum repository developed by Hanrui Wang for gate-based models. Here is the [link](https://github.com/mit-han-lab/torchquantum) to the repo.
