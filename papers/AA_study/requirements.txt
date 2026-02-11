@@ -3,7 +3,7 @@ pytest
 regex
 medmnist
 pennylane
-opt_einsum
+-e git+https://github.com/mit-han-lab/torchquantum.git#egg=torchquantum
 pylatexenc>=2.10
 qiskit==1.4.3; python_version < "3.13"
 qiskit_ibm_runtime
@@ -13,3 +13,4 @@ pathos
 torchdiffeq
 requests
 aiohttp
+opt_einsum
