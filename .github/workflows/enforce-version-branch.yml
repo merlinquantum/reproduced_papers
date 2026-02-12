@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Check PR source branch pattern
         run: |
-          ALLOWED_REGEX='^(release-*)$'
+          ALLOWED_REGEX='^release-.*$'
           echo "Base: ${GITHUB_BASE_REF} | Head: ${GITHUB_HEAD_REF}"
           if [[ "${GITHUB_BASE_REF}" == "main" ]]; then
             if [[ "${GITHUB_HEAD_REF}" =~ ${ALLOWED_REGEX} ]]; then
