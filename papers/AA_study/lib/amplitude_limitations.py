@@ -489,6 +489,8 @@ def reproduce_fig_7(
     if sample_size_per_class is None:
         sample_size_per_class = [1, 10, 100, 1000]
 
+    print(f"Doing the {dataset_to_run} dataset")
+
     for sampler_size in sample_size_per_class:
         train_dataset, test_dataset = get_binary_dataset(
             name=dataset_to_run,

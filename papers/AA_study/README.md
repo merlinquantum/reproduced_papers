@@ -190,7 +190,16 @@ It is also possible to realize that even here, dataset 1 is not being classified
 Here we observe the same results as the one presented in the paper.
 
 #### Figure 6-7: Classification of the known datasets
-**The results are to come!**
+
+
+##### Figure 7
+Gate-based QCNN model on MNIST
+![](images/fig7_qiskit_mnist.png)
+
+MerLin-based QCNN model on MNIST
+![](images/fig7_merlin_mnist.png)
+
+The gate based QCNN model seems to overfit quickly compared to the paper's result and MerLin's model. The Merlin model is similar to the results in the paper.
 
 ## How to Run
 
@@ -261,8 +270,7 @@ python implementation.py --paper AA_study --config configs/defaults.json --batch
  >``python3 implementation.py --paper AA_study --config configs/BAS_exp.json``
 
    To reproduce figure i between $\{1,2,3,4,5,7\}$ :
- >``python3 implementation.py --paper AA_study --config configs/fig_i_exp.json``
-
+ >``python3 implementation.py --paper AA_study --config configs/fig_i_exp.jso
 
 
 ## Extensions and Next Steps

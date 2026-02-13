@@ -2,7 +2,7 @@
     "description": "Run the FIG7 experiment",
     "outdir": "results",
     "exp_to_run": "FIG7",
-    "dataset_to_run":"MNIST",
+    "dataset_to_run":"EUROSAT",
     "batch_size":50,
     "num_epochs":20,
     "lr":0.01,
