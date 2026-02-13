@@ -44,12 +44,12 @@ def test_normalize_features():
 
 
 def test_find_mode_photon_config():
-    m, n = find_mode_photon_config(num_features=2004)
+    m, n = find_mode_photon_config(num_features=253)
     assert m == 11
-    assert n == 5
-    m, n = find_mode_photon_config(num_features=2001)
+    assert n == 4
+    m, n = find_mode_photon_config(num_features=251)
     assert m == 10
     assert n == 5
-    m, n = find_mode_photon_config(num_features=56)
+    m, n = find_mode_photon_config(num_features=20)
     assert m == 6
     assert n == 3

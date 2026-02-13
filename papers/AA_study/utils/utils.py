@@ -58,7 +58,7 @@ def find_mode_photon_config(
 ) -> tuple[int, int]:
     """
     Find (n_modes, n_photons) with smallest n_modes such that
-    C(n_modes + n_photons - 1, n_photons) >= num_features and
+    C(n_modes, n_photons) >= num_features and
     n_photons <= n_modes // 2.
 
     Parameters
@@ -79,7 +79,7 @@ def find_mode_photon_config(
     best = None
     for n_modes in range(1, max_modes + 1):
         for n_photons in range(1, (n_modes // 2) + 1):
-            dim = comb(n_modes + n_photons - 1, n_photons)
+            dim = comb(n_modes, n_photons)
             if dim >= num_features:
                 candidate = (n_modes, n_photons)
                 if best is None or candidate[0] < best[0]:
