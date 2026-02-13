@@ -495,6 +495,7 @@ def reproduce_fig_7(
         train_dataset, test_dataset = get_binary_dataset(
             name=dataset_to_run,
             num_samples_per_class=sampler_size,
+            merge_rgb_to_2d=True,
         )
 
         train_loader = get_data_loader(train_dataset, batch_size=batch_size)

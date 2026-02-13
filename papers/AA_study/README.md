@@ -274,8 +274,8 @@ python implementation.py --paper AA_study --config configs/defaults.json --batch
 
 
 ## Extensions and Next Steps
-We will explore a photonic based, angle-encoding QCNN to classify the data that can not be classified by the amplitude encoding version.
-
+- We will explore a photonic based, angle-encoding QCNN as well as other encodings to classify the data that can not be classified by the amplitude encoding version.
+-  We will also try to modify the MerLin QCNN to take for account RGB images better that a merge of the channels.
 ## Testing
 
 Run tests from inside the `papers/AA_study/` directory:

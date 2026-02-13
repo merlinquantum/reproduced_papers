@@ -351,6 +351,20 @@ def dataset_to_tensordataset(dataset):
     return TensorDataset(X, Y)
 
 
+def _merge_rgb_batch_to_2d(tensor_ds: TensorDataset) -> TensorDataset:
+    """
+    Merge RGB channels into a single 2D square image per sample.
+
+    Input shape must be (N, 3, H, W). Output shape is (N, H, W).
+    """
+    x, y = tensor_ds.tensors
+    if x.ndim == 4 and x.shape[1] == 3:
+        # Standard luminance conversion keeps the image square.
+        weights = x.new_tensor([0.2989, 0.5870, 0.1140]).view(1, 3, 1, 1)
+        x = (x * weights).sum(dim=1)
+    return TensorDataset(x, y)
+
+
 def get_binary_dataset(
     name: str = "MNIST",
     num_samples_per_class: int = 2000,
@@ -358,6 +372,7 @@ def get_binary_dataset(
     root: str = "../../data/AA_study/",
     seed: int = 0,
     shuffle: bool = True,
+    merge_rgb_to_2d: bool = False,
 ):
     """
     Returns (train_tensor_ds, eval_tensor_ds) as TensorDataset objects.
@@ -369,6 +384,7 @@ def get_binary_dataset(
     Notes:
       - num_samples_per_class controls train size only.
       - eval_samples_per_class controls eval/test size only.
+      - if merge_rgb_to_2d is True, RGB tensors (N,3,H,W) are converted to (N,H,W).
     """
 
     name_l = name.strip().lower()
@@ -391,7 +407,9 @@ def get_binary_dataset(
             eval_base, keep, eval_samples_per_class, seed=seed + 1, shuffle=shuffle
         )
 
-        return dataset_to_tensordataset(train_bin), dataset_to_tensordataset(eval_bin)
+        train_ds = dataset_to_tensordataset(train_bin)
+        eval_ds = dataset_to_tensordataset(eval_bin)
+        return train_ds, eval_ds
 
     # ---- CIFAR-10 ----
     if name_l in ["cifar10", "cifar-10"]:
@@ -410,7 +428,12 @@ def get_binary_dataset(
             eval_base, keep, eval_samples_per_class, seed=seed + 1, shuffle=shuffle
         )
 
-        return dataset_to_tensordataset(train_bin), dataset_to_tensordataset(eval_bin)
+        train_ds = dataset_to_tensordataset(train_bin)
+        eval_ds = dataset_to_tensordataset(eval_bin)
+        if merge_rgb_to_2d:
+            train_ds = _merge_rgb_batch_to_2d(train_ds)
+            eval_ds = _merge_rgb_batch_to_2d(eval_ds)
+        return train_ds, eval_ds
 
     # ---- EuroSAT ----
     if name_l in ["eurosat", "euro_sat", "euro-sat"]:
@@ -427,7 +450,12 @@ def get_binary_dataset(
             base, keep, eval_samples_per_class, seed=seed + 1, shuffle=shuffle
         )
 
-        return dataset_to_tensordataset(train_bin), dataset_to_tensordataset(eval_bin)
+        train_ds = dataset_to_tensordataset(train_bin)
+        eval_ds = dataset_to_tensordataset(eval_bin)
+        if merge_rgb_to_2d:
+            train_ds = _merge_rgb_batch_to_2d(train_ds)
+            eval_ds = _merge_rgb_batch_to_2d(eval_ds)
+        return train_ds, eval_ds
 
     # ---- PathMNIST ----
     if name_l in ["pathmnist", "path_mnist", "path-mnist"]:
@@ -457,6 +485,11 @@ def get_binary_dataset(
             eval_base, keep, eval_samples_per_class, seed=seed + 1, shuffle=shuffle
         )
 
-        return dataset_to_tensordataset(train_bin), dataset_to_tensordataset(eval_bin)
+        train_ds = dataset_to_tensordataset(train_bin)
+        eval_ds = dataset_to_tensordataset(eval_bin)
+        if merge_rgb_to_2d:
+            train_ds = _merge_rgb_batch_to_2d(train_ds)
+            eval_ds = _merge_rgb_batch_to_2d(eval_ds)
+        return train_ds, eval_ds
 
     raise ValueError("Unknown dataset name. Use MNIST, CIFAR10, EuroSAT, or PathMNIST.")
