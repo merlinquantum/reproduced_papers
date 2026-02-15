@@ -1,0 +1,56 @@
+{
+  "description": "CLI options for quantum transfer learning reproduction",
+  "options": {
+    "experiment": {
+      "type": "string",
+      "choices": ["spiral", "hymenoptera", "cifar_dogs_cats", "cifar_planes_cars"],
+      "default": "spiral",
+      "help": "Which experiment to run (Examples 1-3 from the paper)"
+    },
+    "use_merlin": {
+      "type": "boolean",
+      "default": true,
+      "help": "Use MerLin photonic backend (true) or PennyLane qubit backend (false)"
+    },
+    "compare_classical": {
+      "type": "boolean",
+      "default": false,
+      "help": "Also train classical baseline for comparison (spiral only)"
+    },
+    "save_model": {
+      "type": "boolean",
+      "default": false,
+      "help": "Save trained model checkpoint"
+    },
+    "generate_figures": {
+      "type": "boolean",
+      "default": true,
+      "help": "Generate result figures"
+    },
+    "n_qubits": {
+      "type": "integer",
+      "default": 4,
+      "help": "Number of qubits/modes in quantum circuit"
+    },
+    "q_depth": {
+      "type": "integer",
+      "default": 5,
+      "help": "Depth of variational quantum circuit"
+    },
+    "epochs": {
+      "type": "integer",
+      "default": 50,
+      "help": "Number of training epochs"
+    },
+    "batch_size": {
+      "type": "integer",
+      "default": 10,
+      "help": "Training batch size"
+    },
+    "learning_rate": {
+      "type": "float",
+      "default": 0.01,
+      "help": "Learning rate for optimizer"
+    }
+  }
+}
