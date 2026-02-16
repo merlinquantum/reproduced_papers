@@ -3,7 +3,7 @@
     "outdir": "results",
     "exp_to_run": "FIG4",
     "batch_size":50,
-    "num_epochs":20,
+    "num_epochs":1000,
     "lr":0.01,
     "num_samples_per_class":2000
 }
