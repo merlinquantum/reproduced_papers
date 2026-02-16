@@ -365,7 +365,7 @@ def plot_fig_5(
     ax.set_ylabel("Trace distance")
     ax.set_xticks([sample_sizes[0], sample_sizes[-1]])
     ax.set_ylim(0.0, 1.0)
-    ax.legend(frameon=False)
+    ax.legend(loc="center left", bbox_to_anchor=(0.18, 0.5), frameon=False)
 
     if add_inset:
         try:
