@@ -12,7 +12,7 @@ import pennylane as qml
 # ============================================================
 
 
-def make_device(n_qubits: int) -> qml.Device:
+def make_device(n_qubits: int) -> qml.Device: # type: ignore
     """Create a PennyLane default.qubit device."""
     return qml.device("default.qubit", wires=n_qubits)
 
@@ -35,9 +35,9 @@ def ansatz_layer(theta: torch.Tensor, n_qubits: int) -> None:
           theta[i, 2] : RZ angle
     """
     for i in range(n_qubits):
-        qml.RZ(theta[i, 0], wires=i)
-        qml.RX(theta[i, 1], wires=i)
-        qml.RZ(theta[i, 2], wires=i)
+        qml.RZ(theta[i, 0], wires=i) # type: ignore
+        qml.RX(theta[i, 1], wires=i) # type: ignore
+        qml.RZ(theta[i, 2], wires=i) # type: ignore
 
     # Entangling ring
     for i in range(n_qubits):
@@ -54,7 +54,7 @@ def feature_layer(phi: torch.Tensor, n_qubits: int) -> None:
         For qubit i, apply RY(phi[i]).
     """
     for i in range(n_qubits):
-        qml.RY(phi[i], wires=i)
+        qml.RY(phi[i], wires=i) # type: ignore
 
 
 # ============================================================
@@ -63,7 +63,7 @@ def feature_layer(phi: torch.Tensor, n_qubits: int) -> None:
 
 
 def make_quantum_block(
-    dev: qml.Device,
+    dev: qml.Device, # type: ignore
     n_qubits: int,
     n_layers: int,
 ) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
@@ -98,9 +98,9 @@ def make_quantum_block(
             if layer < n_layers - 1:
                 feature_layer(phi, n_qubits=n_qubits)
 
-        return qml.expval(qml.PauliZ(0))
+        return qml.expval(qml.PauliZ(0)) # type: ignore
 
-    return quantum_block
+    return quantum_block  # type: ignore
 
 
 # ============================================================

@@ -27,7 +27,7 @@ dtype = torch.float32
 #  Training data: time samples t ∈ [0, 1]
 # ============================================================
 
-t_train = pnp.linspace(0.0, 1.0, 200)
+t_train = pnp.linspace(0.0, 1.0, 200) # type: ignore
 t_train_torch = torch.tensor(t_train, dtype=dtype).reshape(-1, 1)
 
 

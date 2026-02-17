@@ -28,7 +28,7 @@ def entangling_chain_all_modes(n_qubits: int) -> pcvl.Circuit:
     n_modes = 2 * n_qubits
     circ = pcvl.Circuit(n_modes)
     for m_idx in range(n_modes - 1):
-        circ // (m_idx, BS.H())
+        circ // (m_idx, BS.H()) # type: ignore
     return circ
 
 
@@ -56,9 +56,9 @@ def ansatz_layer(prefix: str, n_qubits: int) -> pcvl.Circuit:
         theta_x = pcvl.P(f"theta_{prefix}_{i}_1")
         theta_z2 = pcvl.P(f"theta_{prefix}_{i}_2")
 
-        circ // (m1, PS(theta_z1))
-        circ // (m0, BS.Rx(theta_x))
-        circ // (m1, PS(theta_z2))
+        circ // (m1, PS(theta_z1)) # type: ignore
+        circ // (m0, BS.Rx(theta_x)) # type: ignore
+        circ // (m1, PS(theta_z2)) # type: ignore
 
     return circ // entangling_chain_all_modes(n_qubits)
 
@@ -75,7 +75,7 @@ def feature_layer(prefix: str, n_qubits: int) -> pcvl.Circuit:
     circ = pcvl.Circuit(2 * n_qubits)
     for i in range(n_qubits):
         phi = pcvl.P(f"phi_{prefix}_{i}")
-        circ // (2 * i, BS.Ry(phi))
+        circ // (2 * i, BS.Ry(phi)) # type: ignore
     return circ
 
 
