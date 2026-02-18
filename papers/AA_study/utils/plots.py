@@ -447,10 +447,18 @@ def plot_fig_7(
     ax.set_title("(a) Training loss")
 
     # (b) Generalization error vs sample size per class (log scale x)
+    gen_error_values = []
+    for value in generalization_errors:
+        if isinstance(value, Sequence) and not isinstance(value, (str, bytes)):
+            if len(value) == 0:
+                raise ValueError("generalization_errors contains an empty curve")
+            gen_error_values.append(value[-1])
+        else:
+            gen_error_values.append(value)
     ax = axes[1]
     ax.plot(
         sample_sizes,
-        generalization_errors,
+        gen_error_values,
         color="tab:blue",
         lw=2,
         marker="o",

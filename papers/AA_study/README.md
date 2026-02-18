@@ -191,6 +191,14 @@ Here we observe the same results as the one presented in the paper.
 
 #### Figure 6-7: Classification of the known datasets
 
+##### Figure 6
+Gate-based QCNN model on EURO-SAT
+![](images/fig7_qiskit_euro.png)
+
+MerLin-based QCNN model on EURO-SAT
+![](images/fig7_merlin_euro.png)
+
+We obtain similar results as the one presented in the paper.
 
 ##### Figure 7
 Gate-based QCNN model on MNIST
