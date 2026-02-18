@@ -18,7 +18,7 @@ In this reproduction we:
 
 - Integrate and lightly refactor the authors’ original gate-based (qubit) implementation (see linked repository); changes focus on modular structure, reproducibility, and configuration handling.
 - Add a photonic QLSTM implementation illustrating how interferometers + phase shifts could serve as gate VQCs.
-- Include a real-world time-series dataset (`data/airline-passengers.csv`) alongside synthetic generators to evaluate generalization on actual time serie.
+- Include a real-world time-series dataset (`data/airline-passengers.csv`) alongside synthetic generators to evaluate generalization on actual time series.
 - Standardize interface (CLI + JSON configs) for reproducible comparisons.
 
 ## Reference and Attribution
@@ -109,11 +109,21 @@ python implementation.py --paper QLSTM --model qlstm_photonic --generator sin --
 
 ### Data location
 
-- Default data root is the shared repo `data/` directory (resolved via `paper_data_dir("QLSTM")`).
-- On first use the loader copies the bundled `data/airline-passengers.csv` from this paper folder into the shared `data/QLSTM/airline-passengers.csv` location if missing.
-- Relative `--csv-path` values are resolved under the shared `data/QLSTM/` folder; absolute paths are honored.
+- Default data root is the shared repo `data/` directory.
+- Canonical shared location for the Airline Passengers CSV is `data/time_series/airline-passengers.csv` (resolved via `paper_data_dir("time_series")`).
+- Backwards compatibility: if `data/QLSTM/airline-passengers.csv` exists, it is copied into `data/time_series/` on first use.
+- On first use the loader also copies the bundled `papers/QLSTM/data/airline-passengers.csv` into `data/time_series/` if missing.
+- Relative `--csv-path` values are resolved under the shared `data/time_series/` folder; absolute paths are honored.
 - Override the base with `DATA_DIR=/abs/path` or `--data-root /abs/path` when invoking `implementation.py`.
 - If the resolver still cannot find the CSV, provide `--csv-path` explicitly or place the file in the chosen data root.
+
+### Shared time-series utilities
+
+Reusable time-series utilities live in `papers/shared/time_series/`:
+
+- `generators.py`: paper-agnostic synthetic generators (QLSTM delegates to these)
+- `plotting.py`: small matplotlib helpers (headless-friendly)
+- `plot_metrics.py` / `plot_predictions.py`: shared plotting scripts for QRNN-style run artifacts (`metrics.json` + `predictions.csv`)
 
 ## Output Directory and Artifacts
 

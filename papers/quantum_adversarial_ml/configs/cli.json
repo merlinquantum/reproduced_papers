@@ -1,0 +1,110 @@
+{
+  "description": "Quantum Adversarial ML - cli",
+  "experiment": {
+    "type": "str",
+    "default": "mnist",
+    "choices": [
+      "mnist",
+      "attack",
+      "defense",
+      "ising",
+      "topological",
+      "transfer",
+      "noise",
+      "noise_eval",
+      "transfer_eval",
+      "comparison"
+    ],
+    "help": "Experiment type. Use noise_eval/transfer_eval for single-run evaluations in scripts."
+  },
+  "dataset.digits": {
+    "type": "list",
+    "default": [
+      1,
+      9
+    ],
+    "help": "Digit classes for MNIST classification"
+  },
+  "dataset.image_size": {
+    "type": "int",
+    "default": 16,
+    "help": "Image size for MNIST (16 matches paper)"
+  },
+  "model.type": {
+    "type": "str",
+    "default": "hybrid_quantum",
+    "choices": [
+      "quantum",
+      "hybrid_quantum",
+      "amplitude_quantum",
+      "amplitude_direct",
+      "ising_quantum",
+      "classical",
+      "cnn",
+      "fnn"
+    ],
+    "help": "Model type: hybrid_quantum (angle), amplitude_quantum (amplitude encoding), classical baselines"
+  },
+  "model.n_modes": {
+    "type": "int",
+    "default": 8,
+    "help": "Number of optical modes in quantum circuit"
+  },
+  "model.n_photons": {
+    "type": "int",
+    "default": 2,
+    "help": "Number of photons (defines Fock space dimension for amplitude encoding)"
+  },
+  "model.n_layers": {
+    "type": "int",
+    "default": 10,
+    "help": "Number of variational layers (circuit depth p)"
+  },
+  "training.epochs": {
+    "type": "int",
+    "default": 50,
+    "help": "Number of training epochs"
+  },
+  "training.batch_size": {
+    "type": "int",
+    "default": 256,
+    "help": "Training batch size"
+  },
+  "training.learning_rate": {
+    "type": "float",
+    "default": 0.005,
+    "help": "Learning rate for optimizer"
+  },
+  "attack.method": {
+    "type": "str",
+    "default": "bim",
+    "choices": [
+      "fgsm",
+      "bim",
+      "pgd",
+      "mim",
+      "functional"
+    ],
+    "help": "Attack method: additive (fgsm/bim/pgd/mim) or functional (local phase)"
+  },
+  "attack.epsilon": {
+    "type": "float",
+    "default": 0.1,
+    "help": "Perturbation magnitude epsilon"
+  },
+  "attack.num_iter": {
+    "type": "int",
+    "default": 10,
+    "help": "Number of attack iterations"
+  },
+  "defense.epochs": {
+    "type": "int",
+    "default": 100,
+    "help": "Number of adversarial training epochs"
+  },
+  "options.run_attack": {
+    "type": "bool",
+    "default": true,
+    "help": "Run adversarial attack after training"
+  }
+}

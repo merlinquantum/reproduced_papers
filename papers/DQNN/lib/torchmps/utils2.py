@@ -23,9 +23,11 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """Utility functions"""
-from math import pi, log
+
+from collections.abc import Sequence
 from functools import partial
-from typing import Union, Sequence
+from math import log, pi
+from typing import Union
 
 import torch
 from torch import Tensor
@@ -52,7 +54,7 @@ def bundle_tensors(tensors: TensorSeq, dim: int = 0) -> TensorSeq:
         return tensors
 
     # Note that empty sequences are returned unchanged
-    if len(set(t.shape for t in tensors)) > 1 or len(tensors) == 0:
+    if len({t.shape for t in tensors}) > 1 or len(tensors) == 0:
         return tensors
     else:
         return torch.stack(tensors, dim=dim)
@@ -116,10 +118,10 @@ def batch_broadcast(tens_list: Sequence[Tensor], num_nonbatch: Sequence[int]):
     try:
         full_batch = shape_broadcast(b_shapes)
         bdims = len(full_batch)
-    except ValueError:
+    except ValueError as err:
         raise ValueError(
             f"Following batch shapes couldn't be broadcast: {tuple(b_shapes)}"
-        )
+        ) from err
 
     # Add singletons and expand batch dims of each tensor
     def safe_expand(t, shp):

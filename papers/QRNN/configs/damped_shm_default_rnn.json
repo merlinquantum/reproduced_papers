@@ -1,0 +1,49 @@
+{
+  "description": "Default vanilla RNN baseline on a synthetic damped SHM time-series (shared time_series generator)",
+  "dataset": {
+    "name": "damped_shm",
+    "path": null,
+    "kaggle_dataset": null,
+    "preprocess": null,
+    "generator": {
+      "name": "damped_shm",
+      "params": {
+        "b": 0.15,
+        "g": 9.81,
+        "ell": 1,
+        "m": 1,
+        "theta_0": [0, 3],
+        "t_max": 20,
+        "n_points": 240
+      }
+    },
+    "sequence_length": 12,
+    "prediction_horizon": 1,
+    "train_ratio": 0.7,
+    "val_ratio": 0.15,
+    "batch_size": 32,
+    "shuffle": true
+  },
+  "model": {
+    "params": {
+      "cell_type": "rnn",
+      "hidden_dim": 32,
+      "layers": 2,
+      "dropout": 0.0,
+      "input_dropout": 0.0,
+      "bidirectional": false
+    }
+  },
+  "training": {
+    "epochs": 80,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "clip_grad_norm": 1.0,
+    "early_stopping": {
+      "enabled": true,
+      "patience": 20,
+      "min_delta": 0.0
+    }
+  }
+}

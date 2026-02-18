@@ -5,21 +5,27 @@ This module parses CLI arguments and dispatches to the selected experiment
 routine (default, bond dimension, or ablation).
 """
 
-import torch
 import sys
+import warnings
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO_ROOT))
-
-from papers.DQNN.utils.utils import parse_args
-import warnings
+import torch
 
 warnings.filterwarnings("ignore")
 
-from papers.DQNN.lib.ablation_exp import run_ablation_exp
-from papers.DQNN.lib.bond_dimension_exp import run_bond_dimension_exp
-from papers.DQNN.lib.default_exp import run_default_exp
+try:
+    from papers.DQNN.lib.ablation_exp import run_ablation_exp
+    from papers.DQNN.lib.bond_dimension_exp import run_bond_dimension_exp
+    from papers.DQNN.lib.default_exp import run_default_exp
+    from papers.DQNN.utils.utils import parse_args
+except ModuleNotFoundError:
+    REPO_ROOT = Path(__file__).resolve().parents[3]
+    if str(REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_ROOT))
+    from papers.DQNN.lib.ablation_exp import run_ablation_exp
+    from papers.DQNN.lib.bond_dimension_exp import run_bond_dimension_exp
+    from papers.DQNN.lib.default_exp import run_default_exp
+    from papers.DQNN.utils.utils import parse_args
 
 device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
 

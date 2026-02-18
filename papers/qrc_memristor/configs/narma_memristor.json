@@ -1,0 +1,16 @@
+{   "description": "Parameters to run the NARMA task using a quantum reservoir with memristor",
+
+    "experiment": {
+        "task": "narma",
+        "model_type": "memristor",
+        "n_runs": 10,
+        "memory": 4,
+        "output_dir": "results/narma_qmem",
+        "exp_name": "narma_qmem"
+    },
+    "data": {
+        "size": 1000,
+        "washout": 20,
+        "train_len": 480
+    }
+}

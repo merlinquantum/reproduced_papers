@@ -3,7 +3,7 @@ from __future__ import annotations
 import numpy as np
 import perceval as pcvl
 import torch
-from merlin import QuantumLayer
+from merlin import ComputationSpace, MeasurementStrategy, QuantumLayer
 
 
 def sample_random_features(r: int, seed: int):
@@ -37,18 +37,22 @@ def build_mzi():
 def build_general():
     left = pcvl.GenericInterferometer(
         2,
-        lambda i: pcvl.BS()
-        // pcvl.PS(phi=pcvl.P(f"theta_psl1{i}"))
-        // pcvl.BS()
-        // pcvl.PS(phi=pcvl.P(f"theta_{i}")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(phi=pcvl.P(f"theta_psl1{i}"))
+            // pcvl.BS()
+            // pcvl.PS(phi=pcvl.P(f"theta_{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
     right = pcvl.GenericInterferometer(
         2,
-        lambda i: pcvl.BS()
-        // pcvl.PS(phi=pcvl.P(f"theta_psr1{i}"))
-        // pcvl.BS()
-        // pcvl.PS(phi=pcvl.P(f"theta_psr2{i}")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(phi=pcvl.P(f"theta_psr1{i}"))
+            // pcvl.BS()
+            // pcvl.PS(phi=pcvl.P(f"theta_psr2{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
     circuit = pcvl.Circuit(2)
@@ -62,6 +66,9 @@ def build_quantum_model(cfg: dict):
     circuit_type = cfg.get("circuit", "mzi")
     num_photons = int(cfg.get("num_photon", 10))
     no_bunching = bool(cfg.get("no_bunching", False))
+    computation_space = (
+        ComputationSpace.UNBUNCHED if no_bunching else ComputationSpace.FOCK
+    )
     if circuit_type == "mzi":
         circuit = build_mzi()
         trainable = []
@@ -82,7 +89,9 @@ def build_quantum_model(cfg: dict):
         trainable_parameters=trainable,
         input_parameters=["data"],
         input_state=input_state,
-        no_bunching=no_bunching,
+        measurement_strategy=MeasurementStrategy.probs(
+            computation_space=computation_space
+        ),
     )
     model = torch.nn.Sequential(layer, torch.nn.Linear(layer.output_size, 1))
 

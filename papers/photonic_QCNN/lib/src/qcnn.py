@@ -446,6 +446,7 @@ class QDense(AQCNNLayer):
         self._slos_graph = build_slos_graph(
             m=max(self.m),
             n_photons=2,
+            computation_space=ComputationSpace.FOCK,
             device=self.device,
         )
         self._slos_graph.__class__.compute_amplitudes = compute_amplitudes

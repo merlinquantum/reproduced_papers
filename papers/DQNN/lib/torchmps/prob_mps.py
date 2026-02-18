@@ -23,22 +23,23 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """Uniform and non-uniform probabilistic MPS classes"""
+
 from math import sqrt
-from typing import Optional, Callable
+from typing import Callable, Optional
 
 import torch
 from torch import Tensor, nn
 
+from .embeddings import DataDomain, FixedEmbedding, TrainableEmbedding
 from .mps_base import (
     contract_matseq,
+    get_log_norm,
+    get_mat_slices,
     near_eye_init,
     normal_init,
-    get_mat_slices,
-    get_log_norm,
     slim_eval_fun,
 )
 from .utils2 import phaseify
-from .embeddings import DataDomain, FixedEmbedding, TrainableEmbedding
 
 
 class ProbMPS(nn.Module):

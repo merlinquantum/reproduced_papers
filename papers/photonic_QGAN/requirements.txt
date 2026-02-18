@@ -1,0 +1,7 @@
+merlinquantum
+matplotlib
+scikit-image
+loguru
+pytest
+torchvision
+pandas

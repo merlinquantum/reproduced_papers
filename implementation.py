@@ -30,7 +30,9 @@ def _load_json(path: Path) -> dict[str, object]:
         return json.load(handle)
 
 
-def _build_project_parser(project_dir: Path, repo_root: Path) -> argparse.ArgumentParser:
+def _build_project_parser(
+    project_dir: Path, repo_root: Path
+) -> argparse.ArgumentParser:
     cli_schema_path = project_dir / "cli.json"
     cli_schema = _load_json(cli_schema_path)
     cli_schema.setdefault("arguments", [])
@@ -218,18 +220,14 @@ def main(argv: list[str] | None = None) -> int:
             project_parser = _build_project_parser(project_dir, repo_root)
             prog = Path(sys.argv[0]).name
             paper_name = project_dir.name
-            print(
-                f"Options for paper {paper_name} (includes global options)."
-            )
+            print(f"Options for paper {paper_name} (includes global options).")
             print(f"usage: {prog} --paper {paper_name} [options]")
             help_body = _format_help_without_usage(project_parser)
             if help_body:
                 print(help_body)
         else:
             parser.print_help()
-            print(
-                "\nTip: use --paper NAME --help to show paper-specific options."
-            )
+            print("\nTip: use --paper NAME --help to show paper-specific options.")
             print("\nTip: use --list-papers to list available papers.")
         return 0
     if known.list_papers:

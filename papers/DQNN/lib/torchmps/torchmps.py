@@ -5,18 +5,19 @@
 TODO:
     (1) Update master to include all the new features in dynamic_capacity
 """
+
 import torch
 import torch.nn as nn
 
-from .utils import init_tensor, svd_flex
 from .contractables import (
-    SingleMat,
-    MatRegion,
-    OutputCore,
     ContractableList,
     EdgeVec,
+    MatRegion,
+    OutputCore,
     OutputMat,
+    SingleMat,
 )
+from .utils import init_tensor, svd_flex
 
 
 class TI_MPS(nn.Module):
@@ -162,17 +163,15 @@ class TI_MPS(nn.Module):
             num_modes = len(input_data[0].shape)
             assert num_modes in [1, 2]
             assert all(
-                [
-                    isinstance(s, torch.Tensor) and len(s.shape) == num_modes
-                    for s in input_data
-                ]
+                isinstance(s, torch.Tensor) and len(s.shape) == num_modes
+                for s in input_data
             )
-            assert num_modes == 1 or all([s.size(1) == feature_dim for s in input_data])
+            assert num_modes == 1 or all(s.size(1) == feature_dim for s in input_data)
 
             # Check that all the sequences are the same length or can be padded
             max_len = max([s.size(0) for s in input_data])
             can_pad = self.use_bias and self.fixed_bias
-            if not can_pad and any([s.size(0) != max_len for s in input_data]):
+            if not can_pad and any(s.size(0) != max_len for s in input_data):
                 raise ValueError(
                     "To process input_data as list of sequences "
                     "with different lengths, must have self.use_bias="
@@ -594,7 +593,7 @@ class LinearRegion(nn.Module):
         self, module_list, periodic_bc=False, parallel_eval=False, module_states=None
     ):
         # Check that module_list is a list whose entries are Pytorch modules
-        if not isinstance(module_list, list) or module_list is []:
+        if not isinstance(module_list, list) or module_list == []:
             raise ValueError("Input to LinearRegion must be nonempty list")
         for i, item in enumerate(module_list):
             if not isinstance(item, nn.Module):
@@ -865,7 +864,6 @@ class MergedLinearRegion(LinearRegion):
         # Unmerge each core internally and add results to unmerged_list
         unmerged_list, bond_list, sv_list = [], [None], [None]
         for core in merged_list:
-
             # Apply internal unmerging routine if our core supports it
             if hasattr(core, "_unmerge"):
                 new_cores, new_bonds, new_svs = core._unmerge(cutoff)
@@ -940,7 +938,6 @@ class MergedLinearRegion(LinearRegion):
             (isinstance(left_core, OutputSite) and isinstance(right_core, InputSite))
             or (isinstance(left_core, InputSite) and isinstance(right_core, OutputSite))
         ):
-
             left_site = isinstance(left_core, InputSite)
             if left_site:
                 new_tensor = torch.einsum(
@@ -959,7 +956,6 @@ class MergedLinearRegion(LinearRegion):
                 isinstance(left_core, InputSite) and isinstance(right_core, InputRegion)
             )
         ):
-
             left_site = isinstance(left_core, InputSite)
             if left_site:
                 left_tensor = left_core.tensor.unsqueeze(0)

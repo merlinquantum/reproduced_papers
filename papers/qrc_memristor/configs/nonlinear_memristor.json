@@ -1,0 +1,20 @@
+{   "description": "Parameters to run the non-linear task using a quantum reservoir with memristor",
+
+    "experiment": {
+        "task": "nonlinear",
+        "model_type": "memristor",
+        "n_runs": 20,
+        "memory": 4,
+        "output_dir": "results/nonlinear_memristor",
+        "exp_name": "nonlinear_qmem"
+    },
+    "data": {
+        "size": 85,
+        "washout": 0,
+        "train_len": 76
+    },
+    "training": {
+        "epochs": 200,
+        "lr": 0.01
+    }
+}

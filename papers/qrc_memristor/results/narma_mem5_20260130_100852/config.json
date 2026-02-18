@@ -1,0 +1,13 @@
+{
+    "task": "narma",
+    "seed": 42,
+    "device": "cpu",
+    "exp_name": "",
+    "output_dir": "./results",
+    "model": "QuantumReservoirFeedbackTimeSeries",
+    "n_runs": 10,
+    "memory": 5,
+    "data_size": 1000,
+    "washout": 20,
+    "train_len": 480
+}

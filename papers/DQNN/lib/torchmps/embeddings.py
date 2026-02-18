@@ -24,9 +24,10 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """Uniform and non-uniform probabilistic MPS classes"""
-from math import sqrt, pi
+
 from functools import partial
-from typing import Union, Optional, Callable
+from math import pi, sqrt
+from typing import Callable, Optional, Union
 
 import torch
 from torch import nn
@@ -161,7 +162,7 @@ class FixedEmbedding(nn.Module):
 
     def __init__(self, emb_fun: Callable, data_domain: DataDomain):
         super().__init__()
-        assert hasattr(emb_fun, "__call__")
+        assert callable(emb_fun)
 
         # Save defining data, compute lambda matrix
         self.domain = data_domain
@@ -261,7 +262,7 @@ def trig_embed(data, emb_dim=2):
     return emb_data
 
 
-def init_mlp_embed(output_dim, num_layers=2, hidden_dims=[100], data_domain=None):
+def init_mlp_embed(output_dim, num_layers=2, hidden_dims=None, data_domain=None):
     """
     Initialize multilayer perceptron embedding acting on scalar inputs
 
@@ -273,6 +274,8 @@ def init_mlp_embed(output_dim, num_layers=2, hidden_dims=[100], data_domain=None
             data domain must be specified to allow correct normalization
     """
     # Put all layer dimensions in single list
+    if hidden_dims is None:
+        hidden_dims = [100]
     if isinstance(hidden_dims, int):
         hidden_dims = [hidden_dims] * (num_layers - 1)
     assert len(hidden_dims) == num_layers - 1

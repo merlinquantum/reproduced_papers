@@ -23,23 +23,25 @@
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 """Basic MPS functions used for uniform and non-uniform models"""
+
 import warnings
-from math import sqrt
+from collections.abc import Sequence
 from itertools import repeat
-from typing import Union, Sequence, Optional, Tuple
+from math import sqrt
+from typing import Optional, Union
 
 import torch
 from torch import Tensor
 
 from .utils2 import (
-    bundle_tensors,
+    CIndex,
     batch_broadcast,
     batch_to,
-    phaseify,
+    bundle_tensors,
     einsum,
     hermitian_trace,
+    phaseify,
     realify,
-    CIndex,
 )
 
 TensorSeq = Union[Tensor, Sequence[Tensor]]
@@ -96,9 +98,13 @@ def slim_eval_fun(seq_input: Tensor, core_tensor: Tensor, bound_vecs: Tensor) ->
     else:
         all_cores = core_tensor
     if vec_input:
-        slice_fun = lambda inps, core: einsum("bi,ide->bde", inps, core)
+
+        def slice_fun(inps, core):
+            return einsum("bi,ide->bde", inps, core)
     else:
-        slice_fun = lambda inps, core: core[inps]
+
+        def slice_fun(inps, core):
+            return core[inps]
 
     # Process input sequentially, from left to right
     log_scale = torch.zeros(batch)
@@ -248,7 +254,7 @@ def contract_matseq(
         return product * torch.exp(log_scale)
 
 
-def mat_reduce_par(matrices: Tensor) -> Tuple[Tensor, Tensor]:
+def mat_reduce_par(matrices: Tensor) -> tuple[Tensor, Tensor]:
     """
     Contract sequence of square matrices with parallel mat-mat multiplies
 
@@ -441,13 +447,20 @@ def get_log_norm(
     # Define transfer operator function for different types of lambda matrix
     if lamb_mat is None:
         # In the following, "dm" = "density matrix", "ct" = "core tensor"
-        t_op = lambda dm, ct: einsum("ilr,lp,ipq->rq", ct, dm, ct.conj())
+        def t_op(dm, ct):
+            return einsum("ilr,lp,ipq->rq", ct, dm, ct.conj())
     elif lamb_mat.ndim == 0:
-        t_op = lambda dm, ct: lamb_mat * einsum("ilr,lp,ipq->rq", ct, dm, ct.conj())
+
+        def t_op(dm, ct):
+            return lamb_mat * einsum("ilr,lp,ipq->rq", ct, dm, ct.conj())
     elif lamb_mat.ndim == 1:
-        t_op = lambda dm, ct: einsum("i,ilr,lp,ipq->rq", lamb_mat, ct, dm, ct.conj())
+
+        def t_op(dm, ct):
+            return einsum("i,ilr,lp,ipq->rq", lamb_mat, ct, dm, ct.conj())
     elif lamb_mat.ndim == 2:
-        t_op = lambda dm, ct: einsum("ij,ilr,lp,jpq->rq", lamb_mat, ct, dm, ct.conj())
+
+        def t_op(dm, ct):
+            return einsum("ij,ilr,lp,jpq->rq", lamb_mat, ct, dm, ct.conj())
 
     # Function for applying rightward transfer operator to density mat
     def transfer_op(core_t, d_mat, l_norm, l_sum=None):
@@ -513,7 +526,8 @@ def near_eye_init(
         else:
             warnings.warn(
                 "Core tensor with non-square matrix slices "
-                "requested, is this really what you wanted?"
+                "requested, is this really what you wanted?",
+                stacklevel=2,
             )
 
     # Initialize core using size-adjusted value of noise
@@ -551,7 +565,8 @@ def normal_init(shape: tuple, is_complex: bool = False, rel_std: float = 1.0) ->
         else:
             warnings.warn(
                 "Core tensor with non-square matrix slices "
-                "requested, is this really what you wanted?"
+                "requested, is this really what you wanted?",
+                stacklevel=2,
             )
 
     # Initialize core using size-adjusted value of variance

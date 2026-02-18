@@ -14,7 +14,6 @@ from runtime_lib.cli import build_cli_parser  # noqa: E402
 from runtime_lib.config import load_config  # noqa: E402
 from runtime_lib.dtypes import resolve_config_dtypes  # noqa: E402
 
-
 _CLI_SCHEMA_PATH = PROJECT_DIR / "cli.json"
 _DEFAULTS_PATH = PROJECT_DIR / "configs" / "defaults.json"
 

@@ -1,0 +1,54 @@
+{
+  "description": "Black-box transfer attack experiment (Table III)",
+  "seed": 42,
+  "experiment": "transfer",
+  "device": "auto",
+  "dataset": {
+    "digits": [
+      1,
+      9
+    ],
+    "image_size": 16,
+    "normalize": true,
+    "root": "data",
+    "download": true,
+    "batch_size": 256
+  },
+  "model": {
+    "type": "amplitude_quantum",
+    "hidden_dims": [
+      128,
+      64
+    ],
+    "n_modes": 8,
+    "n_photons": 2,
+    "n_layers": 2
+  },
+  "training": {
+    "epochs": 50,
+    "batch_size": 256,
+    "learning_rate": 0.005,
+    "optimizer": "adam"
+  },
+  "transfer": {
+    "surrogate_types": [
+      "cnn",
+      "fnn"
+    ],
+    "attack_methods": [
+      "bim",
+      "fgsm",
+      "mim"
+    ],
+    "epsilon": 0.1,
+    "num_iter": 50,
+    "surrogate_epochs": 20
+  },
+  "options": {
+    "save_model": false,
+    "target_model": "results/train_quantum/model.pt"
+  },
+  "logging": {
+    "level": "info"
+  }
+}

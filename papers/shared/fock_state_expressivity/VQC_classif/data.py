@@ -1,10 +1,10 @@
-from __future__ import annotations
-
 """Shared dataset generation utilities for VQC_classif."""
 
+from __future__ import annotations
+
+import sys
 from dataclasses import dataclass
 from pathlib import Path
-import sys
 
 import numpy as np
 import torch
@@ -12,14 +12,16 @@ from sklearn.datasets import make_circles, make_classification, make_moons
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-_REPO_ROOT = next(
-    (p for p in Path(__file__).resolve().parents if (p / "runtime_lib").exists()),
-    None,
-)
-if _REPO_ROOT and str(_REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(_REPO_ROOT))
-
-from runtime_lib.data_paths import paper_data_dir
+try:
+    from runtime_lib.data_paths import paper_data_dir
+except ModuleNotFoundError:
+    _REPO_ROOT = next(
+        (p for p in Path(__file__).resolve().parents if (p / "runtime_lib").exists()),
+        None,
+    )
+    if _REPO_ROOT and str(_REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(_REPO_ROOT))
+    from runtime_lib.data_paths import paper_data_dir
 
 DATASET_ORDER = ("linear", "circular", "moon")
 
@@ -145,7 +147,9 @@ def prepare_datasets(cfg: dict) -> dict[str, dict[str, torch.Tensor]]:
     if raw_cache:
         cache_dir = Path(raw_cache)
         if not cache_dir.is_absolute():
-            cache_dir = paper_data_dir("fock_state_expressivity") / "VQC_classif" / cache_dir
+            cache_dir = (
+                paper_data_dir("fock_state_expressivity") / "VQC_classif" / cache_dir
+            )
     else:
         cache_dir = paper_data_dir("fock_state_expressivity") / "VQC_classif" / "cache"
     cache_dir.mkdir(parents=True, exist_ok=True)

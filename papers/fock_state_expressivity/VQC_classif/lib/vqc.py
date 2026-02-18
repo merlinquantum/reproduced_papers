@@ -13,7 +13,7 @@ import numpy as np
 import perceval as pcvl
 import torch
 import torch.nn as nn
-from merlin import QuantumLayer
+from merlin import ComputationSpace, MeasurementStrategy, QuantumLayer
 
 
 def create_vqc_spiral(m, input_size, frequency=1):
@@ -33,10 +33,12 @@ def create_vqc_spiral(m, input_size, frequency=1):
     """
     wl = pcvl.GenericInterferometer(
         m,
-        lambda i: pcvl.BS(theta=pcvl.P(f"bs_1_{i}"))
-        // pcvl.PS(pcvl.P(f"phase_1_{i}"))
-        // pcvl.BS(theta=pcvl.P(f"bs_2_{i}"))
-        // pcvl.PS(pcvl.P(f"phase_2_{i}")),
+        lambda i: (
+            pcvl.BS(theta=pcvl.P(f"bs_1_{i}"))
+            // pcvl.PS(pcvl.P(f"phase_1_{i}"))
+            // pcvl.BS(theta=pcvl.P(f"bs_2_{i}"))
+            // pcvl.PS(pcvl.P(f"phase_2_{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 
@@ -52,10 +54,12 @@ def create_vqc_spiral(m, input_size, frequency=1):
         c.add(0, c_var, merge=True)
         wr = pcvl.GenericInterferometer(
             m,
-            lambda i: pcvl.BS()
-            // pcvl.PS(pcvl.P(f"phase_3_{i}"))
-            // pcvl.BS()
-            // pcvl.PS(pcvl.P(f"phase_4_{i}")),
+            lambda i: (
+                pcvl.BS()
+                // pcvl.PS(pcvl.P(f"phase_3_{i}"))
+                // pcvl.BS()
+                // pcvl.PS(pcvl.P(f"phase_4_{i}"))
+            ),
             shape=pcvl.InterferometerShape.RECTANGLE,
         )
 
@@ -125,8 +129,10 @@ def create_vqc_bs_mesh(m, input_size):
 
     bs_l = pcvl.GenericInterferometer(
         m,
-        lambda idx: pcvl.BS(theta=pcvl.P(f"theta_l{idx}"))
-        // (0, pcvl.PS(phi=np.pi * 2 * random.random())),
+        lambda idx: (
+            pcvl.BS(theta=pcvl.P(f"theta_l{idx}"))
+            // (0, pcvl.PS(phi=np.pi * 2 * random.random()))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
         depth=2 * m,
         phase_shifter_fun_gen=lambda idx: pcvl.PS(phi=np.pi * 2 * random.random()),
@@ -139,8 +145,10 @@ def create_vqc_bs_mesh(m, input_size):
 
     bs_r = pcvl.GenericInterferometer(
         m,
-        lambda idx: pcvl.BS(theta=pcvl.P(f"theta_r{idx}"))
-        // (0, pcvl.PS(phi=np.pi * 2 * random.random())),
+        lambda idx: (
+            pcvl.BS(theta=pcvl.P(f"theta_r{idx}"))
+            // (0, pcvl.PS(phi=np.pi * 2 * random.random()))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
         depth=2 * m,
         phase_shifter_fun_gen=lambda idx: pcvl.PS(phi=np.pi * 2 * random.random()),
@@ -171,10 +179,12 @@ def create_vqc_general(m, input_size):
 
     wl = pcvl.GenericInterferometer(
         m,
-        lambda i: pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_li{i}"))
-        // pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_lo{i}")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_li{i}"))
+            // pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_lo{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 
@@ -185,10 +195,12 @@ def create_vqc_general(m, input_size):
 
     wr = pcvl.GenericInterferometer(
         m,
-        lambda i: pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_ri{i}"))
-        // pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_ro{i}")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_ri{i}"))
+            // pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_ro{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 
@@ -250,6 +262,9 @@ def get_vqc(
         output_size = comb(m + n_photons - 1, n_photons)
 
     print(f"Output size of quantum layer: {output_size}")
+    computation_space = (
+        ComputationSpace.UNBUNCHED if no_bunching else ComputationSpace.FOCK
+    )
 
     vqc = QuantumLayer(
         input_size=input_size,
@@ -259,7 +274,9 @@ def get_vqc(
         ],
         input_parameters=["px"],
         input_state=initial_state,  # [1, 0] * 3 for example
-        no_bunching=no_bunching,
+        measurement_strategy=MeasurementStrategy.probs(
+            computation_space=computation_space
+        ),
     )
 
     # The Linear layer acts as the observable and it makes sure the output is 1 dimensional

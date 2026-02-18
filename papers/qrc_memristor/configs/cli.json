@@ -1,0 +1,75 @@
+{
+  "description": "Quantum Memristor Paper Reproduction",
+  "arguments": [
+    {
+      "flags": ["--task"],
+      "help": "Task to run (narma, mackey_glass, santa_fe, nonlinear)",
+      "type": "str",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "experiment.task" }
+    },
+    {
+      "flags": ["--model-type"],
+      "help": "Model architecture (memristor, nomem, L, Q, L+M, Q+M)",
+      "type": "str",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "experiment.model_type" }
+    },
+    {
+      "flags": ["--memory"],
+      "help": "Memory depth for memristor or window size for classical models",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "experiment.memory" }
+    },
+    {
+      "flags": ["--n-runs"],
+      "help": "Number of independent experimental runs",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "experiment.n_runs" }
+    },
+    {
+      "flags": ["--data-size"],
+      "help": "Total size of the generated dataset",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "data.size" }
+    },
+    {
+      "flags": ["--washout"],
+      "help": "Number of initial timesteps to discard",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "data.washout" }
+    },
+    {
+      "flags": ["--train-len"],
+      "help": "Number of timesteps used for training",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "data.train_len" }
+    },
+    {
+      "flags": ["--epochs"],
+      "help": "Number of training epochs (for Nonlinear task or Classical models)",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "training.epochs" }
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Learning rate for gradient descent",
+      "type": "float",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "training.lr" }
+    },
+    {
+      "flags": ["--output-dir"],
+      "help": "Directory where results will be saved",
+      "type": "str",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "experiment.output_dir" }
+    }
+  ]
+}

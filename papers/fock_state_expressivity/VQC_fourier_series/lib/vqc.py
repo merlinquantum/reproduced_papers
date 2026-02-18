@@ -6,7 +6,7 @@ from copy import deepcopy
 import perceval as pcvl
 import torch
 import torch.nn as nn
-from merlin import QuantumLayer
+from merlin import ComputationSpace, MeasurementStrategy, QuantumLayer
 
 
 class ScaleLayer(nn.Module):
@@ -40,10 +40,12 @@ class ScaleLayer(nn.Module):
 def create_vqc_general(num_modes: int, input_size: int) -> pcvl.Circuit:
     wl = pcvl.GenericInterferometer(
         num_modes,
-        lambda i: pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_li{i}_ps"))
-        // pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_lo{i}_ps")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_li{i}_ps"))
+            // pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_lo{i}_ps"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 
@@ -54,10 +56,12 @@ def create_vqc_general(num_modes: int, input_size: int) -> pcvl.Circuit:
 
     wr = pcvl.GenericInterferometer(
         num_modes,
-        lambda i: pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_ri{i}_ps"))
-        // pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_ro{i}_ps")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_ri{i}_ps"))
+            // pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_ro{i}_ps"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 
@@ -78,6 +82,9 @@ def build_model(
     trainable_params = cfg.get("trainable_parameters", ["theta"])
     input_parameters = cfg.get("input_parameters", ["px"])
     no_bunching = bool(cfg.get("no_bunching", False))
+    computation_space = (
+        ComputationSpace.UNBUNCHED if no_bunching else ComputationSpace.FOCK
+    )
 
     scale_layer = ScaleLayer(input_size, scale_type=scale_type)
     vqc = QuantumLayer(
@@ -86,7 +93,9 @@ def build_model(
         trainable_parameters=trainable_params,
         input_parameters=input_parameters,
         input_state=list(initial_state),
-        no_bunching=no_bunching,
+        measurement_strategy=MeasurementStrategy.probs(
+            computation_space=computation_space
+        ),
     )
 
     linear_layer = nn.Linear(vqc.output_size, 1)

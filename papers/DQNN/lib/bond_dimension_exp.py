@@ -5,30 +5,38 @@ This module contains functions to run experiments evaluating the effect of diffe
 bond dimensions on the performance of the Quantum Train.
 """
 
+import json
+import pathlib
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO_ROOT))
-
-import pathlib
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
-from typing import List
-import json
-from papers.DQNN.lib.photonic_qt_utils import (
-    create_boson_samplers,
-    calculate_qubits,
-)
-from papers.DQNN.lib.model import PhotonicQuantumTrain, train_quantum_model
-from papers.DQNN.utils.utils import plot_bond_exp, create_datasets
+
+try:
+    from papers.DQNN.lib.model import PhotonicQuantumTrain, train_quantum_model
+    from papers.DQNN.lib.photonic_qt_utils import (
+        calculate_qubits,
+        create_boson_samplers,
+    )
+    from papers.DQNN.utils.utils import create_datasets, plot_bond_exp
+except ModuleNotFoundError:
+    REPO_ROOT = Path(__file__).resolve().parents[3]
+    if str(REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_ROOT))
+    from papers.DQNN.lib.model import PhotonicQuantumTrain, train_quantum_model
+    from papers.DQNN.lib.photonic_qt_utils import (
+        calculate_qubits,
+        create_boson_samplers,
+    )
+    from papers.DQNN.utils.utils import create_datasets, plot_bond_exp
 
 device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
 
 
 def run_bond_dimension_exp(
-    bond_dimensions_to_test: List[int] = np.arange(1, 11),
+    bond_dimensions_to_test: list[int] = np.arange(1, 11),
     num_training_rounds: int = 200,
     num_epochs: int = 5,
     qu_train_with_cobyla: bool = False,

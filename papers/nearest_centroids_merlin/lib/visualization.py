@@ -854,4 +854,3 @@ def plot_synthetic_results(
 # ADDITIONAL VISUALIZATION FUNCTIONS FOR PAPER REPRODUCTION
 # Add these functions to lib/visualization.py
 # ===========================================================================
-

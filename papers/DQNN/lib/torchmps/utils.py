@@ -64,7 +64,7 @@ def svd_flex(tensor, svd_string, max_D=None, cutoff=1e-10, sv_right=True, sv_vec
         left_str, right_str = post_str.split(",")
 
         # Check formatting of init_str, left_str, and right_str
-        assert all([c.islower() for c in init_str + left_str + right_str])
+        assert all(c.islower() for c in init_str + left_str + right_str)
         assert len(set(init_str + left_str + right_str)) == len(init_str) + 1
         assert len(set(init_str)) + len(set(left_str)) + len(set(right_str)) == len(
             init_str
@@ -76,7 +76,7 @@ def svd_flex(tensor, svd_string, max_D=None, cutoff=1e-10, sv_right=True, sv_vec
         right_part = right_str.replace(bond_char, "")
 
         # Permute our tensor into something that can be viewed as a matrix
-        ein_str = f"{init_str}->{left_part+right_part}"
+        ein_str = f"{init_str}->{left_part + right_part}"
         tensor = torch.einsum(ein_str, [tensor]).contiguous()
 
         left_shape = list(tensor.shape[: len(left_part)])
@@ -121,8 +121,7 @@ def svd_flex(tensor, svd_string, max_D=None, cutoff=1e-10, sv_right=True, sv_vec
             truncation += 1
         if truncation == 0:
             raise RuntimeError(
-                "SVD cutoff too large, attempted to truncate "
-                "tensor to bond dimension 0"
+                "SVD cutoff too large, attempted to truncate tensor to bond dimension 0"
             )
 
         # Perform the actual truncation
@@ -150,11 +149,11 @@ def svd_flex(tensor, svd_string, max_D=None, cutoff=1e-10, sv_right=True, sv_vec
         # Finally, permute the indices into the desired order
         if left_str != left_part + bond_char:
             left_tensor = torch.einsum(
-                f"{left_part+bond_char}->{left_str}", [left_tensor]
+                f"{left_part + bond_char}->{left_str}", [left_tensor]
             )
         if right_str != bond_char + right_part:
             right_tensor = torch.einsum(
-                f"{bond_char+right_part}->{right_str}", [right_tensor]
+                f"{bond_char + right_part}->{right_str}", [right_tensor]
             )
 
         return left_tensor, right_tensor, truncation
@@ -213,16 +212,15 @@ def init_tensor(shape, bond_str, init_method):
 
     if init_method in ["random_eye", "min_random_eye"]:
         bond_chars = ["l", "r"]
-        assert all([c in bond_str for c in bond_chars])
+        assert all(c in bond_str for c in bond_chars)
 
         # Initialize our tensor slices as identity matrices which each fill
         # some or all of the initially allocated bond space
         if init_method == "min_random_eye":
-
             # The dimensions for our initial identity matrix. These will each
             # be init_dim, unless init_dim exceeds one of the bond dimensions
             bond_dims = [shape[bond_str.index(c)] for c in bond_chars]
-            if all([init_dim <= full_dim for full_dim in bond_dims]):
+            if all(init_dim <= full_dim for full_dim in bond_dims):
                 bond_dims = [init_dim, init_dim]
             else:
                 init_dim = min(bond_dims)
@@ -244,7 +242,7 @@ def init_tensor(shape, bond_str, init_method):
         eye_tensor = eye_tensor.expand(expand_shape)
 
         tensor = torch.zeros(shape)
-        tensor[[slice(dim) for dim in expand_shape]] = eye_tensor
+        tensor[tuple(slice(dim) for dim in expand_shape)] = eye_tensor
 
         # Add on a bit of random noise
         tensor += std * torch.randn(shape)
@@ -314,8 +312,7 @@ def load_HV_data(length):
 
     if length > 14:
         print(
-            "load_HV_data will generate {} images, "
-            "this could take a while...".format(num_images)
+            f"load_HV_data will generate {num_images} images, this could take a while..."
         )
 
     images = np.empty([num_images, length, length], dtype=np.float32)

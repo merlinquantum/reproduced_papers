@@ -77,15 +77,13 @@ for paper in "${PAPERS[@]}"; do
   fi
 
   echo "==> [$paper] setting up venv at $env_dir"
-  if [[ "$paper_rel" == "qLLM" ]] && [[ -x "$env_dir/bin/python" ]]; then
-    py_version="$("$env_dir/bin/python" -c 'import sys; print(f"{sys.version_info[0]}.{sys.version_info[1]}")')"
-    if [[ "$py_version" != "3.12" ]]; then
-        echo "[INFO] Recreating qLLM venv with python3.12 (found $py_version)." >&2
-        rm -rf "$env_dir"
-      fi
+  keep_existing_venv=1
+  
+  if [[ $keep_existing_venv -eq 0 ]] || [[ ! -f "$env_dir/bin/activate" ]]; then
+    if [[ -d "$env_dir" ]] || [[ -f "$env_dir/bin/activate" ]]; then
+      echo "Old venv detected, then removed and new venv installing..."
+      rm -rf "$env_dir"
     fi
-  if [[ ! -d "$env_dir" ]] || [[ ! -f "$env_dir/bin/activate" ]]; then
-    rm -rf "$env_dir"
     $paper_python -m venv "$env_dir"
   fi
 

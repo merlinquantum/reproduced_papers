@@ -7,7 +7,7 @@ qubit calculations, and probability-to-weight mapping utilities.
 
 import numpy as np
 import torch
-from typing import List, Tuple
+
 from papers.DQNN.lib.boson_sampler import BosonSampler
 
 device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
@@ -38,7 +38,7 @@ def create_boson_samplers() -> BosonSampler:
     return bs_1, bs_2
 
 
-def calculate_qubits() -> Tuple[int, List[float]]:
+def calculate_qubits() -> tuple[int, list[float]]:
     """
     Compute the number of qubits required for the CNN weight mapping.
 

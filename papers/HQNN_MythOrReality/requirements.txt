@@ -1,8 +1,5 @@
-matplotlib==3.10.6
+matplotlib
 merlinquantum==0.2.3
-numpy==2.3.3
 pytest==8.4.2
-scikit-learn==1.7.2
 seaborn==0.13.2
-torch==2.8.0
-tqdm==4.67.1
+tqdm

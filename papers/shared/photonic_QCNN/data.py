@@ -9,14 +9,20 @@ from pathlib import Path
 import numpy as np
 import torch
 
-# Ensure repository root is on sys.path so paper modules can be imported.
+try:
+    from runtime_lib.data_paths import paper_data_dir
+
+    from . import paper, scratch
+except ModuleNotFoundError:
+    # Ensure repository root is on sys.path so paper modules can be imported.
+    REPO_ROOT = Path(__file__).resolve().parents[2]
+    if str(REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_ROOT))
+    from runtime_lib.data_paths import paper_data_dir
+
+    from . import paper, scratch
+
 REPO_ROOT = Path(__file__).resolve().parents[2]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
-
-from runtime_lib.data_paths import paper_data_dir
-
-from . import paper, scratch
 
 SHARED_DATA_DIR = paper_data_dir("photonic_QCNN")
 LEGACY_DATA_DIR = REPO_ROOT / "photonic_QCNN" / "data"
@@ -86,7 +92,9 @@ def get_dataset(
             x_train, x_test, y_train, y_test = scratch.get_bas(
                 random_state=random_state
             )
-        return _limit_samples(x_train, x_test, y_train, y_test, max_samples, random_state)
+        return _limit_samples(
+            x_train, x_test, y_train, y_test, max_samples, random_state
+        )
 
     if dataset_name == "Custom BAS":
         if source == "paper":
@@ -96,15 +104,15 @@ def get_dataset(
             x_train, x_test, y_train, y_test = scratch.get_custom_bas(
                 random_state=random_state
             )
-        return _limit_samples(x_train, x_test, y_train, y_test, max_samples, random_state)
+        return _limit_samples(
+            x_train, x_test, y_train, y_test, max_samples, random_state
+        )
 
     # MNIST
     if source == "paper":
         x_train, x_test, y_train, y_test = paper.get_mnist()
     else:
-        x_train, x_test, y_train, y_test = scratch.get_mnist(
-            random_state=random_state
-        )
+        x_train, x_test, y_train, y_test = scratch.get_mnist(random_state=random_state)
     return _limit_samples(x_train, x_test, y_train, y_test, max_samples, random_state)
 
 
@@ -118,7 +126,7 @@ def get_dataset_description(x_train, x_test, y_train, y_test, dataset_name: str)
     description = ""
 
     for name, array in arrays.items():
-        description += f"\n\U0001F4CA{dataset_name} - {name}\n"
+        description += f"\n\U0001f4ca{dataset_name} - {name}\n"
         description += "-" * (len(name) + 4) + "\n"
         description += f"Shape      : {array.shape}\n"
         description += f"Dtype      : {array.dtype}\n\n"
@@ -136,12 +144,16 @@ def get_dataset_description(x_train, x_test, y_train, y_test, dataset_name: str)
         if unique_vals.size <= 20:
             description += f"Unique vals: {unique_vals}\n"
         else:
-            description += f"Unique vals: {unique_vals[:10]} ... (total {len(unique_vals)})\n"
+            description += (
+                f"Unique vals: {unique_vals[:10]} ... (total {len(unique_vals)})\n"
+            )
 
     return description
 
 
-def save_dataset_description(x_train, x_test, y_train, y_test, dataset_name: str, save_path):
+def save_dataset_description(
+    x_train, x_test, y_train, y_test, dataset_name: str, save_path
+):
     save_path = Path(save_path)
     save_path.parent.mkdir(parents=True, exist_ok=True)
     with save_path.open("w") as f:
@@ -185,9 +197,7 @@ def main():
     )
 
     scratch_mnist = get_dataset("MNIST", "scratch", 42)
-    save_dataset_description(
-        *scratch_mnist, "MNIST", details_dir / "MNIST_scratch.txt"
-    )
+    save_dataset_description(*scratch_mnist, "MNIST", details_dir / "MNIST_scratch.txt")
 
     paper_bas = get_dataset("BAS", "paper", 42)
     save_dataset_description(*paper_bas, "BAS", details_dir / "BAS_paper.txt")
@@ -198,9 +208,7 @@ def main():
     )
 
     paper_mnist = get_dataset("MNIST", "paper", 42)
-    save_dataset_description(
-        *paper_mnist, "MNIST", details_dir / "MNIST_paper.txt"
-    )
+    save_dataset_description(*paper_mnist, "MNIST", details_dir / "MNIST_paper.txt")
 
 
 if __name__ == "__main__":

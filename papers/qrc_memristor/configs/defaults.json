@@ -1,0 +1,20 @@
+{   "description": "Default parameters for the main experiment",
+
+    "experiment": {
+        "task": "narma",
+        "model_type": "memristor",
+        "n_runs": 20,
+        "memory": 4,
+        "output_dir": "results/narma_qmem",
+        "exp_name": "narma_default"
+    },
+    "data": {
+        "size": 1000,
+        "washout": 20,
+        "train_len": 480
+    },
+    "training": {
+        "epochs": 200,
+        "lr": 0.01
+    }
+}

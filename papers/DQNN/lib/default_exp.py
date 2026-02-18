@@ -5,31 +5,46 @@ This module trains a classical CNN baseline, then trains and evaluates the
 photonic quantum train model using the specified hyperparameters.
 """
 
-import torch
-from torch.utils.data import DataLoader
 import sys
-import os
+import warnings
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO_ROOT))
-import warnings
+import torch
+from torch.utils.data import DataLoader
 
 warnings.filterwarnings("ignore")
 
-from papers.DQNN.lib.photonic_qt_utils import (
-    create_boson_samplers,
-    calculate_qubits,
-)
-from papers.DQNN.lib.model import (
-    PhotonicQuantumTrain,
-    train_quantum_model,
-    evaluate_model,
-)
-from papers.DQNN.lib.classical_utils import (
-    train_classical_cnn,
-)
-from papers.DQNN.utils.utils import plot_training_metrics, create_datasets
+try:
+    from papers.DQNN.lib.classical_utils import (
+        train_classical_cnn,
+    )
+    from papers.DQNN.lib.model import (
+        PhotonicQuantumTrain,
+        evaluate_model,
+        train_quantum_model,
+    )
+    from papers.DQNN.lib.photonic_qt_utils import (
+        calculate_qubits,
+        create_boson_samplers,
+    )
+    from papers.DQNN.utils.utils import create_datasets, plot_training_metrics
+except ModuleNotFoundError:
+    REPO_ROOT = Path(__file__).resolve().parents[3]
+    if str(REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_ROOT))
+    from papers.DQNN.lib.classical_utils import (
+        train_classical_cnn,
+    )
+    from papers.DQNN.lib.model import (
+        PhotonicQuantumTrain,
+        evaluate_model,
+        train_quantum_model,
+    )
+    from papers.DQNN.lib.photonic_qt_utils import (
+        calculate_qubits,
+        create_boson_samplers,
+    )
+    from papers.DQNN.utils.utils import create_datasets, plot_training_metrics
 
 device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -86,7 +101,7 @@ def run_default_exp(
     None
     """
 
-    print(f"Running experiment with:")
+    print("Running experiment with:")
     print(f"  Pruning: {pruning} (amount: {pruning_amount if pruning else 'N/A'})")
     print(
         f"  Weight sharing: {weight_sharing} (shared rows: {shared_rows if weight_sharing else 'N/A'})"

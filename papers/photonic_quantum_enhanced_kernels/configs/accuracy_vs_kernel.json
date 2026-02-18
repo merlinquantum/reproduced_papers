@@ -1,0 +1,19 @@
+{
+  "description": "Small test run for accuracy_vs_kernel",
+  "experiment": "accuracy_vs_kernel",
+  "plotting": {"use_tex": false, "show": true},
+  "experiments": {
+    "accuracy_vs_kernel": {
+      "superset_size": 1000,
+      "reg": 0.02,
+      "reps": 10,
+      "test_size": 0.33,
+      "indistinguishability": 0.972,
+      "no_bunching": false,
+      "force_psd": false,
+      "shots": null,
+      "seed": 42,
+      "data_sizes": {"min": 40, "max": 100, "step": 20}
+    }
+  }
+}

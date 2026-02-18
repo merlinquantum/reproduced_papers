@@ -5,17 +5,16 @@ This module provides dataset loaders, plotting helpers, and common metrics.
 """
 
 import argparse
-from datasets import load_dataset
+import pathlib
+from pathlib import Path
+
+import matplotlib.pyplot as plt
 import numpy as np
-from torch.utils.data import Dataset
 import pandas as pd
 import regex as re
 import torch
-import matplotlib.pyplot as plt
-from pathlib import Path
-from typing import Tuple, List
-from torch.utils.data import DataLoader
-import pathlib
+from datasets import load_dataset
+from torch.utils.data import DataLoader, Dataset
 
 script_dir = Path(__file__).parent.parent.parent.parent
 DATA_PATH = (script_dir / "data/DQNN").resolve()
@@ -31,8 +30,8 @@ class HFImageDataset(Dataset):
         self.transform = transform
 
     def __len__(self) -> int:
-        l = len(self.dataset["image"])
-        return l
+        length = len(self.dataset["image"])
+        return length
 
     def __getitem__(self, idx: int):
         """
@@ -66,7 +65,7 @@ class HFImageDataset(Dataset):
 
 def create_datasets(
     batch_size: int = 128,
-) -> Tuple[Dataset, Dataset, DataLoader, DataLoader]:
+) -> tuple[Dataset, Dataset, DataLoader, DataLoader]:
     """
     Create MNIST train/validation datasets and data loaders.
     Parameters
@@ -218,8 +217,8 @@ def parse_args():
 
 
 def plot_training_metrics(
-    loss_list_epoch: List[float],
-    acc_list_epoch: List[float],
+    loss_list_epoch: list[float],
+    acc_list_epoch: list[float],
     run_dir: Path = None,
 ):
     """
@@ -273,10 +272,10 @@ def plot_training_metrics(
 
 
 def plot_bond_exp(
-    bond_dimensions: List[int],
-    epochs: List[int],
-    loss_list_epoch: List[float],
-    acc_list_epoch: List[float],
+    bond_dimensions: list[int],
+    epochs: list[int],
+    loss_list_epoch: list[float],
+    acc_list_epoch: list[float],
     run_dir: Path = None,
 ):
     """
@@ -306,7 +305,7 @@ def plot_bond_exp(
     --------
     None
     """
-    rng = np.random.default_rng(0)
+    np.random.default_rng(0)
 
     # ----------------------------
     # Plot styling
@@ -356,9 +355,7 @@ def plot_bond_exp(
     )
 
     # Legend outside the right subplot (like your example)
-    leg = ax2.legend(
-        loc="center left", bbox_to_anchor=(1.02, 0.5), frameon=True, fontsize=9
-    )
+    ax2.legend(loc="center left", bbox_to_anchor=(1.02, 0.5), frameon=True, fontsize=9)
 
     plt.tight_layout()
     if run_dir is None:
@@ -377,10 +374,10 @@ def plot_bond_exp(
 
 
 def plot_ablation_exp(
-    params_qt: List[int],
-    accuracy_qt: List[float],
-    params_ablation: List[int],
-    accuracy_ablation: List[float],
+    params_qt: list[int],
+    accuracy_qt: list[float],
+    params_ablation: list[int],
+    accuracy_ablation: list[float],
     run_dir: Path = None,
 ):
     """

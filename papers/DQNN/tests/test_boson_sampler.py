@@ -1,16 +1,20 @@
 import sys
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-REPO_ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO_ROOT))
-sys.path.insert(0, str(PROJECT_ROOT))
-
-import numpy as np
-import torch
-import pytest
 import merlin as ML
-from papers.DQNN.lib.boson_sampler import BosonSampler
+import numpy as np
+import pytest
+import torch
+
+try:
+    from papers.DQNN.lib.boson_sampler import BosonSampler
+except ModuleNotFoundError:
+    PROJECT_ROOT = Path(__file__).resolve().parents[1]
+    REPO_ROOT = Path(__file__).resolve().parents[3]
+    for path in (REPO_ROOT, PROJECT_ROOT):
+        if str(path) not in sys.path:
+            sys.path.insert(0, str(path))
+    from papers.DQNN.lib.boson_sampler import BosonSampler
 
 
 @pytest.fixture
@@ -28,14 +32,14 @@ def test_init(bs_1, bs_2):
     bs = bs_1
     assert bs.nb_parameters == 108
     assert bs.nb_parameters >= bs.num_effective_params
-    assert len([i for i in bs.quantum_layer.parameters()])
+    assert len(list(bs.quantum_layer.parameters()))
     assert isinstance(bs.quantum_layer, ML.QuantumLayer)
 
     # bs_2
     bs = bs_2
     assert bs.nb_parameters == 84
     assert bs.nb_parameters >= bs.num_effective_params
-    assert len([i for i in bs.quantum_layer.parameters()])
+    assert len(list(bs.quantum_layer.parameters()))
     assert isinstance(bs.quantum_layer, ML.QuantumLayer)
 
 

@@ -5,21 +5,23 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import torch
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
-
-from runtime_lib.data_paths import paper_data_dir
-
-from papers.shared.qSSL.cifar import (
-    GaussianBlur,
-    TwoCropsTransform,
-    denormalize_tensor,
-    get_first_n_classes,
-    load_finetuning_data,
-    load_transformed_data,
-)
-
+try:
+    from papers.shared.qSSL.cifar import (
+        denormalize_tensor,
+        load_finetuning_data,
+        load_transformed_data,
+    )
+    from runtime_lib.data_paths import paper_data_dir
+except ModuleNotFoundError:
+    REPO_ROOT = Path(__file__).resolve().parents[3]
+    if str(REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_ROOT))
+    from papers.shared.qSSL.cifar import (
+        denormalize_tensor,
+        load_finetuning_data,
+        load_transformed_data,
+    )
+    from runtime_lib.data_paths import paper_data_dir
 
 if __name__ == "__main__":
     # Set up argument parser

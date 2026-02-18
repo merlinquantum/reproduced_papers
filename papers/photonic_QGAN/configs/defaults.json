@@ -1,0 +1,56 @@
+{
+  "description": "Default Photonic QGAN reproduction config (smoke mode).",
+  "seed": 0,
+  "dtype": "float32",
+  "device": "cpu",
+  "outdir": "results",
+  "logging": { "level": "info", "save_config_snapshot": true },
+  "run": {
+    "mode": "smoke",
+    "write_to_disk": true,
+    "runs": 1,
+    "progress": true,
+    "log_every": 100
+  },
+  "dataset": {
+    "csv_path": "photonic_QGAN/optdigits_csv.csv"
+  },
+  "model": {
+    "image_size": 8,
+    "batch_size": 4,
+    "lossy": false,
+    "use_clements": false,
+    "sim": false,
+    "remote_token": null
+  },
+  "training": {
+    "digits": {
+      "spsa_iter_num": 3000,
+      "opt_iter_num": 1000,
+      "lrD": 0.002,
+      "spsa_a": 20.0,
+      "spsa_k": 0
+    },
+    "ideal": {
+      "spsa_iter_num": 3000,
+      "opt_iter_num": 1000,
+      "lrD": 0.002,
+      "spsa_a": 20.0,
+      "spsa_k": 0
+    }
+  },
+  "digits": {
+    "arch": ["var", "var", "enc[2]", "var", "var"],
+    "noise_dim": 1,
+    "input_state": [0, 1, 0, 1, 0],
+    "gen_count": 4,
+    "pnr": false,
+    "digit_start": 1,
+    "digit_end": 9,
+    "digits": null
+  },
+  "ideal": {
+    "use_default_grid": true,
+    "config_grid_path": null
+  }
+}

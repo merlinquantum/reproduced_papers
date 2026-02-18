@@ -7,11 +7,9 @@ used alongside the photonic quantum train.
 
 import torch
 import torch.nn as nn
-import torch.optim as optim
 import torch.nn.utils.prune as prune
+import torch.optim as optim
 from torch.utils.data import DataLoader
-from typing import List
-
 
 device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -43,7 +41,7 @@ class SharedWeightFC(nn.Module):
         shared_rows : int
             Number of shared rows to repeat to form the weight matrix.
         """
-        super(SharedWeightFC, self).__init__()
+        super().__init__()
         self.shared_weights = nn.Parameter(torch.randn(shared_rows, in_features))
         self.bias = nn.Parameter(torch.randn(out_features))
         self.out_features = out_features
@@ -92,7 +90,7 @@ class CNNModel(nn.Module):
         shared_rows : int, optional
             Number of shared rows when using weight sharing. Default is 10.
         """
-        super(CNNModel, self).__init__()
+        super().__init__()
         self.conv1 = nn.Conv2d(1, 8, kernel_size=5)
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
         self.conv2 = nn.Conv2d(8, 12, kernel_size=5)
@@ -169,7 +167,7 @@ def remove_pruning(model: nn.Module):
     -------
     None
     """
-    for name, layer in model.named_modules():
+    for _name, layer in model.named_modules():
         if isinstance(layer, (nn.Conv2d, nn.Linear)):
             try:
                 prune.remove(layer, "weight")
@@ -189,7 +187,7 @@ class MaskedAdam(torch.optim.Adam):
         Additional Adam optimizer keyword arguments.
     """
 
-    def __init__(self, params: List[float], **kwargs):
+    def __init__(self, params: list[float], **kwargs):
         """
         Initialize the masked Adam optimizer.
 

@@ -44,9 +44,7 @@ class Contractable:
             if global_bs is not None:
                 tensor = tensor.unsqueeze(0).expand([global_bs] + shape)
             else:
-                raise RuntimeError(
-                    "No batch size given and no previous " "batch size set"
-                )
+                raise RuntimeError("No batch size given and no previous batch size set")
             if bond_str[0] != "b":
                 bond_str = "b" + bond_str
 
@@ -106,7 +104,7 @@ class Contractable:
         for i, bs in enumerate(bond_strs):
             assert bs[0] == "b"
             assert len(set(bs)) == len(bs)
-            assert all([c in lowercases for c in bs])
+            assert all(c in lowercases for c in bs)
             assert (i == 0 and "r" in bs) or (i == 1 and "l" in bs)
 
         # Get used and free characters
@@ -178,7 +176,7 @@ class ContractableList(Contractable):
 
     def __init__(self, contractable_list):
         # Check that input list is nonempty and has contractables as entries
-        if not isinstance(contractable_list, list) or contractable_list is []:
+        if not isinstance(contractable_list, list) or contractable_list == []:
             raise ValueError("Input to ContractableList must be nonempty list")
         for i, item in enumerate(contractable_list):
             if not isinstance(item, Contractable):
@@ -274,7 +272,7 @@ class MatRegion(Contractable):
         mat_list = [mat.squeeze(1) for mat in torch.chunk(mats, num_mats, 1)]
 
         # Do the repeated matrix-vector multiplications in the proper order
-        for i, mat in enumerate(mat_list[:: (1 if rmul else -1)], 1):
+        for _i, mat in enumerate(mat_list[:: (1 if rmul else -1)], 1):
             if rmul:
                 vec = torch.bmm(vec, mat)
             else:
@@ -432,7 +430,7 @@ class Scalar(Contractable):
     def __init__(self, scalar):
         # Add dummy dimension if we have a torch scalar
         shape = list(scalar.shape)
-        if shape is []:
+        if shape == []:
             scalar = scalar.view([1])
             shape = [1]
 

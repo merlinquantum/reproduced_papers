@@ -56,8 +56,9 @@ def get_circuit(m: int, type: str = "MZI"):
     elif type == "BS_random_PS":
         return GenericInterferometer(
             m,
-            lambda i: BS.Ry(theta=-2 * P(f"phi_{i}"))
-            // PS(phi=2 * np.pi * random.random()),
+            lambda i: (
+                BS.Ry(theta=-2 * P(f"phi_{i}")) // PS(phi=2 * np.pi * random.random())
+            ),
             shape=InterferometerShape.TRIANGLE,
         )
     elif type == "paper_6modes":
@@ -541,6 +542,7 @@ class QDense(AQCNNLayer):
         self._slos_graph = build_slos_graph(
             m=max(self.m),
             n_photons=2,
+            computation_space=ComputationSpace.FOCK,
             device=self.device,
         )
         self._slos_graph.__class__.compute_amplitudes = compute_amplitudes

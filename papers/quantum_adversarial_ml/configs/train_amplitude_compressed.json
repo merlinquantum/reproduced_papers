@@ -1,0 +1,43 @@
+{
+  "description": "Train quantum classifier with AMPLITUDE encoding + classical compression",
+  "seed": 42,
+  "experiment": "mnist",
+  "device": "auto",
+  "dataset": {
+    "digits": [
+      1,
+      9
+    ],
+    "image_size": 16,
+    "normalize": true,
+    "root": "data",
+    "download": true,
+    "batch_size": 256
+  },
+  "model": {
+    "type": "amplitude_quantum",
+    "input_dim": 256,
+    "n_outputs": 2,
+    "hidden_dims": [
+      128,
+      64
+    ],
+    "n_modes": 12,
+    "n_photons": 2,
+    "n_layers": 2,
+    "computation_space": "unbunched"
+  },
+  "training": {
+    "epochs": 100,
+    "batch_size": 256,
+    "learning_rate": 0.005,
+    "optimizer": "adam"
+  },
+  "options": {
+    "save_model": true,
+    "run_attack": false
+  },
+  "logging": {
+    "level": "info"
+  }
+}

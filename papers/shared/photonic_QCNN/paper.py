@@ -4,18 +4,22 @@ from __future__ import annotations
 
 import pickle
 import random
-from pathlib import Path
 import sys
+from pathlib import Path
 
 import numpy as np
 import pennylane as qml
 from sklearn.datasets import load_digits
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+try:
+    from runtime_lib.data_paths import paper_data_dir
+except ModuleNotFoundError:
+    REPO_ROOT = Path(__file__).resolve().parents[2]
+    if str(REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_ROOT))
+    from runtime_lib.data_paths import paper_data_dir
 
-from runtime_lib.data_paths import paper_data_dir
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 SHARED_DATA_DIR = paper_data_dir("photonic_QCNN")
 LEGACY_DATA_DIR = REPO_ROOT / "photonic_QCNN" / "data"
@@ -37,7 +41,9 @@ def _resolve_data_file(filename: str) -> Path:
     fallback = _legacy_dir() / filename
     if fallback.exists():
         return fallback
-    raise FileNotFoundError(f"Dataset asset '{filename}' not found in shared or legacy data directories")
+    raise FileNotFoundError(
+        f"Dataset asset '{filename}' not found in shared or legacy data directories"
+    )
 
 
 def get_bas():

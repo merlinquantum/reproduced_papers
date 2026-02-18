@@ -5,36 +5,49 @@ This module contains functions to run experiments evaluating the importance
 of the quantum layer in the Quantum Train algorithm.
 """
 
+import json
 import sys
+import time
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO_ROOT))
-
-import os
-import time
-import torch.nn as nn
 import numpy as np
 import torch
-from torch.utils.data import DataLoader
-from typing import List
-import torch.optim as optim
-import json
-from papers.DQNN.lib.photonic_qt_utils import (
-    create_boson_samplers,
-    calculate_qubits,
-    probs_to_weights,
-    generate_qubit_states_torch,
-)
-from papers.DQNN.lib.model import (
-    PhotonicQuantumTrain,
-    train_quantum_model,
-    evaluate_model,
-)
-from papers.DQNN.utils.utils import plot_ablation_exp, create_datasets
+import torch.nn as nn
 import torch.nn.functional as F
+import torch.optim as optim
+from torch.utils.data import DataLoader
 
-from papers.DQNN.lib.torchmps import MPS
+try:
+    from papers.DQNN.lib.model import (
+        PhotonicQuantumTrain,
+        evaluate_model,
+        train_quantum_model,
+    )
+    from papers.DQNN.lib.photonic_qt_utils import (
+        calculate_qubits,
+        create_boson_samplers,
+        generate_qubit_states_torch,
+        probs_to_weights,
+    )
+    from papers.DQNN.lib.torchmps import MPS
+    from papers.DQNN.utils.utils import create_datasets, plot_ablation_exp
+except ModuleNotFoundError:
+    REPO_ROOT = Path(__file__).resolve().parents[3]
+    if str(REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_ROOT))
+    from papers.DQNN.lib.model import (
+        PhotonicQuantumTrain,
+        evaluate_model,
+        train_quantum_model,
+    )
+    from papers.DQNN.lib.photonic_qt_utils import (
+        calculate_qubits,
+        create_boson_samplers,
+        generate_qubit_states_torch,
+        probs_to_weights,
+    )
+    from papers.DQNN.lib.torchmps import MPS
+    from papers.DQNN.utils.utils import create_datasets, plot_ablation_exp
 
 device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
 
@@ -210,7 +223,7 @@ def evaluate_ab_model(
 
 
 def run_ablation_exp(
-    bond_dimensions_to_test: List[int] = np.arange(2, 17),
+    bond_dimensions_to_test: list[int] = np.arange(2, 17),
     num_training_rounds: int = 2,
     num_epochs: int = 5,
     qu_train_with_cobyla: bool = False,

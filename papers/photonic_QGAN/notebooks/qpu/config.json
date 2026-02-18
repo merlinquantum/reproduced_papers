@@ -1,0 +1,1 @@
+{"noise_dim": 1, "arch": ["var", "var", "enc[2]", "var", "var"], "input_state": [0, 1, 0, 1, 0], "gen_count": 4, "pnr": false}

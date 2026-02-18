@@ -5,23 +5,21 @@ This module defines the quantum train model, along with training and evaluation
 helpers used by the experiment runners.
 """
 
+import time
+
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
-from torch.utils.data import DataLoader
-import numpy as np
-import time
-import sys
-import os
 from scipy.optimize import minimize
+from torch.utils.data import DataLoader
+
+from papers.DQNN.lib.boson_sampler import BosonSampler
 from papers.DQNN.lib.photonic_qt_utils import (
     generate_qubit_states_torch,
     probs_to_weights,
 )
-from papers.DQNN.lib.boson_sampler import BosonSampler
-from typing import List, Tuple
-
 from papers.DQNN.lib.torchmps import MPS
 
 device = torch.device("cuda:0") if torch.cuda.is_available() else torch.device("cpu")
@@ -60,7 +58,7 @@ class PhotonicQuantumTrain(nn.Module):
         bs_1: BosonSampler,
         bs_2: BosonSampler,
         n_qubit: int,
-        nw_list_normal: List[float],
+        nw_list_normal: list[float],
     ):
         """
         Convert quantum-layer probabilities into a CNN-compatible state dict.
@@ -121,7 +119,7 @@ class PhotonicQuantumTrain(nn.Module):
         bs_1: BosonSampler,
         bs_2: BosonSampler,
         n_qubit: int,
-        nw_list_normal: List[float],
+        nw_list_normal: list[float],
     ) -> torch.Tensor:
         """
         Run the forward pass by mapping quantum probabilities to CNN weights.
@@ -174,12 +172,12 @@ def train_quantum_model(
     bs_1: BosonSampler,
     bs_2: BosonSampler,
     n_qubit: int,
-    nw_list_normal: List[float],
+    nw_list_normal: list[float],
     num_training_rounds: int,
     num_epochs: int,
     num_qnn_train_step: int = 12,
     qu_train_with_cobyla: bool = False,
-) -> Tuple[PhotonicQuantumTrain, List[float], List[float], List[float]]:
+) -> tuple[PhotonicQuantumTrain, list[float], list[float], list[float]]:
     """
     Train the quantum train model and quantum layer parameters.
 
@@ -305,13 +303,15 @@ def train_quantum_model(
             global qnn_train_step
             qnn_train_step = 0
 
-            def qnn_minimize_loss(qnn_parameters_=None):
+            def qnn_minimize_loss(
+                qnn_parameters_=None, _images=images, _labels=labels, _round=round_
+            ):  # noqa: B023
                 global qnn_train_step
 
                 correct = 0
                 total = 0
 
-                images_gpu, labels_gpu = images.to(device), labels.to(device)
+                images_gpu, labels_gpu = _images.to(device), _labels.to(device)
 
                 bs_1.set_params(qnn_parameters_[: bs_1.num_effective_params])
                 bs_2.set_params(qnn_parameters_[bs_1.num_effective_params :])
@@ -333,7 +333,7 @@ def train_quantum_model(
                 qnn_train_step += 1
                 if qnn_train_step % 100 == 0:
                     print(
-                        f"Training round [{round_ + 1}/{num_training_rounds}], qnn_train_step: [{qnn_train_step}/{1000}], loss: {loss_val}, accuracy: {acc} %"
+                        f"Training round [{_round + 1}/{num_training_rounds}], qnn_train_step: [{qnn_train_step}/{1000}], loss: {loss_val}, accuracy: {acc} %"
                     )
 
                 return loss_val
@@ -427,9 +427,9 @@ def evaluate_model(
     bs_1: BosonSampler,
     bs_2: BosonSampler,
     n_qubit: int,
-    nw_list_normal: List[float],
-    qnn_parameters: List[float] = None,
-) -> Tuple[float, float, float]:
+    nw_list_normal: list[float],
+    qnn_parameters: list[float] = None,
+) -> tuple[float, float, float]:
     """
     Evaluate the model on train and validation sets.
 

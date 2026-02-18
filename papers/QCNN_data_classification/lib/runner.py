@@ -1,3 +1,4 @@
+# ruff: noqa: I001
 from __future__ import annotations
 
 import json
@@ -10,9 +11,12 @@ from typing import Any, Callable
 import numpy as np
 import torch.nn as nn
 from lib.data import make_pca
-from .models import QConvModel, SingleGI, build_quantum_kernels
 from utils.circuit import required_input_params
 from utils.training import train_once
+import matplotlib
+import matplotlib.pyplot as plt
+
+from .models import QConvModel, SingleGI, build_quantum_kernels
 
 
 def _angle_factor(scale: str) -> float:
@@ -121,16 +125,8 @@ def _prepare_models(
 def _plot_training_figures(
     run_dir: Path, variant_histories: dict[str, list[dict[str, list[float]]]]
 ) -> None:
-    try:
-        import matplotlib
 
-        matplotlib.use("Agg")
-        import matplotlib.pyplot as plt
-    except Exception as exc:  # pragma: no cover - matplotlib optional
-        logging.warning(
-            "[figures] Could not import matplotlib (%s); skipping figure export.", exc
-        )
-        return
+    matplotlib.use("Agg")
 
     def _save_metric(metric_key: str, ylabel: str, title: str, filename: Path) -> None:
         metric_curves: dict[str, list[list[float]]] = {}

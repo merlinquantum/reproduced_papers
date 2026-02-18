@@ -1,0 +1,174 @@
+{
+  "description": "Photonic QGAN reproduction runner",
+  "arguments": [
+    {
+      "flags": ["--mode"],
+      "help": "Run mode",
+      "type": "str",
+      "choices": ["smoke", "digits", "ideal"],
+      "default": null,
+      "apply": { "kind": "config_path", "path": "run.mode" }
+    },
+    {
+      "flags": ["--runs"],
+      "help": "Number of runs per configuration",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "run.runs" }
+    },
+    {
+      "flags": ["--progress"],
+      "help": "Show tqdm progress bars during training",
+      "action": "store_true",
+      "default": false,
+      "apply": { "kind": "config_path", "path": "run.progress", "value": true }
+    },
+    {
+      "flags": ["--log-every"],
+      "help": "Log training losses every N iterations",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "run.log_every" }
+    },
+    {
+      "flags": ["--write-to-disk"],
+      "help": "Persist training outputs under the run directory",
+      "action": "store_true",
+      "default": false,
+      "apply": { "kind": "config_path", "path": "run.write_to_disk", "value": true }
+    },
+    {
+      "flags": ["--csv-path"],
+      "help": "CSV path for the optdigits dataset",
+      "type": "path",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "dataset.csv_path" }
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Batch size",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "model.batch_size" }
+    },
+    {
+      "flags": ["--digit-start"],
+      "help": "Starting digit label (inclusive) for digits mode",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "digits.digit_start" }
+    },
+    {
+      "flags": ["--digit-end"],
+      "help": "Ending digit label (inclusive) for digits mode",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "digits.digit_end" }
+    },
+    {
+      "flags": ["--digits"],
+      "help": "Comma-separated digit labels for digits mode",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "digits.digits" }
+    },
+    {
+      "flags": ["--digits-spsa-iters"],
+      "help": "SPSA iterations for digits mode",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "training.digits.spsa_iter_num" }
+    },
+    {
+      "flags": ["--digits-opt-iters"],
+      "help": "Optimizer iterations for digits mode",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "training.digits.opt_iter_num" }
+    },
+    {
+      "flags": ["--digits-lrd"],
+      "help": "Discriminator learning rate for digits mode",
+      "type": "float",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "training.digits.lrD" }
+    },
+    {
+      "flags": ["--digits-spsa-a"],
+      "help": "SPSA a parameter for digits mode",
+      "type": "float",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "training.digits.spsa_a" }
+    },
+    {
+      "flags": ["--digits-spsa-k"],
+      "help": "SPSA k parameter for digits mode",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "training.digits.spsa_k" }
+    },
+    {
+      "flags": ["--digits-arch"],
+      "help": "Generator architecture list (JSON array or comma-separated)",
+      "type": "str",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "digits.arch" }
+    },
+    {
+      "flags": ["--digits-noise-dim"],
+      "help": "Noise dimension for digits mode",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "digits.noise_dim" }
+    },
+    {
+      "flags": ["--digits-input-state"],
+      "help": "Input state list for digits mode (comma-separated ints)",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "digits.input_state" }
+    },
+    {
+      "flags": ["--digits-gen-count"],
+      "help": "Generator count for digits mode",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "digits.gen_count" }
+    },
+    {
+      "flags": ["--digits-pnr"],
+      "help": "Enable PNR detectors for digits mode",
+      "type": "bool",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "digits.pnr" }
+    },
+    {
+      "flags": ["--ideal-spsa-iters"],
+      "help": "SPSA iterations for ideal mode",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "training.ideal.spsa_iter_num" }
+    },
+    {
+      "flags": ["--ideal-opt-iters"],
+      "help": "Optimizer iterations for ideal mode",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "training.ideal.opt_iter_num" }
+    },
+    {
+      "flags": ["--ideal-lrd"],
+      "help": "Discriminator learning rate for ideal mode",
+      "type": "float",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "training.ideal.lrD" }
+    },
+    {
+      "flags": ["--ideal-config-grid"],
+      "help": "JSON file path for the ideal config grid",
+      "type": "path",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "ideal.config_grid_path" }
+    }
+  ]
+}

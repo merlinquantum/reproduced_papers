@@ -7,7 +7,6 @@ from .cli import (
     register_cli_type,
 )
 from .config import deep_update, load_config
-from .logging_utils import configure_logging
 from .data_paths import (
     DEFAULT_DATA_DIRNAME,
     ENV_DATA_ROOT,
@@ -15,6 +14,7 @@ from .data_paths import (
     paper_data_dir,
     resolve_data_root,
 )
+from .logging_utils import configure_logging
 from .runtime import run_from_project
 
 __all__ = [

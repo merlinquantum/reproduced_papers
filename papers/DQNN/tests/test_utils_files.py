@@ -1,18 +1,26 @@
 import sys
 from pathlib import Path
 
-PROJECT_ROOT = Path(__file__).resolve().parents[1]
-REPO_ROOT = Path(__file__).resolve().parents[3]
-sys.path.insert(0, str(REPO_ROOT))
-sys.path.insert(0, str(PROJECT_ROOT))
-
 import numpy as np
 import torch
-from papers.DQNN.lib.photonic_qt_utils import (
-    generate_qubit_states_torch,
-    probs_to_weights,
-)
-from papers.DQNN.lib.classical_utils import CNNModel
+
+try:
+    from papers.DQNN.lib.classical_utils import CNNModel
+    from papers.DQNN.lib.photonic_qt_utils import (
+        generate_qubit_states_torch,
+        probs_to_weights,
+    )
+except ModuleNotFoundError:
+    PROJECT_ROOT = Path(__file__).resolve().parents[1]
+    REPO_ROOT = Path(__file__).resolve().parents[3]
+    for path in (REPO_ROOT, PROJECT_ROOT):
+        if str(path) not in sys.path:
+            sys.path.insert(0, str(path))
+    from papers.DQNN.lib.classical_utils import CNNModel
+    from papers.DQNN.lib.photonic_qt_utils import (
+        generate_qubit_states_torch,
+        probs_to_weights,
+    )
 
 
 def test_generate_qubit_states_torch():

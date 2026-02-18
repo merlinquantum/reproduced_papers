@@ -1,0 +1,46 @@
+{
+  "description": "Stronger vanilla RNN baseline on the airline-passengers dataset (shared data/time_series)",
+  "dataset": {
+    "name": "airline_passengers",
+    "path": "../time_series/airline-passengers.csv",
+    "kaggle_dataset": null,
+    "preprocess": null,
+    "time_column": "Month",
+    "target_column": "Passengers",
+    "feature_columns": ["Passengers"],
+    "sequence_length": 24,
+    "prediction_horizon": 1,
+    "train_ratio": 0.7,
+    "val_ratio": 0.15,
+    "batch_size": 16,
+    "shuffle": true
+  },
+  "model": {
+    "params": {
+      "cell_type": "rnn",
+      "hidden_dim": 128,
+      "layers": 2,
+      "dropout": 0.2,
+      "input_dropout": 0.0,
+      "bidirectional": false
+    }
+  },
+  "training": {
+    "epochs": 200,
+    "optimizer": "adamw",
+    "lr": 0.001,
+    "weight_decay": 0.0001,
+    "clip_grad_norm": 1.0,
+    "scheduler": {
+      "name": "plateau",
+      "factor": 0.5,
+      "patience": 20,
+      "min_lr": 1e-5
+    },
+    "early_stopping": {
+      "enabled": true,
+      "patience": 40,
+      "min_delta": 0.0
+    }
+  }
+}

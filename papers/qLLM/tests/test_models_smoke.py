@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 
 import pytest
-
 from common import load_project_defaults
 
 
@@ -75,7 +74,9 @@ def test_torchquantum_model_smoke(tmp_path):
 
     _write_embeddings(Path(tmp_path) / "embeddings", dim=4)
     cfg = _build_cfg(tmp_path, "torchquantum")
-    cfg["model"]["encoder_configs"] = [{"n_qubits": 2, "n_layers": 1, "connectivity": 1}]
+    cfg["model"]["encoder_configs"] = [
+        {"n_qubits": 2, "n_layers": 1, "connectivity": 1}
+    ]
     cfg["model"]["pqc_config"] = [
         {"n_qubits": 2, "n_main_layers": 1, "connectivity": 1, "n_reuploading": 1}
     ]

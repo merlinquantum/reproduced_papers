@@ -1,0 +1,48 @@
+{
+  "description": "Quantum Adversarial ML - example",
+  "seed": 42,
+  "experiment": "mnist",
+  "device": "auto",
+  "dataset": {
+    "digits": [
+      1,
+      9
+    ],
+    "image_size": 16,
+    "normalize": true,
+    "root": "data",
+    "download": true,
+    "batch_size": 32,
+    "train_samples": 100,
+    "test_samples": 30
+  },
+  "model": {
+    "type": "amplitude_quantum",
+    "hidden_dims": [
+      16
+    ],
+    "n_modes": 4,
+    "n_photons": 2,
+    "n_layers": 2
+  },
+  "training": {
+    "epochs": 1,
+    "batch_size": 32,
+    "learning_rate": 0.01,
+    "optimizer": "adam"
+  },
+  "attack": {
+    "method": "fgsm",
+    "epsilon": 0.1,
+    "num_iter": 1,
+    "max_samples": 30
+  },
+  "options": {
+    "save_model": false,
+    "run_attack": true,
+    "evaluate_robustness": false
+  },
+  "logging": {
+    "level": "info"
+  }
+}
