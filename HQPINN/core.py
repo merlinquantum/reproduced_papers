@@ -153,7 +153,7 @@ def train_oscillator_pinn(
             stop = datetime.now()
             elapsed = (stop - start).total_seconds()
 
-            print(f"Epoch {epoch:4d} | Elapsed: {elapsed:.2f}s ")
+            print(f"Epoch {epoch:4d} | Elapsed: {elapsed:.2f}seconds")
             print(
                 f"  Loss={loss.item():.4e} | "
                 f"IC_u={lic_u:.4e} | IC_du={lic_du:.4e} | PDE={lf:.4e}"
@@ -189,6 +189,9 @@ def train_oscillator_pinn(
         )
         writer.writerows(rows)
 
+    stop = datetime.now()
+    elapsed = (stop - start).total_seconds()
+
     # -------------------------------------------------------
     # Final PDF (only the prediction vs exact plot)
     # -------------------------------------------------------
@@ -205,7 +208,7 @@ def train_oscillator_pinn(
         ax.legend()
         ax.set_xlabel("t")
         ax.set_ylabel("u(t)")
-        ax.set_title("Final Prediction vs Exact")
+        ax.set_title(f"{elapsed:.2f}s - {n_epochs - 1} epochs")
         ax.grid(True)
         fig.tight_layout()
         pdf.savefig(fig, bbox_inches="tight")
