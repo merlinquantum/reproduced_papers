@@ -10,13 +10,17 @@ from merlin import LexGrouping, QuantumLayer
 import perceval as pcvl
 from perceval import PS, BS
 
+from math import comb
+
+from config import N_QUBITS, N_LAYERS, DTYPE
+
 
 # ============================================================
 #  Perceval building blocks
 # ============================================================
 
 
-def entangling_chain_all_modes(n_qubits: int) -> pcvl.Circuit:
+def entangling_chain_all_modes() -> pcvl.Circuit:
     """
     Linear (non-circular) entangling chain across all 2 * n_qubits modes.
 
@@ -25,14 +29,14 @@ def entangling_chain_all_modes(n_qubits: int) -> pcvl.Circuit:
     - n_modes = 2 * n_qubits (dual-rail encoding)
     - Apply BS.H between (m, m+1) for m = 0 .. n_modes - 2
     """
-    n_modes = 2 * n_qubits
+    n_modes = 2 * N_QUBITS
     circ = pcvl.Circuit(n_modes)
     for m_idx in range(n_modes - 1):
-        circ // (m_idx, BS.H()) # type: ignore
+        circ // (m_idx, BS.H())  # type: ignore
     return circ
 
 
-def ansatz_layer(prefix: str, n_qubits: int) -> pcvl.Circuit:
+def ansatz_layer(prefix: str) -> pcvl.Circuit:
     """
     Perceval implementation of an ansatz layer in dual-rail encoding.
 
@@ -47,8 +51,8 @@ def ansatz_layer(prefix: str, n_qubits: int) -> pcvl.Circuit:
       theta_{prefix}_{i}_1 : "RX-like" rotation
       theta_{prefix}_{i}_2 : "RZ-like" rotation
     """
-    circ = pcvl.Circuit(2 * n_qubits)
-    for i in range(n_qubits):
+    circ = pcvl.Circuit(2 * N_QUBITS)
+    for i in range(N_QUBITS):
         m0 = 2 * i
         m1 = 2 * i + 1
 
@@ -56,14 +60,14 @@ def ansatz_layer(prefix: str, n_qubits: int) -> pcvl.Circuit:
         theta_x = pcvl.P(f"theta_{prefix}_{i}_1")
         theta_z2 = pcvl.P(f"theta_{prefix}_{i}_2")
 
-        circ // (m1, PS(theta_z1)) # type: ignore
-        circ // (m0, BS.Rx(theta_x)) # type: ignore
-        circ // (m1, PS(theta_z2)) # type: ignore
+        circ // (m1, PS(theta_z1))  # type: ignore
+        circ // (m0, BS.Rx(theta_x))  # type: ignore
+        circ // (m1, PS(theta_z2))  # type: ignore
 
-    return circ // entangling_chain_all_modes(n_qubits)
+    return circ // entangling_chain_all_modes()
 
 
-def feature_layer(prefix: str, n_qubits: int) -> pcvl.Circuit:
+def feature_layer(prefix: str) -> pcvl.Circuit:
     """
     Feature map layer implemented as BS.Ry rotations.
 
@@ -72,60 +76,105 @@ def feature_layer(prefix: str, n_qubits: int) -> pcvl.Circuit:
     For each logical qubit i, we introduce:
       phi_{prefix}_{i}
     """
-    circ = pcvl.Circuit(2 * n_qubits)
-    for i in range(n_qubits):
+    circ = pcvl.Circuit(2 * N_QUBITS)
+    for i in range(N_QUBITS):
         phi = pcvl.P(f"phi_{prefix}_{i}")
-        circ // (2 * i, BS.Ry(phi)) # type: ignore
+        circ // (2 * i, BS.Ry(phi))  # type: ignore
     return circ
 
 
-def build_merlin_circuit(n_qubits: int) -> pcvl.Circuit:
+def build_merlin_circuit() -> pcvl.Circuit:
     """
-    Full photonic circuit:
+    Pattern:
+        ansatz("layer0")
+        feature("layer1")
+        ansatz("layer2")
+        feature("layer3")
+        ...
+        ansatz("layer{2*(N_LAYERS-1)}")
+    """
+    circ = pcvl.Circuit(2 * N_QUBITS)
 
-        ansatz("layer0") → feature("layer1") →
-        ansatz("layer2") → feature("layer3") →
-        ansatz("layer4")
-    """
-    circ = pcvl.Circuit(2 * n_qubits)
-    circ = circ // ansatz_layer("layer0", n_qubits)
-    circ = circ // feature_layer("layer1", n_qubits)
-    circ = circ // ansatz_layer("layer2", n_qubits)
-    circ = circ // feature_layer("layer3", n_qubits)
-    circ = circ // ansatz_layer("layer4", n_qubits)
+    for l in range(N_LAYERS):
+        # Ansatz layer with even prefix: layer0, layer2, ...
+        circ = circ // ansatz_layer(f"layer{2 * l}")
+
+        # Feature layer between ansatz layers, except after the last ansatz
+        if l < N_LAYERS - 1:
+            circ = circ // feature_layer(f"layer{2 * l + 1}")
+
     return circ
 
 
 # ============================================================
-#  QuantumLayer factory
+#  QuantumLayers factory
 # ============================================================
 
+# Dual-rail: 2 modes per logical qubit, 1 photon per qubit.
+n_modes = 2 * N_QUBITS
+input_state = [1, 0] * N_QUBITS
+n_photons = sum(input_state)
 
-def make_merlin_qlayer(
-    n_qubits: int,
-    dtype: torch.dtype = torch.float32,
-) -> QuantumLayer:
+# Fock space dimension for n_photons over n_modes modes.
+fock_dim = comb(n_modes + n_photons - 1, n_photons)
+
+# Number of logical output features used by the classical readout.
+group_dim = 2 * N_QUBITS
+
+# Grouping from Fock basis to logical features.
+grouping = LexGrouping(fock_dim, group_dim)
+
+
+def make_perceval_qlayer() -> QuantumLayer:
     """
     Build one QuantumLayer for the given MerLin circuit.
 
-    Important
-    ---------
+    Grouping is handled inside MerLin via the MeasurementStrategy.
     Call this function twice if you need two independent branches.
     """
-    circuit = build_merlin_circuit(n_qubits)
-    input_size = 2 * n_qubits
+    circuit = build_merlin_circuit()
 
     qlayer = QuantumLayer(
-        input_size=input_size,
+        input_size=n_modes,
         circuit=circuit,
-        input_state=[1, 0, 1, 0, 1, 0],  # dual-rail |1> for each logical qubit
+        input_state=input_state,
         trainable_parameters=["theta"],
         input_parameters=["phi"],
         measurement_strategy=ML.MeasurementStrategy.probs(
-            computation_space=ML.ComputationSpace.FOCK
+            computation_space=ML.ComputationSpace.FOCK, grouping=grouping
         ),
-        dtype=dtype,
+        dtype=DTYPE,
     )
+    return qlayer
+
+
+def make_interf_qlayer() -> QuantumLayer:
+    """
+    Build one QuantumLayer for the given MerLin circuit.
+
+    Grouping is handled inside MerLin via the MeasurementStrategy.
+    Call this function twice if you need two independent branches.
+    """
+
+    # Build photonic circuit with interferometers and angle encoding.
+    builder = ML.CircuitBuilder(n_modes=n_modes)
+    builder.add_entangling_layer(trainable=True, name="layer0")
+    encoding_modes = list(range(0, n_modes, 2))
+    builder.add_angle_encoding(modes=encoding_modes, name="phi1_")
+    builder.add_entangling_layer(trainable=True, name="layer2")
+    builder.add_angle_encoding(modes=encoding_modes, name="phi3_")
+    builder.add_entangling_layer(trainable=True, name="layer4")
+
+    qlayer = QuantumLayer(
+        builder=builder,
+        input_state=input_state,
+        measurement_strategy=ML.MeasurementStrategy.probs(
+            computation_space=ML.ComputationSpace.FOCK,
+            grouping=grouping,
+        ),
+        dtype=DTYPE,
+    )
+
     return qlayer
 
 
@@ -134,7 +183,7 @@ def make_merlin_qlayer(
 # ============================================================
 
 
-class MerlinQuantumBranch(nn.Module):
+class BranchMerlin(nn.Module):
     """
     Quantum branch based on a MerLin QuantumLayer.
 
@@ -143,16 +192,20 @@ class MerlinQuantumBranch(nn.Module):
     reused for the two feature layers, giving a 6-dimensional input.
     """
 
-    def __init__(self, qlayer: QuantumLayer, n_qubits: int) -> None:
+    def __init__(self, qlayer: QuantumLayer) -> None:
         super().__init__()
         self.qlayer = qlayer
-        self.n_qubits = n_qubits
 
-        self.group_dim = 2 * n_qubits
-        self.group = LexGrouping(self.qlayer.output_size, self.group_dim)
-        self.readout = nn.Linear(self.group_dim, 1)
+        # QuantumLayer already outputs grouped features of this size.
+        self.group_dim = 2 * N_QUBITS
+        self.readout = nn.Linear(self.group_dim, 1, dtype=DTYPE)
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
+
+        # Enforce global DTYPE
+        t = t.to(DTYPE)
+
+        # Ensure shape (N,) before encoding.
         if t.dim() == 2:
             t = t.squeeze(-1)
 
@@ -161,21 +214,16 @@ class MerlinQuantumBranch(nn.Module):
         phi1 = 2.0 * scale * t
         phi2 = 3.0 * scale * t
 
-        # Two feature layers → concatenate [φ0, φ1, φ2] twice
-        X = torch.stack(
-            [
-                phi0,
-                phi1,
-                phi2,  # layer1
-                phi0,
-                phi1,
-                phi2,  # layer3
-            ],
-            dim=1,
-        )
+        phi_single = torch.stack([phi0, phi1, phi2], dim=1)
+        n_feature_layers = max(N_LAYERS - 1, 0)
 
-        q_out = self.qlayer(X)  # (N, output_size)
-        feat = self.group(q_out)  # (N, 2 * n_qubits)
-        u = self.readout(feat)  # (N, 1)
+        if n_feature_layers > 0:
+            X = torch.cat([phi_single] * n_feature_layers, dim=1).to(DTYPE)
+        else:
+            X = torch.empty(t.shape[0], 0, dtype=DTYPE, device=t.device)
+
+        # QuantumLayer output is already grouped: (N, 2 * n_qubits).
+        q_out = self.qlayer(X).to(DTYPE)  # (N, output_size)
+        u = self.readout(q_out)  # (N, 1)
 
         return u

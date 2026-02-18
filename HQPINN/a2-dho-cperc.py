@@ -1,5 +1,5 @@
-# a2-dho-cp.py
-# Classical–PennyLane PINN with a quantum branch and a classical MLP branch
+# a2-dho-cperc.py
+# Classical–Perceval PINN with a quantum branch using MerLin QuantumLayer and a classical MLP branch
 
 import numpy as np
 import torch
@@ -8,21 +8,27 @@ import torch.nn as nn
 from config import N_EPOCHS, PLOT_EVERY, LR
 from utils import make_time_grid, make_optimizer
 from core import train_oscillator_pinn
-from layer_pennylane import make_quantum_block, BranchPennylane
+from layer_merlin import make_perceval_qlayer, BranchMerlin
 from layer_classical import BranchPyTorch
 
 
-class CQ_PINN(nn.Module):
-    """
-    Hybrid Classical–Quantum PINN:
+# ============================================================
+#  Hybrid CM_PINN model
+# ============================================================
 
-        u(t) = u_q(t) + u_c(t)
+
+class CM_PINN(nn.Module):
+    """
+    Hybrid Classical–MerLin PINN:
+
+        u(t) = u_m(t) + u_c(t)
+
+    where u_m(t) is the MerLin quantum branch and u_c(t) is the classical MLP.
     """
 
     def __init__(self) -> None:
         super().__init__()
-        qblock = make_quantum_block()
-        self.branch_q = BranchPennylane(qblock)
+        self.branch_q = BranchMerlin(make_perceval_qlayer())
         self.branch_c = BranchPyTorch()
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
@@ -30,11 +36,10 @@ class CQ_PINN(nn.Module):
 
 
 def main():
-
     torch.manual_seed(0)
     np.random.seed(0)
 
-    model = CQ_PINN()
+    model = CM_PINN()
 
     train_oscillator_pinn(
         model=model,
@@ -43,7 +48,7 @@ def main():
         n_epochs=N_EPOCHS,
         plot_every=PLOT_EVERY,
         out_dir="HQPINN/results",
-        model_label="classical-pennylane",
+        model_label="classical-perceval",
     )
 
 

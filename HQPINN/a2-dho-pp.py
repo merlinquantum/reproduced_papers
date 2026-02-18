@@ -1,49 +1,13 @@
-# run_qq_oscillator.py
-# Quantum–Quantum PINN using PennyLane + oscillator_core + shared quantum branch
+# a2-dho-pp.py
+# PennyLane–PennyLane PINN with two parallel quantum branches
 
-import numpy as np
 import torch
 import torch.nn as nn
-import pennylane as qml
-from pennylane import numpy as pnp
 
+from config import N_EPOCHS, PLOT_EVERY, LR
+from utils import make_time_grid, make_optimizer
 from core import train_oscillator_pinn
-from layer_pennylane import make_device, make_quantum_block, QuantumBranch
-
-# ============================================================
-#  Hyperparameters and quantum architecture
-# ============================================================
-
-lr = 0.05
-n_epochs = 2800
-plot_every = 100
-
-n_qubits = 3
-n_layers = 3
-dtype = torch.float32
-
-
-# ============================================================
-#  Training data: time samples t ∈ [0, 1]
-# ============================================================
-
-t_train = pnp.linspace(0.0, 1.0, 200) # type: ignore
-t_train_torch = torch.tensor(t_train, dtype=dtype).reshape(-1, 1)
-
-
-# ============================================================
-#  Quantum device and random seeds
-# ============================================================
-
-dev = make_device(n_qubits)
-
-torch.manual_seed(0)
-np.random.seed(0)
-
-
-# ============================================================
-#  QQ-PINN model (two quantum branches)
-# ============================================================
+from layer_pennylane import make_quantum_block, BranchPennylane
 
 
 class QQ_PINN(nn.Module):
@@ -55,33 +19,27 @@ class QQ_PINN(nn.Module):
 
     def __init__(self) -> None:
         super().__init__()
-        qblock = make_quantum_block(dev, n_qubits=n_qubits, n_layers=n_layers)
+        qblock = make_quantum_block()
 
         # Two distinct branches => two independent parameter sets
-        self.branch1 = QuantumBranch(qblock, n_qubits, n_layers, dtype=dtype)
-        self.branch2 = QuantumBranch(qblock, n_qubits, n_layers, dtype=dtype)
+        self.branch1 = BranchPennylane(qblock)
+        self.branch2 = BranchPennylane(qblock)
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
         return self.branch1(t) + self.branch2(t)
 
 
-# ============================================================
-#  Main: training via oscillator_core.train_oscillator_pinn
-# ============================================================
-
-
 def main():
     model = QQ_PINN()
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
     train_oscillator_pinn(
         model=model,
-        t_train=t_train_torch,
-        optimizer=optimizer,
-        n_epochs=n_epochs,
-        plot_every=plot_every,
+        t_train=make_time_grid(),
+        optimizer=make_optimizer(model, lr=LR),
+        n_epochs=N_EPOCHS,
+        plot_every=PLOT_EVERY,
         out_dir="HQPINN/results",
-        model_label="quantum-quantum",
+        model_label="pennylane-pennylane",
     )
 
 

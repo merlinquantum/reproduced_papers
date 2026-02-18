@@ -13,8 +13,9 @@ from layer_merlin import make_merlin_qlayer, MerlinQuantumBranch
 #  Hyperparameters and quantum architecture
 # ============================================================
 
+# Diverge with lr = 0.05
 lr = 0.002
-n_epochs = 2000
+n_epochs = 1801
 plot_every = 100
 
 n_qubits = 3

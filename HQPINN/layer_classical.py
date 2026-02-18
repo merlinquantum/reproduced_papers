@@ -3,8 +3,10 @@
 import torch
 import torch.nn as nn
 
+from config import DTYPE
 
-class MLP(nn.Module):
+
+class BranchPyTorch(nn.Module):
     """
     Simple feed-forward network used as a branch in the PINN.
 
@@ -12,31 +14,15 @@ class MLP(nn.Module):
         1 -> 16 -> 16 -> 1 with Tanh activations.
     """
 
-    def __init__(self, dtype: torch.dtype = torch.float32) -> None:
+    def __init__(self) -> None:
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(1, 16, dtype=dtype),
+            nn.Linear(1, 16, dtype=DTYPE),
             nn.Tanh(),
-            nn.Linear(16, 16, dtype=dtype),
+            nn.Linear(16, 16, dtype=DTYPE),
             nn.Tanh(),
-            nn.Linear(16, 1, dtype=dtype),
+            nn.Linear(16, 1, dtype=DTYPE),
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         return self.net(x)
-
-
-class CC_PINN(nn.Module):
-    """
-    Classical–Classical PINN with two parallel MLP branches:
-
-        u(t) = u_1(t) + u_2(t)
-    """
-
-    def __init__(self, dtype: torch.dtype = torch.float32) -> None:
-        super().__init__()
-        self.branch1 = MLP(dtype=dtype)
-        self.branch2 = MLP(dtype=dtype)
-
-    def forward(self, t: torch.Tensor) -> torch.Tensor:
-        return self.branch1(t) + self.branch2(t)

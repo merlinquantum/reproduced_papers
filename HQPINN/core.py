@@ -1,6 +1,7 @@
 # core.py
 
 import os
+import csv
 from datetime import datetime
 from typing import Tuple, Callable
 
@@ -13,37 +14,10 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
+from config import M, MU, K, LAMBDA1, LAMBDA2, DTYPE, DEVICE
+
 # Use non-interactive backend for batch PDF export
 matplotlib.use("Agg")
-
-
-# ============================================================
-#  Physical parameters and exact solution
-# ============================================================
-#
-#  Problem: 1D damped harmonic oscillator
-#  ODE:     m u''(t) + μ u'(t) + k u(t) = 0,   t ∈ (0, 1]
-#
-#  Regime: underdamped, because (μ/2)^2 < k
-#
-#  Define the damped angular frequency:
-#       ω = sqrt(k - (μ/2)^2)
-#
-#  For initial conditions:
-#       u(0)  = 1
-#       u'(0) = 0
-#
-#  the exact solution is:
-#       u_exact(t) = exp(-μ t / 2) * [cos(ω t) + (μ / (2 ω)) * sin(ω t)]
-#
-# Damped oscillator constants
-M = 1.0
-MU = 4.0
-K = 400.0
-
-# Loss weights
-LAMBDA1 = 1e-1
-LAMBDA2 = 1e-4
 
 
 def omega(mu: float = MU, k: float = K) -> float:
@@ -118,7 +92,7 @@ def oscillator_loss(
     f = m * d2u + mu * du + k * u
 
     # Initial conditions at t = 0
-    t0 = torch.zeros((1, 1), dtype=t.dtype, device=t.device).requires_grad_(True)
+    t0 = torch.zeros((1, 1), dtype=DTYPE, device=DEVICE).requires_grad_(True)
     u0 = model(t0)
     du0 = derivative(u0, t0)
 
@@ -152,103 +126,90 @@ def train_oscillator_pinn(
         [nn.Module, torch.Tensor], Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
     ] = oscillator_loss,
 ) -> None:
-    """
-    Generic training loop for the damped oscillator PINN.
 
-    Parameters
-    ----------
-    model : nn.Module
-    t_train : torch.Tensor
-    optimizer : torch.optim.Optimizer
-    n_epochs : int
-    plot_every : int
-    out_dir : str
-    model_label : str
-    lambda1, lambda2 : float
-    loss_fn : callable
-        Function computing (loss_ic_u, loss_ic_du, loss_f).
-    """
     os.makedirs(out_dir, exist_ok=True)
+
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    pdf_path = os.path.join(out_dir, f"HQPINN-A2-{model_label}_{timestamp}.pdf")
+    pdf_path = os.path.join(out_dir, f"a2-dho-{model_label}_{timestamp}.pdf")
+    csv_path = os.path.join(out_dir, f"a2-dho-{model_label}_{timestamp}.csv")
+
+    start = datetime.now()
+    rows = []
+
+    # -------------------------------------------------------
+    # Training loop
+    # -------------------------------------------------------
+    for epoch in range(n_epochs):
+
+        optimizer.zero_grad()
+        lic_u, lic_du, lf = loss_fn(model, t_train)
+        loss = lic_u + lambda1 * lic_du + lambda2 * lf
+
+        loss.backward()
+        optimizer.step()
+
+        if epoch % plot_every == 0:
+
+            stop = datetime.now()
+            elapsed = (stop - start).total_seconds()
+
+            print(f"Epoch {epoch:4d} | Elapsed: {elapsed:.2f}s ")
+            print(
+                f"  Loss={loss.item():.4e} | "
+                f"IC_u={lic_u:.4e} | IC_du={lic_du:.4e} | PDE={lf:.4e}"
+            )
+
+            # -------------------------------------------------------
+            # Append this epoch to CSV
+            # -------------------------------------------------------
+
+            # for ti, ui, dui, d2ui in zip(t_np, u_np, du_np, d2u_np):
+            rows.append(
+                [
+                    epoch,
+                    f"{elapsed:.2f}",
+                    f"{loss.item():.4e}",
+                    f"{lic_u:.4e}",
+                    f"{lic_du:.4e}",
+                    f"{lf:.4e}",
+                ]
+            )
+
+    with open(csv_path, "a", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(
+            [
+                "epoch",
+                "elapsed time (s)",
+                "Loss",
+                "IC_u",
+                "IC_du",
+                "PDE",
+            ]
+        )
+        writer.writerows(rows)
+
+    # -------------------------------------------------------
+    # Final PDF (only the prediction vs exact plot)
+    # -------------------------------------------------------
+    with torch.no_grad():
+        t_np = t_train.squeeze().cpu().numpy()
+        u_pred = model(t_train).cpu().numpy().flatten()
+        u_ex = u_exact(t_np)
 
     with PdfPages(pdf_path) as pdf:
-        for epoch in range(n_epochs):
 
-            optimizer.zero_grad()
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.plot(t_np, u_pred, label=f"PINN ({model_label})")
+        ax.plot(t_np, u_ex, "--", label="Exact")
+        ax.legend()
+        ax.set_xlabel("t")
+        ax.set_ylabel("u(t)")
+        ax.set_title("Final Prediction vs Exact")
+        ax.grid(True)
+        fig.tight_layout()
+        pdf.savefig(fig, bbox_inches="tight")
+        plt.close(fig)
 
-            lic_u, lic_du, lf = loss_fn(model, t_train)
-
-            # Total weighted loss
-            loss = lic_u + lambda1 * lic_du + lambda2 * lf
-
-            # Backpropagation
-            loss.backward()
-            optimizer.step()
-
-            if epoch % plot_every != 0:
-                continue
-
-            # --- Console diagnostics ---
-            print(
-                f"Epoch {epoch:4d} | "
-                f"Loss = {loss.item():.4e} | "
-                f"IC_u = {lic_u:.4e} | "
-                f"IC_du = {lic_du:.4e} | "
-                f"PDE = {lf:.4e}"
-            )
-
-            # Diagnostic grid
-            t_diag = t_train.clone().detach().requires_grad_(True)
-            u_diag = model(t_diag)
-            du_diag = derivative(u_diag, t_diag)
-            d2u_diag = second_derivative(u_diag, t_diag)
-
-            print(
-                "||u||:",
-                u_diag.abs().mean().item(),
-                "\n||u'||:",
-                du_diag.abs().mean().item(),
-                "\n||u''||:",
-                d2u_diag.abs().mean().item(),
-            )
-
-            # --- Numpy conversion ---
-            with torch.no_grad():
-                t_np = t_diag.squeeze().cpu().numpy()
-                u_np = u_diag.squeeze().cpu().numpy()
-                du_np = du_diag.squeeze().cpu().numpy()
-                d2u_np = d2u_diag.squeeze().cpu().numpy()
-
-                u_pred = model(t_train).cpu().numpy().flatten()
-                u_ex = u_exact(t_np)
-
-            # --------------------------------------------------------
-            # Page 1: u(t), u'(t), u''(t)
-            # --------------------------------------------------------
-            fig1, ax1 = plt.subplots(figsize=(10, 6))
-            ax1.plot(t_np, u_np, label="u(t)")
-            ax1.plot(t_np, du_np, label="u'(t)")
-            ax1.plot(t_np, d2u_np, label="u''(t)")
-            ax1.legend()
-            ax1.set_xlabel("t")
-            ax1.set_title(f"Diagnostics: u, u', u'' — epoch {epoch}")
-            ax1.grid(True)
-            fig1.tight_layout()
-            pdf.savefig(fig1, bbox_inches="tight")
-            plt.close(fig1)
-
-            # --------------------------------------------------------
-            # Page 2: prediction vs exact solution
-            # --------------------------------------------------------
-            fig2, ax2 = plt.subplots(figsize=(10, 6))
-            ax2.plot(t_np, u_pred, label=f"PINN ({model_label})")
-            ax2.plot(t_np, u_ex, "--", label="Exact")
-            ax2.legend()
-            ax2.set_xlabel("t")
-            ax2.set_ylabel("u(t)")
-            ax2.set_title(f"Prediction vs Exact — epoch {epoch}")
-            ax2.grid(True)
-            fig2.tight_layout()
-            pdf.savefig(fig2, bbox_inches="tight")
-            plt.close(fig2)
+    print(f"\nCSV saved to: {csv_path}")
+    print(f"PDF saved to: {pdf_path}")

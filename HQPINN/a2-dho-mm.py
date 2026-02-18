@@ -1,4 +1,3 @@
-# run_mm_oscillator.py
 # MerLin–MerLin PINN for the damped oscillator using oscillator_core + merlin_quantum
 
 import numpy as np
@@ -12,8 +11,9 @@ from layer_merlin import make_merlin_qlayer, MerlinQuantumBranch
 #  Hyperparameters and quantum architecture
 # ============================================================
 
+# Diverge with lr = 0.05
 lr = 0.002
-n_epochs = 2000
+n_epochs = 1801
 plot_every = 100
 
 n_qubits = 3

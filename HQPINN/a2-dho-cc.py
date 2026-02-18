@@ -1,34 +1,43 @@
-# run_cc_oscillator.py
+# a2-dho-cc.py
+# Classical–Classical PINN with two parallel MLP branches
 
 import torch
+import torch.nn as nn
 
+from config import LR, N_EPOCHS, PLOT_EVERY, DTYPE
+from utils import make_time_grid, make_optimizer
 from core import train_oscillator_pinn
-from layer_classical import CC_PINN
+from layer_classical import BranchPyTorch
+
+
+class CC_PINN(nn.Module):
+    """
+    Classical–Classical PINN with two parallel MLP branches:
+
+        u(t) = u_c1(t) + u_c2(t)
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.branch1 = BranchPyTorch()
+        self.branch2 = BranchPyTorch()
+
+    def forward(self, t: torch.Tensor) -> torch.Tensor:
+        return self.branch1(t) + self.branch2(t)
 
 
 def main():
-    # Hyperparameters
-    lr = 0.002
-    n_epochs = 2000
-    plot_every = 100
 
-    # Torch setup and time grid
-    dtype = torch.float64
-    torch.set_default_dtype(dtype)
-    device = torch.device("cpu")
     torch.manual_seed(0)
 
-    t_train = torch.linspace(0.0, 1.0, 200, device=device).reshape(-1, 1)
-
-    model = CC_PINN(dtype=dtype).to(device)
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    model = CC_PINN()
 
     train_oscillator_pinn(
         model=model,
-        t_train=t_train,
-        optimizer=optimizer,
-        n_epochs=n_epochs,
-        plot_every=plot_every,
+        t_train=make_time_grid(),
+        optimizer=make_optimizer(model, LR),
+        n_epochs=N_EPOCHS,
+        plot_every=PLOT_EVERY,
         out_dir="HQPINN/results",
         model_label="classical-classical",
     )
