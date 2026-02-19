@@ -575,35 +575,6 @@ def train_see_cc(
     # Count trainable parameters
     n_params = count_trainable_params(model)
 
-    # Build metrics CSV path
-    # metrics_path = os.path.join(
-    #     out_dir, f"see-cc-{model_label}_{timestamp}_metrics.csv"
-    # )
-
-    # Write one-line CSV with metrics similar to the paper table
-    # with open(metrics_path, "w", newline="") as f:
-    #     writer = csv.writer(f)
-    #     writer.writerow(
-    #         [
-    #             "Model",
-    #             "Size",
-    #             "Trainable parameters",
-    #             "Loss",
-    #             "Density error",
-    #             "Pressure error",
-    #         ]
-    #     )
-    #     writer.writerow(
-    #         [
-    #             "cc",  # Model type (classical-classical)
-    #             model_label,  # Size label, e.g. "10-4", "10-7", "20-4"
-    #             n_params,
-    #             f"{final_loss:.6e}",
-    #             f"{err_rho:.6e}",
-    #             f"{err_p:.6e}",
-    #         ]
-    #     )
-
     # print(f"Metrics CSV saved to: {metrics_path}")
     print(f"CSV saved to: {csv_path}")
     print(f"PDF saved to: {pdf_path}")
