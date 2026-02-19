@@ -119,9 +119,15 @@ def main():
     args = parse_args()
 
     if args.exp_to_run == "DEFAULT":
-        print("Running the DEFAULT experiment")
-        print("Not yet implemented")
-    elif args.exp_to_run == "BOND":
+        print("Running the BAS experiment")
+        run_bas(
+            batch_size=args.batch_size,
+            num_epochs=args.num_epochs,
+            classical_epochs=args.classical_epochs,
+            lr=args.lr,
+            generate_graph=not args.dont_generate_graph,
+        )
+    elif args.exp_to_run == "BAS":
         print("Running the BAS experiment")
         run_bas(
             batch_size=args.batch_size,
