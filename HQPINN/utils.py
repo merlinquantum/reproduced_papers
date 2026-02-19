@@ -1,6 +1,8 @@
 # utils.py
 
 import torch
+import torch.nn as nn
+
 from config import (
     DTYPE,
     DEVICE,
@@ -32,20 +34,6 @@ def make_optimizer(model, lr):
 #  1D Euler, solution lisse:
 #  x ∈ (-1, 1), t ∈ (0, 2)
 # ==========================
-
-
-import torch
-from config import (
-    DTYPE,
-    DEVICE,
-    SEE_X_MIN,
-    SEE_X_MAX,
-    SEE_T_MIN,
-    SEE_T_MAX,
-    SEE_N_IC,
-    SEE_N_BC,
-    SEE_N_F,
-)
 
 
 def sample_ic_points():
@@ -119,3 +107,8 @@ def sample_collocation_points():
     t_f = SEE_T_MIN + (SEE_T_MAX - SEE_T_MIN) * t_f
 
     return x_f, t_f
+
+
+def count_trainable_params(model: nn.Module) -> int:
+    """Count number of trainable parameters in the model."""
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
