@@ -17,7 +17,7 @@ from ..config import (
     SEE_PLOT_EVERY,
 )
 from ..utils import make_time_grid, make_optimizer
-from ..core import train_see_cc
+from .core_see import train_see_cc
 from ..layer_classical import BranchPyTorch
 
 

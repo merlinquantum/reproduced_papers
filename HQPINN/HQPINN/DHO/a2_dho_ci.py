@@ -6,7 +6,7 @@ import torch.nn as nn
 
 from ..config import DHO_N_EPOCHS, DHO_PLOT_EVERY, DHO_LR
 from ..utils import make_time_grid, make_optimizer
-from ..core import train_oscillator_pinn
+from .core_a2_dho import train_oscillator_pinn
 from ..layer_merlin import make_interf_qlayer, BranchMerlin
 from ..layer_classical import BranchPyTorch
 

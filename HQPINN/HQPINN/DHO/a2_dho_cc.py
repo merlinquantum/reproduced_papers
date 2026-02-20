@@ -7,7 +7,7 @@ import torch.nn as nn
 # Relative imports because this file is inside HQPINN/HQPINN/DHO/
 from ..config import DHO_LR, DHO_N_EPOCHS, DHO_PLOT_EVERY, DTYPE
 from ..utils import make_time_grid, make_optimizer
-from ..core import train_oscillator_pinn
+from .core_a2_dho import train_oscillator_pinn
 from ..layer_classical import BranchPyTorch
 
 
@@ -40,5 +40,5 @@ def run():
         n_epochs=DHO_N_EPOCHS,
         plot_every=DHO_PLOT_EVERY,
         out_dir="HQPINN/DHO/results",
-        model_label="classical-classical",
+        model_label="Classical-Classical",
     )
