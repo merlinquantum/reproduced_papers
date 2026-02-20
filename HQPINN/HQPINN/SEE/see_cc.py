@@ -1,8 +1,7 @@
 # see_cc.py
-# Classical–Classical PINN for SEE benchmark
+# Classical–Classical PINN
 
 import csv
-import os
 from datetime import datetime
 
 import torch
@@ -17,11 +16,11 @@ from ..config import (
     SEE_PLOT_EVERY,
 )
 from ..utils import make_time_grid, make_optimizer
-from .core_see import train_see_cc
+from .core_see import train_see
 from ..layer_classical import BranchPyTorch
 
 
-class SEE_CCPINN(nn.Module):
+class CC_PINN(nn.Module):
     """
     Classical-classical PINN with two parallel branches (cc-N-L)
     and a small fusion head (845 trainable parameters for cc-10-4).
@@ -96,16 +95,16 @@ def run():
         for label, width, layers in MODELS:
             print(f"\nTraining SEE-CC model: {label} (width={width}, layers={layers})")
 
-            model = SEE_CCPINN(hidden_width=width, num_hidden_layers=layers)
+            model = CC_PINN(hidden_width=width, num_hidden_layers=layers)
             optimizer = make_optimizer(model, lr=5e-4)
 
-            final_loss, err_rho, err_p, n_params = train_see_cc(
+            final_loss, err_rho, err_p, n_params = train_see(
                 model=model,
                 t_train=make_time_grid(),  # kept for API consistency
                 optimizer=optimizer,
                 n_epochs=SEE_N_EPOCHS,
                 plot_every=SEE_PLOT_EVERY,
-                out_dir=f"HQPINN/SEE/results/{label}",
+                out_dir=f"HQPINN/SEE/results/cc-{label}",
                 model_label=label,
             )
 

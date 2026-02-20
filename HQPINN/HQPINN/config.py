@@ -5,6 +5,8 @@ import torch
 # Default dtype and device
 DTYPE = torch.float64
 DEVICE = torch.device("cpu")
+N_LAYERS = 3
+N_QUBITS = 3
 
 
 # ==========================
@@ -25,8 +27,6 @@ K = 400.0
 LAMBDA1 = 1e-1
 LAMBDA2 = 1e-4
 
-N_QUBITS = 3
-N_LAYERS = 3
 
 DHO_NUM_HIDDEN_LAYERS = 2
 DHO_HIDDEN_WIDTH = 16
@@ -40,7 +40,7 @@ DHO_HIDDEN_WIDTH = 16
 
 SEE_LR = 0.0005
 SEE_N_EPOCHS = 20001
-SEE_PLOT_EVERY = 1000
+SEE_PLOT_EVERY = 10
 
 SEE_X_MIN, SEE_X_MAX = -1.0, 1.0
 SEE_T_MIN, SEE_T_MAX = 0.0, 2.0
@@ -54,3 +54,5 @@ SEE_GAMMA = 1.4
 
 SEE_CC_NUM_HIDDEN_LAYERS = 4
 SEE_CC_HIDDEN_WIDTH = 10
+
+# SEE_SIZE = 2

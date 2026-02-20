@@ -188,7 +188,7 @@ def evaluate_see_errors(model, nx: int = 1000):
     return rel_l2(rho_pred, rho_exact), rel_l2(p_pred, p_exact)
 
 
-def train_see_cc(
+def train_see(
     model: nn.Module,
     t_train,  # unused, kept for API consistency
     optimizer: torch.optim.Optimizer,
@@ -205,8 +205,8 @@ def train_see_cc(
     os.makedirs(out_dir, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    pdf_path = os.path.join(out_dir, f"see-cc-{model_label}_{timestamp}.pdf")
-    csv_path = os.path.join(out_dir, f"see-cc-{model_label}_{timestamp}.csv")
+    pdf_path = os.path.join(out_dir, f"see-{model_label}_{timestamp}.pdf")
+    csv_path = os.path.join(out_dir, f"see-{model_label}_{timestamp}.csv")
 
     rows = []
     start = datetime.now()
