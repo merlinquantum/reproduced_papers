@@ -19,7 +19,7 @@ warnings.filterwarnings(
 
 
 def make_device_lightning() -> qml.Device:  # type: ignore
-    return qml.device("lightning.qubit", wires=N_QUBITS, shots=None)
+    return qml.device("lightning.qubit", wires=N_QUBITS, shots=None, batch_obs=True)  # type: ignore
 
 
 def make_device_default() -> qml.Device:  # type: ignore
@@ -110,7 +110,7 @@ def _make_quantum_block_with_measurement(
     """
 
     if device == "lightning":
-        dev = make_device_default()
+        dev = make_device_lightning()
         diff_method = "adjoint"  # first-order gradients only
     elif device == "default":
         dev = make_device_default()

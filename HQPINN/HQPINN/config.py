@@ -3,7 +3,7 @@
 import torch
 
 # Default dtype and device
-DTYPE = torch.float64
+DTYPE = torch.float32
 DEVICE = torch.device("cpu")
 N_LAYERS = 3
 N_QUBITS = 3
