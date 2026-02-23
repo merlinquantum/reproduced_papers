@@ -132,6 +132,38 @@ def _make_quantum_block_with_measurement(
     return quantum_block  # type: ignore
 
 
+# def _make_quantum_block_with_measurement_batched(
+#     measure_fn: Callable[[], torch.Tensor] | Callable[[], list],
+#     n_layers: int = N_LAYERS,
+# ) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
+#     """
+#     Batched version of the quantum block.
+
+#     phi: shape [B, n_features] (here B = batch size, n_features = N_QUBITS = 3)
+#     thetas: shape [n_layers, N_QUBITS, 3]
+
+#     Returns:
+#         - if measure_fn = measure_single: tensor of shape [B]
+#         - if measure_fn = measure_all: tensor of shape [B, N_QUBITS]
+#     """
+#     dev = make_device_lightning()
+#     diff_method = "adjoint"
+
+#     # NOTE: qml.batch_input will vectorize over the first argument (phi).
+#     # Inside the circuit body, 'phi' is seen as a single sample (shape [N_QUBITS]).
+#     @qml.batch_input(argnum=0)
+#     @qml.qnode(dev, interface="torch", diff_method=diff_method)
+#     def quantum_block(phi: torch.Tensor, thetas: torch.Tensor) -> torch.Tensor:
+#         for layer in range(n_layers):
+#             ansatz_layer(thetas[layer])
+#             if layer < n_layers - 1:
+#                 feature_layer(phi)
+
+#         return measure_fn()  # e.g. list of expvals or a single expval
+
+#     return quantum_block  # type: ignore
+
+
 def measure_single():
     # Single expectation value on qubit 0
     return qml.expval(qml.PauliZ(0))  # type: ignore
@@ -152,6 +184,25 @@ def make_quantum_block_multiout(
 ) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
     """Create a multi-output QNode returning one expectation per qubit."""
     return _make_quantum_block_with_measurement(measure_all, n_layers, device="lightning")  # type: ignore
+
+
+# def make_quantum_block_multiout_batched(
+#     n_layers: int,
+# ) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
+#     """
+#     Create a batched multi-output QNode returning one expectation per qubit.
+
+#     Input:
+#         phi: [B, N_QUBITS]
+#         thetas: [n_layers, N_QUBITS, 3]
+
+#     Output:
+#         [B, N_QUBITS]
+#     """
+#     return _make_quantum_block_with_measurement_batched(
+#         measure_all,
+#         n_layers=n_layers,
+#     )
 
 
 # ============================================================
@@ -216,6 +267,44 @@ class BranchPennylane(nn.Module):
 
         # return out
         return out.to(DTYPE)
+
+
+# class BranchPennylaneBatched(nn.Module):
+#     """
+#     Batched quantum branch.
+#     """
+
+#     def __init__(
+#         self,
+#         quantum_block,
+#         feature_map,
+#         n_layers: int,
+#         output_as_column: bool = False,
+#         init_scale: float = 0.01,
+#     ) -> None:
+#         super().__init__()
+#         self.quantum_block = quantum_block
+#         self.feature_map = feature_map
+#         self.output_as_column = output_as_column
+#         self.n_layers = n_layers
+
+#         self.theta = nn.Parameter(
+#             torch.randn(n_layers, N_QUBITS, 3, dtype=DTYPE) * init_scale
+#         )
+
+#     def forward(self, x: torch.Tensor) -> torch.Tensor:
+#         # x: [B, 2] -> phi: [B, N_QUBITS]
+#         phi = self.feature_map(x)
+
+#         out = self.quantum_block(phi, self.theta)
+
+#         if isinstance(out, (list, tuple)):
+#             out = torch.stack(out, dim=-1)
+
+#         if self.output_as_column and out.dim() == 1:
+#             out = out.unsqueeze(-1)
+
+#         return out.to(DTYPE)
 
 
 def dho_feature_map(t: torch.Tensor) -> torch.Tensor:
