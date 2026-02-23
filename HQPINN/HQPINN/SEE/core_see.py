@@ -3,7 +3,7 @@
 import os
 import csv
 from datetime import datetime
-from typing import Tuple, Callable
+from typing import Tuple, Callable, Optional
 
 import torch
 import torch.nn as nn
@@ -152,6 +152,118 @@ def euler_loss(
     return loss_ic, loss_bc, loss_f
 
 
+from typing import Optional
+
+
+def euler_loss_batched(
+    model: nn.Module,
+    n_f_batch: Optional[int] = 128,
+    n_ic_batch: Optional[int] = 25,
+    n_bc_batch: Optional[int] = 25,
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    """
+    Mini-batching
+
+    Instead of evaluating all PDE, IC, and BC points at every epoch
+    (e.g., 2000 PDE points, 50 IC, 50 BC), we randomly sample a small
+    subset such as:
+
+        n_f_batch = 128     # PDE points
+        n_ic_batch = 25     # initial condition points
+        n_bc_batch = 25     # boundary points
+    """
+
+    # ==========================
+    # 1. Initial condition loss
+    # ==========================
+    x_ic, t_ic = sample_ic_points()  # [N_ic, 1]
+    N_ic = x_ic.size(0)
+    if n_ic_batch is not None and n_ic_batch < N_ic:
+        idx_ic = torch.randperm(N_ic)[:n_ic_batch]
+        x_ic = x_ic[idx_ic]
+        t_ic = t_ic[idx_ic]
+    X_ic = torch.cat([x_ic, t_ic], dim=1)  # [N_ic_batch, 2]
+
+    U_ic = model(X_ic)  # [N_ic_batch, 3]
+    rho_ic, u_ic, p_ic = U_ic.split(1, dim=1)
+
+    rho_ic_exact = 1.0 + 0.2 * torch.sin(torch.pi * x_ic)
+    u_ic_exact = torch.ones_like(x_ic)
+    p_ic_exact = torch.ones_like(x_ic)
+
+    loss_ic = torch.mean(
+        (rho_ic - rho_ic_exact) ** 2
+        + (u_ic - u_ic_exact) ** 2
+        + (p_ic - p_ic_exact) ** 2
+    )
+
+    # ==========================
+    # 2. Periodic boundary loss
+    # ==========================
+    x_left, x_right, t_bc = sample_bc_points()  # [N_bc, 1]
+    N_bc = x_left.size(0)
+    if n_bc_batch is not None and n_bc_batch < N_bc:
+        idx_bc = torch.randperm(N_bc)[:n_bc_batch]
+        x_left = x_left[idx_bc]
+        x_right = x_right[idx_bc]
+        t_bc = t_bc[idx_bc]
+
+    X_left = torch.cat([x_left, t_bc], dim=1)
+    X_right = torch.cat([x_right, t_bc], dim=1)
+
+    U_left = model(X_left)
+    U_right = model(X_right)
+
+    loss_bc = torch.mean((U_left - U_right) ** 2)
+
+    # ==========================
+    # 3. PDE residual loss (batched)
+    # ==========================
+    x_f, t_f = sample_collocation_points()  # [N_f, 1]
+    N_f = x_f.size(0)
+
+    if n_f_batch is not None and n_f_batch < N_f:
+        idx_f = torch.randperm(N_f)[:n_f_batch]
+        x_f = x_f[idx_f]
+        t_f = t_f[idx_f]
+
+    X_f = torch.cat([x_f, t_f], dim=1)  # [n_f_batch, 2]
+    X_f = X_f.clone().detach().to(DTYPE).to(DEVICE)
+    X_f.requires_grad_(True)
+
+    U_f = model(X_f)  # [n_f_batch, 3]
+    rho, u, p = U_f.split(1, dim=1)
+
+    gamma = SEE_GAMMA
+
+    e = p / ((gamma - 1.0) * rho)
+    E = e + 0.5 * u**2
+
+    U1 = rho
+    U2 = rho * u
+    U3 = rho * E
+
+    F1 = rho * u
+    F2 = rho * u**2 + p
+    F3 = u * (rho * E + p)
+
+    U1_t = partial_derivative(U1, X_f, index=1)
+    U2_t = partial_derivative(U2, X_f, index=1)
+    U3_t = partial_derivative(U3, X_f, index=1)
+
+    F1_x = partial_derivative(F1, X_f, index=0)
+    F2_x = partial_derivative(F2, X_f, index=0)
+    F3_x = partial_derivative(F3, X_f, index=0)
+
+    r1 = U1_t + F1_x
+    r2 = U2_t + F2_x
+    r3 = U3_t + F3_x
+
+    loss_f = torch.mean(r1**2 + r2**2 + r3**2)
+
+    return loss_ic, loss_bc, loss_f
+
+
 def exact_rho(x: torch.Tensor, t: torch.Tensor) -> torch.Tensor:
     """Exact density rho(x,t) = 1 + 0.2 * sin(pi * (x - t))."""
     return 1.0 + 0.2 * torch.sin(torch.pi * (x - t))
@@ -198,7 +310,8 @@ def train_see(
     model_label: str,
     loss_fn: Callable[
         [nn.Module], Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
-    ] = euler_loss,
+    ] = euler_loss_batched,
+    # ] = euler_loss,
 ) -> tuple[float, float, float, int]:
     """Training loop for the Smooth Euler Equation PINN (classical-classical)."""
 
