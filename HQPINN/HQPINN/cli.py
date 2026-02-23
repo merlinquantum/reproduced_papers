@@ -17,7 +17,9 @@ def main() -> None:
     print("  dho-percperc    -> DHO, Perceval–Perceval")
     print("  dho-pp          -> DHO, PennyLane–PennyLane")
     print("  see-cc          -> SEE, Classical–Classical")
+    print("  see-cp          -> SEE, Classical–PennyLane")
     print("  see-pp          -> SEE, PennyLane–PennyLane")
+
     print()
     choice = input("Which experiment do you want to run? ").strip()
 
@@ -68,6 +70,12 @@ def main() -> None:
     elif choice == "see-cc":
         # Classical–Classical SEE
         from .SEE.see_cc import run
+
+        run()
+
+    elif choice == "see-cp":
+        # Classical–PennyLane SEE
+        from .SEE.see_cp import run
 
         run()
 
