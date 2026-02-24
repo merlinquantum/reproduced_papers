@@ -17,7 +17,9 @@ def main() -> None:
     print("  dho-percperc    -> DHO, Perceval–Perceval")
     print("  dho-pp          -> DHO, PennyLane–PennyLane")
     print("  see-cc          -> SEE, Classical–Classical")
+    print("  see-ci          -> SEE, Classical–Interferometer")
     print("  see-cp          -> SEE, Classical–PennyLane")
+    print("  see-ii          -> SEE, Interferometer–Interferometer")
     print("  see-pp          -> SEE, PennyLane–PennyLane")
 
     print()
@@ -79,9 +81,21 @@ def main() -> None:
 
         run()
 
+    elif choice == "see-ii":
+        # Interferometer–Interferometer SEE
+        from .SEE.see_ii import run
+
+        run()
+
     elif choice == "see-pp":
         # PennyLane–PennyLane SEE
         from .SEE.see_pp import run
+
+        run()
+
+    elif choice == "see-ci":
+        # Classical–Interferometer SEE
+        from .SEE.see_ci import run
 
         run()
 

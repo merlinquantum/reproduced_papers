@@ -3,7 +3,7 @@
 import torch
 
 # Default dtype and device
-DTYPE = torch.float32
+DTYPE = torch.float64
 DEVICE = torch.device("cpu")
 N_LAYERS = 3
 N_QUBITS = 3
@@ -38,7 +38,7 @@ DHO_HIDDEN_WIDTH = 16
 #  x ∈ (-1, 1), t ∈ (0, 2)
 # ==========================
 
-SEE_LR = 0.0005
+SEE_LR = 5e-4
 SEE_N_EPOCHS = 20001
 SEE_PLOT_EVERY = 100
 

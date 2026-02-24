@@ -157,9 +157,9 @@ from typing import Optional
 
 def euler_loss_batched(
     model: nn.Module,
-    n_f_batch: Optional[int] = 128,
-    n_ic_batch: Optional[int] = 25,
-    n_bc_batch: Optional[int] = 25,
+    n_f_batch: Optional[int] = 256,
+    n_ic_batch: Optional[int] = None,
+    n_bc_batch: Optional[int] = None,
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     """
     Mini-batching
@@ -321,6 +321,10 @@ def train_see(
     pdf_path = os.path.join(out_dir, f"see-{model_label}_{timestamp}.pdf")
     csv_path = os.path.join(out_dir, f"see-{model_label}_{timestamp}.csv")
 
+    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+        optimizer, factor=0.5, patience=500
+    )
+
     rows = []
     start = datetime.now()
 
@@ -357,6 +361,7 @@ def train_see(
                     f"{loss_f.item():.4e}",
                 ]
             )
+            scheduler.step(loss.item())  # Adjust learning rate based on total loss
 
     # -------------------------
     # L-BFGS refinement

@@ -29,8 +29,8 @@ class MM_PINN(nn.Module):
         super().__init__()
 
         # Two distinct quantum branches with independent parameters
-        self.branch1 = BranchMerlin(make_interf_qlayer())
-        self.branch2 = BranchMerlin(make_interf_qlayer())
+        self.branch1 = BranchMerlin(make_interf_qlayer(n_photons=1))
+        self.branch2 = BranchMerlin(make_interf_qlayer(n_photons=1))
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
         # Forward pass: sum of the two interferometer branches

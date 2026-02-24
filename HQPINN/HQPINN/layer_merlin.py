@@ -148,13 +148,19 @@ def make_perceval_qlayer() -> QuantumLayer:
     return qlayer
 
 
-def make_interf_qlayer() -> QuantumLayer:
+def make_interf_qlayer(n_photons: int) -> QuantumLayer:
     """
     Build one QuantumLayer for the given MerLin circuit.
 
     Grouping is handled inside MerLin via the MeasurementStrategy.
     Call this function twice if you need two independent branches.
     """
+    input_state = [n_photons] + [0] * (n_modes - 1)  # All photons in the first mode
+
+    # Fock space dimension for n_photons over n_modes modes.
+    fock_dim = comb(n_modes + n_photons - 1, n_photons)
+
+    grouping = LexGrouping(fock_dim, group_dim)
 
     # Build photonic circuit with interferometers and angle encoding.
     builder = ML.CircuitBuilder(n_modes=n_modes)
@@ -186,44 +192,133 @@ def make_interf_qlayer() -> QuantumLayer:
 class BranchMerlin(nn.Module):
     """
     Quantum branch based on a MerLin QuantumLayer.
-
-    Feature map:
-        φ(t) = [π t, 2π t, 3π t]
-    reused for the two feature layers, giving a 6-dimensional input.
     """
 
-    def __init__(self, qlayer: QuantumLayer) -> None:
+    def __init__(self, qlayer: QuantumLayer, n_outputs: int = 1) -> None:
         super().__init__()
         self.qlayer = qlayer
+        self.group_dim = 2 * N_QUBITS
+        self.n_outputs = n_outputs
 
         # QuantumLayer already outputs grouped features of this size.
         self.group_dim = 2 * N_QUBITS
-        self.readout = nn.Linear(self.group_dim, 1, dtype=DTYPE)
+        self.readout = nn.Linear(self.group_dim, n_outputs, dtype=DTYPE)
 
-    def forward(self, t: torch.Tensor) -> torch.Tensor:
+    def _feature_map(self, x_in: torch.Tensor) -> torch.Tensor:
+        x_in = x_in.to(DTYPE)
 
-        # Enforce global DTYPE
-        t = t.to(DTYPE)
+        # [N] or [N,1] → DHO style 1D encoding (only t)
+        if x_in.dim() == 1:  # x_in is already 1D, treat as t
+            t = x_in
+        elif x_in.shape[1] == 1:
+            t = x_in[:, 0]  # treat single column as t
+        else:
+            # [N,2] → Euler style 2D encoding (x,t)
+            x = x_in[:, 0]
+            t = x_in[:, 1]
+            # Feature map construction for 2D case (example: φ = [π x, π t, π (x-t)])
+            phi0 = np.pi * x
+            phi1 = np.pi * t
+            phi2 = np.pi * (x - t)
+            # Stack features into [N, 3]
+            return torch.stack([phi0, phi1, phi2], dim=1).to(DTYPE)
 
-        # Ensure shape (N,) before encoding.
-        if t.dim() == 2:
-            t = t.squeeze(-1)
-
+        # DHO-style 1D encoding: φ = [π t, 2π t, 3π t]
         scale = np.pi
         phi0 = scale * t
         phi1 = 2.0 * scale * t
         phi2 = 3.0 * scale * t
+        return torch.stack([phi0, phi1, phi2], dim=1).to(DTYPE)
 
-        phi_single = torch.stack([phi0, phi1, phi2], dim=1)
+    def forward(self, x_in: torch.Tensor) -> torch.Tensor:
+        """
+        x_in:
+            - DHO style: [N] or [N,1] with t values → 1D encoding
+            - Euler style: [N,2] with (x,t) pairs → 2D encoding
+        """
+
+        # phi_single: [N, 3] with features for one layer of the MerLin circuit.
+        phi_single = self._feature_map(x_in)
+
+        # Number of angle encoding layers = N_LAYERS - 1 (one encoding layer between each pair of ansatz layers).
         n_feature_layers = max(N_LAYERS - 1, 0)
 
         if n_feature_layers > 0:
-            X = torch.cat([phi_single] * n_feature_layers, dim=1).to(DTYPE)
+            # Repeat phi_single for each feature layer, giving [N, 3 * n_feature_layers].
+            X = torch.cat([phi_single] * n_feature_layers, dim=1)
         else:
-            X = torch.empty(t.shape[0], 0, dtype=DTYPE, device=t.device)
+            # No feature layers, so X is empty with shape [N, 0].
+            X = torch.empty(x_in.shape[0], 0, dtype=DTYPE, device=x_in.device)
 
         # QuantumLayer output is already grouped: (N, 2 * n_qubits).
         q_out = self.qlayer(X).to(DTYPE)  # (N, output_size)
         u = self.readout(q_out)  # (N, 1)
 
         return u
+
+
+# class BranchMerlinSEE(nn.Module):
+#     """
+#     Input :
+#         xt: tensor [N, 2] avec colonnes (x, t)
+
+#     Feature map :
+#         φ(x,t) = [π x, 2π x, π t]
+#     """
+
+#     def __init__(self, qlayer: QuantumLayer, n_outputs: int = 3) -> None:
+#         super().__init__()
+#         self.qlayer = qlayer
+
+#         self.group_dim = 2 * N_QUBITS
+#         self.readout = nn.Linear(self.group_dim, n_outputs, dtype=DTYPE)
+
+#     def forward(self, xt: torch.Tensor) -> torch.Tensor:
+#         # xt: [N, 2] = [x, t]
+#         xt = xt.to(DTYPE)
+
+#         # Extra safety: if xt arrives as [N,1] or [N], fallback to 1D (DHO-style)
+#         if xt.dim() == 1:
+#             # Cas oscillateur harmonique: xt = t
+#             t = xt
+#             x = None
+#         else:
+#             # xt: [N,2]
+#             x = xt[:, 0]
+#             t = xt[:, 1]
+
+#         # ---- Construction des features φ(x,t) ----
+#         scale = np.pi
+
+#         if x is None:
+#             # Mode 1D (DHO)
+#             phi0 = scale * t
+#             phi1 = 2.0 * scale * t
+#             phi2 = 3.0 * scale * t
+#         else:
+#             # Mode 2D (Euler)
+#             phi0 = scale * x
+#             phi1 = scale * t
+#             phi2 = scale * (x - t)
+
+#         # φ_single : [N, 3]
+#         phi_single = torch.stack([phi0, phi1, phi2], dim=1)
+
+#         # Number of "feature layers" = N_LAYERS - 1
+#         n_feature_layers = max(N_LAYERS - 1, 0)
+
+#         # Repeat φ_single for each feature layer, giving [N, 3 * n_feature_layers].
+#         if n_feature_layers > 0:
+#             X = torch.cat([phi_single] * n_feature_layers, dim=1).to(DTYPE)
+#         else:
+#             X = torch.empty(xt.shape[0], 0, dtype=DTYPE, device=xt.device)
+
+#         # QuantumLayer output is already grouped: (N, 2 * N_QUBITS).
+#         q_out = self.qlayer(X).to(DTYPE)  # (N, group_dim)
+
+#         # Linear readout onto (rho, u, p)
+#         U = self.readout(
+#             q_out
+#         )  # (N, n_outputs), where n_outputs=3 for SEE and n_outputs=1 for DHO
+
+#         return U
