@@ -103,5 +103,5 @@ def main() -> None:
         print(f"Unknown experiment: {choice}")
         print(
             "Please choose one of: dho-pp, dho-cc, dho-cp, dho-cperc, "
-            "dho-ii, dho-perc-perc, dho-ci, see-cc, see-pp."
+            "dho-ii, dho-perc-perc, dho-ci, see-cc, see-pp, see-ci, see-ii, see-cp."
         )

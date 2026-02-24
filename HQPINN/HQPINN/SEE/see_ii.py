@@ -13,11 +13,6 @@ from .core_see import train_see
 from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
-# ============================================================
-#  II_PINN model: two MerLin quantum branches
-# ============================================================
-
-
 class II_PINN(nn.Module):
     """
     Interferometer-Interferometer PINN:
@@ -55,33 +50,12 @@ class II_PINN(nn.Module):
         combined = out1 + out2  # [N, 3]
         return self.fusion(combined)  # [N, 3]
 
-    # def forward(self, t: torch.Tensor) -> torch.Tensor:
-    #     # Forward pass: sum of the two interferometer branches
-    #     return self.branch1(t) + self.branch2(t)
-
 
 MODELS = [
     ("2", 2),
     ("3", 3),
     ("4", 4),
 ]
-
-
-# def run() -> None:
-#     """Run the Interferometer–Interferometer DHO PINN experiment."""
-#     torch.manual_seed(0)
-#     np.random.seed(0)
-
-#     model = II_PINN()
-#     train_see(
-#         model=model,
-#         t_train=make_time_grid(),
-#         optimizer=make_optimizer(model, lr=SEE_LR),
-#         n_epochs=SEE_N_EPOCHS,
-#         plot_every=SEE_PLOT_EVERY,
-#         out_dir="HQPINN/SEE/results",
-#         model_label="Interferometer-Interferometer",
-#     )
 
 
 def run():

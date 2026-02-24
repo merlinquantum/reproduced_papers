@@ -28,6 +28,8 @@ from ..utils import (
     count_trainable_params,
 )
 
+from typing import Optional
+
 # Use non-interactive backend for batch PDF export
 matplotlib.use("Agg")
 
@@ -47,112 +49,6 @@ def partial_derivative(y: torch.Tensor, x: torch.Tensor, index: int) -> torch.Te
         retain_graph=True,
     )[0]
     return grads[:, index : index + 1]  # index=0 -> d/dx, index=1 -> d/dt
-
-
-def euler_loss(
-    model: nn.Module,
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
-    """
-    Compute PINN loss terms for the 1D smooth Euler equation:
-      1) Initial condition loss on (rho, u, p) at t = 0
-      2) Periodic boundary loss in x
-      3) PDE residual loss for 1D Euler in conservative form
-    """
-
-    # ==========================
-    # 1. Initial condition loss
-    # ==========================
-    x_ic, t_ic = sample_ic_points()  # shapes [N_ic, 1]
-    X_ic = torch.cat([x_ic, t_ic], dim=1)  # [N_ic, 2]
-
-    # Network prediction at t=0
-    U_ic = model(X_ic)  # [N_ic, 3]
-    rho_ic, u_ic, p_ic = U_ic.split(1, dim=1)
-
-    # Exact IC from the paper:
-    # rho_0(x) = 1.0 + 0.2 * sin(pi * x)
-    # u_0(x)   = 1.0
-    # p_0(x)   = 1.0
-    rho_ic_exact = 1.0 + 0.2 * torch.sin(torch.pi * x_ic)
-    u_ic_exact = torch.ones_like(x_ic)
-    p_ic_exact = torch.ones_like(x_ic)
-
-    loss_ic = torch.mean(
-        (rho_ic - rho_ic_exact) ** 2
-        + (u_ic - u_ic_exact) ** 2
-        + (p_ic - p_ic_exact) ** 2
-    )
-
-    # ==========================
-    # 2. Periodic boundary loss
-    # ==========================
-    x_left, x_right, t_bc = sample_bc_points()  # each [N_bc, 1]
-
-    X_left = torch.cat([x_left, t_bc], dim=1)  # [N_bc, 2]
-    X_right = torch.cat([x_right, t_bc], dim=1)
-
-    U_left = model(X_left)  # [N_bc, 3]
-    U_right = model(X_right)
-
-    # Periodicity: U(x_min, t) = U(x_max, t)
-    loss_bc = torch.mean((U_left - U_right) ** 2)
-
-    # ==========================
-    # 3. PDE residual loss
-    # ==========================
-    x_f, t_f = sample_collocation_points()  # [N_f, 1]
-    X_f = torch.cat([x_f, t_f], dim=1)  # [N_f, 2]
-    X_f = X_f.clone().detach().to(DTYPE).to(DEVICE)
-    X_f.requires_grad_(True)
-
-    # Network prediction in the interior
-    U_f = model(X_f)  # [N_f, 3]
-    rho, u, p = U_f.split(1, dim=1)
-
-    gamma = SEE_GAMMA
-
-    # Total energy per unit mass: E = e + 0.5 u^2
-    # with p = (gamma - 1) * rho * e
-    e = p / ((gamma - 1.0) * rho)
-    E = e + 0.5 * u**2
-
-    # Conservative variables:
-    # U1 = rho
-    # U2 = rho * u
-    # U3 = rho * E
-    U1 = rho
-    U2 = rho * u
-    U3 = rho * E
-
-    # Fluxes in x:
-    # F1 = rho * u
-    # F2 = rho * u^2 + p
-    # F3 = u * (rho * E + p)
-    F1 = rho * u
-    F2 = rho * u**2 + p
-    F3 = u * (rho * E + p)
-
-    # Time derivatives ∂_t U
-    U1_t = partial_derivative(U1, X_f, index=1)
-    U2_t = partial_derivative(U2, X_f, index=1)
-    U3_t = partial_derivative(U3, X_f, index=1)
-
-    # Spatial derivatives ∂_x F
-    F1_x = partial_derivative(F1, X_f, index=0)
-    F2_x = partial_derivative(F2, X_f, index=0)
-    F3_x = partial_derivative(F3, X_f, index=0)
-
-    # Residuals: ∂_t U + ∂_x F = 0
-    r1 = U1_t + F1_x
-    r2 = U2_t + F2_x
-    r3 = U3_t + F3_x
-
-    loss_f = torch.mean(r1**2 + r2**2 + r3**2)
-
-    return loss_ic, loss_bc, loss_f
-
-
-from typing import Optional
 
 
 def euler_loss_batched(
@@ -379,7 +275,7 @@ def train_see(
 
     def closure():
         optimizer_lbfgs.zero_grad()  # resets gradient buffer
-        lic, lbc, lf = euler_loss(model)
+        lic, lbc, lf = loss_fn(model)
         l = lic + lbc + lf
         l.backward()  #  computes ∇loss
         return l
@@ -392,7 +288,7 @@ def train_see(
     # -------------------------
     # Final loss after L-BFGS
     # -------------------------
-    loss_ic, loss_bc, loss_f = euler_loss(model)
+    loss_ic, loss_bc, loss_f = loss_fn(model)
     final_loss = (loss_ic + loss_bc + loss_f).item()
 
     # Save CSV

@@ -7,7 +7,6 @@ from datetime import datetime
 import torch
 import torch.nn as nn
 
-# Relative imports because this file is inside HQPINN/HQPINN/SEE/
 from ..config import (
     SEE_CC_NUM_HIDDEN_LAYERS,
     SEE_CC_HIDDEN_WIDTH,
