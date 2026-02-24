@@ -112,3 +112,27 @@ def sample_collocation_points():
 def count_trainable_params(model: nn.Module) -> int:
     """Count number of trainable parameters in the model."""
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+
+def log_training_info(n_epochs, elapsed, final_loss, loss_ic, loss_bc, loss_f, rows):
+    """Log training information for debugging and monitoring."""
+    print(
+        f"Epoch {n_epochs:5d} | elapsed={elapsed:.2f}s  "
+        f"L={final_loss:.3e} | "
+        f"IC={loss_ic.item():.3e} | "
+        f"BC={loss_bc.item():.3e} | "
+        f"F={loss_f.item():.3e}"
+    )
+
+    rows.append(
+        [
+            n_epochs,
+            f"{elapsed:.2f}",
+            f"{final_loss:.3e}",
+            f"{loss_ic.item():.3e}",
+            f"{loss_bc.item():.3e}",
+            f"{loss_f.item():.3e}",
+        ]
+    )
+
+    return rows

@@ -15,7 +15,7 @@ N_QUBITS = 3
 # ==========================
 
 DHO_LR = 0.002
-DHO_N_EPOCHS = 1801
+DHO_N_EPOCHS = 1800
 DHO_PLOT_EVERY = 100
 DHO_N_SAMPLES = 200
 
@@ -39,7 +39,7 @@ DHO_HIDDEN_WIDTH = 16
 # ==========================
 
 SEE_LR = 5e-4
-SEE_N_EPOCHS = 20001
+SEE_N_EPOCHS = 200
 SEE_PLOT_EVERY = 100
 
 SEE_X_MIN, SEE_X_MAX = -1.0, 1.0

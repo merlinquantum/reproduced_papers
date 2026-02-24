@@ -26,6 +26,7 @@ from ..utils import (
     sample_bc_points,
     sample_collocation_points,
     count_trainable_params,
+    log_training_info,
 )
 
 from typing import Optional
@@ -239,25 +240,17 @@ def train_see(
         if epoch % plot_every == 0:
             elapsed = (datetime.now() - start).total_seconds()
 
-            print(
-                f"Epoch {epoch:5d} | elapsed={elapsed:.2f}s  "
-                f"L={loss.item():.3e} | "
-                f"IC={loss_ic.item():.3e} | "
-                f"BC={loss_bc.item():.3e} | "
-                f"F={loss_f.item():.3e}"
+            log_training_info(
+                n_epochs=epoch,
+                elapsed=elapsed,
+                final_loss=loss,
+                loss_ic=loss_ic,
+                loss_bc=loss_bc,
+                loss_f=loss_f,
+                rows=rows,
             )
 
-            rows.append(
-                [
-                    epoch,
-                    f"{elapsed:.2f}",
-                    f"{loss.item():.4e}",
-                    f"{loss_ic.item():.4e}",
-                    f"{loss_bc.item():.4e}",
-                    f"{loss_f.item():.4e}",
-                ]
-            )
-            scheduler.step(loss.item())  # Adjust learning rate based on total loss
+        scheduler.step(loss.item())  # Adjust learning rate based on total loss
 
     # -------------------------
     # L-BFGS refinement
@@ -290,6 +283,17 @@ def train_see(
     # -------------------------
     loss_ic, loss_bc, loss_f = loss_fn(model)
     final_loss = (loss_ic + loss_bc + loss_f).item()
+    elapsed = (datetime.now() - start).total_seconds()
+
+    log_training_info(
+        n_epochs=n_epochs,
+        elapsed=elapsed,
+        final_loss=final_loss,
+        loss_ic=loss_ic,
+        loss_bc=loss_bc,
+        loss_f=loss_f,
+        rows=rows,
+    )
 
     # Save CSV
     with open(csv_path, "w", newline="") as f:
@@ -321,7 +325,6 @@ def train_see(
         rho_exact_np = rho_exact.cpu().numpy()
         rho_err_np = rho_error.cpu().numpy()
 
-        # Exact density
         with PdfPages(pdf_path) as pdf:
 
             # 1) Predicted density
