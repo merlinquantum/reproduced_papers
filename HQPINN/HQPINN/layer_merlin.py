@@ -194,14 +194,18 @@ class BranchMerlin(nn.Module):
     Quantum branch based on a MerLin QuantumLayer.
     """
 
-    def __init__(self, qlayer: QuantumLayer, n_outputs: int = 1) -> None:
+    def __init__(
+        self,
+        qlayer: QuantumLayer,
+        n_outputs: int = 1,
+        processor: ML.MerlinProcessor | None = None,
+    ) -> None:
         super().__init__()
         self.qlayer = qlayer
         self.group_dim = 2 * N_QUBITS
         self.n_outputs = n_outputs
+        self.processor: ML.MerlinProcessor | None = processor
 
-        # QuantumLayer already outputs grouped features of this size.
-        self.group_dim = 2 * N_QUBITS
         self.readout = nn.Linear(self.group_dim, n_outputs, dtype=DTYPE)
 
     def _feature_map(self, x_in: torch.Tensor) -> torch.Tensor:
@@ -250,8 +254,32 @@ class BranchMerlin(nn.Module):
             # No feature layers, so X is empty with shape [N, 0].
             X = torch.empty(x_in.shape[0], 0, dtype=DTYPE, device=x_in.device)
 
+        if self.processor is None:
+            # Local Execution, differentiable (SLOS)
+            q_out = self.qlayer(X).to(DTYPE)  # (N, output_size)
+        else:
+            # Remote Execution via MerlinProcessor → shots / simulator / QPU
+            # No gradient here since we only use the processor for inference, not training.
+            self.qlayer.eval()
+            with torch.no_grad():
+                q_out = self.processor.forward(self.qlayer, X).to(DTYPE)
+
         # QuantumLayer output is already grouped: (N, 2 * n_qubits).
-        q_out = self.qlayer(X).to(DTYPE)  # (N, output_size)
         u = self.readout(q_out)  # (N, 1)
 
         return u
+
+
+def make_merlin_processor(processor="sim:ascella") -> ML.MerlinProcessor:
+    """
+    Construit un MerlinProcessor connecté au simulateur Perceval 'sim:ascella'.
+    """
+    rp = pcvl.RemoteProcessor(processor)
+    processor = ML.MerlinProcessor(
+        rp,
+        microbatch_size=32,
+        timeout=3600.0,
+        max_shots_per_call=None,
+        chunk_concurrency=1,
+    )
+    return processor

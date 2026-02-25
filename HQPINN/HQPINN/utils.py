@@ -1,5 +1,8 @@
 # utils.py
 
+import os
+from typing import Callable, Optional
+
 import torch
 import torch.nn as nn
 
@@ -135,4 +138,47 @@ def log_training_info(n_epochs, elapsed, final_loss, loss_ic, loss_bc, loss_f, r
         ]
     )
 
-    return rows
+    return
+
+
+def load_model(
+    ckpt_path: str, model_ctor: Callable[..., nn.Module], processor=None
+) -> nn.Module:
+    model = model_ctor(processor=processor)  # use_remote implicite = False (local SLOS)
+    state = torch.load(ckpt_path, map_location="cpu")
+    model.load_state_dict(state)
+    model.eval()
+    print(f"Loaded local model from: {ckpt_path} remote={processor is not None})")
+    return model
+
+
+def get_latest_checkpoint(ckpt_dir: str, case_prefix: str) -> Optional[str]:
+    if not os.path.isdir(ckpt_dir):
+        print(f"No checkpoint directory found at {ckpt_dir}")
+        return None
+
+    files = [
+        f
+        for f in os.listdir(ckpt_dir)
+        if f.startswith(f"{case_prefix}_") and f.endswith(".pt")
+    ]
+    if not files:
+        print(f"No checkpoints matching {case_prefix}_*.pt in {ckpt_dir}")
+        return None
+
+    files.sort()  # lexicographique => avec timestamp YYYYMMDD-HHMMSS c'est chronologique
+    latest = files[-1]
+    ckpt_path = os.path.join(ckpt_dir, latest)
+    print(f"Latest checkpoint found: {ckpt_path}")
+    return ckpt_path
+
+
+def load_latest_model_local(
+    ckpt_dir: str,
+    case_prefix: str,
+    model_ctor: Callable[[], nn.Module],
+) -> Optional[nn.Module]:
+    ckpt_path = get_latest_checkpoint(ckpt_dir, case_prefix)
+    if ckpt_path is None:
+        return None
+    return load_model(ckpt_path, model_ctor)

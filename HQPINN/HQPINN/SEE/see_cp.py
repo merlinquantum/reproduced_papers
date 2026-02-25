@@ -15,7 +15,7 @@ from ..config import (
     SEE_PLOT_EVERY,
     N_LAYERS,
 )
-from ..utils import make_time_grid, make_optimizer
+from ..utils import make_optimizer
 from .core_see import train_see
 from ..layer_pennylane import (
     make_quantum_block_multiout,
@@ -107,7 +107,7 @@ def run():
 
             final_loss, err_rho, err_p, n_params = train_see(
                 model=model,
-                t_train=make_time_grid(),  # kept for API consistency
+                t_train=None,  # kept for API consistency
                 optimizer=optimizer,
                 n_epochs=SEE_N_EPOCHS,
                 plot_every=SEE_PLOT_EVERY,

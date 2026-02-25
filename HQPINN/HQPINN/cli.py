@@ -51,10 +51,11 @@ def main() -> None:
         run()
 
     elif choice == "dho-ii":
-        # Interferometer–Interferometer
         from .DHO.a2_dho_ii import run
 
-        run()
+        mode = input("Train or run? [train/run/remote] ").strip().lower()
+        backend = input("Backend? [sim:ascella/qpu:belenos] ").strip().lower()
+        run(mode=mode, backend=backend)
 
     elif choice == "dho-percperc":
         # Perceval–Perceval
