@@ -152,12 +152,24 @@ def make_interf_qlayer(n_photons: int) -> QuantumLayer:
     """
     Build one QuantumLayer for the given MerLin circuit.
 
+    Simulator/QPU constraint: at most one photon per mode (unbunched input state).
+    We encode this as |1, 1, ..., 1, 0, ..., 0> with n_photons ones.
+
     Grouping is handled inside MerLin via the MeasurementStrategy.
     Call this function twice if you need two independent branches.
     """
-    input_state = [n_photons] + [0] * (n_modes - 1)  # All photons in the first mode
+    # Sanity check: impossible to have more photons than modes in unbunched config
+    assert n_photons <= n_modes, (
+        f"Unbunched encoding requires n_photons <= n_modes, "
+        f"got n_photons={n_photons}, n_modes={n_modes}"
+    )
 
-    # Fock space dimension for n_photons over n_modes modes.
+    # Input state: unbunched, at most one photon per mode
+    # Example: n_photons=3, n_modes=5 -> [1, 1, 1, 0, 0]
+    input_state = [1] * n_photons + [0] * (n_modes - n_photons)
+
+    # Fock space dimension in the unbunched subspace:
+    # choose n_photons distinct modes among n_modes
     fock_dim = comb(n_modes + n_photons - 1, n_photons)
 
     grouping = LexGrouping(fock_dim, group_dim)
@@ -165,6 +177,8 @@ def make_interf_qlayer(n_photons: int) -> QuantumLayer:
     # Build photonic circuit with interferometers and angle encoding.
     builder = ML.CircuitBuilder(n_modes=n_modes)
     builder.add_entangling_layer(trainable=True, name="layer0")
+
+    # Example: encode on even modes (0, 2, 4, …)
     encoding_modes = list(range(0, n_modes, 2))
     builder.add_angle_encoding(modes=encoding_modes, name="phi1_")
     builder.add_entangling_layer(trainable=True, name="layer2")
@@ -182,6 +196,42 @@ def make_interf_qlayer(n_photons: int) -> QuantumLayer:
     )
 
     return qlayer
+
+
+# def make_interf_qlayer(n_photons: int) -> QuantumLayer:
+#     """
+#     Build one QuantumLayer for the given MerLin circuit.
+
+#     Grouping is handled inside MerLin via the MeasurementStrategy.
+#     Call this function twice if you need two independent branches.
+#     """
+#     input_state = [n_photons] + [0] * (n_modes - 1)  # All photons in the first mode
+
+#     # Fock space dimension for n_photons over n_modes modes.
+#     fock_dim = comb(n_modes + n_photons - 1, n_photons)
+
+#     grouping = LexGrouping(fock_dim, group_dim)
+
+#     # Build photonic circuit with interferometers and angle encoding.
+#     builder = ML.CircuitBuilder(n_modes=n_modes)
+#     builder.add_entangling_layer(trainable=True, name="layer0")
+#     encoding_modes = list(range(0, n_modes, 2))
+#     builder.add_angle_encoding(modes=encoding_modes, name="phi1_")
+#     builder.add_entangling_layer(trainable=True, name="layer2")
+#     builder.add_angle_encoding(modes=encoding_modes, name="phi3_")
+#     builder.add_entangling_layer(trainable=True, name="layer4")
+
+#     qlayer = QuantumLayer(
+#         builder=builder,
+#         input_state=input_state,
+#         measurement_strategy=ML.MeasurementStrategy.probs(
+#             computation_space=ML.ComputationSpace.FOCK,
+#             grouping=grouping,
+#         ),
+#         dtype=DTYPE,
+#     )
+
+#     return qlayer
 
 
 # ============================================================

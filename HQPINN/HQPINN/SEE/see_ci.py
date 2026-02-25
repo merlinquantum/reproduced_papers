@@ -15,7 +15,7 @@ from ..config import (
     SEE_PLOT_EVERY,
     SEE_LR,
 )
-from ..utils import  make_optimizer
+from ..utils import make_optimizer
 from .core_see import train_see
 from ..layer_classical import BranchPyTorch
 from ..layer_merlin import make_interf_qlayer, BranchMerlin

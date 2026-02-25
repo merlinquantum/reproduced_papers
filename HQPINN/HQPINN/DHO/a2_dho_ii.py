@@ -56,13 +56,6 @@ class MM_PINN(nn.Module):
 
 
 def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/"):
-    # model.eval()
-
-    # with torch.no_grad():
-    #     t = make_time_grid()
-    #     # u_pred = model(t).cpu().numpy().flatten()
-    #     u_ex = u_exact(t.cpu().numpy().flatten())
-
     plt.figure(figsize=(10, 6))
     plt.plot(t.cpu().numpy(), u_pred, label="Prediction PINN", lw=2)
     plt.plot(t.cpu().numpy(), u_ex, "--", label="Exact solution", lw=2)
@@ -87,6 +80,7 @@ def run(mode="train", backend="sim-ascella") -> None:
     """
     mode = "train" : train the model from scratch and save the checkpoint
     mode = "run"   : load the latest checkpoint and run inference (not implemented here, but can be added)
+    mode = "remote" : load and run in remote
     """
     torch.manual_seed(0)
     np.random.seed(0)
@@ -119,7 +113,6 @@ def run(mode="train", backend="sim-ascella") -> None:
         torch.save(model.state_dict(), ckpt_path)
 
         print(f"Model saved to: {ckpt_path}")
-        return
 
     # ======================
     #  MODE RUN
@@ -151,6 +144,8 @@ def run(mode="train", backend="sim-ascella") -> None:
         if ckpt is None:
             print("No trained checkpoint found!")
             return
+
+        print(f"Latest checkpoint found: {ckpt}")
 
         processor = make_merlin_processor(backend)
 

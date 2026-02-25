@@ -20,6 +20,8 @@ from ..config import (
     SEE_X_MAX,
     SEE_T_MIN,
     SEE_T_MAX,
+    SEE_NX_SAMPLES,
+    SEE_NT_SAMPLES,
 )
 from ..utils import (
     sample_ic_points,
@@ -303,7 +305,7 @@ def train_see(
 
     # Final evaluation grid for PDF
     with torch.no_grad():
-        nx, nt = 200, 200
+        nx, nt = SEE_NX_SAMPLES, SEE_NT_SAMPLES
         x = torch.linspace(SEE_X_MIN, SEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
         t = torch.linspace(SEE_T_MIN, SEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
         X, T = torch.meshgrid(x, t, indexing="ij")
@@ -375,3 +377,57 @@ def train_see(
     print(f"PDF saved to: {pdf_path}")
 
     return final_loss, err_rho, err_p, n_params
+
+
+# Displaying of the result
+def save_density_plot(
+    model: nn.Module,
+    ckpt_dir: str,
+    case_prefix: str,
+    n_photons: int,
+    timestamp: str,
+    backend: str,
+) -> str:
+
+    model.eval()
+
+    with torch.no_grad():
+        nx, nt = SEE_NX_SAMPLES, SEE_NT_SAMPLES
+        x = torch.linspace(SEE_X_MIN, SEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
+        t = torch.linspace(SEE_T_MIN, SEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
+        X, T = torch.meshgrid(x, t, indexing="ij")
+        xt = torch.stack([X.reshape(-1), T.reshape(-1)], dim=1)
+
+        U_pred = model(xt)
+        rho_pred = U_pred[:, 0].reshape(nx, nt)
+
+        X_np = X.cpu().numpy()
+        T_np = T.cpu().numpy()
+        rho_pred_np = rho_pred.cpu().numpy()
+
+        results_dir = os.path.join(ckpt_dir, "results")
+        os.makedirs(results_dir, exist_ok=True)
+
+        png_path = os.path.join(
+            results_dir, f"{case_prefix}_{n_photons}_{backend}_{timestamp}.png"
+        )
+
+        fig, ax = plt.subplots(figsize=(8, 5))
+        cs = ax.contourf(
+            X_np,
+            T_np,
+            rho_pred_np,
+            levels=50,
+        )
+        fig.colorbar(cs, ax=ax)
+        ax.set_title(
+            f"Predicted density $\\rho_\\text{{pred}}(x,t)$, {n_photons} photons, backend: {backend}"
+        )
+        ax.set_xlabel("x")
+        ax.set_ylabel("t")
+        fig.tight_layout()
+
+        fig.savefig(png_path, dpi=300)
+        plt.close(fig)
+
+    return png_path

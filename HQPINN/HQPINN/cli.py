@@ -86,7 +86,16 @@ def main() -> None:
         # Interferometer–Interferometer SEE
         from .SEE.see_ii import run
 
-        run()
+        backend = "Local"
+        n_photons = 2
+
+        mode = input("Train or run? [train/run/remote] ").strip().lower()
+        if mode == "remote":
+            backend = input("Backend? [sim:ascella/qpu:belenos] ").strip().lower()
+            n_photons = int(input("Number of photons? [1/../6] "))
+        if mode == "run":
+            n_photons = int(input("Number of photons? [1/../6] "))
+        run(mode=mode, backend=backend, n_photons=n_photons)
 
     elif choice == "see-pp":
         # PennyLane–PennyLane SEE
