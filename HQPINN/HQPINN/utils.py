@@ -148,7 +148,7 @@ def load_model(
     state = torch.load(ckpt_path, map_location="cpu")
     model.load_state_dict(state)
     model.eval()
-    print(f"Loaded local model from: {ckpt_path} remote={processor is not None})")
+    print(f"Loaded model from: {ckpt_path} remote={processor is not None}")
     return model
 
 

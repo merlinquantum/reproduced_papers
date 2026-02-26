@@ -46,7 +46,7 @@ class II_PINN(nn.Module):
             nn.Linear(8, 3, dtype=DTYPE),
         )
 
-        # Human-readable size label (e.g. "2", "3", "4")
+        # Human-readable size label ("1", "2", ..., "6")
         self.size_label = f"{n_photons}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
@@ -67,17 +67,22 @@ MODELS = [
 ]
 
 
-def run(mode="train", backend="sim-ascella", n_photons=2):
+def run(mode="train", backend="sim:ascella", n_photons=2, rpc_timeout_s=None):
     """Run all SEE Interferometer-Interferometer models and write summary CSV."""
     torch.manual_seed(0)
 
     ckpt_dir = "HQPINN/SEE/"
-    case_prefix = f"see_ii_{n_photons}"
+    # case_prefix = f"see_ii_{n_photons}"
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+
+    # ======================
+    #  MODE TRAIN
+    # ======================
 
     if mode == "train":
         print("=== TRAINING MODE ===")
         out_csv = f"HQPINN/SEE/results/ii_summary_{timestamp}.csv"
+        os.makedirs(os.path.dirname(out_csv), exist_ok=True)
         with open(out_csv, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(
@@ -91,10 +96,11 @@ def run(mode="train", backend="sim-ascella", n_photons=2):
                 ]
             )
 
-            for label, n_photons in MODELS:
-                print(f"\nTraining SEE-II {n_photons} photons")
+            for label, nb_photons in MODELS:
+                print(f"\nTraining SEE-II {nb_photons} photons")
 
-                model = II_PINN(n_photons=n_photons)
+                case_prefix = f"see_ii_{nb_photons}"
+                model = II_PINN(n_photons=nb_photons)
                 optimizer = make_optimizer(model, lr=SEE_LR)
 
                 final_loss, err_rho, err_p, n_params = train_see(
@@ -103,14 +109,14 @@ def run(mode="train", backend="sim-ascella", n_photons=2):
                     optimizer=optimizer,
                     n_epochs=SEE_N_EPOCHS,
                     plot_every=SEE_PLOT_EVERY,
-                    out_dir=f"HQPINN/SEE/results/ii-{label}",
-                    model_label=f"ii-{label}",
+                    out_dir=f"HQPINN/SEE/results/{case_prefix}",
+                    model_label=case_prefix,
                 )
 
                 writer.writerow(
                     [
                         "ii",  # model type: Interferometer-Interferometer
-                        label,  # size label ("2", "3", "4")
+                        label,  # size label ("1", "2", ..., "6")
                         n_params,
                         f"{final_loss:.6e}",
                         f"{err_rho:.6e}",
@@ -118,21 +124,24 @@ def run(mode="train", backend="sim-ascella", n_photons=2):
                     ]
                 )
 
-                print(f"Summary CSV saved to: {out_csv}")
-
                 # === Save model ===
                 model_dir = os.path.join(ckpt_dir, "models")
                 os.makedirs(model_dir, exist_ok=True)
-                timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-                ckpt_path = os.path.join(
-                    ckpt_dir, f"{case_prefix}_{n_photons}_{timestamp}.pt"
-                )
+                # timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+                ckpt_path = os.path.join(model_dir, f"{case_prefix}_{timestamp}.pt")
                 torch.save(model.state_dict(), ckpt_path)
 
                 print(f"Model saved to: {ckpt_path}")
 
+        print(f"Summary CSV saved to: {out_csv}")
+
+    # ======================
+    #  MODE RUN
+    # ======================
+
     elif mode == "run":
 
+        case_prefix = f"see_ii_{n_photons}"
         model_root = os.path.join(ckpt_dir, "models")
         ckpt_path = get_latest_checkpoint(model_root, case_prefix)
         if ckpt_path is None:
@@ -144,7 +153,15 @@ def run(mode="train", backend="sim-ascella", n_photons=2):
         def model_proc_local(processor=None):
             return II_PINN(n_photons=n_photons, processor=processor)
 
-        model = load_model(ckpt_path, model_proc_local)
+        # model = load_model(ckpt_path, model_proc_local)
+
+        if backend.lower() == "local":
+            model = load_model(ckpt_path, model_proc_local)
+        else:
+            print(
+                f"Backend '{backend}' n’est pas utilisé en mode run; for remote use mode='remote'."
+            )
+            model = load_model(ckpt_path, model_proc_local)
 
         model.eval()
 
@@ -159,8 +176,14 @@ def run(mode="train", backend="sim-ascella", n_photons=2):
 
         print(f"Figure saved to: {png_path}")
 
+    # ======================
+    #  MODE RUN REMOTE
+    # ======================
+
     elif mode == "remote":
         print("=== REMOTE MODE ===")
+
+        case_prefix = f"see_ii_{n_photons}"
 
         model_root = os.path.join(ckpt_dir, "models")
         ckpt_path = get_latest_checkpoint(model_root, case_prefix)
@@ -170,7 +193,10 @@ def run(mode="train", backend="sim-ascella", n_photons=2):
 
         print(f"Latest checkpoint found: {ckpt_path}")
 
-        processor = make_merlin_processor(backend)
+        if backend.lower() == "local":
+            backend = "sim:ascella"  # local → simulateur Perceval
+
+        processor = make_merlin_processor(backend, rpc_timeout_s=rpc_timeout_s)
 
         def model_proc_remote(processor=processor):
             return II_PINN(n_photons=n_photons, processor=processor)
@@ -191,4 +217,4 @@ def run(mode="train", backend="sim-ascella", n_photons=2):
         print(f"Figure saved to: {png_path}")
 
     else:
-        raise ValueError("mode must be 'train' or 'run'")
+        raise ValueError("mode must be 'train', 'run', or 'remote'")

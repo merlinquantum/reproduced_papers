@@ -1,4 +1,4 @@
-# core_see.py
+# core_dee.py
 
 import os
 import csv
@@ -16,17 +16,22 @@ from ..config import (
     DTYPE,
     DEVICE,
     EE_GAMMA,
-    SEE_X_MIN,
-    SEE_X_MAX,
-    SEE_T_MIN,
-    SEE_T_MAX,
-    SEE_NX_SAMPLES,
-    SEE_NT_SAMPLES,
+    DEE_X_MIN,
+    DEE_X_MAX,
+    DEE_T_MIN,
+    DEE_T_MAX,
+    DEE_NX_SAMPLES,
+    DEE_NT_SAMPLES,
+    DEE_N_IC,
+    DEE_N_BC,
+    DEE_N_F,
+    DEE_U,
+    DEE_P,
+    DEE_RHO_L,
+    DEE_RHO_R,
+    DEE_X0,
 )
 from ..utils import (
-    sample_ic_points,
-    sample_bc_points,
-    sample_collocation_points,
     count_trainable_params,
     log_training_info,
 )
@@ -38,7 +43,7 @@ matplotlib.use("Agg")
 
 
 # ============================================================
-#  Smooth Euler Equation (SEE)
+#  Discontinue Euler Equation (DEE)
 # ============================================================
 
 
@@ -54,6 +59,54 @@ def partial_derivative(y: torch.Tensor, x: torch.Tensor, index: int) -> torch.Te
     return grads[:, index : index + 1]  # index=0 -> d/dx, index=1 -> d/dt
 
 
+def sample_ic_points():
+    """Sample DEE initial-condition points on t=DEE_T_MIN."""
+    x_ic = torch.rand(DEE_N_IC, 1, dtype=DTYPE, device=DEVICE)
+    x_ic = DEE_X_MIN + (DEE_X_MAX - DEE_X_MIN) * x_ic
+    t_ic = torch.full_like(x_ic, DEE_T_MIN)
+    return x_ic, t_ic
+
+
+def sample_bc_points():
+    """Sample DEE periodic boundary pairs (x=DEE_X_MIN, x=DEE_X_MAX)."""
+    t_bc = torch.rand(DEE_N_BC, 1, dtype=DTYPE, device=DEVICE)
+    t_bc = DEE_T_MIN + (DEE_T_MAX - DEE_T_MIN) * t_bc
+    x_left = torch.full_like(t_bc, DEE_X_MIN)
+    x_right = torch.full_like(t_bc, DEE_X_MAX)
+    return x_left, x_right, t_bc
+
+
+def sample_collocation_points():
+    """Sample DEE collocation points in (x,t) domain."""
+    x_f = torch.rand(DEE_N_F, 1, dtype=DTYPE, device=DEVICE)
+    x_f = DEE_X_MIN + (DEE_X_MAX - DEE_X_MIN) * x_f
+    t_f = torch.rand(DEE_N_F, 1, dtype=DTYPE, device=DEVICE)
+    t_f = DEE_T_MIN + (DEE_T_MAX - DEE_T_MIN) * t_f
+    return x_f, t_f
+
+
+def exact_rho(x: torch.Tensor, t: torch.Tensor) -> torch.Tensor:
+    """
+    Discontinuous density:
+      rho(x, t) = 1.4 if x < 0.5 + 0.1*t
+                  1.0 if x > 0.5 + 0.1*t
+                  undefined if x == 0.5 + 0.1*t
+    """
+    front = DEE_X0 + DEE_U * t
+    rho = torch.full_like(x, float("nan"))
+    rho = torch.where(x < front, torch.full_like(x, DEE_RHO_L), rho)
+    rho = torch.where(x > front, torch.full_like(x, DEE_RHO_R), rho)
+    return rho
+
+
+def exact_solution(x: torch.Tensor, t: torch.Tensor):
+    """Exact smooth Euler solution (rho,u,p) at (x,t)."""
+    rho = exact_rho(x, t)
+    u = torch.full_like(x, DEE_U)
+    p = torch.full_like(x, DEE_P)
+    return rho, u, p
+
+
 def euler_loss_batched(
     model: nn.Module,
     n_f_batch: Optional[int] = 256,
@@ -63,11 +116,11 @@ def euler_loss_batched(
     """
     Mini-batching
 
-    Instead of evaluating all PDE, IC, and BC points at every epoch
-    (e.g., 2000 PDE points, 50 IC, 50 BC), we randomly sample a small
+    Instead of evaluating all F, IC, and BC points at every epoch
+    (e.g., 1000 F, 60 IC, 60 BC), we randomly sample a small
     subset such as:
 
-        n_f_batch = 128     # PDE points
+        n_f_batch = 128     # F points
         n_ic_batch = 25     # initial condition points
         n_bc_batch = 25     # boundary points
     """
@@ -86,9 +139,9 @@ def euler_loss_batched(
     U_ic = model(X_ic)  # [N_ic_batch, 3]
     rho_ic, u_ic, p_ic = U_ic.split(1, dim=1)
 
-    rho_ic_exact = 1.0 + 0.2 * torch.sin(torch.pi * x_ic)
-    u_ic_exact = torch.ones_like(x_ic)
-    p_ic_exact = torch.ones_like(x_ic)
+    rho_ic_exact = exact_rho(x_ic, t_ic)
+    u_ic_exact = torch.full_like(x_ic, DEE_U)
+    p_ic_exact = torch.full_like(x_ic, DEE_P)
 
     loss_ic = torch.mean(
         (rho_ic - rho_ic_exact) ** 2
@@ -133,9 +186,7 @@ def euler_loss_batched(
     U_f = model(X_f)  # [n_f_batch, 3]
     rho, u, p = U_f.split(1, dim=1)
 
-    gamma = EE_GAMMA
-
-    e = p / ((gamma - 1.0) * rho)
+    e = p / ((EE_GAMMA - 1.0) * rho)
     E = e + 0.5 * u**2
 
     U1 = rho
@@ -163,23 +214,10 @@ def euler_loss_batched(
     return loss_ic, loss_bc, loss_f
 
 
-def exact_rho(x: torch.Tensor, t: torch.Tensor) -> torch.Tensor:
-    """Exact density rho(x,t) = 1 + 0.2 * sin(pi * (x - t))."""
-    return 1.0 + 0.2 * torch.sin(torch.pi * (x - t))
-
-
-def exact_solution(x: torch.Tensor, t: torch.Tensor):
-    """Exact smooth Euler solution (rho,u,p) at (x,t)."""
-    rho = exact_rho(x, t)
-    u = torch.ones_like(x)
-    p = torch.ones_like(x)
-    return rho, u, p
-
-
 def evaluate_see_errors(model, nx: int = 1000):
     """Relative L2 errors computed at t = T."""
-    t_final = SEE_T_MAX
-    x = torch.linspace(SEE_X_MIN, SEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
+    t_final = DEE_T_MAX
+    x = torch.linspace(DEE_X_MIN, DEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
     t = torch.full_like(x, t_final)
 
     xt = torch.stack([x, t], dim=1)
@@ -192,14 +230,19 @@ def evaluate_see_errors(model, nx: int = 1000):
 
     # PINN-style L2 error
     def rel_l2(pred, exact):
-        num = torch.sqrt(torch.mean((pred - exact) ** 2))
-        den = torch.sqrt(torch.mean(exact**2))
+        valid = torch.isfinite(pred) & torch.isfinite(exact)
+        if not torch.any(valid):
+            return float("nan")
+        pred_v = pred[valid]
+        exact_v = exact[valid]
+        num = torch.sqrt(torch.mean((pred_v - exact_v) ** 2))
+        den = torch.sqrt(torch.mean(exact_v**2))
         return (num / den).item()
 
     return rel_l2(rho_pred, rho_exact), rel_l2(p_pred, p_exact)
 
 
-def train_see(
+def train_dee(
     model: nn.Module,
     t_train,  # unused, kept for API consistency
     optimizer: torch.optim.Optimizer,
@@ -212,13 +255,13 @@ def train_see(
     ] = euler_loss_batched,
     # ] = euler_loss,
 ) -> tuple[float, float, float, int]:
-    """Training loop for the Smooth Euler Equation PINN (classical-classical)."""
+    """Training loop for the Discontinuous Euler Equation PINN (classical-classical)."""
 
     os.makedirs(out_dir, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    pdf_path = os.path.join(out_dir, f"see-{model_label}_{timestamp}.pdf")
-    csv_path = os.path.join(out_dir, f"see-{model_label}_{timestamp}.csv")
+    pdf_path = os.path.join(out_dir, f"dee-{model_label}_{timestamp}.pdf")
+    csv_path = os.path.join(out_dir, f"dee-{model_label}_{timestamp}.csv")
 
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, factor=0.5, patience=500
@@ -305,9 +348,9 @@ def train_see(
 
     # Final evaluation grid for PDF
     with torch.no_grad():
-        nx, nt = SEE_NX_SAMPLES, SEE_NT_SAMPLES
-        x = torch.linspace(SEE_X_MIN, SEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
-        t = torch.linspace(SEE_T_MIN, SEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
+        nx, nt = DEE_NX_SAMPLES, DEE_NT_SAMPLES
+        x = torch.linspace(DEE_X_MIN, DEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
+        t = torch.linspace(DEE_T_MIN, DEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
         X, T = torch.meshgrid(x, t, indexing="ij")
         xt = torch.stack([X.reshape(-1), T.reshape(-1)], dim=1)
 
@@ -392,14 +435,19 @@ def save_density_plot(
     model.eval()
 
     with torch.no_grad():
-        nx, nt = SEE_NX_SAMPLES, SEE_NT_SAMPLES
+        nx, nt = DEE_NX_SAMPLES, DEE_NT_SAMPLES
         if backend.lower() != "local":
             # Remote backends create many cloud jobs; downsample for robustness.
+            orig_nx, orig_nt = nx, nt
             nx = min(nx, 30)
             nt = min(nt, 30)
-            print(f"Remote backend detected: using reduced grid {nx}x{nt} for plotting.")
-        x = torch.linspace(SEE_X_MIN, SEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
-        t = torch.linspace(SEE_T_MIN, SEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
+            if (nx, nt) != (orig_nx, orig_nt):
+                print(
+                    f"Remote backend detected: reduced grid for plotting "
+                    f"from {orig_nx}x{orig_nt} to {nx}x{nt}."
+                )
+        x = torch.linspace(DEE_X_MIN, DEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
+        t = torch.linspace(DEE_T_MIN, DEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
         X, T = torch.meshgrid(x, t, indexing="ij")
         xt = torch.stack([X.reshape(-1), T.reshape(-1)], dim=1)
 

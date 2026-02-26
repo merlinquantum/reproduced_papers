@@ -76,7 +76,7 @@ def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/"):
     print(f"Plot saved to: {save_path}")
 
 
-def run(mode="train", backend="sim-ascella") -> None:
+def run(mode="train", backend="sim-ascella", rpc_timeout_s=None) -> None:
     """
     mode = "train" : train the model from scratch and save the checkpoint
     mode = "run"   : load the latest checkpoint and run inference (not implemented here, but can be added)
@@ -147,7 +147,7 @@ def run(mode="train", backend="sim-ascella") -> None:
 
         print(f"Latest checkpoint found: {ckpt}")
 
-        processor = make_merlin_processor(backend)
+        processor = make_merlin_processor(backend, rpc_timeout_s=rpc_timeout_s)
 
         model_remote = load_model(ckpt, MM_PINN, processor=processor)
 

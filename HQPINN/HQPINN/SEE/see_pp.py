@@ -1,6 +1,7 @@
 # see_pp.py
 # PennyLane–PennyLane PINN
 
+import os
 import csv
 from datetime import datetime
 
@@ -77,6 +78,7 @@ def run():
 
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     out_csv = f"HQPINN/SEE/results/pp_summary_{timestamp}.csv"
+    os.makedirs("HQPINN/SEE/results", exist_ok=True)
 
     with open(out_csv, "w", newline="") as f:
         writer = csv.writer(f)

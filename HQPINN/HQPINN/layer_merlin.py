@@ -11,6 +11,7 @@ import perceval as pcvl
 from perceval import PS, BS
 
 from math import comb
+from types import MethodType
 
 from .config import N_QUBITS, N_LAYERS, DTYPE
 
@@ -168,8 +169,8 @@ def make_interf_qlayer(n_photons: int) -> QuantumLayer:
     # Example: n_photons=3, n_modes=5 -> [1, 1, 1, 0, 0]
     input_state = [1] * n_photons + [0] * (n_modes - n_photons)
 
-    # Fock space dimension in the unbunched subspace:
-    # choose n_photons distinct modes among n_modes
+    # Fock-space dimension expected by ComputationSpace.FOCK (includes bunching states),
+    # regardless of the chosen unbunched input state.
     fock_dim = comb(n_modes + n_photons - 1, n_photons)
 
     grouping = LexGrouping(fock_dim, group_dim)
@@ -258,26 +259,23 @@ class BranchMerlin(nn.Module):
 
         self.readout = nn.Linear(self.group_dim, n_outputs, dtype=DTYPE)
 
-    def _feature_map(self, x_in: torch.Tensor) -> torch.Tensor:
-        x_in = x_in.to(DTYPE)
+    def _feature_map(self, x_in):
 
-        # [N] or [N,1] → DHO style 1D encoding (only t)
-        if x_in.dim() == 1:  # x_in is already 1D, treat as t
-            t = x_in
-        elif x_in.shape[1] == 1:
-            t = x_in[:, 0]  # treat single column as t
-        else:
-            # [N,2] → Euler style 2D encoding (x,t)
+        # Euler case: (x, t) pairs
+        if x_in.ndim == 2 and x_in.shape[1] == 2:
             x = x_in[:, 0]
             t = x_in[:, 1]
-            # Feature map construction for 2D case (example: φ = [π x, π t, π (x-t)])
             phi0 = np.pi * x
             phi1 = np.pi * t
             phi2 = np.pi * (x - t)
-            # Stack features into [N, 3]
             return torch.stack([phi0, phi1, phi2], dim=1).to(DTYPE)
 
-        # DHO-style 1D encoding: φ = [π t, 2π t, 3π t]
+        # DHO case: only time t
+        if x_in.ndim == 2:
+            t = x_in[:, 0]
+        else:
+            t = x_in
+
         scale = np.pi
         phi0 = scale * t
         phi1 = 2.0 * scale * t
@@ -320,11 +318,44 @@ class BranchMerlin(nn.Module):
         return u
 
 
-def make_merlin_processor(processor="sim:ascella") -> ML.MerlinProcessor:
+def make_merlin_processor(
+    processor="sim:ascella", rpc_timeout_s: int | None = None
+) -> ML.MerlinProcessor:
     """
-    Construit un MerlinProcessor connecté au simulateur Perceval 'sim:ascella'.
+    Build a MerlinProcessor connected to a Perceval backend.
+
+    Args:
+        processor: Perceval/Merlin backend.
+        rpc_timeout_s:
+            - int: enforce this HTTP timeout (seconds) on RPC calls.
+            - None: do not override timeout (use Perceval default).
     """
-    rp = pcvl.RemoteProcessor(processor)
+    raw_backend = str(processor).strip().lower()
+    backend_aliases = {
+        "sim:ascella": "sim:ascella",
+        "sim:acella": "sim:ascella",  # common typo
+        "ascella": "sim:ascella",
+        "acella": "sim:ascella",
+        "qpu:belenos": "qpu:belenos",
+        "belenos": "qpu:belenos",
+    }
+    if raw_backend not in backend_aliases:
+        raise ValueError(
+            f"Unknown backend '{processor}'. Valid values: sim:ascella or qpu:belenos."
+        )
+
+    backend = backend_aliases[raw_backend]
+    if backend != raw_backend:
+        print(f"Backend '{processor}' corrigé en '{backend}'.")
+
+    rp = pcvl.RemoteProcessor(backend)
+    if rpc_timeout_s is not None:
+        # Set per-request HTTP timeout to avoid short cloud RPC timeouts.
+        try:
+            rp.get_rpc_handler().request_timeout = int(rpc_timeout_s)
+        except Exception:
+            pass
+
     processor = ML.MerlinProcessor(
         rp,
         microbatch_size=32,
@@ -332,4 +363,22 @@ def make_merlin_processor(processor="sim:ascella") -> ML.MerlinProcessor:
         max_shots_per_call=None,
         chunk_concurrency=1,
     )
+
+    if rpc_timeout_s is not None:
+        # Merlin creates fresh RemoteProcessor clones per chunk/retry attempt.
+        # Re-apply timeout to each clone to keep behavior consistent.
+        original_clone = processor._clone_remote_processor
+
+        def _clone_remote_processor_with_timeout(self, rp_src):
+            rp_new = original_clone(rp_src)
+            try:
+                rp_new.get_rpc_handler().request_timeout = int(rpc_timeout_s)
+            except Exception:
+                pass
+            return rp_new
+
+        processor._clone_remote_processor = MethodType(
+            _clone_remote_processor_with_timeout, processor
+        )
+
     return processor

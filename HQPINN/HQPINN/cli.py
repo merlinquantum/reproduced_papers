@@ -54,8 +54,13 @@ def main() -> None:
         from .DHO.a2_dho_ii import run
 
         mode = input("Train or run? [train/run/remote] ").strip().lower()
-        backend = input("Backend? [sim:ascella/qpu:belenos] ").strip().lower()
-        run(mode=mode, backend=backend)
+
+        backend = input("Backend? [sim:ascella/qpu:belenos] ").strip()
+        rpc_timeout_s = None
+        if mode == "remote":
+            timeout_raw = input("RPC timeout (s)? [empty=default] ").strip()
+            rpc_timeout_s = int(timeout_raw) if timeout_raw else None
+        run(mode=mode, backend=backend, rpc_timeout_s=rpc_timeout_s)
 
     elif choice == "dho-percperc":
         # Perceval–Perceval
@@ -69,7 +74,9 @@ def main() -> None:
 
         run()
 
+    # ==========================
     # SEE experiments
+    # ==========================
     elif choice == "see-cc":
         # Classical–Classical SEE
         from .SEE.see_cc import run
@@ -88,14 +95,23 @@ def main() -> None:
 
         backend = "Local"
         n_photons = 2
+        rpc_timeout_s = None
 
         mode = input("Train or run? [train/run/remote] ").strip().lower()
+
         if mode == "remote":
-            backend = input("Backend? [sim:ascella/qpu:belenos] ").strip().lower()
+            backend = input("Backend? [sim:ascella/qpu:belenos] ").strip()
+            timeout_raw = input("RPC timeout (s)? [empty=default] ").strip()
+            rpc_timeout_s = int(timeout_raw) if timeout_raw else None
             n_photons = int(input("Number of photons? [1/../6] "))
         if mode == "run":
             n_photons = int(input("Number of photons? [1/../6] "))
-        run(mode=mode, backend=backend, n_photons=n_photons)
+        run(
+            mode=mode,
+            backend=backend,
+            n_photons=n_photons,
+            rpc_timeout_s=rpc_timeout_s,
+        )
 
     elif choice == "see-pp":
         # PennyLane–PennyLane SEE
@@ -107,11 +123,30 @@ def main() -> None:
         # Classical–Interferometer SEE
         from .SEE.see_ci import run
 
-        run()
+        backend = "Local"
+        model_size = "10-4-2"
+        rpc_timeout_s = None
+
+        mode = input("Train or run? [train/run/remote] ").strip().lower()
+
+        if mode == "remote":
+            backend = input("Backend? [sim:ascella/qpu:belenos] ").strip()
+            timeout_raw = input("RPC timeout (s)? [empty=default] ").strip()
+            rpc_timeout_s = int(timeout_raw) if timeout_raw else None
+            model_size = input("Model size? [10-4-2/10-7-2/20-4-2] ").strip()
+        if mode == "run":
+            model_size = input("Model size? [10-4-2/10-7-2/20-4-2] ").strip()
+
+        run(
+            mode=mode,
+            backend=backend,
+            model_size=model_size,
+            rpc_timeout_s=rpc_timeout_s,
+        )
 
     else:
         print(f"Unknown experiment: {choice}")
         print(
             "Please choose one of: dho-pp, dho-cc, dho-cp, dho-cperc, "
-            "dho-ii, dho-perc-perc, dho-ci, see-cc, see-pp, see-ci, see-ii, see-cp."
+            "dho-ii, dho-percperc, dho-ci, see-cc, see-pp, see-ci, see-ii, see-cp."
         )
