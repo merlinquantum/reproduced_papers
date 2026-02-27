@@ -81,9 +81,7 @@ def _get_model_config(model_size: str) -> tuple[str, int, int, int]:
     raise ValueError(f"Unknown model_size='{model_size}'. Valid values: {valid}")
 
 
-def run(
-    mode="train", backend="sim:ascella", model_size="10-4-2", rpc_timeout_s=None
-):
+def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
     """Run SEE Classical-Interferometer models and write summary CSV."""
     torch.manual_seed(0)
 
@@ -199,7 +197,7 @@ def run(
         if backend.lower() == "local":
             backend = "sim:ascella"
 
-        processor = make_merlin_processor(backend, rpc_timeout_s=rpc_timeout_s)
+        processor = make_merlin_processor(backend)
 
         def model_proc_remote(processor=processor):
             return CI_PINN(

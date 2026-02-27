@@ -1,5 +1,5 @@
-# see-ii.py
-# Interferometer-Interferometer PINN for the damped oscillator using oscillator_core + merlin_quantum
+# dee-ii.py
+# Interferometer-Interferometer PINN
 
 import os
 from datetime import datetime
@@ -9,13 +9,13 @@ import torch
 import torch.nn as nn
 
 from ..config import (
-    SEE_N_EPOCHS,
-    SEE_LR,
-    SEE_PLOT_EVERY,
+    DEE_N_EPOCHS,
+    DEE_LR,
+    DEE_PLOT_EVERY,
     DTYPE,
 )
 from ..utils import make_optimizer, get_latest_checkpoint, load_model
-from .core_see import train_see, save_density_plot
+from .core_dee import train_dee, save_density_plot
 from ..layer_merlin import make_interf_qlayer, BranchMerlin, make_merlin_processor
 
 
@@ -67,11 +67,11 @@ MODELS = [
 ]
 
 
-def run(mode="train", backend="sim:ascella", n_photons=2):
-    """Run all SEE Interferometer-Interferometer models and write summary CSV."""
+def run(mode="train", backend="sim:ascella", n_photons=2, rpc_timeout_s=None):
+    """Run all DEE Interferometer-Interferometer models and write summary CSV."""
     torch.manual_seed(0)
 
-    ckpt_dir = "HQPINN/SEE/"
+    ckpt_dir = "HQPINN/DEE/"
     # case_prefix = f"see_ii_{n_photons}"
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
 
@@ -81,7 +81,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
 
     if mode == "train":
         print("=== TRAINING MODE ===")
-        out_csv = f"HQPINN/SEE/results/ii_summary_{timestamp}.csv"
+        out_csv = f"HQPINN/DEE/results/ii_summary_{timestamp}.csv"
         os.makedirs(os.path.dirname(out_csv), exist_ok=True)
         with open(out_csv, "w", newline="") as f:
             writer = csv.writer(f)
@@ -97,19 +97,19 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
             )
 
             for label, nb_photons in MODELS:
-                print(f"\nTraining SEE-II {nb_photons} photons")
+                print(f"\nTraining DEE-II {nb_photons} photons")
 
-                case_prefix = f"see_ii_{nb_photons}"
+                case_prefix = f"dee_ii_{nb_photons}"
                 model = II_PINN(n_photons=nb_photons)
-                optimizer = make_optimizer(model, lr=SEE_LR)
+                optimizer = make_optimizer(model, lr=DEE_LR)
 
-                final_loss, err_rho, err_p, n_params = train_see(
+                final_loss, err_rho, err_p, n_params = train_dee(
                     model=model,
                     t_train=None,  # kept for API consistency
                     optimizer=optimizer,
-                    n_epochs=SEE_N_EPOCHS,
-                    plot_every=SEE_PLOT_EVERY,
-                    out_dir=f"HQPINN/SEE/results/{case_prefix}",
+                    n_epochs=DEE_N_EPOCHS,
+                    plot_every=DEE_PLOT_EVERY,
+                    out_dir=f"HQPINN/DEE/results/{case_prefix}",
                     model_label=case_prefix,
                 )
 
@@ -141,7 +141,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
 
     elif mode == "run":
 
-        case_prefix = f"see_ii_{n_photons}"
+        case_prefix = f"dee_ii_{n_photons}"
         model_root = os.path.join(ckpt_dir, "models")
         ckpt_path = get_latest_checkpoint(model_root, case_prefix)
         if ckpt_path is None:
@@ -183,7 +183,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
     elif mode == "remote":
         print("=== REMOTE MODE ===")
 
-        case_prefix = f"see_ii_{n_photons}"
+        case_prefix = f"dee_ii_{n_photons}"
 
         model_root = os.path.join(ckpt_dir, "models")
         ckpt_path = get_latest_checkpoint(model_root, case_prefix)

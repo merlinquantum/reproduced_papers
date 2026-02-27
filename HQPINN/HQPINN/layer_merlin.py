@@ -11,7 +11,6 @@ import perceval as pcvl
 from perceval import PS, BS
 
 from math import comb
-from types import MethodType
 
 from .config import N_QUBITS, N_LAYERS, DTYPE
 
@@ -318,17 +317,9 @@ class BranchMerlin(nn.Module):
         return u
 
 
-def make_merlin_processor(
-    processor="sim:ascella", rpc_timeout_s: int | None = None
-) -> ML.MerlinProcessor:
+def make_merlin_processor(processor="sim:ascella") -> ML.MerlinProcessor:
     """
-    Build a MerlinProcessor connected to a Perceval backend.
-
-    Args:
-        processor: Perceval/Merlin backend.
-        rpc_timeout_s:
-            - int: enforce this HTTP timeout (seconds) on RPC calls.
-            - None: do not override timeout (use Perceval default).
+    Construit un MerlinProcessor connecté au simulateur Perceval 'sim:ascella'.
     """
     raw_backend = str(processor).strip().lower()
     backend_aliases = {
@@ -349,36 +340,11 @@ def make_merlin_processor(
         print(f"Backend '{processor}' corrigé en '{backend}'.")
 
     rp = pcvl.RemoteProcessor(backend)
-    if rpc_timeout_s is not None:
-        # Set per-request HTTP timeout to avoid short cloud RPC timeouts.
-        try:
-            rp.get_rpc_handler().request_timeout = int(rpc_timeout_s)
-        except Exception:
-            pass
-
     processor = ML.MerlinProcessor(
         rp,
-        microbatch_size=32,
+        microbatch_size=8,
         timeout=3600.0,
         max_shots_per_call=None,
         chunk_concurrency=1,
     )
-
-    if rpc_timeout_s is not None:
-        # Merlin creates fresh RemoteProcessor clones per chunk/retry attempt.
-        # Re-apply timeout to each clone to keep behavior consistent.
-        original_clone = processor._clone_remote_processor
-
-        def _clone_remote_processor_with_timeout(self, rp_src):
-            rp_new = original_clone(rp_src)
-            try:
-                rp_new.get_rpc_handler().request_timeout = int(rpc_timeout_s)
-            except Exception:
-                pass
-            return rp_new
-
-        processor._clone_remote_processor = MethodType(
-            _clone_remote_processor_with_timeout, processor
-        )
-
     return processor

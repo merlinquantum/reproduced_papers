@@ -21,6 +21,8 @@ def main() -> None:
     print("  see-cp          -> SEE, Classical–PennyLane")
     print("  see-ii          -> SEE, Interferometer–Interferometer")
     print("  see-pp          -> SEE, PennyLane–PennyLane")
+    print("  dee-cc          -> DEE, Classical–Classical")
+    print("  dee-ii          -> DEE, Interferometer–Interferometer")
 
     print()
     choice = input("Which experiment do you want to run? ").strip()
@@ -56,11 +58,7 @@ def main() -> None:
         mode = input("Train or run? [train/run/remote] ").strip().lower()
 
         backend = input("Backend? [sim:ascella/qpu:belenos] ").strip()
-        rpc_timeout_s = None
-        if mode == "remote":
-            timeout_raw = input("RPC timeout (s)? [empty=default] ").strip()
-            rpc_timeout_s = int(timeout_raw) if timeout_raw else None
-        run(mode=mode, backend=backend, rpc_timeout_s=rpc_timeout_s)
+        run(mode=mode, backend=backend)
 
     elif choice == "dho-percperc":
         # Perceval–Perceval
@@ -95,6 +93,62 @@ def main() -> None:
 
         backend = "Local"
         n_photons = 2
+
+        mode = input("Train or run? [train/run/remote] ").strip().lower()
+
+        if mode == "remote":
+            backend = input("Backend? [sim:ascella/qpu:belenos] ").strip()
+            n_photons = int(input("Number of photons? [1/../6] "))
+        if mode == "run":
+            n_photons = int(input("Number of photons? [1/../6] "))
+        run(
+            mode=mode,
+            backend=backend,
+            n_photons=n_photons,
+        )
+
+    elif choice == "see-pp":
+        # PennyLane–PennyLane SEE
+        from .SEE.see_pp import run
+
+        run()
+
+    elif choice == "see-ci":
+        # Classical–Interferometer SEE
+        from .SEE.see_ci import run
+
+        backend = "Local"
+        model_size = "10-4-2"
+
+        mode = input("Train or run? [train/run/remote] ").strip().lower()
+
+        if mode == "remote":
+            backend = input("Backend? [sim:ascella/qpu:belenos] ").strip()
+            model_size = input("Model size? [10-4-2/10-7-2/20-4-2] ").strip()
+        if mode == "run":
+            model_size = input("Model size? [10-4-2/10-7-2/20-4-2] ").strip()
+
+        run(
+            mode=mode,
+            backend=backend,
+            model_size=model_size,
+        )
+
+    # ==========================
+    # DEE experiments
+    # ==========================
+    elif choice == "dee-cc":
+        # Classical–Classical DEE
+        from .DEE.dee_cc import run
+
+        run()
+
+    elif choice == "dee-ii":
+        # Interferometer–Interferometer DEE
+        from .DEE.dee_ii import run
+
+        backend = "Local"
+        n_photons = 2
         rpc_timeout_s = None
 
         mode = input("Train or run? [train/run/remote] ").strip().lower()
@@ -113,40 +167,9 @@ def main() -> None:
             rpc_timeout_s=rpc_timeout_s,
         )
 
-    elif choice == "see-pp":
-        # PennyLane–PennyLane SEE
-        from .SEE.see_pp import run
-
-        run()
-
-    elif choice == "see-ci":
-        # Classical–Interferometer SEE
-        from .SEE.see_ci import run
-
-        backend = "Local"
-        model_size = "10-4-2"
-        rpc_timeout_s = None
-
-        mode = input("Train or run? [train/run/remote] ").strip().lower()
-
-        if mode == "remote":
-            backend = input("Backend? [sim:ascella/qpu:belenos] ").strip()
-            timeout_raw = input("RPC timeout (s)? [empty=default] ").strip()
-            rpc_timeout_s = int(timeout_raw) if timeout_raw else None
-            model_size = input("Model size? [10-4-2/10-7-2/20-4-2] ").strip()
-        if mode == "run":
-            model_size = input("Model size? [10-4-2/10-7-2/20-4-2] ").strip()
-
-        run(
-            mode=mode,
-            backend=backend,
-            model_size=model_size,
-            rpc_timeout_s=rpc_timeout_s,
-        )
-
     else:
         print(f"Unknown experiment: {choice}")
         print(
             "Please choose one of: dho-pp, dho-cc, dho-cp, dho-cperc, "
-            "dho-ii, dho-percperc, dho-ci, see-cc, see-pp, see-ci, see-ii, see-cp."
+            "dho-ii, dho-percperc, dho-ci, see-cc, see-pp, see-ci, see-ii, see-cp, dee-cc, dee-ii."
         )
