@@ -1,43 +1,47 @@
-# dee-ii.py
-# Interferometer-Interferometer PINN
+# dee_ci.py
+# Classical–Interferometer PINN for DEE
 
 import os
-from datetime import datetime
 import csv
+from datetime import datetime
 
 import torch
 import torch.nn as nn
 
 from ..config import (
-    DEE_N_EPOCHS,
-    DEE_LR,
-    DEE_PLOT_EVERY,
+    DEE_CC_NUM_HIDDEN_LAYERS,
+    DEE_CC_HIDDEN_WIDTH,
     DTYPE,
+    DEE_N_EPOCHS,
+    DEE_PLOT_EVERY,
+    DEE_LR,
 )
 from ..utils import make_optimizer
 from .core_dee import train_dee, save_density_plot
 from ..run_common import run_density_inference_mode
+from ..layer_classical import BranchPyTorch
 from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
-class II_PINN(nn.Module):
+class CI_PINN(nn.Module):
     """
-    Interferometer-Interferometer PINN:
-
-        u(t) = u_q1(t) + u_q2(t)
-
-    Each branch uses its own QuantumLayer instance → independent parameters.
+    Classical-Interferometer PINN with one classical branch and one quantum branch.
     """
 
-    def __init__(self, n_photons: int, processor=None) -> None:
+    def __init__(
+        self,
+        n_photons: int,
+        hidden_width: int = DEE_CC_HIDDEN_WIDTH,
+        num_hidden_layers: int = DEE_CC_NUM_HIDDEN_LAYERS,
+        processor=None,
+    ) -> None:
         super().__init__()
 
-        # Two distinct quantum branches with independent parameters
-        self.branch1 = BranchMerlin(
-            make_interf_qlayer(n_photons=n_photons),
-            n_outputs=3,
-            processor=processor,
-            feature_map_kind="dee",
+        self.branch1 = BranchPyTorch(
+            in_features=2,
+            out_features=3,
+            num_hidden_layers=num_hidden_layers,
+            hidden_width=hidden_width,
         )
         self.branch2 = BranchMerlin(
             make_interf_qlayer(n_photons=n_photons),
@@ -46,49 +50,45 @@ class II_PINN(nn.Module):
             feature_map_kind="dee",
         )
 
-        # Fusion head: combines outputs of both branches into (rho, u, p)
         self.fusion = nn.Sequential(
             nn.Linear(3, 8, dtype=DTYPE),
             nn.Tanh(),
             nn.Linear(8, 3, dtype=DTYPE),
         )
 
-        # Human-readable size label ("1", "2", ..., "6")
-        self.size_label = f"{n_photons}"
+        self.size_label = f"{hidden_width}-{num_hidden_layers}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
-        # Forward pass: sum two quantum branches then apply fusion head
-        out1 = self.branch1(xt)  # [N, 3]
-        out2 = self.branch2(xt)  # [N, 3]
-        combined = out1 + out2  # [N, 3]
-        return self.fusion(combined)  # [N, 3]
+        out1 = self.branch1(xt)
+        out2 = self.branch2(xt)
+        return self.fusion(out1 + out2)
 
 
 MODELS = [
-    ("1", 1),
-    ("2", 2),
-    ("3", 3),
-    ("4", 4),
-    ("5", 5),
-    ("6", 6),
+    ("10-4-1", 10, 4, 1),
+    ("10-7-1", 10, 7, 1),
+    ("20-4-1", 20, 4, 1),
 ]
 
 
-def run(mode="train", backend="sim:ascella", n_photons=2):
-    """Run all DEE Interferometer-Interferometer models and write summary CSV."""
+def _get_model_config(model_size: str) -> tuple[str, int, int, int]:
+    for label, width, layers, n_photons in MODELS:
+        if label == model_size:
+            return label, width, layers, n_photons
+    valid = ", ".join(label for label, *_ in MODELS)
+    raise ValueError(f"Unknown model_size='{model_size}'. Valid values: {valid}")
+
+
+def run(mode="train", backend="sim:ascella", model_size="10-4-1"):
+    """Run DEE Classical-Interferometer models and write summary CSV."""
     torch.manual_seed(0)
 
     ckpt_dir = "HQPINN/DEE/"
-    # case_prefix = f"see_ii_{n_photons}"
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-
-    # ======================
-    #  MODE TRAIN
-    # ======================
 
     if mode == "train":
         print("=== TRAINING MODE ===")
-        out_csv = f"HQPINN/DEE/results/ii_summary_{timestamp}.csv"
+        out_csv = f"HQPINN/DEE/results/ci_summary_{timestamp}.csv"
         os.makedirs(os.path.dirname(out_csv), exist_ok=True)
         with open(out_csv, "w", newline="") as f:
             writer = csv.writer(f)
@@ -103,16 +103,20 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
                 ]
             )
 
-            for label, nb_photons in MODELS:
-                print(f"\nTraining DEE-II {nb_photons} photons")
+            for label, width, layers, n_photons in MODELS:
+                print(
+                    f"\nTraining DEE-CI model: {label} (width={width}, layers={layers}, {n_photons} photons)"
+                )
 
-                case_prefix = f"dee_ii_{nb_photons}"
-                model = II_PINN(n_photons=nb_photons)
+                case_prefix = f"dee_ci_{label}"
+                model = CI_PINN(
+                    n_photons=n_photons, hidden_width=width, num_hidden_layers=layers
+                )
                 optimizer = make_optimizer(model, lr=DEE_LR)
 
                 final_loss, err_rho, err_p, n_params = train_dee(
                     model=model,
-                    t_train=None,  # kept for API consistency
+                    t_train=None,
                     optimizer=optimizer,
                     n_epochs=DEE_N_EPOCHS,
                     plot_every=DEE_PLOT_EVERY,
@@ -122,8 +126,8 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
 
                 writer.writerow(
                     [
-                        "ii",  # model type: Interferometer-Interferometer
-                        label,  # size label ("1", "2", ..., "6")
+                        "ci",
+                        label,
                         n_params,
                         f"{final_loss:.6e}",
                         f"{err_rho:.6e}",
@@ -131,23 +135,17 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
                     ]
                 )
 
-                # === Save model ===
                 model_dir = os.path.join(ckpt_dir, "models")
                 os.makedirs(model_dir, exist_ok=True)
-                # timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
                 ckpt_path = os.path.join(model_dir, f"{case_prefix}_{timestamp}.pt")
                 torch.save(model.state_dict(), ckpt_path)
-
                 print(f"Model saved to: {ckpt_path}")
 
         print(f"Summary CSV saved to: {out_csv}")
 
-    # ======================
-    #  MODE RUN
-    # ======================
-
     elif mode == "run":
-        case_prefix = f"dee_ii_{n_photons}"
+        label, width, layers, n_photons = _get_model_config(model_size)
+        case_prefix = f"dee_ci_{label}"
         run_density_inference_mode(
             mode="run",
             backend=backend,
@@ -155,18 +153,18 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
             case_prefix=case_prefix,
             n_photons=n_photons,
             timestamp=timestamp,
-            model_factory=lambda processor=None: II_PINN(
-                n_photons=n_photons, processor=processor
+            model_factory=lambda processor=None: CI_PINN(
+                n_photons=n_photons,
+                hidden_width=width,
+                num_hidden_layers=layers,
+                processor=processor,
             ),
             save_plot_fn=save_density_plot,
         )
 
-    # ======================
-    #  MODE RUN REMOTE
-    # ======================
-
     elif mode == "remote":
-        case_prefix = f"dee_ii_{n_photons}"
+        label, width, layers, n_photons = _get_model_config(model_size)
+        case_prefix = f"dee_ci_{label}"
         run_density_inference_mode(
             mode="remote",
             backend=backend,
@@ -174,8 +172,11 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
             case_prefix=case_prefix,
             n_photons=n_photons,
             timestamp=timestamp,
-            model_factory=lambda processor=None: II_PINN(
-                n_photons=n_photons, processor=processor
+            model_factory=lambda processor=None: CI_PINN(
+                n_photons=n_photons,
+                hidden_width=width,
+                num_hidden_layers=layers,
+                processor=processor,
             ),
             save_plot_fn=save_density_plot,
         )

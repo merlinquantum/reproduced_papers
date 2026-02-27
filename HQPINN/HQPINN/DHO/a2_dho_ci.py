@@ -28,7 +28,9 @@ class CI_PINN(nn.Module):
         super().__init__()
 
         # One MerLin quantum branch
-        self.branch1 = BranchMerlin(make_interf_qlayer(n_photons=1))
+        self.branch1 = BranchMerlin(
+            make_interf_qlayer(n_photons=1), feature_map_kind="dho"
+        )
         # One classical MLP branch
         self.branch2 = BranchPyTorch()
 

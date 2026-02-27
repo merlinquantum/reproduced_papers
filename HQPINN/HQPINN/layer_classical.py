@@ -1,4 +1,13 @@
-# layer_classcal.py
+"""
+Classical branch used in HQPINN models.
+
+In the paper's hybrid architecture, each model is built from one or more
+parallel branches whose outputs are combined downstream. This module provides
+the pure-MLP branch used in:
+- fully classical baselines (CC),
+- hybrid classical+quantum variants (e.g., CI/CP),
+- shared readout setups for DHO/SEE/DEE experiments.
+"""
 
 import torch
 import torch.nn as nn
@@ -8,7 +17,10 @@ from .config import DTYPE, DHO_NUM_HIDDEN_LAYERS, DHO_HIDDEN_WIDTH
 
 class BranchPyTorch(nn.Module):
     """
-    Simple feed-forward network used as a branch in the PINN.
+    High-level classical encoder from input coordinates to physical outputs.
+
+    This branch is the "classical path" counterpart to quantum branches
+    (PennyLane/Merlin) in the paper's comparative experiments.
     """
 
     def __init__(

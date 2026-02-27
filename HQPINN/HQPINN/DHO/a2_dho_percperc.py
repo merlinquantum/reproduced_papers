@@ -29,8 +29,8 @@ class MM_PINN(nn.Module):
         super().__init__()
 
         # Two distinct quantum branches with independent parameters
-        self.branch1 = BranchMerlin(make_perceval_qlayer())
-        self.branch2 = BranchMerlin(make_perceval_qlayer())
+        self.branch1 = BranchMerlin(make_perceval_qlayer(), feature_map_kind="dho")
+        self.branch2 = BranchMerlin(make_perceval_qlayer(), feature_map_kind="dho")
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
         # Forward pass: sum of the two Perceval branches

@@ -16,10 +16,11 @@ from ..config import (
     SEE_PLOT_EVERY,
     SEE_LR,
 )
-from ..utils import make_optimizer, get_latest_checkpoint, load_model
+from ..utils import make_optimizer
 from .core_see import train_see, save_density_plot
+from ..run_common import run_density_inference_mode
 from ..layer_classical import BranchPyTorch
-from ..layer_merlin import make_interf_qlayer, BranchMerlin, make_merlin_processor
+from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
 class CI_PINN(nn.Module):
@@ -45,7 +46,10 @@ class CI_PINN(nn.Module):
             hidden_width=hidden_width,
         )
         self.branch2 = BranchMerlin(
-            make_interf_qlayer(n_photons=n_photons), n_outputs=3, processor=processor
+            make_interf_qlayer(n_photons=n_photons),
+            n_outputs=3,
+            processor=processor,
+            feature_map_kind="see",
         )
 
         # Fusion head: combines outputs of both branches
@@ -67,9 +71,9 @@ class CI_PINN(nn.Module):
 
 
 MODELS = [
-    ("10-4-2", 10, 4, 1),
-    ("10-7-2", 10, 7, 1),
-    ("20-4-2", 20, 4, 1),
+    ("10-4-2", 10, 4, 2),
+    ("10-7-2", 10, 7, 2),
+    ("20-4-2", 20, 4, 2),
 ]
 
 
@@ -148,77 +152,40 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
     elif mode == "run":
         label, width, layers, n_photons = _get_model_config(model_size)
         case_prefix = f"see_ci_{label}"
-        model_root = os.path.join(ckpt_dir, "models")
-        ckpt_path = get_latest_checkpoint(model_root, case_prefix)
-        if ckpt_path is None:
-            print("No trained checkpoint found!")
-            return
-
-        print(f"Latest checkpoint found: {ckpt_path}")
-
-        def model_proc_local(processor=None):
-            return CI_PINN(
-                n_photons=n_photons,
-                hidden_width=width,
-                num_hidden_layers=layers,
-                processor=processor,
-            )
-
-        if backend.lower() != "local":
-            print(
-                f"Backend '{backend}' n’est pas utilisé en mode run; for remote use mode='remote'."
-            )
-
-        model = load_model(ckpt_path, model_proc_local)
-        model.eval()
-
-        png_path = save_density_plot(
-            model=model,
+        run_density_inference_mode(
+            mode="run",
+            backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
             n_photons=n_photons,
             timestamp=timestamp,
-            backend=backend,
+            model_factory=lambda processor=None: CI_PINN(
+                n_photons=n_photons,
+                hidden_width=width,
+                num_hidden_layers=layers,
+                processor=processor,
+            ),
+            save_plot_fn=save_density_plot,
         )
-        print(f"Figure saved to: {png_path}")
 
     elif mode == "remote":
-        print("=== REMOTE MODE ===")
         label, width, layers, n_photons = _get_model_config(model_size)
         case_prefix = f"see_ci_{label}"
-        model_root = os.path.join(ckpt_dir, "models")
-        ckpt_path = get_latest_checkpoint(model_root, case_prefix)
-        if ckpt_path is None:
-            print("No trained checkpoint found!")
-            return
-
-        print(f"Latest checkpoint found: {ckpt_path}")
-
-        if backend.lower() == "local":
-            backend = "sim:ascella"
-
-        processor = make_merlin_processor(backend)
-
-        def model_proc_remote(processor=processor):
-            return CI_PINN(
-                n_photons=n_photons,
-                hidden_width=width,
-                num_hidden_layers=layers,
-                processor=processor,
-            )
-
-        model_remote = load_model(ckpt_path, model_proc_remote, processor=processor)
-        model_remote.eval()
-
-        png_path = save_density_plot(
-            model=model_remote,
+        run_density_inference_mode(
+            mode="remote",
+            backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
             n_photons=n_photons,
             timestamp=timestamp,
-            backend=backend,
+            model_factory=lambda processor=None: CI_PINN(
+                n_photons=n_photons,
+                hidden_width=width,
+                num_hidden_layers=layers,
+                processor=processor,
+            ),
+            save_plot_fn=save_density_plot,
         )
-        print(f"Figure saved to: {png_path}")
 
     else:
         raise ValueError("mode must be 'train', 'run', or 'remote'")

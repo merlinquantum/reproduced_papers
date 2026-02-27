@@ -28,7 +28,7 @@ class CM_PINN(nn.Module):
 
     def __init__(self) -> None:
         super().__init__()
-        self.branch_q = BranchMerlin(make_perceval_qlayer())
+        self.branch_q = BranchMerlin(make_perceval_qlayer(), feature_map_kind="dho")
         self.branch_c = BranchPyTorch()
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:

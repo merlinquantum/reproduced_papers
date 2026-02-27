@@ -14,9 +14,10 @@ from ..config import (
     SEE_PLOT_EVERY,
     DTYPE,
 )
-from ..utils import make_optimizer, get_latest_checkpoint, load_model
+from ..utils import make_optimizer
 from .core_see import train_see, save_density_plot
-from ..layer_merlin import make_interf_qlayer, BranchMerlin, make_merlin_processor
+from ..run_common import run_density_inference_mode
+from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
 class II_PINN(nn.Module):
@@ -33,10 +34,16 @@ class II_PINN(nn.Module):
 
         # Two distinct quantum branches with independent parameters
         self.branch1 = BranchMerlin(
-            make_interf_qlayer(n_photons=n_photons), n_outputs=3, processor=processor
+            make_interf_qlayer(n_photons=n_photons),
+            n_outputs=3,
+            processor=processor,
+            feature_map_kind="see",
         )
         self.branch2 = BranchMerlin(
-            make_interf_qlayer(n_photons=n_photons), n_outputs=3, processor=processor
+            make_interf_qlayer(n_photons=n_photons),
+            n_outputs=3,
+            processor=processor,
+            feature_map_kind="see",
         )
 
         # Fusion head: combines outputs of both branches into (rho, u, p)
@@ -140,81 +147,38 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
     # ======================
 
     elif mode == "run":
-
         case_prefix = f"see_ii_{n_photons}"
-        model_root = os.path.join(ckpt_dir, "models")
-        ckpt_path = get_latest_checkpoint(model_root, case_prefix)
-        if ckpt_path is None:
-            print("No trained checkpoint found!")
-            return
-
-        print(f"Latest checkpoint found: {ckpt_path}")
-
-        def model_proc_local(processor=None):
-            return II_PINN(n_photons=n_photons, processor=processor)
-
-        # model = load_model(ckpt_path, model_proc_local)
-
-        if backend.lower() == "local":
-            model = load_model(ckpt_path, model_proc_local)
-        else:
-            print(
-                f"Backend '{backend}' n’est pas utilisé en mode run; for remote use mode='remote'."
-            )
-            model = load_model(ckpt_path, model_proc_local)
-
-        model.eval()
-
-        png_path = save_density_plot(
-            model=model,
+        run_density_inference_mode(
+            mode="run",
+            backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
             n_photons=n_photons,
             timestamp=timestamp,
-            backend=backend,
+            model_factory=lambda processor=None: II_PINN(
+                n_photons=n_photons, processor=processor
+            ),
+            save_plot_fn=save_density_plot,
         )
-
-        print(f"Figure saved to: {png_path}")
 
     # ======================
     #  MODE RUN REMOTE
     # ======================
 
     elif mode == "remote":
-        print("=== REMOTE MODE ===")
-
         case_prefix = f"see_ii_{n_photons}"
-
-        model_root = os.path.join(ckpt_dir, "models")
-        ckpt_path = get_latest_checkpoint(model_root, case_prefix)
-        if ckpt_path is None:
-            print("No trained checkpoint found!")
-            return
-
-        print(f"Latest checkpoint found: {ckpt_path}")
-
-        if backend.lower() == "local":
-            backend = "sim:ascella"  # local → simulateur Perceval
-
-        processor = make_merlin_processor(backend)
-
-        def model_proc_remote(processor=processor):
-            return II_PINN(n_photons=n_photons, processor=processor)
-
-        model_remote = load_model(ckpt_path, model_proc_remote, processor=processor)
-
-        model_remote.eval()
-
-        png_path = save_density_plot(
-            model=model_remote,
+        run_density_inference_mode(
+            mode="remote",
+            backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
             n_photons=n_photons,
             timestamp=timestamp,
-            backend=backend,
+            model_factory=lambda processor=None: II_PINN(
+                n_photons=n_photons, processor=processor
+            ),
+            save_plot_fn=save_density_plot,
         )
-
-        print(f"Figure saved to: {png_path}")
 
     else:
         raise ValueError("mode must be 'train', 'run', or 'remote'")

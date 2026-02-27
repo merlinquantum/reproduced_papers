@@ -1,4 +1,13 @@
 # layer_pennylane.py
+"""
+PennyLane-based quantum branch for HQPINN.
+
+This module implements the gate-model quantum branch used in the paper's
+hybrid PINN setting: an alternating ansatz/feature-map block followed by
+observable readout. It is used both as:
+- a standalone quantum path in quantum-only variants,
+- a component in hybrid models alongside classical branches.
+"""
 
 from typing import Callable
 
@@ -77,10 +86,10 @@ def _make_quantum_block_with_measurement(
     device: str = "default",
 ) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
     """
-    Internal helper to build a QNode with a given measurement rule.
+    Build the core variational quantum block used across experiments.
 
-    The circuit structure (ansatz_layer + feature_layer) is shared between
-    scalar-output and multi-output quantum blocks.
+    At paper level, this corresponds to the reusable quantum branch pattern:
+    data encoding + trainable ansatz + task-specific measurement.
     """
 
     if device == "lightning":
@@ -107,12 +116,10 @@ def _make_quantum_block_with_measurement(
 
 
 def measure_single():
-    # Single expectation value on qubit 0
     return qml.expval(qml.PauliZ(0))  # type: ignore
 
 
 def measure_all():
-    # One expectation value per qubit -> list of length N_QUBITS
     return [qml.expval(qml.PauliZ(i)) for i in range(N_QUBITS)]  # type: ignore
 
 
@@ -135,16 +142,12 @@ def make_quantum_block_multiout(
 
 class BranchPennylane(nn.Module):
     """
-    Generic quantum branch.
+    High-level PennyLane quantum branch wrapper.
 
-    Inputs:
-        - quantum_block: QNode(phi, theta) -> scalar or vector
-        - feature_map: callable mapping raw input x -> phi(x)
-        - output_as_column: if True and the QNode returns scalar, output shape is [N, 1]
-
-    This class can emulate:
-        - scalar branch (DHO): t -> u_q(t) in R
-        - vector branch (SEE): (x,t) -> R^D
+    It connects three conceptual steps used in HQPINN:
+    1) map PDE/ODE inputs to quantum features,
+    2) evaluate the variational quantum block,
+    3) return branch outputs that can be fused with other branches.
     """
 
     def __init__(
@@ -172,29 +175,24 @@ class BranchPennylane(nn.Module):
 
         outputs = []
         for i in range(phi.size(0)):
-            # quantum_block can return scalar or vector
             out_i = self.quantum_block(phi[i], self.theta)
 
-            # Handle multi-output QNodes returning a list/tuple of tensors
             if isinstance(out_i, (list, tuple)):
-                # Convert list of scalar tensors -> 1D tensor
                 out_i = torch.stack(out_i, dim=0)
 
             outputs.append(out_i)
 
         out = torch.stack(outputs, dim=0)
 
-        # If scalar output [N] and we want a column vector [N,1]
         if self.output_as_column and out.dim() == 1:
             out = out.unsqueeze(-1)
 
-        # return out
         return out.to(DTYPE)
 
 
 def dho_feature_map(t: torch.Tensor) -> torch.Tensor:
     """
-    Feature map for DHO: phi(t) in R^3.
+    Feature map used for the DHO setting in the paper.
     """
     if t.dim() == 2:
         t_flat = t.squeeze(-1)
@@ -211,13 +209,10 @@ def dho_feature_map(t: torch.Tensor) -> torch.Tensor:
 
 def see_feature_map(xt: torch.Tensor) -> torch.Tensor:
     """
-    Feature map for the Smooth Euler Equation (SEE).
-    xt: [N, 2] with columns (x, t).
+    Feature map used for Euler-type experiments (SEE/DEE) in the paper.
 
-    We encode both space and time inputs (x, t) into three features:
-        πx        : spatial component,
-        πt        : temporal component,
-        π(x − t)  : travelling-wave component matching the exact solution ρ(x,t) ∝ sin(π(x−t)).
+    It maps spatio-temporal inputs (x, t) to a compact feature vector before
+    the quantum branch evaluation.
     """
     if xt.dim() != 2 or xt.size(1) != 2:
         raise ValueError(f"Expected input of shape [N, 2] for (x,t), got {xt.shape}")

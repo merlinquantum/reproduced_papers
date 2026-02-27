@@ -120,7 +120,7 @@ def euler_loss_batched(
     t_bc: torch.Tensor,
     x_f: torch.Tensor,
     t_f: torch.Tensor,
-    n_f_batch: Optional[int] = None,
+    n_f_batch: Optional[int] = 256,
     n_ic_batch: Optional[int] = None,
     n_bc_batch: Optional[int] = None,
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
@@ -275,7 +275,9 @@ def train_dee(
     plot_every: int,
     out_dir: str,
     model_label: str,
-    loss_fn: Callable[..., Tuple[torch.Tensor, torch.Tensor, torch.Tensor]] = euler_loss_batched,
+    loss_fn: Callable[
+        ..., Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
+    ] = euler_loss_batched,
     # ] = euler_loss,
 ) -> tuple[float, float, float, int]:
     """Training loop for the Discontinuous Euler Equation PINN (classical-classical)."""

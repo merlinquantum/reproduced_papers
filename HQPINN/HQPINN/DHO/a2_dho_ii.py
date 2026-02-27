@@ -18,11 +18,10 @@ from ..config import DHO_N_EPOCHS, DHO_PLOT_EVERY, DHO_LR
 from ..utils import (
     make_time_grid,
     make_optimizer,
-    get_latest_checkpoint,
-    load_model,
 )
 from .core_a2_dho import train_oscillator_pinn, u_exact
-from ..layer_merlin import make_interf_qlayer, BranchMerlin, make_merlin_processor
+from ..run_common import run_series_inference_mode
+from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
 # ============================================================
@@ -44,10 +43,14 @@ class MM_PINN(nn.Module):
 
         # Two distinct quantum branches with independent parameters
         self.branch1 = BranchMerlin(
-            make_interf_qlayer(n_photons=1), processor=processor
+            make_interf_qlayer(n_photons=1),
+            processor=processor,
+            feature_map_kind="dho",
         )
         self.branch2 = BranchMerlin(
-            make_interf_qlayer(n_photons=1), processor=processor
+            make_interf_qlayer(n_photons=1),
+            processor=processor,
+            feature_map_kind="dho",
         )
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
@@ -76,7 +79,7 @@ def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/"):
     print(f"Plot saved to: {save_path}")
 
 
-def run(mode="train", backend="sim-ascella") -> None:
+def run(mode="train", backend="sim:ascella") -> None:
     """
     mode = "train" : train the model from scratch and save the checkpoint
     mode = "run"   : load the latest checkpoint and run inference (not implemented here, but can be added)
@@ -119,45 +122,31 @@ def run(mode="train", backend="sim-ascella") -> None:
     # ======================
     elif mode == "run":
         print("=== RUN MODE ===")
-
-        ckpt = get_latest_checkpoint(ckpt_dir, case_prefix)
-        if ckpt is None:
-            print("No trained checkpoint found!")
-            return
-
-        model = load_model(ckpt, MM_PINN)
-
-        with torch.no_grad():
-            t = make_time_grid()
-            u_pred = model(t).cpu().numpy().flatten()
-            u_ex = u_exact(t.cpu().numpy().flatten())
-
-        plot_model_prediction(u_pred, u_ex, t)
+        run_series_inference_mode(
+            mode="run",
+            backend=backend,
+            ckpt_dir=ckpt_dir,
+            case_prefix=case_prefix,
+            model_factory=MM_PINN,
+            make_time_grid=make_time_grid,
+            exact_fn=u_exact,
+            plot_fn=plot_model_prediction,
+        )
 
     # ======================
     #  MODE RUN REMOTE
     # ======================
     elif mode == "remote":
-        print("=== REMOTE MODE ===")
-
-        ckpt = get_latest_checkpoint(ckpt_dir, case_prefix)
-        if ckpt is None:
-            print("No trained checkpoint found!")
-            return
-
-        processor = make_merlin_processor(backend)
-
-        model_remote = load_model(ckpt, MM_PINN, processor=processor)
-
-        # Run inference on the remote model (simulator) without gradients
-        with torch.no_grad():
-            t = make_time_grid()
-            u_pred_remote = model_remote(t)
-            u_ex = u_exact(t.cpu().numpy().flatten())
-
-        print(f"Executed remote model on simulator from checkpoint: {ckpt}")
-
-        plot_model_prediction(u_pred_remote, u_ex, t)
+        run_series_inference_mode(
+            mode="remote",
+            backend=backend,
+            ckpt_dir=ckpt_dir,
+            case_prefix=case_prefix,
+            model_factory=MM_PINN,
+            make_time_grid=make_time_grid,
+            exact_fn=u_exact,
+            plot_fn=plot_model_prediction,
+        )
 
     else:
-        raise ValueError("mode must be 'train' or 'run'")
+        raise ValueError("mode must be 'train', 'run', or 'remote'")

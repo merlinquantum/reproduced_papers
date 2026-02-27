@@ -211,7 +211,9 @@ def train_see(
         [nn.Module], Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
     ] = euler_loss_batched,
     # ] = euler_loss,
-) -> tuple[float, float, float, int]:
+):
+    # -> tuple[float, float, float, int]
+    # :
     """Training loop for the Smooth Euler Equation PINN (classical-classical)."""
 
     os.makedirs(out_dir, exist_ok=True)
@@ -220,9 +222,9 @@ def train_see(
     pdf_path = os.path.join(out_dir, f"see-{model_label}_{timestamp}.pdf")
     csv_path = os.path.join(out_dir, f"see-{model_label}_{timestamp}.csv")
 
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer, factor=0.5, patience=500
-    )
+    # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
+    #     optimizer, factor=0.5, patience=500
+    # )
 
     rows = []
     start = datetime.now()
@@ -252,33 +254,33 @@ def train_see(
                 rows=rows,
             )
 
-        scheduler.step(loss.item())  # Adjust learning rate based on total loss
+        # scheduler.step(loss.item())  # Adjust learning rate based on total loss
 
     # -------------------------
     # L-BFGS refinement
     # -------------------------
-    print("Starting L-BFGS refinement...")
+    # print("Starting L-BFGS refinement...")
 
-    optimizer_lbfgs = torch.optim.LBFGS(
-        model.parameters(),
-        lr=1.0,
-        max_iter=500,
-        max_eval=500,
-        history_size=50,
-        line_search_fn="strong_wolfe",
-    )
+    # optimizer_lbfgs = torch.optim.LBFGS(
+    #     model.parameters(),
+    #     lr=1.0,
+    #     max_iter=500,
+    #     max_eval=500,
+    #     history_size=50,
+    #     line_search_fn="strong_wolfe",
+    # )
 
-    def closure():
-        optimizer_lbfgs.zero_grad()  # resets gradient buffer
-        lic, lbc, lf = loss_fn(model)
-        l = lic + lbc + lf
-        l.backward()  #  computes ∇loss
-        return l
+    # def closure():
+    #     optimizer_lbfgs.zero_grad()  # resets gradient buffer
+    #     lic, lbc, lf = loss_fn(model)
+    #     l = lic + lbc + lf
+    #     l.backward()  #  computes ∇loss
+    #     return l
 
-    # Run L-BFGS optimization
-    optimizer_lbfgs.step(closure)  #  updates model weights
+    # # Run L-BFGS optimization
+    # optimizer_lbfgs.step(closure)  #  updates model weights
 
-    print("L-BFGS refinement done.")
+    # print("L-BFGS refinement done.")
 
     # -------------------------
     # Final loss after L-BFGS
@@ -397,7 +399,9 @@ def save_density_plot(
             # Remote backends create many cloud jobs; downsample for robustness.
             nx = min(nx, 30)
             nt = min(nt, 30)
-            print(f"Remote backend detected: using reduced grid {nx}x{nt} for plotting.")
+            print(
+                f"Remote backend detected: using reduced grid {nx}x{nt} for plotting."
+            )
         x = torch.linspace(SEE_X_MIN, SEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
         t = torch.linspace(SEE_T_MIN, SEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
         X, T = torch.meshgrid(x, t, indexing="ij")
