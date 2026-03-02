@@ -11,7 +11,6 @@ import torch.nn as nn
 from ..config import (
     DEE_CC_NUM_HIDDEN_LAYERS,
     DEE_CC_HIDDEN_WIDTH,
-    DTYPE,
     DEE_N_EPOCHS,
     DEE_PLOT_EVERY,
     DEE_LR,
@@ -50,18 +49,13 @@ class CI_PINN(nn.Module):
             feature_map_kind="dee",
         )
 
-        self.fusion = nn.Sequential(
-            nn.Linear(3, 8, dtype=DTYPE),
-            nn.Tanh(),
-            nn.Linear(8, 3, dtype=DTYPE),
-        )
-
         self.size_label = f"{hidden_width}-{num_hidden_layers}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
         out1 = self.branch1(xt)
         out2 = self.branch2(xt)
-        return self.fusion(out1 + out2)
+        # Paper-style linear combination with unit weights: out1 + out2.
+        return out1 + out2
 
 
 MODELS = [

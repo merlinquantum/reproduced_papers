@@ -279,8 +279,10 @@ class BranchMerlin(nn.Module):
         t = x_in[:, 1]
         phi0 = np.pi * x
         phi1 = np.pi * t
-        # Shock-relative coordinate for DEE: x - (x0 - u t)
-        phi2 = np.pi * (x - (DEE_X0 - DEE_U * t))
+        # Paper alignment: Sec. 3.2 (Discontinuous Euler Equation), Eq. (13),
+        # defines the front as x_f(t)=x0+u*t. Use shock-relative coordinate
+        # x-x_f(t)=x-(x0+u*t) for the DEE feature map.
+        phi2 = np.pi * (x - (DEE_X0 + DEE_U * t))
         return torch.stack([phi0, phi1, phi2], dim=1).to(DTYPE)
 
     def _feature_map(self, x_in: torch.Tensor) -> torch.Tensor:

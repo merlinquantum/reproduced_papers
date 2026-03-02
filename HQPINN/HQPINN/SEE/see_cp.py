@@ -10,7 +10,6 @@ import torch.nn as nn
 from ..config import (
     SEE_CC_NUM_HIDDEN_LAYERS,
     SEE_CC_HIDDEN_WIDTH,
-    DTYPE,
     SEE_N_EPOCHS,
     SEE_PLOT_EVERY,
     N_LAYERS,
@@ -40,7 +39,6 @@ class CP_PINN(nn.Module):
 
         qblock_multi_1 = make_quantum_block_multiout(n_layers=size)
 
-        # Two parallel PennyLane branches: each (x,t) -> (rho_like, u_like, p_like)
         self.branch1 = BranchPennylane(
             qblock_multi_1,
             feature_map=see_feature_map,
@@ -54,22 +52,14 @@ class CP_PINN(nn.Module):
             hidden_width=hidden_width,
         )
 
-        # Fusion head: combines outputs of both branches into (rho, u, p)
-        self.fusion = nn.Sequential(
-            nn.Linear(3, 8, dtype=DTYPE),
-            nn.Tanh(),
-            nn.Linear(8, 3, dtype=DTYPE),
-        )
-
         # Human-readable size label (e.g. "2", "3", "4")
         self.size_label = f"{size}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
-        # Forward pass: sum two quantum branches then apply fusion head
+        # Paper-style linear combination with unit weights: out1 + out2.
         out1 = self.branch1(xt)  # [N, 3]
         out2 = self.branch2(xt)  # [N, 3]
-        combined = out1 + out2  # [N, 3]
-        return self.fusion(combined)  # [N, 3]
+        return out1 + out2  # [N, 3]
 
 
 MODELS = [
@@ -80,11 +70,11 @@ MODELS = [
 
 
 def run():
-    """Run all SEE PennyLane–PennyLane models and write summary CSV."""
+    """Run all SEE Classical models and write summary CSV."""
     torch.manual_seed(0)
 
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    out_csv = f"HQPINN/SEE/results/pp_summary_{timestamp}.csv"
+    out_csv = f"HQPINN/SEE/results/cp_summary_{timestamp}.csv"
 
     with open(out_csv, "w", newline="") as f:
         writer = csv.writer(f)

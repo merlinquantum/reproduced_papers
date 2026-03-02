@@ -12,7 +12,6 @@ from ..config import (
     DEE_N_EPOCHS,
     DEE_LR,
     DEE_PLOT_EVERY,
-    DTYPE,
 )
 from ..utils import make_optimizer
 from .core_dee import train_dee, save_density_plot
@@ -46,22 +45,14 @@ class II_PINN(nn.Module):
             feature_map_kind="dee",
         )
 
-        # Fusion head: combines outputs of both branches into (rho, u, p)
-        self.fusion = nn.Sequential(
-            nn.Linear(3, 8, dtype=DTYPE),
-            nn.Tanh(),
-            nn.Linear(8, 3, dtype=DTYPE),
-        )
-
         # Human-readable size label ("1", "2", ..., "6")
         self.size_label = f"{n_photons}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
-        # Forward pass: sum two quantum branches then apply fusion head
+        # Paper-style linear combination with unit weights: out1 + out2.
         out1 = self.branch1(xt)  # [N, 3]
         out2 = self.branch2(xt)  # [N, 3]
-        combined = out1 + out2  # [N, 3]
-        return self.fusion(combined)  # [N, 3]
+        return out1 + out2  # [N, 3]
 
 
 MODELS = [

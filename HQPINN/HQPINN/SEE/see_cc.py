@@ -10,7 +10,6 @@ import torch.nn as nn
 from ..config import (
     SEE_CC_NUM_HIDDEN_LAYERS,
     SEE_CC_HIDDEN_WIDTH,
-    DTYPE,
     SEE_N_EPOCHS,
     SEE_PLOT_EVERY,
 )
@@ -21,8 +20,7 @@ from ..layer_classical import BranchPyTorch
 
 class CC_PINN(nn.Module):
     """
-    Classical-classical PINN with two parallel branches (cc-N-L)
-    and a small fusion head (845 trainable parameters for cc-10-4).
+    Classical-classical PINN with two parallel branches (cc-N-L).
     """
 
     def __init__(
@@ -46,28 +44,20 @@ class CC_PINN(nn.Module):
             hidden_width=hidden_width,
         )
 
-        # Fusion head: combines outputs of both branches
-        self.fusion = nn.Sequential(
-            nn.Linear(3, 8, dtype=DTYPE),
-            nn.Tanh(),
-            nn.Linear(8, 3, dtype=DTYPE),
-        )
-
         # Human-readable size label, e.g. "10-4"
         self.size_label = f"{hidden_width}-{num_hidden_layers}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
-        # Forward pass: sum two branches then apply fusion head
+        # Paper-style linear combination with unit weights: out1 + out2.
         out1 = self.branch1(xt)
         out2 = self.branch2(xt)
-        combined = out1 + out2
-        return self.fusion(combined)
+        return out1 + out2
 
 
 MODELS = [
     ("10-4", 10, 4),
-    # ("10-7", 10, 7),
-    # ("20-4", 20, 4),
+    ("10-7", 10, 7),
+    ("20-4", 20, 4),
 ]
 
 

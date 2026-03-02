@@ -8,7 +8,7 @@ from datetime import datetime
 import torch
 import torch.nn as nn
 
-from ..config import DTYPE, SEE_N_EPOCHS, SEE_PLOT_EVERY, N_LAYERS, SEE_LR
+from ..config import SEE_N_EPOCHS, SEE_PLOT_EVERY, N_LAYERS, SEE_LR
 from ..utils import make_optimizer
 from .core_see import train_see
 from ..layer_pennylane import (
@@ -20,8 +20,7 @@ from ..layer_pennylane import (
 
 class PP_PINN(nn.Module):
     """
-    PennyLane–PennyLane PINN with two parallel quantum branches and
-    a small classical fusion head.
+    PennyLane–PennyLane PINN with two parallel quantum branches.
 
     Each quantum branch maps (x, t) -> R^3 via a multi-output PQC and
     a SEE-specific feature map.
@@ -47,22 +46,14 @@ class PP_PINN(nn.Module):
             n_layers=n_layers,
         )
 
-        # Fusion head: combines outputs of both branches into (rho, u, p)
-        self.fusion = nn.Sequential(
-            nn.Linear(3, 8, dtype=DTYPE),
-            nn.Tanh(),
-            nn.Linear(8, 3, dtype=DTYPE),
-        )
-
         # Human-readable size label (e.g. "2", "3", "4")
         self.size_label = f"{n_layers}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
-        # Forward pass: sum two quantum branches then apply fusion head
+        # Paper-style linear combination with unit weights: out1 + out2.
         out1 = self.branch1(xt)  # [N, 3]
         out2 = self.branch2(xt)  # [N, 3]
-        combined = out1 + out2  # [N, 3]
-        return self.fusion(combined)  # [N, 3]
+        return out1 + out2  # [N, 3]
 
 
 MODELS = [
