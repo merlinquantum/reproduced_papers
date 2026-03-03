@@ -1,0 +1,4 @@
+Model,Size,Trainable parameters,Loss,Density error,Pressure error
+ci,10-4-1,504,5.906795e-03,1.496011e-01,1.461523e-03
+ci,10-7-1,834,7.901966e-05,1.399170e-01,6.388444e-04
+ci,20-4-1,1494,4.653764e-03,1.461192e-01,8.342122e-04

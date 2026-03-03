@@ -15,7 +15,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 from ..config import (
     DTYPE,
     DEVICE,
-    EE_GAMMA,
+    GAMMA,
     SEE_X_MIN,
     SEE_X_MAX,
     SEE_T_MIN,
@@ -133,7 +133,7 @@ def euler_loss_batched(
     U_f = model(X_f)  # [n_f_batch, 3]
     rho, u, p = U_f.split(1, dim=1)
 
-    gamma = EE_GAMMA
+    gamma = GAMMA
 
     e = p / ((gamma - 1.0) * rho)
     E = e + 0.5 * u**2

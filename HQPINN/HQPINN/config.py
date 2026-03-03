@@ -8,7 +8,7 @@ DEVICE = torch.device("cpu")
 N_LAYERS = 3
 N_QUBITS = 3
 
-EE_GAMMA = 1.4
+GAMMA = 1.4
 
 
 # ==========================
@@ -85,3 +85,29 @@ DEE_X0 = 0.5
 
 DEE_CC_NUM_HIDDEN_LAYERS = 4
 DEE_CC_HIDDEN_WIDTH = 10
+
+
+# ==========================
+#  TAF – 2D Transonic Aerofoil Flow (Sec. 3.3)
+# ==========================
+
+TAF_X_MIN = -1.0
+TAF_X_MAX = 3.5
+TAF_Y_MIN = -2.25
+TAF_Y_MAX = 2.25
+
+TAF_DOMAIN_SIDE = 4.5
+
+TAF_CHORD_X0 = 0.0
+TAF_CHORD_X1 = 1.0
+
+TAF_N_BOUNDARY = 40
+TAF_N_DOMAIN_TOTAL = 4000
+TAF_N_DATA_INTERNAL = 400
+TAF_N_WALL = 400
+
+TAF_LR = 5e-4
+TAF_ADAM_STEPS = 40000
+TAF_LBFGS_STEPS = 2000
+
+EPSILON_LAMBDA = 0.1
