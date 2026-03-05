@@ -40,6 +40,7 @@ def run() -> None:
     """Run the Classical–Perceval DHO PINN experiment."""
     torch.manual_seed(0)
     np.random.seed(0)
+    case_prefix = "dho_cperc"
 
     model = CM_PINN()
 
@@ -49,6 +50,6 @@ def run() -> None:
         optimizer=make_optimizer(model, lr=DHO_LR),
         n_epochs=DHO_N_EPOCHS,
         plot_every=DHO_PLOT_EVERY,
-        out_dir="HQPINN/DHO/results",
-        model_label="Classical-Perceval",
+        out_dir=f"HQPINN/DHO/results/{case_prefix}",
+        model_label="cperc",
     )

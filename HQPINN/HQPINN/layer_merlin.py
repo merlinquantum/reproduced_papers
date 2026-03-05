@@ -237,7 +237,7 @@ class BranchMerlin(nn.Module):
         self.n_outputs = n_outputs
         self.processor: ML.MerlinProcessor | None = processor
         self.feature_map_kind = feature_map_kind.lower()
-        valid_kinds = {"auto", "dho", "see", "dee"}
+        valid_kinds = {"auto", "dho", "see", "dee", "taf"}
         if self.feature_map_kind not in valid_kinds:
             raise ValueError(
                 f"Unknown feature_map_kind='{feature_map_kind}'. "
@@ -285,6 +285,18 @@ class BranchMerlin(nn.Module):
         phi2 = np.pi * (x - (DEE_X0 + DEE_U * t))
         return torch.stack([phi0, phi1, phi2], dim=1).to(DTYPE)
 
+    def _feature_map_taf(self, x_in: torch.Tensor) -> torch.Tensor:
+        if x_in.ndim != 2 or x_in.shape[1] != 2:
+            raise ValueError(
+                f"TAF feature_map_kind expects input shape [N, 2], got {tuple(x_in.shape)}"
+            )
+        x = x_in[:, 0]
+        y = x_in[:, 1]
+        phi0 = np.pi * x
+        phi1 = np.pi * y
+        phi2 = np.pi * (x - y)
+        return torch.stack([phi0, phi1, phi2], dim=1).to(DTYPE)
+
     def _feature_map(self, x_in: torch.Tensor) -> torch.Tensor:
         if self.feature_map_kind == "dho":
             return self._feature_map_dho(x_in)
@@ -292,6 +304,8 @@ class BranchMerlin(nn.Module):
             return self._feature_map_see(x_in)
         if self.feature_map_kind == "dee":
             return self._feature_map_dee(x_in)
+        if self.feature_map_kind == "taf":
+            return self._feature_map_taf(x_in)
         # auto: keep backward-compatible behavior
         if x_in.ndim == 2 and x_in.shape[1] == 2:
             return self._feature_map_see(x_in)

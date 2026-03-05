@@ -43,6 +43,7 @@ def run() -> None:
     """Run the Classical–Interferometer DHO PINN experiment."""
     torch.manual_seed(0)
     np.random.seed(0)
+    case_prefix = "dho_ci"
 
     model = CI_PINN()
     train_oscillator_pinn(
@@ -51,6 +52,6 @@ def run() -> None:
         optimizer=make_optimizer(model, lr=DHO_LR),
         n_epochs=DHO_N_EPOCHS,
         plot_every=DHO_PLOT_EVERY,
-        out_dir="HQPINN/DHO/results",
-        model_label="Classical-Interferometer",
+        out_dir=f"HQPINN/DHO/results/{case_prefix}",
+        model_label="ci",
     )

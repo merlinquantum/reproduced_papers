@@ -17,7 +17,7 @@ GAMMA = 1.4
 # ==========================
 
 DHO_LR = 0.002
-DHO_N_EPOCHS = 1800
+DHO_N_EPOCHS = 1801
 DHO_PLOT_EVERY = 100
 DHO_N_SAMPLES = 200
 
@@ -91,6 +91,17 @@ DEE_CC_HIDDEN_WIDTH = 10
 #  TAF – 2D Transonic Aerofoil Flow (Sec. 3.3)
 # ==========================
 
+#           TAF_Y_MAX   →  X_top
+#    -------------------------
+#    |                       |
+#    |        AILE           |
+#    |                       |
+#    -------------------------
+#           TAF_Y_MIN   →  X_bot
+
+#   TAF_X_MIN           TAF_X_MAX
+TAF_R_GAS = 287.0
+
 TAF_X_MIN = -1.0
 TAF_X_MAX = 3.5
 TAF_Y_MIN = -2.25
@@ -109,5 +120,20 @@ TAF_N_WALL = 400
 TAF_LR = 5e-4
 TAF_ADAM_STEPS = 40000
 TAF_LBFGS_STEPS = 2000
+TAF_PLOT_EVERY = 500
 
-EPSILON_LAMBDA = 0.1
+TAF_EPSILON_LAMBDA = 0.1
+TAF_P_OUT = 0.0
+
+TAF_CC_NUM_HIDDEN_LAYERS = 4
+TAF_CC_HIDDEN_WIDTH = 40
+
+# Files produced by your generator
+TAF_X_IN_FILE = "X_in.npy"
+TAF_X_OUT_FILE = "X_out.npy"
+TAF_X_TOP_FILE = "X_top.npy"
+TAF_X_BOT_FILE = "X_bot.npy"
+TAF_X_WALL_FILE = "X_wall.npy"
+TAF_X_WALL_NORMALS_FILE = "X_wall_normals.npy"
+TAF_X_F_FILE = "X_f.npy"
+TAF_X_DATA_INT_FILE = "X_data_int.npy"

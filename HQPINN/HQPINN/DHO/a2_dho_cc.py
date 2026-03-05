@@ -30,6 +30,7 @@ class CC_PINN(nn.Module):
 def run():
     """Run the Classical–Classical DHO PINN experiment."""
     torch.manual_seed(0)
+    case_prefix = "dho_cc"
 
     model = CC_PINN()
 
@@ -39,6 +40,6 @@ def run():
         optimizer=make_optimizer(model, DHO_LR),
         n_epochs=DHO_N_EPOCHS,
         plot_every=DHO_PLOT_EVERY,
-        out_dir="HQPINN/DHO/results",
-        model_label="Classical-Classical",
+        out_dir=f"HQPINN/DHO/results/{case_prefix}",
+        model_label="cc",
     )

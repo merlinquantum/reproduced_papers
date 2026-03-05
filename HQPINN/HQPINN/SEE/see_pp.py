@@ -87,6 +87,7 @@ def run():
         for label, size in MODELS:
             print(f"\nTraining SEE-PP model: {label} size={size}")
 
+            case_prefix = f"see_pp_{label}"
             model = PP_PINN(n_layers=size)
             optimizer = make_optimizer(model, lr=SEE_LR)
 
@@ -96,8 +97,8 @@ def run():
                 optimizer=optimizer,
                 n_epochs=SEE_N_EPOCHS,
                 plot_every=SEE_PLOT_EVERY,
-                out_dir=f"HQPINN/SEE/results/pp-{label}",
-                model_label=f"pp-{label}",
+                out_dir=f"HQPINN/SEE/results/{case_prefix}",
+                model_label=f"pp_{label}",
             )
 
             writer.writerow(

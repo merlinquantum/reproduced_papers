@@ -115,7 +115,7 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-1"):
                     n_epochs=DEE_N_EPOCHS,
                     plot_every=DEE_PLOT_EVERY,
                     out_dir=f"HQPINN/DEE/results/{case_prefix}",
-                    model_label=case_prefix,
+                    model_label=f"ci_{label}",
                 )
 
                 writer.writerow(

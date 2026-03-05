@@ -41,6 +41,7 @@ class PP_PINN(nn.Module):
 
 
 def run():
+    case_prefix = "dho_pp"
     model = PP_PINN()
 
     train_oscillator_pinn(
@@ -49,6 +50,6 @@ def run():
         optimizer=make_optimizer(model, lr=DHO_LR),
         n_epochs=DHO_N_EPOCHS,
         plot_every=DHO_PLOT_EVERY,
-        out_dir="HQPINN/DHO/results",
-        model_label="PennyLane-PennyLane",
+        out_dir=f"HQPINN/DHO/results/{case_prefix}",
+        model_label="pp",
     )

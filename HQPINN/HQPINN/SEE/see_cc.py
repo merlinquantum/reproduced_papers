@@ -84,6 +84,7 @@ def run():
         for label, width, layers in MODELS:
             print(f"\nTraining SEE-CC model: {label} (width={width}, layers={layers})")
 
+            case_prefix = f"see_cc_{label}"
             model = CC_PINN(hidden_width=width, num_hidden_layers=layers)
             optimizer = make_optimizer(model, lr=5e-4)
 
@@ -93,8 +94,8 @@ def run():
                 optimizer=optimizer,
                 n_epochs=SEE_N_EPOCHS,
                 plot_every=SEE_PLOT_EVERY,
-                out_dir=f"HQPINN/SEE/results/cc-{label}",
-                model_label=label,
+                out_dir=f"HQPINN/SEE/results/{case_prefix}",
+                model_label=f"cc_{label}",
             )
 
             writer.writerow(

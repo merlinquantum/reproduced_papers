@@ -12,17 +12,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 
-from ..config import (
-    DTYPE,
-    DEVICE,
-    GAMMA,
-    SEE_X_MIN,
-    SEE_X_MAX,
-    SEE_T_MIN,
-    SEE_T_MAX,
-    SEE_NX_SAMPLES,
-    SEE_NT_SAMPLES,
-)
+from ..config import *
 from ..utils import (
     sample_ic_points,
     sample_bc_points,

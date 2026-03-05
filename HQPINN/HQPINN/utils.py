@@ -22,9 +22,9 @@ from .config import (
 
 def make_time_grid():
     """Return the time grid t ∈ [0,1] as a torch tensor."""
-    return torch.linspace(0.0, 1.0, DHO_N_SAMPLES, dtype=DTYPE, device=DEVICE).reshape(
-        -1, 1
-    )
+    return torch.linspace(0.0, 1.0, DHO_N_SAMPLES, dtype=DTYPE, device=DEVICE)[
+        1:
+    ].reshape(-1, 1)
 
 
 def make_optimizer(model, lr):

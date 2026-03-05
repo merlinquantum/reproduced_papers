@@ -118,7 +118,7 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
                     n_epochs=SEE_N_EPOCHS,
                     plot_every=SEE_PLOT_EVERY,
                     out_dir=f"HQPINN/SEE/results/{case_prefix}",
-                    model_label=case_prefix,
+                    model_label=f"ci_{label}",
                 )
 
                 writer.writerow(

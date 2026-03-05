@@ -8,7 +8,7 @@ import numpy as np
 import matplotlib
 import matplotlib.pyplot as plt
 
-# Use non-interactive backend for batch PDF export
+# Use non-interactive backend for batch image export
 matplotlib.use("Agg")
 
 import torch
@@ -58,7 +58,7 @@ class MM_PINN(nn.Module):
         return self.branch1(t) + self.branch2(t)
 
 
-def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/"):
+def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_ii/"):
     plt.figure(figsize=(10, 6))
     plt.plot(t.cpu().numpy(), u_pred, label="Prediction PINN", lw=2)
     plt.plot(t.cpu().numpy(), u_ex, "--", label="Exact solution", lw=2)
@@ -105,8 +105,8 @@ def run(mode="train", backend="sim:ascella") -> None:
             optimizer=make_optimizer(model, lr=DHO_LR),
             n_epochs=DHO_N_EPOCHS,
             plot_every=DHO_PLOT_EVERY,
-            out_dir="HQPINN/DHO/results",
-            model_label="Interferometer-Interferometer",
+            out_dir=f"HQPINN/DHO/results/{case_prefix}",
+            model_label="ii",
         )
 
         # === Save model ===

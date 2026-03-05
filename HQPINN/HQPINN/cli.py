@@ -24,6 +24,9 @@ def main() -> None:
     print("  dee-cc          -> DEE, Classical–Classical")
     print("  dee-ci          -> DEE, Classical–Interferometer")
     print("  dee-ii          -> DEE, Interferometer–Interferometer")
+    print("  taf-cc          -> TAF, Classical–Classical")
+    print("  taf-ci          -> TAF, Classical–Interferometer")
+    print("  taf-ii          -> TAF, Interferometer–Interferometer")
 
     print()
     choice = input("Which experiment do you want to run? ").strip()
@@ -185,9 +188,31 @@ def main() -> None:
             model_size=model_size,
         )
 
+    # ==========================
+    # TAF experiments
+    # ==========================
+    elif choice == "taf-cc":
+        # Classical–Classical TAF
+        from .TAF.taf_cc import run
+
+        run()
+
+    elif choice == "taf-ci":
+        # Classical–Interferometer TAF
+        from .TAF.taf_ci import run
+
+        run()
+
+    elif choice == "taf-ii":
+        # Interferometer–Interferometer TAF
+        from .TAF.taf_ii import run
+
+        run()
+
     else:
         print(f"Unknown experiment: {choice}")
         print(
             "Please choose one of: dho-pp, dho-cc, dho-cp, dho-cperc, "
-            "dho-ii, dho-percperc, dho-ci, see-cc, see-pp, see-ci, see-ii, see-cp, dee-cc, dee-ci, dee-ii."
+            "dho-ii, dho-percperc, dho-ci, see-cc, see-pp, see-ci, see-ii, see-cp, "
+            "dee-cc, dee-ci, dee-ii, taf-cc, taf-ci, taf-ii."
         )

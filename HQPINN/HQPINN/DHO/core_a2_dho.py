@@ -12,7 +12,6 @@ from torch.autograd import grad
 
 import matplotlib
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_pdf import PdfPages
 
 from ..config import (
     M,
@@ -24,7 +23,7 @@ from ..config import (
     DEVICE,
 )
 
-# Use non-interactive backend for batch PDF export
+# Use non-interactive backend for batch image export
 matplotlib.use("Agg")
 
 
@@ -128,11 +127,34 @@ def train_oscillator_pinn(
     os.makedirs(out_dir, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    pdf_path = os.path.join(out_dir, f"a2-dho-{model_label}_{timestamp}.pdf")
+    png_path = os.path.join(out_dir, f"a2-dho-{model_label}_{timestamp}.png")
     csv_path = os.path.join(out_dir, f"a2-dho-{model_label}_{timestamp}.csv")
 
     start = datetime.now()
     rows = []
+    snapshot_epochs = {600, 1200}
+
+    def save_prediction_png(epoch: int, elapsed_s: float) -> str:
+        with torch.no_grad():
+            t_np = t_train.squeeze().cpu().numpy()
+            u_pred = model(t_train).cpu().numpy().flatten()
+            u_ex = u_exact(t_np)
+
+        epoch_png_path = os.path.join(
+            out_dir, f"a2-dho-{model_label}_{timestamp}_epoch-{epoch}.png"
+        )
+        fig, ax = plt.subplots(figsize=(10, 6))
+        ax.plot(t_np, u_pred, label=f"PINN ({model_label})")
+        ax.plot(t_np, u_ex, "--", label="Exact")
+        ax.legend()
+        ax.set_xlabel("t")
+        ax.set_ylabel("u(t)")
+        ax.set_title(f"{elapsed_s:.2f}s - {epoch} epochs")
+        ax.grid(True)
+        fig.tight_layout()
+        fig.savefig(epoch_png_path, bbox_inches="tight")
+        plt.close(fig)
+        return epoch_png_path
 
     # -------------------------------------------------------
     # Training loop
@@ -145,12 +167,9 @@ def train_oscillator_pinn(
 
         loss.backward()
         optimizer.step()
+        elapsed = (datetime.now() - start).total_seconds()
 
         if epoch % plot_every == 0:
-
-            stop = datetime.now()
-            elapsed = (stop - start).total_seconds()
-
             print(f"Epoch {epoch:4d} | Elapsed: {elapsed:.2f}seconds")
             print(
                 f"  Loss={loss.item():.4e} | "
@@ -173,6 +192,10 @@ def train_oscillator_pinn(
                 ]
             )
 
+        if epoch in snapshot_epochs:
+            epoch_png_path = save_prediction_png(epoch=epoch, elapsed_s=elapsed)
+            print(f"PNG snapshot saved to: {epoch_png_path}")
+
     with open(csv_path, "a", newline="") as f:
         writer = csv.writer(f)
         writer.writerow(
@@ -191,26 +214,11 @@ def train_oscillator_pinn(
     elapsed = (stop - start).total_seconds()
 
     # -------------------------------------------------------
-    # Final PDF (only the prediction vs exact plot)
+    # Final PNG (only the prediction vs exact plot)
     # -------------------------------------------------------
-    with torch.no_grad():
-        t_np = t_train.squeeze().cpu().numpy()
-        u_pred = model(t_train).cpu().numpy().flatten()
-        u_ex = u_exact(t_np)
-
-    with PdfPages(pdf_path) as pdf:
-
-        fig, ax = plt.subplots(figsize=(10, 6))
-        ax.plot(t_np, u_pred, label=f"PINN ({model_label})")
-        ax.plot(t_np, u_ex, "--", label="Exact")
-        ax.legend()
-        ax.set_xlabel("t")
-        ax.set_ylabel("u(t)")
-        ax.set_title(f"{elapsed:.2f}s - {n_epochs - 1} epochs")
-        ax.grid(True)
-        fig.tight_layout()
-        pdf.savefig(fig, bbox_inches="tight")
-        plt.close(fig)
+    final_png_path = save_prediction_png(epoch=n_epochs - 1, elapsed_s=elapsed)
+    if final_png_path != png_path:
+        os.replace(final_png_path, png_path)
 
     print(f"\nCSV saved to: {csv_path}")
-    print(f"PDF saved to: {pdf_path}")
+    print(f"PNG saved to: {png_path}")

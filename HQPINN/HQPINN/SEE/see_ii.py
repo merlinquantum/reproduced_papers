@@ -108,7 +108,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
                     n_epochs=SEE_N_EPOCHS,
                     plot_every=SEE_PLOT_EVERY,
                     out_dir=f"HQPINN/SEE/results/{case_prefix}",
-                    model_label=case_prefix,
+                    model_label=f"ii_{nb_photons}",
                 )
 
                 writer.writerow(
