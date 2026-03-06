@@ -96,7 +96,6 @@ class single_qubit_model(tq.QuantumModule):  # noqa: N801
         return logits
 
 
-# TODO Add a num_classes parameter
 class qiskit_QCNN(tq.QuantumModule):  # noqa: N801
     class QiskitQCNNQLayer(tq.QuantumModule):
         def __init__(self, num_qubits: int = 10):
@@ -213,7 +212,6 @@ class qiskit_QCNN(tq.QuantumModule):  # noqa: N801
         self.encoder = tq.AmplitudeEncoder()
 
         self.q_layer = self.QiskitQCNNQLayer(num_qubits=num_qubits)
-        self.measure = tq.MeasureAll(tq.PauliZ)
         self.return_probs = return_probs
 
     def _preprocess_input(self, x):
@@ -239,7 +237,8 @@ class qiskit_QCNN(tq.QuantumModule):  # noqa: N801
 
     def _first_qubit_probs(self, x):
         """
-        Measure all qubits and return probabilities of qubit 0.
+        Measure all qubits in the computational basis and return
+        marginal probabilities of qubit 0.
 
         Parameters
         ----------
@@ -249,15 +248,19 @@ class qiskit_QCNN(tq.QuantumModule):  # noqa: N801
         Returns
         -------
         torch.Tensor
-            Probabilities of shape (N, 2) for the first qubit.
+            Probabilities of shape (N, 2) for qubit 0.
         """
         self.encoder(self.q_device, x)
         self.q_layer(self.q_device)
-        x = self.measure(self.q_device)
-        if x.dim() == 1:
-            x = x.unsqueeze(0)
-        z = x[:, 0]
-        return torch.stack([(1.0 + z) / 2.0, (1.0 - z) / 2.0], dim=1)
+
+        # Full computational-basis probabilities for all qubits.
+        states = self.q_device.get_states_1d()
+        probs_state = torch.abs(states) ** 2
+
+        # Marginalize all qubits except qubit 0.
+        # Bit ordering follows TorchQuantum's basis convention.
+        probs_q0 = probs_state.reshape(probs_state.shape[0], 2, -1).sum(dim=-1)
+        return probs_q0
 
     def forward(self, x):
         """
