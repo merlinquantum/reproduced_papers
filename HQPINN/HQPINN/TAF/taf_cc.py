@@ -98,7 +98,7 @@ def run() -> None:
                 n_epochs=TAF_ADAM_STEPS,
                 plot_every=TAF_PLOT_EVERY,
                 out_dir=f"HQPINN/TAF/results/{case_prefix}",
-                model_label=f"cc_{label}",
+                model_label=case_prefix,
                 data=data,
                 U_in=U_in,
                 lbfgs_steps=TAF_LBFGS_STEPS,

@@ -18,8 +18,9 @@ from ..config import (
     GAMMA,
     TAF_EPSILON_LAMBDA,
     TAF_LBFGS_STEPS,
-    TAF_P_OUT,
+    # TAF_P_OUT,
     TAF_R_GAS,
+    TAF_T_IN,
     TAF_X_BOT_FILE,
     TAF_X_DATA_INT_FILE,
     TAF_X_F_FILE,
@@ -28,6 +29,7 @@ from ..config import (
     TAF_X_TOP_FILE,
     TAF_X_WALL_FILE,
     TAF_X_WALL_NORMALS_FILE,
+    TAF_RHO_IN,
 )
 from ..utils import count_trainable_params
 
@@ -189,9 +191,9 @@ def compute_lambda(
 mse = nn.MSELoss()
 
 
-def loss_boundary(
+def loss_boundary_terms(
     model: nn.Module, data: dict[str, torch.Tensor], U_in: torch.Tensor
-) -> torch.Tensor:
+) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
     """
     Boundary terms for the TAF setup of paper Sec. 3.3, using the
     boundary point sets generated in `generate_aerofoil_training_sets.py`:
@@ -200,8 +202,13 @@ def loss_boundary(
     - wall no-penetration u.n = 0
     - top/bottom periodicity
 
-    Total boundary loss:
-        L_bc = L_in + L_out + L_wall + L_per
+    Returns
+    -------
+    L_bc : total boundary loss
+    L_in : inlet loss
+    L_out : outlet loss
+    L_wall : wall slip loss
+    L_per : periodic side loss
     """
     X_in = data["X_in"]
     X_out = data["X_out"]
@@ -210,20 +217,65 @@ def loss_boundary(
     X_wall = data["X_wall"]
     X_wall_normals = data["X_wall_normals"]
 
+    # Reference scales from the paper inlet state
+    rho_ref = U_in[0]
+    u_ref = U_in[1]
+    T_ref = U_in[3]
+
+    # v_in = 0 in the paper, so use u_ref as the velocity scale for v
+    v_ref = u_ref
+
     # Sec. 3.3 inlet BC, applied on `X_in` (left boundary of the box domain):
     # enforce the prescribed primitive vector U_in = [rho, u, v, T].
     pred_in = model(X_in)
     rho_i, u_i, v_i, T_i = unpack_primitives(pred_in)
-    U_pred_in = torch.cat([rho_i, u_i, v_i, T_i], dim=1)
-    L_in = mse(U_pred_in, U_in.view(1, 4).expand_as(U_pred_in))
+    U_pred_in_norm = torch.cat(
+        [rho_i / rho_ref, u_i / u_ref, v_i / v_ref, T_i / T_ref], dim=1
+    )
+
+    U_in_norm = (
+        torch.tensor(
+            [1.0, 1.0, 0.0, 1.0],
+            dtype=U_in.dtype,
+            device=U_in.device,
+        )
+        .view(1, 4)
+        .expand_as(U_pred_in_norm)
+    )
+
+    L_in = mse(U_pred_in_norm, U_in_norm)
 
     # Sec. 3.3 outlet BC, applied on `X_out` (right boundary):
-    # enforce static pressure p = rho * R * T = Pout.
+    # Keep outputs as (rho,u,v,T), but interpret P_out = 0 as zero gauge pressure.
+    # Reference absolute pressure from inlet:
+    #
+    #   p_ref = rho_in * R * T_in
+    #
+    # Predicted absolute pressure:
+    #
+    #   p_abs = rho * R * T
+    #
+    # Relative/gauge-like pressure:
+    #
+    #   p_rel = (p_abs - p_ref) / p_ref
+    #
+    # Paper says P_out = 0, interpreted as p_rel = 0.
     pred_out = model(X_out)
     rho_o, _, _, T_o = unpack_primitives(pred_out)
-    p_out_pred = rho_o * TAF_R_GAS * T_o
-    p_out_target = torch.full_like(p_out_pred, TAF_P_OUT)
-    L_out = mse(p_out_pred, p_out_target)
+
+    # Reference absolute pressure from inlet state
+    # Uin = (ρin, uin, vin, Tin) = (1.225, 272.15, 0.0, 288.15),
+    # p_ref = 101306
+    p_ref = rho_ref * TAF_R_GAS * T_ref
+
+    # Relative / gauge-like pressure normalized by reference pressure
+    p_abs_pred = rho_o * TAF_R_GAS * T_o
+    p_rel_pred = (p_abs_pred - p_ref) / p_ref
+
+    # Paper says P_out = 0; interpreted as zero gauge pressure
+    p_rel_target = torch.zeros_like(p_rel_pred)
+
+    L_out = mse(p_rel_pred, p_rel_target)
 
     # Sec. 3.3 wall BC on NACA0012 surface points `X_wall`:
     # impermeability (slip wall), i.e. normal velocity is zero: (u, v) dot n = 0.
@@ -232,7 +284,8 @@ def loss_boundary(
     _, u_w, v_w, _ = unpack_primitives(pred_wall)
     normals = X_wall_normals[:, 2:4]
     u_dot_n = u_w * normals[:, 0:1] + v_w * normals[:, 1:2]
-    L_wall = mse(u_dot_n, torch.zeros_like(u_dot_n))
+    u_dot_n_norm = u_dot_n / u_ref
+    L_wall = mse(u_dot_n_norm, torch.zeros_like(u_dot_n_norm))
 
     # Sec. 3.3 far-field closure in this repo: periodic pairing of
     # top and bottom boundaries (`X_top`, `X_bot`) for all primitives.
@@ -240,10 +293,21 @@ def loss_boundary(
     pred_bot = model(X_bot)
     rho_t, u_t, v_t, T_t = unpack_primitives(pred_top)
     rho_b, u_b, v_b, T_b = unpack_primitives(pred_bot)
-    U_top = torch.cat([rho_t, u_t, v_t, T_t], dim=1)
-    U_bot = torch.cat([rho_b, u_b, v_b, T_b], dim=1)
-    L_per = mse(U_top, U_bot)
+    U_top_norm = torch.cat(
+        [rho_t / rho_ref, u_t / u_ref, v_t / v_ref, T_t / T_ref], dim=1
+    )
+    U_bot_norm = torch.cat(
+        [rho_b / rho_ref, u_b / u_ref, v_b / v_ref, T_b / T_ref], dim=1
+    )
+    L_per = mse(U_top_norm, U_bot_norm)
 
+    return L_in, L_out, L_wall, L_per
+
+
+def loss_boundary(
+    model: nn.Module, data: dict[str, torch.Tensor], U_in: torch.Tensor
+) -> torch.Tensor:
+    L_in, L_out, L_wall, L_per = loss_boundary_terms(model, data, U_in)
     return L_in + L_out + L_wall + L_per
 
 
@@ -269,6 +333,10 @@ def log_training_info(
     loss: torch.Tensor,
     loss_bc: torch.Tensor,
     loss_f: torch.Tensor,
+    loss_in: torch.Tensor,
+    loss_out: torch.Tensor,
+    loss_wall: torch.Tensor,
+    loss_per: torch.Tensor,
     rows: list[list[str]],
 ) -> None:
     """Console log + in-memory CSV row append."""
@@ -276,7 +344,11 @@ def log_training_info(
         f"Step {epoch:6d} | elapsed={elapsed:.2f}s | "
         f"L={loss.item():.3e} | "
         f"BC={loss_bc.item():.3e} | "
-        f"F={loss_f.item():.3e}"
+        f"F={loss_f.item():.3e} | "
+        f"L_in={loss_in.item():.3e} | "
+        f"L_out={loss_out.item():.3e} | "
+        f"L_wall={loss_wall.item():.3e} | "
+        f"L_per={loss_per.item():.3e}"
     )
 
     rows.append(
@@ -286,6 +358,10 @@ def log_training_info(
             f"{loss.item():.3e}",
             f"{loss_bc.item():.3e}",
             f"{loss_f.item():.3e}",
+            f"{loss_in.item():.3e}",
+            f"{loss_out.item():.3e}",
+            f"{loss_wall.item():.3e}",
+            f"{loss_per.item():.3e}",
         ]
     )
 
@@ -317,7 +393,8 @@ def train_taf(
 
         # Paper objective:
         #   L = L_bc + L_f
-        L_bc = loss_boundary(model, data, U_in)
+        L_in, L_out, L_wall, L_per = loss_boundary_terms(model, data, U_in)
+        L_bc = L_in + L_out + L_wall + L_per
         L_f = loss_pde(model, data, eps_lambda=eps_lambda)
         L_total = L_bc + L_f
         L_total.backward()
@@ -325,7 +402,18 @@ def train_taf(
 
         if epoch % plot_every == 0:
             elapsed = (datetime.now() - start).total_seconds()
-            log_training_info(epoch, elapsed, L_total, L_bc, L_f, rows)
+            log_training_info(
+                epoch,
+                elapsed,
+                L_total,
+                L_bc,
+                L_f,
+                L_in,
+                L_out,
+                L_wall,
+                L_per,
+                rows,
+            )
 
     if lbfgs_steps > 0:
         print("Switching to L-BFGS...")
@@ -350,16 +438,40 @@ def train_taf(
 
     # Do not use torch.no_grad() here: PDE loss relies on autograd
     # to evaluate spatial derivatives in euler_residual().
-    L_bc = loss_boundary(model, data, U_in)
+    L_in, L_out, L_wall, L_per = loss_boundary_terms(model, data, U_in)
+    L_bc = L_in + L_out + L_wall + L_per
     L_f = loss_pde(model, data, eps_lambda=eps_lambda)
     L_total = L_bc + L_f
 
     elapsed = (datetime.now() - start).total_seconds()
-    log_training_info(n_epochs, elapsed, L_total, L_bc, L_f, rows)
+    log_training_info(
+        n_epochs,
+        elapsed,
+        L_total,
+        L_bc,
+        L_f,
+        L_in,
+        L_out,
+        L_wall,
+        L_per,
+        rows,
+    )
 
     with open(csv_path, "w", newline="") as f:
         writer = csv.writer(f)
-        writer.writerow(["step", "elapsed (s)", "Loss", "BC", "F"])
+        writer.writerow(
+            [
+                "step",
+                "elapsed (s)",
+                "Loss",
+                "BC",
+                "F",
+                "L_in",
+                "L_out",
+                "L_wall",
+                "L_per",
+            ]
+        )
         writer.writerows(rows)
 
     n_params = count_trainable_params(model)

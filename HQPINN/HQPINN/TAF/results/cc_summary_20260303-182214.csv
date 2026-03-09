@@ -1,2 +1,0 @@
-Model,Size,Trainable parameters,Loss,Boundary loss,Data loss,PDE loss
-cc,40-4,10408,1.819303e+03,1.819302e+03,0.000000e+00,1.069300e-03

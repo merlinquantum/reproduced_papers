@@ -107,6 +107,10 @@ TAF_X_MAX = 3.5
 TAF_Y_MIN = -2.25
 TAF_Y_MAX = 2.25
 
+# Uin = (ρin, uin, vin, Tin) = (1.225, 272.15, 0.0, 288.15),
+TAF_RHO_IN = 1.225
+TAF_T_IN = 288.15
+
 TAF_DOMAIN_SIDE = 4.5
 
 TAF_CHORD_X0 = 0.0
