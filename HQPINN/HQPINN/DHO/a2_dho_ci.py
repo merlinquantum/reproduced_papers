@@ -8,7 +8,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from ..config import DHO_N_EPOCHS, DHO_PLOT_EVERY, DHO_LR
+from ..config import DHO_N_EPOCHS, DHO_PLOT_EVERY, DHO_LR, DTYPE
 from ..utils import make_time_grid, make_optimizer
 from .core_a2_dho import train_oscillator_pinn, u_exact
 from ..run_common import run_series_inference_mode
@@ -23,10 +23,7 @@ from ..layer_classical import BranchPyTorch
 
 class CI_PINN(nn.Module):
     """
-    Classical–Interferometer PINN:
-
-        u(t) = u_c(t) + u_q(t)
-    Each branch uses its own QuantumLayer instance → independent parameters.
+    Classical–Interferometer PINN with linear fusion to scalar output.
     """
 
     def __init__(self, processor=None) -> None:
@@ -40,10 +37,12 @@ class CI_PINN(nn.Module):
         )
         # One classical MLP branch
         self.branch2 = BranchPyTorch()
+        self.fusion = nn.Linear(4, 1, dtype=DTYPE)
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
-        # Forward pass: sum of MerLin and classical branches
-        return self.branch1(t) + self.branch2(t)
+        out_q = self.branch1(t)
+        out_c = self.branch2(t)
+        return self.fusion(torch.cat([out_q, out_c], dim=1))
 
 
 def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_ci/"):

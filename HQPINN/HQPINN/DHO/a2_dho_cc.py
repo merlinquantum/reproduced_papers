@@ -19,18 +19,20 @@ from ..layer_classical import BranchPyTorch
 
 class CC_PINN(nn.Module):
     """
-    Classical–Classical PINN with two parallel MLP branches:
-        u(t) = u_c1(t) + u_c2(t)
+    Classical–Classical PINN with two parallel MLP branches
+    and a linear fusion readout to a scalar u(t).
     """
 
     def __init__(self) -> None:
         super().__init__()
         self.branch1 = BranchPyTorch()
         self.branch2 = BranchPyTorch()
+        self.fusion = nn.Linear(6, 1, dtype=DTYPE)
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
-        # Forward pass: sum of the two classical branches
-        return self.branch1(t) + self.branch2(t)
+        out1 = self.branch1(t)
+        out2 = self.branch2(t)
+        return self.fusion(torch.cat([out1, out2], dim=1))
 
 
 def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_cc/"):

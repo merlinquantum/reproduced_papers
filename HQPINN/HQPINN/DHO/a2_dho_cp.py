@@ -9,7 +9,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from ..config import DHO_N_EPOCHS, DHO_PLOT_EVERY, DHO_LR, N_LAYERS
+from ..config import DHO_N_EPOCHS, DHO_PLOT_EVERY, DHO_LR, N_LAYERS, DTYPE
 from ..utils import make_time_grid, make_optimizer
 from .core_a2_dho import train_oscillator_pinn, u_exact
 from ..run_common import run_series_inference_mode
@@ -19,9 +19,7 @@ from ..layer_classical import BranchPyTorch
 
 class CQ_PINN(nn.Module):
     """
-    Hybrid Classical–Quantum PINN:
-
-        u(t) = u_q(t) + u_c(t)
+    Hybrid Classical–Quantum PINN with linear fusion to scalar output.
     """
 
     def __init__(self) -> None:
@@ -36,10 +34,12 @@ class CQ_PINN(nn.Module):
             n_layers=N_LAYERS,
         )
         self.branch_c = BranchPyTorch()
+        self.fusion = nn.Linear(4, 1, dtype=DTYPE)
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
-        # Forward pass: sum of quantum and classical branches
-        return self.branch_q(t) + self.branch_c(t)
+        out_q = self.branch_q(t)
+        out_c = self.branch_c(t)
+        return self.fusion(torch.cat([out_q, out_c], dim=1))
 
 
 def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_cp/"):

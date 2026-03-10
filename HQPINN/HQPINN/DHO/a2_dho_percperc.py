@@ -9,7 +9,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from ..config import DHO_N_EPOCHS, DHO_PLOT_EVERY, DHO_LR
+from ..config import DHO_N_EPOCHS, DHO_PLOT_EVERY, DHO_LR, DTYPE
 from ..utils import make_time_grid, make_optimizer
 from .core_a2_dho import train_oscillator_pinn, u_exact
 from ..run_common import run_series_inference_mode
@@ -23,11 +23,7 @@ from ..layer_merlin import make_perceval_qlayer, BranchMerlin
 
 class MM_PINN(nn.Module):
     """
-    Perceval–Perceval PINN:
-
-        u(t) = u_q1(t) + u_q2(t)
-
-    Each branch uses its own QuantumLayer instance → independent parameters.
+    Perceval–Perceval PINN with linear fusion to scalar output.
     """
 
     def __init__(self, processor=None) -> None:
@@ -44,10 +40,12 @@ class MM_PINN(nn.Module):
             processor=processor,
             feature_map_kind="dho",
         )
+        self.fusion = nn.Linear(2, 1, dtype=DTYPE)
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
-        # Forward pass: sum of the two Perceval branches
-        return self.branch1(t) + self.branch2(t)
+        out1 = self.branch1(t)
+        out2 = self.branch2(t)
+        return self.fusion(torch.cat([out1, out2], dim=1))
 
 
 def plot_model_prediction(

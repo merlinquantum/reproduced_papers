@@ -9,7 +9,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from ..config import DHO_N_EPOCHS, DHO_PLOT_EVERY, DHO_LR
+from ..config import DHO_N_EPOCHS, DHO_PLOT_EVERY, DHO_LR, DTYPE
 from ..utils import make_time_grid, make_optimizer
 from .core_a2_dho import train_oscillator_pinn, u_exact
 from ..run_common import run_series_inference_mode
@@ -24,11 +24,7 @@ from ..layer_classical import BranchPyTorch
 
 class CM_PINN(nn.Module):
     """
-    Hybrid Classical–Perceval PINN:
-
-        u(t) = u_m(t) + u_c(t)
-
-    where u_m(t) is the MerLin quantum branch and u_c(t) is the classical MLP.
+    Hybrid Classical–Perceval PINN with linear fusion to scalar output.
     """
 
     def __init__(self, processor=None) -> None:
@@ -39,10 +35,12 @@ class CM_PINN(nn.Module):
             feature_map_kind="dho",
         )
         self.branch_c = BranchPyTorch()
+        self.fusion = nn.Linear(4, 1, dtype=DTYPE)
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
-        # Forward pass: sum of MerLin and classical branches
-        return self.branch_q(t) + self.branch_c(t)
+        out_q = self.branch_q(t)
+        out_c = self.branch_c(t)
+        return self.fusion(torch.cat([out_q, out_c], dim=1))
 
 
 def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_cperc/"):
