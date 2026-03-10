@@ -14,6 +14,7 @@ from ..config import (
     DEE_N_EPOCHS,
     DEE_PLOT_EVERY,
     DEE_LR,
+    DTYPE,
 )
 from ..utils import make_optimizer
 from .core_dee import train_dee, save_density_plot
@@ -48,14 +49,15 @@ class CI_PINN(nn.Module):
             processor=processor,
             feature_map_kind="dee",
         )
+        self.fusion = nn.Linear(6, 3, dtype=DTYPE)
 
         self.size_label = f"{hidden_width}-{num_hidden_layers}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
         out1 = self.branch1(xt)
         out2 = self.branch2(xt)
-        # Paper-style linear combination with unit weights: out1 + out2.
-        return out1 + out2
+        # Learned linear fusion of both branch outputs.
+        return self.fusion(torch.cat([out1, out2], dim=1))
 
 
 MODELS = [

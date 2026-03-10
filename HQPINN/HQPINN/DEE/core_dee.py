@@ -185,8 +185,8 @@ def euler_loss_batched(
     p_right_exact = torch.full_like(x_right, DEE_P)
 
     loss_bc = torch.mean(
-        (rho_left - rho_left_exact) ** 2
-        + (rho_right - rho_right_exact) ** 2
+        # (rho_left - rho_left_exact) ** 2
+        # + (rho_right - rho_right_exact) ** 2
         + (u_left - u_left_exact) ** 2
         + (u_right - u_right_exact) ** 2
         + (p_left - p_left_exact) ** 2
@@ -528,5 +528,63 @@ def save_density_plot(
 
         fig.savefig(png_path, dpi=300)
         plt.close(fig)
+
+    rho_slice_path = save_rho_slice_plot(
+        model=model,
+        ckpt_dir=ckpt_dir,
+        case_prefix=case_prefix,
+        timestamp=timestamp,
+        backend=backend,
+        t_slice=2.0,
+    )
+    print(f"Rho slice plot saved to: {rho_slice_path}")
+
+    return png_path
+
+
+def save_rho_slice_plot(
+    model: nn.Module,
+    ckpt_dir: str,
+    case_prefix: str,
+    timestamp: str,
+    backend: str,
+    t_slice: float = 2.0,
+) -> str:
+    """Save rho(x, t_slice) prediction (and exact profile) for DEE."""
+    model.eval()
+    t_val = min(max(float(t_slice), DEE_T_MIN), DEE_T_MAX)
+
+    n_points = 400 if backend.lower() == "local" else 120
+    with torch.no_grad():
+        x = torch.linspace(DEE_X_MIN, DEE_X_MAX, n_points, dtype=DTYPE, device=DEVICE)
+        t = torch.full_like(x, t_val)
+        xt = torch.stack([x, t], dim=1)
+
+        rho_pred = model(xt)[:, 0]
+        rho_exact = exact_rho(x[:, None], t[:, None]).squeeze(1)
+
+    x_np = x.detach().cpu().numpy()
+    rho_pred_np = rho_pred.detach().cpu().numpy()
+    rho_exact_np = rho_exact.detach().cpu().numpy()
+
+    results_dir = os.path.join(ckpt_dir, "results")
+    os.makedirs(results_dir, exist_ok=True)
+    t_tag = str(t_val).replace(".", "p")
+    png_path = os.path.join(
+        results_dir,
+        f"{case_prefix}_{backend}_{timestamp}_rho_x_t_{t_tag}.png",
+    )
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.plot(x_np, rho_pred_np, lw=2, label="NN")
+    ax.plot(x_np, rho_exact_np, "--", lw=2, label="Exact")
+    ax.set_xlabel("x")
+    ax.set_ylabel("rho")
+    ax.set_title(f"rho(x, t={t_val:.2f})")
+    ax.grid(True)
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(png_path, dpi=300)
+    plt.close(fig)
 
     return png_path
