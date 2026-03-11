@@ -6,6 +6,20 @@ Usage:
 """
 
 
+def _ask_mode() -> str:
+    mode = input("Mode? [train/run/remote] ").strip().lower()
+    if mode not in {"train", "run", "remote"}:
+        raise ValueError("mode must be 'train', 'run', or 'remote'")
+    return mode
+
+
+def _ask_backend(mode: str) -> str:
+    if mode == "remote":
+        backend = input("Backend? [sim:ascella] ").strip()
+        return backend or "sim:ascella"
+    return "local"
+
+
 def main() -> None:
     """Entry point for the HQPINN command-line interface."""
     print("Available experiments:")
@@ -33,181 +47,201 @@ def main() -> None:
 
     # DHO experiments
     if choice == "dho-pp":
-        # PennyLane–PennyLane
         from .DHO.a2_dho_pp import run
 
-        run()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        run(mode=mode, backend=backend)
 
     elif choice == "dho-cc":
-        # Classical–Classical
         from .DHO.a2_dho_cc import run
 
-        run()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        run(mode=mode, backend=backend)
 
     elif choice == "dho-cp":
-        # Classical–PennyLane
         from .DHO.a2_dho_cp import run
 
-        run()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        run(mode=mode, backend=backend)
 
     elif choice == "dho-cperc":
-        # Classical–Perceval
         from .DHO.a2_dho_cperc import run
 
-        run()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        run(mode=mode, backend=backend)
 
     elif choice == "dho-ii":
         from .DHO.a2_dho_ii import run
 
-        mode = input("Train or run? [train/run/remote] ").strip().lower()
-
-        backend = input("Backend? [sim:ascella] ").strip()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
     elif choice == "dho-percperc":
-        # Perceval–Perceval
         from .DHO.a2_dho_percperc import run
 
-        run()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        run(mode=mode, backend=backend)
 
     elif choice == "dho-ci":
-        # Classical-Interferometer
         from .DHO.a2_dho_ci import run
 
-        run()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        run(mode=mode, backend=backend)
 
-    # ==========================
     # SEE experiments
-    # ==========================
     elif choice == "see-cc":
-        # Classical–Classical SEE
         from .SEE.see_cc import run
 
-        run()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            model_size = input("Model size? [10-4/10-7/20-4] ").strip() or "10-4"
+            run(mode=mode, backend=backend, model_size=model_size)
 
     elif choice == "see-cp":
-        # Classical–PennyLane SEE
         from .SEE.see_cp import run
 
-        run()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            model_size = (
+                input("Model size? [10-4-2/10-7-2/20-4-2] ").strip() or "10-4-2"
+            )
+            run(mode=mode, backend=backend, model_size=model_size)
 
     elif choice == "see-ii":
-        # Interferometer–Interferometer SEE
         from .SEE.see_ii import run
 
-        backend = "Local"
-        n_photons = 2
-
-        mode = input("Train or run? [train/run/remote] ").strip().lower()
-
-        if mode == "remote":
-            backend = input("Backend? [sim:ascella] ").strip()
-            n_photons = int(input("Number of photons? [1/../6] "))
-        if mode == "run":
-            n_photons = int(input("Number of photons? [1/../6] "))
-        run(
-            mode=mode,
-            backend=backend,
-            n_photons=n_photons,
-        )
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            n_photons = int(input("Number of photons? [1/../6] ").strip() or "2")
+            run(
+                mode=mode,
+                backend=backend,
+                n_photons=n_photons,
+            )
 
     elif choice == "see-pp":
-        # PennyLane–PennyLane SEE
         from .SEE.see_pp import run
 
-        run()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            model_size = input("Model size? [2/3/4] ").strip() or "2"
+            run(mode=mode, backend=backend, model_size=model_size)
 
     elif choice == "see-ci":
-        # Classical–Interferometer SEE
         from .SEE.see_ci import run
 
-        backend = "Local"
-        model_size = "10-4-2"
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            model_size = (
+                input("Model size? [10-4-2/10-7-2/20-4-2] ").strip() or "10-4-2"
+            )
+            run(
+                mode=mode,
+                backend=backend,
+                model_size=model_size,
+            )
 
-        mode = input("Train or run? [train/run/remote] ").strip().lower()
-
-        if mode == "remote":
-            backend = input("Backend? [sim:ascella] ").strip()
-            model_size = input("Model size? [10-4-2/10-7-2/20-4-2] ").strip()
-        if mode == "run":
-            model_size = input("Model size? [10-4-2/10-7-2/20-4-2] ").strip()
-
-        run(
-            mode=mode,
-            backend=backend,
-            model_size=model_size,
-        )
-
-    # ==========================
     # DEE experiments
-    # ==========================
     elif choice == "dee-cc":
-        # Classical–Classical DEE
         from .DEE.dee_cc import run
 
-        run()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            model_size = input("Model size? [10-4/10-7/20-4] ").strip() or "10-4"
+            run(mode=mode, backend=backend, model_size=model_size)
 
     elif choice == "dee-ii":
-        # Interferometer–Interferometer DEE
         from .DEE.dee_ii import run
 
-        backend = "Local"
-        n_photons = 2
-
-        mode = input("Train or run? [train/run/remote] ").strip().lower()
-
-        if mode == "remote":
-            backend = input("Backend? [sim:ascella] ").strip()
-            n_photons = int(input("Number of photons? [1/../6] "))
-        if mode == "run":
-            n_photons = int(input("Number of photons? [1/../6] "))
-        run(
-            mode=mode,
-            backend=backend,
-            n_photons=n_photons,
-        )
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            n_photons = int(input("Number of photons? [1/../6] ").strip() or "2")
+            run(
+                mode=mode,
+                backend=backend,
+                n_photons=n_photons,
+            )
 
     elif choice == "dee-ci":
-        # Classical–Interferometer DEE
         from .DEE.dee_ci import run
 
-        backend = "Local"
-        model_size = "10-4-1"
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            model_size = (
+                input("Model size? [10-4-1/10-7-1/20-4-1] ").strip() or "10-4-1"
+            )
+            run(
+                mode=mode,
+                backend=backend,
+                model_size=model_size,
+            )
 
-        mode = input("Train or run? [train/run/remote] ").strip().lower()
-
-        if mode == "remote":
-            backend = input("Backend? [sim:ascella] ").strip()
-            model_size = input("Model size? [10-4-1/10-7-1/20-4-1] ").strip()
-        if mode == "run":
-            model_size = input("Model size? [10-4-1/10-7-1/20-4-1] ").strip()
-
-        run(
-            mode=mode,
-            backend=backend,
-            model_size=model_size,
-        )
-
-    # ==========================
     # TAF experiments
-    # ==========================
     elif choice == "taf-cc":
-        # Classical–Classical TAF
         from .TAF.taf_cc import run
 
-        run()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            model_size = input("Model size? [40-4/40-7/80-4] ").strip() or "40-4"
+            run(mode=mode, backend=backend, model_size=model_size)
 
     elif choice == "taf-ci":
-        # Classical–Interferometer TAF
         from .TAF.taf_ci import run
 
-        run()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            model_size = (
+                input("Model size? [40-4-2/40-7-2/80-4-2] ").strip() or "40-4-2"
+            )
+            run(mode=mode, backend=backend, model_size=model_size)
 
     elif choice == "taf-ii":
-        # Interferometer–Interferometer TAF
         from .TAF.taf_ii import run
 
-        run()
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            n_photons = int(input("Number of photons? [1/../6] ").strip() or "2")
+            run(mode=mode, backend=backend, n_photons=n_photons)
 
     else:
         print(f"Unknown experiment: {choice}")

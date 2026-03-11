@@ -10,7 +10,6 @@ import torch.nn as nn
 
 import matplotlib
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_pdf import PdfPages
 
 from ..config import (
     DTYPE,
@@ -38,7 +37,7 @@ from ..utils import (
 
 from typing import Optional
 
-# Use non-interactive backend for batch PDF export
+# Use non-interactive backend for batch image export
 matplotlib.use("Agg")
 
 
@@ -187,7 +186,7 @@ def euler_loss_batched(
     loss_bc = torch.mean(
         # (rho_left - rho_left_exact) ** 2
         # + (rho_right - rho_right_exact) ** 2
-        + (u_left - u_left_exact) ** 2
+        +((u_left - u_left_exact) ** 2)
         + (u_right - u_right_exact) ** 2
         + (p_left - p_left_exact) ** 2
         + (p_right - p_right_exact) ** 2
@@ -285,7 +284,13 @@ def train_dee(
     os.makedirs(out_dir, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    pdf_path = os.path.join(out_dir, f"dee-{model_label}_{timestamp}.pdf")
+    rho_pred_png_path = os.path.join(out_dir, f"dee-{model_label}_{timestamp}_rho_pred.png")
+    rho_exact_png_path = os.path.join(
+        out_dir, f"dee-{model_label}_{timestamp}_rho_exact.png"
+    )
+    rho_error_png_path = os.path.join(
+        out_dir, f"dee-{model_label}_{timestamp}_rho_error.png"
+    )
     csv_path = os.path.join(out_dir, f"dee-{model_label}_{timestamp}.csv")
 
     # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
@@ -394,7 +399,7 @@ def train_dee(
         writer.writerow(["epoch", "elapsed (s)", "Loss", "IC", "BC", "F"])
         writer.writerows(rows)
 
-    # Final evaluation grid for PDF
+    # Final evaluation grid for PNG outputs
     with torch.no_grad():
         nx, nt = DEE_NX_SAMPLES, DEE_NT_SAMPLES
         x = torch.linspace(DEE_X_MIN, DEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
@@ -418,44 +423,42 @@ def train_dee(
         rho_exact_np = rho_exact.cpu().numpy()
         rho_err_np = rho_error.cpu().numpy()
 
-        with PdfPages(pdf_path) as pdf:
+        # 1) Predicted density
+        fig, ax = plt.subplots(figsize=(8, 5))  # 8x5 inches
+        cs = ax.contourf(
+            X_np, T_np, rho_pred_np, levels=50
+        )  # 50 contour levels for smooth color gradation
+        fig.colorbar(cs, ax=ax)
+        ax.set_title("Predicted density $\\rho_\\text{pred}(x,t)$")
+        ax.set_xlabel("x")
+        ax.set_ylabel("t")
+        fig.tight_layout()
+        fig.savefig(rho_pred_png_path, dpi=300)
+        plt.close(fig)
 
-            # 1) Predicted density
-            fig, ax = plt.subplots(figsize=(8, 5))  # 8x5 inches
-            cs = ax.contourf(
-                X_np, T_np, rho_pred_np, levels=50
-            )  # 50 contour levels for smooth color gradation
-            fig.colorbar(cs, ax=ax)
-            ax.set_title("Predicted density $\\rho_\\text{pred}(x,t)$")
-            ax.set_xlabel("x")
-            ax.set_ylabel("t")
-            fig.tight_layout()
-            pdf.savefig(fig)
-            plt.close(fig)
+        # 2) Exact density
+        fig, ax = plt.subplots(figsize=(8, 5))
+        cs = ax.contourf(X_np, T_np, rho_exact_np, levels=50)
+        fig.colorbar(cs, ax=ax)
+        ax.set_title("Exact density $\\rho_\\text{exact}(x,t)$")
+        ax.set_xlabel("x")
+        ax.set_ylabel("t")
+        fig.tight_layout()
+        fig.savefig(rho_exact_png_path, dpi=300)
+        plt.close(fig)
 
-            # 2) Exact density
-            fig, ax = plt.subplots(figsize=(8, 5))
-            cs = ax.contourf(X_np, T_np, rho_exact_np, levels=50)
-            fig.colorbar(cs, ax=ax)
-            ax.set_title("Exact density $\\rho_\\text{exact}(x,t)$")
-            ax.set_xlabel("x")
-            ax.set_ylabel("t")
-            fig.tight_layout()
-            pdf.savefig(fig)
-            plt.close(fig)
-
-            # 3) Error (pred - exact)
-            fig, ax = plt.subplots(figsize=(8, 5))
-            cs = ax.contourf(X_np, T_np, rho_err_np, levels=50, cmap="bwr")
-            fig.colorbar(cs, ax=ax)
-            ax.set_title(
-                "Density error $\\rho_\\text{pred}(x,t)-\\rho_\\text{exact}(x,t)$"
-            )
-            ax.set_xlabel("x")
-            ax.set_ylabel("t")
-            fig.tight_layout()
-            pdf.savefig(fig)
-            plt.close(fig)
+        # 3) Error (pred - exact)
+        fig, ax = plt.subplots(figsize=(8, 5))
+        cs = ax.contourf(X_np, T_np, rho_err_np, levels=50, cmap="bwr")
+        fig.colorbar(cs, ax=ax)
+        ax.set_title(
+            "Density error $\\rho_\\text{pred}(x,t)-\\rho_\\text{exact}(x,t)$"
+        )
+        ax.set_xlabel("x")
+        ax.set_ylabel("t")
+        fig.tight_layout()
+        fig.savefig(rho_error_png_path, dpi=300)
+        plt.close(fig)
 
     # Evaluate density and pressure errors on (x,t) grid
     err_rho, err_p = evaluate_dee_errors(model)
@@ -465,7 +468,9 @@ def train_dee(
 
     # print(f"Metrics CSV saved to: {metrics_path}")
     print(f"CSV saved to: {csv_path}")
-    print(f"PDF saved to: {pdf_path}")
+    print(f"PNG saved to: {rho_pred_png_path}")
+    print(f"PNG saved to: {rho_exact_png_path}")
+    print(f"PNG saved to: {rho_error_png_path}")
 
     return final_loss, err_rho, err_p, n_params
 

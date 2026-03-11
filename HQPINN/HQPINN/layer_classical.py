@@ -32,18 +32,39 @@ class BranchPyTorch(nn.Module):
     ) -> None:
         super().__init__()
 
-        layers = []
-
-        layers.append(nn.Linear(in_features, hidden_width, dtype=DTYPE))
-        layers.append(nn.Tanh())
-
+        if num_hidden_layers < 1:
+            raise ValueError("num_hidden_layers must be >= 1")
+        layers = [
+            nn.Linear(in_features, out_features, dtype=DTYPE),
+            nn.Tanh(),
+            nn.Linear(out_features, hidden_width, dtype=DTYPE),
+            nn.Tanh(),
+        ]
         for _ in range(num_hidden_layers - 1):
-            layers.append(nn.Linear(hidden_width, hidden_width, dtype=DTYPE))
-            layers.append(nn.Tanh())
-
-        layers.append(nn.Linear(hidden_width, out_features, dtype=DTYPE))
-
+            layers.extend(
+                [
+                    nn.Linear(hidden_width, hidden_width, dtype=DTYPE),
+                    nn.Tanh(),
+                ]
+            )
+        layers.append(nn.Linear(hidden_width, 3, dtype=DTYPE))  # output layer
         self.net = nn.Sequential(*layers)
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.net(x)
+    def forward(self, xt: torch.Tensor) -> torch.Tensor:
+        return self.net(xt)
+
+    #     layers = []
+
+    #     layers.append(nn.Linear(in_features, hidden_width, dtype=DTYPE))
+    #     layers.append(nn.Tanh())
+
+    #     for _ in range(num_hidden_layers - 1):
+    #         layers.append(nn.Linear(hidden_width, hidden_width, dtype=DTYPE))
+    #         layers.append(nn.Tanh())
+
+    #     layers.append(nn.Linear(hidden_width, out_features, dtype=DTYPE))
+
+    #     self.net = nn.Sequential(*layers)
+
+    # def forward(self, x: torch.Tensor) -> torch.Tensor:
+    #     return self.net(x)

@@ -12,6 +12,7 @@ from ..config import (
     SEE_N_EPOCHS,
     SEE_LR,
     SEE_PLOT_EVERY,
+    DTYPE,
 )
 from ..utils import make_optimizer
 from .core_see import train_see, save_density_plot
@@ -44,15 +45,16 @@ class II_PINN(nn.Module):
             processor=processor,
             feature_map_kind="see",
         )
+        self.fusion = nn.Linear(6, 3, dtype=DTYPE)
 
         # Human-readable size label ("1", "2", ..., "6")
         self.size_label = f"{n_photons}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
-        # Paper-style linear combination with unit weights: out1 + out2.
+        # Learned linear fusion of both branch outputs.
         out1 = self.branch1(xt)  # [N, 3]
         out2 = self.branch2(xt)  # [N, 3]
-        return out1 + out2  # [N, 3]
+        return self.fusion(torch.cat([out1, out2], dim=1))  # [N, 3]
 
 
 MODELS = [
@@ -63,7 +65,6 @@ MODELS = [
     ("5", 5),
     ("6", 6),
 ]
-
 
 def run(mode="train", backend="sim:ascella", n_photons=2):
     """Run all SEE Interferometer-Interferometer models and write summary CSV."""

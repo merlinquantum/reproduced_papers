@@ -14,6 +14,7 @@ from ..config import (
     SEE_N_EPOCHS,
     SEE_PLOT_EVERY,
     SEE_LR,
+    DTYPE,
 )
 from ..utils import make_optimizer
 from .core_see import train_see, save_density_plot
@@ -50,15 +51,16 @@ class CI_PINN(nn.Module):
             processor=processor,
             feature_map_kind="see",
         )
+        self.fusion = nn.Linear(6, 3, dtype=DTYPE)
 
         # Human-readable size label, e.g. "10-4"
         self.size_label = f"{hidden_width}-{num_hidden_layers}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
-        # Paper-style linear combination with unit weights: out1 + out2.
+        # Learned linear fusion of both branch outputs.
         out1 = self.branch1(xt)
         out2 = self.branch2(xt)
-        return out1 + out2
+        return self.fusion(torch.cat([out1, out2], dim=1))
 
 
 MODELS = [

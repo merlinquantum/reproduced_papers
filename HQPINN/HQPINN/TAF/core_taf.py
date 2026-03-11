@@ -6,8 +6,9 @@ import csv
 import os
 from datetime import datetime
 from pathlib import Path
-from typing import Tuple
+from typing import Optional, Tuple
 
+import matplotlib
 import numpy as np
 import torch
 import torch.nn as nn
@@ -27,14 +28,19 @@ from ..config import (
     TAF_X_IN_FILE,
     TAF_X_OUT_FILE,
     TAF_X_TOP_FILE,
+    TAF_X_MAX,
+    TAF_X_MIN,
     TAF_X_WALL_FILE,
     TAF_X_WALL_NORMALS_FILE,
-    TAF_RHO_IN,
+    TAF_Y_MAX,
+    TAF_Y_MIN,
 )
 from ..utils import count_trainable_params
 
 
 DATA_DIR = Path(__file__).resolve().parent / "NACA0012"
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 
 def load_points(path: str) -> torch.Tensor:
@@ -47,15 +53,20 @@ def load_points(path: str) -> torch.Tensor:
 
 
 def load_training_sets() -> dict[str, torch.Tensor]:
-    """Load TAF geometry/training point sets."""
+    # No CFD field targets are available in-repo for TAF. We therefore
+    # re-inject the generated interior points (`X_data_int`) into the
+    # training collocation set used by the optimization loop.
+    X_data_int = load_points(TAF_X_DATA_INT_FILE)
+    X_f = load_points(TAF_X_F_FILE)
+
     return {
         "X_in": load_points(TAF_X_IN_FILE),
         "X_out": load_points(TAF_X_OUT_FILE),
         "X_top": load_points(TAF_X_TOP_FILE),
         "X_bot": load_points(TAF_X_BOT_FILE),
         "X_wall": load_points(TAF_X_WALL_FILE),
-        "X_data_int": load_points(TAF_X_DATA_INT_FILE),
-        "X_f": load_points(TAF_X_F_FILE),
+        "X_data_int": X_data_int,
+        "X_f": torch.cat([X_data_int, X_f], dim=0),
         "X_wall_normals": load_points(TAF_X_WALL_NORMALS_FILE),
     }
 
@@ -191,8 +202,36 @@ def compute_lambda(
 mse = nn.MSELoss()
 
 
+def _sample_rows(x: torch.Tensor, batch_size: Optional[int]) -> torch.Tensor:
+    """Randomly sample rows from x. If batch_size is None, keep full tensor."""
+    if batch_size is None or batch_size >= x.shape[0]:
+        return x
+    idx = torch.randperm(x.shape[0], device=x.device)[:batch_size]
+    return x[idx]
+
+
+def _sample_pair_rows(
+    x1: torch.Tensor, x2: torch.Tensor, batch_size: Optional[int]
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Sample aligned rows from two tensors with same first dimension."""
+    if x1.shape[0] != x2.shape[0]:
+        raise ValueError(
+            f"Paired tensors must have same size on dim 0, got {x1.shape[0]} and {x2.shape[0]}"
+        )
+    if batch_size is None or batch_size >= x1.shape[0]:
+        return x1, x2
+    idx = torch.randperm(x1.shape[0], device=x1.device)[:batch_size]
+    return x1[idx], x2[idx]
+
+
 def loss_boundary_terms(
-    model: nn.Module, data: dict[str, torch.Tensor], U_in: torch.Tensor
+    model: nn.Module,
+    data: dict[str, torch.Tensor],
+    U_in: torch.Tensor,
+    n_in_batch: Optional[int] = None,
+    n_out_batch: Optional[int] = None,
+    n_wall_batch: Optional[int] = None,
+    n_per_batch: Optional[int] = None,
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
     """
     Boundary terms for the TAF setup of paper Sec. 3.3, using the
@@ -216,6 +255,11 @@ def loss_boundary_terms(
     X_bot = data["X_bot"]
     X_wall = data["X_wall"]
     X_wall_normals = data["X_wall_normals"]
+
+    X_in = _sample_rows(X_in, n_in_batch)
+    X_out = _sample_rows(X_out, n_out_batch)
+    X_wall, X_wall_normals = _sample_pair_rows(X_wall, X_wall_normals, n_wall_batch)
+    X_top, X_bot = _sample_pair_rows(X_top, X_bot, n_per_batch)
 
     # Reference scales from the paper inlet state
     rho_ref = U_in[0]
@@ -305,9 +349,23 @@ def loss_boundary_terms(
 
 
 def loss_boundary(
-    model: nn.Module, data: dict[str, torch.Tensor], U_in: torch.Tensor
+    model: nn.Module,
+    data: dict[str, torch.Tensor],
+    U_in: torch.Tensor,
+    n_in_batch: Optional[int] = None,
+    n_out_batch: Optional[int] = None,
+    n_wall_batch: Optional[int] = None,
+    n_per_batch: Optional[int] = None,
 ) -> torch.Tensor:
-    L_in, L_out, L_wall, L_per = loss_boundary_terms(model, data, U_in)
+    L_in, L_out, L_wall, L_per = loss_boundary_terms(
+        model,
+        data,
+        U_in,
+        n_in_batch=n_in_batch,
+        n_out_batch=n_out_batch,
+        n_wall_batch=n_wall_batch,
+        n_per_batch=n_per_batch,
+    )
     return L_in + L_out + L_wall + L_per
 
 
@@ -315,9 +373,10 @@ def loss_pde(
     model: nn.Module,
     data: dict[str, torch.Tensor],
     eps_lambda: float = TAF_EPSILON_LAMBDA,
+    n_f_batch: Optional[int] = 1024,
 ) -> torch.Tensor:
     """Weighted PDE residual term."""
-    X_f = data["X_f"]
+    X_f = _sample_rows(data["X_f"], n_f_batch)
     R, _, _, _, _ = euler_residual(model, X_f)
     # Same collocation points, different role:
     # - R: Euler residuals to minimize
@@ -377,6 +436,11 @@ def train_taf(
     U_in: torch.Tensor,
     lbfgs_steps: int = TAF_LBFGS_STEPS,
     eps_lambda: float = TAF_EPSILON_LAMBDA,
+    n_f_batch: Optional[int] = 1024,
+    n_in_batch: Optional[int] = None,
+    n_out_batch: Optional[int] = None,
+    n_wall_batch: Optional[int] = 256,
+    n_per_batch: Optional[int] = None,
 ) -> Tuple[float, float, float, int]:
     """Train TAF model and return summary metrics."""
     os.makedirs(out_dir, exist_ok=True)
@@ -393,9 +457,17 @@ def train_taf(
 
         # Paper objective:
         #   L = L_bc + L_f
-        L_in, L_out, L_wall, L_per = loss_boundary_terms(model, data, U_in)
+        L_in, L_out, L_wall, L_per = loss_boundary_terms(
+            model,
+            data,
+            U_in,
+            n_in_batch=n_in_batch,
+            n_out_batch=n_out_batch,
+            n_wall_batch=n_wall_batch,
+            n_per_batch=n_per_batch,
+        )
         L_bc = L_in + L_out + L_wall + L_per
-        L_f = loss_pde(model, data, eps_lambda=eps_lambda)
+        L_f = loss_pde(model, data, eps_lambda=eps_lambda, n_f_batch=n_f_batch)
         L_total = L_bc + L_f
         L_total.backward()
         optimizer.step()
@@ -428,8 +500,9 @@ def train_taf(
 
         def closure():
             optimizer_lbfgs.zero_grad()
+            # Use full-batch in L-BFGS closure for deterministic updates.
             L_bc_c = loss_boundary(model, data, U_in)
-            L_f_c = loss_pde(model, data, eps_lambda=eps_lambda)
+            L_f_c = loss_pde(model, data, eps_lambda=eps_lambda, n_f_batch=None)
             L_total_c = L_bc_c + L_f_c
             L_total_c.backward()
             return L_total_c
@@ -440,7 +513,7 @@ def train_taf(
     # to evaluate spatial derivatives in euler_residual().
     L_in, L_out, L_wall, L_per = loss_boundary_terms(model, data, U_in)
     L_bc = L_in + L_out + L_wall + L_per
-    L_f = loss_pde(model, data, eps_lambda=eps_lambda)
+    L_f = loss_pde(model, data, eps_lambda=eps_lambda, n_f_batch=None)
     L_total = L_bc + L_f
 
     elapsed = (datetime.now() - start).total_seconds()
@@ -483,3 +556,97 @@ def train_taf(
         float(L_f.item()),
         n_params,
     )
+
+
+def save_density_plot(
+    model: nn.Module,
+    ckpt_dir: str,
+    case_prefix: str,
+    n_photons: int,
+    timestamp: str,
+    backend: str,
+) -> str:
+    """Save a rho(x,y) scatter plot for TAF inference."""
+    del n_photons  # kept for API compatibility with run_common helper
+    model.eval()
+
+    data = load_training_sets()
+    X_data = data["X_data_int"]
+
+    with torch.no_grad():
+        if backend.lower() != "local":
+            # Remote execution can be expensive with large evaluation grids.
+            max_points = 400
+            if X_data.shape[0] > max_points:
+                step = max(1, X_data.shape[0] // max_points)
+                X_plot = X_data[::step]
+            else:
+                X_plot = X_data
+        else:
+            X_plot = X_data
+
+        pred = model(X_plot)
+        rho = pred[:, 0].detach().cpu().numpy()
+        x = X_plot[:, 0].detach().cpu().numpy()
+        y = X_plot[:, 1].detach().cpu().numpy()
+
+    results_dir = os.path.join(ckpt_dir, "results")
+    os.makedirs(results_dir, exist_ok=True)
+    png_path = os.path.join(results_dir, f"{case_prefix}_{backend}_{timestamp}.png")
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    sc = ax.scatter(x, y, c=rho, s=8, cmap="viridis")
+    fig.colorbar(sc, ax=ax, label="rho_pred")
+    ax.set_title(f"Predicted density rho(x,y), backend: {backend}")
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    fig.tight_layout()
+    fig.savefig(png_path, dpi=300)
+    plt.close(fig)
+
+    return png_path
+
+
+def save_rho_slice_plot(
+    model: nn.Module,
+    ckpt_dir: str,
+    case_prefix: str,
+    timestamp: str,
+    backend: str,
+    second_coord: float = 2.0,
+) -> str:
+    """Save rho(x, second_coord) NN prediction curve."""
+    model.eval()
+    y_slice = float(np.clip(second_coord, TAF_Y_MIN, TAF_Y_MAX))
+
+    n_points = 300
+    if backend.lower() != "local":
+        n_points = 80
+
+    with torch.no_grad():
+        x = np.linspace(TAF_X_MIN, TAF_X_MAX, n_points)
+        y = np.full_like(x, y_slice)
+        xy = np.stack([x, y], axis=1)
+        xy_t = torch.tensor(xy, dtype=DTYPE, device=DEVICE)
+        rho_pred = model(xy_t)[:, 0].detach().cpu().numpy()
+
+    results_dir = os.path.join(ckpt_dir, "results")
+    os.makedirs(results_dir, exist_ok=True)
+    y_tag = str(y_slice).replace(".", "p")
+    png_path = os.path.join(
+        results_dir,
+        f"{case_prefix}_{backend}_{timestamp}_rho_x_{y_tag}.png",
+    )
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.plot(x, rho_pred, lw=2, label="NN")
+    ax.set_xlabel("x")
+    ax.set_ylabel("rho")
+    ax.set_title(f"rho(x, {y_slice:.2f})")
+    ax.grid(True)
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(png_path, dpi=300)
+    plt.close(fig)
+
+    return png_path

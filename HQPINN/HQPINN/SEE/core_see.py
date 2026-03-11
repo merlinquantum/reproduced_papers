@@ -10,7 +10,6 @@ import torch.nn as nn
 
 import matplotlib
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_pdf import PdfPages
 
 from ..config import *
 from ..utils import (
@@ -23,7 +22,7 @@ from ..utils import (
 
 from typing import Optional
 
-# Use non-interactive backend for batch PDF export
+# Use non-interactive backend for batch image export
 matplotlib.use("Agg")
 
 
@@ -209,7 +208,13 @@ def train_see(
     os.makedirs(out_dir, exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    pdf_path = os.path.join(out_dir, f"see-{model_label}_{timestamp}.pdf")
+    rho_pred_png_path = os.path.join(out_dir, f"see-{model_label}_{timestamp}_rho_pred.png")
+    rho_exact_png_path = os.path.join(
+        out_dir, f"see-{model_label}_{timestamp}_rho_exact.png"
+    )
+    rho_error_png_path = os.path.join(
+        out_dir, f"see-{model_label}_{timestamp}_rho_error.png"
+    )
     csv_path = os.path.join(out_dir, f"see-{model_label}_{timestamp}.csv")
 
     # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
@@ -244,37 +249,6 @@ def train_see(
                 rows=rows,
             )
 
-        # scheduler.step(loss.item())  # Adjust learning rate based on total loss
-
-    # -------------------------
-    # L-BFGS refinement
-    # -------------------------
-    # print("Starting L-BFGS refinement...")
-
-    # optimizer_lbfgs = torch.optim.LBFGS(
-    #     model.parameters(),
-    #     lr=1.0,
-    #     max_iter=500,
-    #     max_eval=500,
-    #     history_size=50,
-    #     line_search_fn="strong_wolfe",
-    # )
-
-    # def closure():
-    #     optimizer_lbfgs.zero_grad()  # resets gradient buffer
-    #     lic, lbc, lf = loss_fn(model)
-    #     l = lic + lbc + lf
-    #     l.backward()  #  computes ∇loss
-    #     return l
-
-    # # Run L-BFGS optimization
-    # optimizer_lbfgs.step(closure)  #  updates model weights
-
-    # print("L-BFGS refinement done.")
-
-    # -------------------------
-    # Final loss after L-BFGS
-    # -------------------------
     loss_ic, loss_bc, loss_f = loss_fn(model)
     final_loss = (loss_ic + loss_bc + loss_f).item()
     elapsed = (datetime.now() - start).total_seconds()
@@ -295,7 +269,7 @@ def train_see(
         writer.writerow(["epoch", "elapsed (s)", "Loss", "IC", "BC", "F"])
         writer.writerows(rows)
 
-    # Final evaluation grid for PDF
+    # Final evaluation grid for PNG outputs
     with torch.no_grad():
         nx, nt = SEE_NX_SAMPLES, SEE_NT_SAMPLES
         x = torch.linspace(SEE_X_MIN, SEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
@@ -319,44 +293,42 @@ def train_see(
         rho_exact_np = rho_exact.cpu().numpy()
         rho_err_np = rho_error.cpu().numpy()
 
-        with PdfPages(pdf_path) as pdf:
+        # 1) Predicted density
+        fig, ax = plt.subplots(figsize=(8, 5))  # 8x5 inches
+        cs = ax.contourf(
+            X_np, T_np, rho_pred_np, levels=50
+        )  # 50 contour levels for smooth color gradation
+        fig.colorbar(cs, ax=ax)
+        ax.set_title("Predicted density $\\rho_\\text{pred}(x,t)$")
+        ax.set_xlabel("x")
+        ax.set_ylabel("t")
+        fig.tight_layout()
+        fig.savefig(rho_pred_png_path, dpi=300)
+        plt.close(fig)
 
-            # 1) Predicted density
-            fig, ax = plt.subplots(figsize=(8, 5))  # 8x5 inches
-            cs = ax.contourf(
-                X_np, T_np, rho_pred_np, levels=50
-            )  # 50 contour levels for smooth color gradation
-            fig.colorbar(cs, ax=ax)
-            ax.set_title("Predicted density $\\rho_\\text{pred}(x,t)$")
-            ax.set_xlabel("x")
-            ax.set_ylabel("t")
-            fig.tight_layout()
-            pdf.savefig(fig)
-            plt.close(fig)
+        # 2) Exact density
+        fig, ax = plt.subplots(figsize=(8, 5))
+        cs = ax.contourf(X_np, T_np, rho_exact_np, levels=50)
+        fig.colorbar(cs, ax=ax)
+        ax.set_title("Exact density $\\rho_\\text{exact}(x,t)$")
+        ax.set_xlabel("x")
+        ax.set_ylabel("t")
+        fig.tight_layout()
+        fig.savefig(rho_exact_png_path, dpi=300)
+        plt.close(fig)
 
-            # 2) Exact density
-            fig, ax = plt.subplots(figsize=(8, 5))
-            cs = ax.contourf(X_np, T_np, rho_exact_np, levels=50)
-            fig.colorbar(cs, ax=ax)
-            ax.set_title("Exact density $\\rho_\\text{exact}(x,t)$")
-            ax.set_xlabel("x")
-            ax.set_ylabel("t")
-            fig.tight_layout()
-            pdf.savefig(fig)
-            plt.close(fig)
-
-            # 3) Error (pred - exact)
-            fig, ax = plt.subplots(figsize=(8, 5))
-            cs = ax.contourf(X_np, T_np, rho_err_np, levels=50, cmap="bwr")
-            fig.colorbar(cs, ax=ax)
-            ax.set_title(
-                "Density error $\\rho_\\text{pred}(x,t)-\\rho_\\text{exact}(x,t)$"
-            )
-            ax.set_xlabel("x")
-            ax.set_ylabel("t")
-            fig.tight_layout()
-            pdf.savefig(fig)
-            plt.close(fig)
+        # 3) Error (pred - exact)
+        fig, ax = plt.subplots(figsize=(8, 5))
+        cs = ax.contourf(X_np, T_np, rho_err_np, levels=50, cmap="bwr")
+        fig.colorbar(cs, ax=ax)
+        ax.set_title(
+            "Density error $\\rho_\\text{pred}(x,t)-\\rho_\\text{exact}(x,t)$"
+        )
+        ax.set_xlabel("x")
+        ax.set_ylabel("t")
+        fig.tight_layout()
+        fig.savefig(rho_error_png_path, dpi=300)
+        plt.close(fig)
 
     # Evaluate density and pressure errors on (x,t) grid
     err_rho, err_p = evaluate_see_errors(model)
@@ -366,7 +338,9 @@ def train_see(
 
     # print(f"Metrics CSV saved to: {metrics_path}")
     print(f"CSV saved to: {csv_path}")
-    print(f"PDF saved to: {pdf_path}")
+    print(f"PNG saved to: {rho_pred_png_path}")
+    print(f"PNG saved to: {rho_exact_png_path}")
+    print(f"PNG saved to: {rho_error_png_path}")
 
     return final_loss, err_rho, err_p, n_params
 
