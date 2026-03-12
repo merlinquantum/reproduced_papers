@@ -248,7 +248,7 @@ python ../../implementation.py  --config configs/defaults.json --batch_size 50
 python implementation.py --paper AA_study --config configs/defaults.json --batch_size 50
 ```
 
-## Project structure --> TODO
+## Project structure
 - `papers/AA_study/lib/runner.py` — The file to run for every experiment.
 - `papers/AA_study/lib/` — core papers.AA_study.library modules used by scripts.
   - `torchquantum/` — Repository used for gate-based models. Here is the [link](https://github.com/mit-han-lab/torchquantum) to the repo.

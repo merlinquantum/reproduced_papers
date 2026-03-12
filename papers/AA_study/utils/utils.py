@@ -343,7 +343,7 @@ def parse_args():
         "--exp_to_run",
         type=str,
         default="BAS",
-        help="Which experiment to run between 'BAS', 'FIG1', 'FIG2', 'FIG3' and 'FIG4'  (default: 'BAS')",
+        help="Which experiment to run between 'BAS', 'FIG1', 'FIG2', 'FIG3', 'FIG4', 'FIG5' and 'FIG7'   (default: 'FIG4')",
     )
     parser.add_argument(
         "--dataset_to_run",
