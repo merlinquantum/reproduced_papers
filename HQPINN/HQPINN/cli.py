@@ -37,7 +37,9 @@ def main() -> None:
     print("  see-pp          -> SEE, PennyLane–PennyLane")
     print("  dee-cc          -> DEE, Classical–Classical")
     print("  dee-ci          -> DEE, Classical–Interferometer")
+    print("  dee-cp          -> DEE, Classical–PennyLane")
     print("  dee-ii          -> DEE, Interferometer–Interferometer")
+    print("  dee-pp          -> DEE, PennyLane–PennyLane")
     print("  taf-cc          -> TAF, Classical–Classical")
     print("  taf-ci          -> TAF, Classical–Interferometer")
     print("  taf-ii          -> TAF, Interferometer–Interferometer")
@@ -207,6 +209,34 @@ def main() -> None:
                 model_size=model_size,
             )
 
+    elif choice == "dee-cp":
+        from .DEE.dee_cp import run
+
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            model_size = (
+                input("Model size? [10-4-2/10-7-2/20-4-2] ").strip() or "10-4-2"
+            )
+            run(
+                mode=mode,
+                backend=backend,
+                model_size=model_size,
+            )
+
+    elif choice == "dee-pp":
+        from .DEE.dee_pp import run
+
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            model_size = input("Model size? [2/3/4] ").strip() or "2"
+            run(mode=mode, backend=backend, model_size=model_size)
+
     # TAF experiments
     elif choice == "taf-cc":
         from .TAF.taf_cc import run
@@ -248,5 +278,5 @@ def main() -> None:
         print(
             "Please choose one of: dho-pp, dho-cc, dho-cp, dho-cperc, "
             "dho-ii, dho-percperc, dho-ci, see-cc, see-pp, see-ci, see-ii, see-cp, "
-            "dee-cc, dee-ci, dee-ii, taf-cc, taf-ci, taf-ii."
+            "dee-cc, dee-ci, dee-cp, dee-ii, dee-pp, taf-cc, taf-ci, taf-ii."
         )

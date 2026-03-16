@@ -16,7 +16,7 @@ import torch
 import torch.nn as nn
 import pennylane as qml
 
-from .config import N_QUBITS, N_LAYERS, DTYPE
+from .config import N_QUBITS, N_LAYERS, DTYPE, DEE_X0, DEE_U
 
 
 import warnings
@@ -226,6 +226,31 @@ def see_feature_map(xt: torch.Tensor) -> torch.Tensor:
             scale * x,
             scale * t,
             scale * (x - t),
+        ],
+        dim=1,
+    )
+    return phi
+
+
+def dee_feature_map(xt: torch.Tensor) -> torch.Tensor:
+    """
+    Feature map used for DEE experiments.
+
+    It uses the shock-relative coordinate x - (x0 + u*t), aligned with the DEE
+    setup where the front position is x_f(t) = x0 + u*t.
+    """
+    if xt.dim() != 2 or xt.size(1) != 2:
+        raise ValueError(f"Expected input of shape [N, 2] for (x,t), got {xt.shape}")
+
+    x = xt[:, 0]
+    t = xt[:, 1]
+
+    scale = np.pi
+    phi = torch.stack(
+        [
+            scale * x,
+            scale * t,
+            scale * (x - (DEE_X0 + DEE_U * t)),
         ],
         dim=1,
     )
