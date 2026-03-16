@@ -11,6 +11,8 @@ if str(REPO_ROOT) not in sys.path:
 
 
 def load_cli_schema():
-    schema_path = PROJECT_DIR / "configs" / "cli.json"
+    schema_path = PROJECT_DIR / "cli.json"
+    if not schema_path.exists():
+        schema_path = PROJECT_DIR / "configs" / "cli.json"
     with schema_path.open("r", encoding="utf-8") as handle:
         return json.load(handle)

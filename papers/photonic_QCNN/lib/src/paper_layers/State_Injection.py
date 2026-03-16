@@ -1,7 +1,6 @@
 # ruff: noqa: N801, N806, N802, N803, E741, F405, F403
-from torch import nn
-
 from photonic_QCNN.lib.src.paper_layers.toolbox import *
+from torch import nn
 
 
 def get_PVM_of_photon_count_at_mode(mode, modes, photons, device):

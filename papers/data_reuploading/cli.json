@@ -1,0 +1,62 @@
+{
+  "description": "CLI schema for Data Re-uploading experiments.",
+  "arguments": [
+    {
+      "flags": ["--design-benchmark"],
+      "help": "Run the architecture design benchmark",
+      "action": "store_true",
+      "default": false,
+      "apply": {"kind": "config_path", "path": "experiment.type", "value": "design_benchmark"}
+    },
+    {
+      "flags": ["--tau-alpha-benchmark"],
+      "help": "Run the tau/alpha parameter benchmark",
+      "action": "store_true",
+      "default": false,
+      "apply": {"kind": "config_path", "path": "experiment.type", "value": "tau_alpha_benchmark"}
+    },
+    {
+      "flags": ["--dataset"],
+      "help": "Dataset to use",
+      "type": "str",
+      "choices": ["circles", "moons", "tetromino", "overhead"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiment.dataset"}
+    },
+    {
+      "flags": ["--epochs"],
+      "help": "Override number of training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.epochs"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Override dataset batch size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.batch_size"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Override learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lr"}
+    },
+    {
+      "flags": ["--layers"],
+      "help": "Max number of layers for train/eval sweep",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiment.max_layers"}
+    },
+    {
+      "flags": ["--repetitions"],
+      "help": "Number of repetitions per layer count",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiment.repetitions"}
+    }
+  ]
+}

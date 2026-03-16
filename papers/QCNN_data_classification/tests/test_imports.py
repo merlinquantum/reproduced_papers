@@ -11,12 +11,12 @@ def test_import_implementation():
 def test_import_merlin_module():
     import importlib
 
-    mod = importlib.import_module("lib.legacy_merlin_reproduction")
+    mod = importlib.import_module("lib.merlin_reproduction")
     assert hasattr(mod, "main")
 
 
 def test_import_models():
     import importlib
 
-    mod = importlib.import_module("model")
+    mod = importlib.import_module("lib.models")
     assert hasattr(mod, "SingleGI")

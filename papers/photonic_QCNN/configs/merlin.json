@@ -1,0 +1,55 @@
+{
+  "description": "Configuration for testing the MerLin photonic QCNN on BAS, custom BAS and MNIST (0 vs 1).",
+  "implementation": "merlin",
+  "datasets": ["BAS", "Custom BAS", "MNIST"],
+  "seed": 42,
+  "device": "cpu",
+  "outdir": "results",
+  "training": {
+    "lr": 0.1,
+    "weight_decay": 0.001,
+    "gamma": 0.9,
+    "epochs": 20
+  },
+  "runs": {
+    "BAS": {
+      "n_runs": 5,
+      "data_source": "paper",
+      "conv_circuit": "BS",
+      "dense_circuit": "BS",
+      "measure_subset": 2,
+      "dense_added_modes": 2,
+      "output_proba_type": "mode",
+      "output_formatting": "Mod_grouping",
+      "random_states": [42, 123, 456, 789, 999],
+      "batch_size": 6,
+      "results_subdir": "BAS"
+    },
+    "Custom BAS": {
+      "n_runs": 5,
+      "data_source": "paper",
+      "conv_circuit": "BS",
+      "dense_circuit": "BS",
+      "measure_subset": 2,
+      "dense_added_modes": 2,
+      "output_proba_type": "mode",
+      "output_formatting": "Mod_grouping",
+      "random_states": [42, 123, 456, 789, 999],
+      "batch_size": 6,
+      "results_subdir": "custom_BAS"
+    },
+    "MNIST": {
+      "n_runs": 5,
+      "data_source": "paper",
+      "conv_circuit": "BS",
+      "dense_circuit": "BS",
+      "measure_subset": 2,
+      "dense_added_modes": 0,
+      "output_proba_type": "mode",
+      "output_formatting": "Mod_grouping",
+      "random_states": [42, 123, 456, 789, 999],
+      "batch_size": 6,
+      "results_subdir": "MNIST"
+    }
+  }
+}

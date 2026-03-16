@@ -1,0 +1,36 @@
+{
+  "description": "MerLin Expectation model configuration - deep circuits with expectation value measurements.",
+  "seed": 42,
+  "device": "auto",
+  "outdir": "results",
+  "logging": {
+    "level": "info"
+  },
+  "dataset": {
+    "name": "sst2",
+    "eval_size": 250,
+    "embeddings_dir": "embeddings"
+  },
+  "embeddings": {
+    "model_name": "sentence-transformers/paraphrase-mpnet-base-v2"
+  },
+  "model": {
+    "name": "merlin-expectation",
+    "embedding_dim": 768,
+    "hidden_dim": 100,
+    "quantum_modes": 12,
+    "no_bunching": true,
+    "photons": 5,
+    "e_dim": 1
+  },
+  "training": {
+    "epochs": 50,
+    "learning_rate": 1e-4,
+    "batch_size": 16,
+    "kernel_batch_size": 32
+  },
+  "runtime": {
+    "verbose": false,
+    "no_plot": false
+  }
+}

@@ -1,0 +1,12 @@
+2025-12-05 11:44:09 | INFO | runtime | Starting nearest_centroids_merlin run
+2025-12-05 11:44:12 | INFO | lib.runner | Starting run in results\run_20251205-114409
+2025-12-05 11:44:12 | INFO | lib.runner | Using seed=42
+2025-12-05 11:44:12 | INFO | lib.runner | Starting experiment with dataset: mnist
+2025-12-05 11:44:12 | INFO | lib.runner | Loaded 60000 samples with 784 features
+2025-12-05 11:44:12 | INFO | lib.runner | Experiment: 4 classes, 24754 available, using 160 (80 train / 80 test), 1000 shots, 8 components
+2025-12-05 11:45:35 | INFO | lib.runner | Finished experiment 1/1: classes=[0, 1, 2, 3] -> Classical: 87.9%, Cirq: 88.5%, Merlin: 88.2%
+2025-12-05 11:45:35 | INFO | lib.runner | All experiments completed. Results saved to results\run_20251205-114409\summary_results.json
+2025-12-05 11:45:35 | INFO | lib.runner | Generating visualisations...
+2025-12-05 11:45:38 | INFO | lib.runner | Figures saved to: results\run_20251205-114409\figures
+2025-12-05 11:45:38 | INFO | lib.runner | Finished. Artifacts in: results\run_20251205-114409
+2025-12-05 11:45:38 | INFO | root | Finished. Artifacts in: results\run_20251205-114409

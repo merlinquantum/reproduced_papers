@@ -1,0 +1,19 @@
+{
+  "description": "Small test run for accuracy_vs_input_state",
+  "experiment": "accuracy_vs_input_state",
+  "plotting": {"use_tex": false, "show": true},
+  "experiments": {
+    "accuracy_vs_input_state": {
+      "superset_size": 2000,
+      "reg": 0.02,
+      "reps": 5,
+      "test_size": 0.33,
+      "indistinguishability": 0.972,
+      "shots": null,
+      "force_psd": true,
+      "no_bunching": false,
+      "seed": 42,
+      "data_sizes": {"min": 40, "max": 100, "step": 20}
+    }
+  }
+}

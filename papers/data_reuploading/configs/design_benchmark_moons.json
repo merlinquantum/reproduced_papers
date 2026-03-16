@@ -1,4 +1,5 @@
 {
+  "description": "Design benchmark on moons (metrics-only).",
   "seed": 42,
   "outdir": "results",
   "device": "cpu",

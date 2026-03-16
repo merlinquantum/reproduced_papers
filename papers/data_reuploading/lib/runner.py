@@ -7,7 +7,6 @@ import logging
 from pathlib import Path
 from typing import Any
 
-from utils.utils import plot_figure_5
 from .architecture_grid_run import run_architecture_grid
 from .paper_datasets import (
     CirclesDataset,
@@ -19,10 +18,10 @@ from .reuploading_experiment import MerlinReuploadingClassifier
 from .tau_alpha_grid_run import run_tau_alpha_grid
 
 
-def reproduce_figure_5(cfg: dict[str, Any], run_dir: Path) -> None:
-    """Reproduce Figure 5 from the paper - accuracy vs number of layers."""
+def run_train_eval(cfg: dict[str, Any], run_dir: Path) -> None:
+    """Train/evaluate across layer counts and save metrics for Figure 5."""
     logger = logging.getLogger(__name__)
-    logger.info("Reproducing Figure 5 from paper")
+    logger.info("Running train/eval sweep for Figure 5 metrics")
 
     dataset_name = cfg["experiment"]["dataset"]
     train_size = cfg["dataset"]["train_size"]
@@ -96,18 +95,10 @@ def reproduce_figure_5(cfg: dict[str, Any], run_dir: Path) -> None:
         "test_accuracies": all_test_accuracies,
         "config": cfg,
     }
-    results_file = run_dir / "figure_5_results.json"
+    results_file = run_dir / "train_eval_results.json"
     results_file.write_text(json.dumps(results, indent=2), encoding="utf-8")
 
-    plot_figure_5(all_train_accuracies, all_test_accuracies, range_num_layers)
-    import matplotlib.pyplot as plt
-
-    plot_path = run_dir / f"figure_5_{dataset_name}.png"
-    plt.savefig(plot_path, dpi=300, bbox_inches="tight")
-    plt.close()
-
     logger.info("Saved results to: %s", results_file)
-    logger.info("Saved plot to: %s", plot_path)
 
 
 def run_design_benchmark(cfg: dict[str, Any], run_dir: Path) -> None:
@@ -128,10 +119,10 @@ def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> None:
     """Main entry point that routes to the appropriate experiment."""
     logger = logging.getLogger(__name__)
 
-    experiment_type = cfg.get("experiment", {}).get("type", "figure_5")
+    experiment_type = cfg.get("experiment", {}).get("type", "train_eval")
 
-    if experiment_type == "figure_5":
-        reproduce_figure_5(cfg, run_dir)
+    if experiment_type in {"train_eval", "figure_5"}:
+        run_train_eval(cfg, run_dir)
     elif experiment_type == "design_benchmark":
         run_design_benchmark(cfg, run_dir)
     elif experiment_type == "tau_alpha_benchmark":
@@ -144,7 +135,7 @@ def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> None:
 
 __all__ = [
     "train_and_evaluate",
-    "reproduce_figure_5",
+    "run_train_eval",
     "run_design_benchmark",
     "run_tau_alpha_benchmark",
 ]

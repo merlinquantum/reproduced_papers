@@ -1,0 +1,35 @@
+{
+  "description": "MerLin Kernel model configuration - quantum kernel methods using MerLin circuits.",
+  "seed": 42,
+  "device": "auto",
+  "outdir": "results",
+  "logging": {
+    "level": "info"
+  },
+  "dataset": {
+    "name": "sst2",
+    "eval_size": 250,
+    "embeddings_dir": "embeddings"
+  },
+  "embeddings": {
+    "model_name": "sentence-transformers/paraphrase-mpnet-base-v2"
+  },
+  "model": {
+    "name": "merlin-kernel",
+    "embedding_dim": 768,
+    "hidden_dim": 100,
+    "quantum_modes": 6,
+    "no_bunching": false,
+    "photons": 2
+  },
+  "training": {
+    "epochs": 50,
+    "learning_rate": 1e-4,
+    "batch_size": 16,
+    "kernel_batch_size": 32
+  },
+  "runtime": {
+    "verbose": false,
+    "no_plot": false
+  }
+}

@@ -8,15 +8,11 @@ from collections.abc import Iterable
 from pathlib import Path
 from typing import Any
 
-from .data import load_moons
-from utils.visualization import (
-    plot_accuracy_heatmap,
-    plot_combined_decisions,
-    plot_dataset,
-    save_kernel_heatmap,
-)
+from utils.visualization import build_decision_payload
 
 from lib.training import run_rks_experiments
+
+from .data import load_moons
 
 DEFAULT_GAMMAS = list(range(1, 11))
 LOGGER = logging.getLogger(__name__)
@@ -47,12 +43,10 @@ def summarize_results(
 
 
 def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> None:
-    figures_dir = run_dir / "figures"
-    figures_dir.mkdir(parents=True, exist_ok=True)
-
     dataset_cfg = cfg.get("data", {})
     dataset = load_moons(dataset_cfg)
-    plot_dataset(*dataset, figures_dir / "moon_dataset.png")
+    visualization_dir = run_dir / "visualization_data"
+    visualization_dir.mkdir(parents=True, exist_ok=True)
 
     results = run_rks_experiments(
         dataset,
@@ -75,25 +69,34 @@ def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> None:
     ]
     (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=2))
 
+    x_train, x_test, y_train, y_test = dataset
+    dataset_payload = {
+        "x_train": x_train.tolist(),
+        "x_test": x_test.tolist(),
+        "y_train": y_train.tolist(),
+        "y_test": y_test.tolist(),
+    }
+    (visualization_dir / "dataset.json").write_text(
+        json.dumps(dataset_payload, indent=2)
+    )
+
     r_values = cfg.get("sweep", {}).get("r_values", [1])
     gamma_values = cfg.get("sweep", {}).get("gamma_values", DEFAULT_GAMMAS)
 
     summary = summarize_results(results, r_values, gamma_values)
     (run_dir / "summary.txt").write_text(summary)
 
-    plot_accuracy_heatmap(
-        results,
-        r_values,
-        gamma_values,
-        "quantum",
-        figures_dir / "accuracy_quantum.png",
+    decision_quantum = build_decision_payload(
+        results, dataset, r_values, gamma_values, "quantum"
     )
-    plot_accuracy_heatmap(
-        results,
-        r_values,
-        gamma_values,
-        "classical",
-        figures_dir / "accuracy_classical.png",
+    decision_classical = build_decision_payload(
+        results, dataset, r_values, gamma_values, "classical"
+    )
+    (visualization_dir / "combined_decisions_quantum.json").write_text(
+        json.dumps(decision_quantum, indent=2)
+    )
+    (visualization_dir / "combined_decisions_classical.json").write_text(
+        json.dumps(decision_classical, indent=2)
     )
 
     best_quantum = max(
@@ -118,37 +121,30 @@ def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> None:
         best_classical["gamma"],
     )
 
+    kernel_payload_quantum = {
+        "kernel": best_quantum["kernel_train"].tolist(),
+        "y_train": y_train.tolist(),
+        "title": f"Quantum kernel R={best_quantum['r']}, γ={best_quantum['gamma']}",
+    }
+    kernel_payload_classical = {
+        "kernel": best_classical["kernel_train"].tolist(),
+        "y_train": y_train.tolist(),
+        "title": f"Classical kernel R={best_classical['r']}, γ={best_classical['gamma']}",
+    }
     if len(r_values) == 1 and len(gamma_values) == 1:
-        _, _, y_train, _ = dataset
-        save_kernel_heatmap(
-            best_quantum["kernel_train"],
-            y_train,
-            f"Quantum kernel R={best_quantum['r']}, γ={best_quantum['gamma']}",
-            figures_dir / "kernel_quantum.png",
+        (visualization_dir / "kernel_quantum.json").write_text(
+            json.dumps(kernel_payload_quantum, indent=2)
         )
-        save_kernel_heatmap(
-            best_classical["kernel_train"],
-            y_train,
-            f"Classical kernel R={best_classical['r']}, γ={best_classical['gamma']}",
-            figures_dir / "kernel_classical.png",
+        (visualization_dir / "kernel_classical.json").write_text(
+            json.dumps(kernel_payload_classical, indent=2)
         )
-
-    plot_combined_decisions(
-        results,
-        dataset,
-        r_values,
-        gamma_values,
-        "quantum",
-        figures_dir / "combined_decisions_quantum.png",
-    )
-    plot_combined_decisions(
-        results,
-        dataset,
-        r_values,
-        gamma_values,
-        "classical",
-        figures_dir / "combined_decisions_classical.png",
-    )
+    else:
+        (visualization_dir / "kernel_quantum_best.json").write_text(
+            json.dumps(kernel_payload_quantum, indent=2)
+        )
+        (visualization_dir / "kernel_classical_best.json").write_text(
+            json.dumps(kernel_payload_classical, indent=2)
+        )
 
     LOGGER.info("Artifacts saved to %s", run_dir.resolve())
 

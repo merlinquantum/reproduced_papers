@@ -59,4 +59,10 @@ def paper_data_dir(
     return path
 
 
-__all__ = ["ENV_DATA_ROOT", "DEFAULT_DATA_DIRNAME", "find_repo_root", "resolve_data_root", "paper_data_dir"]
+__all__ = [
+    "ENV_DATA_ROOT",
+    "DEFAULT_DATA_DIRNAME",
+    "find_repo_root",
+    "resolve_data_root",
+    "paper_data_dir",
+]

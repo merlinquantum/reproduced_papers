@@ -18,7 +18,7 @@ In this reproduction we:
 
 - Integrate and lightly refactor the authors’ original gate-based (qubit) implementation (see linked repository); changes focus on modular structure, reproducibility, and configuration handling.
 - Add a photonic QLSTM implementation illustrating how interferometers + phase shifts could serve as gate VQCs.
-- Include a real-world time-series dataset (`data/airline-passengers.csv`) alongside synthetic generators to evaluate generalization on actual time serie.
+- Include a real-world time-series dataset (`data/airline-passengers.csv`) alongside synthetic generators to evaluate generalization on actual time series.
 - Standardize interface (CLI + JSON configs) for reproducible comparisons.
 
 ## Reference and Attribution
@@ -44,7 +44,7 @@ Stack: PyTorch, PennyLane, MerLin, NumPy/SciPy, scikit‑learn, matplotlib.
 
 ## Folder Structure
 
-- `../implementation.py --paper QLSTM` — Repository-level CLI entry point powered by this folder's `configs/cli.json`
+- `../implementation.py --paper QLSTM` — Repository-level CLI entry point powered by this folder's `cli.json`
 - `lib/model.py` — Classical LSTM, QLSTM (gate VQCs), sequence wrapper
 - `lib/dataset.py` — Synthetic generators + CSV loader (delegates to `papers/shared/QLSTM/dataset.py`)
 - `lib/rendering.py` — Plotting and pickle helpers
@@ -64,13 +64,13 @@ pip install -r requirements.txt
 
 ## Command-line Interface
 
-Main entry point: repository root `implementation.py` with `--paper QLSTM`. The available arguments live in `configs/cli.json`, so you can extend the CLI by editing JSON rather than Python.
+Main entry point: repository root `implementation.py` with `--paper QLSTM`. The available arguments live in `cli.json`, so you can extend the CLI by editing JSON rather than Python.
 
 ```bash
 python implementation.py --paper QLSTM --help
 ```
 
-Highlights (see `configs/cli.json` for the authoritative list):
+Highlights (see `cli.json` for the authoritative list):
 
 - `--config PATH`: merge an additional JSON config into `configs/defaults.json` (deep merge).
 - `--seed INT`, `--outdir DIR`, `--device STR`: generic runtime overrides.
@@ -109,11 +109,21 @@ python implementation.py --paper QLSTM --model qlstm_photonic --generator sin --
 
 ### Data location
 
-- Default data root is the shared repo `data/` directory (resolved via `paper_data_dir("QLSTM")`).
-- On first use the loader copies the bundled `data/airline-passengers.csv` from this paper folder into the shared `data/QLSTM/airline-passengers.csv` location if missing.
-- Relative `--csv-path` values are resolved under the shared `data/QLSTM/` folder; absolute paths are honored.
+- Default data root is the shared repo `data/` directory.
+- Canonical shared location for the Airline Passengers CSV is `data/time_series/airline-passengers.csv` (resolved via `paper_data_dir("time_series")`).
+- Backwards compatibility: if `data/QLSTM/airline-passengers.csv` exists, it is copied into `data/time_series/` on first use.
+- On first use the loader also copies the bundled `papers/QLSTM/data/airline-passengers.csv` into `data/time_series/` if missing.
+- Relative `--csv-path` values are resolved under the shared `data/time_series/` folder; absolute paths are honored.
 - Override the base with `DATA_DIR=/abs/path` or `--data-root /abs/path` when invoking `implementation.py`.
 - If the resolver still cannot find the CSV, provide `--csv-path` explicitly or place the file in the chosen data root.
+
+### Shared time-series utilities
+
+Reusable time-series utilities live in `papers/shared/time_series/`:
+
+- `generators.py`: paper-agnostic synthetic generators (QLSTM delegates to these)
+- `plotting.py`: small matplotlib helpers (headless-friendly)
+- `plot_metrics.py` / `plot_predictions.py`: shared plotting scripts for QRNN-style run artifacts (`metrics.json` + `predictions.csv`)
 
 ## Output Directory and Artifacts
 
@@ -142,7 +152,7 @@ Place JSON files in `configs/`.
 - `defaults.json` is the base experiment (sine generator with QLSTM).
 - Dataset/model presets (e.g., `sine_qlstm.json`) can be layered via `--config`.
 - `cli.json` defines every CLI argument, its type, and the config key it overrides.
-- The shared runtime automatically reads `configs/defaults.json`, `configs/cli.json`, and imports `lib/runner.py::train_and_evaluate`.
+- The shared runtime automatically reads `configs/defaults.json`, `cli.json`, and imports `lib/runner.py::train_and_evaluate`.
 - Keys follow the same structure as before: `experiment`, `model`, `training`, `logging`, etc. CLI overrides mutate these dictionaries via the dot-paths defined in `cli.json`.
 
 ## Available Generators

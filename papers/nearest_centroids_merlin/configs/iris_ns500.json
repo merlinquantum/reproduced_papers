@@ -1,0 +1,21 @@
+{
+  "description": "IRIS dataset with 500 shots (Paper Figure 9)",
+  "seed": 123,
+  "device": "cpu",
+  "outdir": "results",
+  "dataset": {
+    "name": "iris",
+    "n_components": 4
+  },
+  "training": {
+    "n_repeats": 10,
+    "n_shots": 500,
+    "test_size": 0.5
+  },
+  "experiments": [
+    {
+      "classes": [0, 1, 2],
+      "max_samples": 150
+    }
+  ]
+}

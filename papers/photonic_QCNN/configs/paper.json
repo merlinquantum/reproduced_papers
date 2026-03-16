@@ -1,4 +1,5 @@
 {
+  "description": "Configuration for testing the photonic QCNN from the paper on BAS, custom BAS and MNIST (0 vs 1).",
   "implementation": "paper",
   "datasets": ["BAS", "Custom BAS", "MNIST"],
   "seed": 42,

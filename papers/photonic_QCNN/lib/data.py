@@ -9,7 +9,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from papers.shared.photonic_QCNN.data import (  # type: ignore
+from papers.shared.photonic_QCNN.data import (  # noqa: E402
     convert_dataset_to_tensor,
     convert_scalar_labels_to_onehot,
     convert_tensor_to_loader,

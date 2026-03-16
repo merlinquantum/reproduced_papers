@@ -51,29 +51,26 @@ unzip data/overhead.zip -d data/
 
 ### Main Experiments
 
-The implementation supports three types of experiments:
+The implementation supports three types of experiment, all accessible from the repository root using `python implementation.py --paper data_reuploading`.
 
-#### 1. Reproduce Figure 5 (Default)
-Reproduces the main result showing accuracy vs number of layers for a specific dataset:
+#### 1. Train/Eval Sweep (Default)
+Runs the main accuracy-vs-layers sweep and saves metrics (no figure generation):
 
 ```bash
-# Default: Figure 5 reproduction on circles dataset
-python implementation.py
+# Default: Figure 5 reproduction on circles dataset (short version)
+python implementation.py --paper data_reuploading
 
 # With moons dataset
-python implementation.py --dataset moons
+python implementation.py --paper data_reuploading --dataset moons
 
 # With tetromino dataset
-python implementation.py --dataset tetromino
+python implementation.py --paper data_reuploading --dataset tetromino
 
 # With overhead MNIST dataset
-python implementation.py --dataset overhead
+python implementation.py --paper data_reuploading --dataset overhead
 
 # Using a config file
-python implementation.py --config configs/figure_5_circles.json
-
-# Quick test with fewer epochs and layers
-python implementation.py --config configs/quick_test.json
+python implementation.py --paper data_reuploading --config configs/train_eval_circles.json
 ```
 
 #### 2. Architecture Design Benchmark
@@ -85,36 +82,57 @@ B: PS_0($\theta_i$) ; BS_0($\theta_{i+1}$)
 
 C: PS_0($\theta_i$) ; PS_1($\theta_{i+1}$) ; BS_0()
 
-This benchmark compares 9 different circuit designs (combinations of A, B, C data/trainable blocks) for different number of reuploading layers:
+This benchmark compares 9 different circuit designs (combinations of A, B, C data/trainable blocks) for different number of reuploading layers and saves metrics + figure data (no figures generated here):
 
 ```bash
 # Run architecture benchmark on circles
-python implementation.py --design-benchmark --dataset circles
+python implementation.py --paper data_reuploading --design-benchmark --dataset circles
 
 # Run architecture benchmark on moons
-python implementation.py --design-benchmark --dataset moons
+python implementation.py --paper data_reuploading --design-benchmark --dataset moons
 
 # Using config file
-python implementation.py --config configs/design_benchmark_circles.json
+python implementation.py --paper data_reuploading --config configs/design_benchmark_circles.json
 ```
 
 #### 3. Tau/Alpha Parameter Benchmark
-Explores hyperparameter space of tau (Fisher loss parameter) and alpha (phase scaling):
+Explores hyperparameter space of tau (Fisher loss parameter) and alpha (phase scaling) and saves metrics + figure data (no figures generated here):
 
 ```bash
 # Run tau/alpha benchmark on moons
-python implementation.py --tau-alpha-benchmark --dataset moons
+python implementation.py --paper data_reuploading --tau-alpha-benchmark --dataset moons
 
 # Using config file
-python implementation.py --config configs/tau_alpha_benchmark_moons.json
+python implementation.py --paper data_reuploading --config configs/tau_alpha_benchmark_moons.json
+```
+
+### Figure Generation
+
+Figures are generated explicitly from `utils/figure_*.py`. Run the commands from the `data_reuploading/` directory (or adjust paths). Each script accepts either `--config` (to run if needed) or `--previous_run` (to re-use saved benchmark outputs without retraining), but not both.
+
+```bash
+# Figure 5 from a fresh train/eval sweep
+python utils/figure_5.py --config configs/train_eval_circles.json
+
+# Figure 5 from an existing run directory or results file
+python utils/figure_5.py --previous_run results/run_YYYYMMDD-HHMMSS
+python utils/figure_5.py --previous_run results/run_YYYYMMDD-HHMMSS/train_eval_results.json
+
+# Architecture design benchmark figures
+python utils/figure_architecture_grid.py --config configs/design_benchmark_circles.json
+python utils/figure_architecture_grid.py --previous_run results/run_YYYYMMDD-HHMMSS
+
+# Tau/alpha benchmark figures
+python utils/figure_tau_alpha_grid.py --config configs/tau_alpha_benchmark_moons.json
+python utils/figure_tau_alpha_grid.py --previous_run results/run_YYYYMMDD-HHMMSS
 ```
 
 ### Command-line Options
 
-Main entry point: `implementation.py`
+Main entry point from the repository root: `implementation.py --paper data_reuploading`
 
 ```bash
-python implementation.py --help
+python implementation.py --paper data_reuploading --help
 ```
 
 **General Options:**
@@ -124,15 +142,15 @@ python implementation.py --help
 - `--device STR` Device string (cpu, cuda:0, mps)
 
 **Experiment Selection:**
-- `--design-benchmark` Run architecture design benchmark (9 designs)
-- `--tau-alpha-benchmark` Run tau/alpha parameter grid benchmark
-- `--dataset {circles,moons}` Dataset to use
+- `--design-benchmark` Run architecture design benchmark (metrics-only)
+- `--tau-alpha-benchmark` Run tau/alpha parameter grid benchmark (metrics-only)
+- `--dataset {circles,moons,tetromino,overhead}` Dataset to use
 
 **Training Parameters:**
 - `--epochs INT` Number of training epochs (default: 10000)
 - `--batch-size INT` Batch size (default: 400)
 - `--lr FLOAT` Learning rate (default: 0.001)
-- `--layers INT` Max number of layers for Figure 5 (default: 15)
+- `--layers INT` Max number of layers for the train/eval sweep (default: 15)
 - `--repetitions INT` Number of repetitions for Figure 5 (default: 5)
 
 ### Output Directory
@@ -143,23 +161,31 @@ Each run creates a timestamped folder in `results/`:
 results/run_YYYYMMDD-HHMMSS/
 ├── config_snapshot.json          # Configuration used
 ├── run.log                       # Execution log
-├── figure_5_circles.png          # Main figure (for Figure 5)
-├── figure_5_results.json         # Numerical results
-├── architecture_grid_1_circles.png  # Grid plots (for design benchmark)
-└── tau_alpha_grid_2_moons.png   # Parameter grids (for tau/alpha benchmark)
+├── train_eval_results.json       # Train/eval metrics for Figure 5
+├── design_benchmark_results.json # Design benchmark metrics
+├── design_benchmark_figure_data.npz  # Saved grid data for plotting
+├── tau_alpha_benchmark_results.json  # Tau/alpha benchmark metrics
+└── tau_alpha_benchmark_figure_data.npz  # Saved grid data for plotting
 ```
+
+Figure scripts store their PNGs alongside the run directory they use, e.g.:
+`figure_5_{dataset}.png`, `architecture_grid_{depth}_{dataset}.png`,
+`tau_alpha_grid_{depth}_{dataset}.png`.
 
 ## Configuration
 
 Configuration files are stored in `configs/` directory:
 
 **Available Configs:**
-- `figure_5_circles.json` - Figure 5 reproduction on circles dataset
-- `figure_5_moons.json` - Figure 5 reproduction on moons dataset
-- `design_benchmark_circles.json` - 9-design architecture benchmark
-- `tau_alpha_benchmark_moons.json` - Tau/alpha parameter grid search
-- `quick_test.json` - Fast test with reduced parameters
-- `example.json` - Template configuration
+- `defaults.json` - Train/eval sweep on circles (short version)
+- `train_eval_circles.json` - Train/eval sweep on circles dataset
+- `train_eval_moons.json` - Train/eval sweep on moons dataset
+- `train_eval_tetromino.json` - Train/eval sweep on tetromino dataset
+- `train_eval_overhead.json` - Train/eval sweep on overhead MNIST dataset
+- `design_benchmark_circles.json` - 9-design architecture benchmark (metrics-only)
+- `design_benchmark_moons.json` - 9-design architecture benchmark (metrics-only)
+- `tau_alpha_benchmark_circles.json` - Tau/alpha parameter grid search (metrics-only)
+- `tau_alpha_benchmark_moons.json` - Tau/alpha parameter grid search (metrics-only)
 
 **Configuration Structure:**
 ```json
@@ -168,11 +194,13 @@ Configuration files are stored in `configs/` directory:
   "outdir": "results",
   "device": "cpu",
   "dataset": {
-    "name": "circles",
-    "batch_size": 400
+    "root": "data",
+    "batch_size": 400,
+    "train_size": 400,
+    "test_size": 100
   },
   "experiment": {
-    "type": "figure_5",
+    "type": "train_eval",
     "dataset": "circles",
     "alpha": 0.314159,  // π/10 phase scaling
     "tau": 1.0,         // Fisher loss temperature
@@ -196,7 +224,7 @@ Configuration files are stored in `configs/` directory:
 
 ## Results and Analysis
 
-All the results are stored in `results/` directory and you can reproduce them easily by looking at the `How to Run` section of this README:
+All the results are stored in `results/` directory and you can reproduce them easily by looking at the `How to Run` section of this README. Figures are generated with the `utils/figure_*.py` scripts:
 - `figure_5_{dataset}.png` - Figure 5 reproduction on the {dataset} dataset
 
 Example with the circles dataset (figure_5_circles.png):

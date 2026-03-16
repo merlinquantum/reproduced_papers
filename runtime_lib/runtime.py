@@ -33,7 +33,7 @@ _GLOBAL_DEFAULTS: dict[str, Any] = {
     "data_root": None,
 }
 _PROJECT_DEFAULTS_REL = Path("configs") / "defaults.json"
-_PROJECT_CLI_SCHEMA_REL = Path("configs") / "cli.json"
+_PROJECT_CLI_SCHEMA_REL = Path("cli.json")
 _DEFAULT_RUNNER_CALLABLE = "lib.runner.train_and_evaluate"
 _DEFAULT_TIMESTAMP_FORMAT = "%Y%m%d-%H%M%S"
 _DEFAULT_RUN_PATTERN = "run_{timestamp}"

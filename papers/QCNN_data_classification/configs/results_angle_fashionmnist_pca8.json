@@ -1,0 +1,13 @@
+{
+  "description": "README results: angle encoding (12 modes, 3 kernels, kernel size 3, stride 2).",
+  "dataset": "fashionmnist",
+  "pca_dim": 8,
+  "model": "qconv",
+  "nb_kernels": 3,
+  "kernel_size": 3,
+  "stride": 2,
+  "kernel_modes": 12,
+  "angle_scale": "2pi",
+  "compare_classical": true,
+  "figures": true
+}

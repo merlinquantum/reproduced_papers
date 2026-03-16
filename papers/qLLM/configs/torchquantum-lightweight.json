@@ -1,0 +1,34 @@
+{
+  "description": "TorchQuantum configuration - lightweight model with single encoder.",
+  "seed": 42,
+  "device": "auto",
+  "outdir": "results",
+  "logging": {
+    "level": "info"
+  },
+  "dataset": {
+    "name": "sst2",
+    "eval_size": 250,
+    "embeddings_dir": "embeddings"
+  },
+  "embeddings": {
+    "model_name": "sentence-transformers/paraphrase-mpnet-base-v2"
+  },
+  "model": {
+    "name": "torchquantum",
+    "embedding_dim": 768,
+    "hidden_dim": 100,
+    "encoder_configs": [
+      {"n_qubits": 8, "n_layers": 1, "connectivity": 1}
+    ],
+    "pqc_config": [
+      {"n_qubits": 8, "n_main_layers": 2, "connectivity": 1, "n_reuploading": 2}
+    ],
+    "e_dim": 1
+  },
+  "training": {
+    "epochs": 50,
+    "batch_size": 16,
+    "learning_rate": 1e-5
+  }
+}

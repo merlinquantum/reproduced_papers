@@ -1,0 +1,30 @@
+{
+  "description": "Support Vector Machine configuration - RBF kernel with different regularization strengths.",
+  "seed": 42,
+  "device": "auto",
+  "outdir": "results",
+  "logging": {
+    "level": "info"
+  },
+  "dataset": {
+    "name": "sst2",
+    "eval_size": 250,
+    "embeddings_dir": "embeddings"
+  },
+  "embeddings": {
+    "model_name": "sentence-transformers/paraphrase-mpnet-base-v2"
+  },
+  "model": {
+    "name": "svm",
+    "embedding_dim": 768,
+    "C_values": [1.0, 100.0],
+    "kernel": "rbf"
+  },
+  "training": {
+    "batch_size": 16
+  },
+  "runtime": {
+    "verbose": false,
+    "no_plot": false
+  }
+}

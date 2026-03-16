@@ -1,0 +1,65 @@
+{
+  "description": "Default config for VQC classification reproduction (Algorithm 1).",
+  "outdir": "results",
+  "seed": 1337,
+  "device": "cpu",
+  "experiment": {
+    "model_type": "vqc"
+  },
+  "model": {
+    "num_modes": 3,
+    "input_size": 2,
+    "initial_state": [
+      1,
+      1,
+      1
+    ],
+    "activation": "none",
+    "no_bunching": false,
+    "circuit": "bs_mesh",
+    "scale_type": "1",
+    "regularization_target": "linear"
+  },
+  "training": {
+    "num_runs": 10,
+    "epochs": 150,
+    "batch_size": 30,
+    "learning_rate": 0.02,
+    "alpha": 0.0002,
+    "betas": [
+      0.8,
+      0.999
+    ]
+  },
+  "logging": {
+    "log_wandb": false,
+    "wandb_project": "vqc_reproduction"
+  },
+  "data": {
+    "cache_dir": "data/cache",
+    "force_regenerate": false,
+    "order": [
+      "linear",
+      "circular",
+      "moon"
+    ],
+    "subsample_ratio": 0.5,
+    "test_size": 0.4,
+    "standardize": true,
+    "seed": 42,
+    "datasets": {
+      "linear": {
+        "num_samples": 200,
+        "class_sep": 1.5
+      },
+      "circular": {
+        "num_samples": 200,
+        "noise": 0.05
+      },
+      "moon": {
+        "num_samples": 200,
+        "noise": 0.2
+      }
+    }
+  }
+}

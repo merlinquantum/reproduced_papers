@@ -53,7 +53,7 @@ You can either run a simple QNN model using `--model single` or a quantum convol
 
 ![QCNN](Photonic_QConv.png)
 
-Key options to run these models (see `configs/cli.json`, `model/`, and `utils/` for the full list):
+Key options to run these models (see `cli.json`, `model/`, and `utils/` for the full list):
 
 - `--model {qconv,single}` switch between the quantum pseudo-convolution and a single Gaussian interferometer baseline.
 - `--nb_kernels`, `--kernel_size`, `--stride`, `--kernel_modes`: quantum kernel topology.
@@ -116,10 +116,10 @@ Results are stored in the upstream `QCNN/Result/` tree.
 
 ## Output Directory and Artifacts
 
-The Merlin CLI writes dataset-specific folders such as `results/results-mnist/` or `results/results-fashionmnist/`. Each run creates a timestamped subdirectory:
+The Merlin CLI writes dataset-specific folders such as `results/timestamp/` and each run creates a timestamped subdirectory:
 
 ```
-results/results-<dataset>/run_YYYYMMDD-HHMMSS/
+results/run_YYYYMMDD-HHMMSS/
 ├── config_snapshot.json   # Fully resolved CLI/config arguments
 ├── run_summary.json       # Aggregated metrics (per seed and variant)
 └── checkpoints / figures  # Optional artefacts produced by the run
@@ -133,14 +133,14 @@ Drop JSON configs into `configs/`. `configs/example.json` documents the supporte
 
 ## Results and Analysis
 
-We explored the MNIST 0-vs-1 task with 8 PCA components. Hyperparameter sweeps (outputs under `plots-mnist/outputs/`) were summarised into the figures below (stored in `plots-mnist/plots/`):
+We explored the MNIST 0-vs-1 task with 8 PCA components. Hyperparameter sweeps (outputs under `results/plots-mnist/outputs/`) were summarised into the figures below (stored in `results/plots-mnist/plots/`):
 
 | | |
 | --- | --- |
-| ![Hyperparameter impacts](./plots-mnist/plots/hyperparameter_impacts.png) | ![Correlation matrix](./plots-mnist/plots/correlation_matrix.png) |
-| ![Quantum vs classical](./plots-mnist/plots/quantum_vs_classical.png) | ![Pareto frontier](./plots-mnist/plots/pareto_frontier.png) |
+| ![Hyperparameter impacts](./results/plots-mnist/plots/hyperparameter_impacts.png) | ![Correlation matrix](./results/plots-mnist/plots/correlation_matrix.png) |
+| ![Quantum vs classical](./results/plots-mnist/plots/quantum_vs_classical.png) | ![Pareto frontier](./results/plots-mnist/plots/pareto_frontier.png) |
 
-Highlights (see `plots-mnist/outputs/full_analysis_with_efficiency.csv` and `top_20_configurations.csv` for numbers):
+Highlights (see `results/plots-mnist/outputs/full_analysis_with_efficiency.csv` and `top_20_configurations.csv` for numbers):
 
 - **Kernel modes** drive accuracy the most (correlation ≈0.65). Increasing modes from 4 to 16 boosts mean accuracy from 0.58 to 0.85 but raises parameter counts from ~90 to ~1,000.
 - **Number of kernels**: three kernels deliver ≈0.81 mean accuracy vs 0.68 with one, at the cost of ~700 parameters.

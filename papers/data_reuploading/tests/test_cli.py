@@ -12,19 +12,19 @@ def test_cli_help_exits_cleanly():
 
 
 def test_train_and_evaluate_writes_artifact(tmp_path, monkeypatch):
-    from data_reuploading.lib import runner as dr_runner
+    from lib import runner as dr_runner
 
     cfg = load_runtime_ready_config()
     markers: dict[str, bool] = {}
 
     def fake_reproduce(cfg_arg, run_dir):
-        markers["figure_5"] = True
+        markers["train_eval"] = True
         run_dir.mkdir(parents=True, exist_ok=True)
-        (run_dir / "figure_5_results.json").write_text("{}", encoding="utf-8")
+        (run_dir / "train_eval_results.json").write_text("{}", encoding="utf-8")
 
-    monkeypatch.setattr(dr_runner, "reproduce_figure_5", fake_reproduce)
+    monkeypatch.setattr(dr_runner, "run_train_eval", fake_reproduce)
 
     dr_runner.train_and_evaluate(cfg, tmp_path)
 
-    assert markers.get("figure_5") is True
-    assert (tmp_path / "figure_5_results.json").exists()
+    assert markers.get("train_eval") is True
+    assert (tmp_path / "train_eval_results.json").exists()

@@ -2,26 +2,23 @@
 
 from __future__ import annotations
 
-import sys
 from dataclasses import dataclass
 from pathlib import Path
 
-_REPO_ROOT = Path(__file__).resolve().parents[3]
-if str(_REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(_REPO_ROOT))
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
 
 try:
     from runtime_lib.data_paths import paper_data_dir
 except Exception:  # pragma: no cover - runtime_lib may be absent in some contexts
     paper_data_dir = None
 
-from torch.utils.data import DataLoader
-from torchvision import datasets, transforms
-
 
 def _default_data_root() -> Path:
     if not paper_data_dir:
-        raise RuntimeError("Shared data resolver unavailable; DATA_DIR or runtime_lib required")
+        raise RuntimeError(
+            "Shared data resolver unavailable; DATA_DIR or runtime_lib required"
+        )
     return paper_data_dir("QRKD")
 
 

@@ -1,0 +1,39 @@
+{
+  "description": "CLI schema for VQC classification experiments.",
+  "arguments": [
+    {
+      "flags": [
+        "--model-type"
+      ],
+      "help": "Experiment model type",
+      "type": "str",
+      "choices": [
+        "vqc",
+        "vqc_100",
+        "vqc_111",
+        "mlp_wide",
+        "mlp_deep",
+        "svm_lin",
+        "svm_rbf"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.model_type"
+      }
+    },
+    {
+      "flags": [
+        "--log-wandb"
+      ],
+      "help": "Enable Weights & Biases logging regardless of config",
+      "action": "store_true",
+      "default": false,
+      "apply": {
+        "kind": "config_path",
+        "path": "logging.log_wandb",
+        "value": true
+      }
+    }
+  ]
+}

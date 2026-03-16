@@ -1,5 +1,5 @@
 {
-  "description": "Default configuration for reproducing the Data Re-uploading paper experiments.",
+  "description": "Default configuration for Data Re-uploading train/eval experiments.",
   "seed": 42,
   "device": "cpu",
   "outdir": "results",
@@ -13,13 +13,13 @@
     "test_size": 100
   },
   "experiment": {
-    "type": "figure_5",
+    "type": "train_eval",
     "dataset": "circles",
     "alpha": 0.3141592653589793,
     "tau": 1.0,
     "min_layers": 1,
-    "max_layers": 15,
-    "repetitions": 5,
+    "max_layers": 3,
+    "repetitions": 2,
     "designs": "AA"
   },
   "training": {

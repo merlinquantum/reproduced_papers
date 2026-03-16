@@ -1,0 +1,56 @@
+{
+  "description": "Topological phase classification (QAH) - Section III.C of Lu et al. (2020)",
+  "seed": 42,
+  "experiment": "topological",
+  "device": "auto",
+  "dataset": {
+    "lattice_size": 10,
+    "n_samples": 2000,
+    "t": 1.0,
+    "j_so_range": [
+      0.5,
+      2.0
+    ],
+    "mu_range": [
+      -6.0,
+      6.0
+    ],
+    "momentum_resolution": 20,
+    "batch_size": 64
+  },
+  "model": {
+    "type": "amplitude_quantum",
+    "input_dim": 400,
+    "n_outputs": 2,
+    "n_modes": 15,
+    "n_photons": 3,
+    "n_layers": 2,
+    "computation_space": "unbunched"
+  },
+  "training": {
+    "epochs": 100,
+    "batch_size": 64,
+    "learning_rate": 0.005,
+    "optimizer": "adam"
+  },
+  "attack": {
+    "method": "bim",
+    "epsilon": 0.05,
+    "num_iter": 10,
+    "alpha": 0.01,
+    "epsilon_range": [
+      0.01,
+      0.03,
+      0.05,
+      0.1
+    ]
+  },
+  "options": {
+    "save_model": true,
+    "run_attack": true,
+    "evaluate_robustness": true
+  },
+  "logging": {
+    "level": "info"
+  }
+}

@@ -35,13 +35,13 @@ pip install -r requirements.txt
 
 ### Command-line interface
 
-Main entry point (from repo root): `python implementation.py --paper QRKD [--config ...]`. All flags are defined in `configs/cli.json`.
+Main entry point (from repo root): `python implementation.py --paper QRKD [--config ...]`. All flags are defined in `cli.json`.
 
 ```bash
 python implementation.py --paper QRKD --help
 ```
 
-Example overrides (see `configs/cli.json` for the authoritative list):
+Example overrides (see `cli.json` for the authoritative list):
 
 - `--config PATH` Load an additional JSON config (merged over `defaults.json`), e.g. `--config QRKD/configs/suite_simple_mnist_10epochs.json`.
 - `--seed INT` Random seed applied via the generic runtime.

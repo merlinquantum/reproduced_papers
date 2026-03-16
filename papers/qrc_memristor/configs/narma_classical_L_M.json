@@ -1,0 +1,18 @@
+{   "description": "Parameters to run the NARMA task using the classical models described in the paper",
+
+    "experiment": {
+        "task": "narma",
+        "model_type": "L+M",
+        "model_class": "ClassicalBenchmark_L+M",
+        "n_runs": 10,
+        "epochs": 200,
+        "lr": 0.1,
+        "output_dir": "results_classical/narma_L_M",
+        "exp_name": "narma_L+M"
+    },
+    "data": {
+        "size": 1000,
+        "washout": 20,
+        "train_len": 480
+    }
+}

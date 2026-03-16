@@ -1,0 +1,20 @@
+{
+  "description": "TorchQuantum configuration for qLLM.",
+  "model": {
+    "name": "torchquantum",
+    "embedding_dim": 768,
+    "hidden_dim": 100,
+    "encoder_configs": [
+      {"n_qubits": 10, "n_layers": 1, "connectivity": 1}
+    ],
+    "pqc_config": [
+      {"n_qubits": 10, "n_main_layers": 2, "connectivity": 1, "n_reuploading": 2}
+    ],
+    "e_dim": 1
+  },
+  "training": {
+    "epochs": 50,
+    "batch_size": 16,
+    "learning_rate": 1e-5
+  }
+}

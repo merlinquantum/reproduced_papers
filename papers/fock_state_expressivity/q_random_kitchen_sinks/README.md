@@ -5,7 +5,7 @@ Template-aligned reproduction of Algorithm 3 (“Quantum-enhanced random kitchen
 ## Overview
 - Benchmarks classical random kitchen sinks (RKS) and their photonic quantum counterpart on the moons dataset.
 - Uses Perceval+MerLin to build photonic random feature maps and compares against cosine random Fourier features for several `R` (feature dimensionality) and `γ` (kernel bandwidth) values.
-- Produces dataset visualizations, kernel heatmaps, accuracy heatmaps, and decision boundaries for both classical and quantum methods. This reproduces the Figure 6 from the reference paper.
+- Produces dataset visualizations, kernel heatmaps, accuracy heatmaps, and decision boundaries for both classical and quantum methods via post-run utilities. This reproduces the Figure 6 from the reference paper.
 - Everything is orchestrated through `implementation.py` with JSON-configured sweeps.
 
 The experiments demonstrate the behavior of quantum-enhanced random kitchen sinks:
@@ -17,6 +17,7 @@ The experiments demonstrate the behavior of quantum-enhanced random kitchen sink
 ## How to Run
 
 ### CLI entrypoint
+Run from the repo root with `--paper fock_state_expressivity/q_random_kitchen_sinks`:
 ```bash
 python implementation.py --help
 ```
@@ -28,7 +29,7 @@ Key options:
 
 Example sweep (default r∈{1,10,100}, γ∈{1…5}):
 ```bash
-python implementation.py
+python implementation.py --paper fock_state_expressivity/q_random_kitchen_sinks
 ```
 
 Each run produces `results/run_YYYYMMDD-HHMMSS/` (or `<outdir>/...` if overridden) with:
@@ -36,14 +37,42 @@ Each run produces `results/run_YYYYMMDD-HHMMSS/` (or `<outdir>/...` if overridde
 summary.txt                 # Accuracy table per (method, R, γ)
 metrics.json                # Scalar accuracy entries for every repeat
 config_snapshot.json        # Resolved config after CLI overrides
+visualization_data/
+  dataset.json
+  combined_decisions_quantum.json
+  combined_decisions_classical.json
+  kernel_quantum.json       # only when the sweep contains a single (R, γ)
+  kernel_classical.json     # only when the sweep contains a single (R, γ)
+```
+
+### Visualizations
+Generate figures from a previous run or re-run when `--previous-run` is omitted:
+```bash
+python papers/fock_state_expressivity/q_random_kitchen_sinks/utils/visu_dataset.py \
+  --previous-run results/run_YYYYMMDD-HHMMSS
+
+python papers/fock_state_expressivity/q_random_kitchen_sinks/utils/visu_accuracies.py \
+  --previous-run results/run_YYYYMMDD-HHMMSS
+
+python papers/fock_state_expressivity/q_random_kitchen_sinks/utils/visu_decisions.py \
+  --previous-run results/run_YYYYMMDD-HHMMSS
+
+python papers/fock_state_expressivity/q_random_kitchen_sinks/utils/visu_kernel_heatmap.py \
+  --previous-run results/run_YYYYMMDD-HHMMSS
+```
+Figures are saved under `results/run_YYYYMMDD-HHMMSS/figures/`:
+```
 figures/
   moons_dataset.png
-  accuracy_quantum.png
-  accuracy_classical.png
-  combined_decisions_quantum.png
-  combined_decisions_classical.png
-  kernel_quantum.png       # only when the sweep contains a single (R, γ)
-  kernel_classical.png     # only when the sweep contains a single (R, γ)
+  accuracy_bar.png           # single (R, γ) case
+  accuracy_quantum.png       # sweep case
+  accuracy_classical.png     # sweep case
+  decision_boundary_quantum.png      # single (R, γ) case
+  decision_boundary_classical.png    # single (R, γ) case
+  combined_decisions_quantum.png     # sweep case
+  combined_decisions_classical.png   # sweep case
+  kernel_quantum.png        # only when the sweep contains a single (R, γ)
+  kernel_classical.png      # only when the sweep contains a single (R, γ)
 ```
 
 ## Configuration
@@ -55,7 +84,7 @@ Configs live under `configs/` (the default config trains the hybrid MerLin layer
 
 Common config blocks:
 - `data`: moons dataset generation, scaling, split.
-- `model`: photonic circuit choices (MZI/general), photon count, output mapping strategy.
+- `model`: photonic circuit choices (MZI/general), photon count.
 - `training`: optimizer, epochs, hybrid-model toggles (`train_hybrid_model`, `pre_encoding_scaling`, `z_q_matrix_scaling`, `hybrid_model_data`).
 - `classifier`: downstream SVM hyperparameters (`C`).
 - `sweep`: lists of `r_values`, `gamma_values`, and number of repeats per combination.
@@ -63,11 +92,10 @@ Common config blocks:
 Adjust or duplicate `configs/defaults.json` to experiment with custom sweeps or training regimes.
 
 ## Results and Analysis
-The experiment generates comprehensive analysis outputs:
+Visualization utilities generate comprehensive analysis outputs:
 - **Kernel approximation plots**: Visual comparison of quantum vs classical kernel approximations
 - **Performance metrics**: Accuracy comparison across different configurations
 - **Parameter sweeps**: Analysis of hyperparameter effects on performance
-- **Circuit diagrams**: Visual representation of quantum architectures used
 
 The paper's obtained decision boundaries are the following:
 
@@ -101,10 +129,6 @@ Key findings include:
 
 ### Quantum Circuit Parameters
 - **`num_photon`** (10): Number of photons in the quantum system
-- **`output_mapping_strategy`** ("LINEAR"): How to map quantum outputs to classical features
-  - "NONE": No mapping applied
-  - "LINEAR": Linear mapping transformation
-  - "GROUPING": Group-based mapping (not working in this context)
 - **`no_bunching`** (False): Whether to prevent multiple photons in the same mode
 - **`circuit`** ("general", "mzi"): Quantum circuit architecture
   - "mzi": Mach-Zehnder interferometer
@@ -115,7 +139,7 @@ Key findings include:
 - **`r`** (1, tested: [1,10,100]): Dimensionality of random Fourier features
 - **`gamma`** (1, tested: [1-10]): Kernel bandwidth parameter (σ = 1/γ)
 - **`train_hybrid_model`** (True): **Controls whether to train the hybrid quantum-classical model on the function fitting task.** This is separate from SVM classification and determines if quantum circuit parameters get optimized to approximate target functions.
-- **`pre_encoding_scaling`** (1.0/π): Input scaling factor applied before quantum encoding
+- **`pre_encoding_scaling`** (1.0): Input scaling factor applied before quantum encoding
 - **`z_q_matrix_scaling`** (10): Output matrix scaling factor
 - **`hybrid_model_data`** ("Generated"): **Data source for training the hybrid model on fitting tasks** (separate from SVM classification)
   - "Generated": Uses synthetically generated data for fitting
@@ -128,7 +152,7 @@ Key findings include:
 
 ## Testing
 ```bash
-pytest -q
+pytest -q papers/fock_state_expressivity/q_random_kitchen_sinks/tests
 ```
 Current tests cover dataset preparation; extend with regression tests (e.g., accuracy thresholds) as needed.
 

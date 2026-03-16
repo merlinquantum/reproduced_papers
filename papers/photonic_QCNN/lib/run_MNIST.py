@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import copy
 import json
-from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -70,10 +69,7 @@ def _prepare_random_states(cfg: dict[str, Any]) -> np.ndarray:
 
 
 def _prepare_output_dir(base_outdir: Path, dataset_name: str) -> Path:
-    now = datetime.now()
-    run_dir = (
-        base_outdir / dataset_name / now.strftime("%Y-%m-%d") / now.strftime("%H-%M-%S")
-    )
+    run_dir = base_outdir / dataset_name
     run_dir.mkdir(parents=True, exist_ok=True)
     return run_dir
 

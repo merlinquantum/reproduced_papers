@@ -1,0 +1,39 @@
+{
+  "description": "Train quantum classifier with AMPLITUDE encoding - faithful to Lu et al. (2020)",
+  "seed": 42,
+  "experiment": "mnist",
+  "device": "auto",
+  "dataset": {
+    "digits": [
+      1,
+      9
+    ],
+    "image_size": 16,
+    "normalize": true,
+    "root": "data",
+    "download": true,
+    "batch_size": 256
+  },
+  "model": {
+    "type": "amplitude_quantum",
+    "input_dim": 256,
+    "n_outputs": 2,
+    "n_modes": 13,
+    "n_photons": 3,
+    "n_layers": 2,
+    "computation_space": "unbunched"
+  },
+  "training": {
+    "epochs": 100,
+    "batch_size": 256,
+    "learning_rate": 0.005,
+    "optimizer": "adam"
+  },
+  "options": {
+    "save_model": true,
+    "run_attack": false
+  },
+  "logging": {
+    "level": "info"
+  }
+}

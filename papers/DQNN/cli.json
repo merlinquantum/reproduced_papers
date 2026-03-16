@@ -1,0 +1,96 @@
+{
+  "description": "CLI schema for the Distributed Quantum Neural Networks on Distributed Photonic Quantum Computing paper reproduction.",
+  "arguments": [
+    {
+      "flags": ["--exp_to_run"],
+      "help": "Which experiment to run between 'DEFAULT', 'BOND', 'ABLATION'  (default: 'DEFAULT')",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "exp_to_run"}
+    },
+    {
+      "flags": ["--bond_dim"],
+      "help": "ONLY FOR THE DEFAULT EXPERIMENT! Bond dimension for MPS (default: 7)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "bond_dim"}
+    },
+    {
+      "flags": ["--bond_dimensions_to_test"],
+      "help": "ONLY FOR THE ABLATION AND BOND DIMENSION EXPERIMENT! Bond dimension to test for MPS. Each number needs to be seperated by commas. (default: np.arange(1, 11))",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "bond_dim"}
+    },
+    {
+      "flags": ["--num_training_rounds"],
+      "help": "Number of training rounds for quantum model (default: 2)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_training_rounds"}
+    },
+    {
+      "flags": ["--num_epochs"],
+      "help": "Number of epochs for training (default: 5)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_epochs"}
+    },
+    {
+      "flags": ["--num_qnn_train_step"],
+      "help": "Number of epochs for training the quantum layer (default: 12). If the COBYLA is to be runned, 1000 is the suggested value",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_qnn_train_step"}
+    },
+    {
+      "flags": ["--classical_epochs"],
+      "help": "Number of epochs for classical CNN training (default: 1)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "classical_epochs"}
+    },
+    {
+      "flags": ["--qu_train_with_cobyla"],
+      "help": "Enable optimization of the quantum layer with Cobyla. If false, use the Adam optimizer, which is much faster.",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qu_train_with_cobyla"}
+    },
+    {
+      "flags": ["--pruning"],
+      "help": "Enable pruning experiment",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "pruning"}
+    },
+    {
+      "flags": ["--pruning_amount"],
+      "help": "Pruning amount (default: 0.5)",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "pruning_amount"}
+    },
+    {
+      "flags": ["--weight_sharing"],
+      "help": "Enable weight sharing experiment",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "weight_sharing"}
+    },
+    {
+      "flags": ["--shared_rows"],
+      "help": "Number of shared rows for weight sharing (default: 10)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "shared_rows"}
+    },
+    {
+      "flags": ["--dont_generate_graph"],
+      "help": "Disable weight sharing experiment",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dont_generate_graph"}
+    }
+  ]
+}

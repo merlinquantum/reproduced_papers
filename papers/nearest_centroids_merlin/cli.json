@@ -1,0 +1,53 @@
+{
+  "description": "Nearest Centroid Classification runner",
+  "arguments": [
+    {
+      "flags": [
+        "--n-components"
+      ],
+      "help": "Number of PCA components (must be power of 2: 4, 8, 16...)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.n_components"
+      }
+    },
+    {
+      "flags": [
+        "--n-shots"
+      ],
+      "help": "Number of measurement shots for quantum simulation",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.n_shots"
+      }
+    },
+    {
+      "flags": [
+        "--n-repeats"
+      ],
+      "help": "Number of repeated experiments for statistics",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.n_repeats"
+      }
+    },
+    {
+      "flags": [
+        "--max-samples"
+      ],
+      "help": "Maximum samples to use from dataset",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.max_samples"
+      }
+    }
+  ]
+}

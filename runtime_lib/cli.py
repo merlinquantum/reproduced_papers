@@ -19,6 +19,28 @@ def _register_default_types() -> None:
             return []
         return [int(chunk.strip()) for chunk in text.split(",") if chunk.strip()]
 
+    def _csv_int_matrix(value: Any) -> list[list[int]]:
+        if isinstance(value, list):
+            return [[int(cell) for cell in row] for row in value]
+        text = str(value).strip()
+        if not text:
+            return []
+        rows = [row.strip() for row in text.split(";") if row.strip()]
+        return [
+            [int(cell.strip()) for cell in row.split(",") if cell.strip()]
+            for row in rows
+        ]
+
+    def _int_or_none(raw: Any) -> int | None:
+        if raw is None:
+            return None
+        if isinstance(raw, int):
+            return raw
+        text = str(raw).strip().lower()
+        if text in {"none", "null", ""}:
+            return None
+        return int(raw)
+
     def _path_type(raw: Any) -> Path:
         return Path(raw)
 
@@ -39,6 +61,8 @@ def _register_default_types() -> None:
             "str": str,
             "path": _path_type,
             "csv_int_list": _csv_int_list,
+            "csv_int_matrix": _csv_int_matrix,
+            "int_or_none": _int_or_none,
             "bool": _bool_type,
         }
     )

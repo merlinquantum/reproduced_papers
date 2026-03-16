@@ -2,7 +2,7 @@
 Reproduce the readout-layer experiment where all possible two-mode configurations are evaluated.
 
 Original usage was fully interactive; this module now also exposes a callable API so other scripts
-can drive the experiment programmatically (e.g., `implementation.py --figure4`).
+can drive the experiment programmatically (e.g., `python utils/figure4.py`).
 """
 
 import argparse
@@ -19,6 +19,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import torch
+from sklearn.metrics import confusion_matrix
 
 from photonic_QCNN.lib.data import (
     convert_dataset_to_tensor,
@@ -26,7 +27,7 @@ from photonic_QCNN.lib.data import (
     get_dataset,
 )
 from photonic_QCNN.lib.src.merlin_pqcnn import HybridModelReadout
-from photonic_QCNN.lib.training.train_model import train_model
+from photonic_QCNN.lib.training.train_model import train_model_return_preds
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT_ROOT = PROJECT_ROOT / "results" / "custom_BAS"
@@ -80,7 +81,7 @@ def run_experiment(
     print(f"Output of circuit has size {model.qcnn_output_dim}")
 
     # Train model
-    training_results = train_model(
+    training_results, pred_test, y_test = train_model_return_preds(
         model, train_loader, x_train, x_test, y_train, y_test
     )
 
@@ -93,7 +94,7 @@ def run_experiment(
     print(
         f"Custom BAS - Final train: {training_results['final_train_acc']:.4f}, test: {training_results['final_test_acc']:.4f}"
     )
-    return training_results
+    return training_results, training_results["final_test_acc"], pred_test, y_test
 
 
 def _default_timestamped_dir() -> Path:
@@ -115,18 +116,22 @@ def save_results(all_results, output_dir: Path, k: int) -> Path:
     return results_file
 
 
-def save_confusion_matrix(output_dir: Path, k: int) -> Path:
+def save_confusion_matrix(output_dir: Path, k: int, preds, labels) -> Path:
     """Save confusion matrix to png file"""
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    cm_percent = np.array([[100, 0], [0, 100]])
-
-    labels = np.array([["100%", "0%"], ["0%", "100%"]])
+    cm = confusion_matrix(labels, preds)
+    with np.errstate(divide="ignore", invalid="ignore"):
+        cm_percent = cm / cm.sum(axis=1, keepdims=True) * 100
+        cm_percent = np.nan_to_num(cm_percent)
+    annot_labels = np.array(
+        [[f"{int(round(val))}%" for val in row] for row in cm_percent]
+    )
 
     plt.figure(figsize=(4, 4))
     ax = sns.heatmap(
         cm_percent,
-        annot=labels,
+        annot=annot_labels,
         fmt="",
         cmap="Blues",
         cbar=False,
@@ -151,6 +156,7 @@ def save_confusion_matrix(output_dir: Path, k: int) -> Path:
     plt.tight_layout()
     output_file = output_dir / f"first_readout_detailed_confusion_matrix_k_{k}.png"
     plt.savefig(output_file, dpi=300)
+    plt.close()
     return output_file
 
 
@@ -200,8 +206,9 @@ def run_two_fold_readout(
 
     # Run experiments with different k and different list_label_0
     random_state = 42
-    confusion_matrix_needed = True
-    confusion_path: Optional[Path] = None
+    best_test_acc = -1.0
+    best_preds = None
+    best_labels = None
     all_results = {}
     all_possible_list_label_0 = all_possible_label0_sets(k)
     time_start = time.time()
@@ -222,7 +229,7 @@ def run_two_fold_readout(
             print("[Two-fold Readout] Reached max_iter limit; stopping early.")
             break
         print(f"About to start experiment {i}")
-        results = run_experiment(
+        results, test_acc, preds, labels = run_experiment(
             random_state,
             i,
             data_source,
@@ -235,16 +242,11 @@ def run_two_fold_readout(
         print(f"Experiment {i} completed")
         experiments_run += 1
 
-        # If not saved yet, save perfect confusion matrix
-        if (
-            confusion_matrix_needed
-            and results["final_train_acc"] == 1
-            and results["final_test_acc"] == 1
-        ):
-            confusion_path = save_confusion_matrix(output_dir, k)
-            confusion_matrix_needed = False
-
         all_results[f"k_{k}_run_{i}"] = results
+        if test_acc > best_test_acc:
+            best_test_acc = test_acc
+            best_preds = preds
+            best_labels = labels
 
         # Time report
         time_end = time.time()
@@ -256,6 +258,11 @@ def run_two_fold_readout(
         print(
             f"Time elapsed: {time_elapsed:.2f} seconds\nEstimated time left for k = {k}: {time_left:.2f} seconds"
         )
+
+    # Save best confusion matrix (even if not perfect)
+    confusion_path = None
+    if best_preds is not None and best_labels is not None:
+        confusion_path = save_confusion_matrix(output_dir, k, best_preds, best_labels)
 
     # Save all results
     json_path = save_results(all_results, output_dir, k)

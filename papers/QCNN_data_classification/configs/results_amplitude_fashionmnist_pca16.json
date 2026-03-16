@@ -1,0 +1,12 @@
+{
+  "description": "README results: amplitude encoding (6 modes, 3 kernels, kernel size 3, stride 2).",
+  "dataset": "fashionmnist",
+  "pca_dim": 16,
+  "model": "qconv",
+  "nb_kernels": 3,
+  "kernel_size": 3,
+  "stride": 2,
+  "kernel_modes": 6,
+  "amplitude": true,
+  "figures": true
+}

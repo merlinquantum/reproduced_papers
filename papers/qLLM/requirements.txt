@@ -1,11 +1,11 @@
-# Quantum computing libraries
-merlinquantum==0.1.2
+# Full requirements for qLLM reproductions (MerLin + TorchQuantum).
+merlinquantum==0.2.3
 -e git+https://github.com/mit-han-lab/torchquantum.git#egg=torchquantum
-
-# Scientific computing
+setfit>=1.0.0
 matplotlib>=3.5.0
 seaborn>=0.11.0
 scikit-learn>=1.3.0
-
-# Utilities
+datasets>=2.14.0
+tf-keras
+pytest>=7.0.0
 tqdm>=4.60.0

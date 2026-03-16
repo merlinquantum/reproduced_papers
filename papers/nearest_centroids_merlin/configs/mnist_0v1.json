@@ -1,0 +1,22 @@
+{
+  "description": "MNIST digits 0 vs 1 binary classification (Paper Figure 11)",
+  "seed": 42,
+  "device": "cpu",
+  "outdir": "results",
+  "dataset": {
+    "name": "mnist",
+    "root": "data",
+    "n_components": 8
+  },
+  "training": {
+    "n_repeats": 10,
+    "n_shots": 1000,
+    "test_size": 0.5
+  },
+  "experiments": [
+    {
+      "classes": [0, 1],
+      "max_samples": 80
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "description": "Multi-Layer Perceptron configuration - tests multiple hidden dimensions.",
+  "seed": 42,
+  "device": "auto",
+  "outdir": "results",
+  "logging": {
+    "level": "info"
+  },
+  "dataset": {
+    "name": "sst2",
+    "eval_size": 250,
+    "embeddings_dir": "embeddings"
+  },
+  "embeddings": {
+    "model_name": "sentence-transformers/paraphrase-mpnet-base-v2"
+  },
+  "model": {
+    "name": "mlps",
+    "embedding_dim": 768,
+    "hidden_dims": [0, 48, 96, 144, 192]
+  },
+  "training": {
+    "epochs": 100,
+    "learning_rate": 1e-3,
+    "batch_size": 16
+  },
+  "runtime": {
+    "verbose": false,
+    "no_plot": false
+  }
+}

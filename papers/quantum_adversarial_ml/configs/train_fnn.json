@@ -1,0 +1,35 @@
+{
+  "description": "FNN surrogate training for transfer attacks",
+  "seed": 42,
+  "experiment": "mnist",
+  "device": "auto",
+  "dataset": {
+    "digits": [
+      1,
+      9
+    ],
+    "image_size": 16,
+    "normalize": true,
+    "batch_size": 256
+  },
+  "model": {
+    "type": "fnn",
+    "input_dim": 256,
+    "n_outputs": 2,
+    "hidden_dims": [
+      128,
+      64,
+      32
+    ]
+  },
+  "training": {
+    "epochs": 20,
+    "batch_size": 256,
+    "learning_rate": 0.001,
+    "optimizer": "adam"
+  },
+  "options": {
+    "save_model": true,
+    "run_attack": false
+  }
+}

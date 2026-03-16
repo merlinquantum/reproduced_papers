@@ -484,12 +484,11 @@ class MerlinReuploadingClassifier(BaseEstimator, ClassifierMixin):
         )
         quantum_layer = ml.QuantumLayer(
             input_size=self.dimension,
-            output_size=2,  # [p01, p10]
             circuit=circuit_model.circuit,
             trainable_parameters=["var"],
             input_parameters=["x"],
             input_state=circuit_model.input_state,
-            output_mapping_strategy=ml.OutputMappingStrategy.NONE,
+            measurement_strategy=ml.MeasurementStrategy.PROBABILITIES,
         )
 
         class QuantumModule(nn.Module):

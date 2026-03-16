@@ -10,10 +10,12 @@ def create_quantum_circuit(modes: int, size: int = 400) -> pcvl.Circuit:
 
     interferometer = pcvl.GenericInterferometer(
         modes,
-        lambda i: pcvl.BS(theta=pcvl.P(f"bs_1_{i}"))
-        // pcvl.PS(pcvl.P(f"ps_1_{i}"))
-        // pcvl.BS(theta=pcvl.P(f"bs_2_{i}"))
-        // pcvl.PS(pcvl.P(f"ps_2_{i}")),
+        lambda i: (
+            pcvl.BS(theta=pcvl.P(f"bs_1_{i}"))
+            // pcvl.PS(pcvl.P(f"ps_1_{i}"))
+            // pcvl.BS(theta=pcvl.P(f"bs_2_{i}"))
+            // pcvl.PS(pcvl.P(f"ps_2_{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 
@@ -28,10 +30,12 @@ def create_quantum_circuit(modes: int, size: int = 400) -> pcvl.Circuit:
 
     readout = pcvl.GenericInterferometer(
         modes,
-        lambda i: pcvl.BS()
-        // pcvl.PS(pcvl.P(f"ps_3_{i}"))
-        // pcvl.BS()
-        // pcvl.PS(pcvl.P(f"ps_4_{i}")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(pcvl.P(f"ps_3_{i}"))
+            // pcvl.BS()
+            // pcvl.PS(pcvl.P(f"ps_4_{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
     circuit.add(0, readout, merge=True)

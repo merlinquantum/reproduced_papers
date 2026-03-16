@@ -2,18 +2,20 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 import sys
+from pathlib import Path
 
 import torch
 from sklearn.decomposition import PCA
 from torchvision import datasets, transforms
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
-
-from runtime_lib.data_paths import paper_data_dir
+try:
+    from runtime_lib.data_paths import paper_data_dir
+except ModuleNotFoundError:
+    REPO_ROOT = Path(__file__).resolve().parents[2]
+    if str(REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(REPO_ROOT))
+    from runtime_lib.data_paths import paper_data_dir
 
 _DATASET_MAP = {
     "mnist": datasets.MNIST,
@@ -32,7 +34,9 @@ def make_pca(k: int, dataset: str = "mnist"):
         dataset_cls = _DATASET_MAP[dataset_key]
     except KeyError as exc:
         valid = ", ".join(sorted(_DATASET_MAP))
-        raise ValueError(f"Unknown dataset '{dataset}'. Valid options: {valid}.") from exc
+        raise ValueError(
+            f"Unknown dataset '{dataset}'. Valid options: {valid}."
+        ) from exc
 
     to_t = transforms.Compose([transforms.ToTensor()])
     root = _dataset_root()

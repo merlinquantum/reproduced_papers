@@ -1,148 +1,411 @@
 # qLLM: Quantum Large Language Models
 
-This repository implements various quantum and classical machine learning models for sentiment analysis, as described in a recent work : [Quantum Large Language Model Fine Tuning](https://arxiv.org/abs/2504.08732). The models can be trained and evaluated using pre-computed embeddings from sentence transformers.
+This repository implements various quantum and classical machine learning models for sentiment analysis, as described in [Quantum Large Language Model Fine Tuning](https://arxiv.org/abs/2504.08732). The models can be trained and evaluated using pre-computed embeddings from sentence transformers.
 
-The dataset used in this repo is the SST-2 (Stanford Sentiment Treebank) binary sentiment classification dataset that can be found on [Hugging Face](https://huggingface.co/datasets/SetFit/sst2) .
+**Dataset**: SST-2 (Stanford Sentiment Treebank) binary sentiment classification dataset from [Hugging Face](https://huggingface.co/datasets/SetFit/sst2)
+
+## Reference and Attribution
+
+- Paper: Quantum Large Language Model Fine Tuning (arXiv, 2025)
+- Authors: Quantum Large Language Model Fine-Tuning
+- DOI/ArXiv: https://arxiv.org/abs/2504.08732
+- Original repository (if any): Not specified in the paper.
+- License and attribution notes: Cite the paper above and this reproduction repository when using these results or code.
+
 ## Overview
 
 The codebase provides implementations of:
-- **MerLin quantum models** (3 variants)
-- **TorchQuantum models** 
+- **MerLin quantum models** (4 variants: basic, parallel, expectation, kernel)
+- **TorchQuantum quantum models** (gate-based with multiple encoding strategies)
 - **Classical models** (MLPs, SVM, Logistic Regression)
-- **Quantum kernel methods**
 
+## Project Structure
+
+```
+qLLM/
+├── configs/              # Model configurations
+│   ├── cli.json         # CLI argument schema
+│   ├── defaults.json    # Default configuration
+│   ├── torchquantum.json# TorchQuantum template
+│   ├── merlin-basic.json
+│   ├── merlin-parallel.json
+│   ├── merlin-expectation.json
+│   ├── merlin-kernel.json
+│   ├── mlp.json
+│   ├── svm.json
+│   └── log-reg.json
+├── lib/                  # Model implementations
+│   ├── merlin_llm_models.py     # MerLin models
+│   ├── torchquantum_models.py   # TorchQuantum models
+│   ├── classical_models.py      # Classical models
+│   ├── merlin_kernel.py         # Quantum kernel methods
+│   ├── setfit_model.py          # SetFit utilities
+│   └── runner.py                # Training runner
+├── embeddings/          # Pre-computed embeddings (train/eval/test splits)
+├── results/             # Training outputs and results
+├── tests/               # Unit tests
+├── utils/               # Utility scripts
+├── implementation.py    # CLI entry point
+├── qllm.ipynb          # Jupyter notebook examples
+└── requirements.txt     # Dependencies
+```
+
+Dataset helpers live in `papers/shared/qLLM/data_utils.py` so they can be reused across papers.
+## Configuration System
+
+The project uses JSON-based configuration files to specify model parameters. The CLI system allows overriding config values via command-line arguments.
+
+### Configuration Files Structure
+
+**Global settings** (shared across all models):
+- `dataset`: Dataset name, size, embeddings directory path
+- `embeddings`: Sentence transformer model name
+- `training`: Epochs, learning rate, batch size
+- `seed`, `device`, `logging`: Runtime settings
+
+**Model-specific parameters**: Each model type has its own config file with architecture-specific parameters.
+
+### Configuration Files by Model Type
+
+#### MerLin Models (Photonic Quantum Computing)
+**File structure for all MerLin variants:**
+```json
+{
+  "model": {
+    "name": "merlin-[basic|parallel|expectation|kernel]",
+    "embedding_dim": 768,
+    "hidden_dim": 100,
+    "quantum_modes": 12,
+    "no_bunching": false,
+    "photons": 5,
+    "e_dim": 1
+  },
+  "training": {...}
+}
+```
+
+**Parameters:**
+- `embedding_dim`: Input embedding dimension from sentence transformer (usually 768)
+- `hidden_dim`: Dimension of compressed embedding space before quantum encoding
+- `quantum_modes`: Number of photonic modes in the MerLin circuit (8-12 typical)
+- `no_bunching`: Disable photon bunching for angle-based encoding (useful for parallel encoders)
+- `photons`: Maximum photon number (0 = auto-computed as modes/2)
+- `e_dim`: Number of parallel encoders (1 for basic/expectation/kernel, 1-2 for parallel)
+
+**Specific variants:**
+- `merlin-basic`: Simple sandwich architecture, single encoder
+- `merlin-parallel`: Multiple encoders with concatenated outputs, set `e_dim: 1` or `e_dim: 2`
+- `merlin-expectation`: Deep circuits with expectation value measurements, requires `no_bunching: true`
+- `merlin-kernel`: Quantum kernel methods using MerLin circuits
+
+#### TorchQuantum Models (Gate-based Quantum Computing)
+**File structure:**
+```json
+{
+  "model": {
+    "name": "torchquantum",
+    "embedding_dim": 768,
+    "hidden_dim": 100,
+    "encoder_configs": [
+      {"n_qubits": 10, "n_layers": 1, "connectivity": 1}
+    ],
+    "pqc_config": [
+      {"n_qubits": 10, "n_main_layers": 2, "connectivity": 1, "n_reuploading": 2}
+    ],
+    "e_dim": 1
+  },
+  "training": {...}
+}
+```
+
+**Parameters:**
+
+*encoder_configs* (list of objects):
+- `n_qubits`: Number of qubits in each encoder (typically 6-12)
+- `n_layers`: Number of parameterized layers (1-2 for basic, 2-3 for deeper)
+- `connectivity`: Qubit connectivity pattern (1=nearest neighbor, 2=extended)
+- Multiple encoders for parallel processing; their outputs are fused based on `e_dim`
+
+*pqc_config* (single-element list, defines Quantum Processing Unit):
+- `n_qubits`: Number of qubits in main circuit (typically same as encoder)
+- `n_main_layers`: Number of main parameterized layers (2-4 typical)
+- `connectivity`: Qubit connectivity (1 or 2)
+- `n_reuploading`: Number of data re-uploading blocks (1-3 typical)
+
+*e_dim*: Number of parallel encoders (1-2); must match `encoder_configs` length
+
+#### Classical Models
+
+**MLPs** (`mlp.json`):
+```json
+{
+  "model": {
+    "name": "mlps",
+    "embedding_dim": 768,
+    "hidden_dims": [0, 48, 96, 144, 192]
+  },
+  "training": {...}
+}
+```
+Tests multiple MLP architectures with varying hidden dimensions. Each configuration is trained separately.
+
+**SVM** (`svm.json`):
+```json
+{
+  "model": {
+    "name": "svm",
+    "embedding_dim": 768,
+    "C_values": [1.0, 100.0]
+  },
+  "training": {...}
+}
+```
+SVM with RBF kernel; tests different regularization strengths.
+
+**Logistic Regression** (`log-reg.json`):
+```json
+{
+  "model": {
+    "name": "log-reg",
+    "embedding_dim": 768
+  },
+  "training": {...}
+}
+```
+Standard logistic regression classifier.
+
+### Using Configuration Files
+
+```bash
+# Use a specific config file (overrides defaults.json)
+python implementation.py --config configs/merlin-basic.json
+
+# Override specific values via CLI
+python implementation.py --config configs/merlin-basic.json --learning-rate 5e-5 --epochs 100
+
+# Or just use defaults and override via CLI
+python implementation.py --model merlin-basic --hidden-dim 50 --quantum-modes 10
+```
 ## Data Generation (Important Setup)
 
 **We strongly recommend generating embeddings using `generate_embeddings.py` in a separate environment** to avoid library conflicts between SetFit and TorchQuantum. These libraries have incompatible dependencies that can cause issues if used in the same environment.
 
 1. Create a separate conda/venv environment with SetFit installed
-2. Run `python src/generate_embeddings.py` in that environment
-3. Switch back to your main environment with TorchQuantum/MerLin for model training
+2. Install `requirements.txt` (or at least `setfit`, `datasets`, and `torch`) in that environment
+3. Run `python utils/generate_embeddings.py` from `papers/qLLM/` in that environment
+4. Switch back to your main environment with TorchQuantum/MerLin for model training
 
 ## Quick Start
 
-Run a model using the main script:
+Run a model using the shared CLI:
 
 ```bash
-python src/main.py --model [MODEL_TYPE]
+# From inside papers/qLLM
+python implementation.py --config configs/merlin-basic.json
+
+# From the repo root
+python implementation.py --paper qLLM --config configs/merlin-basic.json
+
+# Override parameters via CLI
+python implementation.py --config configs/merlin-basic.json --learning-rate 1e-5 --epochs 100
 ```
 
-## Available Models
+## Install Dependencies
 
-### MerLin Models (`merlin_llm_utils.py`)
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
 
-MerLin models use photonic quantum computing with interferometers and photon detection.
+The CLI schema is defined in `cli.json`. Default values are in `configs/defaults.json`. Model-specific configs are in `configs/[model-name].json`.
 
-#### 1. Basic MerLin (`--model merlin-basic`)
-**Architecture:**
-- **Data encoding**: 768-dimensional embeddings → Linear layer → Sigmoid normalization → Phase shifters
-- **Quantum layer**: Sandwich architecture with trainable interferometers
-  - Left interferometer (trainable beam splitters + phase shifters)
-  - Data encoding via phase shifters
-  - Right interferometer (trainable beam splitters + phase shifters)
-- **Measurement**: Photon number detection with bunching/no-bunching options
-- **Output**: Linear layer maps measurements to class predictions
+## Output Directory and Config Snapshot
 
-**Key parameters:**
-- `--quantum-modes`: Number of photonic modes (default: 8)
-- `--no-bunching`: Enable/disable photon bunching
-- `--hidden-dim`: Size of compressed embedding space
+Each run writes into a timestamped folder under the base `outdir` (default: `results`):
 
-#### 2. Parallel MerLin (`--model merlin-parallel`)
-**Architecture:**
-- **First module**: E parallel quantum encoders (E=1 or E=2)
-  - Each encoder processes full input independently
-  - Uses angle encoding (no bunching for parallelization)
-  - Outputs concatenated for second module
-- **Second module**: Processes concatenated outputs through quantum circuit
-- **Enhanced capacity**: Multiple encoding paths for richer representation
+```
+results/
+└── run_YYYYMMDD-HHMMSS/
+    ├── config_snapshot.json  # Resolved config after merges/CLI overrides
+    ├── metrics.json          # Model metrics for the run
+    └── SKIPPED.txt           # Present only if a run is skipped
+```
 
-#### 3. Expectation MerLin (`--model merlin-expectation`)
-**Architecture:**
-- **Deep circuits**: Uses `create_quantum_circuit_deep` with layered encoding
-- **Expectation measurement**: Computes probability of ≥1 photon per mode
-- **Novel measurement strategy**: `marginalize_photon_presence` function computes per-mode occupation probabilities
-- **Two-stage processing**: Similar to parallel but with expectation-based measurements
+- Change the base output directory with `--outdir` or `configs/defaults.json`.
+- `config_snapshot.json` is generated by the shared runner before training starts.
+- `metrics.json` is written by `lib/runner.py` at the end of a successful run.
 
-#### 4. Kernel MerLin (`--model merlin-kernel`)
-Uses quantum kernel methods with MerLin circuits for similarity computation.
+## Available Models & Architecture Details
 
-### TorchQuantum Models (`torchquantum_utils.py`)
+### MerLin Models (Photonic Quantum Computing)
 
-TorchQuantum models use gate-based quantum computing with qubits from [Quantum Large Language Model Fine Tuning](https://arxiv.org/abs/2504.08732).
+MerLin models use photonic quantum computing with Mach-Zehnder interferometers and photon detection. Configuration: `configs/merlin-[basic|parallel|expectation|kernel].json`
 
-#### Architecture Components
+#### 1. Basic MerLin (`merlin-basic`)
+**Architecture:** Sandwich architecture with trainable Mach-Zehnder interferometers
+- **Encoding**: 768-dim embeddings → Linear layer → Sigmoid normalization → Phase shifters
+- **Quantum layer**: Left interferometer → Data encoding → Right interferometer
+- **Measurement**: Photon number detection (bunching by default)
+- **Output**: Linear layer → class predictions
+
+**Config parameters**: `quantum_modes` (8-12), `hidden_dim` (50-200), `no_bunching` (false)
+
+#### 2. Parallel MerLin (`merlin-parallel`)
+**Architecture:** Multiple independent encoders with concatenated outputs
+- **First module**: E parallel encoders (E=1 or 2), each processes full input independently
+- **Encoding method**: Angle encoding (typically with `no_bunching: true` for stability)
+- **Second module**: Processes concatenated encoder outputs through quantum circuit
+- **Advantage**: Richer representation through multiple encoding paths
+
+**Config parameters**: `e_dim` (1 or 2), `no_bunching` (true recommended), other params as basic
+
+#### 3. Expectation MerLin (`merlin-expectation`)
+**Architecture:** Deep circuits with expectation value measurements
+- **Quantum layer**: `create_quantum_circuit_deep` with layered phase shifter encoding
+- **Measurement strategy**: Computes per-mode photon presence probability (expectation values)
+- **Novel aspect**: Marginalize photon presence using `marginalize_photon_presence` function
+- **Processing**: Two-stage architecture similar to parallel, with expectation-based outputs
+
+**Config parameters**: `no_bunching` (true required), `quantum_modes`, `hidden_dim`
+
+#### 4. Kernel MerLin (`merlin-kernel`)
+**Architecture:** Quantum kernel methods using MerLin circuits
+- **Purpose**: Compute quantum kernels k(x,y) for kernel classification methods
+- **Uses**: MerLin circuit to generate feature maps, then trains kernel classifier
+- **Suitable for**: Few-shot or low-data regimes where kernels provide advantages
+
+**Config parameters**: `quantum_modes`, `hidden_dim`, `kernel_batch_size` (training parameter)
+
+### TorchQuantum Models (Gate-based Quantum Computing)
+
+TorchQuantum models implement gate-based quantum circuits with qubits. Configuration: `configs/torchquantum.json`
 
 **Data Encoding Methods:**
-1. **Amplitude Encoding**: Classical vector embedded as quantum state amplitudes |ψ(x)⟩ = Σᵢ xᵢ |i⟩
-2. **Angle Encoding**: Data determines qubit rotation angles |ψ(x)⟩ = RY(x₁) ⊗ RY(x₂) ⊗ ... ⊗ RY(xₙ) |0⟩⊗n
+1. **Amplitude Encoding**: Classical vector embedded as quantum amplitudes: |ψ(x)⟩ = Σᵢ xᵢ |i⟩
+2. **Angle Encoding**: Data determines rotation angles: |ψ(x)⟩ = RY(x₁) ⊗ RY(x₂) ⊗ ... ⊗ RY(xₙ) |0⟩⊗ⁿ
 
-**Model Structure (`--model torchquantum`):**
-- **First Module**: Multi-encoder with configurable parallel quantum encoders
+**Model Structure:**
+- **First Module**: Multi-encoder with E parallel quantum encoders
   - Each encoder: Amplitude encoding → Parameterized quantum circuit → Pauli-Z measurements
-  - Fusion methods: concatenation, averaging, or weighted combination
+  - Output fusion: concatenation (default), averaging, or weighted combination
 - **Second Module**: Quantum Processing Unit (QPU) with data re-uploading
-  - Angle encoding → Multiple re-uploading blocks → Main PQC → Single qubit measurement
-- **Output**: Linear layer combines both module outputs for classification
+  - Angle encoding → Re-uploading blocks → Main parameterized circuit → Single qubit measurement
 
-**Key parameters:**
-- `--encoder-configs`: JSON list of encoder configurations
-- `--pqc-config`: QPU configuration
-- `--e-dim`: Number of parallel encoders
+## Results
 
-**Example configuration:**
+> “We observe up to 3.14% improvements in accuracy over classical architectures of comparable model size, within the set of hyperparameters probed.”
+
+Classical baselines (5-fold mean±std with best test accuracy):
+
+| Model | Mean±Std | Best test | Params |
+| --- | --- | --- | --- |
+| SVM (C=1) | 0.8912±0.0038 | 0.8955 | 296 |
+| SVM (C=100) | 0.8889±0.0045 | 0.8932 | 435 |
+| Logistic Regression | 0.8888±0.0043 | 0.8933 | 769 |
+| NN [0] | 0.8886±0.0043 | 0.8934 | 1,538 |
+| NN [48] | 0.8897±0.0098 | 0.8946 | 37,010 |
+| NN [96] | 0.8912±0.0038 | 0.8933 | 74,018 |
+| NN [144] | 0.8839±0.0034 | 0.8896 | 111,026 |
+| NN [192] | 0.8827±0.0085 | 0.8901 | 148,034 |
+
+MerLin sweep snapshot (simple QuantumLayer): mode=8, 1 photon yields 0.8874±0.0071 with best test 0.8924.
+
+Best MerLin results by model type (for 200 epochs):
+
+| MerLin model | Best test accuracy | Source table | `n_modes`| `n_photons`| `computation_space` | hidden dim |
+| --- | --- | --- | --- | --- |  --- | --- | 
+| merlin-basic (simple QuantumLayer) | 0.8951 | Using a simple QuantumLayer | 12 | 1 | UNBUNCHED | 8 |
+| merlin-parallel (angle encoding) | 0.8890±0.0069 | Using a similar architecture as in the paper (only angle encoding) | 12 | 4 | FOCK | 64 |
+| merlin-expectation (expectation values) | 0.8874±0.0092 | Using a similar architecture as in the paper (only angle encoding) but with expectation values | 12 modes | 2 photons | UNBUNCHED | 128 |
+| merlin-kernel (fidelity kernel) | 0.7460±0.0060 | Another approach using a Fidelity Kernel | 12 | 2 | FOCK | . |
+
+Note: the fidelity-kernel table reports mean±std only; the value above is the best mean observed.
+- **Output**: Linear layer combines both modules for final classification
+
+**Config parameters:**
+
+*encoder_configs* (list): Configurations for parallel encoders
+- `n_qubits`: Number of qubits (typically 6-10)
+- `n_layers`: Number of parameterized layers (1-2 for lightweight, 2-4 for deeper)
+- `connectivity`: 1=nearest neighbor, 2=extended connectivity
+
+*pqc_config* (single-element list): QPU configuration
+- `n_qubits`: Usually same as encoder qubits
+- `n_main_layers`: Number of main circuit layers (2-4 typical)
+- `connectivity`: Qubit connectivity pattern
+- `n_reuploading`: Data re-uploading blocks (1-3 typical)
+
+*e_dim*: Number of parallel encoders (1-2); must match `encoder_configs` length
+
+**Example usage:**
 ```bash
-python src/main.py --model torchquantum \
-  --encoder-configs '[{"n_qubits": 10, "n_layers": 2, "connectivity": 1}]' \
-  --pqc-config '[{"n_qubits": 10, "n_main_layers": 2, "connectivity": 1, "n_reuploading": 2}]'
+python implementation.py --config configs/torchquantum.json
 ```
 
-### Classical Models (`classical_utils.py`)
+### Classical Models
 
-#### Multi-Layer Perceptrons (`--model mlps`)
-**Architecture:**
-- Tests multiple MLP configurations with varying hidden dimensions [0, 48, 96, 144, 192]
-- Each MLP: Linear → BatchNorm → ReLU → Linear (or direct Linear if hidden_dim=0)
-- Batch normalization and dropout for regularization
-- Adam optimizer with exponential learning rate decay
+Classical baselines for comparison. Configurations: `configs/[mlp|svm|log-reg].json`
 
-#### Support Vector Machine (`--model svm`)
-**Two configurations:**
-- SVM with C=1.0 (targeting ~296 parameters)
-- SVM with C=100.0 (targeting ~435 parameters)
-- RBF kernel with automatic scaling
+#### Multi-Layer Perceptrons (`mlps`)
+**Architecture:** Tests multiple configurations with varying hidden dimensions
+- **Configurations**: hidden_dim in [0, 48, 96, 144, 192]
+- **Each MLP**: Linear → BatchNorm → ReLU → Linear (or direct Linear if hidden_dim=0)
+- **Regularization**: Batch normalization and dropout
+- **Optimization**: Adam with exponential learning rate decay
 
-#### Logistic Regression (`--model log-reg`)
-Standard logistic regression classifier.
+#### Support Vector Machine (`svm`)
+**Architecture:** RBF kernel SVM
+- **Configurations**: C values [1.0, 100.0] for different regularization strengths
+- **Kernel**: RBF with automatic scaling
+- **Parameter count**: C=1.0 (~296 params), C=100.0 (~435 params)
+
+#### Logistic Regression (`log-reg`)
+**Architecture:** Standard linear classifier with logistic loss
+- **Simple baseline**: Direct linear classification without hidden layers
 
 ## Usage Examples
 
-### Basic MerLin Model
-```bash
-python src/main.py --model merlin-basic \
-  --quantum-modes 8 \
-  --hidden-dim 100 \
-  --epochs 50 \
-  --learning-rate 1e-4
-```
-
-### Parallel MerLin with 2 encoders
-```bash
-python src/main.py --model merlin-parallel \
-  --quantum-modes 10 \
-  --e-dim 2 \
-  --no-bunching
-```
-
-### TorchQuantum Model
+### Using Configuration Files
 
 ```bash
-python src/main.py --model torchquantum \
-  --encoder-configs '[{"n_qubits": 8, "n_layers": 2, "connectivity": 1}, {"n_qubits": 6, "n_layers": 1, "connectivity": 1}]' \
-  --pqc-config '[{"n_qubits": 8, "n_main_layers": 3, "connectivity": 2, "n_reuploading": 2}]'
+# Basic MerLin with config file
+python implementation.py --config configs/merlin-basic.json
+
+# Parallel MerLin with 2 encoders
+python implementation.py --config configs/merlin-parallel.json
+
+# TorchQuantum model
+python implementation.py --config configs/torchquantum.json
+
+# Override config parameters from CLI
+python implementation.py --config configs/merlin-basic.json \
+  --quantum-modes 10 --hidden-dim 50 --epochs 100
 ```
 
-This model is inspired by  [Quantum Large Language Model Fine Tuning](https://arxiv.org/abs/2504.08732). Our goal was to reproduce this model and the results of this paper. However, some specificities of the model and training parameters are not clear:
+### Command-line Only (without config files)
+
+```bash
+# Basic MerLin
+python implementation.py --model merlin-basic \
+  --quantum-modes 8 --hidden-dim 100 --epochs 50 --learning-rate 1e-4
+
+# Parallel MerLin with 2 encoders
+python implementation.py --model merlin-parallel \
+  --quantum-modes 10 --e-dim 2 --no-bunching
+
+# TorchQuantum with inline encoder specs
+python implementation.py --model torchquantum \
+  --encoder-configs '[{"n_qubits": 10, "n_layers": 2, "connectivity": 1}]' \
+  --pqc-config '[{"n_qubits": 10, "n_main_layers": 2, "connectivity": 1, "n_reuploading": 2}]'
+
+# Classical baselines
+python implementation.py --config configs/mlp.json
+python implementation.py --config configs/svm.json
+python implementation.py --config configs/log-reg.json
+```
+
+## Implementation Notes
 
 #### Model Implementation Notes
 
@@ -165,9 +428,9 @@ These ambiguities may lead to differences between our results and those reported
 
 ### Classical Comparison
 ```bash
-python src/main.py --model mlps --hidden-dim 100 --epochs 100
-python src/main.py --model svm
-python src/main.py --model log-reg
+python implementation.py --model mlps --hidden-dim 100 --epochs 100
+python implementation.py --model svm
+python implementation.py --model log-reg
 ```
 
 ## Command Line Arguments
@@ -208,7 +471,7 @@ The models expect pre-computed embeddings in `./embeddings/` directory with:
 - `eval/` split for validation data  
 - `test/` split for test data
 
-Each split should contain embedding files that can be loaded by the `create_dataset_from_embeddings` function in `data_utils.py`.
+Each split should contain embedding files that can be loaded by the `create_dataset_from_embeddings` function in `papers/shared/qLLM/data_utils.py`.
 
 ## Architecture Comparison
 
@@ -222,8 +485,9 @@ Each split should contain embedding files that can be loaded by the `create_data
 
 ## Dependencies
 
+- `requirements.txt`: full reproduction stack (MerLin + TorchQuantum + SetFit)
 - `torch`: PyTorch framework
-- `merlin`: MerLin quantum computing framework  
+- `merlin`: MerLin quantum computing framework
 - `perceval`: Photonic quantum computing
 - `torchquantum`: Gate-based quantum ML
 - `sklearn`: Classical ML algorithms
@@ -232,11 +496,11 @@ Each split should contain embedding files that can be loaded by the `create_data
 ## Model Testing
 
 Both quantum frameworks include gradient propagation tests:
-- MerLin: `test_module_building_and_gradients()` in `merlin_llm_utils.py`
-- TorchQuantum: `test_gradient_propagation()` in `torchquantum_utils.py`
+- MerLin: `test_module_building_and_gradients()` in `lib/merlin_llm_models.py`
+- TorchQuantum: `test_gradient_propagation()` in `lib/torchquantum_models.py`
 
 Run tests individually:
 ```bash
-python src/merlin_llm_utils.py
-python src/torchquantum_utils.py
+python lib/merlin_llm_models.py
+python lib/torchquantum_models.py
 ```

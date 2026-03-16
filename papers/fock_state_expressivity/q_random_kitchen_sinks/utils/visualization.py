@@ -63,6 +63,16 @@ def plot_dataset(x_train, x_test, y_train, y_test, save_path: Path) -> None:
     plt.close()
 
 
+def plot_dataset_from_payload(payload: dict, save_path: Path) -> None:
+    plot_dataset(
+        np.array(payload["x_train"]),
+        np.array(payload["x_test"]),
+        np.array(payload["y_train"]),
+        np.array(payload["y_test"]),
+        save_path,
+    )
+
+
 def plot_accuracy_heatmap(
     results: list[dict],
     r_values: Iterable[int],
@@ -113,6 +123,15 @@ def save_kernel_heatmap(
     plt.tight_layout()
     plt.savefig(save_path, dpi=200)
     plt.close()
+
+
+def save_kernel_heatmap_from_payload(payload: dict, save_path: Path) -> None:
+    save_kernel_heatmap(
+        np.array(payload["kernel"]),
+        np.array(payload["y_train"]),
+        payload.get("title", "Kernel heatmap"),
+        save_path,
+    )
 
 
 def _build_mesh(
@@ -253,6 +272,57 @@ def plot_decision_boundary(entry: dict, dataset, save_path: Path) -> None:
     plt.close(fig)
 
 
+def build_decision_payload(
+    entries: list[dict],
+    dataset,
+    r_values: Iterable[int],
+    gamma_values: Iterable[int],
+    method: str,
+    *,
+    resolution: float = 0.02,
+) -> dict:
+    xx, yy, grid = _build_mesh(dataset, resolution)
+    lookup: dict[tuple[int, int], dict] = {}
+    for entry in entries:
+        if entry["method"] != method:
+            continue
+        key = (entry["r"], entry["gamma"])
+        if key not in lookup or entry["accuracy"] > lookup[key]["accuracy"]:
+            lookup[key] = entry
+
+    payload_entries: list[dict] = []
+    for r in r_values:
+        for gamma in gamma_values:
+            entry = lookup.get((r, gamma))
+            if entry is None:
+                continue
+            class_map = _decision_map(entry, dataset, xx, grid)
+            payload_entries.append(
+                {
+                    "r": r,
+                    "gamma": gamma,
+                    "accuracy": entry.get("accuracy"),
+                    "class_map": class_map.tolist(),
+                }
+            )
+
+    x_train, x_test, y_train, y_test = dataset
+    return {
+        "method": method,
+        "r_values": list(r_values),
+        "gamma_values": list(gamma_values),
+        "grid_x": xx.tolist(),
+        "grid_y": yy.tolist(),
+        "entries": payload_entries,
+        "dataset": {
+            "x_train": x_train.tolist(),
+            "x_test": x_test.tolist(),
+            "y_train": y_train.tolist(),
+            "y_test": y_test.tolist(),
+        },
+    }
+
+
 def plot_combined_decisions(
     entries: list[dict],
     dataset,
@@ -317,5 +387,133 @@ def plot_combined_decisions(
     )
     fig.suptitle(title, fontsize=12)
     fig.tight_layout(rect=(0, 0, 1, 0.96))
+    fig.savefig(save_path, dpi=200)
+    plt.close(fig)
+
+
+def plot_combined_decisions_from_payload(payload: dict, save_path: Path) -> None:
+    _ensure_dir(save_path)
+    dataset_payload = payload["dataset"]
+    dataset = (
+        np.array(dataset_payload["x_train"]),
+        np.array(dataset_payload["x_test"]),
+        np.array(dataset_payload["y_train"]),
+        np.array(dataset_payload["y_test"]),
+    )
+
+    r_values = payload["r_values"]
+    gamma_values = payload["gamma_values"]
+    xx = np.array(payload["grid_x"])
+    yy = np.array(payload["grid_y"])
+    lookup = {(entry["r"], entry["gamma"]): entry for entry in payload["entries"]}
+
+    rows = len(r_values)
+    cols = len(gamma_values)
+    fig, axes = plt.subplots(
+        rows, cols, figsize=(cols * 1.2, rows * 1.2), squeeze=False
+    )
+    for i, r in enumerate(r_values):
+        for j, gamma in enumerate(gamma_values):
+            ax = axes[i][j]
+            entry = lookup.get((r, gamma))
+            if entry is None:
+                ax.axis("off")
+                continue
+            class_map = np.array(entry["class_map"])
+            _render_panel(
+                ax,
+                class_map,
+                xx,
+                yy,
+                dataset,
+                train_kwargs={"marker": "o", "s": 8, "edgecolor": "none"},
+                test_kwargs={"marker": "x", "s": 9, "linewidths": 0.8},
+            )
+            accuracy = entry.get("accuracy")
+            if accuracy is not None:
+                ax.text(
+                    0.02,
+                    0.9,
+                    f"Acc {accuracy:.3f}",
+                    transform=ax.transAxes,
+                    fontsize=6.5,
+                    color="#111",
+                    bbox={"facecolor": "white", "alpha": 0.7, "edgecolor": "none"},
+                )
+            ax.set_xticks([])
+            ax.set_yticks([])
+            if i == 0:
+                ax.set_title(f"γ={gamma}", fontsize=8)
+            if j == 0:
+                ax.set_ylabel(f"R={r}", fontsize=8)
+
+    title = (
+        "Quantum decision boundaries and test accuracies"
+        if payload.get("method") == "quantum"
+        else "Classical decision boundaries and test accuracies"
+    )
+    fig.suptitle(title, fontsize=12)
+    fig.tight_layout(rect=(0, 0, 1, 0.96))
+    fig.savefig(save_path, dpi=200)
+    plt.close(fig)
+
+
+def plot_single_decision_from_payload(payload: dict, save_path: Path) -> None:
+    _ensure_dir(save_path)
+    dataset_payload = payload["dataset"]
+    dataset = (
+        np.array(dataset_payload["x_train"]),
+        np.array(dataset_payload["x_test"]),
+        np.array(dataset_payload["y_train"]),
+        np.array(dataset_payload["y_test"]),
+    )
+    xx = np.array(payload["grid_x"])
+    yy = np.array(payload["grid_y"])
+    entries = payload.get("entries", [])
+    if not entries:
+        raise ValueError("No decision entries available in payload.")
+    entry = entries[0]
+    class_map = np.array(entry["class_map"])
+
+    fig, ax = plt.subplots(figsize=(7, 5))
+    _render_panel(ax, class_map, xx, yy, dataset)
+    r = entry.get("r", 1)
+    gamma = entry.get("gamma", 1)
+    method = payload.get("method", "quantum")
+    ax.set_title(f"{method.capitalize()} R={r}, γ={gamma}")
+    ax.set_xlabel("x1")
+    ax.set_ylabel("x2")
+    accuracy = entry.get("accuracy")
+    if accuracy is not None:
+        ax.text(
+            0.02,
+            0.95,
+            f"Acc: {accuracy:.3f}",
+            transform=ax.transAxes,
+            fontsize=12,
+            fontweight="bold",
+            color="#222222",
+            bbox={"facecolor": "white", "alpha": 0.7, "edgecolor": "none"},
+        )
+
+    legend_elements = [
+        Patch(facecolor="blue", label="Label 0"),
+        Patch(facecolor="red", label="Label 1"),
+        Line2D(
+            [0],
+            [0],
+            marker="o",
+            color="gray",
+            label="Train",
+            markerfacecolor="gray",
+            markersize=6,
+            linestyle="",
+        ),
+        Line2D(
+            [0], [0], marker="x", color="gray", label="Test", markersize=6, linestyle=""
+        ),
+    ]
+    ax.legend(handles=legend_elements, loc="upper right")
+    fig.tight_layout()
     fig.savefig(save_path, dpi=200)
     plt.close(fig)

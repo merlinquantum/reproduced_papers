@@ -1,0 +1,12 @@
+2025-12-05 11:38:16 | INFO | runtime | Starting nearest_centroids_merlin run
+2025-12-05 11:38:21 | INFO | lib.runner | Starting run in results\run_20251205-113816
+2025-12-05 11:38:21 | INFO | lib.runner | Using seed=123
+2025-12-05 11:38:21 | INFO | lib.runner | Starting experiment with dataset: mnist
+2025-12-05 11:38:21 | INFO | lib.runner | Loaded 60000 samples with 784 features
+2025-12-05 11:38:21 | INFO | lib.runner | Experiment: 2 classes, 12665 available, using 80 (40 train / 40 test), 1000 shots, 8 components
+2025-12-05 11:38:45 | INFO | lib.runner | Finished experiment 1/4: classes=[0, 1] -> Classical: 99.0%, Cirq: 99.0%, Merlin: 99.0%
+2025-12-05 11:38:45 | INFO | lib.runner | Experiment: 2 classes, 12223 available, using 80 (40 train / 40 test), 1000 shots, 8 components
+2025-12-05 11:39:12 | INFO | lib.runner | Finished experiment 2/4: classes=[2, 7] -> Classical: 94.2%, Cirq: 95.2%, Merlin: 94.0%
+2025-12-05 11:39:12 | INFO | lib.runner | Experiment: 4 classes, 24754 available, using 160 (80 train / 80 test), 1000 shots, 8 components
+2025-12-05 11:41:05 | INFO | lib.runner | Finished experiment 3/4: classes=[0, 1, 2, 3] -> Classical: 87.9%, Cirq: 89.0%, Merlin: 87.6%
+2025-12-05 11:41:05 | INFO | lib.runner | Experiment: 10 classes, 60000 available, using 400 (200 train / 200 test), 1000 shots, 8 components

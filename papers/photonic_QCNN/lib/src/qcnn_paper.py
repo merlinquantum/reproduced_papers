@@ -13,7 +13,7 @@ from typing import Union
 import numpy as np
 import sympy as sp
 import torch
-from merlin import CircuitConverter
+from merlin import CircuitConverter, ComputationSpace
 from merlin import build_slos_distribution_computegraph as build_slos_graph
 from perceval import (
     BS,
@@ -56,8 +56,9 @@ def get_circuit(m: int, type: str = "MZI"):
     elif type == "BS_random_PS":
         return GenericInterferometer(
             m,
-            lambda i: BS.Ry(theta=-2 * P(f"phi_{i}"))
-            // PS(phi=2 * np.pi * random.random()),
+            lambda i: (
+                BS.Ry(theta=-2 * P(f"phi_{i}")) // PS(phi=2 * np.pi * random.random())
+            ),
             shape=InterferometerShape.TRIANGLE,
         )
     elif type == "paper_6modes":
@@ -403,7 +404,9 @@ def compute_amplitudes(self, unitary: Tensor, input_state: list[int]) -> torch.T
     if any(n < 0 for n in input_state) or sum(input_state) == 0:
         raise ValueError("Photon numbers cannot be negative or all zeros")
 
-    if self.no_bunching and not all(x in [0, 1] for x in input_state):
+    if getattr(
+        self, "computation_space", ComputationSpace.FOCK
+    ) is ComputationSpace.UNBUNCHED and not all(x in [0, 1] for x in input_state):
         raise ValueError(
             "Input state must be binary (0s and 1s only) in non-bunching mode"
         )
@@ -445,9 +448,10 @@ def compute_amplitudes(self, unitary: Tensor, input_state: list[int]) -> torch.T
     # Apply each layer
     for layer_idx, layer_fn in enumerate(self.layer_functions):
         p = idx_n[layer_idx]
-        amplitudes, self.contributions = layer_fn(
+        """amplitudes, self.contributions = layer_fn(
             unitary, amplitudes, p, return_contributions=True
-        )
+        )"""
+        amplitudes = layer_fn(unitary, amplitudes, p)
 
     self.prev_amplitudes = amplitudes
 
@@ -538,6 +542,7 @@ class QDense(AQCNNLayer):
         self._slos_graph = build_slos_graph(
             m=max(self.m),
             n_photons=2,
+            computation_space=ComputationSpace.FOCK,
             device=self.device,
         )
         self._slos_graph.__class__.compute_amplitudes = compute_amplitudes

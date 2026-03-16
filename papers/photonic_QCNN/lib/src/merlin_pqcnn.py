@@ -8,7 +8,6 @@ import math
 import merlin
 import torch
 import torch.nn as nn
-
 from photonic_QCNN.lib.src.qcnn_paper import (
     Measure,
     OneHotEncoder,
@@ -176,13 +175,9 @@ class HybridModel(nn.Module):
             self.output_mapping.weight.requires_grad = False
             self.output_mapping.bias.requires_grad = False
         elif output_formatting == "Lex_grouping":
-            self.output_mapping = merlin.sampling.mappers.LexGroupingMapper(
-                qcnn_output_dim, num_classes
-            )
+            self.output_mapping = merlin.LexGrouping(qcnn_output_dim, num_classes)
         elif output_formatting == "Mod_grouping":
-            self.output_mapping = merlin.sampling.mappers.ModGroupingMapper(
-                qcnn_output_dim, num_classes
-            )
+            self.output_mapping = merlin.ModGrouping(qcnn_output_dim, num_classes)
         else:
             raise NotImplementedError
 

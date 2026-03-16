@@ -1,0 +1,41 @@
+{
+  "description": "Small photonic QRNN baseline on the airline-passengers dataset (shared data/time_series)",
+  "dataset": {
+    "name": "airline_passengers",
+    "path": "../time_series/airline-passengers.csv",
+    "kaggle_dataset": null,
+    "preprocess": null,
+    "time_column": "Month",
+    "target_column": "Passengers",
+    "feature_columns": ["Passengers"],
+    "sequence_length": 4,
+    "prediction_horizon": 1,
+    "train_ratio": 0.7,
+    "val_ratio": 0.15,
+    "batch_size": 16,
+    "shuffle": false
+  },
+  "model": {
+    "name": "photonic_qrnn",
+    "params": {
+      "kd": 2,
+      "kh": 3,
+      "depth": 1,
+      "shots": 0,
+      "measurement_space": "dual_rail"
+    }
+  },
+  "training": {
+    "epochs": 20,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "clip_grad_norm": 1.0,
+    "photonic_optimizer_step": "per_sample",
+    "early_stopping": {
+      "enabled": true,
+      "patience": 20,
+      "min_delta": 0.0
+    }
+  }
+}

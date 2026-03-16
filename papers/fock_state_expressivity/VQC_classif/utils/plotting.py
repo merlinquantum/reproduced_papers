@@ -133,6 +133,82 @@ def plot_decision_boundary(entry: dict, save_path: Path, resolution: int = 100) 
     plt.close()
 
 
+def plot_decision_boundary_from_payload(
+    payload: dict, save_path: Path, resolution: int = 100
+) -> None:
+    _ensure_dir(save_path)
+    x_train = np.array(payload["x_train"])
+    y_train = np.array(payload["y_train"])
+    x_test = np.array(payload["x_test"])
+    y_test = np.array(payload["y_test"])
+    xx = np.array(payload["grid_x"])
+    yy = np.array(payload["grid_y"])
+    class_map = np.array(payload["class_map"])
+
+    model_type = payload.get("model_type", "vqc")
+    dataset_name = payload.get("dataset", "").title()
+    best_acc = payload.get("best_acc", 0.0)
+    initial_state = payload.get("initial_state")
+
+    plt.figure(figsize=(6, 5))
+    region_cmap = ListedColormap(["#a6c8ff", "#ffb3b3"])
+    plt.contourf(
+        xx, yy, class_map, levels=[-0.5, 0.5, 1.5], cmap=region_cmap, alpha=0.9
+    )
+    plt.contour(xx, yy, class_map, levels=[0.5], colors="k", linewidths=0.8)
+
+    point_cmap = ListedColormap(["#1f77b4", "#d62728"])
+    plt.scatter(
+        x_train[:, 0],
+        x_train[:, 1],
+        c=y_train,
+        cmap=point_cmap,
+        vmin=0,
+        vmax=1,
+        marker="o",
+        edgecolor="k",
+        label="Train",
+    )
+    plt.scatter(
+        x_test[:, 0],
+        x_test[:, 1],
+        c=y_test,
+        cmap=point_cmap,
+        vmin=0,
+        vmax=1,
+        marker="x",
+        label="Test",
+    )
+
+    plt.xlabel("x1")
+    plt.ylabel("x2")
+    title_model = model_type.upper()
+    if model_type == "vqc" and initial_state is not None:
+        title_model = f"{title_model} {initial_state}"
+    plt.title(f"{title_model} Decision Boundary on {dataset_name}\nAcc: {best_acc:.3f}")
+    legend_elements = [
+        Patch(facecolor="blue", label="Label 0"),
+        Patch(facecolor="red", label="Label 1"),
+        Line2D(
+            [0],
+            [0],
+            marker="o",
+            color="gray",
+            label="Train",
+            markerfacecolor="gray",
+            markersize=6,
+            linestyle="",
+        ),
+        Line2D(
+            [0], [0], marker="x", color="gray", label="Test", markersize=6, linestyle=""
+        ),
+    ]
+    plt.legend(handles=legend_elements, loc="upper right")
+    plt.tight_layout()
+    plt.savefig(save_path, dpi=200)
+    plt.close()
+
+
 def plot_training_metrics(
     results: dict[str, dict],
     save_path: Path,

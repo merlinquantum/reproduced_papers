@@ -1,0 +1,37 @@
+{
+  "description": "BIM attack on amplitude-encoded classifier at epsilon=0.05",
+  "seed": 42,
+  "experiment": "attack",
+  "device": "auto",
+  "dataset": {
+    "digits": [
+      1,
+      9
+    ],
+    "image_size": 16,
+    "normalize": true,
+    "root": "data",
+    "batch_size": 256
+  },
+  "model": {
+    "type": "amplitude_quantum",
+    "input_dim": 256,
+    "n_outputs": 2,
+    "n_modes": 13,
+    "n_photons": 3,
+    "n_layers": 2,
+    "computation_space": "unbunched"
+  },
+  "attack": {
+    "method": "bim",
+    "epsilon": 0.05,
+    "num_iter": 10,
+    "alpha": 0.01
+  },
+  "options": {
+    "load_model": "results/train_quantum/model.pt"
+  },
+  "logging": {
+    "level": "info"
+  }
+}

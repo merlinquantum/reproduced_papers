@@ -1,0 +1,56 @@
+{
+  "description": "Quantum Adversarial ML - Default config for smoke tests",
+  "seed": 42,
+  "experiment": "mnist",
+  "device": "auto",
+  "dataset": {
+    "digits": [
+      1,
+      9
+    ],
+    "image_size": 16,
+    "normalize": true,
+    "root": "data",
+    "download": true,
+    "batch_size": 64,
+    "train_samples": 200,
+    "test_samples": 50
+  },
+  "model": {
+    "type": "amplitude_quantum",
+    "hidden_dims": [
+      32
+    ],
+    "n_modes": 4,
+    "n_photons": 2,
+    "n_layers": 2
+  },
+  "training": {
+    "epochs": 8,
+    "batch_size": 64,
+    "learning_rate": 0.01,
+    "optimizer": "adam"
+  },
+  "attack": {
+    "method": "fgsm",
+    "epsilon": 0.1,
+    "num_iter": 3,
+    "alpha": null
+  },
+  "defense": {
+    "epochs": 2,
+    "learning_rate": 0.01,
+    "attack_method": "fgsm",
+    "epsilon": 0.1,
+    "num_iter": 2,
+    "mix_ratio": 0.5
+  },
+  "options": {
+    "save_model": false,
+    "run_attack": true,
+    "evaluate_robustness": false
+  },
+  "logging": {
+    "level": "info"
+  }
+}

@@ -40,14 +40,14 @@ done < <($PYTHON_BIN implementation.py --list-papers)
 
 # Optional substring filter to target specific papers quickly (first arg)
 FILTER=${1:-}
+filtered=()
 if [[ -n "$FILTER" ]]; then
-  filtered=()
   for p in "${PAPERS[@]}"; do
     if [[ "$p" == *"$FILTER"* ]]; then
       filtered+=("$p")
     fi
   done
-  PAPERS=("${filtered[@]}")
+  PAPERS=("${filtered[@]-}")
 fi
 
 printf "Found %d papers\n" "${#PAPERS[@]}"
@@ -67,10 +67,24 @@ for paper in "${PAPERS[@]}"; do
   env_dir="$ENV_ROOT/$paper_sanitized"
   log_file="$LOG_DIR/$paper_sanitized.log"
 
+  paper_python="$PYTHON_BIN"
+  if [[ "$paper_rel" == "qLLM" ]]; then
+    if command -v python3.12 >/dev/null 2>&1; then
+      paper_python="python3.12"
+    else
+      echo "[WARN] python3.12 not found; qLLM installs may fail under $PYTHON_BIN." >&2
+    fi
+  fi
+
   echo "==> [$paper] setting up venv at $env_dir"
-  if [[ ! -d "$env_dir" ]] || [[ ! -f "$env_dir/bin/activate" ]]; then
-    rm -rf "$env_dir"
-    $PYTHON_BIN -m venv "$env_dir"
+  keep_existing_venv=1
+  
+  if [[ $keep_existing_venv -eq 0 ]] || [[ ! -f "$env_dir/bin/activate" ]]; then
+    if [[ -d "$env_dir" ]] || [[ -f "$env_dir/bin/activate" ]]; then
+      echo "Old venv detected, then removed and new venv installing..."
+      rm -rf "$env_dir"
+    fi
+    $paper_python -m venv "$env_dir"
   fi
 
   # shellcheck disable=SC1090

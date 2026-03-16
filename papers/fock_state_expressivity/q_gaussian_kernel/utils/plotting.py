@@ -71,6 +71,63 @@ def plot_gaussian_fits(grid, best_models: list[dict], save_path: Path) -> None:
     plt.close(fig)
 
 
+def plot_gaussian_fits_from_payload(payload: dict, save_path: Path) -> None:
+    _ensure_dir(save_path)
+    fig, axes = plt.subplots(2, 2, figsize=(10, 8))
+    plt.subplots_adjust(hspace=0.4, wspace=0.4)
+    sigma_labels = payload["sigma_labels"]
+    sigma_values = payload["sigma_values"]
+    targets = payload["targets"]
+    x_on_pi = np.array(payload["x_on_pi"])
+
+    predictions = payload.get("predictions", [])
+    photon_values = sorted({entry["photons"] for entry in predictions})
+    extra_needed = max(0, len(photon_values) - len(NOTEBOOK_COLORS))
+    extra_colors = (
+        plt.cm.viridis(np.linspace(0, 1, extra_needed)) if extra_needed > 0 else []
+    )
+    color_map: dict[int, str] = {}
+    extra_idx = 0
+    for photons in photon_values:
+        if photons in NOTEBOOK_COLORS:
+            color_map[photons] = NOTEBOOK_COLORS[photons]
+        else:
+            color_map[photons] = extra_colors[extra_idx]
+            extra_idx += 1
+
+    for idx, (sigma_label, sigma_value, target) in enumerate(
+        zip(sigma_labels, sigma_values, targets)
+    ):
+        axis = axes[idx // 2][idx % 2]
+        axis.scatter(x_on_pi, target, s=10, color="black", label="Target")
+        axis.set_title(f"σ = {sigma_value:.2f}")
+        axis.set_xlabel("x / π")
+        axis.set_ylabel("Kernel value")
+
+        sigma_models = [
+            entry for entry in predictions if entry["sigma_label"] == sigma_label
+        ]
+        sorted_models = sorted(sigma_models, key=lambda e: e["photons"])
+        for entry in sorted_models:
+            if entry.get("prediction") is None:
+                continue
+            color = color_map.get(entry["photons"], "#333333")
+            axis.plot(
+                x_on_pi,
+                entry["prediction"],
+                color=color,
+                linewidth=1.5,
+                label=f"n={entry['photons']}",
+            )
+
+        axis.grid(True, linestyle="--", alpha=0.4)
+        axis.legend()
+
+    fig.suptitle("Learned quantum kernels vs target Gaussians", fontsize=14)
+    fig.savefig(save_path, dpi=300)
+    plt.close(fig)
+
+
 def plot_dataset_examples(
     datasets: dict[str, dict[str, torch.Tensor]], save_path: Path
 ) -> None:
@@ -97,6 +154,19 @@ def plot_dataset_examples(
     fig.tight_layout()
     fig.savefig(save_path, dpi=300)
     plt.close(fig)
+
+
+def plot_dataset_examples_from_payload(payload: dict, save_path: Path) -> None:
+    datasets = {
+        name: {
+            "x_train": torch.tensor(data["x_train"]),
+            "y_train": torch.tensor(data["y_train"]),
+            "x_test": torch.tensor(data["x_test"]),
+            "y_test": torch.tensor(data["y_test"]),
+        }
+        for name, data in payload.items()
+    }
+    plot_dataset_examples(datasets, save_path)
 
 
 def plot_accuracy_bars(
@@ -140,11 +210,15 @@ def plot_accuracy_bars(
             if include_classical:
                 heights.append(classical_by_sigma[sigma_label][f"{dataset}_acc"])
             x = positions + idx * bar_width
-            label = dataset.capitalize() if sigma_label == "sigma=1.00" else ""
-            ax.bar(x, heights, width=bar_width, color=colors[idx], label=label)
+            ax.bar(x, heights, width=bar_width, color=colors[idx])
             for x_pos, h in zip(x, heights):
                 ax.text(
-                    x_pos, h + 0.01, f"{h:.2f}", ha="center", va="bottom", fontsize=7
+                    x_pos,
+                    h + 0.01,
+                    f"{h:.2f}",
+                    ha="center",
+                    va="bottom",
+                    fontsize=5,
                 )
             quantum_x.extend(x[: len(photon_values)])
             if include_classical:
@@ -172,11 +246,11 @@ def plot_accuracy_bars(
         for i in range(len(datasets))
     ]
     fig.legend(
-        handles=handles, loc="center left", bbox_to_anchor=(1.0, 0.5), title="Dataset"
+        handles=handles, loc="center left", bbox_to_anchor=(0.9, 0.5), title="Dataset"
     )
     fig.suptitle(
         "SVM accuracy using quantum vs classical Gaussian kernels", fontsize=14
     )
-    fig.tight_layout(rect=[0, 0, 0.92, 1])
+    fig.tight_layout(rect=[0, 0, 0.9, 1])
     fig.savefig(save_path, dpi=300)
     plt.close(fig)

@@ -1,0 +1,31 @@
+{
+  "description": "Synthetic 4Q 4C configuration",
+  "seed": 123,
+  "device": "cpu",
+  "outdir": "results",
+  "dataset": {
+    "name": "synthetic",
+    "n_components": 4,
+    "n_clusters": 4,
+    "n_points_per_cluster": 10,
+    "min_centroid_distance": 0.3,
+    "gaussian_variance": 0.05,
+    "sphere_radius": 1.0
+  },
+  "training": {
+    "n_repeats": 10,
+    "n_shots": 500,
+    "test_size": 0.5
+  },
+  "experiments": [
+    {
+      "classes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "description": "Paper Fig 8: Nq=4, Nc=4, Ns=500 (40 points total, 20 train / 20 test)"
+    }
+  ]
+}

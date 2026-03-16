@@ -1,6 +1,6 @@
 {
   "description": "Default config for quantum random kitchen sinks reproduction (Algorithm 3).",
-  "outdir": "outdir",
+  "outdir": "results",
   "seed": 1337,
   "data": {
     "n_samples": 200,
@@ -12,7 +12,6 @@
   },
   "model": {
     "num_photon": 10,
-    "output_mapping_strategy": "LINEAR",
     "no_bunching": false,
     "circuit": "general"
   },
@@ -20,11 +19,14 @@
     "batch_size": 30,
     "optimizer": "adam",
     "learning_rate": 0.01,
-    "betas": [0.99, 0.9999],
+    "betas": [
+      0.99,
+      0.9999
+    ],
     "weight_decay": 0.0002,
     "num_epochs": 200,
     "train_hybrid_model": true,
-    "pre_encoding_scaling": 0.3183098861837907,
+    "pre_encoding_scaling": 1,
     "z_q_matrix_scaling": 10,
     "hybrid_model_data": "Default"
   },
@@ -32,8 +34,17 @@
     "C": 5.0
   },
   "sweep": {
-    "r_values": [1, 10, 100],
-    "gamma_values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "r_values": [
+      1,
+      10
+    ],
+    "gamma_values": [
+      1,
+      3,
+      5,
+      7,
+      9
+    ],
     "repeats": 1
   }
 }

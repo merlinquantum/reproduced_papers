@@ -1,0 +1,23 @@
+{
+    "input_state": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0
+    ],
+    "superset_size": 1000,
+    "reg": 0.02,
+    "seed": 42,
+    "reps": 10,
+    "test_size": 0.33,
+    "data_sizes": [
+        40,
+        60,
+        80,
+        100
+    ],
+    "indistinguishability": 0.972,
+    "shots": null
+}

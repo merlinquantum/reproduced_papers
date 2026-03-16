@@ -1,0 +1,29 @@
+{
+  "description": "Synthetic 8Q 2C configuration",
+  "seed": 123,
+  "device": "cpu",
+  "outdir": "results",
+  "dataset": {
+    "name": "synthetic",
+    "n_components": 8,
+    "n_clusters": 2,
+    "n_points_per_cluster": 10,
+    "min_centroid_distance": 0.3,
+    "gaussian_variance": 0.05,
+    "sphere_radius": 1.0
+  },
+  "training": {
+    "n_repeats": 10,
+    "n_shots": 1000,
+    "test_size": 0.5
+  },
+  "experiments": [
+    {
+      "classes": [
+        0,
+        1
+      ],
+      "description": "Paper Fig 8: Nq=8, Nc=2, Ns=1000 (20 points total, 10 train / 10 test)"
+    }
+  ]
+}

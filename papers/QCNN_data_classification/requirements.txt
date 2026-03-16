@@ -1,13 +1,10 @@
+# Photonic / quantum stack
+merlinquantum
+
 # Core scientific stack
-numpy
 scipy
 scikit-learn
-torch
 torchvision
-
-# Photonic / quantum stack
-perceval-quandela
-merlinquantum
 
 # Utilities
 matplotlib

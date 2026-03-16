@@ -1,0 +1,5 @@
+2025-12-05 11:25:07 | INFO | lib.runner | Starting run in C:\Users\BenjaminStott\PycharmProjects\pythonProject3\reproduced_papers\nearest_centroids_merlin\results\run_20251205-112507
+2025-12-05 11:25:07 | INFO | lib.runner | Using seed=42
+2025-12-05 11:25:07 | INFO | lib.runner | Starting experiment with dataset: mnist
+2025-12-05 11:25:07 | INFO | lib.runner | Loaded 60000 samples with 784 features
+2025-12-05 11:25:07 | INFO | lib.runner | Experiment: 4 classes, 24754 available, using 160 (80 train / 80 test), 1000 shots, 8 components

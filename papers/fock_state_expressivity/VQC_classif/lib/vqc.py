@@ -8,13 +8,12 @@ All circuits are designed to work with MerLin quantum machine learning framework
 
 import random
 from math import comb
-from pathlib import Path
 
 import numpy as np
 import perceval as pcvl
 import torch
 import torch.nn as nn
-from merlin import OutputMappingStrategy, QuantumLayer
+from merlin import ComputationSpace, MeasurementStrategy, QuantumLayer
 
 
 def create_vqc_spiral(m, input_size, frequency=1):
@@ -34,10 +33,12 @@ def create_vqc_spiral(m, input_size, frequency=1):
     """
     wl = pcvl.GenericInterferometer(
         m,
-        lambda i: pcvl.BS(theta=pcvl.P(f"bs_1_{i}"))
-        // pcvl.PS(pcvl.P(f"phase_1_{i}"))
-        // pcvl.BS(theta=pcvl.P(f"bs_2_{i}"))
-        // pcvl.PS(pcvl.P(f"phase_2_{i}")),
+        lambda i: (
+            pcvl.BS(theta=pcvl.P(f"bs_1_{i}"))
+            // pcvl.PS(pcvl.P(f"phase_1_{i}"))
+            // pcvl.BS(theta=pcvl.P(f"bs_2_{i}"))
+            // pcvl.PS(pcvl.P(f"phase_2_{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 
@@ -53,10 +54,12 @@ def create_vqc_spiral(m, input_size, frequency=1):
         c.add(0, c_var, merge=True)
         wr = pcvl.GenericInterferometer(
             m,
-            lambda i: pcvl.BS()
-            // pcvl.PS(pcvl.P(f"phase_3_{i}"))
-            // pcvl.BS()
-            // pcvl.PS(pcvl.P(f"phase_4_{i}")),
+            lambda i: (
+                pcvl.BS()
+                // pcvl.PS(pcvl.P(f"phase_3_{i}"))
+                // pcvl.BS()
+                // pcvl.PS(pcvl.P(f"phase_4_{i}"))
+            ),
             shape=pcvl.InterferometerShape.RECTANGLE,
         )
 
@@ -126,8 +129,10 @@ def create_vqc_bs_mesh(m, input_size):
 
     bs_l = pcvl.GenericInterferometer(
         m,
-        lambda idx: pcvl.BS(theta=pcvl.P(f"theta_l{idx}"))
-        // (0, pcvl.PS(phi=np.pi * 2 * random.random())),
+        lambda idx: (
+            pcvl.BS(theta=pcvl.P(f"theta_l{idx}"))
+            // (0, pcvl.PS(phi=np.pi * 2 * random.random()))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
         depth=2 * m,
         phase_shifter_fun_gen=lambda idx: pcvl.PS(phi=np.pi * 2 * random.random()),
@@ -140,8 +145,10 @@ def create_vqc_bs_mesh(m, input_size):
 
     bs_r = pcvl.GenericInterferometer(
         m,
-        lambda idx: pcvl.BS(theta=pcvl.P(f"theta_r{idx}"))
-        // (0, pcvl.PS(phi=np.pi * 2 * random.random())),
+        lambda idx: (
+            pcvl.BS(theta=pcvl.P(f"theta_r{idx}"))
+            // (0, pcvl.PS(phi=np.pi * 2 * random.random()))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
         depth=2 * m,
         phase_shifter_fun_gen=lambda idx: pcvl.PS(phi=np.pi * 2 * random.random()),
@@ -172,10 +179,12 @@ def create_vqc_general(m, input_size):
 
     wl = pcvl.GenericInterferometer(
         m,
-        lambda i: pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_li{i}"))
-        // pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_lo{i}")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_li{i}"))
+            // pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_lo{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 
@@ -186,10 +195,12 @@ def create_vqc_general(m, input_size):
 
     wr = pcvl.GenericInterferometer(
         m,
-        lambda i: pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_ri{i}"))
-        // pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_ro{i}")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_ri{i}"))
+            // pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_ro{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 
@@ -208,9 +219,7 @@ def get_vqc(
     no_bunching=False,
     activation="none",
     circuit="bs_mesh",
-    visualize=False,
     scale_type="learned",
-    visualize_dir: str | None = "results",
 ):
     """
     Create a complete variational quantum classifier with specified configuration.
@@ -222,7 +231,6 @@ def get_vqc(
         no_bunching (bool): Whether to disable photon bunching
         activation (str): Activation function ("none", "sigmoid", "softmax")
         circuit (str): Circuit type ("bs_mesh", "general", "bs_basic", "spiral")
-        visualize (bool): Whether to save circuit visualization
         scale_type (str): Input scaling method
 
     Returns:
@@ -243,11 +251,6 @@ def get_vqc(
     else:
         raise ValueError(f"Unknown circuit {circuit}")
 
-    if visualize and visualize_dir:
-        viz_path = Path(visualize_dir) / f"circuit_{circuit}.png"
-        viz_path.parent.mkdir(parents=True, exist_ok=True)
-        pcvl.pdisplay_to_file(vqc_circuit, str(viz_path))
-
     input_layer = ScaleLayer(input_size, scale_type=scale_type)
 
     n_photons = torch.sum(torch.tensor(initial_state))
@@ -259,18 +262,21 @@ def get_vqc(
         output_size = comb(m + n_photons - 1, n_photons)
 
     print(f"Output size of quantum layer: {output_size}")
+    computation_space = (
+        ComputationSpace.UNBUNCHED if no_bunching else ComputationSpace.FOCK
+    )
 
     vqc = QuantumLayer(
         input_size=input_size,
-        output_size=output_size,
         circuit=vqc_circuit,
         trainable_parameters=[
             p.name for p in vqc_circuit.get_parameters() if not p.name.startswith("px")
         ],
         input_parameters=["px"],
         input_state=initial_state,  # [1, 0] * 3 for example
-        no_bunching=no_bunching,
-        output_mapping_strategy=OutputMappingStrategy.NONE,
+        measurement_strategy=MeasurementStrategy.probs(
+            computation_space=computation_space
+        ),
     )
 
     # The Linear layer acts as the observable and it makes sure the output is 1 dimensional

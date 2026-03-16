@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import torch
-
 from lib.models import StudentCNN, TeacherCNN
 from lib.utils import count_parameters
 

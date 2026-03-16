@@ -30,7 +30,7 @@ pip install -r requirements.txt
 
 ### Command-line interface
 
-Main entry point: the repo-level `implementation.py`. The CLI is entirely described in `configs/cli.json`, so updating/adding arguments does not require editing Python code.
+Main entry point: the repo-level `implementation.py`. The CLI is entirely described in `cli.json`, so updating/adding arguments does not require editing Python code.
 
 ```bash
 # From inside papers/reproduction_template
@@ -40,7 +40,7 @@ python ../../implementation.py --help
 python implementation.py --paper reproduction_template --help
 ```
 
-Example overrides (see `configs/cli.json` for the authoritative list):
+Example overrides (see `cli.json` for the authoritative list):
 
 - `--config PATH` Load an additional JSON config (merged over `defaults.json`).
 - `--seed INT` Random seed applied via the generic runtime.
@@ -94,7 +94,7 @@ Place configuration files in `configs/`.
 
 - `defaults.json` defines the default parameter values.
 - `cli.json` declares the CLI arguments, their types, and the config keys they mutate.
-- The shared runtime automatically loads `configs/defaults.json`, `configs/cli.json`, and calls `lib/runner.py::train_and_evaluate`, so keep that entry point in every project.
+- The shared runtime automatically loads `configs/defaults.json`, `cli.json`, and calls `lib/runner.py::train_and_evaluate`, so keep that entry point in every project.
 - Any config value named `dtype` is normalized into a `(label, torch.dtype)` pair at runtime via `runtime_lib.dtypes`, so you can inspect both the requested string and the resolved `torch.dtype` without duplicating conversion logic.
 - `example.json` shows the structure for a specific experiment.
 - Keys typically include: dataset, model, training, evaluation, logging.

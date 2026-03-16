@@ -1,6 +1,6 @@
 {
   "description": "Default QCNN data classification parameters",
-  "outdir": "outdir",
+  "outdir": "results",
   "dataset": "mnist",
   "pca_dim": 8,
   "model": "qconv",

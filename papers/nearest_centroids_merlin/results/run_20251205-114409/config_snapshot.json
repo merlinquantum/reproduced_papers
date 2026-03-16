@@ -1,0 +1,35 @@
+{
+  "seed": 42,
+  "dtype": null,
+  "device": "cpu",
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  },
+  "description": "Mnist 4Class configuration",
+  "outdir": "results",
+  "dataset": {
+    "name": "mnist",
+    "root": "data",
+    "n_components": 8
+  },
+  "training": {
+    "n_components": 8,
+    "n_shots": 1000,
+    "n_repeats": 10,
+    "test_size": 0.5,
+    "max_samples": null
+  },
+  "experiments": [
+    {
+      "classes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "max_samples": 160,
+      "description": "digits 0-3 (160 samples -> 80 train / 80 test)"
+    }
+  ]
+}

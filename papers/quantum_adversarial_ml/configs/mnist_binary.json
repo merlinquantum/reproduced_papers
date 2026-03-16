@@ -1,0 +1,54 @@
+{
+  "description": "Quantum Adversarial ML - mnist_binary",
+  "seed": 42,
+  "experiment": "mnist",
+  "device": "auto",
+  "dataset": {
+    "digits": [
+      1,
+      9
+    ],
+    "image_size": 16,
+    "normalize": true,
+    "root": "data",
+    "download": true,
+    "batch_size": 256
+  },
+  "model": {
+    "type": "amplitude_quantum",
+    "hidden_dims": [
+      128,
+      64
+    ],
+    "n_modes": 8,
+    "n_photons": 2,
+    "n_layers": 2,
+    "computation_space": "unbunched"
+  },
+  "training": {
+    "epochs": 200,
+    "batch_size": 256,
+    "learning_rate": 0.005,
+    "optimizer": "adam"
+  },
+  "attack": {
+    "method": "bim",
+    "epsilon": 0.1,
+    "num_iter": 10,
+    "alpha": 0.01,
+    "epsilon_range": [
+      0.01,
+      0.05,
+      0.1,
+      0.2
+    ]
+  },
+  "options": {
+    "save_model": true,
+    "run_attack": true,
+    "evaluate_robustness": true
+  },
+  "logging": {
+    "level": "info"
+  }
+}

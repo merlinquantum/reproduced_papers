@@ -1,0 +1,407 @@
+{
+  "description": "Photonic quantum-enhanced kernels runner",
+  "arguments": [
+    {
+      "flags": ["--experiment"],
+      "help": "Experiment to run (or 'all' for every experiment)",
+      "type": "str",
+      "choices": [
+        "accuracy_vs_input_state",
+        "accuracy_vs_kernel",
+        "accuracy_vs_width",
+        "accuracy_vs_geometric_difference",
+        "all"
+      ],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiment"}
+    },
+    {
+      "flags": ["--use-tex"],
+      "help": "Enable LaTeX rendering in plots",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "plotting.use_tex"}
+    },
+    {
+      "flags": ["--dry-run"],
+      "help": "Skip heavy computation and only write placeholder artifacts",
+      "action": "store_true",
+      "default": false,
+      "apply": {"kind": "config_path", "path": "dry_run", "value": true}
+    },
+    {
+      "flags": ["--reg"],
+      "help": "Regularization factor for the selected experiment",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "reg"
+      }
+    },
+    {
+      "flags": ["--test-size"],
+      "help": "Test split fraction for the selected experiment",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "test_size"
+      }
+    },
+    {
+      "flags": ["--shots"],
+      "help": "Photon sampling shots for the selected experiment (int or none)",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "shots"
+      }
+    },
+    {
+      "flags": ["--no-bunching"],
+      "help": "Disable bunching for the selected experiment",
+      "type": "bool",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "no_bunching"
+      }
+    },
+    {
+      "flags": ["--force-psd"],
+      "help": "Force PSD kernel matrices for the selected experiment",
+      "type": "bool",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "force_psd"
+      }
+    },
+    {
+      "flags": ["--indistinguishability"],
+      "help": "Indistinguishability for the selected experiment",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "indistinguishability"
+      }
+    },
+    {
+      "flags": ["--superset-size"],
+      "help": "Superset size for the selected experiment",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "superset_size"
+      }
+    },
+    {
+      "flags": ["--reps"],
+      "help": "Repetitions for the selected experiment",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "reps"
+      }
+    },
+    {
+      "flags": ["--data-sizes"],
+      "help": "Comma-separated data sizes for the selected experiment",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "data_sizes"
+      }
+    },
+    {
+      "flags": ["--input-state"],
+      "help": "Comma-separated input state for accuracy_vs_kernel",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "input_state"
+      }
+    },
+    {
+      "flags": ["--input-states"],
+      "help": "Semicolon-separated input states for accuracy_vs_input_state",
+      "type": "csv_int_matrix",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "input_states"
+      }
+    },
+    {
+      "flags": ["--widths"],
+      "help": "Comma-separated widths for accuracy_vs_width",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "widths"
+      }
+    },
+    {
+      "flags": ["--num-points"],
+      "help": "Number of samples for accuracy_vs_geometric_difference",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "num_points"
+      }
+    },
+    {
+      "flags": ["--n"],
+      "help": "Photon count for accuracy_vs_geometric_difference",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "n"
+      }
+    },
+    {
+      "flags": ["--data-size"],
+      "help": "Dataset size for accuracy_vs_geometric_difference",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "data_size"
+      }
+    },
+    {
+      "flags": ["--m-min"],
+      "help": "Minimum interferometer size for accuracy_vs_geometric_difference",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "m_min"
+      }
+    },
+    {
+      "flags": ["--m-max"],
+      "help": "Maximum interferometer size for accuracy_vs_geometric_difference",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "m_max"
+      }
+    },
+    {
+      "flags": ["--spline-smoothing"],
+      "help": "Spline smoothing for accuracy_vs_geometric_difference",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.apply_experiment_param",
+        "param": "spline_smoothing"
+      }
+    },
+    {
+      "flags": ["--kernel-reg"],
+      "help": "Regularization factor for accuracy_vs_kernel",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiments.accuracy_vs_kernel.reg"}
+    },
+    {
+      "flags": ["--kernel-test-size"],
+      "help": "Test split fraction for accuracy_vs_kernel",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiments.accuracy_vs_kernel.test_size"}
+    },
+    {
+      "flags": ["--kernel-indistinguishability"],
+      "help": "Indistinguishability for accuracy_vs_kernel",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiments.accuracy_vs_kernel.indistinguishability"
+      }
+    },
+    {
+      "flags": ["--kernel-no-bunching"],
+      "help": "Disable bunching for accuracy_vs_kernel",
+      "type": "bool",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiments.accuracy_vs_kernel.no_bunching"
+      }
+    },
+    {
+      "flags": ["--kernel-force-psd"],
+      "help": "Force PSD kernel matrices for accuracy_vs_kernel",
+      "type": "bool",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiments.accuracy_vs_kernel.force_psd"
+      }
+    },
+    {
+      "flags": ["--kernel-shots"],
+      "help": "Photon sampling shots for accuracy_vs_kernel (int or none)",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiments.accuracy_vs_kernel.shots"}
+    },
+    {
+      "flags": ["--kernel-seed"],
+      "help": "Random seed for accuracy_vs_kernel",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiments.accuracy_vs_kernel.seed"}
+    },
+    {
+      "flags": ["--input-state-superset-size"],
+      "help": "Superset size for accuracy_vs_input_state",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiments.accuracy_vs_input_state.superset_size"
+      }
+    },
+    {
+      "flags": ["--input-state-reg"],
+      "help": "Regularization factor for accuracy_vs_input_state",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiments.accuracy_vs_input_state.reg"
+      }
+    },
+    {
+      "flags": ["--input-state-test-size"],
+      "help": "Test split fraction for accuracy_vs_input_state",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiments.accuracy_vs_input_state.test_size"
+      }
+    },
+    {
+      "flags": ["--input-state-indistinguishability"],
+      "help": "Indistinguishability for accuracy_vs_input_state",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiments.accuracy_vs_input_state.indistinguishability"
+      }
+    },
+    {
+      "flags": ["--input-state-shots"],
+      "help": "Photon sampling shots for accuracy_vs_input_state (int or none)",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiments.accuracy_vs_input_state.shots"}
+    },
+    {
+      "flags": ["--input-state-force-psd"],
+      "help": "Force PSD kernel matrices for accuracy_vs_input_state",
+      "type": "bool",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiments.accuracy_vs_input_state.force_psd"
+      }
+    },
+    {
+      "flags": ["--input-state-no-bunching"],
+      "help": "Disable bunching for accuracy_vs_input_state",
+      "type": "bool",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiments.accuracy_vs_input_state.no_bunching"
+      }
+    },
+    {
+      "flags": ["--input-state-seed"],
+      "help": "Random seed for accuracy_vs_input_state",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiments.accuracy_vs_input_state.seed"}
+    },
+    {
+      "flags": ["--width-reg"],
+      "help": "Regularization factor for accuracy_vs_width",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiments.accuracy_vs_width.reg"}
+    },
+    {
+      "flags": ["--width-test-size"],
+      "help": "Test split fraction for accuracy_vs_width",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiments.accuracy_vs_width.test_size"}
+    },
+    {
+      "flags": ["--geom-reg"],
+      "help": "Regularization factor for accuracy_vs_geometric_difference",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiments.accuracy_vs_geometric_difference.reg"
+      }
+    },
+    {
+      "flags": ["--geom-test-size"],
+      "help": "Test split fraction for accuracy_vs_geometric_difference",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiments.accuracy_vs_geometric_difference.test_size"
+      }
+    },
+    {
+      "flags": ["--geom-seed"],
+      "help": "Random seed for accuracy_vs_geometric_difference",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiments.accuracy_vs_geometric_difference.seed"
+      }
+    }
+  ]
+}

@@ -9,7 +9,7 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from papers.shared.data_reuploading.paper_datasets import (  # type: ignore
+from papers.shared.data_reuploading.paper_datasets import (  # noqa: E402
     CirclesDataset,
     MoonsDataset,
     OverheadMNISTDataset,

@@ -1,0 +1,11 @@
+{
+  "description": "Example config for a quick qLLM run.",
+  "model": {
+    "name": "merlin-basic",
+    "quantum_modes": 8,
+    "hidden_dim": 100
+  },
+  "training": {
+    "epochs": 1
+  }
+}

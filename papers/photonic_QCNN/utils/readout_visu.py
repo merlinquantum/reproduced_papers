@@ -29,7 +29,6 @@ def _save_plot_multiple(fig, paths: Sequence[Path]) -> None:
     for path in paths:
         path.parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(path, dpi=300, bbox_inches="tight")
-        print(f"Figure saved to: {path}")
 
 
 def readout_visu_first(
@@ -223,8 +222,6 @@ def readout_visu_second(
     output_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(output_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-
-    print(f"Figure saved to: {output_path}")
 
     return output_path
 

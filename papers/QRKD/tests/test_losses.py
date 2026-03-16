@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import torch
-
 from lib.losses import DistillationLoss, fidelity_kernel_matrix
 
 

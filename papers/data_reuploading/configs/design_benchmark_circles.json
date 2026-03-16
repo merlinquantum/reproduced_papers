@@ -1,4 +1,5 @@
 {
+  "description": "Design benchmark on circles (metrics-only).",
   "seed": 42,
   "outdir": "results",
   "device": "cpu",

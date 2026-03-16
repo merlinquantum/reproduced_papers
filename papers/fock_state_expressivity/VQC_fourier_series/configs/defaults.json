@@ -1,5 +1,6 @@
 {
   "description": "Default config for VQC Fourier-series expressivity reproduction.",
+  "outdir": "results",
   "seed": 1337,
   "device": "cpu",
   "data": {
@@ -16,11 +17,10 @@
   "model": {
     "num_modes": 3,
     "input_size": 1,
-    "scale_type": "/pi",
+    "scale_type": "1",
     "trainable_parameters": ["theta"],
     "input_parameters": ["px"],
-    "no_bunching": false,
-    "output_mapping_strategy": "LINEAR"
+    "no_bunching": false
   },
   "training": {
     "epochs": 120,
@@ -28,14 +28,9 @@
     "learning_rate": 0.02,
     "betas": [0.9, 0.999],
     "num_runs": 3,
-    "initial_states": [[1, 0, 0], [1, 1, 0], [1, 1, 1]],
-    "progress_bar": true
+    "initial_states": [[1, 0, 0], [1, 1, 0], [1, 1, 1]]
   },
   "plotting": {
     "colors": ["#1f77b4", "#ff7f0e", "#d62728"]
-  },
-  "logging": {
-    "save_training_curves": true,
-    "save_learned_functions": true
   }
 }

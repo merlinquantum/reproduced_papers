@@ -1,0 +1,148 @@
+{
+  "description": "CLI schema for the qLLM reproduction.",
+  "arguments": [
+    {
+      "flags": ["--dataset"],
+      "help": "Dataset name for embeddings generation",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.name"}
+    },
+    {
+      "flags": ["--eval-size"],
+      "help": "Validation set size (used by embeddings pipeline)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.eval_size"}
+    },
+    {
+      "flags": ["--embeddings-dir"],
+      "help": "Directory containing precomputed embeddings",
+      "type": "path",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.embeddings_dir"}
+    },
+    {
+      "flags": ["--model-name"],
+      "help": "Sentence transformer model name for embeddings",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "embeddings.model_name"}
+    },
+    {
+      "flags": ["--embedding-dim"],
+      "help": "Input embedding dimension",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.embedding_dim"}
+    },
+    {
+      "flags": ["--hidden-dim"],
+      "help": "Hidden dimension for MLP/quantum layers",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.hidden_dim"}
+    },
+    {
+      "flags": ["--epochs"],
+      "help": "Epochs for classification head training",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.epochs"}
+    },
+    {
+      "flags": ["--learning-rate"],
+      "help": "Learning rate for head training",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.learning_rate"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Batch size for evaluation",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.batch_size"}
+    },
+    {
+      "flags": ["--kernel-batch-size"],
+      "help": "Batch size for kernel computation in merlin-kernel",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.kernel_batch_size"}
+    },
+    {
+      "flags": ["--model"],
+      "help": "Model head to train",
+      "type": "str",
+      "choices": [
+        "merlin-basic",
+        "merlin-parallel",
+        "merlin-expectation",
+        "merlin-kernel",
+        "torchquantum",
+        "mlps",
+        "svm",
+        "log-reg"
+      ],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.name"}
+    },
+    {
+      "flags": ["--quantum-modes"],
+      "help": "Number of quantum modes for MerLin models",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.quantum_modes"}
+    },
+    {
+      "flags": ["--no-bunching"],
+      "help": "Disable photon bunching in MerLin models",
+      "action": "store_true",
+      "default": false,
+      "apply": {"kind": "config_path", "path": "model.no_bunching", "value": true}
+    },
+    {
+      "flags": ["--photons"],
+      "help": "Maximum photons for MerLin kernel (0 means modes/2)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.photons"}
+    },
+    {
+      "flags": ["--encoder-configs"],
+      "help": "TorchQuantum encoder config list (JSON or Python literal)",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.encoder_configs"}
+    },
+    {
+      "flags": ["--pqc-config"],
+      "help": "TorchQuantum PQC config list (JSON or Python literal)",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.pqc_config"}
+    },
+    {
+      "flags": ["--e-dim"],
+      "help": "Parallel encoder dimension",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.e_dim"}
+    },
+    {
+      "flags": ["--verbose"],
+      "help": "Verbose output",
+      "action": "store_true",
+      "default": false,
+      "apply": {"kind": "config_path", "path": "runtime.verbose", "value": true}
+    },
+    {
+      "flags": ["--no-plot"],
+      "help": "Skip plotting results",
+      "action": "store_true",
+      "default": false,
+      "apply": {"kind": "config_path", "path": "runtime.no_plot", "value": true}
+    }
+  ]
+}

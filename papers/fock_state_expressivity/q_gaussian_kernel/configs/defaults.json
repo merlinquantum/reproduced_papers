@@ -3,7 +3,7 @@
   "experiment": {
     "task": "sampler"
   },
-  "outdir": "outdir",
+  "outdir": "results",
   "seed": 1337,
   "device": "cpu",
   "model": {
@@ -13,24 +13,37 @@
     "no_bunching": false
   },
   "training": {
-    "num_runs": 5,
-    "epochs": 200,
+    "num_runs": 1,
+    "epochs": 100,
     "batch_size": 32,
     "learning_rate": 0.02,
-    "betas": [0.7, 0.9],
+    "betas": [
+      0.7,
+      0.9
+    ],
     "weight_decay": 0.0,
     "optimizer": "adam",
     "shuffle_train": true
   },
   "sampler": {
-    "photons": [2, 4, 6, 8, 10],
+    "photons": [
+      2,
+      4,
+      6,
+      8,
+      10
+    ],
     "grid": {
       "step": 0.05,
       "span": 3.141592653589793,
       "center": 0.0,
-      "sigmas": [1.0, 0.5, 0.33, 0.25]
-    },
-    "export_dir": "models/gaussian_kernels"
+      "sigmas": [
+        1.0,
+        0.5,
+        0.33,
+        0.25
+      ]
+    }
   },
   "classification": {
     "manifest": "models/gaussian_kernels/manifest.json",
@@ -40,15 +53,16 @@
       "scaling_factor": 0.65,
       "cache_dir": "data/cache/classification",
       "datasets": {
-        "circular": {"noise": 0.05},
-        "moon": {"noise": 0.2},
-        "blob": {"cluster_std": 4.0}
+        "circular": {
+          "noise": 0.05
+        },
+        "moon": {
+          "noise": 0.2
+        },
+        "blob": {
+          "cluster_std": 4.0
+        }
       }
     }
-  },
-  "outputs": {
-    "save_learned_functions": true,
-    "save_dataset_plots": true,
-    "save_accuracy_bars": true
   }
 }
