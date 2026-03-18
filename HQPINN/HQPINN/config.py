@@ -91,6 +91,9 @@ DEE_CC_HIDDEN_WIDTH = 10
 #  TAF – 2D Transonic Aerofoil Flow (Sec. 3.3)
 # ==========================
 
+# TAF PennyLane setup: one qubit per primitive output (rho, u, v, T).
+TAF_N_QUBITS = 4
+
 #           TAF_Y_MAX   →  X_top
 #    -------------------------
 #    |                       |

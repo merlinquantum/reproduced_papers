@@ -27,12 +27,12 @@ warnings.filterwarnings(
 )
 
 
-def make_device_lightning() -> qml.Device:  # type: ignore
-    return qml.device("lightning.qubit", wires=N_QUBITS, shots=None, batch_obs=True)  # type: ignore
+def make_device_lightning(n_qubits: int = N_QUBITS) -> qml.Device:  # type: ignore
+    return qml.device("lightning.qubit", wires=n_qubits, shots=None, batch_obs=True)  # type: ignore
 
 
-def make_device_default() -> qml.Device:  # type: ignore
-    return qml.device("default.qubit", wires=N_QUBITS, shots=None)
+def make_device_default(n_qubits: int = N_QUBITS) -> qml.Device:  # type: ignore
+    return qml.device("default.qubit", wires=n_qubits, shots=None)
 
 
 # ============================================================
@@ -40,7 +40,7 @@ def make_device_default() -> qml.Device:  # type: ignore
 # ============================================================
 
 
-def ansatz_layer(theta: torch.Tensor) -> None:
+def ansatz_layer(theta: torch.Tensor, n_qubits: int = N_QUBITS) -> None:
     """
     Single ansatz layer with local RZ–RX–RZ rotations and ring CNOT entanglers.
 
@@ -52,17 +52,17 @@ def ansatz_layer(theta: torch.Tensor) -> None:
           theta[i, 1] : RX angle
           theta[i, 2] : RZ angle
     """
-    for i in range(N_QUBITS):
+    for i in range(n_qubits):
         qml.RZ(theta[i, 0], wires=i)  # type: ignore
         qml.RX(theta[i, 1], wires=i)  # type: ignore
         qml.RZ(theta[i, 2], wires=i)  # type: ignore
 
     # Entangling ring
-    for i in range(N_QUBITS):
-        qml.CNOT(wires=[i, (i + 1) % N_QUBITS])
+    for i in range(n_qubits):
+        qml.CNOT(wires=[i, (i + 1) % n_qubits])
 
 
-def feature_layer(phi: torch.Tensor) -> None:
+def feature_layer(phi: torch.Tensor, n_qubits: int = N_QUBITS) -> None:
     """
     Feature map: angle encoding via RY rotations.
 
@@ -71,7 +71,7 @@ def feature_layer(phi: torch.Tensor) -> None:
     phi : (n_qubits,) tensor-like
         For qubit i, apply RY(phi[i]).
     """
-    for i in range(N_QUBITS):
+    for i in range(n_qubits):
         qml.RY(phi[i], wires=i)  # type: ignore
 
 
@@ -81,9 +81,10 @@ def feature_layer(phi: torch.Tensor) -> None:
 
 
 def _make_quantum_block_with_measurement(
-    measure_fn: Callable[[], torch.Tensor] | Callable[[], list],
+    measure_fn: Callable[[int], torch.Tensor] | Callable[[int], list],
     n_layers: int = N_LAYERS,
     device: str = "default",
+    n_qubits: int = N_QUBITS,
 ) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
     """
     Build the core variational quantum block used across experiments.
@@ -93,10 +94,10 @@ def _make_quantum_block_with_measurement(
     """
 
     if device == "lightning":
-        dev = make_device_lightning()
+        dev = make_device_lightning(n_qubits=n_qubits)
         diff_method = "adjoint"  # first-order gradients only
     elif device == "default":
-        dev = make_device_default()
+        dev = make_device_default(n_qubits=n_qubits)
         diff_method = "backprop"  # supports higher-order derivatives
     else:
         raise ValueError(f"Unknown device '{device}'. Use 'default' or 'lightning'.")
@@ -105,34 +106,41 @@ def _make_quantum_block_with_measurement(
     def quantum_block(phi: torch.Tensor, thetas: torch.Tensor) -> torch.Tensor:
         # Apply ansatz + feature map layers
         for layer in range(n_layers):
-            ansatz_layer(thetas[layer])
+            ansatz_layer(thetas[layer], n_qubits=n_qubits)
             if layer < n_layers - 1:
-                feature_layer(phi)
+                feature_layer(phi, n_qubits=n_qubits)
 
         # Measurement is delegated to measure_fn (e.g. single Z or list of Z's)
-        return measure_fn()  # type: ignore
+        return measure_fn(n_qubits)  # type: ignore
 
     return quantum_block  # type: ignore
 
 
-def measure_single():
+def measure_single(n_qubits: int):
     return qml.expval(qml.PauliZ(0))  # type: ignore
 
 
-def measure_all():
-    return [qml.expval(qml.PauliZ(i)) for i in range(N_QUBITS)]  # type: ignore
+def measure_all(n_qubits: int):
+    return [qml.expval(qml.PauliZ(i)) for i in range(n_qubits)]  # type: ignore
 
 
-def make_quantum_block() -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
+def make_quantum_block(
+    n_qubits: int = N_QUBITS,
+) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
     """Create a single-output QNode returning <Z_0>."""
-    return _make_quantum_block_with_measurement(measure_single, device="default")  # type: ignore
+    return _make_quantum_block_with_measurement(
+        measure_single, device="default", n_qubits=n_qubits
+    )  # type: ignore
 
 
 def make_quantum_block_multiout(
     n_layers: int,
+    n_qubits: int = N_QUBITS,
 ) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
     """Create a multi-output QNode returning one expectation per qubit."""
-    return _make_quantum_block_with_measurement(measure_all, n_layers, device="lightning")  # type: ignore
+    return _make_quantum_block_with_measurement(
+        measure_all, n_layers, device="lightning", n_qubits=n_qubits
+    )  # type: ignore
 
 
 # ============================================================
@@ -155,6 +163,7 @@ class BranchPennylane(nn.Module):
         quantum_block,
         feature_map,
         n_layers: int,
+        n_qubits: int = N_QUBITS,
         output_as_column: bool = False,
         init_scale: float = 0.01,
     ) -> None:
@@ -163,15 +172,20 @@ class BranchPennylane(nn.Module):
         self.feature_map = feature_map
         self.output_as_column = output_as_column
         self.n_layers = n_layers
+        self.n_qubits = n_qubits
 
-        # Trainable ansatz parameters: (n_layers, N_QUBITS, 3)
+        # Trainable ansatz parameters: (n_layers, n_qubits, 3)
         self.theta = nn.Parameter(
-            torch.randn(n_layers, N_QUBITS, 3, dtype=DTYPE) * init_scale
+            torch.randn(n_layers, n_qubits, 3, dtype=DTYPE) * init_scale
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         # Map input to features phi(x)
         phi = self.feature_map(x)
+        if phi.dim() != 2 or phi.size(1) != self.n_qubits:
+            raise ValueError(
+                f"Feature map must return shape [N, {self.n_qubits}], got {tuple(phi.shape)}"
+            )
 
         outputs = []
         for i in range(phi.size(0)):
@@ -251,6 +265,31 @@ def dee_feature_map(xt: torch.Tensor) -> torch.Tensor:
             scale * x,
             scale * t,
             scale * (x - (DEE_X0 + DEE_U * t)),
+        ],
+        dim=1,
+    )
+    return phi
+
+
+def taf_feature_map(xy: torch.Tensor) -> torch.Tensor:
+    """
+    Feature map used for TAF experiments.
+
+    Returns 4 encoded features to match a 4-qubit PennyLane branch.
+    """
+    if xy.dim() != 2 or xy.size(1) != 2:
+        raise ValueError(f"Expected input of shape [N, 2] for (x,y), got {xy.shape}")
+
+    x = xy[:, 0]
+    y = xy[:, 1]
+
+    scale = np.pi
+    phi = torch.stack(
+        [
+            scale * x,
+            scale * y,
+            scale * (x - y),
+            scale * (x + y),
         ],
         dim=1,
     )
