@@ -1,5 +1,5 @@
-# taf_cc.py
-# Classical–Classical PINN for TAF (Sec. 3.3)
+# taf_pp.py
+# PennyLane–PennyLane PINN for TAF (Sec. 3.3)
 
 import csv
 import os
@@ -11,18 +11,21 @@ import torch.nn as nn
 from ..config import (
     DEVICE,
     DTYPE,
+    N_LAYERS,
     TAF_ADAM_STEPS,
-    TAF_CC_HIDDEN_WIDTH,
-    TAF_CC_NUM_HIDDEN_LAYERS,
     TAF_EPSILON_LAMBDA,
     TAF_LBFGS_STEPS,
     TAF_LR,
     TAF_N_OUTPUTS,
     TAF_PLOT_EVERY,
 )
-from ..layer_classical import BranchPyTorch
-from ..utils import make_optimizer
+from ..layer_pennylane import (
+    BranchPennylane,
+    make_quantum_block_multiout,
+    taf_feature_map,
+)
 from ..run_common import run_density_inference_mode
+from ..utils import make_optimizer
 from .core_taf import (
     load_training_sets,
     save_density_plot,
@@ -30,55 +33,61 @@ from .core_taf import (
 )
 
 
-class CC_PINN(nn.Module):
-    """Classical-classical TAF PINN with two parallel branches."""
+class PP_PINN(nn.Module):
+    """PennyLane-PennyLane TAF PINN with two independent quantum branches."""
 
-    def __init__(
-        self,
-        hidden_width: int = TAF_CC_HIDDEN_WIDTH,
-        num_hidden_layers: int = TAF_CC_NUM_HIDDEN_LAYERS,
-    ) -> None:
+    def __init__(self, n_layers: int = N_LAYERS) -> None:
         super().__init__()
 
-        # Two parallel classical branches: each (x,y) -> (rho,u,v,T)
-        self.branch1 = BranchPyTorch(
-            in_features=2,
-            out_features=TAF_N_OUTPUTS,
-            num_hidden_layers=num_hidden_layers,
-            hidden_width=hidden_width,
+        qblock_multi_1 = make_quantum_block_multiout(
+            n_layers=n_layers, n_qubits=TAF_N_OUTPUTS
         )
-        self.branch2 = BranchPyTorch(
-            in_features=2,
-            out_features=TAF_N_OUTPUTS,
-            num_hidden_layers=num_hidden_layers,
-            hidden_width=hidden_width,
+        qblock_multi_2 = make_quantum_block_multiout(
+            n_layers=n_layers, n_qubits=TAF_N_OUTPUTS
         )
+
+        self.branch1 = BranchPennylane(
+            qblock_multi_1,
+            feature_map=taf_feature_map,
+            output_as_column=False,
+            n_layers=n_layers,
+            n_qubits=TAF_N_OUTPUTS,
+        )
+        self.branch2 = BranchPennylane(
+            qblock_multi_2,
+            feature_map=taf_feature_map,
+            output_as_column=False,
+            n_layers=n_layers,
+            n_qubits=TAF_N_OUTPUTS,
+        )
+
+        # Two branches of TAF_N_OUTPUTS quantum outputs each.
         self.fusion = nn.Linear(2 * TAF_N_OUTPUTS, TAF_N_OUTPUTS, dtype=DTYPE)
+        self.size_label = f"{n_layers}"
 
     def forward(self, xy: torch.Tensor) -> torch.Tensor:
-        # Learned linear fusion of both branch outputs.
-        out1 = self.branch1(xy)
-        out2 = self.branch2(xy)
-        return self.fusion(torch.cat([out1, out2], dim=1))
+        out1 = self.branch1(xy)  # [N, TAF_N_OUTPUTS]
+        out2 = self.branch2(xy)  # [N, TAF_N_OUTPUTS]
+        return self.fusion(torch.cat([out1, out2], dim=1))  # [N, TAF_N_OUTPUTS]
 
 
 MODELS = [
-    ("40-4", 40, 4),
-    ("40-7", 40, 7),
-    ("80-4", 80, 4),
+    ("2", 2),
+    ("4", 4),
+    ("6", 6),
 ]
 
 
-def _get_model_config(model_size: str) -> tuple[str, int, int]:
-    for label, width, layers in MODELS:
+def _get_model_config(model_size: str) -> tuple[str, int]:
+    for label, size in MODELS:
         if label == model_size:
-            return label, width, layers
-    valid = ", ".join(label for label, *_ in MODELS)
+            return label, size
+    valid = ", ".join(label for label, _ in MODELS)
     raise ValueError(f"Unknown model_size='{model_size}'. Valid values: {valid}")
 
 
-def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
-    """Run TAF classical-classical models and write summary CSV."""
+def run(mode="train", backend="sim:ascella", model_size="2") -> None:
+    """Run TAF PennyLane-PennyLane models and write summary CSV."""
     torch.manual_seed(0)
 
     data = load_training_sets()
@@ -90,7 +99,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     if mode == "train":
         os.makedirs("HQPINN/TAF/results", exist_ok=True)
-        out_csv = f"HQPINN/TAF/results/cc_summary_{timestamp}.csv"
+        out_csv = f"HQPINN/TAF/results/pp_summary_{timestamp}.csv"
 
         with open(out_csv, "w", newline="") as f:
             writer = csv.writer(f)
@@ -105,13 +114,11 @@ def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
                 ]
             )
 
-            for label, width, layers in MODELS:
-                print(
-                    f"\nTraining TAF-CC model: {label} (width={width}, layers={layers})"
-                )
+            for label, size in MODELS:
+                print(f"\nTraining TAF-PP model: {label} size={size}")
 
-                case_prefix = f"taf_cc_{label}"
-                model = CC_PINN(hidden_width=width, num_hidden_layers=layers).to(DEVICE)
+                case_prefix = f"taf_pp_{label}"
+                model = PP_PINN(n_layers=size).to(DEVICE)
                 optimizer = make_optimizer(model, lr=TAF_LR)
 
                 final_loss, loss_bc, loss_f, n_params = train_taf(
@@ -120,7 +127,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
                     n_epochs=TAF_ADAM_STEPS,
                     plot_every=TAF_PLOT_EVERY,
                     out_dir=f"HQPINN/TAF/results/{case_prefix}",
-                    model_label=f"cc_{label}",
+                    model_label=f"pp_{label}",
                     data=data,
                     U_in=U_in,
                     lbfgs_steps=TAF_LBFGS_STEPS,
@@ -129,7 +136,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
 
                 writer.writerow(
                     [
-                        "cc",
+                        "pp",
                         label,
                         n_params,
                         f"{final_loss:.6e}",
@@ -147,37 +154,31 @@ def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
         print(f"Summary CSV saved to: {out_csv}")
 
     elif mode == "run":
-        label, width, layers = _get_model_config(model_size)
-        case_prefix = f"taf_cc_{label}"
+        label, size = _get_model_config(model_size)
+        case_prefix = f"taf_pp_{label}"
         run_density_inference_mode(
             mode="run",
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            n_photons=0,
+            n_photons=size,
             timestamp=timestamp,
-            model_factory=lambda processor=None: CC_PINN(
-                hidden_width=width, num_hidden_layers=layers
-            ),
+            model_factory=lambda processor=None: PP_PINN(n_layers=size),
             save_plot_fn=save_density_plot,
         )
 
     elif mode == "remote":
-        print(
-            "Remote mode is not available for TAF-CC. Falling back to local run mode."
-        )
-        label, width, layers = _get_model_config(model_size)
-        case_prefix = f"taf_cc_{label}"
+        print("Remote mode is not available for TAF-PP. Falling back to local run mode.")
+        label, size = _get_model_config(model_size)
+        case_prefix = f"taf_pp_{label}"
         run_density_inference_mode(
             mode="run",
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            n_photons=0,
+            n_photons=size,
             timestamp=timestamp,
-            model_factory=lambda processor=None: CC_PINN(
-                hidden_width=width, num_hidden_layers=layers
-            ),
+            model_factory=lambda processor=None: PP_PINN(n_layers=size),
             save_plot_fn=save_density_plot,
         )
 

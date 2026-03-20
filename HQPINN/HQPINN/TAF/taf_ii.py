@@ -15,6 +15,7 @@ from ..config import (
     TAF_EPSILON_LAMBDA,
     TAF_LBFGS_STEPS,
     TAF_LR,
+    TAF_N_OUTPUTS,
     TAF_PLOT_EVERY,
 )
 from ..layer_merlin import BranchMerlin, make_interf_qlayer
@@ -35,17 +36,17 @@ class II_PINN(nn.Module):
 
         self.branch1 = BranchMerlin(
             make_interf_qlayer(n_photons=n_photons),
-            n_outputs=4,
+            n_outputs=TAF_N_OUTPUTS,
             processor=processor,
             feature_map_kind="taf",
         )
         self.branch2 = BranchMerlin(
             make_interf_qlayer(n_photons=n_photons),
-            n_outputs=4,
+            n_outputs=TAF_N_OUTPUTS,
             processor=processor,
             feature_map_kind="taf",
         )
-        self.fusion = nn.Linear(8, 4, dtype=DTYPE)
+        self.fusion = nn.Linear(2 * TAF_N_OUTPUTS, TAF_N_OUTPUTS, dtype=DTYPE)
 
     def forward(self, xy: torch.Tensor) -> torch.Tensor:
         # Learned linear fusion of both branch outputs.
@@ -62,6 +63,7 @@ MODELS = [
     ("5", 5),
     ("6", 6),
 ]
+
 
 def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
     """Run TAF interferometer-interferometer models and write summary CSV."""

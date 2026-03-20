@@ -26,7 +26,7 @@ class BranchPyTorch(nn.Module):
     def __init__(
         self,
         in_features: int = 1,
-        out_features: int = 1,
+        out_features: int = 3,
         num_hidden_layers: int = DHO_NUM_HIDDEN_LAYERS,
         hidden_width: int = DHO_HIDDEN_WIDTH,
     ) -> None:
@@ -47,7 +47,7 @@ class BranchPyTorch(nn.Module):
                     nn.Tanh(),
                 ]
             )
-        layers.append(nn.Linear(hidden_width, 3, dtype=DTYPE))  # output layer
+        layers.append(nn.Linear(hidden_width, out_features, dtype=DTYPE))  # output layer
         self.net = nn.Sequential(*layers)
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:

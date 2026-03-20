@@ -6,7 +6,12 @@ import torch
 DTYPE = torch.float64
 DEVICE = torch.device("cpu")
 N_LAYERS = 3
-N_QUBITS = 3
+DEFAULT_N_OUTPUTS = 3
+# NOTE:
+# - For SEE/DEE/TAF in this paper setup, the quantum branch uses one measured
+#   qubit per physical output channel.
+# - DHO is the exception: it predicts a scalar output even though the circuit
+#   can still use multiple qubits.
 
 GAMMA = 1.4
 
@@ -91,8 +96,8 @@ DEE_CC_HIDDEN_WIDTH = 10
 #  TAF – 2D Transonic Aerofoil Flow (Sec. 3.3)
 # ==========================
 
-# TAF PennyLane setup: one qubit per primitive output (rho, u, v, T).
-TAF_N_QUBITS = 4
+# TAF has 4 primitive outputs: (rho, u, v, T).
+TAF_N_OUTPUTS = 4
 
 #           TAF_Y_MAX   →  X_top
 #    -------------------------

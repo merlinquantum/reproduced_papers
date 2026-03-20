@@ -16,7 +16,7 @@ import torch
 import torch.nn as nn
 import pennylane as qml
 
-from .config import N_QUBITS, N_LAYERS, DTYPE, DEE_X0, DEE_U
+from .config import DEFAULT_N_OUTPUTS, N_LAYERS, DTYPE, DEE_X0, DEE_U
 
 
 import warnings
@@ -27,11 +27,11 @@ warnings.filterwarnings(
 )
 
 
-def make_device_lightning(n_qubits: int = N_QUBITS) -> qml.Device:  # type: ignore
+def make_device_lightning(n_qubits: int = DEFAULT_N_OUTPUTS) -> qml.Device:  # type: ignore
     return qml.device("lightning.qubit", wires=n_qubits, shots=None, batch_obs=True)  # type: ignore
 
 
-def make_device_default(n_qubits: int = N_QUBITS) -> qml.Device:  # type: ignore
+def make_device_default(n_qubits: int = DEFAULT_N_OUTPUTS) -> qml.Device:  # type: ignore
     return qml.device("default.qubit", wires=n_qubits, shots=None)
 
 
@@ -40,7 +40,7 @@ def make_device_default(n_qubits: int = N_QUBITS) -> qml.Device:  # type: ignore
 # ============================================================
 
 
-def ansatz_layer(theta: torch.Tensor, n_qubits: int = N_QUBITS) -> None:
+def ansatz_layer(theta: torch.Tensor, n_qubits: int = DEFAULT_N_OUTPUTS) -> None:
     """
     Single ansatz layer with local RZ–RX–RZ rotations and ring CNOT entanglers.
 
@@ -62,7 +62,7 @@ def ansatz_layer(theta: torch.Tensor, n_qubits: int = N_QUBITS) -> None:
         qml.CNOT(wires=[i, (i + 1) % n_qubits])
 
 
-def feature_layer(phi: torch.Tensor, n_qubits: int = N_QUBITS) -> None:
+def feature_layer(phi: torch.Tensor, n_qubits: int = DEFAULT_N_OUTPUTS) -> None:
     """
     Feature map: angle encoding via RY rotations.
 
@@ -84,7 +84,7 @@ def _make_quantum_block_with_measurement(
     measure_fn: Callable[[int], torch.Tensor] | Callable[[int], list],
     n_layers: int = N_LAYERS,
     device: str = "default",
-    n_qubits: int = N_QUBITS,
+    n_qubits: int = DEFAULT_N_OUTPUTS,
 ) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
     """
     Build the core variational quantum block used across experiments.
@@ -125,7 +125,7 @@ def measure_all(n_qubits: int):
 
 
 def make_quantum_block(
-    n_qubits: int = N_QUBITS,
+    n_qubits: int = DEFAULT_N_OUTPUTS,
 ) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
     """Create a single-output QNode returning <Z_0>."""
     return _make_quantum_block_with_measurement(
@@ -135,7 +135,7 @@ def make_quantum_block(
 
 def make_quantum_block_multiout(
     n_layers: int,
-    n_qubits: int = N_QUBITS,
+    n_qubits: int = DEFAULT_N_OUTPUTS,
 ) -> Callable[[torch.Tensor, torch.Tensor], torch.Tensor]:
     """Create a multi-output QNode returning one expectation per qubit."""
     return _make_quantum_block_with_measurement(
@@ -163,7 +163,7 @@ class BranchPennylane(nn.Module):
         quantum_block,
         feature_map,
         n_layers: int,
-        n_qubits: int = N_QUBITS,
+        n_qubits: int = DEFAULT_N_OUTPUTS,
         output_as_column: bool = False,
         init_scale: float = 0.01,
     ) -> None:
@@ -271,25 +271,52 @@ def dee_feature_map(xt: torch.Tensor) -> torch.Tensor:
     return phi
 
 
-def taf_feature_map(xy: torch.Tensor) -> torch.Tensor:
-    """
-    Feature map used for TAF experiments.
+# def taf_feature_map(xy: torch.Tensor) -> torch.Tensor:
+#     """
+#     Feature map used for TAF experiments.
 
-    Returns 4 encoded features to match a 4-qubit PennyLane branch.
-    """
-    if xy.dim() != 2 or xy.size(1) != 2:
-        raise ValueError(f"Expected input of shape [N, 2] for (x,y), got {xy.shape}")
+#     Returns 4 encoded features to match a 4-qubit PennyLane branch.
+#     """
+#     if xy.dim() != 2 or xy.size(1) != 2:
+#         raise ValueError(f"Expected input of shape [N, 2] for (x,y), got {xy.shape}")
+
+#     x = xy[:, 0]
+#     y = xy[:, 1]
+
+#     scale = np.pi
+#     phi = torch.stack(
+#         [
+#             scale * x,
+#             scale * y,
+#             scale * (x - y),
+#             scale * (x + y),
+#         ],
+#         dim=1,
+#     )
+#     return phi
+
+
+def taf_feature_map(xy: torch.Tensor) -> torch.Tensor:
+    """TAF: encodage angulaire centré, normalisé, avec couplage modéré."""
+    if xy.ndim != 2 or xy.shape[1] != 2:
+        raise ValueError(
+            f"Expected input of shape [N, 2] for (x,y), got {tuple(xy.shape)}"
+        )
 
     x = xy[:, 0]
     y = xy[:, 1]
 
-    scale = np.pi
+    # Domaine recentré et ramené à une échelle ~[-1, 1].
+    xh = (x - 1.25) / 2.25
+    yh = y / 2.25
+
+    # x et y restent lisibles ; x±y ajoutent un couplage sans sur-osciller.
     phi = torch.stack(
         [
-            scale * x,
-            scale * y,
-            scale * (x - y),
-            scale * (x + y),
+            torch.pi * xh,
+            torch.pi * yh,
+            0.5 * torch.pi * (xh - yh),
+            0.5 * torch.pi * (xh + yh),
         ],
         dim=1,
     )

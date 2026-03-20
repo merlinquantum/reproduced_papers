@@ -17,6 +17,7 @@ from ..config import (
     TAF_EPSILON_LAMBDA,
     TAF_LBFGS_STEPS,
     TAF_LR,
+    TAF_N_OUTPUTS,
     TAF_PLOT_EVERY,
 )
 from ..layer_classical import BranchPyTorch
@@ -44,17 +45,17 @@ class CI_PINN(nn.Module):
 
         self.branch1 = BranchPyTorch(
             in_features=2,
-            out_features=4,
+            out_features=TAF_N_OUTPUTS,
             num_hidden_layers=num_hidden_layers,
             hidden_width=hidden_width,
         )
         self.branch2 = BranchMerlin(
             make_interf_qlayer(n_photons=n_photons),
-            n_outputs=4,
+            n_outputs=TAF_N_OUTPUTS,
             processor=processor,
             feature_map_kind="taf",
         )
-        self.fusion = nn.Linear(7, 4, dtype=DTYPE)
+        self.fusion = nn.Linear(2 * TAF_N_OUTPUTS, TAF_N_OUTPUTS, dtype=DTYPE)
 
     def forward(self, xy: torch.Tensor) -> torch.Tensor:
         # Learned linear fusion of both branch outputs.

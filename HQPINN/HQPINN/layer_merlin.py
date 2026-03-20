@@ -20,7 +20,7 @@ from perceval import PS, BS
 
 from math import comb
 
-from .config import N_QUBITS, N_LAYERS, DTYPE, DEE_X0, DEE_U
+from .config import DEFAULT_N_OUTPUTS, N_LAYERS, DTYPE, DEE_X0, DEE_U
 
 
 # ============================================================
@@ -37,7 +37,7 @@ def entangling_chain_all_modes() -> pcvl.Circuit:
     - n_modes = 2 * n_qubits (dual-rail encoding)
     - Apply BS.H between (m, m+1) for m = 0 .. n_modes - 2
     """
-    n_modes = 2 * N_QUBITS
+    n_modes = 2 * DEFAULT_N_OUTPUTS
     circ = pcvl.Circuit(n_modes)
     for m_idx in range(n_modes - 1):
         circ // (m_idx, BS.H())  # type: ignore
@@ -59,8 +59,8 @@ def ansatz_layer(prefix: str) -> pcvl.Circuit:
       theta_{prefix}_{i}_1 : "RX-like" rotation
       theta_{prefix}_{i}_2 : "RZ-like" rotation
     """
-    circ = pcvl.Circuit(2 * N_QUBITS)
-    for i in range(N_QUBITS):
+    circ = pcvl.Circuit(2 * DEFAULT_N_OUTPUTS)
+    for i in range(DEFAULT_N_OUTPUTS):
         m0 = 2 * i
         m1 = 2 * i + 1
 
@@ -84,8 +84,8 @@ def feature_layer(prefix: str) -> pcvl.Circuit:
     For each logical qubit i, we introduce:
       phi_{prefix}_{i}
     """
-    circ = pcvl.Circuit(2 * N_QUBITS)
-    for i in range(N_QUBITS):
+    circ = pcvl.Circuit(2 * DEFAULT_N_OUTPUTS)
+    for i in range(DEFAULT_N_OUTPUTS):
         phi = pcvl.P(f"phi_{prefix}_{i}")
         circ // (2 * i, BS.Ry(phi))  # type: ignore
     return circ
@@ -103,7 +103,7 @@ def build_merlin_circuit() -> pcvl.Circuit:
         ...
         ansatz("layer{2*(N_LAYERS-1)}")
     """
-    circ = pcvl.Circuit(2 * N_QUBITS)
+    circ = pcvl.Circuit(2 * DEFAULT_N_OUTPUTS)
 
     for l in range(N_LAYERS):
         # Ansatz layer with even prefix: layer0, layer2, ...
@@ -121,15 +121,15 @@ def build_merlin_circuit() -> pcvl.Circuit:
 # ============================================================
 
 # Dual-rail: 2 modes per logical qubit, 1 photon per qubit.
-n_modes = 2 * N_QUBITS
-input_state = [1, 0] * N_QUBITS
+n_modes = 2 * DEFAULT_N_OUTPUTS
+input_state = [1, 0] * DEFAULT_N_OUTPUTS
 n_photons = sum(input_state)
 
 # Fock space dimension for n_photons over n_modes modes.
 fock_dim = comb(n_modes + n_photons - 1, n_photons)
 
 # Number of logical output features used by the classical readout.
-group_dim = 2 * N_QUBITS
+group_dim = 2 * DEFAULT_N_OUTPUTS
 
 # Grouping from Fock basis to logical features.
 grouping = LexGrouping(fock_dim, group_dim)
@@ -233,7 +233,7 @@ class BranchMerlin(nn.Module):
     ) -> None:
         super().__init__()
         self.qlayer = qlayer
-        self.group_dim = 2 * N_QUBITS
+        self.group_dim = 2 * DEFAULT_N_OUTPUTS
         self.n_outputs = n_outputs
         self.processor: ML.MerlinProcessor | None = processor
         self.feature_map_kind = feature_map_kind.lower()

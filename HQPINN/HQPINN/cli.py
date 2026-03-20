@@ -42,7 +42,9 @@ def main() -> None:
     print("  dee-pp          -> DEE, PennyLane–PennyLane")
     print("  taf-cc          -> TAF, Classical–Classical")
     print("  taf-ci          -> TAF, Classical–Interferometer")
+    print("  taf-cp          -> TAF, Classical–PennyLane")
     print("  taf-ii          -> TAF, Interferometer–Interferometer")
+    print("  taf-pp          -> TAF, PennyLane–PennyLane")
 
     print()
     choice = input("Which experiment do you want to run? ").strip()
@@ -262,6 +264,19 @@ def main() -> None:
             )
             run(mode=mode, backend=backend, model_size=model_size)
 
+    elif choice == "taf-cp":
+        from .TAF.taf_cp import run
+
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            model_size = (
+                input("Model size? [40-4-2/40-7-2/80-4-2] ").strip() or "40-4-2"
+            )
+            run(mode=mode, backend=backend, model_size=model_size)
+
     elif choice == "taf-ii":
         from .TAF.taf_ii import run
 
@@ -273,10 +288,21 @@ def main() -> None:
             n_photons = int(input("Number of photons? [1/../6] ").strip() or "2")
             run(mode=mode, backend=backend, n_photons=n_photons)
 
+    elif choice == "taf-pp":
+        from .TAF.taf_pp import run
+
+        mode = _ask_mode()
+        backend = _ask_backend(mode)
+        if mode == "train":
+            run(mode=mode, backend=backend)
+        else:
+            model_size = input("Model size? [2/4/6] ").strip() or "2"
+            run(mode=mode, backend=backend, model_size=model_size)
+
     else:
         print(f"Unknown experiment: {choice}")
         print(
             "Please choose one of: dho-pp, dho-cc, dho-cp, dho-cperc, "
             "dho-ii, dho-percperc, dho-ci, see-cc, see-pp, see-ci, see-ii, see-cp, "
-            "dee-cc, dee-ci, dee-cp, dee-ii, dee-pp, taf-cc, taf-ci, taf-ii."
+            "dee-cc, dee-ci, dee-cp, dee-ii, dee-pp, taf-cc, taf-ci, taf-cp, taf-ii, taf-pp."
         )
