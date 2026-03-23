@@ -19,9 +19,7 @@ from ..config import (
     GAMMA,
     TAF_EPSILON_LAMBDA,
     TAF_LBFGS_STEPS,
-    # TAF_P_OUT,
     TAF_R_GAS,
-    TAF_T_IN,
     TAF_X_BOT_FILE,
     TAF_X_DATA_INT_FILE,
     TAF_X_F_FILE,
@@ -436,10 +434,10 @@ def train_taf(
     U_in: torch.Tensor,
     lbfgs_steps: int = TAF_LBFGS_STEPS,
     eps_lambda: float = TAF_EPSILON_LAMBDA,
-    n_f_batch: Optional[int] = 1024,
+    n_f_batch: Optional[int] = 256,
     n_in_batch: Optional[int] = None,
     n_out_batch: Optional[int] = None,
-    n_wall_batch: Optional[int] = 256,
+    n_wall_batch: Optional[int] = 128,
     n_per_batch: Optional[int] = None,
 ) -> Tuple[float, float, float, int]:
     """Train TAF model and return summary metrics."""
