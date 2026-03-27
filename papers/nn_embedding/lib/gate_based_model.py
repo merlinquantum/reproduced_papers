@@ -1,0 +1,322 @@
+import torch
+import torch.nn as nn
+import pennylane as qml
+import numpy as np
+from merlin import LexGrouping
+
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(REPO_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT))
+
+from papers.nn_embedding.utils.utils import (
+    create_random_pairs,
+    pick_random_data,
+    calculate_distance,
+    LinearLoss,
+)
+from papers.nn_embedding.utils.embedding import (
+    QuantumEmbedding1,
+    QuantumEmbedding2,
+    QCNN_four,
+)
+
+
+class NeuralEmbeddingGateBasedModel(nn.Module):
+    def __init__(
+        self,
+        num_qubits: int,
+        classical_model: nn.Module,
+        quantum_embedding_layer: callable,
+        quantum_classifier: callable,
+        quantum_classifier_params_shape: tuple[int, ...],
+        num_classes: int = 2,
+    ):
+        """
+        The quantum_embedding_layer must not have other
+        trainable parameters that the ones in the input parameter of the function
+        """
+        super().__init__()
+        self.num_qubits = num_qubits
+        self.classical_encoder = classical_model
+        self.quantum_embedding_layer = quantum_embedding_layer
+        self.quantum_classifier = quantum_classifier
+        self.quantum_classifier_params_shape = quantum_classifier_params_shape
+        self.output_grouper = LexGrouping(2**num_qubits, num_classes)
+        self.dev = qml.device("default.qubit", wires=num_qubits)
+
+        # Creating the torch pennylane layers
+        self.distance_circuit_layer = self._create_distance_layer()
+        self.complete_circuit_layer = self._create_complete_circuit_layer()
+        self.state_embedding_layer = self._create_state_embedding_layer()
+
+        # Creating the models
+        self.embedding_training_model = self._TrainingModule(self)
+        self.model = self._TrainedEmbeddingModel(self)
+
+    def _create_distance_layer(self) -> torch.Tensor:
+        @qml.qnode(self.dev, interface="torch")
+        def distance_qnode(inputs):
+            split = len(inputs) // 2
+            self.quantum_embedding_layer(inputs[:split])
+            self.quantum_embedding_layer(inputs[split:])
+            return qml.probs(wires=range(self.num_qubits))
+
+        return qml.qnn.TorchLayer(distance_qnode, weight_shapes={})
+
+    def _create_complete_circuit_layer(
+        self,
+    ) -> torch.nn.Module:
+        @qml.qnode(self.dev, interface="torch")
+        def complete_circuit(inputs, classifier_params):
+            self.quantum_embedding_layer(inputs)
+            self.quantum_classifier(classifier_params)
+            return qml.probs(wires=range(self.num_qubits))
+
+        return qml.qnn.TorchLayer(
+            complete_circuit,
+            weight_shapes={"classifier_params": self.quantum_classifier_params_shape},
+        )
+
+    def _create_state_embedding_layer(self) -> torch.Tensor:
+        @qml.qnode(self.dev, interface="torch")
+        def embedding_state(inputs):
+            self.quantum_embedding_layer(inputs)
+            return qml.density_matrix(wires=range(self.num_qubits))
+
+        return qml.qnn.TorchLayer(embedding_state, weight_shapes={})
+
+    class _TrainingModule(nn.Module):
+        def __init__(self, main_model):
+            super().__init__()
+            self.main_model = main_model
+
+        def forward(self, x: torch.Tensor) -> torch.Tensor:
+            seperation_index = x.size(dim=1) // 2
+            data_1 = x[:, :seperation_index]
+            data_2 = x[:, seperation_index:]
+            data_1 = self.main_model.classical_encoder(data_1)
+            data_2 = self.main_model.classical_encoder(data_2)
+
+            data_1 = data_1.reshape(data_1.size(dim=0), np.prod(data_1.shape[1:]))
+            data_2 = data_2.reshape(data_2.size(dim=0), np.prod(data_2.shape[1:]))
+
+            params_to_apply = torch.concatenate([data_1, data_2], dim=1)
+            probs = self.main_model.distance_circuit_layer(params_to_apply)
+            return probs[:, 0]
+
+    class _TrainedEmbeddingModel(nn.Module):
+        def __init__(self, main_model):
+            super().__init__()
+            self.main_model = main_model
+
+        def forward(self, x: torch.Tensor) -> torch.Tensor:
+            with torch.no_grad():
+                embedding_params = self.main_model.classical_encoder(x)
+                embedding_params = embedding_params.reshape(
+                    embedding_params.size(0), -1
+                )
+            return self.main_model.output_grouper(
+                self.main_model.complete_circuit_layer(embedding_params)
+            )
+
+    def train_embedding(
+        self,
+        x_train: torch.Tensor,
+        y_train: torch.Tensor,
+        x_test: torch.Tensor,
+        y_test: torch.Tensor,
+        distance: str = "Trace",
+        batch_size: int = 25,
+        num_epochs: int = 100,
+        lr: float = 0.01,
+        opt: torch.optim = torch.optim.Adam,
+        return_data: bool = False,
+    ) -> list[list[float]] | None:
+        optimizer = opt(self.embedding_training_model.parameters(), lr=lr)
+        criterion = torch.nn.MSELoss()
+
+        train_distance = []
+        test_distance = []
+        loss_list = []
+
+        if return_data:
+            # Seperating the test value classes
+            X1_test, X0_test = [], []
+            for i in range(len(x_test)):
+                if y_test[i] == 1:
+                    X1_test.append(x_test[i])
+                else:
+                    X0_test.append(x_test[i])
+            X1_test, X0_test = torch.tensor(X1_test), torch.tensor(X0_test)
+
+            # Seperating the train value classes
+            X1_train, X0_train = [], []
+            for i in range(len(x_test)):
+                if y_train[i] == 1:
+                    X1_train.append(x_train[i])
+                else:
+                    X0_train.append(x_train[i])
+            X1_test, X0_test = torch.tensor(X1_test), torch.tensor(X0_test)
+
+        for _ in range(num_epochs):
+
+            # Training loop
+            self.embedding_training_model.train()
+
+            X1_batch, X2_batch, Y_batch = create_random_pairs(
+                batch_size, x_train, y_train
+            )
+
+            x = torch.concatenate([X1_batch, X2_batch], dim=1)
+
+            optimizer.zero_grad()
+            outputs = self.embedding_training_model(x)
+            loss = criterion(outputs, Y_batch)
+            loss_list.append(loss.cpu().detach().numpy())
+            loss.backward()
+            optimizer.step()
+
+            self.embedding_training_model.eval()
+
+            # Distance evaluation
+            if return_data:
+                # Training distances
+                rhos0 = self.state_embedding_layer(X0_train)
+                rhos1 = self.state_embedding_layer(X1_train)
+                rho0 = torch.sum(rhos0, dim=0) / len(X0_train)
+                rho1 = torch.sum(rhos1, dim=0) / len(X1_train)
+                train_distance.append(calculate_distance(rho0, rho1, distance=distance))
+
+                # Test distances
+                rhos0 = self.state_embedding_layer(X0_test)
+                rhos1 = self.state_embedding_layer(X1_test)
+                rho0 = torch.sum(rhos0, dim=0) / len(X0_test)
+                rho1 = torch.sum(rhos1, dim=0) / len(X1_test)
+                test_distance.append(calculate_distance(rho0, rho1, distance=distance))
+
+        if return_data:
+            return loss_list, train_distance, test_distance
+
+    def train_classifier(
+        self,
+        x_train: torch.Tensor,
+        y_train: torch.Tensor,
+        x_test: torch.Tensor,
+        y_test: torch.Tensor,
+        batch_size: int = 25,
+        num_epochs: int = 100,
+        lr: float = 0.01,
+        opt: torch.optim = torch.optim.Adam,
+        return_data: bool = False,
+    ) -> list[list[float]] | None:
+        optimizer = opt(self.quantum_classifier.parameters(), lr=lr)
+        criterion = LinearLoss()
+
+        train_accs = []
+        test_accs = []
+        loss_list = []
+
+        for _ in range(num_epochs):
+
+            ### Training loop
+            self.model.train()
+
+            X_batch, Y_batch = pick_random_data(batch_size, x_train, y_train)
+
+            optimizer.zero_grad()
+            outputs = self.model(X_batch)
+            _, predicted = torch.max(outputs.data, 1)
+            loss = criterion(predicted, Y_batch)
+
+            loss.backward()
+            optimizer.step()
+
+            if return_data:
+                loss_list.append(loss.cpu().detach().numpy())
+                ### Evaluate the accuracy
+                self.model.eval()
+                # Check on the training set
+                outputs = self.model(x_train)
+                _, predicted = torch.max(outputs.data, 1)
+                correct += (predicted == y_train).sum().item()
+                acc = 100 * correct / x_train.size(dim=0)
+                train_accs.append(acc)
+
+                # Check on the training set
+                outputs = self.model(x_test)
+                _, predicted = torch.max(outputs.data, 1)
+                correct += (predicted == y_test).sum().item()
+                acc = 100 * correct / x_test.size(dim=0)
+                test_accs.append(acc)
+
+        if return_data:
+            return loss_list, train_accs, test_accs
+
+
+def create_paper_models() -> tuple[
+    NeuralEmbeddingGateBasedModel,
+    NeuralEmbeddingGateBasedModel,
+    NeuralEmbeddingGateBasedModel,
+]:
+    """
+    Hybrid Model 1 transforms 8 dimensional features to 8 dimensional features using Fully connected classical NN.
+
+    Hybrid Model 2 transforms 8 dimensional features to 16 dimensional features.
+
+    Hybrid Model 3 transforms 28 * 28 dimensional features to 16 dimensional features using CNN.
+    16 dimensional features are used as a rotation angle of the ZZ feature embedding.
+    """
+    ###Model 1
+    classical_model = nn.Sequential(
+        nn.Linear(8, 10),
+        nn.ReLU(),
+        nn.Linear(10, 10),
+        nn.ReLU(),
+        nn.Linear(10, 8),
+    )
+
+    model_1 = NeuralEmbeddingGateBasedModel(
+        num_qubits=4,
+        classical_model=classical_model,
+        quantum_embedding_layer=QuantumEmbedding1,
+        quantum_classifier=QCNN_four,
+        quantum_classifier_params_shape=(30),
+    )
+
+    ###Model 2
+    classical_model = nn.Sequential(
+        nn.Linear(8, 20), nn.ReLU(), nn.Linear(20, 20), nn.ReLU(), nn.Linear(20, 16)
+    )
+
+    model_2 = NeuralEmbeddingGateBasedModel(
+        num_qubits=4,
+        classical_model=classical_model,
+        quantum_embedding_layer=QuantumEmbedding2,
+        quantum_classifier=QCNN_four,
+        quantum_classifier_params_shape=(30),
+    )
+
+    ###Model 3
+    classical_model = torch.nn.Sequential(
+        torch.nn.Conv2d(1, 1, kernel_size=3, stride=1, padding=1),
+        torch.nn.ReLU(),
+        torch.nn.MaxPool2d(kernel_size=2, stride=2),
+        torch.nn.Conv2d(1, 1, kernel_size=3, stride=1, padding=1),
+        torch.nn.ReLU(),
+        torch.nn.MaxPool2d(kernel_size=2, stride=2),
+        torch.nn.Linear(7 * 7, 16, bias=True),
+    )
+
+    model_3 = NeuralEmbeddingGateBasedModel(
+        num_qubits=4,
+        classical_model=classical_model,
+        quantum_embedding_layer=QuantumEmbedding2,
+        quantum_classifier=QCNN_four,
+        quantum_classifier_params_shape=(30),
+    )
+
+    return model_1, model_2, model_3
