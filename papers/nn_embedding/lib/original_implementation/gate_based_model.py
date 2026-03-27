@@ -97,10 +97,38 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
 
     def train_embedding(
         self,
+        x_train: torch.Tensor,
+        y_train: torch.Tensor,
+        x_test: torch.Tensor,
+        y_test: torch.Tensor,
         loss: str = "Loss",
         num_epochs: int = 100,
         lr: float = 0.01,
         opt: torch.optim = torch.optim.Adam,
-        return_training_data: bool = True,
-    ) -> nn.Module:
-        optimizer = opt(self.classical_encoder.parameters(), lr=lr)
+    ) -> list[list[float]]:
+        optimizer = opt(self.embedding_training_model.parameters(), lr=lr)
+
+        train_distance = []
+        test_distance = []
+        loss_list = []
+
+        for epoch in range(num_epochs):
+            self.embedding_training_model.train()
+            train_loss = 0
+            for i, (images, labels) in enumerate(train_loader):
+                optimizer.zero_grad()
+                outputs = self.embedding_training_model(x)
+                total += labels.size(0)
+                loss = criterion(outputs, labels)
+
+                loss_list.append(loss.cpu().detach().numpy())
+                train_distance.append(outputs)
+
+                loss.backward()
+
+                self.embedding_training_model.eval()
+                for i, (images, labels) in enumerate(test_loader):
+                    outputs = self.embedding_training_model(x)
+                    train_distance.append(outputs)
+
+                optimizer.step()
