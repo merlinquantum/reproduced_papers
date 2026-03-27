@@ -16,14 +16,14 @@ def create_random_pairs(batch_size, X, Y):
     return (
         torch.stack(X1_new),
         torch.stack(X2_new),
-        torch.as_tensor(Y_new),
+        torch.as_tensor(Y_new, dtype=torch.float32),
     )
 
 
 def pick_random_data(batch_size, X, Y):
     batch_index = np.random.randint(0, len(X), (batch_size,))
     X_batch = torch.stack([X[i] for i in batch_index])
-    Y_batch = torch.as_tensor([Y[i] for i in batch_index])
+    Y_batch = torch.as_tensor([Y[i] for i in batch_index], dtype=torch.long)
     return X_batch, Y_batch
 
 

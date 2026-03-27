@@ -57,13 +57,12 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
         self.embedding_training_model = self._TrainingModule(self)
         self.model = self._TrainedEmbeddingModel(self)
 
-    def _create_distance_layer(self) -> torch.Tensor:
+    def _create_distance_layer(self) -> torch.nn.Module:
         @qml.qnode(self.dev, interface="torch")
         def distance_qnode(inputs):
-            split = inputs.shape[0] // 2
-            self.quantum_embedding_layer(inputs[..., :split])
-            qml.adjoint(self.quantum_embedding_layer)(inputs[..., split:])
-
+            split = len(inputs) // 2
+            self.quantum_embedding_layer(inputs[0:split])
+            qml.adjoint(self.quantum_embedding_layer)(inputs[split:])
             return qml.probs(wires=range(self.num_qubits))
 
         return qml.qnn.TorchLayer(distance_qnode, weight_shapes={})
@@ -96,17 +95,20 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             object.__setattr__(self, "main_model", main_model)
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
-            seperation_index = x.size(dim=1) // 2
-            data_1 = x[:, :seperation_index]
-            data_2 = x[:, seperation_index:]
+            separation_index = x.size(1) // 2
+            data_1 = x[:, :separation_index]
+            data_2 = x[:, separation_index:]
+
             data_1 = self.main_model.classical_encoder(data_1)
             data_2 = self.main_model.classical_encoder(data_2)
 
-            data_1 = data_1.reshape(data_1.size(dim=0), np.prod(data_1.shape[1:]))
-            data_2 = data_2.reshape(data_2.size(dim=0), np.prod(data_2.shape[1:]))
+            data_1 = data_1.reshape(data_1.size(0), -1)
+            data_2 = data_2.reshape(data_2.size(0), -1)
 
-            params_to_apply = torch.concatenate([data_1, data_2], dim=1)
-            probs = self.main_model.distance_circuit_layer(params_to_apply)
+            x = torch.cat([data_1, data_2], dim=1)
+            probs = torch.vstack(
+                tuple(self.main_model.distance_circuit_layer(sample) for sample in x)
+            )
             return probs[:, 0]
 
     class _TrainedEmbeddingModel(nn.Module):
@@ -120,9 +122,15 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
                 embedding_params = embedding_params.reshape(
                     embedding_params.size(0), -1
                 )
-            return self.main_model.output_grouper(
-                self.main_model.complete_circuit_layer(embedding_params)
+
+            probs = torch.stack(
+                tuple(
+                    self.main_model.complete_circuit_layer(sample)
+                    for sample in embedding_params
+                ),
+                dim=0,
             )
+            return self.main_model.output_grouper(probs)
 
     def train_embedding(
         self,
