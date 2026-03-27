@@ -81,13 +81,14 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             weight_shapes={"classifier_params": self.quantum_classifier_params_shape},
         )
 
-    def _create_state_embedding_layer(self) -> torch.Tensor:
+    ### No TorchLayer as it does not support complex data
+    def _create_state_embedding_layer(self):
         @qml.qnode(self.dev, interface="torch")
         def embedding_state(inputs):
             self.quantum_embedding_layer(inputs)
             return qml.density_matrix(wires=range(self.num_qubits))
 
-        return qml.qnn.TorchLayer(embedding_state, weight_shapes={})
+        return embedding_state
 
     class _TrainingModule(nn.Module):
         def __init__(self, main_model):
@@ -194,15 +195,27 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             # Distance evaluation
             if return_data:
                 # Training distances
-                rhos0 = self.state_embedding_layer(X0_train)
-                rhos1 = self.state_embedding_layer(X1_train)
+                rhos0 = torch.stack(
+                    tuple(self.state_embedding_layer(sample) for sample in X0_train),
+                    dim=0,
+                )
+                rhos1 = torch.stack(
+                    tuple(self.state_embedding_layer(sample) for sample in X1_train),
+                    dim=0,
+                )
                 rho0 = torch.sum(rhos0, dim=0) / len(X0_train)
                 rho1 = torch.sum(rhos1, dim=0) / len(X1_train)
                 train_distance.append(calculate_distance(rho0, rho1, distance=distance))
 
                 # Test distances
-                rhos0 = self.state_embedding_layer(X0_test)
-                rhos1 = self.state_embedding_layer(X1_test)
+                rhos0 = torch.stack(
+                    tuple(self.state_embedding_layer(sample) for sample in X0_test),
+                    dim=0,
+                )
+                rhos1 = torch.stack(
+                    tuple(self.state_embedding_layer(sample) for sample in X1_test),
+                    dim=0,
+                )
                 rho0 = torch.sum(rhos0, dim=0) / len(X0_test)
                 rho1 = torch.sum(rhos1, dim=0) / len(X1_test)
                 test_distance.append(calculate_distance(rho0, rho1, distance=distance))

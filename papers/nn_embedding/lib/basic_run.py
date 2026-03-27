@@ -21,8 +21,8 @@ from papers.nn_embedding.utils.plotting import (
 def basic_train_and_evaluate(
     dataset="mnist",
     batch_size: int = 25,
-    num_epochs_training_embedding: int = 100,
-    num_epochs_training_classifier: int = 100,
+    num_epochs_training_embedding: int = 50,
+    num_epochs_training_classifier: int = 50,
     lr: float = 0.01,
 ):
     print(f"Creating models")
@@ -31,7 +31,7 @@ def basic_train_and_evaluate(
 
     print("Model 1")
     x_train, x_test, y_train, y_test = data_load_and_process(
-        dataset=dataset, feature_reduction="PCA8", classes=[0, 1]
+        dataset=dataset, feature_reduction="PCA8", classes=[0, 1], samples_per_class=150
     )
     print("Data loaded")
 

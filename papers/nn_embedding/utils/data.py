@@ -49,7 +49,38 @@ def _normalize_pca_features(features: np.ndarray) -> np.ndarray:
     return np.asarray(normalized, dtype=np.float32)
 
 
-def data_load_and_process(dataset, feature_reduction="resize256", classes=[0, 1]):
+def _limit_samples_per_class(
+    x: np.ndarray,
+    y: np.ndarray,
+    samples_per_class: int | None,
+    random_state: int = 42,
+) -> tuple[np.ndarray, np.ndarray]:
+    if samples_per_class is None:
+        return x, y
+
+    rng = np.random.default_rng(random_state)
+    selected_indices = []
+
+    for class_label in np.unique(y):
+        class_indices = np.flatnonzero(y == class_label)
+        if len(class_indices) < samples_per_class:
+            raise ValueError(
+                f"Requested {samples_per_class} samples for class {class_label}, "
+                f"but only {len(class_indices)} are available."
+            )
+        chosen = rng.choice(class_indices, size=samples_per_class, replace=False)
+        selected_indices.append(chosen)
+
+    selected_indices = np.sort(np.concatenate(selected_indices))
+    return x[selected_indices], y[selected_indices]
+
+
+def data_load_and_process(
+    dataset,
+    feature_reduction="resize256",
+    classes=[0, 1],
+    samples_per_class: int | None = None,
+):
     """
     This part of the code was originally written to use Brain signal dataset.
     This implementation is currently out of interest; hence commented out.
@@ -91,6 +122,10 @@ def data_load_and_process(dataset, feature_reduction="resize256", classes=[0, 1]
 
     x_train, y_train = x_train[train_filter_tf], y_train[train_filter_tf]
     x_test, y_test = x_test[test_filter_tf], y_test[test_filter_tf]
+    x_train, y_train = _limit_samples_per_class(x_train, y_train, samples_per_class)
+    x_test, y_test = _limit_samples_per_class(
+        x_test, y_test, samples_per_class, random_state=43
+    )
 
     if feature_reduction == False:
         return (
