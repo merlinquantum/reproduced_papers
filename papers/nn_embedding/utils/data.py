@@ -4,11 +4,49 @@ File from the original repo
 
 from os import listdir
 import numpy as np
-import pandas as pd
-from sklearn.decomposition import PCA
-from sklearn.model_selection import train_test_split
-import tensorflow as tf
 import torch
+from sklearn.decomposition import PCA
+from sklearn.datasets import fetch_openml
+from sklearn.model_selection import train_test_split
+
+
+def _load_openml_dataset(dataset: str):
+    if dataset == "mnist":
+        openml_name = "mnist_784"
+    elif dataset == "fashion":
+        openml_name = "Fashion-MNIST"
+    else:
+        raise ValueError(f"Unsupported dataset: {dataset}")
+
+    data, targets = fetch_openml(
+        openml_name,
+        version=1,
+        return_X_y=True,
+        as_frame=False,
+    )
+
+    data = data.astype(np.float32).reshape(-1, 28, 28)
+    targets = targets.astype(np.int64)
+
+    return train_test_split(
+        data,
+        targets,
+        test_size=10000,
+        random_state=42,
+        stratify=targets,
+    )
+
+
+def _normalize_pca_features(features: np.ndarray) -> np.ndarray:
+    normalized = []
+    for x in features:
+        x_min = x.min()
+        x_max = x.max()
+        if x_max == x_min:
+            normalized.append(np.zeros_like(x))
+        else:
+            normalized.append((x - x_min) * (np.pi / (x_max - x_min)))
+    return np.asarray(normalized, dtype=np.float32)
 
 
 def data_load_and_process(dataset, feature_reduction="resize256", classes=[0, 1]):
@@ -32,12 +70,11 @@ def data_load_and_process(dataset, feature_reduction="resize256", classes=[0, 1]
         y_test = [1 if y ==1 else -1 for y in y_test]
     """
 
-    if dataset == "mnist":
-        (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data()
-    elif dataset == "fashion":
-        (x_train, y_train), (x_test, y_test) = (
-            tf.keras.datasets.fashion_mnist.load_data()
-        )
+    if dataset in {"mnist", "fashion"}:
+        x_train, x_test, y_train, y_test = _load_openml_dataset(dataset)
+    else:
+        raise ValueError(f"Unsupported dataset: {dataset}")
+
     x_train, x_test = x_train[..., np.newaxis] / 255.0, x_test[..., np.newaxis] / 255.0
 
     if len(classes) == 2:
@@ -56,25 +93,32 @@ def data_load_and_process(dataset, feature_reduction="resize256", classes=[0, 1]
     x_test, y_test = x_test[test_filter_tf], y_test[test_filter_tf]
 
     if feature_reduction == False:
-        return x_train, x_test, y_train, y_test
+        return (
+            torch.as_tensor(x_train, dtype=torch.float32),
+            torch.as_tensor(x_test, dtype=torch.float32),
+            torch.as_tensor(y_train),
+            torch.as_tensor(y_test),
+        )
 
     if feature_reduction in ["PCA16", "PCA8", "PCA4"]:
-        x_train = tf.image.resize(x_train[:], (256, 1)).numpy()
-        x_test = tf.image.resize(x_test[:], (256, 1)).numpy()
-        x_train, x_test = tf.squeeze(x_train).numpy(), tf.squeeze(x_test).numpy()
         if feature_reduction == "PCA16":
             dim_reduct = 16
         if feature_reduction == "PCA8":
             dim_reduct = 8
         if feature_reduction == "PCA4":
             dim_reduct = 4
-        X_train = PCA(dim_reduct).fit_transform(x_train)
-        X_test = PCA(dim_reduct).fit_transform(x_test)
-        x_train, x_test = [], []
-        for x in X_train:
-            x = (x - x.min()) * (np.pi / (x.max() - x.min()))
-            x_train.append(x)
-        for x in X_test:
-            x = (x - x.min()) * (np.pi / (x.max() - x.min()))
-            x_test.append(x)
-        return x_train, x_test, y_train, y_test
+        x_train_flat = x_train.reshape(len(x_train), -1)
+        x_test_flat = x_test.reshape(len(x_test), -1)
+
+        pca = PCA(dim_reduct)
+        X_train = pca.fit_transform(x_train_flat)
+        X_test = pca.transform(x_test_flat)
+
+        x_train = _normalize_pca_features(X_train)
+        x_test = _normalize_pca_features(X_test)
+        return (
+            torch.as_tensor(x_train, dtype=torch.float32),
+            torch.as_tensor(x_test, dtype=torch.float32),
+            torch.as_tensor(y_train),
+            torch.as_tensor(y_test),
+        )

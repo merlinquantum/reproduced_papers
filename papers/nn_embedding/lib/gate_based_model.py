@@ -21,7 +21,7 @@ from papers.nn_embedding.utils.utils import (
 from papers.nn_embedding.utils.embedding import (
     QuantumEmbedding1,
     QuantumEmbedding2,
-    QCNN_four,
+    QCNN,
 )
 
 
@@ -60,9 +60,10 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
     def _create_distance_layer(self) -> torch.Tensor:
         @qml.qnode(self.dev, interface="torch")
         def distance_qnode(inputs):
-            split = len(inputs) // 2
-            self.quantum_embedding_layer(inputs[:split])
-            self.quantum_embedding_layer(inputs[split:])
+            split = inputs.shape[0] // 2
+            self.quantum_embedding_layer(inputs[..., :split])
+            qml.adjoint(self.quantum_embedding_layer)(inputs[..., split:])
+
             return qml.probs(wires=range(self.num_qubits))
 
         return qml.qnn.TorchLayer(distance_qnode, weight_shapes={})
@@ -92,7 +93,7 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
     class _TrainingModule(nn.Module):
         def __init__(self, main_model):
             super().__init__()
-            self.main_model = main_model
+            object.__setattr__(self, "main_model", main_model)
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
             seperation_index = x.size(dim=1) // 2
@@ -111,7 +112,7 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
     class _TrainedEmbeddingModel(nn.Module):
         def __init__(self, main_model):
             super().__init__()
-            self.main_model = main_model
+            object.__setattr__(self, "main_model", main_model)
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
             with torch.no_grad():
@@ -136,7 +137,7 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
         opt: torch.optim = torch.optim.Adam,
         return_data: bool = False,
     ) -> list[list[float]] | None:
-        optimizer = opt(self.embedding_training_model.parameters(), lr=lr)
+        optimizer = opt(self.classical_encoder.parameters(), lr=lr)
         criterion = torch.nn.MSELoss()
 
         train_distance = []
@@ -145,24 +146,22 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
 
         if return_data:
             # Seperating the test value classes
-            X1_test, X0_test = [], []
-            for i in range(len(x_test)):
-                if y_test[i] == 1:
-                    X1_test.append(x_test[i])
-                else:
-                    X0_test.append(x_test[i])
-            X1_test, X0_test = torch.tensor(X1_test), torch.tensor(X0_test)
+            X1_test = torch.stack(
+                [x_test[i] for i in range(len(x_test)) if y_test[i] == 1]
+            )
+            X0_test = torch.stack(
+                [x_test[i] for i in range(len(x_test)) if y_test[i] != 1]
+            )
 
             # Seperating the train value classes
-            X1_train, X0_train = [], []
-            for i in range(len(x_test)):
-                if y_train[i] == 1:
-                    X1_train.append(x_train[i])
-                else:
-                    X0_train.append(x_train[i])
-            X1_test, X0_test = torch.tensor(X1_test), torch.tensor(X0_test)
+            X1_train = torch.stack(
+                [x_train[i] for i in range(len(x_train)) if y_train[i] == 1]
+            )
+            X0_train = torch.stack(
+                [x_train[i] for i in range(len(x_train)) if y_train[i] != 1]
+            )
 
-        for _ in range(num_epochs):
+        for epoch in range(num_epochs):
 
             # Training loop
             self.embedding_training_model.train()
@@ -181,6 +180,8 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             optimizer.step()
 
             self.embedding_training_model.eval()
+
+            print(f"Epoch {epoch+1} had a loss of {loss_list[-1]}")
 
             # Distance evaluation
             if return_data:
@@ -213,14 +214,14 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
         opt: torch.optim = torch.optim.Adam,
         return_data: bool = False,
     ) -> list[list[float]] | None:
-        optimizer = opt(self.quantum_classifier.parameters(), lr=lr)
+        optimizer = opt(self.complete_circuit_layer.parameters(), lr=lr)
         criterion = LinearLoss()
 
         train_accs = []
         test_accs = []
         loss_list = []
 
-        for _ in range(num_epochs):
+        for epoch in range(num_epochs):
 
             ### Training loop
             self.model.train()
@@ -229,26 +230,30 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
 
             optimizer.zero_grad()
             outputs = self.model(X_batch)
-            _, predicted = torch.max(outputs.data, 1)
-            loss = criterion(predicted, Y_batch)
+            loss = criterion(Y_batch, outputs[:, 1])
 
             loss.backward()
             optimizer.step()
 
+            loss_list.append(loss.cpu().detach().numpy())
+
+            print(f"Epoch {epoch+1} had a loss of {loss_list[-1]}")
+
             if return_data:
-                loss_list.append(loss.cpu().detach().numpy())
                 ### Evaluate the accuracy
                 self.model.eval()
                 # Check on the training set
                 outputs = self.model(x_train)
-                _, predicted = torch.max(outputs.data, 1)
+                predicted = torch.argmax(outputs, dim=1)
+                correct = 0
                 correct += (predicted == y_train).sum().item()
                 acc = 100 * correct / x_train.size(dim=0)
                 train_accs.append(acc)
 
                 # Check on the training set
                 outputs = self.model(x_test)
-                _, predicted = torch.max(outputs.data, 1)
+                predicted = torch.argmax(outputs, dim=1)
+                correct = 0
                 correct += (predicted == y_test).sum().item()
                 acc = 100 * correct / x_test.size(dim=0)
                 test_accs.append(acc)
@@ -280,11 +285,11 @@ def create_paper_models() -> tuple[
     )
 
     model_1 = NeuralEmbeddingGateBasedModel(
-        num_qubits=4,
+        num_qubits=8,
         classical_model=classical_model,
         quantum_embedding_layer=QuantumEmbedding1,
-        quantum_classifier=QCNN_four,
-        quantum_classifier_params_shape=(30),
+        quantum_classifier=QCNN,
+        quantum_classifier_params_shape=(45),
     )
 
     ###Model 2
@@ -293,11 +298,11 @@ def create_paper_models() -> tuple[
     )
 
     model_2 = NeuralEmbeddingGateBasedModel(
-        num_qubits=4,
+        num_qubits=8,
         classical_model=classical_model,
         quantum_embedding_layer=QuantumEmbedding2,
-        quantum_classifier=QCNN_four,
-        quantum_classifier_params_shape=(30),
+        quantum_classifier=QCNN,
+        quantum_classifier_params_shape=(45),
     )
 
     ###Model 3
@@ -312,11 +317,11 @@ def create_paper_models() -> tuple[
     )
 
     model_3 = NeuralEmbeddingGateBasedModel(
-        num_qubits=4,
+        num_qubits=8,
         classical_model=classical_model,
         quantum_embedding_layer=QuantumEmbedding2,
-        quantum_classifier=QCNN_four,
-        quantum_classifier_params_shape=(30),
+        quantum_classifier=QCNN,
+        quantum_classifier_params_shape=(45),
     )
 
     return model_1, model_2, model_3

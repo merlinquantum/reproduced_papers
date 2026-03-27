@@ -1,6 +1,19 @@
 from collections.abc import Sequence
+from pathlib import Path
 
 import matplotlib.pyplot as plt
+
+
+def _save_plot(fig: plt.Figure, filename: str, run_dir: Path | None = None) -> Path:
+    if run_dir is None:
+        output_path = Path(__file__).parent.parent.resolve() / "results" / filename
+    else:
+        output_path = run_dir / filename
+
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(output_path, format="pdf", bbox_inches="tight")
+    plt.close(fig)
+    return output_path
 
 
 ### Fig 2b
@@ -18,7 +31,9 @@ def plot_trace_distance_comparison(
     nqe_label: str = "NQE",
     baseline_label: str = "Without NQE",
     figsize: tuple[float, float] = (8.0, 4.2),
-) -> tuple[plt.Figure, Sequence[plt.Axes]]:
+    run_dir: Path | None = None,
+    filename: str = "trace_distance_comparison.pdf",
+) -> Path:
     if iterations is None:
         iterations = range(len(train_pca_nqe))
 
@@ -75,7 +90,7 @@ def plot_trace_distance_comparison(
         ax.legend(loc="lower right", frameon=True)
 
     fig.tight_layout()
-    return fig, axes
+    return _save_plot(fig, filename, run_dir)
 
 
 ### Fig 2c
@@ -94,7 +109,9 @@ def plot_qcnn_loss_history(
     accuracy_rows: Sequence[tuple[str, str]] | None = None,
     title: str = "Noiseless QCNN Loss History",
     figsize: tuple[float, float] = (9.0, 4.8),
-) -> tuple[plt.Figure, plt.Axes]:
+    run_dir: Path | None = None,
+    filename: str = "qcnn_loss_history.pdf",
+) -> Path:
     if iterations is None:
         iterations = range(len(pca_nqe_mean))
 
@@ -212,14 +229,17 @@ def plot_qcnn_loss_history(
         table.set_fontsize(9)
 
     fig.tight_layout()
-    return fig, ax
+    return _save_plot(fig, filename, run_dir)
 
 
 ### Simple trac distance plot
 def plot_trace_distance(
     train_distances,
     test_distances,
-) -> tuple[plt.Figure, Sequence[plt.Axes]]:
+    *,
+    run_dir: Path | None = None,
+    filename: str = "trace_distance.pdf",
+) -> Path:
     iterations = list(range(len(train_distances)))
 
     series_lengths = {
@@ -254,14 +274,17 @@ def plot_trace_distance(
         ax.set_xlabel("Iteration")
         ax.set_ylabel("Trace Distance")
         ax.set_xlim(min(iterations) - 0.5, max(iterations) + 0.5)
-        ax.legend(loc="lower right", frameon=True)
-
     fig.tight_layout()
-    return fig, axes
+    return _save_plot(fig, filename, run_dir)
 
 
 ### Quick loss plot
-def quick_loss_plot(loss: Sequence[float]) -> tuple[plt.Figure, plt.Axes]:
+def quick_loss_plot(
+    loss: Sequence[float],
+    *,
+    run_dir: Path | None = None,
+    filename: str = "quick_loss_plot.pdf",
+) -> Path:
     iterations = list(range(len(loss)))
     fig, ax = plt.subplots()
     ax.plot(iterations, loss, color="#339af0", linewidth=1.8)
@@ -269,14 +292,17 @@ def quick_loss_plot(loss: Sequence[float]) -> tuple[plt.Figure, plt.Axes]:
     ax.set_xlabel("Iteration")
     ax.set_ylabel("Loss")
     fig.tight_layout()
-    return fig, ax
+    return _save_plot(fig, filename, run_dir)
 
 
 ### Accuracies
 def plot_accuracies(
     train_accuracies: Sequence[float],
     test_accuracies: Sequence[float],
-) -> tuple[plt.Figure, Sequence[plt.Axes]]:
+    *,
+    run_dir: Path | None = None,
+    filename: str = "accuracies.pdf",
+) -> Path:
     iterations = list(range(len(train_accuracies)))
 
     if len(train_accuracies) != len(test_accuracies):
@@ -299,4 +325,4 @@ def plot_accuracies(
         ax.set_xlim(min(iterations), max(iterations) if iterations else 0)
 
     fig.tight_layout()
-    return fig, axes
+    return _save_plot(fig, filename, run_dir)
