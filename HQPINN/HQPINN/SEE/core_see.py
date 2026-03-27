@@ -188,6 +188,28 @@ def evaluate_see_errors(model, nx: int = 1000):
     return rel_l2(rho_pred, rho_exact), rel_l2(p_pred, p_exact)
 
 
+def load_latest_training_loss(out_dir: str, model_label: str) -> Optional[float]:
+    """Return the final Loss from the latest per-model SEE CSV, if available."""
+    if not os.path.isdir(out_dir):
+        return None
+
+    prefix = f"see-{model_label}_"
+    files = [
+        f for f in os.listdir(out_dir) if f.startswith(prefix) and f.endswith(".csv")
+    ]
+    if not files:
+        return None
+
+    files.sort()
+    csv_path = os.path.join(out_dir, files[-1])
+    with open(csv_path, newline="") as f:
+        rows = list(csv.DictReader(f))
+    if not rows:
+        return None
+
+    return float(rows[-1]["Loss"])
+
+
 def train_see(
     model: nn.Module,
     t_train,  # unused, kept for API consistency

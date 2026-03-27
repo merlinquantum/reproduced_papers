@@ -21,10 +21,11 @@ from ..config import (
     TAF_PLOT_EVERY,
 )
 from ..layer_classical import BranchPyTorch
-from ..utils import make_optimizer
+from ..utils import count_trainable_params, get_latest_checkpoint, make_optimizer
 from ..run_common import run_density_inference_mode
 from .core_taf import (
     load_training_sets,
+    load_latest_training_metrics,
     save_density_plot,
     train_taf,
 )
@@ -111,6 +112,39 @@ def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
                 )
 
                 case_prefix = f"taf_cc_{label}"
+                model_dir = os.path.join(ckpt_dir, "models")
+                existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
+                if existing_ckpt is not None:
+                    metrics = load_latest_training_metrics(
+                        out_dir=f"HQPINN/TAF/results/{case_prefix}",
+                        model_label=f"cc_{label}",
+                    )
+                    print(
+                        f"Skipping {case_prefix}: existing checkpoint found at {existing_ckpt}"
+                    )
+                    if metrics is None:
+                        print(
+                            f"No existing metrics CSV found for {case_prefix}; summary row omitted."
+                        )
+                        continue
+
+                    n_params = count_trainable_params(
+                        CC_PINN(hidden_width=width, num_hidden_layers=layers)
+                    )
+                    final_loss, loss_bc, loss_f = metrics
+                    writer.writerow(
+                        [
+                            "cc",
+                            label,
+                            n_params,
+                            f"{final_loss:.6e}",
+                            f"{loss_bc:.6e}",
+                            f"{loss_f:.6e}",
+                        ]
+                    )
+                    print(f"Reused latest metrics for {case_prefix} in summary CSV.")
+                    continue
+
                 model = CC_PINN(hidden_width=width, num_hidden_layers=layers).to(DEVICE)
                 optimizer = make_optimizer(model, lr=TAF_LR)
 
@@ -138,7 +172,6 @@ def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
                     ]
                 )
 
-                model_dir = os.path.join(ckpt_dir, "models")
                 os.makedirs(model_dir, exist_ok=True)
                 ckpt_path = os.path.join(model_dir, f"{case_prefix}_{timestamp}.pt")
                 torch.save(model.state_dict(), ckpt_path)

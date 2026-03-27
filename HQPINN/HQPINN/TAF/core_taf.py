@@ -69,6 +69,31 @@ def load_training_sets() -> dict[str, torch.Tensor]:
     }
 
 
+def load_latest_training_metrics(
+    out_dir: str, model_label: str
+) -> Optional[Tuple[float, float, float]]:
+    """Return (Loss, BC, F) from the latest per-model TAF CSV, if available."""
+    if not os.path.isdir(out_dir):
+        return None
+
+    prefix = f"taf-{model_label}_"
+    files = [
+        f for f in os.listdir(out_dir) if f.startswith(prefix) and f.endswith(".csv")
+    ]
+    if not files:
+        return None
+
+    files.sort()
+    csv_path = os.path.join(out_dir, files[-1])
+    with open(csv_path, newline="") as f:
+        rows = list(csv.DictReader(f))
+    if not rows:
+        return None
+
+    last = rows[-1]
+    return float(last["Loss"]), float(last["BC"]), float(last["F"])
+
+
 def unpack_primitives(
     raw: torch.Tensor,
 ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:

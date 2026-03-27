@@ -9,8 +9,8 @@ import torch
 import torch.nn as nn
 
 from ..config import DEE_N_EPOCHS, DEE_PLOT_EVERY, N_LAYERS, DEE_LR, DTYPE
-from ..utils import make_optimizer
-from .core_dee import save_density_plot, train_dee
+from ..utils import count_trainable_params, get_latest_checkpoint, load_model, make_optimizer
+from .core_dee import evaluate_dee_errors, load_latest_training_loss, save_density_plot, train_dee
 from ..run_common import run_density_inference_mode
 from ..layer_pennylane import (
     make_quantum_block_multiout,
@@ -99,6 +99,41 @@ def run(mode="train", backend="sim:ascella", model_size="2"):
                 print(f"\nTraining DEE-PP model: {label} size={size}")
 
                 case_prefix = f"dee_pp_{label}"
+                model_dir = os.path.join(ckpt_dir, "models")
+                existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
+                if existing_ckpt is not None:
+                    final_loss = load_latest_training_loss(
+                        out_dir=f"HQPINN/DEE/results/{case_prefix}",
+                        model_label=f"pp_{label}",
+                    )
+                    print(
+                        f"Skipping {case_prefix}: existing checkpoint found at {existing_ckpt}"
+                    )
+                    if final_loss is None:
+                        print(
+                            f"No existing loss CSV found for {case_prefix}; summary row omitted."
+                        )
+                        continue
+
+                    model = load_model(
+                        existing_ckpt,
+                        lambda processor=None: PP_PINN(n_layers=size),
+                    )
+                    err_rho, err_p = evaluate_dee_errors(model)
+                    n_params = count_trainable_params(model)
+                    writer.writerow(
+                        [
+                            "pp",
+                            label,
+                            n_params,
+                            f"{final_loss:.6e}",
+                            f"{err_rho:.6e}",
+                            f"{err_p:.6e}",
+                        ]
+                    )
+                    print(f"Reused latest metrics for {case_prefix} in summary CSV.")
+                    continue
+
                 model = PP_PINN(n_layers=size)
                 optimizer = make_optimizer(model, lr=DEE_LR)
 
@@ -123,7 +158,6 @@ def run(mode="train", backend="sim:ascella", model_size="2"):
                     ]
                 )
 
-                model_dir = os.path.join(ckpt_dir, "models")
                 os.makedirs(model_dir, exist_ok=True)
                 ckpt_path = os.path.join(model_dir, f"{case_prefix}_{timestamp}.pt")
                 torch.save(model.state_dict(), ckpt_path)

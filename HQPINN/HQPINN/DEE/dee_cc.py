@@ -15,8 +15,8 @@ from ..config import (
     DEE_PLOT_EVERY,
     DTYPE,
 )
-from ..utils import make_optimizer
-from .core_dee import save_density_plot, train_dee
+from ..utils import count_trainable_params, get_latest_checkpoint, load_model, make_optimizer
+from .core_dee import evaluate_dee_errors, load_latest_training_loss, save_density_plot, train_dee
 from ..run_common import run_density_inference_mode
 from ..layer_classical import BranchPyTorch
 
@@ -102,6 +102,43 @@ def run(mode="train", backend="sim:ascella", model_size="10-4"):
                 )
 
                 case_prefix = f"dee_cc_{label}"
+                model_dir = os.path.join(ckpt_dir, "models")
+                existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
+                if existing_ckpt is not None:
+                    final_loss = load_latest_training_loss(
+                        out_dir=f"HQPINN/DEE/results/{case_prefix}",
+                        model_label=f"cc_{label}",
+                    )
+                    print(
+                        f"Skipping {case_prefix}: existing checkpoint found at {existing_ckpt}"
+                    )
+                    if final_loss is None:
+                        print(
+                            f"No existing loss CSV found for {case_prefix}; summary row omitted."
+                        )
+                        continue
+
+                    model = load_model(
+                        existing_ckpt,
+                        lambda processor=None: CC_PINN(
+                            hidden_width=width, num_hidden_layers=layers
+                        ),
+                    )
+                    err_rho, err_p = evaluate_dee_errors(model)
+                    n_params = count_trainable_params(model)
+                    writer.writerow(
+                        [
+                            "cc",
+                            label,
+                            n_params,
+                            f"{final_loss:.6e}",
+                            f"{err_rho:.6e}",
+                            f"{err_p:.6e}",
+                        ]
+                    )
+                    print(f"Reused latest metrics for {case_prefix} in summary CSV.")
+                    continue
+
                 model = CC_PINN(hidden_width=width, num_hidden_layers=layers)
                 optimizer = make_optimizer(model, lr=5e-4)
 
@@ -126,7 +163,6 @@ def run(mode="train", backend="sim:ascella", model_size="10-4"):
                     ]
                 )
 
-                model_dir = os.path.join(ckpt_dir, "models")
                 os.makedirs(model_dir, exist_ok=True)
                 ckpt_path = os.path.join(model_dir, f"{case_prefix}_{timestamp}.pt")
                 torch.save(model.state_dict(), ckpt_path)

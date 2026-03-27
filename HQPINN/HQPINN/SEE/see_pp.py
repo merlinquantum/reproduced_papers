@@ -9,8 +9,8 @@ import torch
 import torch.nn as nn
 
 from ..config import SEE_N_EPOCHS, SEE_PLOT_EVERY, N_LAYERS, SEE_LR, DTYPE
-from ..utils import make_optimizer
-from .core_see import save_density_plot, train_see
+from ..utils import count_trainable_params, get_latest_checkpoint, load_model, make_optimizer
+from .core_see import evaluate_see_errors, load_latest_training_loss, save_density_plot, train_see
 from ..run_common import run_density_inference_mode
 from ..layer_pennylane import (
     make_quantum_block_multiout,
@@ -100,6 +100,41 @@ def run(mode="train", backend="sim:ascella", model_size="2"):
                 print(f"\nTraining SEE-PP model: {label} size={size}")
 
                 case_prefix = f"see_pp_{label}"
+                model_dir = os.path.join(ckpt_dir, "models")
+                existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
+                if existing_ckpt is not None:
+                    final_loss = load_latest_training_loss(
+                        out_dir=f"HQPINN/SEE/results/{case_prefix}",
+                        model_label=f"pp_{label}",
+                    )
+                    print(
+                        f"Skipping {case_prefix}: existing checkpoint found at {existing_ckpt}"
+                    )
+                    if final_loss is None:
+                        print(
+                            f"No existing loss CSV found for {case_prefix}; summary row omitted."
+                        )
+                        continue
+
+                    model = load_model(
+                        existing_ckpt,
+                        lambda processor=None: PP_PINN(n_layers=size),
+                    )
+                    err_rho, err_p = evaluate_see_errors(model)
+                    n_params = count_trainable_params(model)
+                    writer.writerow(
+                        [
+                            "pp",
+                            label,
+                            n_params,
+                            f"{final_loss:.6e}",
+                            f"{err_rho:.6e}",
+                            f"{err_p:.6e}",
+                        ]
+                    )
+                    print(f"Reused latest metrics for {case_prefix} in summary CSV.")
+                    continue
+
                 model = PP_PINN(n_layers=size)
                 optimizer = make_optimizer(model, lr=SEE_LR)
 
@@ -124,7 +159,6 @@ def run(mode="train", backend="sim:ascella", model_size="2"):
                     ]
                 )
 
-                model_dir = os.path.join(ckpt_dir, "models")
                 os.makedirs(model_dir, exist_ok=True)
                 ckpt_path = os.path.join(model_dir, f"{case_prefix}_{timestamp}.pt")
                 torch.save(model.state_dict(), ckpt_path)
