@@ -1,0 +1,14 @@
+merlinquantum
+-e git+https://github.com/mit-han-lab/torchquantum.git#egg=torchquantum
+pytest
+regex
+medmnist
+pennylane
+matplotlib
+opt_einsum
+pylatexenc>=2.10
+torchpack
+pathos
+torchdiffeq
+requests
+aiohttp
