@@ -44,6 +44,4 @@ class LinearLoss(nn.Module):
     def forward(self, labels, predictions):
         labels = labels.to(predictions.dtype)
         # Same as 1-(l * p) where the labels are -1 and 1
-        return (
-            0.5 * ((4 * labels * predictions) - (2 * labels) - (2 * predictions)).mean()
-        )
+        return (labels + predictions - (2 * labels * predictions)).mean()

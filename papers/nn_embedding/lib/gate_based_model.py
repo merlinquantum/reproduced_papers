@@ -51,7 +51,7 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
         # Creating the torch pennylane layers
         self.distance_circuit_layer = self._create_distance_layer()
         self.complete_circuit_layer = self._create_complete_circuit_layer()
-        self.state_embedding_layer = self._create_state_embedding_layer()
+        self.state_embedding_circuit = self._create_state_embedding_circuit()
 
         # Creating the models
         self.embedding_training_model = self._TrainingModule(self)
@@ -82,7 +82,7 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
         )
 
     ### No TorchLayer as it does not support complex data
-    def _create_state_embedding_layer(self):
+    def _create_state_embedding_circuit(self):
         @qml.qnode(self.dev, interface="torch")
         def embedding_state(inputs):
             self.quantum_embedding_layer(inputs)
@@ -154,7 +154,7 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
         loss_list = []
 
         if return_data:
-            # Seperating the test value classes
+            # Separating the test value classes
             X1_test = torch.stack(
                 [x_test[i] for i in range(len(x_test)) if y_test[i] == 1]
             )
@@ -162,7 +162,7 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
                 [x_test[i] for i in range(len(x_test)) if y_test[i] != 1]
             )
 
-            # Seperating the train value classes
+            # Separating the train value classes
             X1_train = torch.stack(
                 [x_train[i] for i in range(len(x_train)) if y_train[i] == 1]
             )
@@ -196,11 +196,11 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             if return_data:
                 # Training distances
                 rhos0 = torch.stack(
-                    tuple(self.state_embedding_layer(sample) for sample in X0_train),
+                    tuple(self.state_embedding_circuit(sample) for sample in X0_train),
                     dim=0,
                 )
                 rhos1 = torch.stack(
-                    tuple(self.state_embedding_layer(sample) for sample in X1_train),
+                    tuple(self.state_embedding_circuit(sample) for sample in X1_train),
                     dim=0,
                 )
                 rho0 = torch.sum(rhos0, dim=0) / len(X0_train)
@@ -209,11 +209,11 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
 
                 # Test distances
                 rhos0 = torch.stack(
-                    tuple(self.state_embedding_layer(sample) for sample in X0_test),
+                    tuple(self.state_embedding_circuit(sample) for sample in X0_test),
                     dim=0,
                 )
                 rhos1 = torch.stack(
-                    tuple(self.state_embedding_layer(sample) for sample in X1_test),
+                    tuple(self.state_embedding_circuit(sample) for sample in X1_test),
                     dim=0,
                 )
                 rho0 = torch.sum(rhos0, dim=0) / len(X0_test)
@@ -251,6 +251,15 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
 
             optimizer.zero_grad()
             outputs = self.model(X_batch)
+
+            """
+            Pourquoi pas donner les logits avec argmax: So the answer is:
+
+            argmax throws away the gradient information
+            the loss needs a differentiable quantity
+            argmax is only for converting scores to final class labels at evaluation time
+            """
+
             loss = criterion(Y_batch, outputs[:, 1])
 
             loss.backward()

@@ -1,3 +1,4 @@
+import json
 import numpy as np
 import torch
 
@@ -18,9 +19,21 @@ from papers.nn_embedding.utils.plotting import (
 )
 
 
+def _to_serializable_list(values):
+    if isinstance(values, torch.Tensor):
+        return values.detach().cpu().tolist()
+    if isinstance(values, np.ndarray):
+        return values.tolist()
+    if isinstance(values, np.generic):
+        return values.item()
+    if isinstance(values, (list, tuple)):
+        return [_to_serializable_list(value) for value in values]
+    return values
+
+
 def basic_train_and_evaluate(
     dataset="mnist",
-    batch_size: int = 25,
+    batch_size: int = 100,
     num_epochs_training_embedding: int = 50,
     num_epochs_training_classifier: int = 50,
     lr: float = 0.01,
@@ -62,9 +75,23 @@ def basic_train_and_evaluate(
     )
 
     plot_trace_distance(train_distances, test_distances)
-    quick_loss_plot(loss_list_embedding)
-    quick_loss_plot(loss_list_classier)
+    quick_loss_plot(loss_list_embedding, filename="quick_loss_plot_embedding.pdf")
+    quick_loss_plot(loss_list_classier, filename="quick_loss_plot_classifier.pdf")
     plot_accuracies(train_acc, test_acc)
+
+    results_dir = PROJECT_ROOT / "results"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    output_path = results_dir / "basic_run_results.json"
+    payload = {
+        "loss_list_embedding": _to_serializable_list(loss_list_embedding),
+        "train_distances": _to_serializable_list(train_distances),
+        "test_distances": _to_serializable_list(test_distances),
+        "loss_list_classier": _to_serializable_list(loss_list_classier),
+        "train_acc": _to_serializable_list(train_acc),
+        "test_acc": _to_serializable_list(test_acc),
+    }
+    output_path.write_text(json.dumps(payload, indent=2))
+    print(f"Saved results to {output_path}")
 
 
 basic_train_and_evaluate()
