@@ -26,7 +26,7 @@ from ..run_common import run_density_inference_mode
 from ..utils import count_trainable_params, get_latest_checkpoint, make_optimizer
 from .core_taf import (
     load_training_sets,
-    load_latest_training_metrics,
+    load_training_metrics_for_checkpoint,
     save_density_plot,
     train_taf,
 )
@@ -118,39 +118,52 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                 model_dir = os.path.join(ckpt_dir, "models")
                 existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
                 if existing_ckpt is not None:
-                    metrics = load_latest_training_metrics(
-                        out_dir=f"HQPINN/TAF/results/{case_prefix}",
-                        model_label=f"ci_{label}",
-                    )
-                    print(
-                        f"Skipping {case_prefix}: existing checkpoint found at {existing_ckpt}"
-                    )
-                    if metrics is None:
+                    try:
+                        torch.load(existing_ckpt, map_location="cpu")
+                    except Exception as exc:
                         print(
-                            f"No existing metrics CSV found for {case_prefix}; summary row omitted."
+                            f"Checkpoint validation failed for {case_prefix} at "
+                            f"{existing_ckpt}: {exc}; retraining model."
                         )
-                        continue
-
-                    n_params = count_trainable_params(
-                        CI_PINN(
-                            n_photons=n_photons,
-                            hidden_width=width,
-                            num_hidden_layers=layers,
+                    else:
+                        metrics = load_training_metrics_for_checkpoint(
+                            out_dir=f"HQPINN/TAF/results/{case_prefix}",
+                            model_label=f"ci_{label}",
+                            ckpt_path=existing_ckpt,
+                            case_prefix=case_prefix,
                         )
-                    )
-                    final_loss, loss_bc, loss_f = metrics
-                    writer.writerow(
-                        [
-                            "ci",
-                            label,
-                            n_params,
-                            f"{final_loss:.6e}",
-                            f"{loss_bc:.6e}",
-                            f"{loss_f:.6e}",
-                        ]
-                    )
-                    print(f"Reused latest metrics for {case_prefix} in summary CSV.")
-                    continue
+                        if metrics is not None:
+                            print(
+                                f"Skipping {case_prefix}: existing checkpoint found at "
+                                f"{existing_ckpt}"
+                            )
+                            n_params = count_trainable_params(
+                                CI_PINN(
+                                    n_photons=n_photons,
+                                    hidden_width=width,
+                                    num_hidden_layers=layers,
+                                )
+                            )
+                            final_loss, loss_bc, loss_f = metrics
+                            writer.writerow(
+                                [
+                                    "ci",
+                                    label,
+                                    n_params,
+                                    f"{final_loss:.6e}",
+                                    f"{loss_bc:.6e}",
+                                    f"{loss_f:.6e}",
+                                ]
+                            )
+                            print(
+                                f"Reused latest metrics for {case_prefix} in summary CSV."
+                            )
+                            continue
+                        print(
+                            f"Existing checkpoint found for {case_prefix} at "
+                            f"{existing_ckpt}, but no matching metrics CSV was found; "
+                            f"retraining model."
+                        )
 
                 model = CI_PINN(
                     n_photons=n_photons,
@@ -166,6 +179,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                     plot_every=TAF_PLOT_EVERY,
                     out_dir=f"HQPINN/TAF/results/{case_prefix}",
                     model_label=f"ci_{label}",
+                    timestamp=timestamp,
                     data=data,
                     U_in=U_in,
                     lbfgs_steps=TAF_LBFGS_STEPS,

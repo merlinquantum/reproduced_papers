@@ -188,20 +188,24 @@ def evaluate_see_errors(model, nx: int = 1000):
     return rel_l2(rho_pred, rho_exact), rel_l2(p_pred, p_exact)
 
 
-def load_latest_training_loss(out_dir: str, model_label: str) -> Optional[float]:
-    """Return the final Loss from the latest per-model SEE CSV, if available."""
-    if not os.path.isdir(out_dir):
+def load_training_loss_for_checkpoint(
+    out_dir: str, model_label: str, ckpt_path: str, case_prefix: str
+) -> Optional[float]:
+    """Return the final Loss from the CSV that matches the checkpoint timestamp."""
+    ckpt_name = os.path.basename(ckpt_path)
+    ckpt_prefix = f"{case_prefix}_"
+    ckpt_suffix = ".pt"
+    if not (ckpt_name.startswith(ckpt_prefix) and ckpt_name.endswith(ckpt_suffix)):
         return None
 
-    prefix = f"see-{model_label}_"
-    files = [
-        f for f in os.listdir(out_dir) if f.startswith(prefix) and f.endswith(".csv")
-    ]
-    if not files:
+    timestamp = ckpt_name[len(ckpt_prefix) : -len(ckpt_suffix)]
+    if not timestamp:
         return None
 
-    files.sort()
-    csv_path = os.path.join(out_dir, files[-1])
+    csv_path = os.path.join(out_dir, f"see-{model_label}_{timestamp}.csv")
+    if not os.path.isfile(csv_path):
+        return None
+
     with open(csv_path, newline="") as f:
         rows = list(csv.DictReader(f))
     if not rows:
@@ -218,6 +222,7 @@ def train_see(
     plot_every: int,
     out_dir: str,
     model_label: str,
+    timestamp: str,
     loss_fn: Callable[
         [nn.Module], Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
     ] = euler_loss_batched,
@@ -229,7 +234,6 @@ def train_see(
 
     os.makedirs(out_dir, exist_ok=True)
 
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     rho_pred_png_path = os.path.join(out_dir, f"see-{model_label}_{timestamp}_rho_pred.png")
     rho_exact_png_path = os.path.join(
         out_dir, f"see-{model_label}_{timestamp}_rho_exact.png"

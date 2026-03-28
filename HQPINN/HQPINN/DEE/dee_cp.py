@@ -18,7 +18,12 @@ from ..config import (
     DTYPE,
 )
 from ..utils import count_trainable_params, get_latest_checkpoint, load_model, make_optimizer
-from .core_dee import evaluate_dee_errors, load_latest_training_loss, save_density_plot, train_dee
+from .core_dee import (
+    evaluate_dee_errors,
+    load_training_loss_for_checkpoint,
+    save_density_plot,
+    train_dee,
+)
 from ..run_common import run_density_inference_mode
 from ..layer_pennylane import (
     make_quantum_block_multiout,
@@ -112,41 +117,53 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
                 model_dir = os.path.join(ckpt_dir, "models")
                 existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
                 if existing_ckpt is not None:
-                    final_loss = load_latest_training_loss(
+                    final_loss = load_training_loss_for_checkpoint(
                         out_dir=f"HQPINN/DEE/results/{case_prefix}",
                         model_label=f"cp_{label}",
+                        ckpt_path=existing_ckpt,
+                        case_prefix=case_prefix,
                     )
-                    print(
-                        f"Skipping {case_prefix}: existing checkpoint found at {existing_ckpt}"
-                    )
-                    if final_loss is None:
+                    if final_loss is not None:
                         print(
-                            f"No existing loss CSV found for {case_prefix}; summary row omitted."
+                            f"Skipping {case_prefix}: existing checkpoint found at "
+                            f"{existing_ckpt}"
                         )
-                        continue
-
-                    model = load_model(
-                        existing_ckpt,
-                        lambda processor=None: CP_PINN(
-                            size=size,
-                            hidden_width=width,
-                            num_hidden_layers=layers,
-                        ),
+                        try:
+                            model = load_model(
+                                existing_ckpt,
+                                lambda processor=None: CP_PINN(
+                                    size=size,
+                                    hidden_width=width,
+                                    num_hidden_layers=layers,
+                                ),
+                            )
+                            err_rho, err_p = evaluate_dee_errors(model)
+                        except Exception as exc:
+                            print(
+                                f"Checkpoint validation failed for {case_prefix} at "
+                                f"{existing_ckpt}: {exc}; retraining model."
+                            )
+                        else:
+                            n_params = count_trainable_params(model)
+                            writer.writerow(
+                                [
+                                    "cp",
+                                    label,
+                                    n_params,
+                                    f"{final_loss:.6e}",
+                                    f"{err_rho:.6e}",
+                                    f"{err_p:.6e}",
+                                ]
+                            )
+                            print(
+                                f"Reused latest metrics for {case_prefix} in summary CSV."
+                            )
+                            continue
+                    print(
+                        f"Existing checkpoint found for {case_prefix} at "
+                        f"{existing_ckpt}, but no matching loss CSV was found; "
+                        f"retraining model."
                     )
-                    err_rho, err_p = evaluate_dee_errors(model)
-                    n_params = count_trainable_params(model)
-                    writer.writerow(
-                        [
-                            "cp",
-                            label,
-                            n_params,
-                            f"{final_loss:.6e}",
-                            f"{err_rho:.6e}",
-                            f"{err_p:.6e}",
-                        ]
-                    )
-                    print(f"Reused latest metrics for {case_prefix} in summary CSV.")
-                    continue
 
                 model = CP_PINN(size=size, hidden_width=width, num_hidden_layers=layers)
                 optimizer = make_optimizer(model, lr=DEE_LR)
@@ -159,6 +176,7 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
                     plot_every=DEE_PLOT_EVERY,
                     out_dir=f"HQPINN/DEE/results/{case_prefix}",
                     model_label=f"cp_{label}",
+                    timestamp=timestamp,
                 )
 
                 writer.writerow(

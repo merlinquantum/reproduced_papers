@@ -69,22 +69,24 @@ def load_training_sets() -> dict[str, torch.Tensor]:
     }
 
 
-def load_latest_training_metrics(
-    out_dir: str, model_label: str
+def load_training_metrics_for_checkpoint(
+    out_dir: str, model_label: str, ckpt_path: str, case_prefix: str
 ) -> Optional[Tuple[float, float, float]]:
-    """Return (Loss, BC, F) from the latest per-model TAF CSV, if available."""
-    if not os.path.isdir(out_dir):
+    """Return (Loss, BC, F) from the CSV that matches the checkpoint timestamp."""
+    ckpt_name = os.path.basename(ckpt_path)
+    ckpt_prefix = f"{case_prefix}_"
+    ckpt_suffix = ".pt"
+    if not (ckpt_name.startswith(ckpt_prefix) and ckpt_name.endswith(ckpt_suffix)):
         return None
 
-    prefix = f"taf-{model_label}_"
-    files = [
-        f for f in os.listdir(out_dir) if f.startswith(prefix) and f.endswith(".csv")
-    ]
-    if not files:
+    timestamp = ckpt_name[len(ckpt_prefix) : -len(ckpt_suffix)]
+    if not timestamp:
         return None
 
-    files.sort()
-    csv_path = os.path.join(out_dir, files[-1])
+    csv_path = os.path.join(out_dir, f"taf-{model_label}_{timestamp}.csv")
+    if not os.path.isfile(csv_path):
+        return None
+
     with open(csv_path, newline="") as f:
         rows = list(csv.DictReader(f))
     if not rows:
@@ -455,6 +457,7 @@ def train_taf(
     plot_every: int,
     out_dir: str,
     model_label: str,
+    timestamp: str,
     data: dict[str, torch.Tensor],
     U_in: torch.Tensor,
     lbfgs_steps: int = TAF_LBFGS_STEPS,
@@ -468,7 +471,6 @@ def train_taf(
     """Train TAF model and return summary metrics."""
     os.makedirs(out_dir, exist_ok=True)
 
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     csv_path = os.path.join(out_dir, f"taf-{model_label}_{timestamp}.csv")
 
     rows: list[list[str]] = []
