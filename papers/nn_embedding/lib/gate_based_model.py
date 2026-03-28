@@ -196,11 +196,17 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             if return_data:
                 # Training distances
                 rhos0 = torch.stack(
-                    tuple(self.state_embedding_circuit(sample) for sample in X0_train),
+                    tuple(
+                        self.state_embedding_circuit(sample)
+                        for sample in self.classical_encoder(X0_train)
+                    ),
                     dim=0,
                 )
                 rhos1 = torch.stack(
-                    tuple(self.state_embedding_circuit(sample) for sample in X1_train),
+                    tuple(
+                        self.state_embedding_circuit(sample)
+                        for sample in self.classical_encoder(X1_train)
+                    ),
                     dim=0,
                 )
                 rho0 = torch.sum(rhos0, dim=0) / len(X0_train)
@@ -209,11 +215,17 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
 
                 # Test distances
                 rhos0 = torch.stack(
-                    tuple(self.state_embedding_circuit(sample) for sample in X0_test),
+                    tuple(
+                        self.state_embedding_circuit(sample)
+                        for sample in self.classical_encoder(X0_test)
+                    ),
                     dim=0,
                 )
                 rhos1 = torch.stack(
-                    tuple(self.state_embedding_circuit(sample) for sample in X1_test),
+                    tuple(
+                        self.state_embedding_circuit(sample)
+                        for sample in self.classical_encoder(X1_test)
+                    ),
                     dim=0,
                 )
                 rho0 = torch.sum(rhos0, dim=0) / len(X0_test)
