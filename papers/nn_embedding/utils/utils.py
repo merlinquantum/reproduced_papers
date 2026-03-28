@@ -45,3 +45,11 @@ class LinearLoss(nn.Module):
         labels = labels.to(predictions.dtype)
         # Same as 1-(l * p) where the labels are -1 and 1
         return (labels + predictions - (2 * labels * predictions)).mean()
+
+
+def state_vector_to_state(x: torch.Tensor) -> torch.Tensor:
+    if x.ndim == 1:
+        return torch.outer(x, torch.conj(x))
+    if x.ndim == 2:
+        return x.unsqueeze(-1) * torch.conj(x).unsqueeze(-2)
+    raise ValueError("x must have shape (state_dim,) or (batch_size, state_dim)")
