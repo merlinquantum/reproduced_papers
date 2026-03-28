@@ -2,6 +2,8 @@ from collections.abc import Sequence
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import numpy as np
+import torch
 
 
 def _save_plot(fig: plt.Figure, filename: str, run_dir: Path | None = None) -> Path:
@@ -14,6 +16,17 @@ def _save_plot(fig: plt.Figure, filename: str, run_dir: Path | None = None) -> P
     fig.savefig(output_path, format="pdf", bbox_inches="tight")
     plt.close(fig)
     return output_path
+
+
+def _to_plot_values(values):
+    if isinstance(values, torch.Tensor):
+        return values.detach().cpu().numpy()
+    if isinstance(values, np.ndarray):
+        return values
+    return [
+        value.detach().cpu().item() if isinstance(value, torch.Tensor) else value
+        for value in values
+    ]
 
 
 ### Fig 2b
@@ -240,6 +253,8 @@ def plot_trace_distance(
     run_dir: Path | None = None,
     filename: str = "trace_distance.pdf",
 ) -> Path:
+    train_distances = _to_plot_values(train_distances)
+    test_distances = _to_plot_values(test_distances)
     iterations = list(range(len(train_distances)))
 
     series_lengths = {
@@ -285,6 +300,7 @@ def quick_loss_plot(
     run_dir: Path | None = None,
     filename: str = "quick_loss_plot.pdf",
 ) -> Path:
+    loss = _to_plot_values(loss)
     iterations = list(range(len(loss)))
     fig, ax = plt.subplots()
     ax.plot(iterations, loss, color="#339af0", linewidth=1.8)
@@ -303,6 +319,8 @@ def plot_accuracies(
     run_dir: Path | None = None,
     filename: str = "accuracies.pdf",
 ) -> Path:
+    train_accuracies = _to_plot_values(train_accuracies)
+    test_accuracies = _to_plot_values(test_accuracies)
     iterations = list(range(len(train_accuracies)))
 
     if len(train_accuracies) != len(test_accuracies):
