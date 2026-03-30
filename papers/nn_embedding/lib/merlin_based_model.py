@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import merlin as ml
+from copy import deepcopy
 
 import sys
 from pathlib import Path
@@ -10,6 +11,14 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
+
+from papers.nn_embedding.utils.merlin_model_utils import (
+    rename_params_in_current_order,
+    count_parameters_with_prefixes,
+    strip_simple_negation_expressions,
+    compute_x2_permutation,
+    assign_params,
+)
 from papers.nn_embedding.utils.utils import (
     create_random_pairs,
     pick_random_data,
@@ -19,7 +28,7 @@ from papers.nn_embedding.utils.utils import (
 )
 
 
-class NeuralEmbeddingGateBasedModel(nn.Module):
+class NeuralEmbeddingMerLinModel(nn.Module):
     def __init__(
         self,
         classical_model: nn.Module,
@@ -29,19 +38,71 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
     ):
         """
         The quantum classifier must have amplitude encoding on and return probs
-        The embedding_layer must return amplitudes.
+        The embedding_layer must return amplitudes and have no input parameters, only trainable ones. The input state must also be a basis state
         """
         super().__init__()
         self.classical_encoder = classical_model
-        self.quantum_embedding_layer = quantum_embedding_layer
+        self.quantum_embedding_layer = deepcopy(quantum_embedding_layer)
+        for param in self.quantum_embedding_layer.parameters():
+            param.requires_grad = False
         self.quantum_classifier = quantum_classifier
         self.output_grouper = ml.LexGrouping(
             self.quantum_classifier.output_size, num_classes
         )
+        self.similarity_layer = self._SimilarityLayer(self)
 
         # Creating the models
         self.embedding_training_model = self._TrainingModule(self)
         self.model = self._TrainedEmbeddingModel(self)
+
+    class _SimilarityLayer(nn.Module):
+        def __init__(self, main_model):
+            super().__init__()
+            object.__setattr__(self, "main_model", main_model)
+            encoder_1 = deepcopy(self.main_model.quantum_embedding_layer)
+            encoder_2 = deepcopy(self.main_model.quantum_embedding_layer)
+
+            rename_params_in_current_order(encoder_1.circuit, "x_1_")
+            rename_params_in_current_order(encoder_2.circuit, "x_2_")
+
+            encoder_2.circuit.inverse(h=True)
+            strip_simple_negation_expressions(encoder_2.circuit)
+
+            fidelity_circuit = encoder_1.circuit.add(0, encoder_2.circuit, merge=False)
+
+            input_prefixes = ["x_1_", "x_2_"]
+            input_size = count_parameters_with_prefixes(
+                fidelity_circuit, input_prefixes
+            )
+
+            self.fidelity_layer = ml.QuantumLayer(
+                input_size=input_size,
+                circuit=fidelity_circuit,
+                input_state=encoder_1.input_state,
+                n_photons=encoder_1.n_photons,
+                amplitude_encoding=False,
+                computation_space=encoder_1.computation_space,
+                measurement_strategy=ml.MeasurementStrategy.PROBABILITIES,
+                device=encoder_1.device,
+                dtype=encoder_1.dtype,
+                input_parameters=input_prefixes,
+            )
+
+            self.perm_x2 = compute_x2_permutation(self.fidelity_layer)
+
+            for param in self.fidelity_layer.parameters():
+                param.requires_grad = False
+
+            self.target_index = list(self.fidelity_layer.output_keys).index(
+                tuple(self.fidelity_layer.input_state)
+            )
+
+        def forward(self, x_1: torch.Tensor, x_2: torch.Tensor) -> torch.Tensor:
+            x_2 = -x_2
+            x2_for_layer = x_2[..., self.perm_x2]
+
+            probs = self.fidelity_layer(x_1, x2_for_layer)
+            return probs[..., self.target_index]
 
     class _TrainingModule(nn.Module):
         def __init__(self, main_model):
@@ -49,6 +110,9 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             object.__setattr__(self, "main_model", main_model)
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
+            if len(x.shape) == 1:
+                x = x.unsqueeze(0)
+
             separation_index = x.size(1) // 2
             data_1 = x[:, :separation_index]
             data_2 = x[:, separation_index:]
@@ -59,10 +123,12 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             data_1 = data_1.reshape(data_1.size(0), -1)
             data_2 = data_2.reshape(data_2.size(0), -1)
 
-            # Not exact but similar
-            states_1 = self.main_model.quantum_embedding_layer(data_1)
-            states_2 = self.main_model.quantum_embedding_layer(data_2)
-            return torch.linalg.vecdot(states_2, states_1, dim=1)
+            # # Not exact but similar
+            # states_1 = self.main_model.quantum_embedding_layer(data_1)
+            # states_2 = self.main_model.quantum_embedding_layer(data_2)
+            # return torch.linalg.vecdot(states_2, states_1, dim=1)
+
+            return self.main_model.similarity_layer(data_1, data_2)
 
     class _TrainedEmbeddingModel(nn.Module):
         def __init__(self, main_model):
@@ -75,7 +141,9 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
                 embedding_params = embedding_params.reshape(
                     embedding_params.size(0), -1
                 )
-                states = self.main_model.quantum_embedding_layer(embedding_params)
+                states = assign_params(
+                    self.main_model.quantum_embedding_layer, embedding_params
+                )
 
             probs = self.main_model.quantum_classifier(states)
 
@@ -143,16 +211,25 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             # Distance evaluation
             if return_data:
                 # Training distances
-                rhos0 = state_vector_to_state(self.state_embedding_circuit(X0_train))
-                rhos1 = state_vector_to_state(self.state_embedding_circuit(X1_train))
+                classical_data = self.classical_encoder(X0_train)
+                states = assign_params(self.quantum_embedding_layer, classical_data)
+                rhos0 = state_vector_to_state(states)
+                classical_data = self.classical_encoder(X1_train)
+                states = assign_params(self.quantum_embedding_layer, classical_data)
+                rhos1 = state_vector_to_state(states)
 
                 rho0 = torch.sum(rhos0, dim=0) / len(X0_train)
                 rho1 = torch.sum(rhos1, dim=0) / len(X1_train)
                 train_distance.append(calculate_distance(rho0, rho1, distance=distance))
 
                 # Test distances
-                rhos0 = state_vector_to_state(self.state_embedding_circuit(X0_test))
-                rhos1 = state_vector_to_state(self.state_embedding_circuit(X1_test))
+                classical_data = self.classical_encoder(X0_test)
+                states = assign_params(self.quantum_embedding_layer, classical_data)
+                rhos0 = state_vector_to_state(states)
+                classical_data = self.classical_encoder(X1_test)
+                states = assign_params(self.quantum_embedding_layer, classical_data)
+                rhos1 = state_vector_to_state(states)
+
                 rho0 = torch.sum(rhos0, dim=0) / len(X0_test)
                 rho1 = torch.sum(rhos1, dim=0) / len(X1_test)
                 test_distance.append(calculate_distance(rho0, rho1, distance=distance))
@@ -172,7 +249,7 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
         opt: torch.optim = torch.optim.Adam,
         return_data: bool = False,
     ) -> list[list[float]] | None:
-        optimizer = opt(self.complete_circuit_layer.parameters(), lr=lr)
+        optimizer = opt(self.quantum_classifier.parameters(), lr=lr)
         criterion = LinearLoss()
 
         train_accs = []
@@ -227,3 +304,35 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
 
         if return_data:
             return loss_list, train_accs, test_accs
+
+
+def create_basic_merlin_model() -> NeuralEmbeddingMerLinModel:
+    # Quantum embedding
+    circ = ml.CircuitBuilder(n_modes=8)
+    circ.add_entangling_layer()
+    embedder = ml.QuantumLayer(
+        input_size=0,
+        builder=circ,
+        n_photons=4,
+        measurement_strategy=ml.MeasurementStrategy.AMPLITUDES,
+    )
+
+    # Quantum classifier
+    circ = ml.CircuitBuilder(n_modes=8)
+    circ.add_entangling_layer()
+    classifier = ml.QuantumLayer(
+        builder=circ,
+        n_photons=4,
+        amplitude_encoding=True,
+        measurement_strategy=ml.MeasurementStrategy.PROBABILITIES,
+    )
+
+    classical_model = nn.Sequential(
+        nn.Linear(8, 10),
+        nn.ReLU(),
+        nn.Linear(10, 10),
+        nn.ReLU(),
+        nn.Linear(10, sum([i.numel() for i in embedder.parameters()])),
+    )
+
+    return NeuralEmbeddingMerLinModel(classical_model, embedder, classifier)

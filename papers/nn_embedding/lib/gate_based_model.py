@@ -18,7 +18,7 @@ from papers.nn_embedding.utils.utils import (
     calculate_distance,
     LinearLoss,
 )
-from papers.nn_embedding.utils.embedding import (
+from papers.nn_embedding.utils.gate_based_embedding import (
     QuantumEmbedding1,
     QuantumEmbedding2,
     QCNN,
