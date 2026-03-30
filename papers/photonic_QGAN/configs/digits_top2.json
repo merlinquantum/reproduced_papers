@@ -1,0 +1,192 @@
+{
+  "description": "Digits-mode config from hp_study run_20260213-104332 top-2 (rank=5, score=0.568271536942).",
+  "seed": 0,
+  "dtype": "float32",
+  "device": "cpu",
+  "outdir": "results",
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  },
+  "run": {
+    "mode": "digits",
+    "write_to_disk": true,
+    "runs": 3,
+    "progress": true,
+    "log_every": 100
+  },
+  "dataset": {
+    "csv_path": "photonic_QGAN/optdigits_csv.csv"
+  },
+  "model": {
+    "image_size": 8,
+    "batch_size": 4,
+    "lossy": false,
+    "use_clements": false,
+    "sim": false,
+    "remote_token": null
+  },
+  "training": {
+    "digits": {
+      "opt_iter_num": 1500,
+      "lrD": 0.0002,
+      "lrG": 0.004,
+      "adam_beta1": 0.7,
+      "adam_beta2": 0.999,
+      "real_label": 0.9,
+      "fake_label": 0.0,
+      "gen_target": 0.9,
+      "d_steps": 1,
+      "g_steps": 3
+    },
+    "ideal": {
+      "opt_iter_num": 1500,
+      "lrD": 0.0002,
+      "lrG": 0.004,
+      "adam_beta1": 0.5,
+      "adam_beta2": 0.99,
+      "real_label": 0.9,
+      "fake_label": 0.0,
+      "gen_target": 0.9,
+      "d_steps": 1,
+      "g_steps": 3
+    },
+    "ideal_top3_from_hp_study": [
+      {
+        "rank": 1,
+        "score": 0.5705749843486895,
+        "params": {
+          "opt_iter_num": 200,
+          "lrD": 0.0002,
+          "lrG": 0.004,
+          "adam_beta1": 0.5,
+          "adam_beta2": 0.99,
+          "real_label": 0.9,
+          "fake_label": 0.0,
+          "gen_target": 0.9,
+          "d_steps": 1,
+          "g_steps": 3
+        }
+      },
+      {
+        "rank": 5,
+        "score": 0.5682715369419507,
+        "params": {
+          "opt_iter_num": 200,
+          "lrD": 0.0002,
+          "lrG": 0.004,
+          "adam_beta1": 0.7,
+          "adam_beta2": 0.999,
+          "real_label": 0.9,
+          "fake_label": 0.0,
+          "gen_target": 0.9,
+          "d_steps": 1,
+          "g_steps": 3
+        }
+      },
+      {
+        "rank": 9,
+        "score": 0.5633705344020079,
+        "params": {
+          "opt_iter_num": 200,
+          "lrD": 0.0002,
+          "lrG": 0.004,
+          "adam_beta1": 0.7,
+          "adam_beta2": 0.99,
+          "real_label": 0.9,
+          "fake_label": 0.0,
+          "gen_target": 0.9,
+          "d_steps": 1,
+          "g_steps": 3
+        }
+      }
+    ]
+  },
+  "digits": {
+    "arch": [
+      "var",
+      "var",
+      "enc[2]",
+      "var",
+      "var"
+    ],
+    "noise_dim": 1,
+    "input_state": [
+      0,
+      1,
+      0,
+      1,
+      0
+    ],
+    "gen_count": 4,
+    "pnr": false,
+    "digit_start": 0,
+    "digit_end": 9,
+    "digits": null
+  },
+  "ideal": {
+    "use_default_grid": false,
+    "config_grid_path": null,
+    "digit": 0,
+    "setup": "setup_c",
+    "input_state": "01010",
+    "gen_count": 4,
+    "pnr": false
+  },
+  "hp_study": {
+    "setups": [
+      "setup_c"
+    ],
+    "input_states": [
+      "01010"
+    ],
+    "digits": [
+      0,
+      3
+    ],
+    "ssim_tail": 100,
+    "top_k": 10,
+    "param_grid": {
+      "lrD": [
+        0.0002,
+        0.0005,
+        0.001
+      ],
+      "lrG": [
+        0.001,
+        0.002,
+        0.004
+      ],
+      "adam_beta1": [
+        0.5,
+        0.7
+      ],
+      "adam_beta2": [
+        0.99,
+        0.999
+      ],
+      "d_steps": [
+        1,
+        2
+      ],
+      "g_steps": [
+        1,
+        2,
+        3
+      ],
+      "real_label": [
+        0.9
+      ],
+      "gen_target": [
+        0.9
+      ]
+    },
+    "halving": {
+      "min_resources": 200,
+      "max_resources": 1500,
+      "factor": 3,
+      "cv": 3,
+      "random_state": 0
+    }
+  }
+}

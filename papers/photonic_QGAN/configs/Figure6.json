@@ -26,8 +26,6 @@
   "training": {
     "digits": {
       "opt_iter_num": 1000,
-      "optimizer": "adam",
-      "spsa_iter_num": 16000,
       "lrD": 0.002,
       "lrG": 0.002,
       "adam_beta1": 0.5,
@@ -40,8 +38,6 @@
     },
     "ideal": {
       "opt_iter_num": 1500,
-      "optimizer": "adam",
-      "spsa_iter_num": 10500,
       "lrD": 0.0002,
       "lrG": 0.002,
       "adam_beta1": 0.5,

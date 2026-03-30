@@ -70,63 +70,107 @@ def _load_config_grid(path_value) -> list[dict]:
     return payload
 
 
-def _default_ideal_grid() -> list[dict]:
-    arch_grid_45modes = [
-        {"noise_dim": 1, "arch": ["var", "enc[2]", "var"]},
-        {"noise_dim": 1, "arch": ["var", "var", "enc[2]", "var", "var"]},
-        {"noise_dim": 2, "arch": ["var", "enc[1]", "var", "enc[3]", "var"]},
+def _arch_is_valid_for_modes(arch: list[str], mode_count: int) -> bool:
+    for token in arch:
+        if token.startswith("enc[") and token.endswith("]"):
+            idx_text = token[4:-1]
+            try:
+                idx = int(idx_text)
+            except ValueError:
+                return False
+            if idx < 0 or idx >= mode_count:
+                return False
+    return True
+
+
+def _setup_arch_grid() -> list[dict]:
+    return [
         {
+            "setup": "setup_a",
+            "noise_dim": 1,
+            "arch": ["var", "enc[2]", "var"],
+        },
+        {
+            "setup": "setup_b",
+            "noise_dim": 3,
+            "arch": ["var", "enc[0]", "var", "enc[2]", "var", "enc[4]", "var"],
+        },
+        {
+            "setup": "setup_c",
+            "noise_dim": 1,
+            "arch": ["var", "var", "enc[2]", "var", "var"],
+        },
+        {
+            "setup": "setup_d",
             "noise_dim": 2,
-            "arch": ["var", "var", "enc[1]", "var", "var", "enc[3]", "var", "var"],
+            "arch": ["var", "enc[1]", "var", "enc[3]", "var"],
         },
     ]
+
+
+def _setup_arch_from_label(setup_label: str) -> dict | None:
+    key = str(setup_label).strip().lower()
+    for item in _setup_arch_grid():
+        if item["setup"] == key:
+            return {"noise_dim": int(item["noise_dim"]), "arch": list(item["arch"])}
+    return None
+
+
+def _coerce_input_state(value):
+    if value is None:
+        return None
+    if isinstance(value, list):
+        return [int(item) for item in value]
+    text = str(value).strip()
+    if not text:
+        return None
+    if "," not in text and "[" not in text and "]" not in text and all(ch in "01" for ch in text):
+        return [int(ch) for ch in text]
+    return _coerce_int_list(value)
+
+
+def _default_ideal_grid() -> list[dict]:
+    # User-selected setup family:
+    # A: var, enc[2], var
+    # B: var, enc[0], var, enc[2], var, enc[4], var
+    # C: var, var, enc[2], var, var
+    # D: var, enc[1], var, enc[3], var
+    setup_arch_grid = [{"noise_dim": item["noise_dim"], "arch": item["arch"]} for item in _setup_arch_grid()]
     input_grid_4modes = [
         {"input_state": [1, 1, 1, 1], "gen_count": 2, "pnr": True},
         {"input_state": [1, 1, 1, 1], "gen_count": 4, "pnr": False},
         {"input_state": [1, 0, 1, 1], "gen_count": 4, "pnr": True},
     ]
-    arch_grid_5modes = [
-        {"noise_dim": 3, "arch": ["var", "enc[0]", "var", "enc[2]", "var", "enc[4]", "var"]},
-    ]
     input_grid_5modes = [
         {"input_state": [0, 1, 0, 1, 0], "gen_count": 4, "pnr": False},
         {"input_state": [1, 0, 1, 0, 1], "gen_count": 2, "pnr": True},
-    ]
-    arch_grid_8modes = [
-        {"noise_dim": 1, "arch": ["var", "enc[4]", "var"]},
-        {"noise_dim": 1, "arch": ["var", "var", "enc[4]", "var", "var"]},
-        {"noise_dim": 2, "arch": ["var", "enc[2]", "var", "enc[5]", "var"]},
-        {
-            "noise_dim": 2,
-            "arch": ["var", "var", "enc[2]", "var", "var", "enc[5]", "var", "var"],
-        },
-        {"noise_dim": 3, "arch": ["var", "enc[1]", "var", "enc[4]", "var", "enc[6]", "var"]},
-        {
-            "noise_dim": 4,
-            "arch": ["var", "enc[1]", "var", "enc[3]", "var", "enc[5]", "var", "enc[7]", "var"],
-        },
     ]
     input_grid_8modes = [
         {"input_state": [0, 0, 1, 0, 0, 1, 0, 0], "gen_count": 2, "pnr": False},
     ]
 
     config_grid: list[dict] = []
-    for inp in input_grid_5modes:
-        for arch in (arch_grid_45modes + arch_grid_5modes):
-            config = inp.copy()
-            config.update(arch)
-            config_grid.append(config)
-    for inp in input_grid_4modes:
-        for arch in arch_grid_45modes:
-            config = inp.copy()
-            config.update(arch)
-            config_grid.append(config)
-    for inp in input_grid_8modes:
-        for arch in arch_grid_8modes:
+    for inp in (input_grid_4modes + input_grid_5modes + input_grid_8modes):
+        mode_count = len(inp["input_state"])
+        for arch in setup_arch_grid:
+            if not _arch_is_valid_for_modes(arch["arch"], mode_count):
+                continue
             config = inp.copy()
             config.update(arch)
             config_grid.append(config)
     return config_grid
+
+
+def _ideal_setup_label(arch: list[str]) -> str:
+    arch_tuple = tuple(arch)
+    for item in _setup_arch_grid():
+        if tuple(item["arch"]) == arch_tuple:
+            return item["setup"]
+    return "setup_other"
+
+
+def _input_state_tag(input_state: list[int]) -> str:
+    return "".join(str(int(x)) for x in input_state)
 
 
 def _resolve_csv_path(
@@ -210,7 +254,9 @@ def _run_qgan(
     dataloader,
     write_to_disk: bool,
     lrD: float,
-    opt_params: dict,
+    lrG: float,
+    opt_iter_num: int,
+    train_params: dict,
     log_every: int,
     show_progress: bool,
     log,
@@ -227,6 +273,7 @@ def _run_qgan(
     remote_token = model_cfg.get("remote_token")
     use_clements = bool(model_cfg.get("use_clements", False))
     sim = bool(model_cfg.get("sim", False))
+    generator_type = str(model_cfg.get("generator_type", "photonic")).strip().lower()
 
     gen_arch = run_cfg["arch"]
     noise_dim = int(run_cfg["noise_dim"])
@@ -235,7 +282,7 @@ def _run_qgan(
     gen_count = int(run_cfg["gen_count"])
 
     log.info(
-        "Starting QGAN run image_size={} gen_count={} noise_dim={} batch_size={} pnr={} lossy={} use_clements={} sim={}",
+        "Starting QGAN run image_size={} gen_count={} noise_dim={} batch_size={} pnr={} lossy={} use_clements={} sim={} generator_type={}",
         image_size,
         gen_count,
         noise_dim,
@@ -244,6 +291,7 @@ def _run_qgan(
         lossy,
         use_clements,
         sim,
+        generator_type,
     )
     log.info(
         "Generator config patches={} modes={} input_state={} arch={}",
@@ -257,6 +305,9 @@ def _run_qgan(
         if show_progress
         else dataloader
     )
+    progress_images_dir = run_dir / "generated_every_100"
+    if write_to_disk:
+        progress_images_dir.mkdir(parents=True, exist_ok=True)
 
     def _log_progress(
         i,
@@ -264,11 +315,31 @@ def _run_qgan(
         g_loss,
         _g_params,
         _d_state,
-        _fake_samples,
+        fake_samples,
         _optG,
     ):
         if log_every > 0 and (i + 1) % log_every == 0:
             log.info("Iteration {} D_loss={} G_loss={}", i + 1, d_loss, g_loss)
+        if write_to_disk and fake_samples is not None and (i + 1) % 100 == 0:
+            try:
+                import matplotlib.pyplot as plt
+
+                if hasattr(fake_samples, "detach"):
+                    sample_arr = fake_samples.detach().cpu().numpy()
+                else:
+                    sample_arr = np.asarray(fake_samples)
+                if sample_arr.ndim > 1:
+                    sample = sample_arr[0].reshape(image_size, image_size)
+                else:
+                    sample = sample_arr.reshape(image_size, image_size)
+                plt.imshow(sample, cmap="gray")
+                plt.axis("off")
+                plt.tight_layout()
+                out_path = progress_images_dir / f"fake_iter_{i + 1:04d}.png"
+                plt.savefig(out_path, dpi=150)
+                plt.close()
+            except Exception as exc:
+                log.warning("Failed to save iteration image at {}: {}", i + 1, exc)
 
     start = time.perf_counter()
     qgan = QGAN(
@@ -283,41 +354,83 @@ def _run_qgan(
         remote_token=remote_token,
         use_clements=use_clements,
         sim=sim,
+        generator_type=generator_type,
     )
     (
         D_loss_progress,
         G_loss_progress,
         G_params_progress,
         fake_data_progress,
+        ssim_progress,
     ) = qgan.fit(
         iterator,
         lrD,
-        opt_params,
+        lrG,
+        opt_iter_num,
+        train_params=train_params,
         silent=True,
         callback=_log_progress if log_every > 0 else None,
     )
 
     if write_to_disk:
+        fake_rows = []
+        for snapshot in fake_data_progress:
+            if hasattr(snapshot, "detach"):
+                arr = snapshot.detach().cpu().numpy()
+            else:
+                arr = np.asarray(snapshot)
+            fake_rows.append(arr.reshape(-1))
+        fake_progress_2d = np.stack(fake_rows, axis=0)
         np.savetxt(
             run_dir / "fake_progress.csv",
-            fake_data_progress,
+            fake_progress_2d,
             delimiter=",",
         )
         np.savetxt(
             run_dir / "loss_progress.csv",
-            np.array(np.array([D_loss_progress, G_loss_progress]).transpose()),
+            np.column_stack((D_loss_progress, G_loss_progress)),
             delimiter=",",
             header="D_loss, G_loss",
         )
-        np.savetxt(
-            run_dir / "G_params_progress.csv",
-            np.array(G_params_progress),
-            delimiter=",",
-        )
+        if ssim_progress:
+            ssim_array = np.asarray(ssim_progress, dtype=float)
+            iterations = np.arange(1, ssim_array.shape[0] + 1, dtype=int)
+            np.savetxt(
+                run_dir / "ssim_progress.csv",
+                np.column_stack((iterations, ssim_array)),
+                delimiter=",",
+                header="iter,similarity,diversity,ssim",
+            )
+        try:
+            import torch
+
+            torch.save(G_params_progress, run_dir / "G_params_progress.pt")
+            flat_params = []
+            for tensor in G_params_progress.values():
+                if hasattr(tensor, "detach"):
+                    flat_params.append(tensor.detach().cpu().numpy().reshape(-1))
+                else:
+                    flat_params.append(np.asarray(tensor).reshape(-1))
+            if flat_params:
+                np.savetxt(
+                    run_dir / "G_params_progress.csv",
+                    np.concatenate(flat_params).reshape(1, -1),
+                    delimiter=",",
+                )
+        except Exception as exc:
+            log.warning("Failed to save generator state dict: {}", exc)
         try:
             import matplotlib.pyplot as plt
 
-            sample = np.array(fake_data_progress)[-1].reshape(image_size, image_size)
+            last_snapshot = fake_data_progress[-1]
+            if hasattr(last_snapshot, "detach"):
+                last_snapshot = last_snapshot.detach().cpu().numpy()
+            else:
+                last_snapshot = np.asarray(last_snapshot)
+            if last_snapshot.ndim > 1:
+                sample = last_snapshot[0].reshape(image_size, image_size)
+            else:
+                sample = last_snapshot.reshape(image_size, image_size)
             plt.imshow(sample, cmap="gray")
             plt.axis("off")
             plt.tight_layout()
@@ -355,7 +468,7 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         logger.info("Wrote placeholder artifact: %s", artifact)
         return
 
-    if mode not in {"digits", "ideal"}:
+    if mode not in {"digits", "ideal", "hp_study"}:
         raise ValueError(f"Unsupported run mode: {mode}")
 
     run_cfg = cfg.get("run", {})
@@ -371,6 +484,12 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         show_progress,
         log_every,
     )
+
+    if mode == "hp_study":
+        from lib.hp_study import run_halving_grid_study
+
+        run_halving_grid_study(cfg, run_dir, logger)
+        return
 
     project_dir = run_dir.parent.parent.resolve()
     dataset_cfg = cfg.get("dataset", {})
@@ -393,31 +512,58 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         train_cfg = training_cfg.get("digits", {})
     else:
         train_cfg = training_cfg.get("ideal", {})
-    spsa_iter_num = int(train_cfg.get("spsa_iter_num", 0))
     opt_iter_num = int(train_cfg.get("opt_iter_num", 0))
     lrD = float(train_cfg.get("lrD", 0.002))
-    if spsa_iter_num <= 0 or opt_iter_num <= 0:
+    lrG = float(train_cfg.get("lrG", lrD))
+    optimizer = str(train_cfg.get("optimizer", "adam")).strip().lower()
+    d_optimizer = str(train_cfg.get("d_optimizer", "adam")).strip().lower()
+    adam_beta1 = float(train_cfg.get("adam_beta1", 0.5))
+    adam_beta2 = float(train_cfg.get("adam_beta2", 0.999))
+    real_label = float(train_cfg.get("real_label", 0.9))
+    fake_label = float(train_cfg.get("fake_label", 0.0))
+    gen_target = float(train_cfg.get("gen_target", real_label))
+    d_steps = int(train_cfg.get("d_steps", 1))
+    g_steps = int(train_cfg.get("g_steps", 1))
+    if opt_iter_num <= 0:
         raise ValueError("Training iterations must be positive for digits/ideal modes.")
+    if d_steps <= 0 or g_steps <= 0:
+        raise ValueError("d_steps and g_steps must be positive for digits/ideal modes.")
 
-    opt_params = {"spsa_iter_num": spsa_iter_num, "opt_iter_num": opt_iter_num}
-    spsa_a = train_cfg.get("spsa_a")
-    spsa_k = train_cfg.get("spsa_k")
-    if spsa_a is not None:
-        opt_params["a"] = float(spsa_a)
-    if spsa_k is not None:
-        opt_params["k"] = int(spsa_k)
+    train_params = {
+        "optimizer": optimizer,
+        "d_optimizer": d_optimizer,
+        "adam_beta1": adam_beta1,
+        "adam_beta2": adam_beta2,
+        "real_label": real_label,
+        "fake_label": fake_label,
+        "gen_target": gen_target,
+        "d_steps": d_steps,
+        "g_steps": g_steps,
+    }
+
+    if optimizer == "spsa":
+        spsa_iter_num = int(train_cfg.get("spsa_iter_num", 10500))
+        train_params["spsa_iter_num"] = spsa_iter_num
+        if "spsa_a" in train_cfg:
+            train_params["spsa_a"] = float(train_cfg["spsa_a"])
+        if "spsa_k" in train_cfg:
+            train_params["spsa_k"] = int(train_cfg["spsa_k"])
+
     logger.info(
-        "Training params spsa_iter_num={} opt_iter_num={} lrD={}",
-        spsa_iter_num,
+        "Training params opt_iter_num={} lrD={} lrG={} optimizer={} d_optimizer={} betas=({}, {}) labels=(real={}, fake={}, gen={}) steps=(d={}, g={})",
         opt_iter_num,
         lrD,
+        lrG,
+        optimizer,
+        d_optimizer,
+        adam_beta1,
+        adam_beta2,
+        real_label,
+        fake_label,
+        gen_target,
+        d_steps,
+        g_steps,
     )
-    if "a" in opt_params or "k" in opt_params:
-        logger.info(
-            "SPSA overrides a={} k={}",
-            opt_params.get("a"),
-            opt_params.get("k"),
-        )
 
     if mode == "digits":
         digits_cfg = cfg.get("digits", {})
@@ -466,7 +612,9 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                         dataloader,
                         write_to_disk,
                         lrD,
-                        opt_params,
+                        lrG,
+                        opt_iter_num,
+                        train_params,
                         log_every,
                         show_progress,
                         logger,
@@ -479,6 +627,13 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         return
 
     ideal_cfg = cfg.get("ideal", {})
+    # Resolve digit list: ideal.digits (list) takes priority over ideal.digit (single int)
+    _ideal_digits_raw = ideal_cfg.get("digits")
+    if _ideal_digits_raw:
+        ideal_digits = [int(d) for d in _ideal_digits_raw]
+    else:
+        ideal_digits = [int(ideal_cfg.get("digit", 0))]
+
     if ideal_cfg.get("config_grid_path"):
         config_grid = _load_config_grid(ideal_cfg.get("config_grid_path"))
         logger.info(
@@ -489,49 +644,90 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
     elif ideal_cfg.get("config_grid"):
         config_grid = list(ideal_cfg["config_grid"])
         logger.info("Ideal mode config_grid_size={}", len(config_grid))
+    elif ideal_cfg.get("setup") and ideal_cfg.get("input_state") is not None:
+        setup_label = str(ideal_cfg.get("setup")).strip().lower()
+        setup_cfg = _setup_arch_from_label(setup_label)
+        if setup_cfg is None:
+            raise ValueError(
+                f"Unknown ideal.setup={ideal_cfg.get('setup')}. Expected one of: setup_a, setup_b, setup_c, setup_d."
+            )
+        input_state = _coerce_input_state(ideal_cfg.get("input_state"))
+        if not input_state:
+            raise ValueError("ideal.input_state must be a non-empty list, csv string, or bitstring like '01010'.")
+        mode_count = len(input_state)
+        if not _arch_is_valid_for_modes(setup_cfg["arch"], mode_count):
+            raise ValueError(
+                f"Selected setup {setup_label} is incompatible with input_state of length {mode_count}."
+            )
+        gen_count = int(ideal_cfg.get("gen_count", 4 if mode_count == 5 else 2))
+        pnr = bool(ideal_cfg.get("pnr", False))
+        config_grid = [
+            {
+                "input_state": input_state,
+                "gen_count": gen_count,
+                "pnr": pnr,
+                "noise_dim": setup_cfg["noise_dim"],
+                "arch": setup_cfg["arch"],
+            }
+        ]
+        logger.info(
+            "Ideal mode selected setup={} input_state={} gen_count={} pnr={}",
+            setup_label,
+            input_state,
+            gen_count,
+            pnr,
+        )
     else:
         config_grid = _default_ideal_grid()
         logger.info("Ideal mode default config_grid_size={}", len(config_grid))
+
     model_cfg = cfg.get("model", {})
     batch_size = int(model_cfg.get("batch_size", 4))
-    logger.info("Model batch_size={}", batch_size)
-    dataloader = _prepare_dataset(
-        csv_path, None, batch_size, opt_iter_num, data_root, project_dir, logger
-    )
+    logger.info("Model batch_size={} ideal_digits={}", batch_size, ideal_digits)
 
-    output_root = run_dir / "ideal"
-    if output_root.exists():
-        shutil.rmtree(output_root)
-    output_root.mkdir(parents=True, exist_ok=True)
+    for ideal_digit in ideal_digits:
+        logger.info("--- Ideal mode digit={} ---", ideal_digit)
+        dataloader = _prepare_dataset(
+            csv_path, ideal_digit, batch_size, opt_iter_num, data_root, project_dir, logger
+        )
 
-    for config_num, config in enumerate(config_grid):
-        config_path = output_root / f"config_{config_num}"
-        config_path.mkdir(parents=True, exist_ok=True)
-        _write_config(config_path / "config.json", config)
-        logger.debug("Ideal config {}: {}", config_num, json.dumps(config, indent=2))
+        output_root = run_dir / f"ideal-{ideal_digit}"
+        if output_root.exists():
+            shutil.rmtree(output_root)
+        output_root.mkdir(parents=True, exist_ok=True)
 
-        run_num = 0
-        attempt = 0
-        while run_num < runs and attempt < 1000:
-            attempt += 1
-            run_num += 1
-            save_path = config_path / f"run_{run_num}"
-            save_path.mkdir(parents=True, exist_ok=True)
-            logger.info("Ideal config {} run {}/{}", config_num, run_num, runs)
-            try:
-                _run_qgan(
-                    cfg,
-                    save_path,
-                    config,
-                    dataloader,
-                    write_to_disk,
-                    lrD,
-                    opt_params,
-                    log_every,
-                    show_progress,
-                    logger,
-                )
-            except Exception as exc:
-                logger.exception("Run failed for config {}: {}", config_num, exc)
-                shutil.rmtree(save_path, ignore_errors=True)
-                run_num -= 1
+        for config_num, config in enumerate(config_grid):
+            setup_dir = output_root / _ideal_setup_label(config["arch"])
+            state_tag = _input_state_tag(config["input_state"])
+            config_path = setup_dir / f"config_{config_num}_input_{state_tag}"
+            config_path.mkdir(parents=True, exist_ok=True)
+            _write_config(config_path / "config.json", config)
+            logger.debug("Ideal config {}: {}", config_num, json.dumps(config, indent=2))
+
+            run_num = 0
+            attempt = 0
+            while run_num < runs and attempt < 1000:
+                attempt += 1
+                run_num += 1
+                save_path = config_path / f"run_{run_num}"
+                save_path.mkdir(parents=True, exist_ok=True)
+                logger.info("Ideal digit={} config {} run {}/{}", ideal_digit, config_num, run_num, runs)
+                try:
+                    _run_qgan(
+                        cfg,
+                        save_path,
+                        config,
+                        dataloader,
+                        write_to_disk,
+                        lrD,
+                        lrG,
+                        opt_iter_num,
+                        train_params,
+                        log_every,
+                        show_progress,
+                        logger,
+                    )
+                except Exception as exc:
+                    logger.exception("Run failed for digit={} config {}: {}", ideal_digit, config_num, exc)
+                    shutil.rmtree(save_path, ignore_errors=True)
+                    run_num -= 1

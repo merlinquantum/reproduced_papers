@@ -1,12 +1,12 @@
 {
-  "description": "Default Photonic QGAN reproduction config (smoke mode).",
+  "description": "Ideal-mode selectable config. Edit ideal.setup and ideal.input_state to choose one setup/input pair.",
   "seed": 0,
   "dtype": "float32",
   "device": "cpu",
   "outdir": "results",
   "logging": { "level": "info", "save_config_snapshot": true },
   "run": {
-    "mode": "smoke",
+    "mode": "ideal",
     "write_to_disk": true,
     "runs": 1,
     "progress": true,
@@ -26,8 +26,6 @@
   "training": {
     "digits": {
       "opt_iter_num": 1000,
-      "optimizer": "adam",
-      "spsa_iter_num": 16000,
       "lrD": 0.002,
       "lrG": 0.002,
       "adam_beta1": 0.5,
@@ -40,8 +38,6 @@
     },
     "ideal": {
       "opt_iter_num": 1500,
-      "optimizer": "adam",
-      "spsa_iter_num": 10500,
       "lrD": 0.0002,
       "lrG": 0.002,
       "adam_beta1": 0.5,
@@ -64,9 +60,13 @@
     "digits": null
   },
   "ideal": {
-    "use_default_grid": true,
+    "use_default_grid": false,
     "config_grid_path": null,
-    "digit": 0
+    "digit": 0,
+    "setup": "setup_c",
+    "input_state": "01010",
+    "gen_count": 4,
+    "pnr": false
   },
   "hp_study": {
     "setups": ["setup_c"],

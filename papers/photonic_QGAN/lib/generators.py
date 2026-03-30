@@ -11,8 +11,12 @@ import merlin as ML
 
 
 class ClassicalGenerator(nn.Module):
-    def __init__(self):
+    def __init__(self, noise_dim=2, image_size=8, hidden_dim=64):
         super(ClassicalGenerator, self).__init__()
+        self.noise_dim = int(noise_dim)
+        self.image_size = int(image_size)
+        self.hidden_dim = int(hidden_dim)
+        output_dim = int(np.prod((self.image_size, self.image_size)))
 
         def block(in_feat, out_feat, normalize=True):
             layers = [nn.Linear(in_feat, out_feat)]
@@ -22,14 +26,14 @@ class ClassicalGenerator(nn.Module):
             return layers
 
         self.model = nn.Sequential(
-            *block(2, 4, normalize=False),
-            nn.Linear(4, int(np.prod((8, 8)))),
-            nn.Tanh()
+            *block(self.noise_dim, self.hidden_dim, normalize=False),
+            nn.Linear(self.hidden_dim, output_dim),
+            nn.Tanh(),
         )
 
     def forward(self, z):
         img = self.model(z)
-        img = img.view(img.size(0), 64)
+        img = img.view(img.size(0), self.image_size * self.image_size)
         return img
 
 
@@ -44,22 +48,24 @@ class PatchGenerator(nn.Module):
         lossy,
         remote_token=None,
         use_clements=False,
-        sim = False
+        sim=False,
     ):
         super().__init__()
         self.image_size = image_size
         self.gen_count = gen_count
         self.input_state = input_state
 
-        # Here I have replaced the list of ParametrizedQuantumCircuit 
+        # Here I have replaced the list of ParametrizedQuantumCircuit
         # By a list of quantum layers based on these circuits
         self.models = nn.ModuleList()
         for _ in range(gen_count):
-            pcvl_circuit = ParametrizedQuantumCircuit(len(input_state), gen_arch, use_clements)
+            pcvl_circuit = ParametrizedQuantumCircuit(
+                len(input_state), gen_arch, use_clements
+            )
             circuit_var_params = pcvl_circuit.var_param_names
             circuit_enc_params = pcvl_circuit.enc_param_names
             num_enc_params = len(circuit_enc_params)
-            
+
             layer = ML.QuantumLayer(
                 input_size=num_enc_params,
                 circuit=pcvl_circuit.circuit,
@@ -67,9 +73,9 @@ class PatchGenerator(nn.Module):
                 trainable_parameters=circuit_var_params,
                 input_state=self.input_state,
                 measurement_strategy=ML.MeasurementStrategy.PROBABILITIES,
-                computation_space = ML.ComputationSpace.FOCK
+                computation_space=ML.ComputationSpace.FOCK,
             )
-            
+
             self.models.append(layer)
 
         # Define mapping
@@ -87,7 +93,14 @@ class PatchGenerator(nn.Module):
                     res += 2 ** (m - i)
             return res
 
-        for key in self.output_keys:
+        # Mirror get_output_map: with threshold detectors (non-pnr) and lossy source,
+        # only keep states where every mode has count < 2.
+        if pnr or not lossy:
+            possible_state_keys = self.output_keys
+        else:
+            possible_state_keys = [key for key in self.output_keys if all(i < 2 for i in key)]
+
+        for key in possible_state_keys:
             int_state = state_to_int(key, pnr)
             if int_state in rev_map.keys():
                 rev_map[int_state].append(key)
@@ -104,26 +117,31 @@ class PatchGenerator(nn.Module):
         self.bin_count = np.max(list(self.output_map.values())) + 1
         self.expected_size = self.image_size * self.image_size // self.gen_count
 
-
     def dist_to_image(self, raw_results_list):
         patches = []
         B = None
         K = len(self.output_keys)
-        idx_cpu = torch.tensor([self.output_map[k] for k in self.output_keys], dtype=torch.long)
+        idx_cpu = torch.tensor(
+            [self.output_map[k] for k in self.output_keys], dtype=torch.long
+        )
 
         for res in raw_results_list:
             # res: [B, K]
             if res.numel() == 0:
                 continue
-            
+
             # for each of the generators results, rearrange prob distribution according to get_output_map
             if res.shape[1] != K:
-                raise ValueError(f"res has K={res.shape[1]} cols but len(output_keys)={K}")
+                raise ValueError(
+                    f"res has K={res.shape[1]} cols but len(output_keys)={K}"
+                )
 
             if B is None:
                 B = res.shape[0]
             elif res.shape[0] != B:
-                raise ValueError(f"Batch size mismatch: got {res.shape[0]} vs expected {B}")
+                raise ValueError(
+                    f"Batch size mismatch: got {res.shape[0]} vs expected {B}"
+                )
 
             device = res.device
             dtype = res.dtype
@@ -139,10 +157,10 @@ class PatchGenerator(nn.Module):
             # map to the right number of pixels with map_generator_output
             gen_out_len = gen_out.shape[1]
             expected_len = self.expected_size
-            
+
             if gen_out_len > expected_len:
                 surplus_half = (gen_out_len - expected_len) // 2
-                img_gen = gen_out[:, surplus_half:surplus_half + expected_len]
+                img_gen = gen_out[:, surplus_half : surplus_half + expected_len]
             else:
                 left = (expected_len - gen_out_len) // 2
                 right = expected_len - gen_out_len - left
@@ -158,20 +176,17 @@ class PatchGenerator(nn.Module):
         # Concatenate into one patch
         if len(patches) == 0:
             return torch.empty(0)
-    
+
         return torch.cat(patches, dim=1)
 
-    
     def forward(self, z):
         # Get results from each generator which is a quantum layer
         raw_results_list = [m(z) for m in self.models]
 
-        # Map to image 
+        # Map to image
         img = self.dist_to_image(raw_results_list)
 
         return img
-
-
 
 
 class PatchGeneratorLegacy:
@@ -185,7 +200,7 @@ class PatchGeneratorLegacy:
         lossy,
         remote_token=None,
         use_clements=False,
-        sim = False
+        sim=False,
     ):
         self.image_size = image_size
         self.gen_count = gen_count
@@ -223,7 +238,7 @@ class PatchGeneratorLegacy:
         proc.with_input(self.input_state)
         proc.min_detected_photons_filter(self.input_state.n)
         if remote_token is not None:
-            self.sampler = pcvl.algorithm.Sampler(proc, max_shots_per_call = 1000000)
+            self.sampler = pcvl.algorithm.Sampler(proc, max_shots_per_call=1000000)
         else:
             self.sampler = pcvl.algorithm.Sampler(proc)
 
@@ -234,7 +249,6 @@ class PatchGeneratorLegacy:
             self.generators[0].circuit, self.input_state, pnr, lossy
         )
         self.bin_count = np.max(list(self.output_map.values())) + 1
-
 
     def init_params(self):
         params = []
@@ -262,7 +276,7 @@ class PatchGeneratorLegacy:
 
     def generate(self, noise=None, it_list=None):
         # Do the mapping to get an image
-        # what the mapping does: 
+        # what the mapping does:
         # for 1 item in a batch, get results for all generators in the patchgenerator
         # for each of them, rearrange prob distribution according to get_output_map
         # then map to the right number of pixels with map_generator_output
@@ -314,7 +328,7 @@ class PatchGeneratorLegacy:
                 # gen_out is a np array of the re-ordered probabilities of size bin_count
                 # map_generator_output then maps gen_out to the right number of pixels
                 out_modes = map_generator_output(
-                        gen_out, self.image_size * self.image_size // self.gen_count
+                    gen_out, self.image_size * self.image_size // self.gen_count
                 )
                 # add linearly to fake data sample
                 fake_data_sample.extend(out_modes / np.max(out_modes))
