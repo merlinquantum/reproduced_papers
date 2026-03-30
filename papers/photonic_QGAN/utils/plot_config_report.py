@@ -9,7 +9,6 @@ import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 ITER_IMG_RE = re.compile(r"fake_iter_(\d+)\.png$")
 
 
@@ -85,7 +84,9 @@ def _choose_best_run(run_dirs: list[Path], last_n: int = 10) -> tuple[Path, floa
     return best_run, best_score
 
 
-def _aggregate_losses(run_dirs: list[Path]) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+def _aggregate_losses(
+    run_dirs: list[Path],
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     loss_runs: list[np.ndarray] = []
     for run_dir in run_dirs:
         loss_csv = run_dir / "loss_progress.csv"
@@ -125,7 +126,9 @@ def _pick_five_iteration_images(run_dir: Path) -> list[tuple[int, Path]]:
         return []
 
     max_iter = max(it for it, _ in candidates)
-    targets = [max(1, int(round(max_iter * frac))) for frac in (0.2, 0.4, 0.6, 0.8, 1.0)]
+    targets = [
+        max(1, int(round(max_iter * frac))) for frac in (0.2, 0.4, 0.6, 0.8, 1.0)
+    ]
     picked: list[tuple[int, Path]] = []
     used = set()
     for target in targets:
@@ -144,7 +147,9 @@ def _pick_five_iteration_images(run_dir: Path) -> list[tuple[int, Path]]:
     return sorted(picked, key=lambda x: x[0])
 
 
-def _fallback_five_images_from_fake_progress(run_dir: Path, image_size: int) -> list[np.ndarray]:
+def _fallback_five_images_from_fake_progress(
+    run_dir: Path, image_size: int
+) -> list[np.ndarray]:
     fake_csv = run_dir / "fake_progress.csv"
     if not fake_csv.exists():
         return []
@@ -233,13 +238,23 @@ def build_report(
     iterations, d_mean, d_std, g_mean, g_std = _aggregate_losses(run_dirs)
 
     fig = plt.figure(figsize=(16, 9))
-    gs = fig.add_gridspec(2, 2, width_ratios=[1.9, 2.1], height_ratios=[1, 1], wspace=0.25, hspace=0.35)
+    gs = fig.add_gridspec(
+        2, 2, width_ratios=[1.9, 2.1], height_ratios=[1, 1], wspace=0.25, hspace=0.35
+    )
 
     ax_loss = fig.add_subplot(gs[:, 0])
-    ax_loss.plot(iterations, g_mean, color="tab:blue", label="G Loss (mean)", linewidth=1.7)
-    ax_loss.fill_between(iterations, g_mean - g_std, g_mean + g_std, color="tab:blue", alpha=0.18)
-    ax_loss.plot(iterations, d_mean, color="tab:orange", label="D Loss (mean)", linewidth=1.7)
-    ax_loss.fill_between(iterations, d_mean - d_std, d_mean + d_std, color="tab:orange", alpha=0.18)
+    ax_loss.plot(
+        iterations, g_mean, color="tab:blue", label="G Loss (mean)", linewidth=1.7
+    )
+    ax_loss.fill_between(
+        iterations, g_mean - g_std, g_mean + g_std, color="tab:blue", alpha=0.18
+    )
+    ax_loss.plot(
+        iterations, d_mean, color="tab:orange", label="D Loss (mean)", linewidth=1.7
+    )
+    ax_loss.fill_between(
+        iterations, d_mean - d_std, d_mean + d_std, color="tab:orange", alpha=0.18
+    )
     ax_loss.set_title(f"Loss vs Iterations (avg across {len(run_dirs)} run(s))")
     ax_loss.set_xlabel("Iteration")
     ax_loss.set_ylabel("Loss")
@@ -255,7 +270,9 @@ def build_report(
             ax.set_title(f"it={it}", fontsize=9)
             ax.axis("off")
     else:
-        fallback_imgs = _fallback_five_images_from_fake_progress(best_run_dir, image_size)
+        fallback_imgs = _fallback_five_images_from_fake_progress(
+            best_run_dir, image_size
+        )
         for i in range(5):
             ax = fig.add_subplot(top_gs[0, i])
             if i < len(fallback_imgs):
@@ -289,7 +306,9 @@ def build_report(
     if not generated:
         generated = _fallback_five_images_from_fake_progress(best_run_dir, image_size)
         if use_saved_model:
-            generated_title = f"Generated (fallback from fake_progress, target digit={digit})"
+            generated_title = (
+                f"Generated (fallback from fake_progress, target digit={digit})"
+            )
         else:
             generated_title = f"Generated from fake_progress (target digit={digit})"
 
@@ -323,7 +342,9 @@ def build_report(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Create a summary plot for one photonic_QGAN config folder.")
+    parser = argparse.ArgumentParser(
+        description="Create a summary plot for one photonic_QGAN config folder."
+    )
     parser.add_argument(
         "config_dir",
         type=Path,
@@ -335,7 +356,9 @@ def main() -> None:
         default=None,
         help="Optional specific run folder (e.g. run_1). If omitted, aggregate all run_*.",
     )
-    parser.add_argument("--out", type=Path, default=None, help="Optional output image path.")
+    parser.add_argument(
+        "--out", type=Path, default=None, help="Optional output image path."
+    )
     parser.add_argument(
         "--no-model",
         action="store_true",

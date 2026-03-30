@@ -6,7 +6,6 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-
 CONFIG_RE = re.compile(r"config_(\d+)(?:_input_([01]+))?$")
 
 
@@ -73,7 +72,9 @@ def _config_info_from_ssim_path(path: Path) -> tuple[str, str, str] | None:
     return setup, config_id, input_state
 
 
-def collect_config_stats(run_dir: Path, last_n: int) -> dict[tuple[str, str, str], ConfigStats]:
+def collect_config_stats(
+    run_dir: Path, last_n: int
+) -> dict[tuple[str, str, str], ConfigStats]:
     stats: dict[tuple[str, str, str], ConfigStats] = {}
     for ssim_file in sorted(run_dir.glob("**/ssim_progress.csv")):
         info = _config_info_from_ssim_path(ssim_file)
@@ -93,7 +94,9 @@ def collect_config_stats(run_dir: Path, last_n: int) -> dict[tuple[str, str, str
     return stats
 
 
-def collect_config_stats_best_run(run_dir: Path, last_n: int) -> dict[tuple[str, str, str], ConfigStats]:
+def collect_config_stats_best_run(
+    run_dir: Path, last_n: int
+) -> dict[tuple[str, str, str], ConfigStats]:
     run_stats: dict[tuple[str, str, str], list[tuple[str, float, int]]] = {}
     for ssim_file in sorted(run_dir.glob("**/ssim_progress.csv")):
         info = _config_info_from_ssim_path(ssim_file)

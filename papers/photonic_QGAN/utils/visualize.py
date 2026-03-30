@@ -43,7 +43,8 @@ def show_grid(
     plt.show()
 
 
-
-csv_path = Path("/Users/cassandrenotton/Documents/projects/QML_project/fork_reproduced_papers/reproduced_papers/papers/photonic_QGAN/outdir/run_20260120-150550/digits/config_1/run_1/fake_progress.csv")
+csv_path = Path(
+    "/Users/cassandrenotton/Documents/projects/QML_project/fork_reproduced_papers/reproduced_papers/papers/photonic_QGAN/outdir/run_20260120-150550/digits/config_1/run_1/fake_progress.csv"
+)
 show_sample(csv_path, index=-1, image_size=8)
 show_grid(csv_path, count=16, image_size=8, cols=4)

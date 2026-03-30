@@ -45,7 +45,7 @@ class SPSA:
         for _ in range(iter_count):
             self.k += 1
             ak = self.a / ((self.k + self.A) ** self.alpha)
-            ck = self.c / (self.k ** self.gamma)
+            ck = self.c / (self.k**self.gamma)
             gk = np.array(self.grad_fun(params, ck))
             params -= ak * gk
 

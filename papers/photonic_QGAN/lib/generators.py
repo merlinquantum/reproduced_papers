@@ -1,18 +1,16 @@
+import merlin as ML
 import numpy as np
 import perceval as pcvl
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
 from utils.mappings import get_output_map, map_generator_output
 from utils.pqc import ParametrizedQuantumCircuit
-
-import merlin as ML
 
 
 class ClassicalGenerator(nn.Module):
     def __init__(self, noise_dim=2, image_size=8, hidden_dim=64):
-        super(ClassicalGenerator, self).__init__()
+        super().__init__()
         self.noise_dim = int(noise_dim)
         self.image_size = int(image_size)
         self.hidden_dim = int(hidden_dim)
@@ -98,7 +96,9 @@ class PatchGenerator(nn.Module):
         if pnr or not lossy:
             possible_state_keys = self.output_keys
         else:
-            possible_state_keys = [key for key in self.output_keys if all(i < 2 for i in key)]
+            possible_state_keys = [
+                key for key in self.output_keys if all(i < 2 for i in key)
+            ]
 
         for key in possible_state_keys:
             int_state = state_to_int(key, pnr)
@@ -110,7 +110,7 @@ class PatchGenerator(nn.Module):
                 possible_outputs.append(int_state)
 
         self.output_map = {}
-        for index, int_state in enumerate(sorted(list(possible_outputs))):
+        for index, int_state in enumerate(sorted(possible_outputs)):
             for basic_state in rev_map[int_state]:
                 self.output_map[basic_state] = index
 
@@ -320,8 +320,8 @@ class PatchGeneratorLegacy:
                     try:
                         gen_out[out_map[key]] += res[key]
                         total_count += res[key]
-                    except:
-                        pass
+                    except KeyError:
+                        continue
                 # print(np.sum(gen_out / self.sample_count), np.sum(gen_out / total_count))
                 gen_out /= total_count
                 # The probabilities are re-ordered according to the mapping

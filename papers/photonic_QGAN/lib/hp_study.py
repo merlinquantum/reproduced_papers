@@ -8,7 +8,6 @@ from typing import Any
 
 import numpy as np
 from loguru import logger
-
 from sklearn.base import BaseEstimator
 from sklearn.experimental import enable_halving_search_cv  # noqa: F401
 from sklearn.model_selection import HalvingGridSearchCV, KFold
@@ -83,7 +82,12 @@ def _coerce_input_state(value: Any) -> list[int] | None:
     text = str(value).strip()
     if not text:
         return None
-    if "," not in text and "[" not in text and "]" not in text and all(ch in "01" for ch in text):
+    if (
+        "," not in text
+        and "[" not in text
+        and "]" not in text
+        and all(ch in "01" for ch in text)
+    ):
         return [int(ch) for ch in text]
     return _coerce_int_list(value)
 
@@ -102,7 +106,12 @@ def _arch_is_valid_for_modes(arch: list[str], mode_count: int) -> bool:
     return True
 
 
-def _resolve_csv_path(csv_path: str | Path, data_root: str | Path | None, repo_root: Path, project_dir: Path) -> Path:
+def _resolve_csv_path(
+    csv_path: str | Path,
+    data_root: str | Path | None,
+    repo_root: Path,
+    project_dir: Path,
+) -> Path:
     """Resolve the dataset CSV path against project and data-root fallbacks."""
     path = Path(csv_path)
     if path.is_absolute():
@@ -117,7 +126,8 @@ def _resolve_csv_path(csv_path: str | Path, data_root: str | Path | None, repo_r
         if candidate.exists():
             return candidate
     raise FileNotFoundError(
-        "CSV file not found; tried: " + ", ".join(str(candidate) for candidate in candidates)
+        "CSV file not found; tried: "
+        + ", ".join(str(candidate) for candidate in candidates)
     )
 
 
@@ -143,13 +153,17 @@ def _prepare_dataset(
         label=label,
         transform=transforms.Compose([transforms.ToTensor()]),
     )
-    sampler = RandomSampler(dataset, replacement=True, num_samples=batch_size * opt_iter_num)
+    sampler = RandomSampler(
+        dataset, replacement=True, num_samples=batch_size * opt_iter_num
+    )
     return torch.utils.data.DataLoader(
         dataset, batch_size=batch_size, drop_last=True, sampler=sampler
     )
 
 
-def _extract_ssim_score(ssim_progress: list[tuple[float, float, float]], tail: int) -> float:
+def _extract_ssim_score(
+    ssim_progress: list[tuple[float, float, float]], tail: int
+) -> float:
     """Aggregate SSIM from QGAN training, using a tail average for stability."""
     if not ssim_progress:
         return float("-inf")
@@ -219,7 +233,6 @@ class QGANSSIMEstimator(BaseEstimator):
     def fit(self, X, y=None):
         import perceval as pcvl
         import torch
-
         from lib.qgan import QGAN
 
         fit_start = time.perf_counter()
@@ -373,9 +386,7 @@ def _build_cases(cfg: dict[str, Any]) -> list[dict[str, Any]]:
     for setup_label in setups:
         setup_cfg = _setup_arch_from_label(setup_label)
         if setup_cfg is None:
-            raise ValueError(
-                f"Unknown setup {setup_label}. Expected setup_c."
-            )
+            raise ValueError(f"Unknown setup {setup_label}. Expected setup_c.")
         for input_state in input_states:
             if not _arch_is_valid_for_modes(setup_cfg["arch"], len(input_state)):
                 continue
@@ -386,12 +397,16 @@ def _build_cases(cfg: dict[str, Any]) -> list[dict[str, Any]]:
                     "input_state": list(input_state),
                     "noise_dim": int(setup_cfg["noise_dim"]),
                     "arch": list(setup_cfg["arch"]),
-                    "gen_count": int(ideal_cfg.get("gen_count", 4 if len(input_state) == 5 else 2)),
+                    "gen_count": int(
+                        ideal_cfg.get("gen_count", 4 if len(input_state) == 5 else 2)
+                    ),
                     "pnr": bool(ideal_cfg.get("pnr", False)),
                 }
                 cases.append(case)
     if not cases:
-        raise ValueError("No valid hp study cases were produced from setups/input_states.")
+        raise ValueError(
+            "No valid hp study cases were produced from setups/input_states."
+        )
     return cases
 
 
@@ -432,9 +447,13 @@ def run_halving_grid_study(cfg: dict[str, Any], run_dir: Path, log) -> dict[str,
     model_cfg = cfg.get("model", {})
 
     cases = _build_cases(cfg)
-    param_grid = _normalize_param_grid(study_cfg.get("param_grid", _default_param_grid()))
+    param_grid = _normalize_param_grid(
+        study_cfg.get("param_grid", _default_param_grid())
+    )
 
-    max_resources = int(search_cfg.get("max_resources", int(training_ideal.get("opt_iter_num", 1500))))
+    max_resources = int(
+        search_cfg.get("max_resources", int(training_ideal.get("opt_iter_num", 1500)))
+    )
     min_resources = int(search_cfg.get("min_resources", max(100, max_resources // 8)))
     if min_resources > max_resources:
         raise ValueError("hp_study.halving.min_resources must be <= max_resources.")
@@ -448,7 +467,9 @@ def run_halving_grid_study(cfg: dict[str, Any], run_dir: Path, log) -> dict[str,
     random_state = int(search_cfg.get("random_state", cfg.get("seed", 0)))
     ssim_tail = int(study_cfg.get("ssim_tail", 100))
 
-    csv_path = str(cfg.get("dataset", {}).get("csv_path", "photonic_QGAN/optdigits_csv.csv"))
+    csv_path = str(
+        cfg.get("dataset", {}).get("csv_path", "photonic_QGAN/optdigits_csv.csv")
+    )
     data_root = cfg.get("data_root")
     repo_root = str(Path(__file__).resolve().parents[3])
     project_dir = str(Path(__file__).resolve().parents[1])
@@ -510,7 +531,9 @@ def run_halving_grid_study(cfg: dict[str, Any], run_dir: Path, log) -> dict[str,
         factor,
         len(cases),
     )
-    log.info("Detailed hp_study progress logs will appear in the run log with [hp_study] prefix.")
+    log.info(
+        "Detailed hp_study progress logs will appear in the run log with [hp_study] prefix."
+    )
     # Main optimization run; may take hours for large candidate sets/cases/resources.
     search.fit(X, y)
 
@@ -546,7 +569,9 @@ def run_halving_grid_study(cfg: dict[str, Any], run_dir: Path, log) -> dict[str,
             "random_state": random_state,
         },
     }
-    (study_out / "best_result.json").write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    (study_out / "best_result.json").write_text(
+        json.dumps(payload, indent=2), encoding="utf-8"
+    )
 
     training_patch = dict(training_ideal)
     training_patch.update(search.best_params_)

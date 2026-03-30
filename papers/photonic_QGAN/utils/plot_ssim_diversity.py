@@ -8,7 +8,6 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
-
 CONFIG_RE = re.compile(r"config_(\d+)(?:_input_([01]+))?$")
 
 
@@ -58,7 +57,9 @@ def _config_info_from_ssim_path(path: Path) -> tuple[str, str, str] | None:
     return setup, config_id, input_state
 
 
-def _read_similarity_diversity(path: Path, last_n: int) -> tuple[list[float], list[float]]:
+def _read_similarity_diversity(
+    path: Path, last_n: int
+) -> tuple[list[float], list[float]]:
     similarity: list[float] = []
     diversity: list[float] = []
     sim_idx: int | None = None
@@ -81,8 +82,16 @@ def _read_similarity_diversity(path: Path, last_n: int) -> tuple[list[float], li
             if row[0].strip().lower() == "iter":
                 continue
             try:
-                cur_sim = float(row[sim_idx]) if sim_idx is not None and sim_idx < len(row) else float(row[-1])
-                cur_div = float(row[div_idx]) if div_idx is not None and div_idx < len(row) else float("nan")
+                cur_sim = (
+                    float(row[sim_idx])
+                    if sim_idx is not None and sim_idx < len(row)
+                    else float(row[-1])
+                )
+                cur_div = (
+                    float(row[div_idx])
+                    if div_idx is not None and div_idx < len(row)
+                    else float("nan")
+                )
             except (ValueError, IndexError):
                 continue
             if cur_div == cur_div:  # NaN check
@@ -94,7 +103,9 @@ def _read_similarity_diversity(path: Path, last_n: int) -> tuple[list[float], li
     return similarity, diversity
 
 
-def collect_points(run_dir: Path, last_n: int) -> dict[tuple[str, str, str], ConfigPoint]:
+def collect_points(
+    run_dir: Path, last_n: int
+) -> dict[tuple[str, str, str], ConfigPoint]:
     points: dict[tuple[str, str, str], ConfigPoint] = {}
     for ssim_file in sorted(run_dir.glob("**/ssim_progress.csv")):
         info = _config_info_from_ssim_path(ssim_file)
@@ -115,7 +126,9 @@ def collect_points(run_dir: Path, last_n: int) -> dict[tuple[str, str, str], Con
     return points
 
 
-def collect_points_best_run(run_dir: Path, last_n: int) -> dict[tuple[str, str, str], ConfigPoint]:
+def collect_points_best_run(
+    run_dir: Path, last_n: int
+) -> dict[tuple[str, str, str], ConfigPoint]:
     run_stats: dict[tuple[str, str, str], list[tuple[str, float, float, int]]] = {}
     for ssim_file in sorted(run_dir.glob("**/ssim_progress.csv")):
         info = _config_info_from_ssim_path(ssim_file)
@@ -226,7 +239,9 @@ def plot_similarity_vs_diversity(
     )
 
     if annotate_top_k > 0:
-        ranked = sorted(filtered, key=lambda p: p.mean_similarity, reverse=True)[:annotate_top_k]
+        ranked = sorted(filtered, key=lambda p: p.mean_similarity, reverse=True)[
+            :annotate_top_k
+        ]
         for p in ranked:
             ax.annotate(
                 p.label,
@@ -315,7 +330,9 @@ def main() -> None:
     )
     points = sorted(points_map.values(), key=lambda p: p.mean_similarity, reverse=True)
     if not points:
-        print("No valid ssim_progress.csv files found in the provided experiment directory.")
+        print(
+            "No valid ssim_progress.csv files found in the provided experiment directory."
+        )
         return
 
     out_path = args.out or (experiment_dir / "ssim_vs_diversity.png")

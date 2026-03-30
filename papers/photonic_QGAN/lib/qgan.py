@@ -1,13 +1,11 @@
 import numpy as np
-import torch.nn as nn
 import torch
-from skimage.metrics import structural_similarity as ssim
-
+import torch.nn as nn
 import torch.optim as optim
-
-from lib.generators import ClassicalGenerator, PatchGenerator
 from lib.discriminator import Discriminator
+from lib.generators import ClassicalGenerator, PatchGenerator
 from lib.spsa import SPSA, bernoulli_delta
+from skimage.metrics import structural_similarity as ssim
 
 
 def get_metrics(real, fake):
@@ -28,6 +26,7 @@ def get_metrics(real, fake):
 
     return similarity, 1 - diversity
 
+
 class QGAN:
     def __init__(
         self,
@@ -41,7 +40,7 @@ class QGAN:
         lossy,
         remote_token=None,
         use_clements=False,
-        sim = False,
+        sim=False,
         generator_type="photonic",
     ):
         self.noise_dim = noise_dim
@@ -112,7 +111,9 @@ class QGAN:
             opt_iter_num = int(payload.get("opt_iter_num", 0))
             if train_params is None:
                 train_params = {}
-            train_params.update({k: v for k, v in payload.items() if k != "opt_iter_num"})
+            train_params.update(
+                {k: v for k, v in payload.items() if k != "opt_iter_num"}
+            )
         if train_params is None:
             train_params = {}
 
@@ -137,14 +138,18 @@ class QGAN:
         criterion = nn.BCEWithLogitsLoss()
 
         device = next(self.D.parameters()).device
-        fixed_noise = torch.normal(0, 2 * torch.pi, (self.batch_size, self.noise_dim), device=device)
+        fixed_noise = torch.normal(
+            0, 2 * torch.pi, (self.batch_size, self.noise_dim), device=device
+        )
         with torch.no_grad():
             fake_progress.append(self.G(fixed_noise).detach().cpu())
 
         if d_optimizer_type == "sgd":
             optD = optim.SGD(self.D.parameters(), lr=lrD)
         else:
-            optD = optim.Adam(self.D.parameters(), lr=lrD, betas=(adam_beta1, adam_beta2))
+            optD = optim.Adam(
+                self.D.parameters(), lr=lrD, betas=(adam_beta1, adam_beta2)
+            )
 
         # ---- Generator optimizer setup ----
         if optimizer_type == "spsa":
@@ -152,9 +157,15 @@ class QGAN:
             spsa_step_duration = max(1, spsa_iter_num // opt_iter_num)
 
             # Mutable context so grad_G can read the current iteration's tensors.
-            _spsa_ctx: dict = {"noise": fixed_noise, "gen_labels": None, "criterion": criterion}
+            _spsa_ctx: dict = {
+                "noise": fixed_noise,
+                "gen_labels": None,
+                "criterion": criterion,
+            }
 
-            fixed_gen_labels = torch.full((self.batch_size,), gen_target_value, device=device)
+            fixed_gen_labels = torch.full(
+                (self.batch_size,), gen_target_value, device=device
+            )
             _spsa_ctx["gen_labels"] = fixed_gen_labels
 
             def _grad_G(params, c):
@@ -179,7 +190,9 @@ class QGAN:
             if "spsa_k" in train_params:
                 optG.k = int(train_params["spsa_k"])
         else:
-            optG = optim.Adam(self.G.parameters(), lr=lrG, betas=(adam_beta1, adam_beta2))
+            optG = optim.Adam(
+                self.G.parameters(), lr=lrG, betas=(adam_beta1, adam_beta2)
+            )
 
         G_loss_prog = []
         D_loss_prog = []
@@ -198,14 +211,18 @@ class QGAN:
             # discriminator training
             d_losses = []
             for _ in range(d_steps):
-                noise_d = torch.normal(0, 2 * torch.pi, (B, self.noise_dim), device=device)
+                noise_d = torch.normal(
+                    0, 2 * torch.pi, (B, self.noise_dim), device=device
+                )
                 fake_data_d = self.G(noise_d).detach()
 
                 self.D.zero_grad()
-                outD_real = self.D(real_data).view(-1)                 # logits
-                outD_fake = self.D(fake_data_d).view(-1)               # logits, detached
+                outD_real = self.D(real_data).view(-1)  # logits
+                outD_fake = self.D(fake_data_d).view(-1)  # logits, detached
 
-                errD = criterion(outD_real, real_labels) + criterion(outD_fake, fake_labels)
+                errD = criterion(outD_real, real_labels) + criterion(
+                    outD_fake, fake_labels
+                )
                 errD.backward()
                 optD.step()
                 d_losses.append(errD.detach().item())
@@ -217,7 +234,9 @@ class QGAN:
             fake_data = None
             if optimizer_type == "spsa":
                 # Update SPSA context to use current iteration's noise.
-                noise_g = torch.normal(0, 2 * torch.pi, (B, self.noise_dim), device=device)
+                noise_g = torch.normal(
+                    0, 2 * torch.pi, (B, self.noise_dim), device=device
+                )
                 iter_gen_labels = torch.full((B,), gen_target_value, device=device)
                 _spsa_ctx["noise"] = noise_g
                 _spsa_ctx["gen_labels"] = iter_gen_labels
@@ -237,10 +256,12 @@ class QGAN:
                     p.requires_grad_(False)
 
                 for _ in range(g_steps):
-                    noise_g = torch.normal(0, 2 * torch.pi, (B, self.noise_dim), device=device)
+                    noise_g = torch.normal(
+                        0, 2 * torch.pi, (B, self.noise_dim), device=device
+                    )
                     self.G.zero_grad()
                     fake_data = self.G(noise_g)
-                    outD_fake_for_G = self.D(fake_data).view(-1)       # logits, NOT detached
+                    outD_fake_for_G = self.D(fake_data).view(-1)  # logits, NOT detached
                     G_loss = criterion(outD_fake_for_G, gen_labels)
                     G_loss.backward()
                     optG.step()
@@ -258,17 +279,22 @@ class QGAN:
                 if real_images.ndim == 4:
                     real_images = real_images[:, 0, :, :]
                 elif real_images.ndim == 2:
-                    real_images = real_images.reshape(B, self.image_size, self.image_size)
+                    real_images = real_images.reshape(
+                        B, self.image_size, self.image_size
+                    )
 
-                fake_images = fake_data.detach().cpu().numpy().reshape(
-                    B, self.image_size, self.image_size
+                fake_images = (
+                    fake_data.detach()
+                    .cpu()
+                    .numpy()
+                    .reshape(B, self.image_size, self.image_size)
                 )
                 real_images = np.clip(real_images, 0.0, 1.0)
                 fake_images = np.clip(fake_images, 0.0, 1.0)
                 similarity, diversity = get_metrics(real_images, fake_images)
                 # Keep SSIM as the final column for downstream ranking scripts.
                 ssim_prog.append((similarity, diversity, similarity))
-            
+
             # log and display results
             D_loss_prog.append(D_loss)
             G_loss_prog.append(G_loss_val)
@@ -288,7 +314,13 @@ class QGAN:
 
             if callback is not None:
                 callback(
-                    i, D_loss, G_loss_val, self.G.state_dict(), self.D.state_dict(), fake_samples, optG
+                    i,
+                    D_loss,
+                    G_loss_val,
+                    self.G.state_dict(),
+                    self.D.state_dict(),
+                    fake_samples,
+                    optG,
                 )
 
         final_G_params = self.G.state_dict()

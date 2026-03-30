@@ -58,7 +58,7 @@ def _load_cv_rows(path: Path) -> list[CVRow]:
             params: dict[str, Any] = {}
             for key, value in row.items():
                 if key.startswith(PARAM_PREFIX):
-                    params[key[len(PARAM_PREFIX):]] = _to_num(value)
+                    params[key[len(PARAM_PREFIX) :]] = _to_num(value)
             resource = int(params.get("opt_iter_num", 0))
             rows.append(
                 CVRow(
@@ -91,7 +91,9 @@ def _group_unique(rows: list[CVRow]) -> list[dict[str, Any]]:
                 "best_score_any": best_any.score,
                 "best_rank_any": min(item.rank for item in group_rows),
                 "scores_by_resource": {
-                    str(resource): max(item.score for item in group_rows if item.resource == resource)
+                    str(resource): max(
+                        item.score for item in group_rows if item.resource == resource
+                    )
                     for resource in sorted({item.resource for item in group_rows})
                 },
                 "resources_seen": sorted({item.resource for item in group_rows}),
@@ -123,7 +125,9 @@ def _mean_by_param(rows: list[CVRow]) -> dict[str, list[dict[str, Any]]]:
                     "count": len(scores),
                 }
             )
-        out[param] = sorted(rows_for_param, key=lambda item: item["mean_score"], reverse=True)
+        out[param] = sorted(
+            rows_for_param, key=lambda item: item["mean_score"], reverse=True
+        )
     return out
 
 
@@ -190,7 +194,9 @@ def _compute_param_importance(rows: list[CVRow]) -> list[dict[str, Any]]:
     return importance_rows
 
 
-def _plot_param_importance(importance_rows: list[dict[str, Any]], out_path: Path) -> str | None:
+def _plot_param_importance(
+    importance_rows: list[dict[str, Any]], out_path: Path
+) -> str | None:
     if plt is None or not importance_rows:
         return None
     labels = [row["param"] for row in importance_rows]
@@ -216,8 +222,12 @@ def _plot_interaction_demo(
     if plt is None or not rows:
         return None
     grouped: dict[tuple[Any, Any], list[float]] = defaultdict(list)
-    x_values = sorted({row.params.get(param_x) for row in rows if param_x in row.params})
-    y_values = sorted({row.params.get(param_y) for row in rows if param_y in row.params})
+    x_values = sorted(
+        {row.params.get(param_x) for row in rows if param_x in row.params}
+    )
+    y_values = sorted(
+        {row.params.get(param_y) for row in rows if param_y in row.params}
+    )
     if not x_values or not y_values:
         return None
     for row in rows:
@@ -251,7 +261,9 @@ def _plot_interaction_demo(
     return str(out_path)
 
 
-def _plot_ssim_vs_param(rows: list[CVRow], param_name: str, out_path: Path) -> str | None:
+def _plot_ssim_vs_param(
+    rows: list[CVRow], param_name: str, out_path: Path
+) -> str | None:
     if plt is None:
         return None
     if not rows:
@@ -287,7 +299,9 @@ def _plot_ssim_vs_param(rows: list[CVRow], param_name: str, out_path: Path) -> s
     return str(out_path)
 
 
-def _plot_adam_beta_heatmap(rows: list[CVRow], out_path: Path, max_resource: int) -> str | None:
+def _plot_adam_beta_heatmap(
+    rows: list[CVRow], out_path: Path, max_resource: int
+) -> str | None:
     if plt is None:
         return None
     if not rows:
@@ -371,15 +385,21 @@ def analyze_hp_study(run_dir: Path, top_k: int = 3) -> dict[str, Any]:
     rows_max = _rows_at_resource(cv_rows, max_resource)
 
     unique_candidates = _group_unique(cv_rows)
-    unique_any = sorted(unique_candidates, key=lambda item: item["best_score_any"], reverse=True)
+    unique_any = sorted(
+        unique_candidates, key=lambda item: item["best_score_any"], reverse=True
+    )
     unique_max = sorted(
         unique_candidates,
-        key=lambda item: item["scores_by_resource"].get(str(max_resource), float("-inf")),
+        key=lambda item: item["scores_by_resource"].get(
+            str(max_resource), float("-inf")
+        ),
         reverse=True,
     )
 
     top_unique_any = unique_any[:top_k]
-    top_unique_max = [item for item in unique_max if str(max_resource) in item["scores_by_resource"]][:top_k]
+    top_unique_max = [
+        item for item in unique_max if str(max_resource) in item["scores_by_resource"]
+    ][:top_k]
 
     max_resource_rows_sorted = sorted(rows_max, key=lambda row: row.score, reverse=True)
     param_effect_max = _mean_by_param(rows_max) if rows_max else {}
@@ -591,7 +611,9 @@ def analyze_hp_study(run_dir: Path, top_k: int = 3) -> dict[str, Any]:
     lines.append("")
     lines.append("## Plots")
     if plt is None:
-        lines.append("- Plot generation skipped: `matplotlib` is not installed in this Python environment.")
+        lines.append(
+            "- Plot generation skipped: `matplotlib` is not installed in this Python environment."
+        )
     for plot_name, plot_path in generated_plots.items():
         if plot_path:
             rel = Path(plot_path).as_posix()
@@ -599,7 +621,9 @@ def analyze_hp_study(run_dir: Path, top_k: int = 3) -> dict[str, Any]:
     lines.append("")
     lines.append("## Notes")
     lines.append("- Successive-halving ranks include many 200-iteration evaluations.")
-    lines.append("- For deployment-sized training, prioritize the final-stage (`opt_iter_num=600`) view.")
+    lines.append(
+        "- For deployment-sized training, prioritize the final-stage (`opt_iter_num=600`) view."
+    )
 
     analysis_md = study_dir / "analysis.md"
     analysis_md.write_text("\n".join(lines) + "\n", encoding="utf-8")

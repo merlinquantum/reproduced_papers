@@ -14,6 +14,7 @@ RUNNER_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = RUNNER_DIR.parent  # photonic_QGAN/
 REPO_ROOT = PROJECT_ROOT.parent.parent  # reproduced_papers/
 
+
 def _resolve_digit_list(cfg: dict) -> list[int]:
     digits_cfg = cfg.get("digits", {})
     explicit = digits_cfg.get("digits")
@@ -124,7 +125,12 @@ def _coerce_input_state(value):
     text = str(value).strip()
     if not text:
         return None
-    if "," not in text and "[" not in text and "]" not in text and all(ch in "01" for ch in text):
+    if (
+        "," not in text
+        and "[" not in text
+        and "]" not in text
+        and all(ch in "01" for ch in text)
+    ):
         return [int(ch) for ch in text]
     return _coerce_int_list(value)
 
@@ -135,7 +141,10 @@ def _default_ideal_grid() -> list[dict]:
     # B: var, enc[0], var, enc[2], var, enc[4], var
     # C: var, var, enc[2], var, var
     # D: var, enc[1], var, enc[3], var
-    setup_arch_grid = [{"noise_dim": item["noise_dim"], "arch": item["arch"]} for item in _setup_arch_grid()]
+    setup_arch_grid = [
+        {"noise_dim": item["noise_dim"], "arch": item["arch"]}
+        for item in _setup_arch_grid()
+    ]
     input_grid_4modes = [
         {"input_state": [1, 1, 1, 1], "gen_count": 2, "pnr": True},
         {"input_state": [1, 1, 1, 1], "gen_count": 4, "pnr": False},
@@ -150,7 +159,7 @@ def _default_ideal_grid() -> list[dict]:
     ]
 
     config_grid: list[dict] = []
-    for inp in (input_grid_4modes + input_grid_5modes + input_grid_8modes):
+    for inp in input_grid_4modes + input_grid_5modes + input_grid_8modes:
         mode_count = len(inp["input_state"])
         for arch in setup_arch_grid:
             if not _arch_is_valid_for_modes(arch["arch"], mode_count):
@@ -177,7 +186,7 @@ def _resolve_csv_path(
     csv_path: str | Path, data_root: str | Path | None, project_dir: Path
 ) -> Path:
     """Resolve CSV file path with multiple fallback strategies.
-    
+
     Priority order:
     1. Absolute paths are returned as-is
     2. repo_root/data/<csv_path> (default data directory)
@@ -187,23 +196,23 @@ def _resolve_csv_path(
     path = Path(csv_path)
     if path.is_absolute():
         return path
-    
+
     candidate_paths: list[Path] = []
-    
+
     # Priority 1: Default data directory at repo root
     candidate_paths.append((REPO_ROOT / "data" / path).resolve())
-    
+
     # Priority 2: Explicit data_root if provided
     if data_root:
         candidate_paths.append((Path(data_root) / path).resolve())
-    
+
     # Priority 3: Relative to project_dir (legacy fallback)
     candidate_paths.append((project_dir / path).resolve())
-    
+
     for candidate in candidate_paths:
         if candidate.exists():
             return candidate
-    
+
     raise FileNotFoundError(
         "CSV file not found; tried: "
         + ", ".join(str(candidate) for candidate in candidate_paths)
@@ -263,7 +272,6 @@ def _run_qgan(
 ) -> None:
     import numpy as np
     import perceval as pcvl
-
     from lib.qgan import QGAN
 
     model_cfg = cfg.get("model", {})
@@ -301,9 +309,7 @@ def _run_qgan(
         gen_arch,
     )
     iterator = (
-        tqdm(dataloader, desc="iter", leave=False)
-        if show_progress
-        else dataloader
+        tqdm(dataloader, desc="iter", leave=False) if show_progress else dataloader
     )
     progress_images_dir = run_dir / "generated_every_100"
     if write_to_disk:
@@ -436,7 +442,9 @@ def _run_qgan(
             plt.tight_layout()
             plt.savefig(run_dir / "fake_progress_last.png", dpi=150)
             plt.close()
-            log.debug("Saved image preview under {}", run_dir / "fake_progress_last.png")
+            log.debug(
+                "Saved image preview under {}", run_dir / "fake_progress_last.png"
+            )
         except Exception as exc:
             log.warning("Failed to save image preview: {}", exc)
         log.debug("Saved outputs under %s", run_dir)
@@ -494,9 +502,10 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
     project_dir = run_dir.parent.parent.resolve()
     dataset_cfg = cfg.get("dataset", {})
     csv_path = dataset_cfg.get("csv_path", "photonic_QGAN/optdigits_csv.csv")
-    
+
     # Resolve data_root: use config value, DATA_DIR env var, or default to repo_root/data
     import os
+
     data_root_cfg = cfg.get("data_root")
     if data_root_cfg:
         data_root = Path(data_root_cfg).expanduser()
@@ -504,7 +513,7 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         data_root = Path(os.environ["DATA_DIR"]).expanduser()
     else:
         data_root = REPO_ROOT / "data"
-    
+
     logger.info("Dataset csv_path={}", csv_path)
 
     training_cfg = cfg.get("training", {})
@@ -587,7 +596,13 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
 
         for digit in digits:
             dataloader = _prepare_dataset(
-                csv_path, digit, batch_size, opt_iter_num, data_root, project_dir, logger
+                csv_path,
+                digit,
+                batch_size,
+                opt_iter_num,
+                data_root,
+                project_dir,
+                logger,
             )
             config_path = output_root / f"config_{digit}"
             config_path.mkdir(parents=True, exist_ok=True)
@@ -653,7 +668,9 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
             )
         input_state = _coerce_input_state(ideal_cfg.get("input_state"))
         if not input_state:
-            raise ValueError("ideal.input_state must be a non-empty list, csv string, or bitstring like '01010'.")
+            raise ValueError(
+                "ideal.input_state must be a non-empty list, csv string, or bitstring like '01010'."
+            )
         mode_count = len(input_state)
         if not _arch_is_valid_for_modes(setup_cfg["arch"], mode_count):
             raise ValueError(
@@ -688,7 +705,13 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
     for ideal_digit in ideal_digits:
         logger.info("--- Ideal mode digit={} ---", ideal_digit)
         dataloader = _prepare_dataset(
-            csv_path, ideal_digit, batch_size, opt_iter_num, data_root, project_dir, logger
+            csv_path,
+            ideal_digit,
+            batch_size,
+            opt_iter_num,
+            data_root,
+            project_dir,
+            logger,
         )
 
         output_root = run_dir / f"ideal-{ideal_digit}"
@@ -702,7 +725,9 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
             config_path = setup_dir / f"config_{config_num}_input_{state_tag}"
             config_path.mkdir(parents=True, exist_ok=True)
             _write_config(config_path / "config.json", config)
-            logger.debug("Ideal config {}: {}", config_num, json.dumps(config, indent=2))
+            logger.debug(
+                "Ideal config {}: {}", config_num, json.dumps(config, indent=2)
+            )
 
             run_num = 0
             attempt = 0
@@ -711,7 +736,13 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                 run_num += 1
                 save_path = config_path / f"run_{run_num}"
                 save_path.mkdir(parents=True, exist_ok=True)
-                logger.info("Ideal digit={} config {} run {}/{}", ideal_digit, config_num, run_num, runs)
+                logger.info(
+                    "Ideal digit={} config {} run {}/{}",
+                    ideal_digit,
+                    config_num,
+                    run_num,
+                    runs,
+                )
                 try:
                     _run_qgan(
                         cfg,
@@ -728,6 +759,11 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                         logger,
                     )
                 except Exception as exc:
-                    logger.exception("Run failed for digit={} config {}: {}", ideal_digit, config_num, exc)
+                    logger.exception(
+                        "Run failed for digit={} config {}: {}",
+                        ideal_digit,
+                        config_num,
+                        exc,
+                    )
                     shutil.rmtree(save_path, ignore_errors=True)
                     run_num -= 1
