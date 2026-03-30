@@ -17,7 +17,7 @@ jobs:
             if [[ "${GITHUB_HEAD_REF}" =~ ${ALLOWED_REGEX} ]]; then
               echo "✅ Allowed source branch."
             else
-              echo "❌ Only branches starting with release-, paper-, or pml- may target main."
+              echo "❌ Only branches starting with release-, paper-, pr- or pml- may target main."
               exit 1
             fi
           fi
