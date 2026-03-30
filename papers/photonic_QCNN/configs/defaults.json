@@ -1,11 +1,10 @@
 {
-  "description": "Default configuration for Photonic QCNN reproduction experiments.",
+  "description": "Default configuration for MerLin Photonic QCNN short training on MNIST (0 vs 1).",
   "implementation": "merlin",
   "datasets": ["MNIST"],
   "seed": 42,
   "device": "cpu",
-  "figure4": false,
-  "figure12": false,
+  "outdir": "results",
   "max_iter": null,
   "logging": {
     "level": "info"

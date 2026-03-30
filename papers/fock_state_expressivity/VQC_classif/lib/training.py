@@ -197,12 +197,7 @@ def train_model(
     }
 
 
-def _instantiate_model(
-    model_type: str,
-    args: ExperimentArgs,
-    visualize: bool,
-    circuit_dir: str | None,
-) -> nn.Module:
+def _instantiate_model(model_type: str, args: ExperimentArgs) -> nn.Module:
     if model_type == "vqc":
         return get_vqc(
             args.m,
@@ -211,9 +206,7 @@ def _instantiate_model(
             no_bunching=args.no_bunching,
             activation=args.activation,
             circuit=args.circuit,
-            visualize=visualize,
             scale_type=args.scale_type,
-            visualize_dir=circuit_dir,
         )
     if model_type == "mlp_wide":
         return get_mlp_wide(args.input_size, activation=args.activation)
@@ -223,10 +216,7 @@ def _instantiate_model(
 
 
 def train_model_multiple_runs(
-    model_type: str,
-    args: ExperimentArgs,
-    datasets: dict[str, dict[str, torch.Tensor]],
-    circuit_dir: str | None = None,
+    model_type: str, args: ExperimentArgs, datasets: dict[str, dict[str, torch.Tensor]]
 ) -> tuple[dict[str, dict], list[dict]]:
     args.set_model_type(model_type)
     results: dict[str, dict] = {}
@@ -262,19 +252,12 @@ def train_model_multiple_runs(
                 model_runs.append(run_results)
 
         else:
-            visualize_circuit = True
             model_label = _format_model_label(
                 model_type, args.initial_state, uppercase=False
             )
             print(f"\nTraining {model_label} on {dataset_name} ({args.num_runs} runs)")
             for run in range(args.num_runs):
-                model = _instantiate_model(
-                    model_type,
-                    args,
-                    visualize=visualize_circuit,
-                    circuit_dir=circuit_dir,
-                )
-                visualize_circuit = False
+                model = _instantiate_model(model_type, args)
                 num_params = (
                     count_parameters(model)
                     if model_type == "vqc"
@@ -307,6 +290,7 @@ def train_model_multiple_runs(
                 "model": best_model,
                 "best_acc": float(best_acc),
                 "model_type": model_type,
+                "requested_model_type": args.requested_model_type,
                 "activation": args.activation,
                 "initial_state": list(args.initial_state)
                 if model_type == "vqc"

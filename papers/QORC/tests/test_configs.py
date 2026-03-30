@@ -23,7 +23,9 @@ def test_defaults_has_description_and_required_keys() -> None:
 
 def test_cli_schema_matches_defaults_path() -> None:
     defaults_path = PROJECT_DIR / "configs" / "defaults.json"
-    cli_schema_path = PROJECT_DIR / "configs" / "cli.json"
+    cli_schema_path = PROJECT_DIR / "cli.json"
+    if not cli_schema_path.exists():
+        cli_schema_path = PROJECT_DIR / "configs" / "cli.json"
 
     assert defaults_path.exists(), "defaults.json missing"
     assert cli_schema_path.exists(), "cli.json missing"

@@ -1,0 +1,110 @@
+{
+  "description": "QRNN paper reproduction runner",
+  "arguments": [
+    {
+      "flags": ["--epochs"],
+      "help": "Override number of training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.epochs"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Override dataset batch size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.batch_size"}
+    },
+    {
+      "flags": ["--sequence-length"],
+      "help": "Length of the input weather history used for forecasting",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.sequence_length"}
+    },
+    {
+      "flags": ["--hidden-dim"],
+      "help": "Hidden dimension for the RNN baseline",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.params.hidden_dim"}
+    },
+    {
+      "flags": ["--cell-type"],
+      "help": "Recurrent cell type: rnn|gru|lstm",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.params.cell_type"}
+    },
+    {
+      "flags": ["--bidirectional"],
+      "help": "Use a bidirectional recurrent encoder",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.params.bidirectional"}
+    },
+    {
+      "flags": ["--dropout"],
+      "help": "Dropout applied inside the recurrent stack (effective when layers > 1)",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.params.dropout"}
+    },
+    {
+      "flags": ["--input-dropout"],
+      "help": "Dropout applied to inputs before the recurrent stack",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.params.input_dropout"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Override learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lr"}
+    },
+    {
+      "flags": ["--weight-decay"],
+      "help": "Optimizer weight decay",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.weight_decay"}
+    },
+    {
+      "flags": ["--optimizer"],
+      "help": "Optimizer: adam|adamw|sgd",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.optimizer"}
+    },
+    {
+      "flags": ["--scheduler"],
+      "help": "LR scheduler: none|plateau|cosine (use with configs for params)",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.scheduler"}
+    },
+    {
+      "flags": ["--early-stopping"],
+      "help": "Enable early stopping",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.early_stopping.enabled"}
+    },
+    {
+      "flags": ["--feature-normalization"],
+      "help": "Feature normalization scheme: standard|none|minmax_0_1|minmax_-1_1 (default: minmax_-1_1)",
+      "type": "str",
+      "default": "minmax_-1_1",
+      "apply": {"kind": "config_path", "path": "dataset.feature_normalization"}
+    },
+    {
+      "flags": ["--input-encoding"],
+      "help": "Input-to-angle encoding for quantum models: identity|arccos (default: arccos)",
+      "type": "str",
+      "default": "arccos",
+      "apply": {"kind": "config_path", "path": "model.params.input_encoding"}
+    }
+  ]
+}

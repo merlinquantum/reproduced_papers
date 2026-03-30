@@ -1,8 +1,6 @@
 """Smoke tests for Nearest Centroid Classification."""
 
 import numpy as np
-import pytest
-
 from lib.classifier import MLQuantumNearestCentroid, QuantumNearestCentroid
 from lib.synthetic_data import generate_synthetic_data
 
@@ -101,4 +99,5 @@ def test_merlin_classifier_fit_predict():
 def test_train_and_evaluate_import():
     """Test that train_and_evaluate can be imported."""
     from lib.runner import train_and_evaluate
+
     assert callable(train_and_evaluate)

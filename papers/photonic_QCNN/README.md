@@ -35,7 +35,7 @@ Scope and components:
 Key deviations/assumptions:
 
 - This repository runs simulations only.
-- Configuration-driven CLI (`implementation.py`) with JSON configs under `configs/`.
+- Configuration-driven CLI (`implementation.py`) with JSON configs under `configs/` (run from repo root with `--paper photonic_QCNN`).
 - All reusable code lives in `lib/` (per template).
 - Readout sweeps and visualizations reside in `lib/run_*readout.py` and `results/`.
 
@@ -51,15 +51,18 @@ pip install -r requirements.txt
 
 ### Command-line interface
 
-Main entry point: `implementation.py`
+All `implementation.py` commands must be run from the repository root and include
+`--paper photonic_QCNN`.
+
+Main entry point: `implementation.py`.
 
 ```bash
-python implementation.py --help
+python implementation.py --paper photonic_QCNN --help
 ```
 
 Supported options (can also be set via JSON config):
 
-- `--merlin` / `--paper` choose implementation (defaults to config value, MerLin in `defaults.json`).
+- `--merlin` forces the MerLin implementation (paper implementation is selected via `configs/paper.json`).
 - `--config PATH` load/merge JSON configuration (`configs/defaults.json` and `configs/example.json` available).
 - `--datasets BAS Custom BAS` limit runs to listed datasets.
 - `--seed INT` global RNG seed (propagated to dataset configs).
@@ -67,20 +70,20 @@ Supported options (can also be set via JSON config):
 - `--device STR` `cpu`, `cuda:0`, `mps`, etc. MerLin runs move models/tensors accordingly.
 - `--n-runs INT`, `--batch-size INT`, `--epochs INT`, `--lr FLOAT`, `--weight-decay FLOAT`, `--gamma FLOAT` override per-dataset restarts, loaders, and training hyperparameters.
 
-Example runs:
+Example runs (from repo root):
 
 ```bash
 # Default MerLin pipeline on all datasets
-python implementation.py --merlin
+python implementation.py --paper photonic_QCNN --merlin
 
 # Paper implementation on BAS + MNIST only
-python implementation.py --paper --datasets BAS MNIST
+python implementation.py --paper photonic_QCNN --config configs/paper.json --datasets BAS MNIST
 
 # Custom experiment from JSON, overriding epochs/lr inline
-python implementation.py --config configs/example.json --epochs 30 --lr 5e-2
+python implementation.py --paper photonic_QCNN --config configs/example.json --epochs 30 --lr 5e-2
 ```
 
-Each MerLin call creates `<outdir>/<dataset>/run_YYYYMMDD/HH-MM-SS/` containing configs, metrics, plots, and summaries. Paper scripts continue to save under `results/*_paper/` following the authors' convention.
+Each MerLin call creates `results/run_YYYYMMDD-HHMMSS/<dataset>/` containing configs, metrics, plots, and summaries. Paper run metrics land under `results/run_YYYYMMDD-HHMMSS/`, and model checkpoints are stored under `models/run_YYYYMMDD-HHMMSS/`.
 
 ### Data location
 
@@ -94,24 +97,32 @@ Each MerLin call creates `<outdir>/<dataset>/run_YYYYMMDD/HH-MM-SS/` containing 
 A typical MerLin run folder contains:
 
 ```
-results/BAS/run_2025-05-13/14-32-10/
+results/run_2025-05-13-143210/BAS/
 ├── args.txt                 # resolved dataset hyperparameters
 ├── detailed_results.json    # per-run metrics & histories
 ├── summary.json             # mean/std accuracy statistics
 └── BAS_training_plots.png   # loss/train/test curves
 ```
 
-Override the base directory via `--outdir` or the `outdir` key in the config. Paper outputs land in `results/BAS_paper`, `results/custom_BAS_paper`, etc.
+Override the base directory via `--outdir` or the `outdir` key in the config. Paper run metrics land under `results/run_YYYYMMDD-HHMMSS/`, and model checkpoints are stored under `models/run_YYYYMMDD-HHMMSS/`.
+
+Paper training metric plots can be regenerated with:
+
+```bash
+python utils/BAS_paper_plots.py --input-dir results/run_YYYYMMDD-HHMMSS
+python utils/custom_BAS_paper_plots.py --input-dir results/run_YYYYMMDD-HHMMSS
+python utils/MNIST_paper_plots.py --input-dir results/run_YYYYMMDD-HHMMSS
+```
 
 ### Figure 12 simulation plots
 
 Replicate the paper's Figure 12 (loss/accuracy trajectories per dataset) with:
 
 ```bash
-python implementation.py --figure12
+python utils/figure12.py
 ```
 
-This launches fresh MerLin runs for every dataset in the default config and automatically renders the plots via `utils/simulation_visu.py`. Outputs are stored under `results/figure12/<timestamp>/`, with run artifacts in `runs/` and figures in `figures/`.
+This launches fresh MerLin runs for every dataset in the default config and automatically renders the plots via `utils/simulation_visu.py`. Outputs are stored under `results/figure12/<timestamp>/`, with run artifacts in `runs/<dataset>/` and figures in `figures/` (override the base directory with `--outdir`).
 
 Manual route: run your desired MerLin experiment, then call:
 
@@ -130,8 +141,8 @@ Generated files (one per dataset) follow the pattern:
 The full Figure 4 reproduction can be triggered with:
 
 ```bash
-python implementation.py --figure4
-# optional: python implementation.py --figure4 --max_iter 25  # stop after 25 label assignments to shorten running time
+python utils/figure4.py
+# optional: python utils/figure4.py --max-iter 25 --n-runs 3  # stop after 25 label assignments for the first readout strategy and repeat second readout strategy only 3 times to shorten running time
 ```
 
 This runs both readout sweeps (two-fold with k∈{7,8} and the modes-pair variant), then generates all visualizations via `utils/readout_visu.py`. Artifacts are collected under `results/figure4/<timestamp>/` by default (append `--outdir my_dir` to choose a different base directory).
@@ -151,8 +162,10 @@ Generated outputs include:
 
 All configs live in `configs/`:
 
-- `defaults.json` — global defaults merged into every run.
-- `example.json` — sample experiment (scratch BAS, 3 runs, tweaked optimizer, custom outdir).
+- `defaults.json` — Short training of the MerLin photonic QCNN on MNIST (0 vs 1).
+- `merlin.json` — MerLin reproduction setup (20 epochs, all datasets).
+- `paper.json` — paper reproduction setup (20 epochs, all datasets) for the reference implementation.
+- `cli.json` — CLI schema consumed by `implementation.py` (not an experiment config).
 
 Config structure:
 
@@ -280,7 +293,7 @@ The model uses the following key hyperparameters across different experiments:
 
 ## Reproducibility Notes
 
-- Determinism: `implementation.py` exposes `--seed` (default 42) and propagates it to dataset loaders + PyTorch/MerLin layers.
+- Determinism: `implementation.py --paper photonic_QCNN` exposes `--seed` (default 42) and propagates it to dataset loaders + PyTorch/MerLin layers.
 - Training determinism depends on backend support (set `torch.backends.cudnn.deterministic = True` externally if needed).
 - Captured environment: `results/requirements.txt` contains all the specific environment libraries.
 - Saved artifacts: use `models/` for checkpoints, `results/` for plots/metrics, `lib/` for reusable code per template guidelines.
@@ -290,8 +303,7 @@ The model uses the following key hyperparameters across different experiments:
 Run tests from the repository root:
 
 ```bash
-cd photonic_QCNN
-pytest -q
+pytest -q papers/photonic_QCNN
 ```
 
 Tests cover the QCNN building blocks (`tests/test_qcnn.py`). Add additional tests under `tests/` as new functionality lands.

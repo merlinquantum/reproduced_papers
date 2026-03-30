@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 import json
+import logging
 import os
 import runpy
 import sys
@@ -25,6 +26,8 @@ PAPER_SCRIPT_MAP = {
     "Custom BAS": "run_custom_BAS_paper.py",
     "MNIST": "run_MNIST_paper.py",
 }
+
+LOGGER = logging.getLogger(__name__)
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -101,25 +104,38 @@ def run_merlin_pipeline(config: dict[str, Any]) -> dict[str, Any]:
         except Exception as exc:  # pragma: no cover - surface failure info
             results[dataset] = {"status": "failed", "error": str(exc)}
             print(f"MerLin run for {dataset} failed: {exc}")
+            LOGGER.exception("MerLin run for %s failed", dataset)
     return results
 
 
-def run_paper_pipeline(datasets: list[str]) -> dict[str, Any]:
+def run_paper_pipeline(
+    datasets: list[str], *, results_dir: Path, models_dir: Path
+) -> dict[str, Any]:
     results: dict[str, Any] = {}
     lib_dir = PROJECT_ROOT / "lib"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    models_dir.mkdir(parents=True, exist_ok=True)
+    os.environ["PHOTONIC_QCNN_RESULTS_DIR"] = str(results_dir)
+    os.environ["PHOTONIC_QCNN_MODELS_DIR"] = str(models_dir)
 
-    for dataset in datasets:
-        script_name = PAPER_SCRIPT_MAP[dataset]
-        script_path = lib_dir / script_name
-        print("=" * 60)
-        print(f"Running {dataset} with the paper implementation")
-        print("=" * 60)
-        try:
-            runpy.run_path(str(script_path), run_name="__main__")
-            results[dataset] = {"status": "success", "script": str(script_path)}
-        except Exception as exc:  # pragma: no cover - bubble up info
-            results[dataset] = {"status": "failed", "error": str(exc)}
-            print(f"Paper run for {dataset} failed: {exc}")
+    original_cwd = Path.cwd()
+    try:
+        os.chdir(models_dir)
+        for dataset in datasets:
+            script_name = PAPER_SCRIPT_MAP[dataset]
+            script_path = lib_dir / script_name
+            print("=" * 60)
+            print(f"Running {dataset} with the paper implementation")
+            print("=" * 60)
+            try:
+                runpy.run_path(str(script_path), run_name="__main__")
+                results[dataset] = {"status": "success", "script": str(script_path)}
+            except Exception as exc:  # pragma: no cover - bubble up info
+                results[dataset] = {"status": "failed", "error": str(exc)}
+                print(f"Paper run for {dataset} failed: {exc}")
+                LOGGER.exception("Paper run for %s failed", dataset)
+    finally:
+        os.chdir(original_cwd)
     return results
 
 
@@ -144,7 +160,10 @@ def _prepare_figure12_dir(outdir: str | None) -> Path:
 
 
 def run_readout_pipeline(
-    outdir: str | None = None, *, max_iter: int | None = None
+    outdir: str | None = None,
+    *,
+    max_iter: int | None = None,
+    num_runs: int | None = None,
 ) -> dict[str, Any]:
     from photonic_QCNN.lib.run_modes_pair_readout import run_modes_pair_readout
     from photonic_QCNN.lib.run_two_fold_readout import run_two_fold_readout
@@ -153,7 +172,6 @@ def run_readout_pipeline(
     base_dir = _prepare_figure4_dir(outdir)
     print("=" * 60)
     print("Running Figure 4 readout analysis")
-    print(f"Artifacts root: {base_dir}")
     if max_iter is not None:
         print(
             f"Two-fold readout will be truncated after {max_iter} iterations "
@@ -178,7 +196,9 @@ def run_readout_pipeline(
     modes_dir = base_dir / "modes_pair"
     print("\n[Figure4] Launching modes-pair readout strategy")
     time.sleep(2)
-    modes_result = run_modes_pair_readout(modes_dir)
+    modes_result = run_modes_pair_readout(
+        modes_dir, num_runs=num_runs if num_runs is not None else 10
+    )
 
     figures_dir = base_dir / "figures"
     first_fig_paths = readout_visu.readout_visu_first(
@@ -205,7 +225,9 @@ def run_readout_pipeline(
     return summary
 
 
-def run_simulation_pipeline(outdir: str | None = None) -> dict[str, Any]:
+def run_simulation_pipeline(
+    outdir: str | None = None, *, config: dict[str, Any] | None = None
+) -> dict[str, Any]:
     from photonic_QCNN.utils import simulation_visu
 
     base_dir = _prepare_figure12_dir(outdir)
@@ -214,7 +236,10 @@ def run_simulation_pipeline(outdir: str | None = None) -> dict[str, Any]:
     runs_dir.mkdir(parents=True, exist_ok=True)
     figures_dir.mkdir(parents=True, exist_ok=True)
 
-    config = load_config(None)
+    if config is None:
+        config = load_config(None)
+    else:
+        config = copy.deepcopy(config)
     config["implementation"] = "merlin"
     config["outdir"] = str(runs_dir)
     datasets = config.get("datasets", list(DATASET_CHOICES))
@@ -249,6 +274,7 @@ def run_simulation_pipeline(outdir: str | None = None) -> dict[str, Any]:
             figure_paths[dataset] = str(figure_path)
         except Exception as exc:  # pragma: no cover - surface failure info
             print(f"[Figure12] Failed to plot {dataset}: {exc}")
+            LOGGER.exception("Figure12 plot for %s failed", dataset)
 
     print("Figure 12 simulation pipeline complete. Outputs stored in:", base_dir)
     return {
@@ -318,10 +344,11 @@ def _stringify(obj: Any) -> Any:
 
 
 def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> None:
-    figure4 = bool(cfg.get("figure4"))
-    figure12 = bool(cfg.get("figure12"))
-    if figure4 and figure12:
-        raise ValueError("figure4/figure12 modes are mutually exclusive")
+    if cfg.get("figure4") or cfg.get("figure12"):
+        raise ValueError(
+            "Figure 4/12 pipelines are now launched via utils/figure4.py or "
+            "utils/figure12.py (remove figure4/figure12 from configs)."
+        )
 
     config = copy.deepcopy(cfg)
     config.setdefault("datasets", list(DATASET_CHOICES))
@@ -331,18 +358,6 @@ def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> None:
     config["outdir"] = str(run_dir)
 
     summary_path = run_dir / "summary.json"
-    if figure12:
-        summary = run_simulation_pipeline(str(run_dir))
-        summary_path.write_text(json.dumps(_stringify(summary), indent=2))
-        return
-    if figure4:
-        max_iter = cfg.get("max_iter")
-        summary = run_readout_pipeline(
-            str(run_dir), max_iter=int(max_iter) if max_iter is not None else None
-        )
-        summary_path.write_text(json.dumps(_stringify(summary), indent=2))
-        return
-
     implementation = config.get("implementation", "merlin")
     if implementation not in {"merlin", "paper"}:
         raise ValueError(
@@ -353,7 +368,10 @@ def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> None:
         results = run_merlin_pipeline(config)
     else:
         datasets = config.get("datasets", list(DATASET_CHOICES))
-        results = run_paper_pipeline(datasets)
+        models_dir = PROJECT_ROOT / "models" / run_dir.name
+        results = run_paper_pipeline(
+            datasets, results_dir=run_dir, models_dir=models_dir
+        )
 
     print_summary(results, implementation)
     summary_path.write_text(json.dumps(_stringify(results), indent=2))

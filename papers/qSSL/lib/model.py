@@ -130,7 +130,11 @@ class QSSL(nn.Module):
         if self.merlin:
             print("\n -> Building the quantum representation network with MerLin")
             # Local import to avoid hard dependency unless used
-            from merlin import MeasurementStrategy, QuantumLayer, ComputationSpace  # type: ignore
+            from merlin import (  # type: ignore
+                ComputationSpace,
+                MeasurementStrategy,
+                QuantumLayer,
+            )
 
             self.modes = args.modes  # Number of photonic modes
             self.no_bunching = args.no_bunching  # Photon bunching configuration
@@ -158,7 +162,7 @@ class QSSL(nn.Module):
                 input_parameters=["feature"],
                 input_state=input_state,
                 computation_space=ComputationSpace.UNBUNCHED,
-                measurement_strategy = MeasurementStrategy.PROBABILITIES,
+                measurement_strategy=MeasurementStrategy.PROBABILITIES,
             )
 
             self.rep_net_output_size = self.representation_network.output_size

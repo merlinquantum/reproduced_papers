@@ -65,7 +65,7 @@ pip install -r requirements.txt
 
 ### Command-line interface
 
-All runs go through the repository root runner so the CLI definition in `configs/cli.json` stays in sync with other projects.
+All runs go through the repository root runner so the CLI definition in `cli.json` stays in sync with other projects.
 
 ```bash
 # From the repo root

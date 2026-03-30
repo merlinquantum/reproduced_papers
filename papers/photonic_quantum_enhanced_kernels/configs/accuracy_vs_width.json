@@ -1,0 +1,15 @@
+{
+  "description": "Small test run for accuracy_vs_width",
+  "experiment": "accuracy_vs_width",
+  "plotting": {"use_tex": false, "show": true},
+  "experiments": {
+    "accuracy_vs_width": {
+      "widths": [4, 5, 6, 7],
+      "superset_size": 300,
+      "reg": 0.02,
+      "reps": 10,
+      "test_size": 0.33,
+      "data_sizes": {"min": 40, "max": 200, "step": 20}
+    }
+  }
+}

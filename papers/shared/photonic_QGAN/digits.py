@@ -1,7 +1,8 @@
 import numpy as np
-import torch
 import pandas as pd
+import torch
 from torch.utils.data import Dataset
+
 
 class DigitsDataset(Dataset):
     def __init__(self, csv_file, label=0, transform=None):

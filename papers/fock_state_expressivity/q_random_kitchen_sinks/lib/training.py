@@ -5,7 +5,6 @@ from dataclasses import dataclass
 
 import numpy as np
 import torch
-from .data import target_function
 from sklearn.metrics import accuracy_score
 from sklearn.svm import SVC
 from torch.utils.data import DataLoader, TensorDataset
@@ -17,6 +16,8 @@ from lib.approx_kernel import (
     sample_random_features,
     transform_inputs,
 )
+
+from .data import target_function
 
 
 @dataclass

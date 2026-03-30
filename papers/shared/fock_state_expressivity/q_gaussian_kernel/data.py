@@ -1,6 +1,6 @@
-from __future__ import annotations
-
 """Dataset utilities for the Quantum Gaussian Kernel project (shared)."""
+
+from __future__ import annotations
 
 import sys
 from dataclasses import dataclass
@@ -12,14 +12,16 @@ from sklearn.datasets import make_blobs, make_circles, make_moons
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
-_REPO_ROOT = next(
-    (p for p in Path(__file__).resolve().parents if (p / "runtime_lib").exists()),
-    None,
-)
-if _REPO_ROOT and str(_REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(_REPO_ROOT))
-
-from runtime_lib.data_paths import paper_data_dir
+try:
+    from runtime_lib.data_paths import paper_data_dir
+except ModuleNotFoundError:
+    _REPO_ROOT = next(
+        (p for p in Path(__file__).resolve().parents if (p / "runtime_lib").exists()),
+        None,
+    )
+    if _REPO_ROOT and str(_REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(_REPO_ROOT))
+    from runtime_lib.data_paths import paper_data_dir
 
 
 @dataclass
@@ -91,9 +93,15 @@ def prepare_classification_data(cfg: dict) -> dict[str, dict[str, torch.Tensor]]
     if raw_cache:
         cache_dir = Path(raw_cache)
         if not cache_dir.is_absolute():
-            cache_dir = paper_data_dir("fock_state_expressivity") / "q_gaussian_kernel" / cache_dir
+            cache_dir = (
+                paper_data_dir("fock_state_expressivity")
+                / "q_gaussian_kernel"
+                / cache_dir
+            )
     else:
-        cache_dir = paper_data_dir("fock_state_expressivity") / "q_gaussian_kernel" / "cache"
+        cache_dir = (
+            paper_data_dir("fock_state_expressivity") / "q_gaussian_kernel" / "cache"
+        )
     cache_dir.mkdir(parents=True, exist_ok=True)
     force_regen = cfg.get("force_regenerate", False)
     test_size = float(cfg.get("test_size", 0.4))

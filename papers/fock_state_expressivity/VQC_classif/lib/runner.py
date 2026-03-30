@@ -7,15 +7,12 @@ import logging
 from pathlib import Path
 from typing import Any
 
+import numpy as np
 import torch
-from .data import DATASET_ORDER, prepare_datasets
-from utils.plotting import (
-    plot_dataset_samples,
-    plot_decision_boundary,
-    plot_training_metrics,
-)
 
 from lib.training import ExperimentArgs, summarize_results, train_model_multiple_runs
+
+from .data import prepare_datasets
 
 LOGGER = logging.getLogger(__name__)
 
@@ -66,71 +63,107 @@ def build_args(config: dict[str, Any]) -> ExperimentArgs:
     return args
 
 
-def _visualize_datasets(
-    datasets: dict[str, dict[str, torch.Tensor]], figures_dir: Path
-) -> None:
-    dataset_fig_dir = figures_dir / "datasets"
-    dataset_fig_dir.mkdir(parents=True, exist_ok=True)
-    for name in DATASET_ORDER:
-        if name not in datasets:
-            continue
-        payload = datasets[name]
-        x = torch.cat((payload["x_train"], payload["x_test"]))
-        y = torch.cat((payload["y_train"], payload["y_test"]))
-        plot_dataset_samples(
-            x,
-            y,
-            f"{name.title()} dataset",
-            dataset_fig_dir / f"{name}_scatter.png",
-        )
-
-
-def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> None:
-    figures_dir = run_dir / "figures"
-    figures_dir.mkdir(parents=True, exist_ok=True)
-
-    data_cfg = cfg.get("data", {})
-    datasets = prepare_datasets(data_cfg)
-    if data_cfg.get("visualize", False):
-        _visualize_datasets(datasets, figures_dir)
-
-    args = build_args(cfg)
-    circuit_dir = (figures_dir / "circuits").as_posix()
-    results, best_models = train_model_multiple_runs(
-        args.model_type,
-        args,
-        datasets,
-        circuit_dir=circuit_dir,
-    )
-
-    summary = summarize_results(results, args)
-    (run_dir / "summary.txt").write_text(summary)
-
-    metrics = {
+def _serialize_training_metrics(results: dict[str, dict]) -> dict[str, Any]:
+    return {
         dataset: {
+            "runs": _serialize_runs_data(data["runs"]),
             "final_test_accs": [float(run["final_test_acc"]) for run in data["runs"]],
             "avg_final_test_acc": float(data["avg_final_test_acc"]),
         }
         for dataset, data in results.items()
     }
+
+
+def _serialize_runs_data(runs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    serialized_runs: list[dict[str, Any]] = []
+    for run in runs:
+        serialized_run: dict[str, Any] = {}
+        for key, value in run.items():
+            if isinstance(value, np.floating):
+                serialized_run[key] = float(value)
+            else:
+                serialized_run[key] = value
+        serialized_runs.append(serialized_run)
+    return serialized_runs
+
+
+def _serialize_decision_boundaries(
+    best_models: list[dict[str, Any]],
+    resolution: int = 100,
+) -> list[dict[str, Any]]:
+    payloads: list[dict[str, Any]] = []
+    for entry in best_models:
+        x_train = entry["x_train"].cpu().numpy()
+        y_train = entry["y_train"].cpu().numpy()
+        x_test = entry["x_test"].cpu().numpy()
+        y_test = entry["y_test"].cpu().numpy()
+
+        combined = np.vstack([x_train, x_test])
+        x_min, x_max = combined[:, 0].min() - 1, combined[:, 0].max() + 1
+        y_min, y_max = combined[:, 1].min() - 1, combined[:, 1].max() + 1
+
+        xx, yy = np.meshgrid(
+            np.linspace(x_min, x_max, resolution),
+            np.linspace(y_min, y_max, resolution),
+        )
+        grid_points = np.c_[xx.ravel(), yy.ravel()]
+
+        model_type = entry["model_type"]
+        activation = entry.get("activation", "none")
+        model = entry["model"]
+        if model_type.startswith("svm"):
+            preds = model.predict(grid_points).astype(float)
+        else:
+            model.eval()
+            with torch.no_grad():
+                outputs = model(torch.tensor(grid_points, dtype=torch.float32))
+            if activation == "softmax":
+                preds = torch.argmax(outputs, dim=1).cpu().numpy()
+            else:
+                preds = torch.round(outputs).squeeze().cpu().numpy()
+
+        preds = (preds > 0.5).astype(int)
+        class_map = preds.reshape(xx.shape).astype(float)
+
+        payloads.append(
+            {
+                "dataset": entry["dataset"],
+                "model_type": model_type,
+                "requested_model_type": entry.get("requested_model_type", model_type),
+                "activation": activation,
+                "initial_state": entry.get("initial_state"),
+                "best_acc": float(entry.get("best_acc", 0.0)),
+                "x_train": x_train.tolist(),
+                "y_train": y_train.tolist(),
+                "x_test": x_test.tolist(),
+                "y_test": y_test.tolist(),
+                "grid_x": xx.tolist(),
+                "grid_y": yy.tolist(),
+                "class_map": class_map.tolist(),
+            }
+        )
+    return payloads
+
+
+def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> None:
+    data_cfg = cfg.get("data", {})
+    datasets = prepare_datasets(data_cfg)
+
+    args = build_args(cfg)
+    results, best_models = train_model_multiple_runs(args.model_type, args, datasets)
+
+    summary = summarize_results(results, args)
+    (run_dir / "summary.txt").write_text(summary)
+
+    metrics = _serialize_training_metrics(results)
     (run_dir / "metrics.json").write_text(json.dumps(metrics, indent=2))
 
-    outputs_cfg = cfg.get("outputs", {})
-    if outputs_cfg.get("save_training_curves", True):
-        plot_training_metrics(
-            results,
-            figures_dir / "training_metrics.png",
-            dataset_order=DATASET_ORDER,
-        )
-
-    if outputs_cfg.get("save_decision_boundaries", True):
-        boundary_dir = figures_dir / "decision_boundaries"
-        boundary_dir.mkdir(parents=True, exist_ok=True)
-        for entry in best_models:
-            plot_decision_boundary(
-                entry,
-                boundary_dir / f"{entry['dataset']}_{args.requested_model_type}.png",
-            )
+    boundary_dir = run_dir / "decision_boundaries"
+    boundary_dir.mkdir(parents=True, exist_ok=True)
+    boundary_payload = _serialize_decision_boundaries(best_models)
+    (boundary_dir / "boundary_data.json").write_text(
+        json.dumps(boundary_payload, indent=2)
+    )
 
     LOGGER.info("Artifacts saved to %s", run_dir.resolve())
 

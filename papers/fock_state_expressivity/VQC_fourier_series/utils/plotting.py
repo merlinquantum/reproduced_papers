@@ -79,3 +79,33 @@ def plot_learned_functions(
     if show:
         plt.show()
     plt.close(fig)
+
+
+def plot_learned_functions_from_predictions(
+    payload: dict, save_path: Path | None = None, show: bool = False
+) -> None:
+    fig, ax = plt.subplots(figsize=(10, 5))
+    x_numpy = payload["x"]
+    target_numpy = payload["target"]
+
+    ax.scatter(x_numpy, target_numpy, label="Target g(x)", s=15, alpha=0.6)
+
+    for entry in payload.get("entries", []):
+        label = entry.get("label", "VQC")
+        color = entry.get("color")
+        preds = entry.get("predictions", [])
+        ax.plot(x_numpy, preds, label=label, linewidth=2, color=color)
+
+    ax.set_title("Learned Functions vs Target Fourier Series")
+    ax.set_xlabel("x")
+    ax.set_ylabel("g(x)")
+    ax.grid(True, alpha=0.3)
+    ax.legend()
+    fig.tight_layout()
+
+    if save_path is not None:
+        _ensure_parent(Path(save_path))
+        fig.savefig(save_path, dpi=200)
+    if show:
+        plt.show()
+    plt.close(fig)

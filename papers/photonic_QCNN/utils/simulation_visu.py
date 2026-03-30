@@ -167,7 +167,6 @@ def generate_simulation_plot(
     fig.tight_layout()
     fig.savefig(output_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
-    print(f"Simulation plot saved to: {output_path}")
     return output_path
 
 

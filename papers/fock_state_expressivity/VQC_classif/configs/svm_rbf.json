@@ -1,6 +1,6 @@
 {
   "description": "Preset config for VQC classification: RBF SVM baseline.",
-  "outdir": "outdir",
+  "outdir": "results",
   "seed": 1337,
   "device": "cpu",
   "experiment": {
@@ -9,11 +9,15 @@
   "model": {
     "num_modes": 3,
     "input_size": 2,
-    "initial_state": [1, 1, 1],
+    "initial_state": [
+      1,
+      1,
+      1
+    ],
     "activation": "none",
     "no_bunching": false,
     "circuit": "bs_mesh",
-    "scale_type": "/pi",
+    "scale_type": "1",
     "regularization_target": "linear"
   },
   "training": {
@@ -22,7 +26,10 @@
     "batch_size": 30,
     "learning_rate": 0.02,
     "alpha": 0.0002,
-    "betas": [0.8, 0.999]
+    "betas": [
+      0.8,
+      0.999
+    ]
   },
   "logging": {
     "log_wandb": false,
@@ -31,20 +38,28 @@
   "data": {
     "cache_dir": "data/cache",
     "force_regenerate": false,
-    "visualize": false,
-    "order": ["linear", "circular", "moon"],
+    "order": [
+      "linear",
+      "circular",
+      "moon"
+    ],
     "subsample_ratio": 0.5,
     "test_size": 0.4,
     "standardize": true,
     "seed": 42,
     "datasets": {
-      "linear": {"num_samples": 200, "class_sep": 1.5},
-      "circular": {"num_samples": 200, "noise": 0.05},
-      "moon": {"num_samples": 200, "noise": 0.2}
+      "linear": {
+        "num_samples": 200,
+        "class_sep": 1.5
+      },
+      "circular": {
+        "num_samples": 200,
+        "noise": 0.05
+      },
+      "moon": {
+        "num_samples": 200,
+        "noise": 0.2
+      }
     }
-  },
-  "outputs": {
-    "save_training_curves": true,
-    "save_decision_boundaries": true
   }
 }

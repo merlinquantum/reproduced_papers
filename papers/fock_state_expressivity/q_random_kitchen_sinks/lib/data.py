@@ -9,7 +9,7 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from papers.shared.fock_state_expressivity.q_random_kitchen_sinks.data import (  # type: ignore
+from papers.shared.fock_state_expressivity.q_random_kitchen_sinks.data import (  # noqa: E402
     load_moons,
     target_function,
 )

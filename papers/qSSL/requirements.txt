@@ -1,5 +1,4 @@
 merlinquantum
-torch
 torchvision
 tqdm
 matplotlib
@@ -8,5 +7,4 @@ pytest
 qiskit
 qiskit-aer
 qiskit-ibm-runtime
-numpy
 huggingface_hub

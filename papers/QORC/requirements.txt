@@ -1,7 +1,3 @@
-numpy==2.3.3
-scikit_learn==1.7.1
-pandas==2.3.1
-torch==2.7.1
-perceval_quandela>=1
 merlinquantum
+pandas
 pytest

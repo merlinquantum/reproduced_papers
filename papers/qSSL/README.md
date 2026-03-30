@@ -77,7 +77,7 @@ Need to see every toggle first? Run `python implementation.py --paper qSSL --hel
 Data root: CIFAR10 downloads under `<DATA_DIR>/qSSL` (default `DATA_DIR` env or `<repo>/data`). Override the base root with `--datadir` if needed; the paper subfolder is added automatically.
 
 ## Configuration (JSON)
-See `configs/defaults.json` (overrides are described in `configs/cli.json`). Key fields:
+See `configs/defaults.json` (overrides are described in `cli.json`). Key fields:
 - `dataset`: `root`, `classes`, `batch_size`
 - `model`: `backend` (`merlin` | `qiskit` | `classical`), `width`, `loss_dim`, `batch_norm`, `temperature`
 - Qiskit-specific: `layers`, `encoding`, `q_ansatz`, `q_sweeps`, `activation`, `shots`, `q_backend`

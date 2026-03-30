@@ -1,0 +1,8 @@
+merlinquantum==0.2.3
+jax
+jaxlib
+neural-tangents
+matplotlib==3.10.5
+tqdm==4.67.1
+scipy==1.16.1
+pytest

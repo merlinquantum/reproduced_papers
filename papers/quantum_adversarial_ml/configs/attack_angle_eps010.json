@@ -1,0 +1,41 @@
+{
+  "description": "BIM attack on angle-encoded classifier at epsilon=0.10",
+  "seed": 42,
+  "experiment": "attack",
+  "device": "auto",
+  "dataset": {
+    "digits": [
+      1,
+      9
+    ],
+    "image_size": 16,
+    "normalize": true,
+    "root": "data",
+    "batch_size": 256
+  },
+  "model": {
+    "type": "hybrid_angle",
+    "input_dim": 256,
+    "n_outputs": 2,
+    "hidden_dims": [
+      128,
+      64
+    ],
+    "n_modes": 13,
+    "n_photons": 3,
+    "n_layers": 3,
+    "computation_space": "unbunched"
+  },
+  "attack": {
+    "method": "bim",
+    "epsilon": 0.1,
+    "num_iter": 10,
+    "alpha": 0.01
+  },
+  "options": {
+    "load_model": "results/train_angle/model.pt"
+  },
+  "logging": {
+    "level": "info"
+  }
+}

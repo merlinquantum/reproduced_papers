@@ -1,0 +1,77 @@
+{
+  "description": "CLI schema for Photonic QCNN reproduction experiments.",
+  "arguments": [
+    {
+      "flags": ["--datasets"],
+      "help": "Subset of datasets to run",
+      "type": "str",
+      "choices": ["BAS", "Custom BAS", "MNIST"],
+      "nargs": "+",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "datasets"}
+    },
+    {
+      "flags": ["--epochs"],
+      "help": "Override number of training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.epochs"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Override batch size for every dataset run",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "custom_callable", "callable": "photonic_QCNN.lib.runtime_cli.apply_batch_size"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Override learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lr"}
+    },
+    {
+      "flags": ["--weight-decay"],
+      "help": "Override weight decay",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.weight_decay"}
+    },
+    {
+      "flags": ["--gamma"],
+      "help": "Override LR scheduler gamma",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.gamma"}
+    },
+    {
+      "flags": ["--n-runs"],
+      "help": "Number of random restarts per dataset",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "custom_callable", "callable": "photonic_QCNN.lib.runtime_cli.apply_n_runs"}
+    },
+    {
+      "flags": ["--max-iter", "--max_iter"],
+      "help": "Limit number of two-fold readout experiments (Figure 4)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "max_iter"}
+    },
+    {
+      "flags": ["--paper"],
+      "help": "Force the paper implementation",
+      "action": "store_true",
+      "default": false,
+      "apply": {"kind": "config_path", "path": "implementation", "value": "paper"}
+    },
+    {
+      "flags": ["--merlin"],
+      "help": "Force the MerLin implementation",
+      "action": "store_true",
+      "default": false,
+      "apply": {"kind": "config_path", "path": "implementation", "value": "merlin"}
+    }
+  ]
+}

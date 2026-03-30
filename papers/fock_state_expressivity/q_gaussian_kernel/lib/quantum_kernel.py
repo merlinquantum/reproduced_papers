@@ -6,7 +6,7 @@ import numpy as np
 import perceval as pcvl
 import torch
 import torch.nn as nn
-from merlin import OutputMappingStrategy, QuantumLayer
+from merlin import ComputationSpace, MeasurementStrategy, QuantumLayer
 
 
 def _ps_random():
@@ -17,10 +17,12 @@ def _generic_block(trainable: bool, label: str):
     if trainable:
         return pcvl.GenericInterferometer(
             2,
-            lambda i: pcvl.BS(theta=pcvl.P(f"theta_{label}1{i}"))
-            // pcvl.PS(phi=pcvl.P(f"theta_ps{label}1{i}"))
-            // pcvl.BS(theta=pcvl.P(f"theta_{label}2{i}"))
-            // pcvl.PS(phi=pcvl.P(f"theta_ps{label}2{i}")),
+            lambda i: (
+                pcvl.BS(theta=pcvl.P(f"theta_{label}1{i}"))
+                // pcvl.PS(phi=pcvl.P(f"theta_ps{label}1{i}"))
+                // pcvl.BS(theta=pcvl.P(f"theta_{label}2{i}"))
+                // pcvl.PS(phi=pcvl.P(f"theta_ps{label}2{i}"))
+            ),
             shape=pcvl.InterferometerShape.RECTANGLE,
         )
     return pcvl.GenericInterferometer(
@@ -62,22 +64,24 @@ def build_circuit(cfg: dict) -> pcvl.Circuit:
             def unit(label: str):
                 return pcvl.GenericInterferometer(
                     2,
-                    lambda i: pcvl.BS(
-                        theta=pcvl.P(f"theta_{label}1{i}"),
-                        phi_tr=pcvl.P(f"theta_{label}2{i}"),
-                        phi_br=pcvl.P(f"theta_{label}3{i}"),
-                        phi_tl=pcvl.P(f"theta_{label}4{i}"),
-                        phi_bl=pcvl.P(f"theta_{label}5{i}"),
-                    )
-                    // pcvl.PS(phi=pcvl.P(f"theta_ps{label}1{i}"))
-                    // pcvl.BS(
-                        theta=pcvl.P(f"theta_{label}6{i}"),
-                        phi_tr=pcvl.P(f"theta_{label}7{i}"),
-                        phi_br=pcvl.P(f"theta_{label}8{i}"),
-                        phi_tl=pcvl.P(f"theta_{label}9{i}"),
-                        phi_bl=pcvl.P(f"theta_{label}10{i}"),
-                    )
-                    // pcvl.PS(phi=pcvl.P(f"theta_ps{label}2{i}")),
+                    lambda i: (
+                        pcvl.BS(
+                            theta=pcvl.P(f"theta_{label}1{i}"),
+                            phi_tr=pcvl.P(f"theta_{label}2{i}"),
+                            phi_br=pcvl.P(f"theta_{label}3{i}"),
+                            phi_tl=pcvl.P(f"theta_{label}4{i}"),
+                            phi_bl=pcvl.P(f"theta_{label}5{i}"),
+                        )
+                        // pcvl.PS(phi=pcvl.P(f"theta_ps{label}1{i}"))
+                        // pcvl.BS(
+                            theta=pcvl.P(f"theta_{label}6{i}"),
+                            phi_tr=pcvl.P(f"theta_{label}7{i}"),
+                            phi_br=pcvl.P(f"theta_{label}8{i}"),
+                            phi_tl=pcvl.P(f"theta_{label}9{i}"),
+                            phi_bl=pcvl.P(f"theta_{label}10{i}"),
+                        )
+                        // pcvl.PS(phi=pcvl.P(f"theta_ps{label}2{i}"))
+                    ),
                     shape=pcvl.InterferometerShape.RECTANGLE,
                 )
 
@@ -94,10 +98,12 @@ def build_circuit(cfg: dict) -> pcvl.Circuit:
             left = _generic_block(True, "l")
             right = pcvl.GenericInterferometer(
                 2,
-                lambda i: pcvl.BS()
-                // pcvl.PS(phi=pcvl.P(f"theta_psr1{i}"))
-                // pcvl.BS()
-                // pcvl.PS(phi=pcvl.P(f"theta_psr2{i}")),
+                lambda i: (
+                    pcvl.BS()
+                    // pcvl.PS(phi=pcvl.P(f"theta_psr1{i}"))
+                    // pcvl.BS()
+                    // pcvl.PS(phi=pcvl.P(f"theta_psr2{i}"))
+                ),
                 shape=pcvl.InterferometerShape.RECTANGLE,
             )
         else:
@@ -107,18 +113,22 @@ def build_circuit(cfg: dict) -> pcvl.Circuit:
         if train:
             left = pcvl.GenericInterferometer(
                 2,
-                lambda i: pcvl.BS()
-                // pcvl.PS(phi=pcvl.P(f"theta_l1{i}"))
-                // pcvl.BS()
-                // pcvl.PS(phi=pcvl.P(f"theta_{i}")),
+                lambda i: (
+                    pcvl.BS()
+                    // pcvl.PS(phi=pcvl.P(f"theta_l1{i}"))
+                    // pcvl.BS()
+                    // pcvl.PS(phi=pcvl.P(f"theta_{i}"))
+                ),
                 shape=pcvl.InterferometerShape.RECTANGLE,
             )
             right = pcvl.GenericInterferometer(
                 2,
-                lambda i: pcvl.BS()
-                // pcvl.PS(phi=pcvl.P(f"theta_r1{i}"))
-                // pcvl.BS()
-                // pcvl.PS(phi=pcvl.P(f"theta_r2{i}")),
+                lambda i: (
+                    pcvl.BS()
+                    // pcvl.PS(phi=pcvl.P(f"theta_r1{i}"))
+                    // pcvl.BS()
+                    // pcvl.PS(phi=pcvl.P(f"theta_r2{i}"))
+                ),
                 shape=pcvl.InterferometerShape.RECTANGLE,
             )
         else:
@@ -128,18 +138,22 @@ def build_circuit(cfg: dict) -> pcvl.Circuit:
         if train:
             left = pcvl.GenericInterferometer(
                 2,
-                lambda i: pcvl.BS(theta=pcvl.P(f"theta_l1{i}_bs"))
-                // pcvl.PS(phi=random.random() * np.pi)
-                // pcvl.BS(theta=pcvl.P(f"theta_l2{i}_bs"))
-                // pcvl.PS(phi=random.random() * np.pi),
+                lambda i: (
+                    pcvl.BS(theta=pcvl.P(f"theta_l1{i}_bs"))
+                    // pcvl.PS(phi=random.random() * np.pi)
+                    // pcvl.BS(theta=pcvl.P(f"theta_l2{i}_bs"))
+                    // pcvl.PS(phi=random.random() * np.pi)
+                ),
                 shape=pcvl.InterferometerShape.RECTANGLE,
             )
             right = pcvl.GenericInterferometer(
                 2,
-                lambda i: pcvl.BS(theta=pcvl.P(f"theta_r1{i}_bs"))
-                // pcvl.PS(phi=random.random() * np.pi)
-                // pcvl.BS(theta=pcvl.P(f"theta_r2{i}_bs"))
-                // pcvl.PS(phi=random.random() * np.pi),
+                lambda i: (
+                    pcvl.BS(theta=pcvl.P(f"theta_r1{i}_bs"))
+                    // pcvl.PS(phi=random.random() * np.pi)
+                    // pcvl.BS(theta=pcvl.P(f"theta_r2{i}_bs"))
+                    // pcvl.PS(phi=random.random() * np.pi)
+                ),
                 shape=pcvl.InterferometerShape.RECTANGLE,
             )
         else:
@@ -194,6 +208,10 @@ def build_quantum_kernel(num_photons: int, cfg: dict) -> nn.Module:
     scale_layer = ScaleLayer(1, cfg.get("scale_type", "learned"))
     circuit = build_circuit(cfg)
     train_params: list[str] = ["theta"] if cfg.get("train_circuit", False) else []
+    no_bunching = bool(cfg.get("no_bunching", False))
+    computation_space = (
+        ComputationSpace.UNBUNCHED if no_bunching else ComputationSpace.FOCK
+    )
 
     quantum_layer = QuantumLayer(
         input_size=1,
@@ -201,8 +219,9 @@ def build_quantum_kernel(num_photons: int, cfg: dict) -> nn.Module:
         trainable_parameters=train_params,
         input_parameters=["δ"],
         input_state=input_state,
-        no_bunching=cfg.get("no_bunching", False),
-        output_mapping_strategy=OutputMappingStrategy.NONE,
+        measurement_strategy=MeasurementStrategy.probs(
+            computation_space=computation_space
+        ),
     )
 
     linear = nn.Linear(quantum_layer.output_size, 1)

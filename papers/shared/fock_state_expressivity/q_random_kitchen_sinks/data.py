@@ -1,23 +1,25 @@
-from __future__ import annotations
-
 """Shared moons dataset utilities for q_random_kitchen_sinks."""
 
-from pathlib import Path
+from __future__ import annotations
+
 import sys
+from pathlib import Path
 
 import numpy as np
 from sklearn.datasets import make_moons
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
-_REPO_ROOT = next(
-    (p for p in Path(__file__).resolve().parents if (p / "runtime_lib").exists()),
-    None,
-)
-if _REPO_ROOT and str(_REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(_REPO_ROOT))
-
-from runtime_lib.data_paths import paper_data_dir
+try:
+    from runtime_lib.data_paths import paper_data_dir
+except ModuleNotFoundError:
+    _REPO_ROOT = next(
+        (p for p in Path(__file__).resolve().parents if (p / "runtime_lib").exists()),
+        None,
+    )
+    if _REPO_ROOT and str(_REPO_ROOT) not in sys.path:
+        sys.path.insert(0, str(_REPO_ROOT))
+    from runtime_lib.data_paths import paper_data_dir
 
 
 def load_moons(cfg: dict) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
@@ -47,9 +49,17 @@ def load_moons(cfg: dict) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarra
     if raw_cache:
         cache_dir = Path(raw_cache)
         if not cache_dir.is_absolute():
-            cache_dir = paper_data_dir("fock_state_expressivity") / "q_random_kitchen_sinks" / cache_dir
+            cache_dir = (
+                paper_data_dir("fock_state_expressivity")
+                / "q_random_kitchen_sinks"
+                / cache_dir
+            )
     else:
-        cache_dir = paper_data_dir("fock_state_expressivity") / "q_random_kitchen_sinks" / "cache"
+        cache_dir = (
+            paper_data_dir("fock_state_expressivity")
+            / "q_random_kitchen_sinks"
+            / "cache"
+        )
     cache_dir.mkdir(parents=True, exist_ok=True)
     np.save(cache_dir / "moons_x_train.npy", x_train)
     np.save(cache_dir / "moons_x_test.npy", x_test)

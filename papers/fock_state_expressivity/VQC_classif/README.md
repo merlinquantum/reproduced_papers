@@ -15,6 +15,7 @@ Key result:
 ## How to Run
 
 ### CLI entry point
+Run from the repo root with `--paper fock_state_expressivity/VQC_classif`:
 ```bash
 python implementation.py --help
 ```
@@ -23,33 +24,41 @@ Key options:
 - `--config PATH` JSON config (default `configs/defaults.json`).
 - `--model-type {vqc,vqc_100,vqc_111,mlp_wide,mlp_deep,svm_lin,svm_rbf}` switches between photonic and classical baselines, with `vqc_100`/`vqc_111` selecting the input Fock state `[1,0,0]` or `[1,1,1]`.
 - `--seed INT`, `--outdir DIR`, `--device STR` override reproducibility knobs and output location (default outdir `results/`).
-- `--visualize-data` force dataset scatter plots; `--skip-boundaries` skips per-dataset decision boundaries.
 - `--log-wandb` enables Weights & Biases logging (requires `wandb login`).
 
 Examples:
 ```bash
 # Default photonic VQC reproduction
-python implementation.py
+python implementation.py --paper fock_state_expressivity/VQC_classif
 
 # Explicit photonic states
-python implementation.py --model-type vqc_100   # prepares |1,0,0>
-python implementation.py --model-type vqc_111   # prepares |1,1,1>
+python implementation.py --paper fock_state_expressivity/VQC_classif --model-type vqc_100   # prepares |1,0,0>
+python implementation.py --paper fock_state_expressivity/VQC_classif --model-type vqc_111   # prepares |1,1,1>
 
 # Classical baseline on GPU with custom outdir
-python implementation.py --model-type mlp_wide --device cuda:0 --outdir results/vqc_classif
+python implementation.py --paper fock_state_expressivity/VQC_classif --model-type mlp_wide \
+  --device cuda:0 --outdir results/vqc_classif
 ```
 
 Each run creates `results/run_YYYYMMDD-HHMMSS/` (or `<outdir>/...` if overridden):
 ```
 summary.txt                 # Hyperparameters + dataset-wise stats
-metrics.json                # Serialized accuracy traces
+metrics.json                # Serialized accuracy traces and histories
 config_snapshot.json        # Resolved config (after CLI overrides)
-figures/
-  training_metrics.png
-  datasets/<dataset>_scatter.png      # optional
-  decision_boundaries/<dataset>_<model>.png
-  circuits/circuit_<type>.png         # first VQC run visual
+decision_boundaries/boundary_data.json # Saved grid predictions for visualization
+figures/                    # Populated by visualization utilities
 ```
+
+### Visualizations
+Generate figures from a previous run or re-run when `--previous-run` is omitted:
+```bash
+python papers/fock_state_expressivity/VQC_classif/utils/visu_training_metrics.py \
+  --previous-run results/run_YYYYMMDD-HHMMSS
+
+python papers/fock_state_expressivity/VQC_classif/utils/visu_decision_boundaries.py \
+  --previous-run results/run_YYYYMMDD-HHMMSS
+```
+Figures are saved under `<run_dir>/figures/`.
 
 ## Configuration
 Files live in `configs/`. `defaults.json` reproduces the paper (3 modes, `[1,1,1]` photons, bs_mesh circuit, 10 runs × 150 epochs, lr 0.02). Ready-made variants include:
@@ -60,16 +69,14 @@ Use `--config configs/<name>.json` to run these presets, or create additional JS
 
 Important blocks:
 - `model`: photonic circuit hyperparameters (modes, activation, scale layer, regularization target).
-- `training`: optimizer settings, number of repeated runs, Adam betas, weight decay (`alpha`), logging toggles.
+- `training`: optimizer settings, number of repeated runs, Adam betas, weight decay (`alpha`).
 - `data`: dataset generation specs (samples, noise/class separation, subsampling ratio, cache dir).
-- `outputs`: enable/disable training curves and decision-boundary plots.
 - `experiment.model_type`: default model family (can be overridden with `--model-type`).
 
 ## Results and Analysis
-The experiment generates several visualization outputs:
+Visualization utilities produce:
 - **Decision boundaries**: Comparison of VQC and classical model boundaries
 - **Performance metrics**: Accuracy comparison across methods and datasets
-- **Circuit diagrams**: Visual representation of quantum circuits used
 
 The main figure that was reproduced is Figure 4.
 
@@ -93,7 +100,7 @@ Key findings show that VQCs with more photons have increased expressivity, which
 
 ## Testing
 ```bash
-pytest -q
+pytest -q papers/fock_state_expressivity/VQC_classif/tests
 ```
 Current tests sanity-check dataset preparation; extend with regression tests (e.g., target accuracy thresholds) as needed.
 

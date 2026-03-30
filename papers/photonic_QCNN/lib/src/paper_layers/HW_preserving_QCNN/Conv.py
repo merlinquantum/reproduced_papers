@@ -15,8 +15,6 @@ import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import torch
-from torch import nn
-
 from photonic_QCNN.lib.src.paper_layers.HW_preserving_QCNN.RBS_Circuit import (
     RBS_Unitaries,
     RBS_Unitaries_I2,
@@ -26,6 +24,7 @@ from photonic_QCNN.lib.src.paper_layers.HW_preserving_QCNN.toolbox import (
     QCNN_RBS_based_VQC,
     QCNN_RBS_based_VQC_3D,
 )
+from torch import nn
 
 
 #################################################################################

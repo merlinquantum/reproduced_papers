@@ -8,6 +8,20 @@ from pathlib import Path
 
 import numpy as np
 import torch
+from merlin.datasets.fashion_mnist import (
+    get_data_test as get_fashion_mnist_test,
+)
+from merlin.datasets.fashion_mnist import (
+    get_data_train as get_fashion_mnist_train,
+)
+from merlin.datasets.k_mnist import get_data_test as get_k_mnist_test
+from merlin.datasets.k_mnist import get_data_train as get_k_mnist_train
+from merlin.datasets.mnist_digits import (
+    get_data_test_original as get_mnist_test,
+)
+from merlin.datasets.mnist_digits import (
+    get_data_train_original as get_mnist_train,
+)
 from torch.utils.data import Dataset
 
 _REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -24,27 +38,19 @@ try:
 except Exception:  # pragma: no cover - optional merlin dependency
     _datasets_utils = None
 
-from merlin.datasets.fashion_mnist import (
-    get_data_test as get_fashion_mnist_test,
-    get_data_train as get_fashion_mnist_train,
-)
-from merlin.datasets.k_mnist import get_data_test as get_k_mnist_test
-from merlin.datasets.k_mnist import get_data_train as get_k_mnist_train
-from merlin.datasets.mnist_digits import (
-    get_data_test_original as get_mnist_test,
-    get_data_train_original as get_mnist_train,
-)
-
 
 def _data_root() -> Path:
     if not paper_data_dir:
-        raise RuntimeError("Shared data resolver unavailable; DATA_DIR or runtime_lib required")
+        raise RuntimeError(
+            "Shared data resolver unavailable; DATA_DIR or runtime_lib required"
+        )
     return paper_data_dir("QORC")
 
 
 _MERLIN_DATA_ROOT = _data_root()
 
 if _datasets_utils:
+
     def _custom_data_dir() -> Path:
         return _MERLIN_DATA_ROOT
 

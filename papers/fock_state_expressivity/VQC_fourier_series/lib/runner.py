@@ -8,11 +8,11 @@ from pathlib import Path
 from typing import Any
 
 import torch
-from .data import generate_dataset
-from utils.plotting import plot_learned_functions, plot_training_curves
 
 from lib.training import summarize_results, train_models_multiple_runs
 from lib.vqc import VQCFactory
+
+from .data import generate_dataset
 
 LOGGER = logging.getLogger(__name__)
 
@@ -26,6 +26,33 @@ def _serialize_metrics(results: dict[str, Any]) -> dict[str, Any]:
         }
         for label, data in results.items()
     }
+
+
+def _serialize_learned_functions(
+    best_models: list[dict[str, Any]],
+    inputs: torch.Tensor,
+    targets: torch.Tensor,
+) -> dict[str, Any]:
+    x_values = inputs.squeeze(-1).cpu().tolist()
+    target_values = targets.cpu().tolist()
+    entries = []
+    for entry in best_models:
+        model = entry["model"]
+        model.eval()
+        with torch.no_grad():
+            preds = model(inputs).view(-1).cpu().tolist()
+        initial_state = entry.get("initial_state")
+        entries.append(
+            {
+                "label": entry["label"],
+                "initial_state": list(initial_state)
+                if initial_state is not None
+                else [],
+                "color": entry.get("color"),
+                "predictions": preds,
+            }
+        )
+    return {"x": x_values, "target": target_values, "entries": entries}
 
 
 def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> None:
@@ -60,24 +87,13 @@ def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> None:
         json.dumps(_serialize_metrics(results), indent=2)
     )
 
-    logging_cfg = cfg.get("logging", {})
-    show_plots = bool(plotting_cfg.get("show", False))
-
-    if logging_cfg.get("save_training_curves", True):
-        plot_training_curves(
-            results,
-            save_path=figures_dir / "training_curves.png",
-            show=show_plots,
+    learned_dir = run_dir / "learned_function"
+    learned_dir.mkdir(parents=True, exist_ok=True)
+    (learned_dir / "predictions.json").write_text(
+        json.dumps(
+            _serialize_learned_functions(best_models, x_tensor, y_tensor), indent=2
         )
-
-    if logging_cfg.get("save_learned_functions", True):
-        plot_learned_functions(
-            best_models,
-            x_tensor,
-            y_tensor,
-            save_path=figures_dir / "learned_vs_target.png",
-            show=show_plots,
-        )
+    )
 
     LOGGER.info("Artifacts saved to %s", run_dir.resolve())
 

@@ -9,7 +9,6 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
-import torch
 import torchvision
 from sklearn.datasets import load_iris
 from sklearn.decomposition import PCA
@@ -18,6 +17,8 @@ from sklearn.neighbors import NearestCentroid
 from sklearn.preprocessing import MinMaxScaler
 from torchvision import transforms
 
+from runtime_lib.data_paths import paper_data_dir
+
 from .classifier import MLQuantumNearestCentroid, QuantumNearestCentroid
 from .synthetic_data import generate_synthetic_data
 from .visualization import (
@@ -25,8 +26,6 @@ from .visualization import (
     plot_combined_figure,
     plot_confusion_matrices_comparison,
 )
-
-from runtime_lib.data_paths import paper_data_dir
 
 logger = logging.getLogger(__name__)
 

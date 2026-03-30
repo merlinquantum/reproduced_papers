@@ -16,11 +16,24 @@ import torch
 # Get the directory where the current script lives
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-# Define the folder relative to script_dir
-save_dir = os.path.join(script_dir, "..", "results", "custom_BAS_paper")
 
-# Make sure the folder exists
-os.makedirs(save_dir, exist_ok=True)
+def _resolve_output_dirs() -> tuple[str, str]:
+    results_env = os.environ.get("PHOTONIC_QCNN_RESULTS_DIR")
+    models_env = os.environ.get("PHOTONIC_QCNN_MODELS_DIR")
+    if results_env:
+        results_dir = os.path.abspath(results_env)
+    else:
+        results_dir = os.path.join(script_dir, "..", "results", "custom_BAS_paper")
+    if models_env:
+        models_dir = os.path.abspath(models_env)
+    else:
+        models_dir = results_dir
+    os.makedirs(results_dir, exist_ok=True)
+    os.makedirs(models_dir, exist_ok=True)
+    return results_dir, models_dir
+
+
+results_dir, models_dir = _resolve_output_dirs()
 
 print("WARNING. Is torch.cuda.is_available():", torch.cuda.is_available())
 
@@ -148,7 +161,7 @@ for test in range(nbr_test):
         test_interval,
         device,
     )
-    save_path = os.path.join(save_dir, f"model_state_Custom_BAS_{test}")
+    save_path = os.path.join(models_dir, f"model_state_Custom_BAS_{test}")
     torch.save(network_state, save_path)  # save network parameters
     training_data = torch.tensor(
         [
@@ -158,7 +171,7 @@ for test in range(nbr_test):
             testing_accuracy_list,
         ]
     )
-    save_path = os.path.join(save_dir, f"Custom_BAS_training_data_{test}.pt")
+    save_path = os.path.join(results_dir, f"Custom_BAS_training_data_{test}.pt")
     torch.save(training_data, save_path)
     # saving the data to perform expectation and average values:
     training_loss.append(training_loss_list)
@@ -237,4 +250,4 @@ plt.grid(True)
 plt.ylim(0, 1)
 
 plt.tight_layout()
-plt.savefig(os.path.join(save_dir, "Custom_BAS_training_metrics.png"))
+plt.savefig(os.path.join(results_dir, "Custom_BAS_training_metrics.png"))

@@ -84,8 +84,10 @@ def _generate_interferometer(n_modes, stage_idx, reservoir_mode=False):
     if reservoir_mode:
         return pcvl.GenericInterferometer(
             n_modes,
-            lambda idx: pcvl.BS(theta=np.pi * 2 * random.random())
-            // (0, pcvl.PS(phi=np.pi * 2 * random.random())),
+            lambda idx: (
+                pcvl.BS(theta=np.pi * 2 * random.random())
+                // (0, pcvl.PS(phi=np.pi * 2 * random.random()))
+            ),
             shape=pcvl.InterferometerShape.RECTANGLE,
             depth=2 * n_modes,
             phase_shifter_fun_gen=lambda idx: pcvl.PS(phi=np.pi * 2 * random.random()),
@@ -137,10 +139,12 @@ def create_quantum_circuit(n_modes: int, n_features: int):
     # 1. Left interferometer - trainable transformation
     wl = pcvl.GenericInterferometer(
         n_modes,
-        lambda i: pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_li{i}"))
-        // pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_lo{i}")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_li{i}"))
+            // pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_lo{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 
@@ -152,10 +156,12 @@ def create_quantum_circuit(n_modes: int, n_features: int):
     # 3. Right interferometer - trainable transformation
     wr = pcvl.GenericInterferometer(
         n_modes,
-        lambda i: pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_ri{i}"))
-        // pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_ro{i}")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_ri{i}"))
+            // pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_ro{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 

@@ -14,12 +14,16 @@ import numpy as np
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 REPO_ROOT = PROJECT_DIR.parents[1]
-for path in (REPO_ROOT, PROJECT_DIR):
-    if str(path) not in sys.path:
-        sys.path.insert(0, str(path))
+try:
+    from papers.qLLM.lib.setfit_model import load_model
+    from papers.shared.qLLM.data_utils import load_data
+except ModuleNotFoundError:
+    for path in (REPO_ROOT, PROJECT_DIR):
+        if str(path) not in sys.path:
+            sys.path.insert(0, str(path))
+    from lib.setfit_model import load_model
 
-from papers.shared.qLLM.data_utils import load_data
-from lib.setfit_model import load_model
+    from papers.shared.qLLM.data_utils import load_data
 
 
 def save_embeddings_to_json(

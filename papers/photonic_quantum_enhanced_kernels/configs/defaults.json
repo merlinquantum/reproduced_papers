@@ -1,0 +1,27 @@
+{
+  "description": "Photonic quantum-enhanced kernels defaults",
+  "seed": 42,
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "experiment": "accuracy_vs_kernel",
+  "dry_run": false,
+  "plotting": {
+    "use_tex": false,
+    "show": false
+  },
+  "experiments": {
+    "accuracy_vs_width": {
+      "widths": [4, 5, 6, 7],
+      "superset_size": 300,
+      "reg": 0.02,
+      "reps": 10,
+      "test_size": 0.33,
+      "data_sizes": {"min": 40, "max": 200, "step": 20}
+    }
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "description": "Photonic quantum-enhanced kernels defaults",
+  "seed": 42,
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "experiment": "accuracy_vs_kernel",
+  "dry_run": false,
+  "plotting": {
+    "use_tex": false,
+    "show": false
+  },
+  "experiments": {
+    "accuracy_vs_input_state": {
+      "input_states": [[1, 1, 0, 0, 0, 0], [0, 0, 1, 1, 0, 0]],
+      "superset_size": 2000,
+      "reg": 0.02,
+      "reps": 5,
+      "test_size": 0.33,
+      "indistinguishability": 0.972,
+      "shots": null,
+      "force_psd": true,
+      "no_bunching": false,
+      "data_sizes": {"min": 40, "max": 100, "step": 20}
+    },
+    "accuracy_vs_kernel": {
+      "input_state": [1, 1, 0, 0, 0, 0],
+      "superset_size": 1000,
+      "reg": 0.02,
+      "reps": 10,
+      "test_size": 0.33,
+      "indistinguishability": 0.972,
+      "no_bunching": false,
+      "force_psd": false,
+      "shots": null,
+      "data_sizes": {"min": 40, "max": 100, "step": 20}
+    },
+    "accuracy_vs_width": {
+      "widths": [4, 5, 6, 7],
+      "superset_size": 300,
+      "reg": 0.02,
+      "reps": 10,
+      "test_size": 0.33,
+      "data_sizes": {"min": 40, "max": 200, "step": 20}
+    },
+    "accuracy_vs_geometric_difference": {
+      "num_points": 800,
+      "n": 2,
+      "data_size": 150,
+      "test_size": 0.33,
+      "reg": 0.02,
+      "m_min": 4,
+      "m_max": 7,
+      "spline_smoothing": 5
+    }
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

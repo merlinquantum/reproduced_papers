@@ -1,0 +1,47 @@
+{
+  "description": "Tiny classical RNN baseline on shared time_series sin generator",
+  "dtype": "float32",
+  "dataset": {
+    "name": "sin",
+    "path": null,
+    "kaggle_dataset": null,
+    "preprocess": null,
+    "generator": {
+      "name": "sin",
+      "params": {
+        "frequency": 0.2,
+        "amplitude": 1.0,
+        "phase": 0.0,
+        "t_max": 20,
+        "n_points": 103,
+        "noise_std": 0.0
+      },
+      "feature_dim": 2
+    },
+    "sequence_length": 6,
+    "prediction_horizon": 1,
+    "max_rows": null,
+    "train_ratio": 0.7,
+    "val_ratio": 0.15,
+    "batch_size": 32,
+    "shuffle": false
+  },
+  "model": {
+    "name": "rnn_baseline",
+    "params": {
+      "cell_type": "rnn",
+      "hidden_dim": 16,
+      "layers": 1,
+      "dropout": 0.0,
+      "input_dropout": 0.0,
+      "bidirectional": false
+    }
+  },
+  "training": {
+    "epochs": 15,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "clip_grad_norm": 1.0
+  }
+}

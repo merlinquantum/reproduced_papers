@@ -29,10 +29,12 @@ def universal_interferometer(m: int, tag: str) -> pcvl.GenericInterferometer:
     """Trainable rectangular mesh interferometer with theta_* parameters."""
     return pcvl.GenericInterferometer(
         m,
-        lambda idx: pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_{tag}_in_{idx}"))
-        // pcvl.BS()
-        // pcvl.PS(pcvl.P(f"theta_{tag}_out_{idx}")),
+        lambda idx: (
+            pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_{tag}_in_{idx}"))
+            // pcvl.BS()
+            // pcvl.PS(pcvl.P(f"theta_{tag}_out_{idx}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 

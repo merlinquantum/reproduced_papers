@@ -7,7 +7,6 @@ from statistics import mean
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, TensorDataset
-from tqdm import tqdm
 
 DEFAULT_COLORS = ["#1f77b4", "#ff7f0e", "#d62728", "#2ca02c"]
 
@@ -29,7 +28,6 @@ def train_single_run(
     batch_size = int(cfg.get("batch_size", 32))
     lr = float(cfg.get("learning_rate", 0.02))
     betas = cfg.get("betas", [0.9, 0.999])
-    progress_bar = bool(cfg.get("progress_bar", True))
 
     model.to(device)
     optimizer = torch.optim.Adam(model.parameters(), lr=lr, betas=betas)
@@ -39,11 +37,7 @@ def train_single_run(
     losses: list[float] = []
     mses: list[float] = []
 
-    iterator = range(epochs)
-    if progress_bar:
-        iterator = tqdm(iterator, desc=desc)
-
-    for _epoch in iterator:
+    for _epoch in range(epochs):
         # Shuffle each epoch by relying on DataLoader's sampling
         loader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
         running_loss = 0.0
@@ -70,11 +64,6 @@ def train_single_run(
             preds = model(full_x).view(-1)
             mse = torch.mean((preds - full_y) ** 2).item()
             mses.append(mse)
-
-        if progress_bar and hasattr(iterator, "set_description"):
-            iterator.set_description(
-                f"{desc} | Loss {avg_loss:.4f} | Train MSE {mse:.4f}"
-            )
 
     return {"losses": losses, "train_mses": mses}
 

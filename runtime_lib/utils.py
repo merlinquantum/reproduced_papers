@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import importlib
 import re
-from typing import Callable, Iterable, Tuple, Union
+from collections.abc import Iterable
+from typing import Callable
 
 
 def import_callable(path_spec: str) -> Callable[..., object]:
@@ -14,7 +15,7 @@ def import_callable(path_spec: str) -> Callable[..., object]:
     return fn
 
 
-def _iter_placeholders(obj: object, path: str = "") -> Iterable[Tuple[str, str]]:
+def _iter_placeholders(obj: object, path: str = "") -> Iterable[tuple[str, str]]:
     """Yield (path, value) for any string containing <<...>> placeholders."""
     if isinstance(obj, dict):
         for key, value in obj.items():
@@ -29,7 +30,7 @@ def _iter_placeholders(obj: object, path: str = "") -> Iterable[Tuple[str, str]]
             yield path, obj
 
 
-def ensure_no_placeholders(cfg: Union[dict, list, tuple]) -> None:
+def ensure_no_placeholders(cfg: dict | list | tuple) -> None:
     """Raise if the config contains unresolved <<PLACEHOLDER>> strings."""
     placeholders = list(_iter_placeholders(cfg))
     if not placeholders:

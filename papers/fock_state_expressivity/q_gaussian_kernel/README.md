@@ -17,29 +17,85 @@ The experiments demonstrate that quantum circuits can learn to approximate Gauss
 ## How to Run
 
 ### CLI workflow
-1. **Train Gaussian kernel samplers** (stores checkpoints + learned function plots):
-   ```bash
-   python implementation.py --task sampler
-   ```
-2. **Evaluate saved kernels on classification datasets** (uses manifest from step 1 by default):
-   ```bash
-   python implementation.py --task classify
-   ```
+Run from the repo root with `--paper fock_state_expressivity/q_gaussian_kernel`.
+
+Sampler task (creates a new run folder and writes sampler outputs + checkpoints):
+```bash
+python implementation.py --paper fock_state_expressivity/q_gaussian_kernel --task sampler
+```
+
+Classify task with prior sampler outputs (creates a new run folder and writes classify outputs there):
+```bash
+python implementation.py --paper fock_state_expressivity/q_gaussian_kernel --task classify \
+  --previous-run results/run_YYYYMMDD-HHMMSS
+```
+
+Classify task without `--previous-run` (runs the sampler first using `configs/defaults.json`,
+then classifies using the newly created run’s `model/manifest.json`):
+```bash
+python implementation.py --paper fock_state_expressivity/q_gaussian_kernel --task classify
+```
 
 Common flags:
 - `--config PATH` select another JSON config (default `configs/defaults.json`).
 - `--seed INT`, `--outdir DIR`, `--device STR` override reproducibility and device (default outdir `results/`).
-- `--num-runs INT` override the sampler’s `training.num_runs` value (number of restarts per `(σ, n)` pair); defaults to 5 in the base config.
+- `--num-runs INT` override the sampler’s `training.num_runs` value (number of restarts per `(σ, n)` pair).
+- `--previous-run PATH` reuse model outputs from a prior sampler run for classification.
 - `--manifest PATH` manually point to a checkpoint manifest for classification runs.
+  If `--previous-run` is not set, `--manifest` is ignored.
 
 Each execution creates `results/run_YYYYMMDD-HHMMSS/` (or `<outdir>/...` if overridden) containing:
 ```
-summary.txt               # Human-readable metrics
-metrics.json              # Raw loss/accuracy traces
 config_snapshot.json      # Resolved config (after CLI overrides)
-figures/                  # Learned kernels, dataset previews, accuracy charts
-models/                   # Kernel checkpoints (sampler task)
-models_manifest.json      # Metadata for checkpoints (sampler task)
+model/                    # Sampler checkpoints + manifest
+sampler/                  # Sampler outputs
+classify/                 # Classification outputs
+```
+Sampler checkpoints are stored under `results/<run>/model/`.
+Sampler and classification outputs:
+```
+sampler/
+  summary.txt
+  metrics.json
+  visualization_data/learned_functions.json
+classify/
+  summary.txt
+  quantum_metrics.json
+  classical_metrics.json
+  visualization_data/classification_datasets.json
+```
+
+### Visualizations
+Each visualization script can either reuse a prior run (`--previous-run`) or launch the
+task it depends on if `--previous-run` is omitted (except `visu_dataset_examples.py`,
+which generates datasets from `configs/defaults.json` without running training):
+```bash
+python papers/fock_state_expressivity/q_gaussian_kernel/utils/visu_learned_functions.py \
+  --previous-run results/run_YYYYMMDD-HHMMSS
+
+python papers/fock_state_expressivity/q_gaussian_kernel/utils/visu_dataset_examples.py \
+  --previous-run results/run_YYYYMMDD-HHMMSS
+
+python papers/fock_state_expressivity/q_gaussian_kernel/utils/visu_accuracy_bars.py \
+  --previous-run results/run_YYYYMMDD-HHMMSS
+```
+Notes:
+- `visu_learned_functions.py` requires sampler outputs (`sampler/visualization_data/`).
+- `visu_dataset_examples.py` uses `classify/visualization_data/` when `--previous-run`
+  is provided; otherwise it generates datasets from defaults.
+- `visu_accuracy_bars.py` requires classify outputs (`classify/visualization_data/` and
+  `classify/*_metrics.json`).
+If required data is missing, the script warns and exits.
+Figures are saved under `results/run_YYYYMMDD-HHMMSS/<task>/figures/` (or
+`results/figures/` for `visu_dataset_examples.py` without `--previous-run`):
+```
+sampler/figures/
+  learned_vs_target.png
+classify/figures/
+  datasets/classification_datasets.png
+  svm_accuracy.png
+figures/
+  classification_datasets.png
 ```
 
 ## Configuration
@@ -47,21 +103,18 @@ Configs follow the template structure (`configs/`):
 - `experiment.task`: `"sampler"` or `"classify"` (can be overridden via CLI).
 - `model`: circuit architecture (`general`, `mzi`, etc.), scaling layer type, trainable interferometer flag, bunching toggle.
 - `training`: optimizer settings, number of restarts, epochs, batch size, shuffle toggle.
-- `sampler`: photon counts, Gaussian grid definition (span/step/σ list), optional `export_dir` for checkpoint artifacts.
+- `sampler`: photon counts, Gaussian grid definition (span/step/σ list).
 - `classification`: dataset generation parameters (noise, scaling) and manifest path reused for evaluation.
-- `outputs`: toggle learned-function plots, dataset scatter plots, and accuracy bar charts.
 
 Modify/duplicate `configs/defaults.json` (sampler) or `configs/classify.json` (classification) to explore other circuits, photon sets, or datasets.
 
 ## Results and Analysis
-- **Sampler task**: `summary.txt` reports mean/min/max training MSE for each `(σ, n)` pair; `figures/learned_vs_target.png` overlays learned kernels with analytical Gaussians, showing better fits as photon number increases.
-- **Classification task**: `figures/svm_accuracy.png` compares quantum precomputed kernels against RBF-SVMs. For small σ, high-photon circuits close the gap with classical baselines but optimization becomes harder, mirroring the paper’s finding.
+- **Sampler task**: `sampler/summary.txt` reports mean/min/max training MSE for each `(σ, n)` pair; use `visu_learned_functions.py` to render learned kernels vs analytical Gaussians.
+- **Classification task**: `visu_accuracy_bars.py` compares quantum precomputed kernels against RBF-SVMs. For small σ, high-photon circuits close the gap with classical baselines but optimization becomes harder, mirroring the paper’s finding.
 
-The experiment generates several outputs:
+The visualization utilities generate:
 - **Kernel approximation plots**: Visual comparison of learned vs target kernels
 - **SVM performance**: Classification accuracy using quantum vs classical kernels
-- **Circuit diagrams**: Visual representation of different quantum architectures
-- **Training dynamics**: Loss curves and convergence analysis
 
 The paper's results are the follow:
 
@@ -107,12 +160,12 @@ Key findings include:
 
 ## Reproducibility Notes
 - Seeds propagate to `random`, `numpy`, and `torch`; dataset caches under `data/cache/` ensure deterministic reuse unless `force_regenerate` is set.
-- Checkpoints are saved both inside each run directory and (optionally) under `models/gaussian_kernels/` for cross-run reuse.
+- Checkpoints are saved inside `results/<run>/model/`.
 - GPU execution depends on Perceval/MerLin CUDA builds; defaults run on CPU.
 
 ## Testing
 ```bash
-pytest -q
+pytest -q papers/fock_state_expressivity/q_gaussian_kernel/tests
 ```
 Current tests cover Gaussian grid and dataset preparation. Extend with regression tests (e.g., MSE/accuracy thresholds) as needed.
 

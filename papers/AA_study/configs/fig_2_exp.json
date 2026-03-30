@@ -1,0 +1,6 @@
+{
+    "description": "Run the FIG2 experiment",
+    "outdir": "results",
+    "exp_to_run": "FIG2",
+    "num_samples_per_class":2000
+}

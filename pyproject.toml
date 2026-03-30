@@ -1,6 +1,10 @@
 [tool.ruff]
 line-length = 88
 target-version = "py39"
+extend-exclude = [
+    "legacy",
+    "**/*.ipynb",
+]
 
 [tool.ruff.lint]
 select = [
@@ -19,6 +23,9 @@ ignore = [
     "N802",  # function naming rules
     "N803",  # argument naming rules
     "N806",  # variable naming rules
+    "N812",  # lowercase imported as non-lowercase (e.g., F, ML)
+    "N999",  # invalid module names (packages with underscores)
+    "N801",  # class naming rules (some packages have unconventional names)
 ]
 
 [tool.ruff.lint.per-file-ignores]

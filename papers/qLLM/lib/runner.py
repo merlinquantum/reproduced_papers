@@ -355,9 +355,7 @@ def train_kernel_method(args, train_dataset, eval_dataset, test_dataset):
 
         svc_296_val_preds = model.predict(eval_embeddings)
         svc_296_test_preds = model.predict(test_embeddings)
-        svc_296_val_accuracy = accuracy_score(
-            eval_dataset["label"], svc_296_val_preds
-        )
+        svc_296_val_accuracy = accuracy_score(eval_dataset["label"], svc_296_val_preds)
         svc_296_test_accuracy = accuracy_score(
             test_dataset["label"], svc_296_test_preds
         )
@@ -376,9 +374,7 @@ def train_kernel_method(args, train_dataset, eval_dataset, test_dataset):
 
         svc_435_val_preds = model.predict(eval_embeddings)
         svc_435_test_preds = model.predict(test_embeddings)
-        svc_435_val_accuracy = accuracy_score(
-            eval_dataset["label"], svc_435_val_preds
-        )
+        svc_435_val_accuracy = accuracy_score(eval_dataset["label"], svc_435_val_preds)
         svc_435_test_accuracy = accuracy_score(
             test_dataset["label"], svc_435_test_preds
         )

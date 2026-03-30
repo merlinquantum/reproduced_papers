@@ -33,6 +33,10 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
     n_modes = cfg["n_modes"]
     seeds = cfg["seed"]
     fold_index = cfg["fold_index"]
+    dataset_name = cfg.get("dataset_name", "mnist")
+    dataset_truncate = cfg.get("dataset_truncate", 0)
+    qpu_device_name = cfg.get("qpu_device_name", cfg.get("qpu_device", "none"))
+    qpu_device_nsample = cfg.get("qpu_device_nsample", 10000)
 
     if any(
         isinstance(val, Sequence) and not isinstance(val, (str, bytes))
@@ -83,8 +87,10 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
                             n_photons=photons,
                             n_modes=modes,
                             seed=seed,
+                            dataset_name=dataset_name,
                             fold_index=fold,
                             n_fold=cfg["n_fold"],
+                            dataset_truncate=dataset_truncate,
                             n_epochs=cfg["n_epochs"],
                             batch_size=cfg["batch_size"],
                             learning_rate=cfg["learning_rate"],
@@ -96,6 +102,8 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
                             b_no_bunching=cfg["b_no_bunching"],
                             b_use_tensorboard=cfg["b_use_tensorboard"],
                             device_name=cfg["device"],
+                            qpu_device_name=qpu_device_name,
+                            qpu_device_nsample=qpu_device_nsample,
                             run_dir=run_dir,
                             logger=logger,
                         )
@@ -126,8 +134,10 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
         n_photons=n_photons,
         n_modes=n_modes,
         seed=seeds,
+        dataset_name=dataset_name,
         fold_index=fold_index,
         n_fold=cfg["n_fold"],
+        dataset_truncate=dataset_truncate,
         n_epochs=cfg["n_epochs"],
         batch_size=cfg["batch_size"],
         learning_rate=cfg["learning_rate"],
@@ -139,6 +149,8 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
         b_no_bunching=cfg["b_no_bunching"],
         b_use_tensorboard=cfg["b_use_tensorboard"],
         device_name=cfg["device"],
+        qpu_device_name=qpu_device_name,
+        qpu_device_nsample=qpu_device_nsample,
         run_dir=run_dir,
         logger=logger,
     )
@@ -149,6 +161,7 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
 def _run_rff(cfg, run_dir: Path, logger: logging.Logger) -> None:
     n_rff_features = cfg["n_rff_features"]
     seeds = cfg["seed"]
+    dataset_name = cfg.get("dataset_name", "mnist")
 
     if any(
         isinstance(val, Sequence) and not isinstance(val, (str, bytes))
@@ -184,6 +197,7 @@ def _run_rff(cfg, run_dir: Path, logger: logging.Logger) -> None:
                     seed=seed,
                     b_optim_via_sgd=cfg["b_optim_via_sgd"],
                     max_iter_sgd=cfg["max_iter_sgd"],
+                    dataset_name=dataset_name,
                     run_dir=run_dir,
                     logger=logger,
                 )
@@ -211,6 +225,7 @@ def _run_rff(cfg, run_dir: Path, logger: logging.Logger) -> None:
         seed=seeds,
         b_optim_via_sgd=cfg["b_optim_via_sgd"],
         max_iter_sgd=cfg["max_iter_sgd"],
+        dataset_name=dataset_name,
         run_dir=run_dir,
         logger=logger,
     )

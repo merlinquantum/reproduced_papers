@@ -1,0 +1,20 @@
+{
+    "loss_qt": [
+        2.1410176753997803
+    ],
+    "accuracy_qt": [
+        20.666666666666668
+    ],
+    "params_qt": [
+        202
+    ],
+    "loss_ablation": [
+        2.145516872406006
+    ],
+    "accuracy_ablation": [
+        21.5
+    ],
+    "params_ablation": [
+        31
+    ]
+}

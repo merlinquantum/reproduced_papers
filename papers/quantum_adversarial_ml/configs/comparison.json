@@ -1,0 +1,53 @@
+{
+  "description": "Quantum Adversarial ML - comparison",
+  "seed": 42,
+  "experiment": "comparison",
+  "device": "auto",
+  "dataset": {
+    "digits": [
+      1,
+      9
+    ],
+    "image_size": 16,
+    "normalize": true,
+    "root": "data",
+    "download": true,
+    "batch_size": 256
+  },
+  "comparison": {
+    "hidden_dims": [
+      128,
+      64
+    ],
+    "n_modes": 8,
+    "n_photons": 2,
+    "n_layers_photonic": 2,
+    "n_qubits": 8,
+    "n_layers_gate": 2
+  },
+  "training": {
+    "epochs": 50,
+    "batch_size": 256,
+    "learning_rate": 0.005,
+    "optimizer": "adam"
+  },
+  "attack": {
+    "method": "bim",
+    "epsilon": 0.1,
+    "num_iter": 10,
+    "alpha": 0.01,
+    "epsilon_range": [
+      0.01,
+      0.05,
+      0.1,
+      0.2
+    ]
+  },
+  "options": {
+    "save_model": true,
+    "run_attack": true
+  },
+  "logging": {
+    "level": "info"
+  }
+}

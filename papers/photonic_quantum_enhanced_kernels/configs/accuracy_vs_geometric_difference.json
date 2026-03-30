@@ -1,0 +1,18 @@
+{
+  "description": "Small test run for accuracy_vs_geometric_difference",
+  "experiment": "accuracy_vs_geometric_difference",
+  "plotting": {"use_tex": false, "show": true},
+  "experiments": {
+    "accuracy_vs_geometric_difference": {
+      "num_points": 800,
+      "n": 2,
+      "data_size": 150,
+      "test_size": 0.33,
+      "reg": 0.02,
+      "m_min": 4,
+      "m_max": 7,
+      "spline_smoothing": 3,
+      "seed": 42
+    }
+  }
+}

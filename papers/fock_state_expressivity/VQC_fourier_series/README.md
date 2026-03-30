@@ -11,7 +11,7 @@ Template-aligned reproduction of the Fourier-series fitting experiment from the 
 ## How to Run
 
 ### Command-line interface
-Main entry point: `implementation.py`
+Main entry point: `implementation.py` (run from repo root)
 ```bash
 python implementation.py --help
 ```
@@ -21,15 +21,16 @@ Key options:
 - `--seed INT` Override RNG seed.
 - `--outdir DIR` Base folder for timestamped runs (default: `results/`).
 - `--device STR` Torch device string (default `cpu` — GPU support depends on Perceval/MerLin build).
-- `--show-plots` Also display generated matplotlib figures.
+- `--show-plots` Display matplotlib figures when running visualization utilities.
 
 Example runs:
 ```bash
 # Default reproduction (3 runs per photon configuration)
-python implementation.py
+python implementation.py --paper fock_state_expressivity/VQC_fourier_series
 
 # Custom seed and output directory
-python implementation.py --seed 2024 --outdir results/vqc_fourier
+python implementation.py --paper fock_state_expressivity/VQC_fourier_series \
+  --seed 2024 --outdir results/vqc_fourier
 ```
 
 Each run creates `results/run_YYYYMMDD-HHMMSS/` (or `<outdir>/...` if overridden) containing:
@@ -37,9 +38,19 @@ Each run creates `results/run_YYYYMMDD-HHMMSS/` (or `<outdir>/...` if overridden
 summary.txt                 # Textual statistics per photon config
 metrics.json                # JSON dump of all recorded losses/MSEs
 config_snapshot.json        # Resolved config (after CLI overrides)
-figures/training_curves.png # Loss envelopes
-figures/learned_vs_target.png # Learned functions vs target Fourier series
+learned_function/predictions.json # Best-model predictions for visualization
 ```
+
+### Visualizations
+Plots are generated via utilities that can reuse a previous run or re-run the experiment when the flag `--previous-run` is not used:
+```bash
+python papers/fock_state_expressivity/VQC_fourier_series/utils/visu_training_curves.py \
+  --previous-run results/run_YYYYMMDD-HHMMSS
+
+python papers/fock_state_expressivity/VQC_fourier_series/utils/visu_learned_functions.py \
+  --previous-run results/run_YYYYMMDD-HHMMSS
+```
+Figures are saved under `<run_dir>/figures/`.
 
 ## Configuration
 Place JSON configs inside `configs/`.
@@ -50,7 +61,7 @@ Place JSON configs inside `configs/`.
 Relevant keys:
 - `data`: domain bounds, sampling step, Fourier coefficients (positive orders, negatives inferred via conjugation).
 - `model`: number of modes, scale layer type, Perceval/MerLin layer options.
-- `training`: optimizer hyperparameters, number of restarts, progress bar toggle.
+- `training`: optimizer hyperparameters, number of restarts.
 - `plotting`: color palette per photon configuration.
 
 ## Results and Analysis
@@ -65,7 +76,6 @@ Ours:
 ![VQC_fourier_series_reproduced](./results/expressive_power_of_the_VQC.png)
 
 - The `summary.txt` file reports average/min/max final MSE over the independent restarts for each photon configuration.
-- Reproduced figures are stored both in `results/` (for archival plots) and inside each run directory for provenance.
 
 ## Reproducibility Notes
 - RNG seed controls `random`, `numpy`, and `torch` generators; set via config or `--seed`.

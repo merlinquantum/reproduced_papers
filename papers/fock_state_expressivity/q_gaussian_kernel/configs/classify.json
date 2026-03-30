@@ -3,41 +3,26 @@
   "experiment": {
     "task": "classify"
   },
-  "outdir": "outdir",
+  "outdir": "results",
   "seed": 1337,
   "device": "cpu",
-  "model": {
-    "circuit": "general",
-    "train_circuit": true,
-    "scale_type": "learned",
-    "no_bunching": false
-  },
-  "training": {
-    "num_runs": 5,
-    "epochs": 200,
-    "batch_size": 32,
-    "learning_rate": 0.02,
-    "betas": [0.7, 0.9],
-    "weight_decay": 0.0,
-    "optimizer": "adam",
-    "shuffle_train": true
-  },
   "classification": {
-    "manifest": "models/gaussian_kernels/manifest.json",
     "data": {
       "num_samples": 200,
       "test_size": 0.4,
       "scaling_factor": 0.65,
       "cache_dir": "data/cache/classification",
       "datasets": {
-        "circular": {"noise": 0.05},
-        "moon": {"noise": 0.2},
-        "blob": {"cluster_std": 4.0}
+        "circular": {
+          "noise": 0.05
+        },
+        "moon": {
+          "noise": 0.2
+        },
+        "blob": {
+          "cluster_std": 4.0
+        }
       }
     }
-  },
-  "outputs": {
-    "save_dataset_plots": true,
-    "save_accuracy_bars": true
   }
 }

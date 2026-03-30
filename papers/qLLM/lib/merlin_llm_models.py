@@ -19,10 +19,12 @@ def create_quantum_circuit(m, size=400):
 
     wl = pcvl.GenericInterferometer(
         m,
-        lambda i: pcvl.BS()
-        // pcvl.PS(pcvl.P(f"phase_1_{i}"))
-        // pcvl.BS()
-        // pcvl.PS(pcvl.P(f"phase_2_{i}")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(pcvl.P(f"phase_1_{i}"))
+            // pcvl.BS()
+            // pcvl.PS(pcvl.P(f"phase_2_{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 
@@ -38,10 +40,12 @@ def create_quantum_circuit(m, size=400):
 
     wr = pcvl.GenericInterferometer(
         m,
-        lambda i: pcvl.BS()
-        // pcvl.PS(pcvl.P(f"phase_3_{i}"))
-        // pcvl.BS()
-        // pcvl.PS(pcvl.P(f"phase_4_{i}")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(pcvl.P(f"phase_3_{i}"))
+            // pcvl.BS()
+            // pcvl.PS(pcvl.P(f"phase_4_{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 
@@ -57,10 +61,12 @@ def create_quantum_circuit_deep(m, size=400):
 
     wl = pcvl.GenericInterferometer(
         m,
-        lambda i: pcvl.BS()
-        // pcvl.PS(pcvl.P(f"phase_1_{i}"))
-        // pcvl.BS()
-        // pcvl.PS(pcvl.P(f"phase_2_{i}")),
+        lambda i: (
+            pcvl.BS()
+            // pcvl.PS(pcvl.P(f"phase_1_{i}"))
+            // pcvl.BS()
+            // pcvl.PS(pcvl.P(f"phase_2_{i}"))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
     )
 
@@ -78,10 +84,12 @@ def create_quantum_circuit_deep(m, size=400):
 
         wr = pcvl.GenericInterferometer(
             m,
-            lambda i, id=layer_idx: pcvl.BS()
-            // pcvl.PS(pcvl.P(f"phase_3_{id}_{i}"))
-            // pcvl.BS()
-            // pcvl.PS(pcvl.P(f"phase_4_{id}_{i}")),
+            lambda i, id=layer_idx: (
+                pcvl.BS()
+                // pcvl.PS(pcvl.P(f"phase_3_{id}_{i}"))
+                // pcvl.BS()
+                // pcvl.PS(pcvl.P(f"phase_4_{id}_{i}"))
+            ),
             shape=pcvl.InterferometerShape.RECTANGLE,
         )
 
@@ -139,7 +147,7 @@ class QuantumClassifier(nn.Module):
         num_classes=2,
         input_state=None,
         device="cpu",
-        no_bunching =False,
+        no_bunching=False,
     ):
         super().__init__()
         print(
@@ -167,7 +175,11 @@ class QuantumClassifier(nn.Module):
         # build the QLayer with a linear output as in the original paper
         # "The measurement output of the second module is then passed through a single Linear layer"
         print("\n -> self.q_circuit")
-        computation_space = ml.ComputationSpace.FOCK if not no_bunching else ml.ComputationSpace.UNBUNCHED
+        computation_space = (
+            ml.ComputationSpace.FOCK
+            if not no_bunching
+            else ml.ComputationSpace.UNBUNCHED
+        )
         self.q_circuit = ml.QuantumLayer(
             input_size=hidden_dim,
             circuit=circuit,
@@ -177,7 +189,7 @@ class QuantumClassifier(nn.Module):
             input_parameters=["px"],
             input_state=input_state,
             device=device,
-            computation_space = computation_space,
+            computation_space=computation_space,
         )
         self.bn = nn.LayerNorm(output_size_slos).requires_grad_(False)  # works OK
         print(f"\n -- Building the Linear layer with output size = {num_classes} -- ")
@@ -213,7 +225,7 @@ class QuantumClassifierParallel(nn.Module):
         num_classes=2,
         input_state=None,
         device="cpu",
-        no_bunching =False,
+        no_bunching=False,
         e=1,
     ):
         super().__init__()
@@ -249,7 +261,7 @@ class QuantumClassifierParallel(nn.Module):
             input_parameters=["px"],
             input_state=input_state,
             device=device,
-            computation_space = ml.ComputationSpace.UNBUNCHED,
+            computation_space=ml.ComputationSpace.UNBUNCHED,
         )
         if self.E == 2:
             self.q_circuit_2 = ml.QuantumLayer(
@@ -263,7 +275,7 @@ class QuantumClassifierParallel(nn.Module):
                 input_parameters=["px"],
                 input_state=input_state,
                 device=device,
-                computation_space = ml.ComputationSpace.UNBUNCHED,
+                computation_space=ml.ComputationSpace.UNBUNCHED,
             )
 
         output_encoder = math.comb(modes, photons_count)
@@ -291,7 +303,9 @@ class QuantumClassifierParallel(nn.Module):
             input_parameters=["px"],
             input_state=input_state,
             device=device,
-            computation_space = ml.ComputationSpace.FOCK if not no_bunching else ml.ComputationSpace.UNBUNCHED,
+            computation_space=ml.ComputationSpace.FOCK
+            if not no_bunching
+            else ml.ComputationSpace.UNBUNCHED,
         )
 
         # build the QLayer with a linear output as in the original paper
@@ -359,7 +373,7 @@ def marginalize_photon_presence(keys, probs):
 
     # Convert to float to allow matrix multiplication
     mask = mask.float()
-    
+
     # Convert probs to float if complex (take absolute value squared to get real probabilities)
     if probs.is_complex():
         probs = torch.abs(probs) ** 2
@@ -414,7 +428,7 @@ class QuantumClassifierExpectation(nn.Module):
             input_parameters=["px"],
             input_state=input_state,
             device=device,
-            computation_space = ml.ComputationSpace.UNBUNCHED,
+            computation_space=ml.ComputationSpace.UNBUNCHED,
         )
         if self.E == 2:
             self.q_circuit_2 = ml.QuantumLayer(
@@ -428,7 +442,7 @@ class QuantumClassifierExpectation(nn.Module):
                 input_parameters=["px"],
                 input_state=input_state,
                 device=device,
-                computation_space = ml.ComputationSpace.UNBUNCHED,
+                computation_space=ml.ComputationSpace.UNBUNCHED,
             )
 
         # We generate the keys associated with the probs
@@ -466,7 +480,9 @@ class QuantumClassifierExpectation(nn.Module):
             input_parameters=["px"],
             input_state=input_state,
             device=device,
-            computation_space = ml.ComputationSpace.FOCK if not no_bunching else ml.ComputationSpace.UNBUNCHED,
+            computation_space=ml.ComputationSpace.FOCK
+            if not no_bunching
+            else ml.ComputationSpace.UNBUNCHED,
         )
 
         # PNR output size
@@ -568,7 +584,7 @@ def test_module_building_and_gradients():
                 modes=modes,
                 num_classes=num_classes,
                 device=device,
-                computation_space = ml.ComputationSpace.FOCK,
+                computation_space=ml.ComputationSpace.FOCK,
             )
             print(f"   ✓ {name} instantiated successfully")
 
