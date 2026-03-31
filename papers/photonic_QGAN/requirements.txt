@@ -4,3 +4,4 @@ scikit-image
 loguru
 pytest
 torchvision
+scikit-image
