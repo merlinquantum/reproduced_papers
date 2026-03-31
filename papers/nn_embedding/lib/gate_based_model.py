@@ -195,43 +195,48 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
 
             # Distance evaluation
             if return_data:
-                # Training distances
-                rhos0_train = torch.stack(
-                    tuple(
-                        self.state_embedding_circuit(sample)
-                        for sample in self.classical_encoder(X0_train)
-                    ),
-                    dim=0,
-                )
-                rhos1_train = torch.stack(
-                    tuple(
-                        self.state_embedding_circuit(sample)
-                        for sample in self.classical_encoder(X1_train)
-                    ),
-                    dim=0,
-                )
-                rho0 = torch.sum(rhos0_train, dim=0) / len(X0_train)
-                rho1 = torch.sum(rhos1_train, dim=0) / len(X1_train)
-                train_distance.append(calculate_distance(rho0, rho1, distance=distance))
+                with torch.no_grad():
+                    # Training distances
+                    rhos0_train = torch.stack(
+                        tuple(
+                            self.state_embedding_circuit(sample)
+                            for sample in self.classical_encoder(X0_train)
+                        ),
+                        dim=0,
+                    )
+                    rhos1_train = torch.stack(
+                        tuple(
+                            self.state_embedding_circuit(sample)
+                            for sample in self.classical_encoder(X1_train)
+                        ),
+                        dim=0,
+                    )
+                    rho0 = torch.sum(rhos0_train, dim=0) / len(X0_train)
+                    rho1 = torch.sum(rhos1_train, dim=0) / len(X1_train)
+                    train_distance.append(
+                        calculate_distance(rho0, rho1, distance=distance)
+                    )
 
-                # Test distances
-                rhos0_test = torch.stack(
-                    tuple(
-                        self.state_embedding_circuit(sample)
-                        for sample in self.classical_encoder(X0_test)
-                    ),
-                    dim=0,
-                )
-                rhos1_test = torch.stack(
-                    tuple(
-                        self.state_embedding_circuit(sample)
-                        for sample in self.classical_encoder(X1_test)
-                    ),
-                    dim=0,
-                )
-                rho0 = torch.sum(rhos0_test, dim=0) / len(X0_test)
-                rho1 = torch.sum(rhos1_test, dim=0) / len(X1_test)
-                test_distance.append(calculate_distance(rho0, rho1, distance=distance))
+                    # Test distances
+                    rhos0_test = torch.stack(
+                        tuple(
+                            self.state_embedding_circuit(sample)
+                            for sample in self.classical_encoder(X0_test)
+                        ),
+                        dim=0,
+                    )
+                    rhos1_test = torch.stack(
+                        tuple(
+                            self.state_embedding_circuit(sample)
+                            for sample in self.classical_encoder(X1_test)
+                        ),
+                        dim=0,
+                    )
+                    rho0 = torch.sum(rhos0_test, dim=0) / len(X0_test)
+                    rho1 = torch.sum(rhos1_test, dim=0) / len(X1_test)
+                    test_distance.append(
+                        calculate_distance(rho0, rho1, distance=distance)
+                    )
 
         if return_data:
             return (
@@ -291,21 +296,22 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             if return_data:
                 ### Evaluate the accuracy
                 self.model.eval()
-                # Check on the training set
-                outputs = self.model(x_train)
-                predicted = torch.argmax(outputs, dim=1)
-                correct = 0
-                correct += (predicted == y_train).sum().item()
-                acc = 100 * correct / x_train.size(dim=0)
-                train_accs.append(acc)
+                with torch.no_grad():
+                    # Check on the training set
+                    outputs = self.model(x_train)
+                    predicted = torch.argmax(outputs, dim=1)
+                    correct = 0
+                    correct += (predicted == y_train).sum().item()
+                    acc = 100 * correct / x_train.size(dim=0)
+                    train_accs.append(acc)
 
-                # Check on the training set
-                outputs = self.model(x_test)
-                predicted = torch.argmax(outputs, dim=1)
-                correct = 0
-                correct += (predicted == y_test).sum().item()
-                acc = 100 * correct / x_test.size(dim=0)
-                test_accs.append(acc)
+                    # Check on the training set
+                    outputs = self.model(x_test)
+                    predicted = torch.argmax(outputs, dim=1)
+                    correct = 0
+                    correct += (predicted == y_test).sum().item()
+                    acc = 100 * correct / x_test.size(dim=0)
+                    test_accs.append(acc)
 
         if return_data:
             return loss_list, train_accs, test_accs

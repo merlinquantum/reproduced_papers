@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch
 import merlin as ml
 import json
+import gc
 from copy import deepcopy
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -28,17 +29,32 @@ from papers.nn_embedding.utils.plotting import plot_figure_2_bc
 
 
 def _randomize_trainable_parameters(module: nn.Module) -> None:
-    """Force a fresh random initialization for each repetition."""
+    """Force a fresh random initialization for each repetition.
+
+    Classical PyTorch modules keep their native ``reset_parameters`` behavior.
+    Their freshly initialized values are then lightly reshuffled so repetitions
+    stay independent while preserving the original value range. Only Merlin
+    quantum-layer trainable tensors are additionally resampled in ``[-pi, pi]``.
+    """
     for submodule in module.modules():
         if submodule is module:
             continue
         if hasattr(submodule, "reset_parameters"):
             submodule.reset_parameters()
+            if not isinstance(submodule, ml.QuantumLayer):
+                for param in submodule.parameters(recurse=False):
+                    if param.requires_grad and param.numel() > 1:
+                        with torch.no_grad():
+                            shuffled = param.reshape(-1)[
+                                torch.randperm(param.numel(), device=param.device)
+                            ].reshape_as(param)
+                            param.copy_(shuffled)
 
-    for param in module.parameters():
-        if param.requires_grad:
-            with torch.no_grad():
-                param.uniform_(-torch.pi, torch.pi)
+    if isinstance(module, ml.QuantumLayer):
+        for param in module.parameters():
+            if param.requires_grad:
+                with torch.no_grad():
+                    param.uniform_(-torch.pi, torch.pi)
 
 
 def reproduce_figure_2(
@@ -133,7 +149,6 @@ def reproduce_figure_2(
                 quantum_classifier=deepcopy(classifier),
                 num_classes=num_classes,
             )
-            _randomize_trainable_parameters(model)
             print("Training embedding")
             (
                 loss_list_embedding,
@@ -172,6 +187,7 @@ def reproduce_figure_2(
             results["loss_lists_classifier"]["pca_nqe"].append(loss_list_classifier)
             results["train_accuracies"]["pca_nqe"].append(train_acc)
             results["test_accuracies"]["pca_nqe"].append(test_acc)
+            del model
 
             # NQE
             print("NQE")
@@ -181,7 +197,6 @@ def reproduce_figure_2(
                 quantum_classifier=deepcopy(classifier),
                 num_classes=num_classes,
             )
-            _randomize_trainable_parameters(model)
             print("Training embedding")
             (
                 loss_list_embedding,
@@ -220,6 +235,7 @@ def reproduce_figure_2(
             results["loss_lists_classifier"]["nqe"].append(loss_list_classifier)
             results["train_accuracies"]["nqe"].append(train_acc)
             results["test_accuracies"]["nqe"].append(test_acc)
+            del model
 
             # No NQE
             print("No NQE")
@@ -227,23 +243,25 @@ def reproduce_figure_2(
             for param in embedder.parameters():
                 number_of_params += param.numel()
 
-            if number_of_params == 28 * 28:
-                x_train, x_test, y_train, y_test = data_load_and_process(
-                    dataset=dataset,
-                    feature_reduction=False,
-                    classes=[0, 1],
-                    samples_per_class=samples_per_class,
-                )
-            elif number_of_params < 28 * 28:
-                x_train, x_test, y_train, y_test = data_load_and_process(
-                    dataset=dataset,
-                    feature_reduction=number_of_params,
-                    classes=[0, 1],
-                    samples_per_class=samples_per_class,
-                )
-            else:
+            if number_of_params > 28 * 28:
                 raise ValueError(
                     "Not implemented yet for more params that number of features"
+                )
+            elif number_of_params < 28 * 28:
+                x_train_no_nqe, x_test_no_nqe, y_train_no_nqe, y_test_no_nqe = (
+                    data_load_and_process(
+                        dataset=dataset,
+                        feature_reduction=number_of_params,
+                        classes=[0, 1],
+                        samples_per_class=samples_per_class,
+                    )
+                )
+            else:
+                x_train_no_nqe, x_test_no_nqe, y_train_no_nqe, y_test_no_nqe = (
+                    x_train,
+                    x_test,
+                    y_train,
+                    y_test,
                 )
             print("Training classifier")
             (
@@ -257,10 +275,10 @@ def reproduce_figure_2(
             ) = train_merlin_based(
                 quantum_embedding_layer=deepcopy(embedder),
                 quantum_classifier=deepcopy(classifier),
-                x_train=x_train_PCA8,
-                y_train=y_train_PCA8,
-                x_test=x_test_PCA8,
-                y_test=y_test_PCA8,
+                x_train=x_train_no_nqe,
+                y_train=y_train_no_nqe,
+                x_test=x_test_no_nqe,
+                y_test=y_test_no_nqe,
                 batch_size=batch_size,
                 num_epochs=num_epochs_training_classifier,
                 lr=lr,
@@ -275,6 +293,7 @@ def reproduce_figure_2(
             results["loss_lists_classifier"]["without_nqe"].append(loss_list)
             results["train_accuracies"]["without_nqe"].append(train_accs)
             results["test_accuracies"]["without_nqe"].append(test_accs)
+            del embedder, classifier, classical_model_8, classical_model
         else:
 
             # PCA 8
@@ -307,7 +326,6 @@ def reproduce_figure_2(
                 quantum_classifier_params_shape=(30),
                 num_classes=num_classes,
             )
-            _randomize_trainable_parameters(model)
             print("Training embedding")
             (
                 loss_list_embedding,
@@ -346,6 +364,7 @@ def reproduce_figure_2(
             results["loss_lists_classifier"]["pca_nqe"].append(loss_list_classifier)
             results["train_accuracies"]["pca_nqe"].append(train_acc)
             results["test_accuracies"]["pca_nqe"].append(test_acc)
+            del model
 
             # NQE
             print("NQE")
@@ -357,7 +376,6 @@ def reproduce_figure_2(
                 quantum_classifier_params_shape=(30),
                 num_classes=num_classes,
             )
-            _randomize_trainable_parameters(model)
             print("Training embedding")
             (
                 loss_list_embedding,
@@ -396,6 +414,7 @@ def reproduce_figure_2(
             results["loss_lists_classifier"]["nqe"].append(loss_list_classifier)
             results["train_accuracies"]["nqe"].append(train_acc)
             results["test_accuracies"]["nqe"].append(test_acc)
+            del model
 
             # No NQE
             print("No NQE")
@@ -431,38 +450,44 @@ def reproduce_figure_2(
             results["loss_lists_classifier"]["without_nqe"].append(loss_list)
             results["train_accuracies"]["without_nqe"].append(train_accs)
             results["test_accuracies"]["without_nqe"].append(test_accs)
+            del classical_model_8, classical_model
 
         print(f"Repetition {i+1} done")
+        gc.collect()
 
-    payload = {
-        "loss_lists_embedding": to_serializable_list(results["loss_lists_embedding"]),
-        "training_distances": to_serializable_list(results["training_distances"]),
-        "testing_distances": to_serializable_list(results["testing_distances"]),
-        "train_lower_bounds": to_serializable_list(results["train_lower_bounds"]),
-        "test_lower_bounds": to_serializable_list(results["test_lower_bounds"]),
-        "loss_lists_classifier": to_serializable_list(results["loss_lists_classifier"]),
-        "train_accuracies": to_serializable_list(results["train_accuracies"]),
-        "test_accuracies": to_serializable_list(results["test_accuracies"]),
-        "config": {
-            "dataset": dataset,
-            "use_merlin": use_merlin,
-            "batch_size": batch_size,
-            "num_epochs_training_embedding": num_epochs_training_embedding,
-            "num_epochs_training_classifier": num_epochs_training_classifier,
-            "lr": lr,
-            "distance": distance,
-            "samples_per_class": samples_per_class,
-            "num_classes": num_classes,
-            "num_repetitions": num_repetitions,
-        },
-    }
+        payload = {
+            "loss_lists_embedding": to_serializable_list(
+                results["loss_lists_embedding"]
+            ),
+            "training_distances": to_serializable_list(results["training_distances"]),
+            "testing_distances": to_serializable_list(results["testing_distances"]),
+            "train_lower_bounds": to_serializable_list(results["train_lower_bounds"]),
+            "test_lower_bounds": to_serializable_list(results["test_lower_bounds"]),
+            "loss_lists_classifier": to_serializable_list(
+                results["loss_lists_classifier"]
+            ),
+            "train_accuracies": to_serializable_list(results["train_accuracies"]),
+            "test_accuracies": to_serializable_list(results["test_accuracies"]),
+            "config": {
+                "dataset": dataset,
+                "use_merlin": use_merlin,
+                "batch_size": batch_size,
+                "num_epochs_training_embedding": num_epochs_training_embedding,
+                "num_epochs_training_classifier": num_epochs_training_classifier,
+                "lr": lr,
+                "distance": distance,
+                "samples_per_class": samples_per_class,
+                "num_classes": num_classes,
+                "num_repetitions": num_repetitions,
+            },
+        }
 
-    results_dir = PROJECT_ROOT / "results"
-    results_dir.mkdir(parents=True, exist_ok=True)
-    backend = "merlin" if use_merlin else "gate_based"
-    output_path = results_dir / f"figure_2_{backend}_results.json"
-    output_path.write_text(json.dumps(payload, indent=2))
-    print(f"Saved results to {output_path}")
+        results_dir = PROJECT_ROOT / "results"
+        results_dir.mkdir(parents=True, exist_ok=True)
+        backend = "merlin" if use_merlin else "gate_based"
+        output_path = results_dir / f"figure_2_{backend}_results.json"
+        output_path.write_text(json.dumps(payload, indent=2))
+        print(f"Saved results to {output_path}")
 
     plot_figure_2_bc(
         train_pca_nqe=results["training_distances"]["pca_nqe"],
@@ -491,89 +516,16 @@ def reproduce_figure_2(
     return payload
 
 
-def reproduce_figure_3(
-    dataset: str = "mnist",
-    use_merlin: bool = False,
-    batch_size: int = 100,
-    num_epochs_training_embedding: int = 50,
-    num_epochs_training_classifier: int = 50,
-    lr: float = 0.01,
-    distance: str = "Trace",
-    samples_per_class: int = 150,
-    num_classes: int = 2,
-    num_repetitions: int = 5,
-):
-    keys = ("pca_nqe", "nqe", "without_nqe")
-    embedding_keys = ("pca_nqe", "nqe")
+"""
+    keys = ("pca_nqe", "nqe", "layer_1", "layer_2", "layer_3")
 
     results = {
-        "loss_lists_embedding": {key: [] for key in embedding_keys},
         "training_distances": {key: [] for key in keys},
         "testing_distances": {key: [] for key in keys},
-        "train_lower_bounds": {key: [] for key in keys},
-        "test_lower_bounds": {key: [] for key in keys},
         "loss_lists_classifier": {key: [] for key in keys},
         "train_accuracies": {key: [] for key in keys},
         "test_accuracies": {key: [] for key in keys},
     }
-
-    # load the data
-    x_train_PCA8, x_test_PCA8, y_train_PCA8, y_test_PCA8 = data_load_and_process(
-        dataset=dataset,
-        feature_reduction="PCA8",
-        classes=[0, 1],
-        samples_per_class=samples_per_class,
-    )
-    x_train, x_test, y_train, y_test = data_load_and_process(
-        dataset=dataset,
-        feature_reduction=False,
-        classes=[0, 1],
-        samples_per_class=samples_per_class,
-    )
-    for i in range(num_repetitions):
-        if use_merlin:
-            # Quantum embedding
-            circ = ml.CircuitBuilder(n_modes=8)
-            circ.add_entangling_layer()
-            embedder = ml.QuantumLayer(
-                input_size=0,
-                builder=circ,
-                n_photons=4,
-                measurement_strategy=ml.MeasurementStrategy.AMPLITUDES,
-            )
-            _randomize_trainable_parameters(embedder)
-
-            # Quantum classifier
-            circ = ml.CircuitBuilder(n_modes=8)
-            circ.add_entangling_layer()
-            classifier = ml.QuantumLayer(
-                builder=circ,
-                n_photons=4,
-                amplitude_encoding=True,
-                measurement_strategy=ml.MeasurementStrategy.PROBABILITIES,
-            )
-            _randomize_trainable_parameters(classifier)
-
-            # PCA 8
-            classical_model_8 = nn.Sequential(
-                nn.Linear(8, 10),
-                nn.ReLU(),
-                nn.Linear(10, 10),
-                nn.ReLU(),
-                nn.Linear(10, sum([i.numel() for i in embedder.parameters()])),
-            )
-            _randomize_trainable_parameters(classical_model_8)
-
-            # Full classical_model
-            classical_model = nn.Sequential(
-                nn.Flatten(),
-                nn.Linear(28 * 28, 128),
-                nn.ReLU(),
-                nn.Linear(128, 64),
-                nn.ReLU(),
-                nn.Linear(64, sum([i.numel() for i in embedder.parameters()])),
-            )
-            _randomize_trainable_parameters(classical_model)
-
+"""
 
 reproduce_figure_2(use_merlin=True)
