@@ -25,7 +25,7 @@ from papers.nn_embedding.lib.training_without_nqe import (
 )
 from papers.nn_embedding.utils.data import data_load_and_process
 from papers.nn_embedding.utils.utils import to_serializable_list
-from papers.nn_embedding.utils.plotting import plot_figure_2_bc
+from papers.nn_embedding.utils.plotting import plot_figure_2_bc, plot_figure_3
 
 
 def _randomize_trainable_parameters(module: nn.Module) -> None:
@@ -99,22 +99,22 @@ def reproduce_figure_2(
     for i in range(num_repetitions):
         if use_merlin:
             # Quantum embedding
-            circ = ml.CircuitBuilder(n_modes=8)
+            circ = ml.CircuitBuilder(n_modes=6)
             circ.add_entangling_layer()
             embedder = ml.QuantumLayer(
                 input_size=0,
                 builder=circ,
-                n_photons=4,
+                n_photons=2,
                 measurement_strategy=ml.MeasurementStrategy.AMPLITUDES,
             )
             _randomize_trainable_parameters(embedder)
 
             # Quantum classifier
-            circ = ml.CircuitBuilder(n_modes=8)
+            circ = ml.CircuitBuilder(n_modes=6)
             circ.add_entangling_layer()
             classifier = ml.QuantumLayer(
                 builder=circ,
-                n_photons=4,
+                n_photons=2,
                 amplitude_encoding=True,
                 measurement_strategy=ml.MeasurementStrategy.PROBABILITIES,
             )
@@ -429,8 +429,8 @@ def reproduce_figure_2(
                 test_lower_bound,
             ) = train_gate_based(
                 num_qubits=4,
-                quantum_embedding_layer=EmbeddingCallable().Four_QuantumEmbedding2,
-                quantum_classifier=FourQCNN,
+                quantum_embedding_circuit=EmbeddingCallable().Four_QuantumEmbedding2,
+                quantum_classifier_circuit=FourQCNN,
                 quantum_classifier_params_shape=(30),
                 x_train=x_train_PCA8,
                 y_train=y_train_PCA8,
@@ -527,16 +527,363 @@ def reproduce_figure_3(
     samples_per_class: int = 150,
     num_classes: int = 2,
     num_repetitions: int = 5,
+    layers_to_test: list[int] = [1, 2, 3],
 ):
-    keys = ("pca_nqe", "nqe", "layer_1", "layer_2", "layer_3")
+    keys = ["pca_nqe", "nqe"]
+    for i in layers_to_test:
+        keys.append(f"layer_{i}")
+    keys = tuple(keys)
 
     results = {
-        "training_distances": {key: [] for key in keys},
-        "testing_distances": {key: [] for key in keys},
         "loss_lists_classifier": {key: [] for key in keys},
         "train_accuracies": {key: [] for key in keys},
         "test_accuracies": {key: [] for key in keys},
     }
+    # load the data
+    x_train_PCA8, x_test_PCA8, y_train_PCA8, y_test_PCA8 = data_load_and_process(
+        dataset=dataset,
+        feature_reduction=8,
+        classes=[0, 1],
+        samples_per_class=samples_per_class,
+    )
+    x_train, x_test, y_train, y_test = data_load_and_process(
+        dataset=dataset,
+        feature_reduction=False,
+        classes=[0, 1],
+        samples_per_class=samples_per_class,
+    )
+
+    for i in range(num_repetitions):
+        if use_merlin:
+            # Quantum embedding
+            circ = ml.CircuitBuilder(n_modes=10)
+            circ.add_entangling_layer()
+            embedder = ml.QuantumLayer(
+                input_size=0,
+                builder=circ,
+                n_photons=5,
+                measurement_strategy=ml.MeasurementStrategy.AMPLITUDES,
+            )
+            _randomize_trainable_parameters(embedder)
+
+            # Quantum classifier
+            circ = ml.CircuitBuilder(n_modes=10)
+            circ.add_entangling_layer()
+            classifier = ml.QuantumLayer(
+                builder=circ,
+                n_photons=5,
+                amplitude_encoding=True,
+                measurement_strategy=ml.MeasurementStrategy.PROBABILITIES,
+            )
+            _randomize_trainable_parameters(classifier)
+
+            # PCA 8
+            classical_model_8 = nn.Sequential(
+                nn.Linear(8, 10),
+                nn.ReLU(),
+                nn.Linear(10, 10),
+                nn.ReLU(),
+                nn.Linear(10, sum([i.numel() for i in embedder.parameters()])),
+            )
+            _randomize_trainable_parameters(classical_model_8)
+
+            # Full classical_model
+            classical_model = nn.Sequential(
+                nn.Flatten(),
+                nn.Linear(28 * 28, 128),
+                nn.ReLU(),
+                nn.Linear(128, 64),
+                nn.ReLU(),
+                nn.Linear(64, sum([i.numel() for i in embedder.parameters()])),
+            )
+            _randomize_trainable_parameters(classical_model)
+
+            # PCA_NQE
+            print("PCA_NQE")
+            model = NeuralEmbeddingMerLinModel(
+                classical_model=classical_model_8,
+                quantum_embedding_layer=deepcopy(embedder),
+                quantum_classifier=deepcopy(classifier),
+                num_classes=num_classes,
+            )
+            print("Training embedding")
+            model.train_embedding(
+                x_train=x_train_PCA8,
+                y_train=y_train_PCA8,
+                x_test=x_test_PCA8,
+                y_test=y_test_PCA8,
+                distance=distance,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_embedding,
+                lr=lr,
+                return_data=False,
+            )
+            print("Training classifier")
+            loss_list_classifier, train_acc, test_acc = model.train_classifier(
+                x_train=x_train_PCA8,
+                y_train=y_train_PCA8,
+                x_test=x_test_PCA8,
+                y_test=y_test_PCA8,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_classifier,
+                lr=lr,
+                return_data=True,
+            )
+            results["loss_lists_classifier"]["pca_nqe"].append(loss_list_classifier)
+            results["train_accuracies"]["pca_nqe"].append(train_acc)
+            results["test_accuracies"]["pca_nqe"].append(test_acc)
+            del model
+
+            # NQE
+            print("NQE")
+            model = NeuralEmbeddingMerLinModel(
+                classical_model=classical_model,
+                quantum_embedding_layer=deepcopy(embedder),
+                quantum_classifier=deepcopy(classifier),
+                num_classes=num_classes,
+            )
+            print("Training embedding")
+            model.train_embedding(
+                x_train=x_train,
+                y_train=y_train,
+                x_test=x_test,
+                y_test=y_test,
+                distance=distance,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_embedding,
+                lr=lr,
+                return_data=False,
+            )
+            print("Training classifier")
+            loss_list_classifier, train_acc, test_acc = model.train_classifier(
+                x_train=x_train,
+                y_train=y_train,
+                x_test=x_test,
+                y_test=y_test,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_classifier,
+                lr=lr,
+                return_data=True,
+            )
+            results["loss_lists_classifier"]["nqe"].append(loss_list_classifier)
+            results["train_accuracies"]["nqe"].append(train_acc)
+            results["test_accuracies"]["nqe"].append(test_acc)
+            del model
+
+            # No NQE
+            for layer in layers_to_test:
+                circuit = ml.CircuitBuilder(n_modes=10)
+                for _ in range(layer):
+                    circuit.add_entangling_layer()
+                    circuit.add_angle_encoding(modes=list(range(6)))
+                    circuit.add_entangling_layer()
+                trainable_embedder = ml.QuantumLayer(
+                    input_size=6 * layer,
+                    builder=circuit,
+                    n_photons=5,
+                    measurement_strategy=ml.MeasurementStrategy.AMPLITUDES,
+                )
+
+                print("Training classifier")
+                (
+                    loss_list,
+                    train_accs,
+                    test_accs,
+                    _,
+                    _,
+                    _,
+                    _,
+                ) = train_merlin_based(
+                    quantum_embedding_layer=trainable_embedder,
+                    quantum_classifier=deepcopy(classifier),
+                    x_train=x_train_PCA8,
+                    y_train=y_train_PCA8,
+                    x_test=x_test_PCA8,
+                    y_test=y_test_PCA8,
+                    batch_size=batch_size,
+                    num_epochs=num_epochs_training_classifier,
+                    lr=lr,
+                    distance=distance,
+                    return_data=True,
+                    num_classes=num_classes,
+                    trainable_embedding=True,
+                    num_layers=layer,
+                )
+
+                results["loss_lists_classifier"][f"layer_{layer}"].append(loss_list)
+                results["train_accuracies"][f"layer_{layer}"].append(train_accs)
+                results["test_accuracies"][f"layer_{layer}"].append(test_accs)
+            del embedder, classifier, classical_model_8, classical_model
+        else:
+            # PCA 8
+            classical_model_8 = nn.Sequential(
+                nn.Linear(8, 10),
+                nn.ReLU(),
+                nn.Linear(10, 10),
+                nn.ReLU(),
+                nn.Linear(10, 8),
+            )
+            _randomize_trainable_parameters(classical_model_8)
+
+            # Full classical_model
+            classical_model = nn.Sequential(
+                nn.Flatten(),
+                nn.Linear(28 * 28, 128),
+                nn.ReLU(),
+                nn.Linear(128, 64),
+                nn.ReLU(),
+                nn.Linear(64, 8),
+            )
+            _randomize_trainable_parameters(classical_model)
+            # PCA_NQE
+            print("PCA_NQE")
+            model = NeuralEmbeddingGateBasedModel(
+                num_qubits=4,
+                classical_model=classical_model_8,
+                quantum_embedding_layer=EmbeddingCallable().Four_QuantumEmbedding2,
+                quantum_classifier=FourQCNN,
+                quantum_classifier_params_shape=(30),
+                num_classes=num_classes,
+            )
+            print("Training embedding")
+            model.train_embedding(
+                x_train=x_train_PCA8,
+                y_train=y_train_PCA8,
+                x_test=x_test_PCA8,
+                y_test=y_test_PCA8,
+                distance=distance,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_embedding,
+                lr=lr,
+                return_data=False,
+            )
+            print("Training classifier")
+            loss_list_classifier, train_acc, test_acc = model.train_classifier(
+                x_train=x_train_PCA8,
+                y_train=y_train_PCA8,
+                x_test=x_test_PCA8,
+                y_test=y_test_PCA8,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_classifier,
+                lr=lr,
+                return_data=True,
+            )
+            results["loss_lists_classifier"]["pca_nqe"].append(loss_list_classifier)
+            results["train_accuracies"]["pca_nqe"].append(train_acc)
+            results["test_accuracies"]["pca_nqe"].append(test_acc)
+            del model
+
+            # NQE
+            print("NQE")
+            model = NeuralEmbeddingGateBasedModel(
+                num_qubits=4,
+                classical_model=classical_model,
+                quantum_embedding_layer=EmbeddingCallable().Four_QuantumEmbedding2,
+                quantum_classifier=FourQCNN,
+                quantum_classifier_params_shape=(30),
+                num_classes=num_classes,
+            )
+            print("Training embedding")
+            model.train_embedding(
+                x_train=x_train,
+                y_train=y_train,
+                x_test=x_test,
+                y_test=y_test,
+                distance=distance,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_embedding,
+                lr=lr,
+                return_data=False,
+            )
+            print("Training classifier")
+            loss_list_classifier, train_acc, test_acc = model.train_classifier(
+                x_train=x_train,
+                y_train=y_train,
+                x_test=x_test,
+                y_test=y_test,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_classifier,
+                lr=lr,
+                return_data=True,
+            )
+            results["loss_lists_classifier"]["nqe"].append(loss_list_classifier)
+            results["train_accuracies"]["nqe"].append(train_acc)
+            results["test_accuracies"]["nqe"].append(test_acc)
+            del model
+            del classical_model_8, classical_model
+            # No NQE
+            print("No NQE")
+            print("Training classifier")
+            for layer in layers_to_test:
+                (
+                    loss_list,
+                    train_accs,
+                    test_accs,
+                    _,
+                    _,
+                    _,
+                    _,
+                ) = train_gate_based(
+                    num_qubits=4,
+                    quantum_embedding_circuit=EmbeddingCallable(
+                        N_layers=layer
+                    ).Four_QuantumEmbedding2Trainable,
+                    quantum_classifier_circuit=FourQCNN,
+                    quantum_classifier_params_shape=(30),
+                    x_train=x_train_PCA8,
+                    y_train=y_train_PCA8,
+                    x_test=x_test_PCA8,
+                    y_test=y_test_PCA8,
+                    batch_size=batch_size,
+                    num_epochs=num_epochs_training_classifier,
+                    lr=lr,
+                    distance=distance,
+                    return_data=True,
+                    num_classes=num_classes,
+                    trainable_embedding=True,
+                    embedding_params_shape=(10 * layer),
+                )
+                results["loss_lists_classifier"][f"layer_{layer}"].append(loss_list)
+                results["train_accuracies"][f"layer_{layer}"].append(train_accs)
+                results["test_accuracies"][f"layer_{layer}"].append(test_accs)
+
+        print(f"Repetition {i+1} done")
+        gc.collect()
+
+        payload = {
+            "loss_lists_classifier": to_serializable_list(
+                results["loss_lists_classifier"]
+            ),
+            "train_accuracies": to_serializable_list(results["train_accuracies"]),
+            "test_accuracies": to_serializable_list(results["test_accuracies"]),
+            "config": {
+                "dataset": dataset,
+                "use_merlin": use_merlin,
+                "batch_size": batch_size,
+                "num_epochs_training_embedding": num_epochs_training_embedding,
+                "num_epochs_training_classifier": num_epochs_training_classifier,
+                "lr": lr,
+                "distance": distance,
+                "samples_per_class": samples_per_class,
+                "num_classes": num_classes,
+                "num_repetitions": num_repetitions,
+                "layers_to_test": layers_to_test,
+            },
+        }
+
+        results_dir = PROJECT_ROOT / "results"
+        results_dir.mkdir(parents=True, exist_ok=True)
+        backend = "merlin" if use_merlin else "gate_based"
+        output_path = results_dir / f"figure_3_{backend}_results.json"
+        output_path.write_text(json.dumps(payload))
+
+    plot_figure_3(
+        loss_lists_classifier=payload["loss_lists_classifier"],
+        test_accuracies=payload["test_accuracies"],
+        layers_to_test=payload["config"]["layers_to_test"],
+        run_dir=results_dir,
+        filename=f"figure_2_bc_{backend}.pdf",
+    )
 
 
 reproduce_figure_2(use_merlin=False)

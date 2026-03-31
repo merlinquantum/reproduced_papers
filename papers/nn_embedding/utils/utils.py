@@ -95,10 +95,51 @@ def create_basic_gate_based_model(
         def __init__(self):
             super().__init__()
             self.output_grouper = ml.LexGrouping(2**num_qubits, num_classes)
+            self.complete_circuit_layer = complete_circuit_layer
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
             probs = torch.stack(
-                tuple(complete_circuit_layer(sample) for sample in x),
+                tuple(self.complete_circuit_layer(sample) for sample in x),
+                dim=0,
+            )
+            return self.output_grouper(probs)
+
+    return BasicModel()
+
+
+def create_trainable_embedding_gate_based_model(
+    num_qubits: int,
+    quantum_embedding_circuit: callable,
+    quantum_classifier_circuit: callable,
+    embedding_params_shape: tuple[int, ...],
+    quantum_classifier_params_shape: tuple[int, ...],
+    num_classes: int = 2,
+):
+    device = qml.device("default.qubit", wires=num_qubits)
+
+    @qml.qnode(device, interface="torch")
+    def complete_circuit(inputs, embedding_params, classifier_params):
+        quantum_embedding_circuit(inputs, embedding_params)
+        quantum_classifier_circuit(classifier_params)
+        return qml.probs(wires=range(num_qubits))
+
+    complete_circuit_layer = qml.qnn.TorchLayer(
+        complete_circuit,
+        weight_shapes={
+            "embedding_params": embedding_params_shape,
+            "classifier_params": quantum_classifier_params_shape,
+        },
+    )
+
+    class BasicModel(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.output_grouper = ml.LexGrouping(2**num_qubits, num_classes)
+            self.complete_circuit_layer = complete_circuit_layer
+
+        def forward(self, x: torch.Tensor) -> torch.Tensor:
+            probs = torch.stack(
+                tuple(self.complete_circuit_layer(sample) for sample in x),
                 dim=0,
             )
             return self.output_grouper(probs)
@@ -125,6 +166,35 @@ def create_basic_merlin_model(
             with torch.no_grad():
                 x = x.reshape(x.size(0), -1)
                 states = assign_params(self.embedder, x)
+
+            probs = quantum_classifier(states)
+
+            return self.output_grouper(probs)
+
+    return BasicModel()
+
+
+def create_trainable_embedding_merlin_model(
+    quantum_embedding_layer: ml.QuantumLayer,
+    quantum_classifier: ml.QuantumLayer,
+    num_classes: int = 2,
+    num_layers: int = 1,
+):
+    class BasicModel(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.output_grouper = ml.LexGrouping(
+                quantum_classifier.output_size, num_classes
+            )
+            self.embedder = deepcopy(quantum_embedding_layer)
+            for param in self.embedder.parameters():
+                param.requires_grad = False
+
+        def forward(self, x: torch.Tensor) -> torch.Tensor:
+            x = x.reshape(x.size(0), -1)
+            x = x.repeat((1, num_layers))
+
+            states = self.embedder(x)
 
             probs = quantum_classifier(states)
 

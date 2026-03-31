@@ -15,7 +15,9 @@ from papers.nn_embedding.utils.utils import (
     calculate_distance,
     LinearLoss,
     create_basic_gate_based_model,
+    create_trainable_embedding_gate_based_model,
     create_basic_merlin_model,
+    create_trainable_embedding_merlin_model,
     state_vector_to_density_matrix,
     loss_lower_bound,
 )
@@ -39,19 +41,31 @@ def train_gate_based(
     return_data: bool = False,
     num_classes: int = 2,
     distance: str = "Trace",
+    trainable_embedding: bool = False,
+    embedding_params_shape: tuple[int, ...] | None = None,
 ) -> list[list[float]] | None:
 
     ### Creating the model
-    model = create_basic_gate_based_model(
-        num_qubits,
-        quantum_classifier_circuit,
-        quantum_classifier_circuit,
-        quantum_classifier_params_shape,
-        num_classes,
-    )
+    if trainable_embedding:
+        model = create_trainable_embedding_gate_based_model(
+            num_qubits,
+            quantum_embedding_circuit,
+            quantum_classifier_circuit,
+            embedding_params_shape,
+            quantum_classifier_params_shape,
+            num_classes,
+        )
+    else:
+        model = create_basic_gate_based_model(
+            num_qubits,
+            quantum_embedding_circuit,
+            quantum_classifier_circuit,
+            quantum_classifier_params_shape,
+            num_classes,
+        )
 
     ### Optimizing the model
-    optimizer = opt(model.parameters(), lr=lr)
+    optimizer = opt(model.complete_circuit_layer.parameters(), lr=lr)
     criterion = LinearLoss()
 
     train_accs = []
@@ -169,10 +183,19 @@ def train_merlin_based(
     return_data: bool = False,
     num_classes: int = 2,
     distance: str = "Trace",
+    trainable_embedding: bool = False,
+    num_layers: int = 1,
 ):
-    model = create_basic_merlin_model(
-        quantum_embedding_layer, quantum_classifier, num_classes
-    )
+    if trainable_embedding:
+        model = create_trainable_embedding_merlin_model(
+            quantum_embedding_layer, quantum_classifier, num_classes, num_layers
+        )
+    else:
+        model = create_basic_merlin_model(
+            quantum_embedding_layer,
+            quantum_classifier,
+            num_classes,
+        )
 
     ### Optimizing the model
     optimizer = opt(quantum_classifier.parameters(), lr=lr)
@@ -235,24 +258,44 @@ def train_merlin_based(
         )
 
         with torch.no_grad():
-            states = assign_params(model.embedder, X0_train)
-            rhos0_train = state_vector_to_density_matrix(states)
-            states = assign_params(model.embedder, X1_train)
-            rhos1_train = state_vector_to_density_matrix(states)
+            if trainable_embedding:
+                states = model.embedder(X0_train)
+                rhos0_train = state_vector_to_density_matrix(states)
+                states = model.embedder(X1_train)
+                rhos1_train = state_vector_to_density_matrix(states)
 
-            rho0 = torch.sum(rhos0_train, dim=0) / len(X0_train)
-            rho1 = torch.sum(rhos1_train, dim=0) / len(X1_train)
-            train_distance = calculate_distance(rho0, rho1, distance=distance)
+                rho0 = torch.sum(rhos0_train, dim=0) / len(X0_train)
+                rho1 = torch.sum(rhos1_train, dim=0) / len(X1_train)
+                train_distance = calculate_distance(rho0, rho1, distance=distance)
 
-            # Test distances
-            states = assign_params(model.embedder, X0_test)
-            rhos0_test = state_vector_to_density_matrix(states)
-            states = assign_params(model.embedder, X1_test)
-            rhos1_test = state_vector_to_density_matrix(states)
+                # Test distances
+                states = model.embedder(X0_test)
+                rhos0_test = state_vector_to_density_matrix(states)
+                states = model.embedder(X1_test)
+                rhos1_test = state_vector_to_density_matrix(states)
 
-            rho0 = torch.sum(rhos0_test, dim=0) / len(X0_test)
-            rho1 = torch.sum(rhos1_test, dim=0) / len(X1_test)
-            test_distance = calculate_distance(rho0, rho1, distance=distance)
+                rho0 = torch.sum(rhos0_test, dim=0) / len(X0_test)
+                rho1 = torch.sum(rhos1_test, dim=0) / len(X1_test)
+                test_distance = calculate_distance(rho0, rho1, distance=distance)
+            else:
+                states = assign_params(model.embedder, X0_train)
+                rhos0_train = state_vector_to_density_matrix(states)
+                states = assign_params(model.embedder, X1_train)
+                rhos1_train = state_vector_to_density_matrix(states)
+
+                rho0 = torch.sum(rhos0_train, dim=0) / len(X0_train)
+                rho1 = torch.sum(rhos1_train, dim=0) / len(X1_train)
+                train_distance = calculate_distance(rho0, rho1, distance=distance)
+
+                # Test distances
+                states = assign_params(model.embedder, X0_test)
+                rhos0_test = state_vector_to_density_matrix(states)
+                states = assign_params(model.embedder, X1_test)
+                rhos1_test = state_vector_to_density_matrix(states)
+
+                rho0 = torch.sum(rhos0_test, dim=0) / len(X0_test)
+                rho1 = torch.sum(rhos1_test, dim=0) / len(X1_test)
+                test_distance = calculate_distance(rho0, rho1, distance=distance)
 
         return (
             loss_list,

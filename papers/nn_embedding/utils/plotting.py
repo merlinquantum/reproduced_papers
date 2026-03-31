@@ -29,222 +29,6 @@ def _to_plot_values(values):
     ]
 
 
-### Fig 2b
-def plot_trace_distance_comparison(
-    train_pca_nqe: Sequence[float],
-    train_nqe: Sequence[float],
-    test_pca_nqe: Sequence[float],
-    test_nqe: Sequence[float],
-    baseline: float,
-    *,
-    iterations: Sequence[float] | None = None,
-    train_title: str = "Training data",
-    test_title: str = "Test data",
-    pca_label: str = "PCA-NQE",
-    nqe_label: str = "NQE",
-    baseline_label: str = "Without NQE",
-    figsize: tuple[float, float] = (8.0, 4.2),
-    run_dir: Path | None = None,
-    filename: str = "trace_distance_comparison.pdf",
-) -> Path:
-    if iterations is None:
-        iterations = range(len(train_pca_nqe))
-
-    iterations = list(iterations)
-
-    series_lengths = {
-        len(train_pca_nqe),
-        len(train_nqe),
-        len(test_pca_nqe),
-        len(test_nqe),
-        len(iterations),
-    }
-    if len(series_lengths) != 1:
-        raise ValueError("All data series and iterations must have the same length.")
-
-    fig, axes = plt.subplots(1, 2, figsize=figsize, sharey=False)
-
-    panel_specs = (
-        (axes[0], train_title, train_pca_nqe, train_nqe),
-        (axes[1], test_title, test_pca_nqe, test_nqe),
-    )
-
-    for ax, title, pca_values, nqe_values in panel_specs:
-        ax.scatter(
-            iterations,
-            pca_values,
-            color="#f26f87",
-            s=18,
-            label=pca_label,
-            zorder=3,
-        )
-        ax.scatter(
-            iterations,
-            nqe_values,
-            color="#57b33e",
-            marker="^",
-            s=24,
-            label=nqe_label,
-            zorder=3,
-        )
-        ax.axhline(
-            baseline,
-            color="#3390ff",
-            linestyle="--",
-            linewidth=1.2,
-            label=baseline_label,
-            zorder=2,
-        )
-
-        ax.set_title(title)
-        ax.set_xlabel("Iteration")
-        ax.set_ylabel("Trace Distance")
-        ax.set_xlim(min(iterations) - 0.5, max(iterations) + 0.5)
-        ax.legend(loc="lower right", frameon=True)
-
-    fig.tight_layout()
-    return _save_plot(fig, filename, run_dir)
-
-
-### Fig 2c
-def plot_qcnn_loss_history(
-    pca_nqe_mean: Sequence[float],
-    pca_nqe_std: Sequence[float],
-    nqe_mean: Sequence[float],
-    nqe_std: Sequence[float],
-    without_nqe_mean: Sequence[float],
-    without_nqe_std: Sequence[float],
-    *,
-    iterations: Sequence[float] | None = None,
-    lower_bound_pca_nqe: float | None = None,
-    lower_bound_nqe: float | None = None,
-    lower_bound_without_nqe: float | None = None,
-    accuracy_rows: Sequence[tuple[str, str]] | None = None,
-    title: str = "Noiseless QCNN Loss History",
-    figsize: tuple[float, float] = (9.0, 4.8),
-    run_dir: Path | None = None,
-    filename: str = "qcnn_loss_history.pdf",
-) -> Path:
-    if iterations is None:
-        iterations = range(len(pca_nqe_mean))
-
-    iterations = list(iterations)
-
-    series_lengths = {
-        len(iterations),
-        len(pca_nqe_mean),
-        len(pca_nqe_std),
-        len(nqe_mean),
-        len(nqe_std),
-        len(without_nqe_mean),
-        len(without_nqe_std),
-    }
-    if len(series_lengths) != 1:
-        raise ValueError("All loss series, std series, and iterations must match.")
-
-    fig, ax = plt.subplots(figsize=figsize)
-
-    colors = {
-        "pca": "#f26f87",
-        "nqe": "#4daf3c",
-        "baseline": "#339af0",
-    }
-
-    ax.plot(
-        iterations,
-        pca_nqe_mean,
-        linestyle="--",
-        linewidth=1.6,
-        color=colors["pca"],
-        label="PCA-NQE",
-    )
-    ax.fill_between(
-        iterations,
-        [m - s for m, s in zip(pca_nqe_mean, pca_nqe_std)],
-        [m + s for m, s in zip(pca_nqe_mean, pca_nqe_std)],
-        color=colors["pca"],
-        alpha=0.28,
-        linewidth=0,
-    )
-
-    ax.plot(
-        iterations,
-        nqe_mean,
-        linestyle="-.",
-        linewidth=1.6,
-        color=colors["nqe"],
-        label="NQE",
-    )
-    ax.fill_between(
-        iterations,
-        [m - s for m, s in zip(nqe_mean, nqe_std)],
-        [m + s for m, s in zip(nqe_mean, nqe_std)],
-        color=colors["nqe"],
-        alpha=0.28,
-        linewidth=0,
-    )
-
-    ax.plot(
-        iterations,
-        without_nqe_mean,
-        linestyle="-",
-        linewidth=1.6,
-        color=colors["baseline"],
-        label="Without NQE",
-    )
-    ax.fill_between(
-        iterations,
-        [m - s for m, s in zip(without_nqe_mean, without_nqe_std)],
-        [m + s for m, s in zip(without_nqe_mean, without_nqe_std)],
-        color=colors["baseline"],
-        alpha=0.28,
-        linewidth=0,
-    )
-
-    if lower_bound_pca_nqe is not None:
-        ax.axhline(
-            lower_bound_pca_nqe,
-            color=colors["pca"],
-            linestyle="--",
-            linewidth=3,
-            label="Lower Bound with PCA-NQE",
-        )
-    if lower_bound_nqe is not None:
-        ax.axhline(
-            lower_bound_nqe,
-            color=colors["nqe"],
-            linestyle="-.",
-            linewidth=3,
-            label="Lower Bound with NQE",
-        )
-    if lower_bound_without_nqe is not None:
-        ax.axhline(
-            lower_bound_without_nqe,
-            color=colors["baseline"],
-            linestyle="-",
-            linewidth=3,
-            label="Lower Bound without NQE",
-        )
-
-    ax.set_title(title)
-    ax.set_xlabel("Iteration")
-    ax.set_ylabel("Loss")
-    ax.legend(loc="upper right", frameon=True, ncol=2)
-
-    if accuracy_rows:
-        table = ax.table(
-            cellText=[[label, value] for label, value in accuracy_rows],
-            colLabels=["", "Classification accuracy (%)"],
-            cellLoc="center",
-            bbox=[0.64, 0.30, 0.34, 0.27],
-        )
-        table.auto_set_font_size(False)
-        table.set_fontsize(9)
-
-    fig.tight_layout()
-    return _save_plot(fig, filename, run_dir)
-
-
 def plot_figure_2_bc(
     train_pca_nqe: Sequence[Sequence[float]],
     train_nqe: Sequence[Sequence[float]],
@@ -295,6 +79,7 @@ def plot_figure_2_bc(
     figsize, run_dir, filename
         Standard plotting/output configuration.
     """
+
     def _to_2d_float_array(values, name):
         arr = np.asarray(_to_plot_values(values), dtype=float)
         if arr.ndim != 2:
@@ -518,7 +303,9 @@ def plot_figure_2_bc(
             },
         )
         table = ax_loss.table(
-            cellText=[[label, _format_accuracy(value)] for label, value in accuracy_rows],
+            cellText=[
+                [label, _format_accuracy(value)] for label, value in accuracy_rows
+            ],
             colLabels=["Method", "Accuracy (%)"],
             cellLoc="center",
             colWidths=[0.5, 0.5],
@@ -531,6 +318,195 @@ def plot_figure_2_bc(
                 cell.set_text_props(weight="semibold")
 
     fig.subplots_adjust(left=0.06, right=0.985, bottom=0.12, top=0.90, wspace=0.22)
+    return _save_plot(fig, filename, run_dir)
+
+
+def plot_figure_3(
+    loss_lists_classifier: dict[str, Sequence[Sequence[float]]],
+    test_accuracies: dict[str, Sequence[Sequence[float]]],
+    *,
+    layers_to_test: Sequence[int] | None = None,
+    loss_iterations: Sequence[float] | None = None,
+    figsize: tuple[float, float] = (10.2, 5.6),
+    run_dir: Path | None = None,
+    filename: str = "figure_3.pdf",
+) -> Path:
+    """Plot figure 3 style QCNN loss comparison with repeated runs.
+
+    Parameters
+    ----------
+    loss_lists_classifier
+        Mapping from method name to repeated classifier loss histories. Each
+        value must be shaped like ``(num_repetitions, num_iterations)``.
+        Expected keys are ``"pca_nqe"``, ``"nqe"``, and any number of
+        ``"layer_<k>"`` entries.
+    test_accuracies
+        Mapping from method name to repeated test-accuracy histories. Each
+        value must be shaped like ``(num_repetitions, num_iterations)``. The
+        final accuracy from each repetition is summarized in the table.
+    layers_to_test
+        Optional ordered list of layer indices to show. If omitted, layer keys
+        are inferred from ``loss_lists_classifier`` and sorted numerically.
+    loss_iterations
+        Optional x-axis values for the loss histories. Defaults to
+        ``range(num_iterations)``.
+    figsize, run_dir, filename
+        Standard plotting/output configuration.
+    """
+
+    def _to_2d_float_array(values, name):
+        arr = np.asarray(_to_plot_values(values), dtype=float)
+        if arr.ndim != 2:
+            raise ValueError(
+                f"{name} must be a 2D array-like object shaped "
+                "(num_repetitions, num_iterations)."
+            )
+        return arr
+
+    def _format_accuracy(values):
+        arr = np.asarray(_to_plot_values(values), dtype=float)
+        if arr.ndim == 2:
+            arr = arr[:, -1]
+        return f"{arr.mean():.1f} ± {arr.std():.1f}"
+
+    def _mean_and_std(values, name):
+        arr = _to_2d_float_array(values, name)
+        return arr.mean(axis=0), arr.std(axis=0), arr
+
+    if layers_to_test is None:
+        layers_to_test = sorted(
+            int(key.split("_", 1)[1])
+            for key in loss_lists_classifier
+            if key.startswith("layer_")
+        )
+
+    layer_keys = [f"layer_{layer}" for layer in layers_to_test]
+    required_keys = ["pca_nqe", "nqe", *layer_keys]
+
+    missing_loss = [key for key in required_keys if key not in loss_lists_classifier]
+    missing_acc = [key for key in required_keys if key not in test_accuracies]
+    if missing_loss:
+        raise ValueError(f"Missing loss histories for keys: {missing_loss}")
+    if missing_acc:
+        raise ValueError(f"Missing test accuracies for keys: {missing_acc}")
+
+    series = {}
+    for key in required_keys:
+        mean, std, arr = _mean_and_std(loss_lists_classifier[key], key)
+        series[key] = {"mean": mean, "std": std, "arr": arr}
+
+    num_iterations = series["pca_nqe"]["arr"].shape[1]
+    if loss_iterations is None:
+        loss_iterations = list(range(num_iterations))
+    loss_iterations = list(loss_iterations)
+
+    if len(loss_iterations) != num_iterations:
+        raise ValueError("loss_iterations must have the same length as the loss curves.")
+
+    for key in required_keys[1:]:
+        if series[key]["arr"].shape[1] != num_iterations:
+            raise ValueError("All loss-history series must have the same length.")
+
+    colors = {
+        "layer_1": "#36b37e",
+        "layer_2": "#39a8d0",
+        "layer_3": "#c86bf0",
+        "pca_nqe": "#f26f87",
+        "nqe": "#b89d17",
+    }
+    line_styles = {
+        "pca_nqe": "--",
+        "nqe": "-.",
+    }
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    for key in layer_keys:
+        color = colors.get(key, None)
+        label = f"Layer={key.split('_', 1)[1]}"
+        mean = series[key]["mean"]
+        std = series[key]["std"]
+        ax.plot(
+            loss_iterations,
+            mean,
+            color=color,
+            linewidth=2.4,
+            label=label,
+        )
+        ax.fill_between(
+            loss_iterations,
+            mean - std,
+            mean + std,
+            color=color,
+            alpha=0.28,
+            linewidth=0,
+        )
+
+    for key, label in (("pca_nqe", "PCA-NQE"), ("nqe", "NQE")):
+        mean = series[key]["mean"]
+        std = series[key]["std"]
+        ax.plot(
+            loss_iterations,
+            mean,
+            color=colors[key],
+            linestyle=line_styles[key],
+            linewidth=1.7,
+            label=label,
+        )
+        ax.fill_between(
+            loss_iterations,
+            mean - std,
+            mean + std,
+            color=colors[key],
+            alpha=0.28,
+            linewidth=0,
+        )
+
+    ax.set_xlabel("Iteration")
+    ax.set_ylabel("Loss")
+    ax.legend(loc="upper right", frameon=True, ncol=2)
+
+    accuracy_rows = [
+        (f"Layer={layer}", _format_accuracy(test_accuracies[f"layer_{layer}"]))
+        for layer in layers_to_test
+    ]
+    accuracy_rows.extend(
+        [
+            ("PCA-NQE", _format_accuracy(test_accuracies["pca_nqe"])),
+            ("NQE", _format_accuracy(test_accuracies["nqe"])),
+        ]
+    )
+
+    ax.text(
+        0.09,
+        0.25,
+        "Classification accuracy",
+        transform=ax.transAxes,
+        ha="center",
+        va="bottom",
+        fontsize=9,
+        fontweight="semibold",
+        bbox={
+            "facecolor": "white",
+            "edgecolor": "#b0b0b0",
+            "boxstyle": "round,pad=0.2",
+            "alpha": 0.92,
+        },
+    )
+    table = ax.table(
+        cellText=[[label, value] for label, value in accuracy_rows],
+        colLabels=["Method", "Accuracy"],
+        cellLoc="center",
+        colWidths=[0.5, 0.5],
+        bbox=[0.00, 0.00, 0.19, 0.24],
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(9)
+    for (row, col), cell in table.get_celld().items():
+        if row == 0:
+            cell.set_text_props(weight="semibold")
+
+    fig.subplots_adjust(left=0.08, right=0.98, bottom=0.12, top=0.95)
     return _save_plot(fig, filename, run_dir)
 
 
