@@ -215,3 +215,32 @@ def to_serializable_list(values):
     if isinstance(values, (list, tuple)):
         return [to_serializable_list(value) for value in values]
     return values
+
+
+def randomize_trainable_parameters(module: nn.Module) -> None:
+    """Force a fresh random initialization for each repetition.
+
+    Classical PyTorch modules keep their native ``reset_parameters`` behavior.
+    Their freshly initialized values are then lightly reshuffled so repetitions
+    stay independent while preserving the original value range. Only Merlin
+    quantum-layer trainable tensors are additionally resampled in ``[-pi, pi]``.
+    """
+    for submodule in module.modules():
+        if submodule is module:
+            continue
+        if hasattr(submodule, "reset_parameters"):
+            submodule.reset_parameters()
+            if not isinstance(submodule, ml.QuantumLayer):
+                for param in submodule.parameters(recurse=False):
+                    if param.requires_grad and param.numel() > 1:
+                        with torch.no_grad():
+                            shuffled = param.reshape(-1)[
+                                torch.randperm(param.numel(), device=param.device)
+                            ].reshape_as(param)
+                            param.copy_(shuffled)
+
+    if isinstance(module, ml.QuantumLayer):
+        for param in module.parameters():
+            if param.requires_grad:
+                with torch.no_grad():
+                    param.uniform_(-torch.pi, torch.pi)

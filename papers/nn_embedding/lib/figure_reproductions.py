@@ -1,7 +1,6 @@
 import sys
 from pathlib import Path
 import torch.nn as nn
-import torch
 import merlin as ml
 import json
 import gc
@@ -15,46 +14,26 @@ sys.path.insert(0, str(PROJECT_ROOT))
 
 from papers.nn_embedding.lib.merlin_based_model import NeuralEmbeddingMerLinModel
 from papers.nn_embedding.lib.gate_based_model import NeuralEmbeddingGateBasedModel
+from papers.nn_embedding.utils.merlin_models import (
+    create_merlin_fig_2_models,
+    create_merlin_fig_3_models,
+    create_trainable_merlin_layer_fig_3,
+)
+from papers.nn_embedding.utils.gate_based_models import create_gate_based_fig_2_3_models
 from papers.nn_embedding.utils.gate_based_embedding import (
     EmbeddingCallable,
     FourQCNN,
+    QCNN,
 )
 from papers.nn_embedding.lib.training_without_nqe import (
     train_gate_based,
     train_merlin_based,
 )
 from papers.nn_embedding.utils.data import data_load_and_process
-from papers.nn_embedding.utils.utils import to_serializable_list
+from papers.nn_embedding.utils.utils import (
+    to_serializable_list,
+)
 from papers.nn_embedding.utils.plotting import plot_figure_2_bc, plot_figure_3
-
-
-def _randomize_trainable_parameters(module: nn.Module) -> None:
-    """Force a fresh random initialization for each repetition.
-
-    Classical PyTorch modules keep their native ``reset_parameters`` behavior.
-    Their freshly initialized values are then lightly reshuffled so repetitions
-    stay independent while preserving the original value range. Only Merlin
-    quantum-layer trainable tensors are additionally resampled in ``[-pi, pi]``.
-    """
-    for submodule in module.modules():
-        if submodule is module:
-            continue
-        if hasattr(submodule, "reset_parameters"):
-            submodule.reset_parameters()
-            if not isinstance(submodule, ml.QuantumLayer):
-                for param in submodule.parameters(recurse=False):
-                    if param.requires_grad and param.numel() > 1:
-                        with torch.no_grad():
-                            shuffled = param.reshape(-1)[
-                                torch.randperm(param.numel(), device=param.device)
-                            ].reshape_as(param)
-                            param.copy_(shuffled)
-
-    if isinstance(module, ml.QuantumLayer):
-        for param in module.parameters():
-            if param.requires_grad:
-                with torch.no_grad():
-                    param.uniform_(-torch.pi, torch.pi)
 
 
 def reproduce_figure_2(
@@ -97,49 +76,12 @@ def reproduce_figure_2(
         samples_per_class=samples_per_class,
     )
     for i in range(num_repetitions):
+
+        ################################################################# MerLin-based
         if use_merlin:
-            # Quantum embedding
-            circ = ml.CircuitBuilder(n_modes=6)
-            circ.add_entangling_layer()
-            embedder = ml.QuantumLayer(
-                input_size=0,
-                builder=circ,
-                n_photons=2,
-                measurement_strategy=ml.MeasurementStrategy.AMPLITUDES,
+            embedder, classifier, classical_model_8, classical_model = (
+                create_merlin_fig_2_models()
             )
-            _randomize_trainable_parameters(embedder)
-
-            # Quantum classifier
-            circ = ml.CircuitBuilder(n_modes=6)
-            circ.add_entangling_layer()
-            classifier = ml.QuantumLayer(
-                builder=circ,
-                n_photons=2,
-                amplitude_encoding=True,
-                measurement_strategy=ml.MeasurementStrategy.PROBABILITIES,
-            )
-            _randomize_trainable_parameters(classifier)
-
-            # PCA 8
-            classical_model_8 = nn.Sequential(
-                nn.Linear(8, 10),
-                nn.ReLU(),
-                nn.Linear(10, 10),
-                nn.ReLU(),
-                nn.Linear(10, sum([i.numel() for i in embedder.parameters()])),
-            )
-            _randomize_trainable_parameters(classical_model_8)
-
-            # Full classical_model
-            classical_model = nn.Sequential(
-                nn.Flatten(),
-                nn.Linear(28 * 28, 128),
-                nn.ReLU(),
-                nn.Linear(128, 64),
-                nn.ReLU(),
-                nn.Linear(64, sum([i.numel() for i in embedder.parameters()])),
-            )
-            _randomize_trainable_parameters(classical_model)
 
             # PCA_NQE
             print("PCA_NQE")
@@ -239,6 +181,8 @@ def reproduce_figure_2(
 
             # No NQE
             print("No NQE")
+
+            # Adapt the dataset to the number of parameters of the embedder
             number_of_params = 0
             for param in embedder.parameters():
                 number_of_params += param.numel()
@@ -294,28 +238,10 @@ def reproduce_figure_2(
             results["train_accuracies"]["without_nqe"].append(train_accs)
             results["test_accuracies"]["without_nqe"].append(test_accs)
             del embedder, classifier, classical_model_8, classical_model
+
+        ################################################################# Gate-based
         else:
-
-            # PCA 8
-            classical_model_8 = nn.Sequential(
-                nn.Linear(8, 10),
-                nn.ReLU(),
-                nn.Linear(10, 10),
-                nn.ReLU(),
-                nn.Linear(10, 8),
-            )
-            _randomize_trainable_parameters(classical_model_8)
-
-            # Full classical_model
-            classical_model = nn.Sequential(
-                nn.Flatten(),
-                nn.Linear(28 * 28, 128),
-                nn.ReLU(),
-                nn.Linear(128, 64),
-                nn.ReLU(),
-                nn.Linear(64, 8),
-            )
-            _randomize_trainable_parameters(classical_model)
+            classical_model_8, classical_model = create_gate_based_fig_2_3_models()
             # PCA_NQE
             print("PCA_NQE")
             model = NeuralEmbeddingGateBasedModel(
@@ -455,6 +381,7 @@ def reproduce_figure_2(
         print(f"Repetition {i+1} done")
         gc.collect()
 
+        ################################################################# Writing the results
         payload = {
             "loss_lists_embedding": to_serializable_list(
                 results["loss_lists_embedding"]
@@ -554,50 +481,11 @@ def reproduce_figure_3(
     )
 
     for i in range(num_repetitions):
+        ################################################################# MerLin-based
         if use_merlin:
-            # Quantum embedding
-            circ = ml.CircuitBuilder(n_modes=10)
-            circ.add_entangling_layer()
-            embedder = ml.QuantumLayer(
-                input_size=0,
-                builder=circ,
-                n_photons=5,
-                measurement_strategy=ml.MeasurementStrategy.AMPLITUDES,
+            embedder, classifier, classical_model_8, classical_model = (
+                create_merlin_fig_3_models()
             )
-            _randomize_trainable_parameters(embedder)
-
-            # Quantum classifier
-            circ = ml.CircuitBuilder(n_modes=10)
-            circ.add_entangling_layer()
-            classifier = ml.QuantumLayer(
-                builder=circ,
-                n_photons=5,
-                amplitude_encoding=True,
-                measurement_strategy=ml.MeasurementStrategy.PROBABILITIES,
-            )
-            _randomize_trainable_parameters(classifier)
-
-            # PCA 8
-            classical_model_8 = nn.Sequential(
-                nn.Linear(8, 10),
-                nn.ReLU(),
-                nn.Linear(10, 10),
-                nn.ReLU(),
-                nn.Linear(10, sum([i.numel() for i in embedder.parameters()])),
-            )
-            _randomize_trainable_parameters(classical_model_8)
-
-            # Full classical_model
-            classical_model = nn.Sequential(
-                nn.Flatten(),
-                nn.Linear(28 * 28, 128),
-                nn.ReLU(),
-                nn.Linear(128, 64),
-                nn.ReLU(),
-                nn.Linear(64, sum([i.numel() for i in embedder.parameters()])),
-            )
-            _randomize_trainable_parameters(classical_model)
-
             # PCA_NQE
             print("PCA_NQE")
             model = NeuralEmbeddingMerLinModel(
@@ -672,18 +560,7 @@ def reproduce_figure_3(
 
             # No NQE
             for layer in layers_to_test:
-                circuit = ml.CircuitBuilder(n_modes=10)
-                for _ in range(layer):
-                    circuit.add_entangling_layer()
-                    circuit.add_angle_encoding(modes=list(range(6)))
-                    circuit.add_entangling_layer()
-                trainable_embedder = ml.QuantumLayer(
-                    input_size=6 * layer,
-                    builder=circuit,
-                    n_photons=5,
-                    measurement_strategy=ml.MeasurementStrategy.AMPLITUDES,
-                )
-
+                trainable_embedder = create_trainable_merlin_layer_fig_3(layer)
                 print("Training classifier")
                 (
                     loss_list,
@@ -714,34 +591,17 @@ def reproduce_figure_3(
                 results["train_accuracies"][f"layer_{layer}"].append(train_accs)
                 results["test_accuracies"][f"layer_{layer}"].append(test_accs)
             del embedder, classifier, classical_model_8, classical_model
-        else:
-            # PCA 8
-            classical_model_8 = nn.Sequential(
-                nn.Linear(8, 10),
-                nn.ReLU(),
-                nn.Linear(10, 10),
-                nn.ReLU(),
-                nn.Linear(10, 8),
-            )
-            _randomize_trainable_parameters(classical_model_8)
 
-            # Full classical_model
-            classical_model = nn.Sequential(
-                nn.Flatten(),
-                nn.Linear(28 * 28, 128),
-                nn.ReLU(),
-                nn.Linear(128, 64),
-                nn.ReLU(),
-                nn.Linear(64, 8),
-            )
-            _randomize_trainable_parameters(classical_model)
+        ################################################################# Gate-based
+        else:
+            classical_model_8, classical_model = create_gate_based_fig_2_3_models()
             # PCA_NQE
             print("PCA_NQE")
             model = NeuralEmbeddingGateBasedModel(
                 num_qubits=4,
                 classical_model=classical_model_8,
-                quantum_embedding_layer=EmbeddingCallable().Four_QuantumEmbedding2,
-                quantum_classifier=FourQCNN,
+                quantum_embedding_layer=EmbeddingCallable().QuantumEmbedding1,
+                quantum_classifier=QCNN,
                 quantum_classifier_params_shape=(30),
                 num_classes=num_classes,
             )
@@ -778,8 +638,8 @@ def reproduce_figure_3(
             model = NeuralEmbeddingGateBasedModel(
                 num_qubits=4,
                 classical_model=classical_model,
-                quantum_embedding_layer=EmbeddingCallable().Four_QuantumEmbedding2,
-                quantum_classifier=FourQCNN,
+                quantum_embedding_layer=EmbeddingCallable().QuantumEmbedding1,
+                quantum_classifier=QCNN,
                 quantum_classifier_params_shape=(30),
                 num_classes=num_classes,
             )
@@ -827,8 +687,8 @@ def reproduce_figure_3(
                     num_qubits=4,
                     quantum_embedding_circuit=EmbeddingCallable(
                         N_layers=layer
-                    ).Four_QuantumEmbedding2Trainable,
-                    quantum_classifier_circuit=FourQCNN,
+                    ).QuantumEmbedding1Trainable,
+                    quantum_classifier_circuit=QCNN,
                     quantum_classifier_params_shape=(30),
                     x_train=x_train_PCA8,
                     y_train=y_train_PCA8,
@@ -849,6 +709,8 @@ def reproduce_figure_3(
 
         print(f"Repetition {i+1} done")
         gc.collect()
+
+        ################################################################# Writing the data
 
         payload = {
             "loss_lists_classifier": to_serializable_list(
