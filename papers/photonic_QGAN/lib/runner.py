@@ -385,7 +385,11 @@ def _run_qgan(
                 arr = snapshot.detach().cpu().numpy()
             else:
                 arr = np.asarray(snapshot)
-            fake_rows.append(arr.reshape(-1))
+            # arr may be [B, pixels] (batched) or already 1-D; always save one
+            # image per snapshot so each CSV row is exactly pixels long, matching
+            # the (samples × pixels) layout expected by utils/visualize.py.
+            arr = np.atleast_2d(arr)
+            fake_rows.append(arr[0])
         fake_progress_2d = np.stack(fake_rows, axis=0)
         np.savetxt(
             run_dir / "fake_progress.csv",

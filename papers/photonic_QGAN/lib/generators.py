@@ -117,13 +117,22 @@ class PatchGenerator(nn.Module):
         self.bin_count = np.max(list(self.output_map.values())) + 1
         self.expected_size = self.image_size * self.image_size // self.gen_count
 
+        # Precompute per-column index tensors for dist_to_image.
+        # When lossy and not pnr, output_map covers only a subset of output_keys;
+        # restrict to those columns so no KeyError is raised.
+        self._mapped_col_indices = torch.tensor(
+            [i for i, k in enumerate(self.output_keys) if k in self.output_map],
+            dtype=torch.long,
+        )
+        self._idx_cpu = torch.tensor(
+            [self.output_map[k] for k in self.output_keys if k in self.output_map],
+            dtype=torch.long,
+        )
+
     def dist_to_image(self, raw_results_list):
         patches = []
         B = None
         K = len(self.output_keys)
-        idx_cpu = torch.tensor(
-            [self.output_map[k] for k in self.output_keys], dtype=torch.long
-        )
 
         for res in raw_results_list:
             # res: [B, K]
@@ -145,14 +154,21 @@ class PatchGenerator(nn.Module):
 
             device = res.device
             dtype = res.dtype
-            idx = idx_cpu.to(device=device)
+            idx = self._idx_cpu.to(device=device)
+            col_idx = self._mapped_col_indices.to(device=device)
+
+            # Restrict to columns present in output_map (filtered subset when lossy and not pnr)
+            res_mapped = res.index_select(1, col_idx)  # [B, len(mapped)]
 
             gen_out = torch.zeros((B, self.bin_count), device=device, dtype=dtype)
-            gen_out.index_add_(1, idx, res)
+            gen_out.index_add_(1, idx, res_mapped)
 
-            # Normalize to distribution (avoid divide-by-zero)
-            total_count = res.sum(dim=1, keepdim=True)  # [B, 1]
-            gen_out = gen_out / (total_count + 1e-8)
+            # Normalize by the probability mass that landed in mapped (kept) bins.
+            # In lossy/non-PNR mode this can be 0 for samples where all probability
+            # fell into filtered-out multi-photon states; clamp ensures no NaN/inf
+            # and the result is a zero distribution for those samples.
+            total_count = res_mapped.sum(dim=1, keepdim=True)  # [B, 1]
+            gen_out = gen_out / total_count.clamp(min=1e-8)
 
             # map to the right number of pixels with map_generator_output
             gen_out_len = gen_out.shape[1]
@@ -331,7 +347,8 @@ class PatchGeneratorLegacy:
                     gen_out, self.image_size * self.image_size // self.gen_count
                 )
                 # add linearly to fake data sample
-                fake_data_sample.extend(out_modes / np.max(out_modes))
+                mx = np.max(out_modes)
+                fake_data_sample.extend(out_modes / mx if mx > 0 else out_modes)
 
             fake_data.append(fake_data_sample)
         fake_data = torch.FloatTensor(fake_data)

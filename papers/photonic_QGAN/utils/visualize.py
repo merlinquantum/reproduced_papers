@@ -43,8 +43,46 @@ def show_grid(
     plt.show()
 
 
-csv_path = Path(
-    "/Users/cassandrenotton/Documents/projects/QML_project/fork_reproduced_papers/reproduced_papers/papers/photonic_QGAN/outdir/run_20260120-150550/digits/config_1/run_1/fake_progress.csv"
-)
-show_sample(csv_path, index=-1, image_size=8)
-show_grid(csv_path, count=16, image_size=8, cols=4)
+def main() -> None:
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Visualize generated samples from fake_progress.csv."
+    )
+    parser.add_argument("csv_path", type=Path, help="Path to fake_progress.csv")
+    parser.add_argument(
+        "--index",
+        type=int,
+        default=-1,
+        help="Sample index for show_sample (default: -1)",
+    )
+    parser.add_argument(
+        "--count",
+        type=int,
+        default=16,
+        help="Number of samples for show_grid (default: 16)",
+    )
+    parser.add_argument(
+        "--image-size", type=int, default=8, help="Image size in pixels (default: 8)"
+    )
+    parser.add_argument(
+        "--cols", type=int, default=4, help="Columns in the grid (default: 4)"
+    )
+    parser.add_argument(
+        "--mode",
+        choices=["sample", "grid", "both"],
+        default="both",
+        help="What to display (default: both)",
+    )
+    args = parser.parse_args()
+
+    if args.mode in ("sample", "both"):
+        show_sample(args.csv_path, index=args.index, image_size=args.image_size)
+    if args.mode in ("grid", "both"):
+        show_grid(
+            args.csv_path, count=args.count, image_size=args.image_size, cols=args.cols
+        )
+
+
+if __name__ == "__main__":
+    main()

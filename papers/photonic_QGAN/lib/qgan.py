@@ -16,12 +16,13 @@ def get_metrics(real, fake):
     diversity = 0.0
     similarity = 0.0
     for i in range(count):
-        for j in range(i + 1, count):
+        for j in range(count):
             similarity += ssim(real[i], fake[j], data_range=1.0)
+        for j in range(i + 1, count):
             diversity += ssim(fake[i], fake[j], data_range=1.0)
 
+    similarity /= count * count
     denom = count * (count - 1) / 2
-    similarity /= denom
     diversity /= denom
 
     return similarity, 1 - diversity

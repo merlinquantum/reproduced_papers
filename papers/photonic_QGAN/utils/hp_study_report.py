@@ -54,6 +54,11 @@ class HPStudyReporter:
         self.n_candidates = self.analysis["n_unique_candidates"]
         self.n_rows = self.analysis["n_rows"]
         self.resource_levels = self.analysis["resource_levels"]
+        self.max_resource = self.analysis.get(
+            "max_resource", max(self.resource_levels) if self.resource_levels else 0
+        )
+        self.importance_max = self.analysis.get("param_importance_max_resource", [])
+        self.importance_all = self.analysis.get("param_importance_all_resources", [])
 
     def generate_report(self, output_file: str = "HP_STUDY_REPORT.md"):
         """Generate the complete report and save to file."""
@@ -68,17 +73,127 @@ class HPStudyReporter:
         print(f"✓ Report saved to: {output_path}")
         return output_path
 
+    @staticmethod
+    def _stars(eta2: float) -> str:
+        """Return a star-rating string scaled to the eta² importance value."""
+        if eta2 >= 0.3:
+            return "⭐⭐⭐⭐⭐"
+        if eta2 >= 0.1:
+            return "⭐⭐⭐⭐"
+        if eta2 >= 0.05:
+            return "⭐⭐⭐"
+        if eta2 >= 0.01:
+            return "⭐⭐"
+        return "⭐"
+
+    def _build_section3_md(self) -> str:
+        """Build Section 3 (Parameter Importance Analysis) from computed analysis data."""
+        lines = []
+        lines.append("---")
+        lines.append("")
+        lines.append("## 3. Parameter Importance Analysis")
+        lines.append("")
+
+        # --- Final-resource subsection ---
+        lines.append(
+            f"### Top Influential Parameters (at Final Resource - {self.max_resource} iterations)"
+        )
+        lines.append("")
+        lines.append(
+            "The importance ranking reveals which parameters most significantly affect "
+            "model performance at the final resource level."
+        )
+        lines.append(
+            "> **Note:** Only a small number of candidates reach the final resource level "
+            "in successive halving; this ranking may be less robust than the all-resources "
+            "ranking below."
+        )
+        lines.append("")
+
+        if self.importance_max:
+            for rank, row in enumerate(self.importance_max, 1):
+                stars = self._stars(row["importance_eta2"])
+                lines.append(
+                    f"{rank}. **{row['param']} (eta²={row['importance_eta2']:.4f})** {stars}"
+                )
+                lines.append(f"   - Best value: **{row['best_value']}**")
+                lines.append(
+                    f"   - Performance spread: {row['spread_best_minus_worst']:.4f}"
+                )
+                lines.append("")
+        else:
+            lines.append("*(No data for final-resource importance.)*")
+            lines.append("")
+
+        # --- All-resources subsection ---
+        resource_str = " and ".join(str(r) for r in self.resource_levels)
+        lines.append("### Parameter Effects Across All Resources")
+        lines.append("")
+        lines.append(
+            f"When considering all resource levels ({resource_str} iterations):"
+        )
+        lines.append("")
+        lines.append("| Rank | Parameter | eta² | Best Value | Spread |")
+        lines.append("|------|-----------|------|------------|--------|")
+        for rank, row in enumerate(self.importance_all, 1):
+            lines.append(
+                f"| {rank} | {row['param']} | {row['importance_eta2']:.4f}"
+                f" | {row['best_value']} | {row['spread_best_minus_worst']:.4f} |"
+            )
+        lines.append("")
+
+        if self.importance_all:
+            top = self.importance_all[0]
+            second = self.importance_all[1] if len(self.importance_all) > 1 else None
+            insight = (
+                f"**`{top['param']}`** (eta²={top['importance_eta2']:.4f}) is the dominant "
+                f"factor across all resource levels, with best value `{top['best_value']}`."
+            )
+            if second:
+                insight += (
+                    f" **`{second['param']}`** (eta²={second['importance_eta2']:.4f}) is "
+                    f"the second most influential parameter."
+                )
+        else:
+            insight = "*(No importance data available.)*"
+
+        lines.append(f"**Insight:** {insight}")
+
+        return "\n".join(lines)
+
     def _generate_markdown_report(self) -> str:
         """Generate the markdown report content."""
 
         # Get final stage results
         final_stage_results = self.cv_results[
-            self.cv_results["param_opt_iter_num"] == 600
+            self.cv_results["param_opt_iter_num"] == self.max_resource
         ].nlargest(3, "mean_test_score")
 
         # Pre-compute values for report
         avg_training_time = self.cv_results["mean_fit_time"].mean()
-        improvement_percent = (self.best_score - 0.35) / 0.35 * 100
+        median_score = self.cv_results["mean_test_score"].median()
+        improvement_percent = (
+            (self.best_score - median_score) / max(median_score, 1e-12) * 100
+        )
+
+        # Pre-compute section 3 and dynamic values derived from analysis data
+        section3_md = self._build_section3_md()
+        lrG = self.best_params.get("lrG", "N/A")
+        lrD = self.best_params.get("lrD", "N/A")
+        beta1 = self.best_params.get("adam_beta1", "N/A")
+        beta2 = self.best_params.get("adam_beta2", "N/A")
+        d_steps = self.best_params.get("d_steps", "N/A")
+        g_steps = self.best_params.get("g_steps", "N/A")
+        real_label = self.best_params.get("real_label", "N/A")
+        optimal_config_json = json.dumps(self.best_params, indent=4)
+        top_max_param = (
+            self.importance_max[0]["param"] if self.importance_max else "N/A"
+        )
+        top_max_eta2 = (
+            self.importance_max[0]["importance_eta2"] if self.importance_max else 0.0
+        )
+        top2_all_params = [r["param"] for r in self.importance_all[:2]]
+        top2_all_label = " and ".join(top2_all_params) if top2_all_params else "N/A"
 
         report = f"""# Hyperparameter Study Report: Photonic QGAN
 ## Run: {self.results_dir.name}
@@ -150,7 +265,7 @@ The optimal hyperparameters identified at the final resource level (600 iteratio
 - **Resource Level:** {self.best_params.get("opt_iter_num", "N/A")} iterations
 - **Training Time per Evaluation:** ~{avg_training_time:.1f} seconds
 
-### Score Distribution at Final Resource (600 iterations)
+### Score Distribution at Final Resource ({self.max_resource} iterations)
 
 | Rank | Score | Std | lrG | lrD | β₁ | β₂ |
 |------|-----------|-------------|-----|-----|----|----|
@@ -164,47 +279,7 @@ The optimal hyperparameters identified at the final resource level (600 iteratio
             report += f"{row['param_adam_beta1']} | {row['param_adam_beta2']} |\n"
 
         report += f"""
----
-
-## 3. Parameter Importance Analysis
-
-### Top Influential Parameters (at Final Resource - 600 iterations)
-
-The importance ranking reveals which parameters most significantly affect model performance:
-
-1. **Adam β₂ (eta²=0.846)** ⭐⭐⭐⭐⭐
-   - Best value: **0.999**
-   - Performance spread: 0.011 (11.3 mSIMM)
-   - Impact: Critical - strongly determines convergence behavior
-   - Recommendation: **Use 0.999 for production**
-
-2. **Adam β₁ (eta²=0.015)** ⭐⭐
-   - Best value: **0.7**
-   - Performance spread: 0.0015 (1.5 mSIMM)
-   - Impact: Minor - small effect on performance
-   - Recommendation: **0.7 preferred, but 0.5 is acceptable**
-
-3. **Learning Rates & Training Steps**
-   - eta² < 0.001 (negligible importance at final stage)
-   - These parameters stabilize during the final training phase
-   - They are more critical during early training stages
-
-### Parameter Effects Across All Resources
-
-When considering all resource levels (200 and 600 iterations):
-
-| Rank | Parameter | eta² | Best Value | Range |
-|------|-----------|------|-----------|-------|
-| 1 | Learning Rate (Generator) | 0.383 | 0.004 | 0.182 |
-| 2 | Generator Steps | 0.345 | 3 | 0.172 |
-| 3 | Learning Rate (Discriminator) | 0.275 | 0.0002 | 0.142 |
-| 4 | Discriminator Steps | 0.046 | 1 | 0.051 |
-| 5 | Adam β₁ | 0.001 | 0.5 | 0.008 |
-| 6 | Adam β₂ | 0.000 | 0.999 | 0.004 |
-| 7-8 | Label Smoothing & Target | 0.000 | 0.9 | 0.000 |
-
-**Insight:** Learning rates and step counts are crucial during early training but
-stabilize by the final stage. Adam β₂ becomes the dominant factor during fine-tuning.
+{section3_md}
 
 ---
 
@@ -214,12 +289,12 @@ stabilize by the final stage. Adam β₂ becomes the dominant factor during fine
 
 The following plots show how each parameter affects SSIM performance:
 
-- **[plot_ssim_vs_lrG.png](plot_ssim_vs_lrG.png)**: Generator learning rate shows clear peak at 0.004
-- **[plot_ssim_vs_lrD.png](plot_ssim_vs_lrD.png)**: Discriminator learning rate plateaus at 0.0002
-- **[plot_ssim_vs_adam_beta1.png](plot_ssim_vs_adam_beta1.png)**: Slight preference for β₁=0.7
-- **[plot_ssim_vs_adam_beta2.png](plot_ssim_vs_adam_beta2.png)**: Strong peak at β₂=0.999
-- **[plot_ssim_vs_d_steps.png](plot_ssim_vs_d_steps.png)**: d_steps=1 performs best
-- **[plot_ssim_vs_g_steps.png](plot_ssim_vs_g_steps.png)**: g_steps=3 consistently optimal
+- **[plot_ssim_vs_lrG.png](plot_ssim_vs_lrG.png)**: Generator learning rate shows best performance at {lrG}
+- **[plot_ssim_vs_lrD.png](plot_ssim_vs_lrD.png)**: Discriminator learning rate shows best performance at {lrD}
+- **[plot_ssim_vs_adam_beta1.png](plot_ssim_vs_adam_beta1.png)**: Best performance with β₁={beta1}
+- **[plot_ssim_vs_adam_beta2.png](plot_ssim_vs_adam_beta2.png)**: Best performance with β₂={beta2}
+- **[plot_ssim_vs_d_steps.png](plot_ssim_vs_d_steps.png)**: d_steps={d_steps} performs best
+- **[plot_ssim_vs_g_steps.png](plot_ssim_vs_g_steps.png)**: g_steps={g_steps} consistently optimal
 
 **Key Observation:** All parameters show smooth trade-offs with no abrupt discontinuities,
 suggesting the optimization landscape is well-behaved.
@@ -229,32 +304,31 @@ suggesting the optimization landscape is well-behaved.
 **[plot_ssim_heatmap_adam_betas_max_resource.png](plot_ssim_heatmap_adam_betas_max_resource.png)**
 
 The heatmap reveals the interaction between Adam β₁ and β₂:
-- β₂=0.999 is superior across all β₁ values
-- The β₁ effect is amplified when β₂=0.999
-- Synergy observed: (β₁=0.7, β₂=0.999) is better than sum of individual effects
+- β₂={beta2} shows the best mean SSIM across all β₁ values
+- The optimal combination is (β₁={beta1}, β₂={beta2})
+- Synergy observed: the best combination may outperform the sum of individual effects
 
 ### 4.3 Feature Importance Visualization
 
 **[plot_param_importance_max_resource.png](plot_param_importance_max_resource.png)**
 
-Bar chart showing relative importance at final resource (600 iterations):
-- Adam β₂ dominates with eta²=0.846
-- All other parameters have negligible individual effects
-- This indicates the model is well-tuned for the other parameters
+Bar chart showing relative importance at final resource ({self.max_resource} iterations):
+- **{top_max_param}** is the most influential parameter (eta²={top_max_eta2:.4f})
+- Other parameters have comparatively smaller effects at this late training stage
+- Note: few candidates reach the final stage; see all-resources ranking for a more robust view
 
 **[plot_param_importance_all_resources.png](plot_param_importance_all_resources.png)**
 
 Bar chart across all resources reveals the dynamic importance:
-- Learning rates are critical early (high eta² at 200 iterations)
-- Importance gradually shifts to Adam β₂ by final stage
-- This pattern is typical of curriculum-style learning progression
+- **{top2_all_label}** are the most critical parameters throughout training
+- The all-resources ranking is more robust than the final-stage ranking for this study
+- This pattern reflects which parameters most influence generalization
 
 **[plot_importance_top2_interaction_demo.png](plot_importance_top2_interaction_demo.png)**
 
-Interaction analysis between top two parameters (lrG and g_steps):
-- Shows non-additive effects
-- Optimal g_steps varies with lrG
-- Highest scores at (lrG=0.004, g_steps=3)
+Interaction analysis between top two parameters ({top2_all_label}):
+- Shows non-additive effects between these parameters
+- Highest scores are achieved at the best hyperparameter combination (see Section 2)
 
 ---
 
@@ -268,21 +342,21 @@ Interaction analysis between top two parameters (lrG and g_steps):
 
 ### 5.2 Optimal Training Strategy
 The best configuration suggests:
-- **Generator:** Learn with step size 3 at rate 0.004
-- **Discriminator:** Learn with step size 1 at rate 0.0002
-- **Momentum:** Use aggressive momentum (β₁=0.7) with conservative RMS decay (β₂=0.999)
-- **Label Smoothing:** Real label = 0.9 provides stability
+- **Generator:** Learn with step size {g_steps} at rate {lrG}
+- **Discriminator:** Learn with step size {d_steps} at rate {lrD}
+- **Momentum:** Adam β₁={beta1} with RMS decay β₂={beta2}
+- **Label Smoothing:** Real label = {real_label} provides stability
 
 ### 5.3 Robustness Analysis
 Top configurations cluster around:
-- Learning rates: (lrG=0.004, lrD=0.0002)
-- Adam parametrization: (β₁∈{0.5, 0.7}, β₂=0.999)
-- Training steps: (d_steps=1, g_steps=3)
+- Learning rates: (lrG={lrG}, lrD={lrD})
+- Adam parametrization: β₁={beta1}, β₂={beta2}
+- Training steps: (d_steps={d_steps}, g_steps={g_steps})
 
 This clustering suggests these parameters create a robust basin of attraction.
 
 ### 5.4 Trade-offs Discovered
-- **Generator Learning Rate:** Higher rates (0.004) require smaller discriminator rates
+- **Generator Learning Rate:** Higher rates ({lrG}) require smaller discriminator rates
 - **Generator Steps:** More steps need careful balance with learning rates
 - **Adam β₂:** Increasing β₂ stabilizes training but requires proper learning rate tuning
 
@@ -292,17 +366,7 @@ This clustering suggests these parameters create a robust basin of attraction.
 
 ### For Production Deployment
 ```python
-optimal_config = {{
-    "lrG": 0.004,
-    "lrD": 0.0002,
-    "adam_beta1": 0.7,
-    "adam_beta2": 0.999,
-    "d_steps": 1,
-    "g_steps": 3,
-    "real_label": 0.9,
-    "gen_target": 0.9,
-    "opt_iter_num": 600
-}}
+optimal_config = {optimal_config_json}
 ```
 
 ### Training Protocol
@@ -312,10 +376,10 @@ optimal_config = {{
 4. **Batch Normalization:** Consider adding layer normalization if performance plateaus
 
 ### Future Optimization Opportunities
-1. **Discriminator Architecture:** Current (d_steps=1) suggests capacity might support more updates
+1. **Discriminator Architecture:** Current (d_steps={d_steps}) suggests capacity might support more updates
 2. **Learning Rate Scheduling:** Fixed rates work well; dynamic schedules could improve convergence
 3. **Label Smoothing:** Both tested values (0.9, 1.0) perform similarly; explore intermediate values
-4. **Generator Capacity:** With g_steps=3, consider increasing model architecture depth
+4. **Generator Capacity:** With g_steps={g_steps}, consider increasing model architecture depth
 5. **Resource Allocation:** Test extended training (1000+ iterations) to identify true plateau
 
 ---
@@ -323,8 +387,8 @@ optimal_config = {{
 ## 7. Methodology Notes
 
 ### Successive Halving Algorithm
-- **Round 1 (200 iterations):** {self.n_candidates} candidates evaluated
-- **Round 2 (600 iterations):** 3 top candidates re-evaluated
+- **Round 1 ({self.resource_levels[0] if self.resource_levels else "N/A"} iterations):** {self.n_candidates} candidates evaluated
+- **Final round ({self.max_resource} iterations):** top candidates re-evaluated
 - **Advantage:** Eliminates poor candidates early, focuses resources on promising ones
 - **Efficiency:** Typical speedup: 3-5x vs. full grid search
 
@@ -346,10 +410,10 @@ optimal_config = {{
 The hyperparameter study successfully identified an optimal configuration for the Photonic QGAN
 with **high confidence** in the recommendations:
 
-✓ **Adam β₂=0.999** is critical for stable convergence
-✓ **Learning rate balance** (lrG=0.004, lrD=0.0002) is essential
-✓ **Asymmetric training steps** (d_steps=1, g_steps=3) outperform balanced approach
-✓ **Label smoothing** (0.9) provides better performance than hard labels
+✓ **Adam β₂={beta2}** with β₁={beta1} provides stable convergence
+✓ **Learning rate balance** (lrG={lrG}, lrD={lrD}) is essential
+✓ **Asymmetric training steps** (d_steps={d_steps}, g_steps={g_steps}) outperform balanced approach
+✓ **Label smoothing** ({real_label}) provides stability
 
 The **top candidate** achieves an SSIM score of **{self.best_score:.4f}** and represents
 a significant improvement over baseline configurations. The parameter space around this
@@ -357,7 +421,7 @@ solution is relatively flat (low eta² for most parameters), suggesting the conf
 is robust to minor variations.
 
 ### Expected Performance Gains
-- Improvement over default parameters: +{improvement_percent:.1f}% SSIM
+- Improvement over median configuration: +{improvement_percent:.1f}% SSIM
 - Training efficiency: Successive halving reduces search cost by ~70%
 - Recommended for: Production deployment of Photonic QGAN on optical digits
 
