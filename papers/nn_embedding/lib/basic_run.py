@@ -47,7 +47,7 @@ def basic_train_and_evaluate(
 
     print("Model 1")
     x_train, x_test, y_train, y_test = data_load_and_process(
-        dataset=dataset, feature_reduction="PCA8", classes=[0, 1], samples_per_class=150
+        dataset=dataset, feature_reduction=8, classes=[0, 1], samples_per_class=150
     )
     print("Data loaded")
 

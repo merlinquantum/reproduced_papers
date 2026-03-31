@@ -135,17 +135,11 @@ def data_load_and_process(
             torch.as_tensor(y_test),
         )
 
-    if feature_reduction in ["PCA16", "PCA8", "PCA4"]:
-        if feature_reduction == "PCA16":
-            dim_reduct = 16
-        if feature_reduction == "PCA8":
-            dim_reduct = 8
-        if feature_reduction == "PCA4":
-            dim_reduct = 4
+    if isinstance(feature_reduction, int):
         x_train_flat = x_train.reshape(len(x_train), -1)
         x_test_flat = x_test.reshape(len(x_test), -1)
 
-        pca = PCA(dim_reduct)
+        pca = PCA(feature_reduction)
         X_train = pca.fit_transform(x_train_flat)
         X_test = pca.transform(x_test_flat)
 

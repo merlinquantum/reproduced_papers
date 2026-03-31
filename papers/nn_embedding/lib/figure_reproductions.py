@@ -70,7 +70,7 @@ def reproduce_figure_2(
     # load the data
     x_train_PCA8, x_test_PCA8, y_train_PCA8, y_test_PCA8 = data_load_and_process(
         dataset=dataset,
-        feature_reduction="PCA8",
+        feature_reduction=8,
         classes=[0, 1],
         samples_per_class=samples_per_class,
     )
@@ -223,6 +223,28 @@ def reproduce_figure_2(
 
             # No NQE
             print("No NQE")
+            number_of_params = 0
+            for param in embedder.parameters():
+                number_of_params += param.numel()
+
+            if number_of_params == 28 * 28:
+                x_train, x_test, y_train, y_test = data_load_and_process(
+                    dataset=dataset,
+                    feature_reduction=False,
+                    classes=[0, 1],
+                    samples_per_class=samples_per_class,
+                )
+            elif number_of_params < 28 * 28:
+                x_train, x_test, y_train, y_test = data_load_and_process(
+                    dataset=dataset,
+                    feature_reduction=number_of_params,
+                    classes=[0, 1],
+                    samples_per_class=samples_per_class,
+                )
+            else:
+                raise ValueError(
+                    "Not implemented yet for more params that number of features"
+                )
             print("Training classifier")
             (
                 loss_list,
@@ -467,6 +489,91 @@ def reproduce_figure_2(
     )
 
     return payload
+
+
+def reproduce_figure_3(
+    dataset: str = "mnist",
+    use_merlin: bool = False,
+    batch_size: int = 100,
+    num_epochs_training_embedding: int = 50,
+    num_epochs_training_classifier: int = 50,
+    lr: float = 0.01,
+    distance: str = "Trace",
+    samples_per_class: int = 150,
+    num_classes: int = 2,
+    num_repetitions: int = 5,
+):
+    keys = ("pca_nqe", "nqe", "without_nqe")
+    embedding_keys = ("pca_nqe", "nqe")
+
+    results = {
+        "loss_lists_embedding": {key: [] for key in embedding_keys},
+        "training_distances": {key: [] for key in keys},
+        "testing_distances": {key: [] for key in keys},
+        "train_lower_bounds": {key: [] for key in keys},
+        "test_lower_bounds": {key: [] for key in keys},
+        "loss_lists_classifier": {key: [] for key in keys},
+        "train_accuracies": {key: [] for key in keys},
+        "test_accuracies": {key: [] for key in keys},
+    }
+
+    # load the data
+    x_train_PCA8, x_test_PCA8, y_train_PCA8, y_test_PCA8 = data_load_and_process(
+        dataset=dataset,
+        feature_reduction="PCA8",
+        classes=[0, 1],
+        samples_per_class=samples_per_class,
+    )
+    x_train, x_test, y_train, y_test = data_load_and_process(
+        dataset=dataset,
+        feature_reduction=False,
+        classes=[0, 1],
+        samples_per_class=samples_per_class,
+    )
+    for i in range(num_repetitions):
+        if use_merlin:
+            # Quantum embedding
+            circ = ml.CircuitBuilder(n_modes=8)
+            circ.add_entangling_layer()
+            embedder = ml.QuantumLayer(
+                input_size=0,
+                builder=circ,
+                n_photons=4,
+                measurement_strategy=ml.MeasurementStrategy.AMPLITUDES,
+            )
+            _randomize_trainable_parameters(embedder)
+
+            # Quantum classifier
+            circ = ml.CircuitBuilder(n_modes=8)
+            circ.add_entangling_layer()
+            classifier = ml.QuantumLayer(
+                builder=circ,
+                n_photons=4,
+                amplitude_encoding=True,
+                measurement_strategy=ml.MeasurementStrategy.PROBABILITIES,
+            )
+            _randomize_trainable_parameters(classifier)
+
+            # PCA 8
+            classical_model_8 = nn.Sequential(
+                nn.Linear(8, 10),
+                nn.ReLU(),
+                nn.Linear(10, 10),
+                nn.ReLU(),
+                nn.Linear(10, sum([i.numel() for i in embedder.parameters()])),
+            )
+            _randomize_trainable_parameters(classical_model_8)
+
+            # Full classical_model
+            classical_model = nn.Sequential(
+                nn.Flatten(),
+                nn.Linear(28 * 28, 128),
+                nn.ReLU(),
+                nn.Linear(128, 64),
+                nn.ReLU(),
+                nn.Linear(64, sum([i.numel() for i in embedder.parameters()])),
+            )
+            _randomize_trainable_parameters(classical_model)
 
 
 reproduce_figure_2(use_merlin=True)
