@@ -449,7 +449,7 @@ def _run_qgan(
             log.warning("Failed to save image preview: {}", exc)
         log.debug("Saved outputs under %s", run_dir)
     duration = time.perf_counter() - start
-    log.info("Completed run at {} duration={:.2f}s", run_dir, duration)
+    log.debug("Completed run at {} duration={:.2f}s", run_dir, duration)
 
 
 def _write_config(path: Path, payload: dict) -> None:
