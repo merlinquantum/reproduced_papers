@@ -12,6 +12,16 @@ and complements the online documentation available at:
 
 Each paper reproduction is designed to be accessible, well-documented, and easy to extend. Contributions are welcome!
 
+## License
+
+Unless otherwise noted, original code in this repository is released under the
+MIT License. See the root [LICENSE](LICENSE).
+
+This repository also includes or adapts third-party material. Files copied or
+derived from upstream projects keep their original license headers and remain
+subject to those terms. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
+and any per-file or per-directory notices for details.
+
 
 ## Papers reproduced:
 | Paper | Reproduction |
