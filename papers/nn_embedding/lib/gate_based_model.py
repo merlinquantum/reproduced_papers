@@ -17,6 +17,7 @@ from papers.nn_embedding.utils.utils import (
     pick_random_data,
     calculate_distance,
     LinearLoss,
+    loss_lower_bound,
 )
 from papers.nn_embedding.utils.gate_based_embedding import (
     QuantumEmbedding1,
@@ -195,45 +196,51 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             # Distance evaluation
             if return_data:
                 # Training distances
-                rhos0 = torch.stack(
+                rhos0_train = torch.stack(
                     tuple(
                         self.state_embedding_circuit(sample)
                         for sample in self.classical_encoder(X0_train)
                     ),
                     dim=0,
                 )
-                rhos1 = torch.stack(
+                rhos1_train = torch.stack(
                     tuple(
                         self.state_embedding_circuit(sample)
                         for sample in self.classical_encoder(X1_train)
                     ),
                     dim=0,
                 )
-                rho0 = torch.sum(rhos0, dim=0) / len(X0_train)
-                rho1 = torch.sum(rhos1, dim=0) / len(X1_train)
+                rho0 = torch.sum(rhos0_train, dim=0) / len(X0_train)
+                rho1 = torch.sum(rhos1_train, dim=0) / len(X1_train)
                 train_distance.append(calculate_distance(rho0, rho1, distance=distance))
 
                 # Test distances
-                rhos0 = torch.stack(
+                rhos0_test = torch.stack(
                     tuple(
                         self.state_embedding_circuit(sample)
                         for sample in self.classical_encoder(X0_test)
                     ),
                     dim=0,
                 )
-                rhos1 = torch.stack(
+                rhos1_test = torch.stack(
                     tuple(
                         self.state_embedding_circuit(sample)
                         for sample in self.classical_encoder(X1_test)
                     ),
                     dim=0,
                 )
-                rho0 = torch.sum(rhos0, dim=0) / len(X0_test)
-                rho1 = torch.sum(rhos1, dim=0) / len(X1_test)
+                rho0 = torch.sum(rhos0_test, dim=0) / len(X0_test)
+                rho1 = torch.sum(rhos1_test, dim=0) / len(X1_test)
                 test_distance.append(calculate_distance(rho0, rho1, distance=distance))
 
         if return_data:
-            return loss_list, train_distance, test_distance
+            return (
+                loss_list,
+                train_distance,
+                test_distance,
+                loss_lower_bound(rhos0_train, rhos1_train),
+                loss_lower_bound(rhos0_test, rhos1_test),
+            )
 
     def train_classifier(
         self,

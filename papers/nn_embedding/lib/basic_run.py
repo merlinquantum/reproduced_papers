@@ -52,17 +52,21 @@ def basic_train_and_evaluate(
     print("Data loaded")
 
     print("Training the embedding")
-    loss_list_embedding, train_distances, test_distances = (
-        merlin_based_model.train_embedding(
-            x_train,
-            y_train,
-            x_test,
-            y_test,
-            batch_size=batch_size,
-            num_epochs=num_epochs_training_embedding,
-            lr=lr,
-            return_data=True,
-        )
+    (
+        loss_list_embedding,
+        train_distances,
+        test_distances,
+        train_lower_bound,
+        test_lower_bound,
+    ) = merlin_based_model.train_embedding(
+        x_train,
+        y_train,
+        x_test,
+        y_test,
+        batch_size=batch_size,
+        num_epochs=num_epochs_training_embedding,
+        lr=lr,
+        return_data=True,
     )
 
     print("Training the classifier")
@@ -89,6 +93,8 @@ def basic_train_and_evaluate(
         "loss_list_embedding": _to_serializable_list(loss_list_embedding),
         "train_distances": _to_serializable_list(train_distances),
         "test_distances": _to_serializable_list(test_distances),
+        "train_lower_bound": train_lower_bound,
+        "test_lower_bound": test_lower_bound,
         "loss_list_classier": _to_serializable_list(loss_list_classier),
         "train_acc": _to_serializable_list(train_acc),
         "test_acc": _to_serializable_list(test_acc),

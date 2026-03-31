@@ -103,6 +103,19 @@ def U_TTN(params, wires):  # 2 params
     qml.CNOT(wires=[wires[0], wires[1]])
 
 
+def FourQCNN(input):
+    U = U_SU4
+    num_params = 15
+
+    param1 = input[0:num_params]
+    param2 = input[num_params : 2 * num_params]
+    U(param1, wires=[0, 1])
+    U(param1, wires=[2, 3])
+    U(param1, wires=[1, 2])
+    U(param1, wires=[3, 0])
+    U(param2, wires=[0, 2])
+
+
 def QCNN(input):
     # if ansatz == "SU4":
     U = U_SU4

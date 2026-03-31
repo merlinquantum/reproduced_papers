@@ -25,6 +25,7 @@ from papers.nn_embedding.utils.utils import (
     calculate_distance,
     state_vector_to_density_matrix,
     LinearLoss,
+    loss_lower_bound,
 )
 
 
@@ -213,29 +214,35 @@ class NeuralEmbeddingMerLinModel(nn.Module):
                 # Training distances
                 classical_data = self.classical_encoder(X0_train)
                 states = assign_params(self.quantum_embedding_layer, classical_data)
-                rhos0 = state_vector_to_density_matrix(states)
+                rhos0_train = state_vector_to_density_matrix(states)
                 classical_data = self.classical_encoder(X1_train)
                 states = assign_params(self.quantum_embedding_layer, classical_data)
-                rhos1 = state_vector_to_density_matrix(states)
+                rhos1_train = state_vector_to_density_matrix(states)
 
-                rho0 = torch.sum(rhos0, dim=0) / len(X0_train)
-                rho1 = torch.sum(rhos1, dim=0) / len(X1_train)
+                rho0 = torch.sum(rhos0_train, dim=0) / len(X0_train)
+                rho1 = torch.sum(rhos1_train, dim=0) / len(X1_train)
                 train_distance.append(calculate_distance(rho0, rho1, distance=distance))
 
                 # Test distances
                 classical_data = self.classical_encoder(X0_test)
                 states = assign_params(self.quantum_embedding_layer, classical_data)
-                rhos0 = state_vector_to_density_matrix(states)
+                rhos0_test = state_vector_to_density_matrix(states)
                 classical_data = self.classical_encoder(X1_test)
                 states = assign_params(self.quantum_embedding_layer, classical_data)
-                rhos1 = state_vector_to_density_matrix(states)
+                rhos1_test = state_vector_to_density_matrix(states)
 
-                rho0 = torch.sum(rhos0, dim=0) / len(X0_test)
-                rho1 = torch.sum(rhos1, dim=0) / len(X1_test)
+                rho0 = torch.sum(rhos0_test, dim=0) / len(X0_test)
+                rho1 = torch.sum(rhos1_test, dim=0) / len(X1_test)
                 test_distance.append(calculate_distance(rho0, rho1, distance=distance))
 
         if return_data:
-            return loss_list, train_distance, test_distance
+            return (
+                loss_list,
+                train_distance,
+                test_distance,
+                loss_lower_bound(rhos0_train, rhos1_train),
+                loss_lower_bound(rhos0_test, rhos1_test),
+            )
 
     def train_classifier(
         self,
