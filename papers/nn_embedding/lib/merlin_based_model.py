@@ -23,7 +23,7 @@ from papers.nn_embedding.utils.utils import (
     create_random_pairs,
     pick_random_data,
     calculate_distance,
-    state_vector_to_state,
+    state_vector_to_density_matrix,
     LinearLoss,
 )
 
@@ -213,10 +213,10 @@ class NeuralEmbeddingMerLinModel(nn.Module):
                 # Training distances
                 classical_data = self.classical_encoder(X0_train)
                 states = assign_params(self.quantum_embedding_layer, classical_data)
-                rhos0 = state_vector_to_state(states)
+                rhos0 = state_vector_to_density_matrix(states)
                 classical_data = self.classical_encoder(X1_train)
                 states = assign_params(self.quantum_embedding_layer, classical_data)
-                rhos1 = state_vector_to_state(states)
+                rhos1 = state_vector_to_density_matrix(states)
 
                 rho0 = torch.sum(rhos0, dim=0) / len(X0_train)
                 rho1 = torch.sum(rhos1, dim=0) / len(X1_train)
@@ -225,10 +225,10 @@ class NeuralEmbeddingMerLinModel(nn.Module):
                 # Test distances
                 classical_data = self.classical_encoder(X0_test)
                 states = assign_params(self.quantum_embedding_layer, classical_data)
-                rhos0 = state_vector_to_state(states)
+                rhos0 = state_vector_to_density_matrix(states)
                 classical_data = self.classical_encoder(X1_test)
                 states = assign_params(self.quantum_embedding_layer, classical_data)
-                rhos1 = state_vector_to_state(states)
+                rhos1 = state_vector_to_density_matrix(states)
 
                 rho0 = torch.sum(rhos0, dim=0) / len(X0_test)
                 rho1 = torch.sum(rhos1, dim=0) / len(X1_test)

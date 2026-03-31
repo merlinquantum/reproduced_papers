@@ -35,7 +35,7 @@ def calculate_distance(
         eigvals = torch.linalg.eigvals(rho_diff)
         return 0.5 * torch.real(torch.sum(torch.abs(eigvals)))
     elif distance == "Hilbert-Schmidt":
-        return torch.trace(rho_diff @ rho_diff)
+        return 0.5 * torch.trace(rho_diff @ rho_diff)
     else:
         raise ValueError("No distance with that name")
 
@@ -47,7 +47,7 @@ class LinearLoss(nn.Module):
         return (labels + predictions - (2 * labels * predictions)).mean()
 
 
-def state_vector_to_state(x: torch.Tensor) -> torch.Tensor:
+def state_vector_to_density_matrix(x: torch.Tensor) -> torch.Tensor:
     if x.ndim == 1:
         return torch.outer(x, torch.conj(x))
     if x.ndim == 2:
