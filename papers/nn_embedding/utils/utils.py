@@ -92,9 +92,8 @@ def create_basic_gate_based_model(
     )
 
     class BasicModel(nn.Module):
-        def __init__(self, main_model):
+        def __init__(self):
             super().__init__()
-            object.__setattr__(self, "main_model", main_model)
             self.output_grouper = ml.LexGrouping(2**num_qubits, num_classes)
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -113,9 +112,8 @@ def create_basic_merlin_model(
     num_classes: int = 2,
 ):
     class BasicModel(nn.Module):
-        def __init__(self, main_model):
+        def __init__(self):
             super().__init__()
-            object.__setattr__(self, "main_model", main_model)
             self.output_grouper = ml.LexGrouping(
                 quantum_classifier.output_size, num_classes
             )
@@ -128,8 +126,20 @@ def create_basic_merlin_model(
                 x = x.reshape(x.size(0), -1)
                 states = assign_params(self.embedder, x)
 
-            probs = self.main_model.quantum_classifier(states)
+            probs = quantum_classifier(states)
 
-            return self.main_model.output_grouper(probs)
+            return self.output_grouper(probs)
 
     return BasicModel()
+
+
+def to_serializable_list(values):
+    if isinstance(values, torch.Tensor):
+        return values.detach().cpu().tolist()
+    if isinstance(values, np.ndarray):
+        return values.tolist()
+    if isinstance(values, np.generic):
+        return values.item()
+    if isinstance(values, (list, tuple)):
+        return [to_serializable_list(value) for value in values]
+    return values

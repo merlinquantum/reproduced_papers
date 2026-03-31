@@ -20,7 +20,7 @@ from papers.nn_embedding.utils.plotting import (
 )
 
 
-def _to_serializable_list(values):
+def to_serializable_list(values):
     if isinstance(values, torch.Tensor):
         return values.detach().cpu().tolist()
     if isinstance(values, np.ndarray):
@@ -28,7 +28,7 @@ def _to_serializable_list(values):
     if isinstance(values, np.generic):
         return values.item()
     if isinstance(values, (list, tuple)):
-        return [_to_serializable_list(value) for value in values]
+        return [to_serializable_list(value) for value in values]
     return values
 
 
@@ -90,14 +90,14 @@ def basic_train_and_evaluate(
     results_dir.mkdir(parents=True, exist_ok=True)
     output_path = results_dir / "basic_run_results.json"
     payload = {
-        "loss_list_embedding": _to_serializable_list(loss_list_embedding),
-        "train_distances": _to_serializable_list(train_distances),
-        "test_distances": _to_serializable_list(test_distances),
+        "loss_list_embedding": to_serializable_list(loss_list_embedding),
+        "train_distances": to_serializable_list(train_distances),
+        "test_distances": to_serializable_list(test_distances),
         "train_lower_bound": train_lower_bound,
         "test_lower_bound": test_lower_bound,
-        "loss_list_classier": _to_serializable_list(loss_list_classier),
-        "train_acc": _to_serializable_list(train_acc),
-        "test_acc": _to_serializable_list(test_acc),
+        "loss_list_classier": to_serializable_list(loss_list_classier),
+        "train_acc": to_serializable_list(train_acc),
+        "test_acc": to_serializable_list(test_acc),
     }
     output_path.write_text(json.dumps(payload, indent=2))
     print(f"Saved results to {output_path}")
