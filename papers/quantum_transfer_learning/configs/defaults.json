@@ -5,7 +5,7 @@
   "logging": {
     "level": "info"
   },
-  "device": "auto",
+  "device": "cpu",
   "dtype": "float32",
 
   "dataset": {
@@ -36,7 +36,7 @@
   },
 
   "training": {
-    "epochs": 8,
+    "epochs": 1,
     "batch_size": 10,
     "learning_rate": 0.01,
     "optimizer": "adam",
