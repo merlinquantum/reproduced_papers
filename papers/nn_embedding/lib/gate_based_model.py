@@ -20,8 +20,7 @@ from papers.nn_embedding.utils.utils import (
     loss_lower_bound,
 )
 from papers.nn_embedding.utils.gate_based_embedding import (
-    QuantumEmbedding1,
-    QuantumEmbedding2,
+    EmbeddingCallable,
     QCNN,
 )
 
@@ -342,7 +341,7 @@ def create_paper_models() -> tuple[
     model_1 = NeuralEmbeddingGateBasedModel(
         num_qubits=8,
         classical_model=classical_model,
-        quantum_embedding_layer=QuantumEmbedding1,
+        quantum_embedding_layer=EmbeddingCallable().QuantumEmbedding1,
         quantum_classifier=QCNN,
         quantum_classifier_params_shape=(45),
     )
@@ -355,7 +354,7 @@ def create_paper_models() -> tuple[
     model_2 = NeuralEmbeddingGateBasedModel(
         num_qubits=8,
         classical_model=classical_model,
-        quantum_embedding_layer=QuantumEmbedding2,
+        quantum_embedding_layer=EmbeddingCallable().QuantumEmbedding2,
         quantum_classifier=QCNN,
         quantum_classifier_params_shape=(45),
     )
@@ -374,7 +373,7 @@ def create_paper_models() -> tuple[
     model_3 = NeuralEmbeddingGateBasedModel(
         num_qubits=8,
         classical_model=classical_model,
-        quantum_embedding_layer=QuantumEmbedding2,
+        quantum_embedding_layer=EmbeddingCallable().QuantumEmbedding2,
         quantum_classifier=QCNN,
         quantum_classifier_params_shape=(45),
     )

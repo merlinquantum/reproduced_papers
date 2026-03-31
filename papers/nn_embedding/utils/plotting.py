@@ -501,16 +501,36 @@ def plot_figure_2_bc(
     ax_loss.legend(loc="upper right", frameon=True, ncol=2)
 
     if accuracy_rows:
+        ax_loss.text(
+            0.805,
+            0.59,
+            "Classification accuracy (%)",
+            transform=ax_loss.transAxes,
+            ha="center",
+            va="bottom",
+            fontsize=9,
+            fontweight="semibold",
+            bbox={
+                "facecolor": "white",
+                "edgecolor": "#b0b0b0",
+                "boxstyle": "round,pad=0.2",
+                "alpha": 0.92,
+            },
+        )
         table = ax_loss.table(
             cellText=[[label, _format_accuracy(value)] for label, value in accuracy_rows],
-            colLabels=["", "Classification accuracy (%)"],
+            colLabels=["Method", "Accuracy (%)"],
             cellLoc="center",
-            bbox=[0.63, 0.29, 0.35, 0.28],
+            colWidths=[0.5, 0.5],
+            bbox=[0.60, 0.29, 0.38, 0.26],
         )
         table.auto_set_font_size(False)
         table.set_fontsize(9)
+        for (row, col), cell in table.get_celld().items():
+            if row == 0:
+                cell.set_text_props(weight="semibold")
 
-    fig.tight_layout()
+    fig.subplots_adjust(left=0.06, right=0.985, bottom=0.12, top=0.90, wspace=0.22)
     return _save_plot(fig, filename, run_dir)
 
 

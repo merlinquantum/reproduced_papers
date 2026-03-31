@@ -16,7 +16,7 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from papers.nn_embedding.lib.merlin_based_model import NeuralEmbeddingMerLinModel
 from papers.nn_embedding.lib.gate_based_model import NeuralEmbeddingGateBasedModel
 from papers.nn_embedding.utils.gate_based_embedding import (
-    Four_QuantumEmbedding2,
+    EmbeddingCallable,
     FourQCNN,
 )
 from papers.nn_embedding.lib.training_without_nqe import (
@@ -321,7 +321,7 @@ def reproduce_figure_2(
             model = NeuralEmbeddingGateBasedModel(
                 num_qubits=4,
                 classical_model=classical_model_8,
-                quantum_embedding_layer=Four_QuantumEmbedding2,
+                quantum_embedding_layer=EmbeddingCallable().Four_QuantumEmbedding2,
                 quantum_classifier=FourQCNN,
                 quantum_classifier_params_shape=(30),
                 num_classes=num_classes,
@@ -371,7 +371,7 @@ def reproduce_figure_2(
             model = NeuralEmbeddingGateBasedModel(
                 num_qubits=4,
                 classical_model=classical_model,
-                quantum_embedding_layer=Four_QuantumEmbedding2,
+                quantum_embedding_layer=EmbeddingCallable().Four_QuantumEmbedding2,
                 quantum_classifier=FourQCNN,
                 quantum_classifier_params_shape=(30),
                 num_classes=num_classes,
@@ -429,7 +429,7 @@ def reproduce_figure_2(
                 test_lower_bound,
             ) = train_gate_based(
                 num_qubits=4,
-                quantum_embedding_layer=Four_QuantumEmbedding2,
+                quantum_embedding_layer=EmbeddingCallable().Four_QuantumEmbedding2,
                 quantum_classifier=FourQCNN,
                 quantum_classifier_params_shape=(30),
                 x_train=x_train_PCA8,
@@ -516,7 +516,18 @@ def reproduce_figure_2(
     return payload
 
 
-"""
+def reproduce_figure_3(
+    dataset: str = "mnist",
+    use_merlin: bool = False,
+    batch_size: int = 100,
+    num_epochs_training_embedding: int = 50,
+    num_epochs_training_classifier: int = 50,
+    lr: float = 0.01,
+    distance: str = "Trace",
+    samples_per_class: int = 150,
+    num_classes: int = 2,
+    num_repetitions: int = 5,
+):
     keys = ("pca_nqe", "nqe", "layer_1", "layer_2", "layer_3")
 
     results = {
@@ -526,6 +537,6 @@ def reproduce_figure_2(
         "train_accuracies": {key: [] for key in keys},
         "test_accuracies": {key: [] for key in keys},
     }
-"""
 
-reproduce_figure_2(use_merlin=True)
+
+reproduce_figure_2(use_merlin=False)

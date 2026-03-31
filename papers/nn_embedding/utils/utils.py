@@ -140,6 +140,8 @@ def to_serializable_list(values):
         return values.tolist()
     if isinstance(values, np.generic):
         return values.item()
+    if isinstance(values, dict):
+        return {key: to_serializable_list(value) for key, value in values.items()}
     if isinstance(values, (list, tuple)):
         return [to_serializable_list(value) for value in values]
     return values
