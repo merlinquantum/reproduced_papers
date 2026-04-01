@@ -1,9 +1,0 @@
-# Core numerical stack
-numpy
-matplotlib
-torch
-
-# Quantum layers / backends
-pennylane
-perceval-quandela
-merlin

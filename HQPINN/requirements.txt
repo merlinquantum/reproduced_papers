@@ -1,0 +1,12 @@
+# Core numerical stack
+numpy>=2.4.3
+matplotlib>=3.10.8
+torch>=2.11.0
+
+# PennyLane-based experiments
+pennylane>=0.44.1
+pennylane-lightning>=0.44.0
+
+# Merlin / Perceval photonic experiments
+perceval-quandela>=1.1.0
+merlinquantum>=0.3.1
