@@ -604,7 +604,7 @@ def reproduce_figure_3(
                 classical_model=classical_model_8,
                 quantum_embedding_layer=EmbeddingCallable().QuantumEmbedding1,
                 quantum_classifier=QCNN,
-                quantum_classifier_params_shape=(30),
+                quantum_classifier_params_shape=(60),
                 num_classes=num_classes,
             )
             print("Training embedding")
@@ -642,7 +642,7 @@ def reproduce_figure_3(
                 classical_model=classical_model,
                 quantum_embedding_layer=EmbeddingCallable().QuantumEmbedding1,
                 quantum_classifier=QCNN,
-                quantum_classifier_params_shape=(30),
+                quantum_classifier_params_shape=(60),
                 num_classes=num_classes,
             )
             print("Training embedding")
@@ -677,6 +677,7 @@ def reproduce_figure_3(
             print("No NQE")
             print("Training classifier")
             for layer in layers_to_test:
+                print(f"Doing layer {layer}")
                 (
                     loss_list,
                     train_accs,
@@ -691,7 +692,7 @@ def reproduce_figure_3(
                         N_layers=layer
                     ).QuantumEmbedding1Trainable,
                     quantum_classifier_circuit=QCNN,
-                    quantum_classifier_params_shape=(30),
+                    quantum_classifier_params_shape=(60),
                     x_train=x_train_PCA8,
                     y_train=y_train_PCA8,
                     x_test=x_test_PCA8,

@@ -316,6 +316,11 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             return loss_list, train_accs, test_accs
 
 
+class NeuralEmbeddingGateBasedKernel(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+
 def create_paper_models() -> tuple[
     NeuralEmbeddingGateBasedModel,
     NeuralEmbeddingGateBasedModel,

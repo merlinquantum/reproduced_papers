@@ -60,13 +60,17 @@ class EmbeddingCallable:
                 param_index += 1
             for j in range(8):
                 for k in range(j + 1, 8):
-                    qml.adjoint(qml.S(wires=[j, k]))
-                    qml.Hadamard(wires=[j, k])
+                    qml.adjoint(qml.S(wires=j))
+                    qml.adjoint(qml.S(wires=k))
+                    qml.Hadamard(wires=j)
+                    qml.Hadamard(wires=k)
                     qml.CNOT(wires=[j, k])
                     qml.RZ(params[param_index], wires=k)
                     qml.CNOT(wires=[j, k])
-                    qml.Hadamard(wires=[j, k])
-                    qml.S(wires=[j, k])
+                    qml.Hadamard(wires=j)
+                    qml.Hadamard(wires=k)
+                    qml.S(wires=j)
+                    qml.S(wires=k)
 
                     param_index += 1
             for j in range(8):
@@ -94,13 +98,17 @@ class EmbeddingCallable:
                 param_index += 1
             for j in range(8):
                 for k in range(j + 1, 8):
-                    qml.adjoint(qml.S(wires=[j, k]))
-                    qml.Hadamard(wires=[j, k])
+                    qml.adjoint(qml.S(wires=j))
+                    qml.adjoint(qml.S(wires=k))
+                    qml.Hadamard(wires=j)
+                    qml.Hadamard(wires=k)
                     qml.CNOT(wires=[j, k])
                     qml.RZ(params[param_index], wires=k)
                     qml.CNOT(wires=[j, k])
-                    qml.Hadamard(wires=[j, k])
-                    qml.S(wires=[j, k])
+                    qml.Hadamard(wires=j)
+                    qml.Hadamard(wires=k)
+                    qml.S(wires=j)
+                    qml.S(wires=k)
 
                     param_index += 1
             for j in range(8):
@@ -123,18 +131,22 @@ class EmbeddingCallable:
     def Four_QuantumEmbedding1Trainable(self, input, params):
         param_index = 0
         for i in range(self.N_layers):
-            for j in range(8):
+            for j in range(4):
                 qml.RY(params[param_index], wires=j)
                 param_index += 1
-            for j in range(8):
-                for k in range(j + 1, 8):
-                    qml.adjoint(qml.S(wires=[j, k]))
-                    qml.Hadamard(wires=[j, k])
+            for j in range(4):
+                for k in range(j + 1, 4):
+                    qml.adjoint(qml.S(wires=j))
+                    qml.adjoint(qml.S(wires=k))
+                    qml.Hadamard(wires=j)
+                    qml.Hadamard(wires=k)
                     qml.CNOT(wires=[j, k])
                     qml.RZ(params[param_index], wires=k)
                     qml.CNOT(wires=[j, k])
-                    qml.Hadamard(wires=[j, k])
-                    qml.S(wires=[j, k])
+                    qml.Hadamard(wires=j)
+                    qml.Hadamard(wires=k)
+                    qml.S(wires=j)
+                    qml.S(wires=k)
 
                     param_index += 1
             for j in range(4):
@@ -156,18 +168,22 @@ class EmbeddingCallable:
     def Four_QuantumEmbedding2Trainable(self, input, params):
         param_index = 0
         for i in range(self.N_layers):
-            for j in range(8):
+            for j in range(4):
                 qml.RY(params[param_index], wires=j)
                 param_index += 1
-            for j in range(8):
-                for k in range(j + 1, 8):
-                    qml.adjoint(qml.S(wires=[j, k]))
-                    qml.Hadamard(wires=[j, k])
+            for j in range(4):
+                for k in range(j + 1, 4):
+                    qml.adjoint(qml.S(wires=j))
+                    qml.adjoint(qml.S(wires=k))
+                    qml.Hadamard(wires=j)
+                    qml.Hadamard(wires=k)
                     qml.CNOT(wires=[j, k])
                     qml.RZ(params[param_index], wires=k)
                     qml.CNOT(wires=[j, k])
-                    qml.Hadamard(wires=[j, k])
-                    qml.S(wires=[j, k])
+                    qml.Hadamard(wires=j)
+                    qml.Hadamard(wires=k)
+                    qml.S(wires=j)
+                    qml.S(wires=k)
 
                     param_index += 1
             for j in range(4):
