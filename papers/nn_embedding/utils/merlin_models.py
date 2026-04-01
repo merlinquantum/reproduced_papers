@@ -1,5 +1,6 @@
 import merlin as ml
 import torch.nn as nn
+import torch
 
 import sys
 from pathlib import Path
@@ -112,15 +113,30 @@ def create_trainable_merlin_layer_fig_3(N_layer: int):
     circuit = ml.CircuitBuilder(n_modes=10)
     for _ in range(N_layer):
         circuit.add_entangling_layer()
-        circuit.add_angle_encoding(modes=list(range(6)))
+        circuit.add_angle_encoding(modes=list(range(8)))
         circuit.add_entangling_layer()
     embedder = ml.QuantumLayer(
-        input_size=6 * N_layer,
+        input_size=8 * N_layer,
         builder=circuit,
         n_photons=5,
         measurement_strategy=ml.MeasurementStrategy.AMPLITUDES,
     )
 
-    randomize_trainable_parameters(embedder)
+    class BasicModelRepeatedModel(nn.Module):
+        def __init__(self):
+            super().__init__()
+            self.embedder = embedder
+            for param in self.embedder.parameters():
+                param.requires_grad = False
 
-    return embedder
+        def forward(self, x: torch.Tensor) -> torch.Tensor:
+            x = x.reshape(x.size(0), -1)
+            x = x.repeat((1, N_layer))
+
+            return self.embedder(x)
+
+    model = BasicModelRepeatedModel()
+
+    randomize_trainable_parameters(model)
+
+    return model

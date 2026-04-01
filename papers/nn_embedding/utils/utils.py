@@ -191,9 +191,6 @@ def create_trainable_embedding_merlin_model(
                 param.requires_grad = False
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
-            x = x.reshape(x.size(0), -1)
-            x = x.repeat((1, num_layers))
-
             states = self.embedder(x)
 
             probs = quantum_classifier(states)

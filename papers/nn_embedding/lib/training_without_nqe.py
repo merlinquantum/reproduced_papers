@@ -22,7 +22,10 @@ from papers.nn_embedding.utils.utils import (
     loss_lower_bound,
 )
 
-from papers.nn_embedding.utils.merlin_model_utils import assign_params
+from papers.nn_embedding.utils.merlin_model_utils import (
+    assign_params,
+)
+from papers.nn_embedding.utils.merlin_models import create_trainable_merlin_layer_fig_3
 
 
 def train_gate_based(
@@ -187,6 +190,7 @@ def train_merlin_based(
     num_layers: int = 1,
 ):
     if trainable_embedding:
+        quantum_embedding_layer = create_trainable_merlin_layer_fig_3(num_layers)
         model = create_trainable_embedding_merlin_model(
             quantum_embedding_layer, quantum_classifier, num_classes, num_layers
         )

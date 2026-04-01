@@ -559,7 +559,9 @@ def reproduce_figure_3(
             del model
 
             # No NQE
+            print("No NQE")
             for layer in layers_to_test:
+                print(f"Doing layer {layer}")
                 trainable_embedder = create_trainable_merlin_layer_fig_3(layer)
                 print("Training classifier")
                 (
@@ -598,7 +600,7 @@ def reproduce_figure_3(
             # PCA_NQE
             print("PCA_NQE")
             model = NeuralEmbeddingGateBasedModel(
-                num_qubits=4,
+                num_qubits=8,
                 classical_model=classical_model_8,
                 quantum_embedding_layer=EmbeddingCallable().QuantumEmbedding1,
                 quantum_classifier=QCNN,
@@ -636,7 +638,7 @@ def reproduce_figure_3(
             # NQE
             print("NQE")
             model = NeuralEmbeddingGateBasedModel(
-                num_qubits=4,
+                num_qubits=8,
                 classical_model=classical_model,
                 quantum_embedding_layer=EmbeddingCallable().QuantumEmbedding1,
                 quantum_classifier=QCNN,
@@ -684,7 +686,7 @@ def reproduce_figure_3(
                     _,
                     _,
                 ) = train_gate_based(
-                    num_qubits=4,
+                    num_qubits=8,
                     quantum_embedding_circuit=EmbeddingCallable(
                         N_layers=layer
                     ).QuantumEmbedding1Trainable,
@@ -744,8 +746,8 @@ def reproduce_figure_3(
         test_accuracies=payload["test_accuracies"],
         layers_to_test=payload["config"]["layers_to_test"],
         run_dir=results_dir,
-        filename=f"figure_2_bc_{backend}.pdf",
+        filename=f"figure_3_{backend}.pdf",
     )
 
 
-reproduce_figure_2(use_merlin=False)
+reproduce_figure_3(use_merlin=False)
