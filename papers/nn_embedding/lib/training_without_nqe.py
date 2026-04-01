@@ -121,7 +121,12 @@ def train_gate_based(
 
         @qml.qnode(device, interface="torch")
         def embedding_state(inputs):
-            quantum_embedding_circuit(inputs)
+            if trainable_embedding:
+                quantum_embedding_circuit(
+                    inputs, model.complete_circuit_layer.embedding_params
+                )
+            else:
+                quantum_embedding_circuit(inputs)
             return qml.density_matrix(wires=range(num_qubits))
 
         X1_test = torch.stack([x_test[i] for i in range(len(x_test)) if y_test[i] == 1])
@@ -187,12 +192,10 @@ def train_merlin_based(
     num_classes: int = 2,
     distance: str = "Trace",
     trainable_embedding: bool = False,
-    num_layers: int = 1,
 ):
     if trainable_embedding:
-        quantum_embedding_layer = create_trainable_merlin_layer_fig_3(num_layers)
         model = create_trainable_embedding_merlin_model(
-            quantum_embedding_layer, quantum_classifier, num_classes, num_layers
+            quantum_embedding_layer, quantum_classifier, num_classes
         )
     else:
         model = create_basic_merlin_model(

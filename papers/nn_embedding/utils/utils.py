@@ -178,7 +178,6 @@ def create_trainable_embedding_merlin_model(
     quantum_embedding_layer: ml.QuantumLayer,
     quantum_classifier: ml.QuantumLayer,
     num_classes: int = 2,
-    num_layers: int = 1,
 ):
     class BasicModel(nn.Module):
         def __init__(self):
@@ -241,3 +240,18 @@ def randomize_trainable_parameters(module: nn.Module) -> None:
             if param.requires_grad:
                 with torch.no_grad():
                     param.uniform_(-torch.pi, torch.pi)
+
+
+def get_error_bound(weights: np.ndarray, Kernel: np.ndarray, Y_train: np.ndarray):
+    N = len(Y_train)
+    error_list = []
+
+    for weight in weights:
+        Kernel_MP = np.linalg.pinv(Kernel + weight * np.eye(N), hermitian=True)
+        error_list.append(
+            np.sqrt(Y_train @ Kernel_MP @ Kernel @ Kernel_MP @ Y_train.T / N)
+        )
+
+    error_list = np.array(error_list)
+
+    return error_list

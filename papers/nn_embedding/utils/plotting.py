@@ -401,7 +401,9 @@ def plot_figure_3(
     loss_iterations = list(loss_iterations)
 
     if len(loss_iterations) != num_iterations:
-        raise ValueError("loss_iterations must have the same length as the loss curves.")
+        raise ValueError(
+            "loss_iterations must have the same length as the loss curves."
+        )
 
     for key in required_keys[1:]:
         if series[key]["arr"].shape[1] != num_iterations:
@@ -606,6 +608,84 @@ def plot_accuracies(
         ax.set_xlabel("Iteration")
         ax.set_ylabel("Accuracy")
         ax.set_xlim(min(iterations), max(iterations) if iterations else 0)
+
+    fig.tight_layout()
+    return _save_plot(fig, filename, run_dir)
+
+
+def plot_figure_5(
+    generalization_error: dict[str, Sequence[Sequence[float]]],
+    *,
+    weights: Sequence[float] | None = None,
+    figsize: tuple[float, float] = (6.0, 4.5),
+    run_dir: Path | None = None,
+    filename: str = "figure_5.pdf",
+) -> Path:
+    """Plot figure 5: generalization error bound vs regularization weight.
+
+    Parameters
+    ----------
+    generalization_error
+        Mapping from method name to repeated error-bound lists. Each value
+        must be shaped like ``(num_repetitions, num_weights)``. Expected keys
+        are ``"pca_nqe"``, ``"nqe"``, and ``"without_nqe"``.
+    weights
+        Optional regularization weight values for the x-axis. If omitted,
+        inferred from the data length as ``np.linspace(0.1, 0.9, num_weights)``.
+    figsize, run_dir, filename
+        Standard plotting/output configuration.
+    """
+
+    def _to_2d_float_array(values, name):
+        arr = np.asarray(_to_plot_values(values), dtype=float)
+        if arr.ndim != 2:
+            raise ValueError(
+                f"{name} must be a 2D array-like object shaped "
+                "(num_repetitions, num_weights)."
+            )
+        return arr
+
+    required_keys = ("pca_nqe", "nqe", "without_nqe")
+    missing = [k for k in required_keys if k not in generalization_error]
+    if missing:
+        raise ValueError(f"Missing generalization error for keys: {missing}")
+
+    arrays = {k: _to_2d_float_array(generalization_error[k], k) for k in required_keys}
+    num_weights = arrays["pca_nqe"].shape[1]
+
+    if weights is None:
+        weights = np.linspace(0.1, 0.9, num_weights)
+    weights = np.asarray(weights, dtype=float)
+
+    if len(weights) != num_weights:
+        raise ValueError("weights must have the same length as the error curves.")
+
+    specs = (
+        ("pca_nqe", "PCA-NQE", "#f26f87", "o"),
+        ("nqe", "NQE", "#4daf3c", "^"),
+        ("without_nqe", "Without NQE", "#339af0", "s"),
+    )
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    for key, label, color, marker in specs:
+        mean = arrays[key].mean(axis=0)
+        std = arrays[key].std(axis=0)
+        ax.errorbar(
+            weights,
+            mean,
+            yerr=std,
+            fmt=marker,
+            color=color,
+            markersize=6,
+            capsize=3,
+            label=label,
+            zorder=3,
+        )
+
+    ax.set_xlabel(r"Regularization Weight ($\lambda$)")
+    ax.set_ylabel("Generalization Error Bound (G)")
+    ax.legend(loc="upper right", frameon=True)
 
     fig.tight_layout()
     return _save_plot(fig, filename, run_dir)

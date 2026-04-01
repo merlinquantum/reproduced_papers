@@ -12,14 +12,24 @@ sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
 
-from papers.nn_embedding.lib.merlin_based_model import NeuralEmbeddingMerLinModel
-from papers.nn_embedding.lib.gate_based_model import NeuralEmbeddingGateBasedModel
+from papers.nn_embedding.lib.merlin_based_model import (
+    NeuralEmbeddingMerLinModel,
+    NeuralEmbeddingMerLinKernel,
+)
+from papers.nn_embedding.lib.gate_based_model import (
+    NeuralEmbeddingGateBasedModel,
+    NeuralEmbeddingGateBasedKernel,
+)
 from papers.nn_embedding.utils.merlin_models import (
     create_merlin_fig_2_models,
     create_merlin_fig_3_models,
     create_trainable_merlin_layer_fig_3,
+    create_merlin_fig_5_models,
 )
-from papers.nn_embedding.utils.gate_based_models import create_gate_based_fig_2_3_models
+from papers.nn_embedding.utils.gate_based_models import (
+    create_gate_based_fig_2_3_models,
+    create_gate_based_fig_5_models,
+)
 from papers.nn_embedding.utils.gate_based_embedding import (
     EmbeddingCallable,
     FourQCNN,
@@ -30,10 +40,12 @@ from papers.nn_embedding.lib.training_without_nqe import (
     train_merlin_based,
 )
 from papers.nn_embedding.utils.data import data_load_and_process
-from papers.nn_embedding.utils.utils import (
-    to_serializable_list,
+from papers.nn_embedding.utils.utils import to_serializable_list, get_error_bound
+from papers.nn_embedding.utils.plotting import (
+    plot_figure_2_bc,
+    plot_figure_3,
+    plot_figure_5,
 )
-from papers.nn_embedding.utils.plotting import plot_figure_2_bc, plot_figure_3
 
 
 def reproduce_figure_2(
@@ -704,7 +716,7 @@ def reproduce_figure_3(
                     return_data=True,
                     num_classes=num_classes,
                     trainable_embedding=True,
-                    embedding_params_shape=(10 * layer),
+                    embedding_params_shape=(36 * layer),
                 )
                 results["loss_lists_classifier"][f"layer_{layer}"].append(loss_list)
                 results["train_accuracies"][f"layer_{layer}"].append(train_accs)
@@ -748,6 +760,209 @@ def reproduce_figure_3(
         layers_to_test=payload["config"]["layers_to_test"],
         run_dir=results_dir,
         filename=f"figure_3_{backend}.pdf",
+    )
+
+
+# Following the paper even though the code does not say this, The goal is to study the generalization error upper bound changing with nqe
+def reproduce_figure_5(
+    dataset: str = "mnist",
+    use_merlin: bool = False,
+    batch_size: int = 100,
+    num_epochs_training_embedding: int = 50,
+    lr: float = 0.01,
+    distance: str = "Trace",
+    samples_per_class: int = 150,
+    num_repetitions: int = 5,
+    weights: list[float] = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+):
+    keys = ("pca_nqe", "nqe", "without_nqe")
+
+    results = {
+        "generalization_error": {key: [] for key in keys},
+    }
+
+    # load the data
+    x_train_PCA4, x_test_PCA4, y_train_PCA4, y_test_PCA4 = data_load_and_process(
+        dataset=dataset,
+        feature_reduction=8,
+        classes=[0, 1],
+        samples_per_class=samples_per_class,
+    )
+    y_train_PCA4_minus_one = [-1 if y == 0 else 1 for y in y_train_PCA4]
+    x_train, x_test, y_train, y_test = data_load_and_process(
+        dataset=dataset,
+        feature_reduction=False,
+        classes=[0, 1],
+        samples_per_class=samples_per_class,
+    )
+    y_train_minus_one = [-1 if y == 0 else 1 for y in y_train]
+
+    for i in range(num_repetitions):
+        ################################################################# MerLin-based
+        if use_merlin:
+            embedder, classical_model_4, classical_model = create_merlin_fig_5_models()
+            # PCA_NQE
+            print("PCA_NQE")
+            model = NeuralEmbeddingMerLinKernel(
+                classical_model=deepcopy(classical_model_4),
+                quantum_embedding_layer=deepcopy(embedder),
+            )
+            print("Training embedding")
+            model.train_embedding(
+                x_train=x_train_PCA4,
+                y_train=y_train_PCA4,
+                x_test=x_test_PCA4,
+                y_test=y_test_PCA4,
+                distance=distance,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_embedding,
+                lr=lr,
+                return_data=False,
+            )
+            print("Calculating the error")
+            kernel_matrix = model.compute_kernel_matrix(x_train_PCA4)
+            errors = get_error_bound(weights, kernel_matrix, y_train_PCA4_minus_one)
+
+            results["generalization_error"]["pca_nqe"].append(errors)
+            del model
+
+            # NQE
+            print("NQE")
+            model = NeuralEmbeddingMerLinKernel(
+                classical_model=classical_model,
+                quantum_embedding_layer=deepcopy(embedder),
+            )
+            print("Training embedding")
+            model.train_embedding(
+                x_train=x_train,
+                y_train=y_train,
+                x_test=x_test,
+                y_test=y_test,
+                distance=distance,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_embedding,
+                lr=lr,
+                return_data=False,
+            )
+            print("Calculating the error")
+            kernel_matrix = model.compute_kernel_matrix(x_train)
+            errors = get_error_bound(weights, kernel_matrix, y_train_minus_one)
+
+            results["generalization_error"]["nqe"].append(errors)
+            del model
+
+            # No NQE
+            model = NeuralEmbeddingMerLinKernel(
+                classical_model=deepcopy(classical_model_4),
+                quantum_embedding_layer=deepcopy(embedder),
+            )
+            print("Calculating the error")
+            kernel_matrix = model.compute_kernel_matrix(x_train_PCA4)
+            errors = get_error_bound(weights, kernel_matrix, y_train_PCA4_minus_one)
+            results["generalization_error"]["without_nqe"].append(errors)
+
+            del model, embedder, classical_model_4, classical_model
+
+        ################################################################# Gate-based
+        else:
+            classical_model_4, classical_model = create_gate_based_fig_5_models()
+            # PCA_NQE
+            print("PCA_NQE")
+            model = NeuralEmbeddingGateBasedKernel(
+                num_qubits=4,
+                classical_model=deepcopy(classical_model_4),
+                quantum_embedding_layer=EmbeddingCallable.Four_QuantumEmbedding1,
+            )
+            print("Training embedding")
+            model.train_embedding(
+                x_train=x_train_PCA4,
+                y_train=y_train_PCA4,
+                x_test=x_test_PCA4,
+                y_test=y_test_PCA4,
+                distance=distance,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_embedding,
+                lr=lr,
+                return_data=False,
+            )
+            print("Calculating the error")
+            kernel_matrix = model.compute_kernel_matrix(x_train_PCA4)
+            errors = get_error_bound(weights, kernel_matrix, y_train_PCA4_minus_one)
+
+            results["generalization_error"]["pca_nqe"].append(errors)
+            del model
+
+            # NQE
+            print("NQE")
+            model = NeuralEmbeddingGateBasedKernel(
+                num_qubits=4,
+                classical_model=classical_model,
+                quantum_embedding_layer=EmbeddingCallable.Four_QuantumEmbedding1,
+            )
+            print("Training embedding")
+            model.train_embedding(
+                x_train=x_train,
+                y_train=y_train,
+                x_test=x_test,
+                y_test=y_test,
+                distance=distance,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_embedding,
+                lr=lr,
+                return_data=False,
+            )
+            print("Calculating the error")
+            kernel_matrix = model.compute_kernel_matrix(x_train)
+            errors = get_error_bound(weights, kernel_matrix, y_train_minus_one)
+
+            results["generalization_error"]["nqe"].append(errors)
+            del model
+
+            # No NQE
+            model = NeuralEmbeddingGateBasedKernel(
+                num_qubits=4,
+                classical_model=deepcopy(classical_model_4),
+                quantum_embedding_layer=EmbeddingCallable.Four_QuantumEmbedding1,
+            )
+            print("Calculating the error")
+            kernel_matrix = model.compute_kernel_matrix(x_train_PCA4)
+            errors = get_error_bound(weights, kernel_matrix, y_train_PCA4_minus_one)
+            results["generalization_error"]["without_nqe"].append(errors)
+
+            del model, embedder, classical_model_4, classical_model
+
+        print(f"Repetition {i+1} done")
+        gc.collect()
+
+        ################################################################# Writing the data
+
+        payload = {
+            "generalization_error": to_serializable_list(
+                results["generalization_error"]
+            ),
+            "config": {
+                "dataset": dataset,
+                "use_merlin": use_merlin,
+                "batch_size": batch_size,
+                "num_epochs_training_embedding": num_epochs_training_embedding,
+                "lr": lr,
+                "distance": distance,
+                "samples_per_class": samples_per_class,
+                "num_repetitions": num_repetitions,
+            },
+        }
+
+        results_dir = PROJECT_ROOT / "results"
+        results_dir.mkdir(parents=True, exist_ok=True)
+        backend = "merlin" if use_merlin else "gate_based"
+        output_path = results_dir / f"figure_5_{backend}_results.json"
+        output_path.write_text(json.dumps(payload))
+
+    plot_figure_5(
+        generalization_error=payload["generalization_error"],
+        weights=weights,
+        run_dir=results_dir,
+        filename=f"figure_5_{backend}.pdf",
     )
 
 

@@ -316,9 +316,224 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             return loss_list, train_accs, test_accs
 
 
+########################################################################################################
+# Kernel
+########################################################################################################
+
+
 class NeuralEmbeddingGateBasedKernel(nn.Module):
-    def __init__(self):
+    def __init__(
+        self,
+        num_qubits: int,
+        classical_model: nn.Module,
+        quantum_embedding_layer: callable,
+    ):
+        """
+        The quantum_embedding_layer must not have other
+        trainable parameters that the ones in the input parameter of the function
+        """
         super().__init__()
+        self.num_qubits = num_qubits
+        self.classical_encoder = classical_model
+        self.quantum_embedding_layer = quantum_embedding_layer
+        self.dev = qml.device("default.qubit", wires=num_qubits)
+
+        # Creating the torch pennylane layers
+        self.distance_circuit_layer = self._create_distance_layer()
+        self.state_embedding_circuit = self._create_state_embedding_circuit()
+
+        # Creating the models
+        self.embedding_training_model = self._TrainingModule(self)
+        self.kernel_function = self._ComputeKernel(self)
+
+    def _create_distance_layer(self) -> torch.nn.Module:
+        @qml.qnode(self.dev, interface="torch")
+        def distance_qnode(inputs):
+            split = len(inputs) // 2
+            self.quantum_embedding_layer(inputs[0:split])
+            qml.adjoint(self.quantum_embedding_layer)(inputs[split:])
+            return qml.probs(wires=range(self.num_qubits))
+
+        return qml.qnn.TorchLayer(distance_qnode, weight_shapes={})
+
+    ### No TorchLayer as it does not support complex data
+    def _create_state_embedding_circuit(self):
+        @qml.qnode(self.dev, interface="torch")
+        def embedding_state(inputs):
+            self.quantum_embedding_layer(inputs)
+            return qml.density_matrix(wires=range(self.num_qubits))
+
+        return embedding_state
+
+    class _TrainingModule(nn.Module):
+        def __init__(self, main_model):
+            super().__init__()
+            object.__setattr__(self, "main_model", main_model)
+
+        def forward(self, x: torch.Tensor) -> torch.Tensor:
+            separation_index = x.size(1) // 2
+            data_1 = x[:, :separation_index]
+            data_2 = x[:, separation_index:]
+
+            data_1 = self.main_model.classical_encoder(data_1)
+            data_2 = self.main_model.classical_encoder(data_2)
+
+            data_1 = data_1.reshape(data_1.size(0), -1)
+            data_2 = data_2.reshape(data_2.size(0), -1)
+
+            x = torch.cat([data_1, data_2], dim=1)
+            probs = torch.vstack(
+                tuple(self.main_model.distance_circuit_layer(sample) for sample in x)
+            )
+            return probs[:, 0]
+
+    class _ComputeKernel(nn.Module):
+        def __init__(self, main_model):
+            super().__init__()
+            object.__setattr__(self, "main_model", main_model)
+
+        def forward(self, x_1: torch.Tensor, x_2: torch.Tensor) -> torch.Tensor:
+            with torch.no_grad():
+
+                data_1 = self.main_model.classical_encoder(x_1)
+                data_2 = self.main_model.classical_encoder(x_2)
+
+                data_1 = data_1.reshape(data_1.size(0), -1)
+                data_2 = data_2.reshape(data_2.size(0), -1)
+
+                x = torch.cat([data_1, data_2], dim=1)
+                probs = torch.vstack(
+                    tuple(
+                        self.main_model.distance_circuit_layer(sample) for sample in x
+                    )
+                )
+            return probs
+
+    def train_embedding(
+        self,
+        x_train: torch.Tensor,
+        y_train: torch.Tensor,
+        x_test: torch.Tensor,
+        y_test: torch.Tensor,
+        distance: str = "Trace",
+        batch_size: int = 25,
+        num_epochs: int = 100,
+        lr: float = 0.01,
+        opt: torch.optim = torch.optim.Adam,
+        return_data: bool = False,
+    ) -> list[list[float]] | None:
+        optimizer = opt(self.classical_encoder.parameters(), lr=lr)
+        criterion = torch.nn.MSELoss()
+
+        train_distance = []
+        test_distance = []
+        loss_list = []
+
+        if return_data:
+            # Separating the test value classes
+            X1_test = torch.stack(
+                [x_test[i] for i in range(len(x_test)) if y_test[i] == 1]
+            )
+            X0_test = torch.stack(
+                [x_test[i] for i in range(len(x_test)) if y_test[i] != 1]
+            )
+
+            # Separating the train value classes
+            X1_train = torch.stack(
+                [x_train[i] for i in range(len(x_train)) if y_train[i] == 1]
+            )
+            X0_train = torch.stack(
+                [x_train[i] for i in range(len(x_train)) if y_train[i] != 1]
+            )
+
+        for epoch in range(num_epochs):
+
+            # Training loop
+            self.embedding_training_model.train()
+
+            X1_batch, X2_batch, Y_batch = create_random_pairs(
+                batch_size, x_train, y_train
+            )
+
+            x = torch.concatenate([X1_batch, X2_batch], dim=1)
+
+            optimizer.zero_grad()
+            outputs = self.embedding_training_model(x)
+            loss = criterion(outputs, Y_batch)
+            loss_list.append(loss.cpu().detach().numpy())
+            loss.backward()
+            optimizer.step()
+
+            self.embedding_training_model.eval()
+
+            print(f"Epoch {epoch+1} had a loss of {loss_list[-1]}")
+
+            # Distance evaluation
+            if return_data:
+                with torch.no_grad():
+                    # Training distances
+                    rhos0_train = torch.stack(
+                        tuple(
+                            self.state_embedding_circuit(sample)
+                            for sample in self.classical_encoder(X0_train)
+                        ),
+                        dim=0,
+                    )
+                    rhos1_train = torch.stack(
+                        tuple(
+                            self.state_embedding_circuit(sample)
+                            for sample in self.classical_encoder(X1_train)
+                        ),
+                        dim=0,
+                    )
+                    rho0 = torch.sum(rhos0_train, dim=0) / len(X0_train)
+                    rho1 = torch.sum(rhos1_train, dim=0) / len(X1_train)
+                    train_distance.append(
+                        calculate_distance(rho0, rho1, distance=distance)
+                    )
+
+                    # Test distances
+                    rhos0_test = torch.stack(
+                        tuple(
+                            self.state_embedding_circuit(sample)
+                            for sample in self.classical_encoder(X0_test)
+                        ),
+                        dim=0,
+                    )
+                    rhos1_test = torch.stack(
+                        tuple(
+                            self.state_embedding_circuit(sample)
+                            for sample in self.classical_encoder(X1_test)
+                        ),
+                        dim=0,
+                    )
+                    rho0 = torch.sum(rhos0_test, dim=0) / len(X0_test)
+                    rho1 = torch.sum(rhos1_test, dim=0) / len(X1_test)
+                    test_distance.append(
+                        calculate_distance(rho0, rho1, distance=distance)
+                    )
+
+        if return_data:
+            return (
+                loss_list,
+                train_distance,
+                test_distance,
+                loss_lower_bound(rhos0_train, rhos1_train),
+                loss_lower_bound(rhos0_test, rhos1_test),
+            )
+
+    def compute_kernel_matrix(self, X_data: torch.Tensor):
+        output = torch.empty((X_data.size(0), X_data.size(0)))
+        for i in range(X_data.size(0)):
+            output[i, i] = self.kernel_function(X_data[i], X_data[i])
+            for j in range(i + 1, X_data.size(0)):
+                output[i, j] = self.kernel_function(X_data[i], X_data[j])
+        return output
+
+
+########################################################################################################
+# Creating basic models
+########################################################################################################
 
 
 def create_paper_models() -> tuple[
