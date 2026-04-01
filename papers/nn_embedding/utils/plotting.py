@@ -689,3 +689,135 @@ def plot_figure_5(
 
     fig.tight_layout()
     return _save_plot(fig, filename, run_dir)
+
+
+def plot_figure_6(
+    train_deviation: dict[str, Sequence[float]],
+    test_deviation: dict[str, Sequence[float]],
+    train_kernel_var: dict[str, Sequence[float]],
+    test_kernel_var: dict[str, Sequence[float]],
+    *,
+    figsize: tuple[float, float] = (10.0, 4.5),
+    run_dir: Path | None = None,
+    filename: str = "figure_6.pdf",
+) -> Path:
+    """Plot figure 6: deviation from 2-design and kernel variance.
+
+    Parameters
+    ----------
+    train_deviation, test_deviation
+        Mapping from method name to repeated scalar deviation values shaped
+        ``(num_repetitions,)``. Expected keys: ``"pca_nqe"``, ``"nqe"``,
+        ``"without_nqe"``.
+    train_kernel_var, test_kernel_var
+        Same structure for kernel variance values.
+    figsize, run_dir, filename
+        Standard plotting/output configuration.
+    """
+
+    required_keys = ("pca_nqe", "nqe", "without_nqe")
+    for name, d in (
+        ("train_deviation", train_deviation),
+        ("test_deviation", test_deviation),
+        ("train_kernel_var", train_kernel_var),
+        ("test_kernel_var", test_kernel_var),
+    ):
+        missing = [k for k in required_keys if k not in d]
+        if missing:
+            raise ValueError(f"Missing {name} for keys: {missing}")
+
+    labels = ("PCA-NQE", "NQE", "Without NQE")
+    x = np.arange(len(labels))
+    bar_width = 0.3
+
+    # ── (a) Deviation from 2-design ──
+    train_dev_means = np.array([np.mean(train_deviation[k]) for k in required_keys])
+    train_dev_stds = np.array([np.std(train_deviation[k]) for k in required_keys])
+    test_dev_means = np.array([np.mean(test_deviation[k]) for k in required_keys])
+    test_dev_stds = np.array([np.std(test_deviation[k]) for k in required_keys])
+
+    # ── (b) Kernel variance (train + test averaged) ──
+    kernel_means = np.array(
+        [
+            np.mean(list(train_kernel_var[k]) + list(test_kernel_var[k]))
+            for k in required_keys
+        ]
+    )
+    kernel_stds = np.array(
+        [
+            np.std(list(train_kernel_var[k]) + list(test_kernel_var[k]))
+            for k in required_keys
+        ]
+    )
+
+    fig, (ax_a, ax_b) = plt.subplots(1, 2, figsize=figsize)
+
+    # ── Panel (a) ──
+    bars_train = ax_a.bar(
+        x - bar_width / 2,
+        train_dev_means,
+        bar_width,
+        yerr=train_dev_stds,
+        color="black",
+        capsize=3,
+        label="Train data",
+        zorder=3,
+    )
+    bars_test = ax_a.bar(
+        x + bar_width / 2,
+        test_dev_means,
+        bar_width,
+        yerr=test_dev_stds,
+        color="white",
+        edgecolor="black",
+        linewidth=1.0,
+        capsize=3,
+        label="Test data",
+        zorder=3,
+    )
+
+    for bar, val in zip(bars_train, train_dev_means):
+        ax_a.text(
+            bar.get_x() + bar.get_width() / 2,
+            bar.get_height() + 0.008,
+            f"{val:.3f}",
+            ha="center",
+            va="bottom",
+            fontsize=8,
+        )
+    for bar, val in zip(bars_test, test_dev_means):
+        ax_a.text(
+            bar.get_x() + bar.get_width() / 2,
+            bar.get_height() + 0.008,
+            f"{val:.3f}",
+            ha="center",
+            va="bottom",
+            fontsize=8,
+        )
+
+    ax_a.set_xticks(x)
+    ax_a.set_xticklabels(labels)
+    ax_a.set_ylabel("Deviation from 2-design")
+    ax_a.set_ylim(bottom=0.0)
+    ax_a.legend(loc="upper left", frameon=True)
+    ax_a.set_title("(a)")
+
+    # ── Panel (b) ──
+    ax_b.bar(
+        x,
+        kernel_means,
+        bar_width * 1.5,
+        yerr=kernel_stds,
+        color="gray",
+        capsize=3,
+        zorder=3,
+    )
+
+    ax_b.set_xticks(x)
+    ax_b.set_xticklabels(labels)
+    ax_b.set_ylabel("Kernel Variance")
+    ax_b.set_ylim(bottom=0.0)
+    ax_b.set_title("(b)")
+
+    fig.tight_layout()
+    return _save_plot(fig, filename, run_dir)

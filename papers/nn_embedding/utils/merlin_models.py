@@ -175,4 +175,9 @@ def create_merlin_fig_5_models():
     )
     randomize_trainable_parameters(classical_model)
 
-    return embedder, classical_model_4, classical_model
+    return (
+        embedder,
+        classical_model_4,
+        classical_model,
+        sum([i.numel() for i in embedder.parameters()]),
+    )

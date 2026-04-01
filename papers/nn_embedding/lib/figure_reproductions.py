@@ -5,6 +5,7 @@ import merlin as ml
 import json
 import gc
 from copy import deepcopy
+from math import comb
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -40,11 +41,21 @@ from papers.nn_embedding.lib.training_without_nqe import (
     train_merlin_based,
 )
 from papers.nn_embedding.utils.data import data_load_and_process
-from papers.nn_embedding.utils.utils import to_serializable_list, get_error_bound
+from papers.nn_embedding.utils.utils import (
+    to_serializable_list,
+    get_error_bound,
+    TransparentModel,
+    assign_params,
+    state_vector_to_density_matrix,
+    two_design_deviation_gate_based,
+    two_design_deviation_photonics,
+    kernel_variance,
+)
 from papers.nn_embedding.utils.plotting import (
     plot_figure_2_bc,
     plot_figure_3,
     plot_figure_5,
+    plot_figure_6,
 )
 
 
@@ -763,7 +774,8 @@ def reproduce_figure_3(
     )
 
 
-# Following the paper even though the code does not say this, The goal is to study the generalization error upper bound changing with nqe
+# Following the paper even though the code does not say this,
+# The goal is to study the generalization error upper bound changing with nqe
 def reproduce_figure_5(
     dataset: str = "mnist",
     use_merlin: bool = False,
@@ -800,11 +812,29 @@ def reproduce_figure_5(
     for i in range(num_repetitions):
         ################################################################# MerLin-based
         if use_merlin:
-            embedder, classical_model_4, classical_model = create_merlin_fig_5_models()
+            embedder, classical_model_4, classical_model, dim = (
+                create_merlin_fig_5_models()
+            )
+            # Create a dataset that has the correct dimension for the encoder
+            (
+                x_train_PCA_no_NQE,
+                _,
+                y_train_PCA_no_NQE,
+                _,
+            ) = data_load_and_process(
+                dataset=dataset,
+                feature_reduction=dim,
+                classes=[0, 1],
+                samples_per_class=samples_per_class,
+            )
+            y_train_PCA_no_NQE_minus_one = [
+                -1 if y == 0 else 1 for y in y_train_PCA_no_NQE
+            ]
+
             # PCA_NQE
             print("PCA_NQE")
             model = NeuralEmbeddingMerLinKernel(
-                classical_model=deepcopy(classical_model_4),
+                classical_model=classical_model_4,
                 quantum_embedding_layer=deepcopy(embedder),
             )
             print("Training embedding")
@@ -853,12 +883,14 @@ def reproduce_figure_5(
 
             # No NQE
             model = NeuralEmbeddingMerLinKernel(
-                classical_model=deepcopy(classical_model_4),
+                classical_model=TransparentModel(),
                 quantum_embedding_layer=deepcopy(embedder),
             )
             print("Calculating the error")
-            kernel_matrix = model.compute_kernel_matrix(x_train_PCA4)
-            errors = get_error_bound(weights, kernel_matrix, y_train_PCA4_minus_one)
+            kernel_matrix = model.compute_kernel_matrix(x_train_PCA_no_NQE)
+            errors = get_error_bound(
+                weights, kernel_matrix, y_train_PCA_no_NQE_minus_one
+            )
             results["generalization_error"]["without_nqe"].append(errors)
 
             del model, embedder, classical_model_4, classical_model
@@ -870,7 +902,7 @@ def reproduce_figure_5(
             print("PCA_NQE")
             model = NeuralEmbeddingGateBasedKernel(
                 num_qubits=4,
-                classical_model=deepcopy(classical_model_4),
+                classical_model=classical_model_4,
                 quantum_embedding_layer=EmbeddingCallable.Four_QuantumEmbedding1,
             )
             print("Training embedding")
@@ -921,7 +953,7 @@ def reproduce_figure_5(
             # No NQE
             model = NeuralEmbeddingGateBasedKernel(
                 num_qubits=4,
-                classical_model=deepcopy(classical_model_4),
+                classical_model=TransparentModel(),
                 quantum_embedding_layer=EmbeddingCallable.Four_QuantumEmbedding1,
             )
             print("Calculating the error")
@@ -949,6 +981,7 @@ def reproduce_figure_5(
                 "distance": distance,
                 "samples_per_class": samples_per_class,
                 "num_repetitions": num_repetitions,
+                "weights": weights,
             },
         }
 
@@ -963,6 +996,346 @@ def reproduce_figure_5(
         weights=weights,
         run_dir=results_dir,
         filename=f"figure_5_{backend}.pdf",
+    )
+
+
+def reproduce_figure_6(
+    dataset: str = "mnist",
+    use_merlin: bool = False,
+    batch_size: int = 100,
+    num_epochs_training_embedding: int = 50,
+    lr: float = 0.01,
+    distance: str = "Trace",
+    samples_per_class: int = 150,
+    num_repetitions: int = 5,
+):
+    keys = ("pca_nqe", "nqe", "without_nqe")
+
+    results = {
+        "train_deviation": {key: [] for key in keys},
+        "train_deviation": {key: [] for key in keys},
+        "train_kernel_var": {key: [] for key in keys},
+        "test_kernel_var": {key: [] for key in keys},
+    }
+
+    # load the data
+    x_train_PCA4, x_test_PCA4, y_train_PCA4, y_test_PCA4 = data_load_and_process(
+        dataset=dataset,
+        feature_reduction=8,
+        classes=[0, 1],
+        samples_per_class=samples_per_class,
+    )
+    x_train, x_test, y_train, y_test = data_load_and_process(
+        dataset=dataset,
+        feature_reduction=False,
+        classes=[0, 1],
+        samples_per_class=samples_per_class,
+    )
+
+    for i in range(num_repetitions):
+        ################################################################# MerLin-based
+        if use_merlin:
+            embedder, classical_model_4, classical_model, dim = (
+                create_merlin_fig_5_models()
+            )
+            # Create a dataset that has the correct dimension for the encoder
+            (
+                x_train_PCA_no_NQE,
+                x_test_PCA_no_NQE,
+                _,
+                _,
+            ) = data_load_and_process(
+                dataset=dataset,
+                feature_reduction=dim,
+                classes=[0, 1],
+                samples_per_class=samples_per_class,
+            )
+
+            # PCA_NQE
+            print("PCA_NQE")
+            model = NeuralEmbeddingMerLinKernel(
+                classical_model=classical_model_4,
+                quantum_embedding_layer=deepcopy(embedder),
+            )
+            print("Training embedding")
+            model.train_embedding(
+                x_train=x_train_PCA4,
+                y_train=y_train_PCA4,
+                x_test=x_test_PCA4,
+                y_test=y_test_PCA4,
+                distance=distance,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_embedding,
+                lr=lr,
+                return_data=False,
+            )
+            print("Calculating the metrics")
+
+            classical_data = model.classical_encoder(x_train_PCA4)
+            states = assign_params(model.quantum_embedding_layer, classical_data)
+            rhos_train = state_vector_to_density_matrix(states)
+
+            classical_data = model.classical_encoder(x_test_PCA4)
+            states = assign_params(model.quantum_embedding_layer, classical_data)
+            rhos_test = state_vector_to_density_matrix(states)
+
+            train_kernel_matrix = model.compute_kernel_matrix(x_train_PCA4)
+            test_kernel_matrix = model.compute_kernel_matrix(x_test_PCA4)
+            results["train_deviation"]["pca_nqe"].append(
+                two_design_deviation_photonics(rhos_train, comb(6, 2), x_train.shape[0])
+            )
+            results["test_deviation"]["pca_nqe"].append(
+                two_design_deviation_photonics(rhos_test, comb(6, 2), x_test.shape[0])
+            )
+            results["train_kernel_var"]["pca_nqe"].append(
+                kernel_variance(train_kernel_matrix)
+            )
+            results["test_kernel_var"]["pca_nqe"].append(
+                kernel_variance(test_kernel_matrix)
+            )
+
+            del model
+
+            # NQE
+            print("NQE")
+            model = NeuralEmbeddingMerLinKernel(
+                classical_model=classical_model,
+                quantum_embedding_layer=deepcopy(embedder),
+            )
+            print("Training embedding")
+            model.train_embedding(
+                x_train=x_train,
+                y_train=y_train,
+                x_test=x_test,
+                y_test=y_test,
+                distance=distance,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_embedding,
+                lr=lr,
+                return_data=False,
+            )
+            print("Calculating the metrics")
+
+            classical_data = model.classical_encoder(x_train)
+            states = assign_params(model.quantum_embedding_layer, classical_data)
+            rhos_train = state_vector_to_density_matrix(states)
+
+            classical_data = model.classical_encoder(x_test)
+            states = assign_params(model.quantum_embedding_layer, classical_data)
+            rhos_test = state_vector_to_density_matrix(states)
+
+            train_kernel_matrix = model.compute_kernel_matrix(x_train)
+            test_kernel_matrix = model.compute_kernel_matrix(x_test)
+            results["train_deviation"]["pca_nqe"].append(
+                two_design_deviation_photonics(rhos_train, comb(6, 2), x_train.shape[0])
+            )
+            results["test_deviation"]["pca_nqe"].append(
+                two_design_deviation_photonics(rhos_test, comb(6, 2), x_test.shape[0])
+            )
+            results["train_kernel_var"]["pca_nqe"].append(
+                kernel_variance(train_kernel_matrix)
+            )
+            results["test_kernel_var"]["pca_nqe"].append(
+                kernel_variance(test_kernel_matrix)
+            )
+
+            del model
+
+            # No NQE
+            model = NeuralEmbeddingMerLinKernel(
+                classical_model=TransparentModel(),
+                quantum_embedding_layer=deepcopy(embedder),
+            )
+            print("Calculating the metrics")
+
+            classical_data = model.classical_encoder(x_train_PCA_no_NQE)
+            states = assign_params(model.quantum_embedding_layer, classical_data)
+            rhos_train = state_vector_to_density_matrix(states)
+
+            classical_data = model.classical_encoder(x_test_PCA_no_NQE)
+            states = assign_params(model.quantum_embedding_layer, classical_data)
+            rhos_test = state_vector_to_density_matrix(states)
+
+            train_kernel_matrix = model.compute_kernel_matrix(x_train_PCA_no_NQE)
+            test_kernel_matrix = model.compute_kernel_matrix(x_test_PCA_no_NQE)
+            results["train_deviation"]["pca_nqe"].append(
+                two_design_deviation_photonics(
+                    rhos_train, comb(6, 2), x_train_PCA_no_NQE.shape[0]
+                )
+            )
+            results["test_deviation"]["pca_nqe"].append(
+                two_design_deviation_photonics(
+                    rhos_test, comb(6, 2), x_test_PCA_no_NQE.shape[0]
+                )
+            )
+            results["train_kernel_var"]["pca_nqe"].append(
+                kernel_variance(train_kernel_matrix)
+            )
+            results["test_kernel_var"]["pca_nqe"].append(
+                kernel_variance(test_kernel_matrix)
+            )
+
+            del model, embedder, classical_model_4, classical_model
+
+        ################################################################# Gate-based
+        else:
+            classical_model_4, classical_model = create_gate_based_fig_5_models()
+            # PCA_NQE
+            print("PCA_NQE")
+            model = NeuralEmbeddingGateBasedKernel(
+                num_qubits=4,
+                classical_model=classical_model_4,
+                quantum_embedding_layer=EmbeddingCallable.Four_QuantumEmbedding1,
+            )
+            print("Training embedding")
+            model.train_embedding(
+                x_train=x_train_PCA4,
+                y_train=y_train_PCA4,
+                x_test=x_test_PCA4,
+                y_test=y_test_PCA4,
+                distance=distance,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_embedding,
+                lr=lr,
+                return_data=False,
+            )
+            print("Calculating the metrics")
+            classical_data = model.classical_encoder(x_train_PCA4)
+            states = assign_params(model.quantum_embedding_layer, classical_data)
+            rhos_train = state_vector_to_density_matrix(states)
+
+            classical_data = model.classical_encoder(x_test_PCA4)
+            states = assign_params(model.quantum_embedding_layer, classical_data)
+            rhos_test = state_vector_to_density_matrix(states)
+
+            train_kernel_matrix = model.compute_kernel_matrix(x_train_PCA4)
+            test_kernel_matrix = model.compute_kernel_matrix(x_test_PCA4)
+            results["train_deviation"]["pca_nqe"].append(
+                two_design_deviation_photonics(rhos_train, comb(6, 2), x_train.shape[0])
+            )
+            results["test_deviation"]["pca_nqe"].append(
+                two_design_deviation_photonics(rhos_test, comb(6, 2), x_test.shape[0])
+            )
+            results["train_kernel_var"]["pca_nqe"].append(
+                kernel_variance(train_kernel_matrix)
+            )
+            results["test_kernel_var"]["pca_nqe"].append(
+                kernel_variance(test_kernel_matrix)
+            )
+
+            del model
+
+            # NQE
+            print("NQE")
+            model = NeuralEmbeddingGateBasedKernel(
+                num_qubits=4,
+                classical_model=classical_model,
+                quantum_embedding_layer=EmbeddingCallable.Four_QuantumEmbedding1,
+            )
+            print("Training embedding")
+            model.train_embedding(
+                x_train=x_train,
+                y_train=y_train,
+                x_test=x_test,
+                y_test=y_test,
+                distance=distance,
+                batch_size=batch_size,
+                num_epochs=num_epochs_training_embedding,
+                lr=lr,
+                return_data=False,
+            )
+            print("Calculating the metrics")
+
+            classical_data = model.classical_encoder(x_train)
+            states = assign_params(model.quantum_embedding_layer, classical_data)
+            rhos_train = state_vector_to_density_matrix(states)
+
+            classical_data = model.classical_encoder(x_test)
+            states = assign_params(model.quantum_embedding_layer, classical_data)
+            rhos_test = state_vector_to_density_matrix(states)
+
+            train_kernel_matrix = model.compute_kernel_matrix(x_train)
+            test_kernel_matrix = model.compute_kernel_matrix(x_test)
+            results["train_deviation"]["pca_nqe"].append(
+                two_design_deviation_photonics(rhos_train, comb(6, 2), x_train.shape[0])
+            )
+            results["test_deviation"]["pca_nqe"].append(
+                two_design_deviation_photonics(rhos_test, comb(6, 2), x_test.shape[0])
+            )
+            results["train_kernel_var"]["pca_nqe"].append(
+                kernel_variance(train_kernel_matrix)
+            )
+            results["test_kernel_var"]["pca_nqe"].append(
+                kernel_variance(test_kernel_matrix)
+            )
+
+            # No NQE
+            model = NeuralEmbeddingGateBasedKernel(
+                num_qubits=4,
+                classical_model=TransparentModel(),
+                quantum_embedding_layer=EmbeddingCallable.Four_QuantumEmbedding1,
+            )
+            print("Calculating the metrics")
+            classical_data = model.classical_encoder(x_train_PCA4)
+            states = assign_params(model.quantum_embedding_layer, classical_data)
+            rhos_train = state_vector_to_density_matrix(states)
+
+            classical_data = model.classical_encoder(x_test_PCA4)
+            states = assign_params(model.quantum_embedding_layer, classical_data)
+            rhos_test = state_vector_to_density_matrix(states)
+
+            train_kernel_matrix = model.compute_kernel_matrix(x_train_PCA4)
+            test_kernel_matrix = model.compute_kernel_matrix(x_test_PCA4)
+            results["train_deviation"]["pca_nqe"].append(
+                two_design_deviation_photonics(rhos_train, comb(6, 2), x_train.shape[0])
+            )
+            results["test_deviation"]["pca_nqe"].append(
+                two_design_deviation_photonics(rhos_test, comb(6, 2), x_test.shape[0])
+            )
+            results["train_kernel_var"]["pca_nqe"].append(
+                kernel_variance(train_kernel_matrix)
+            )
+            results["test_kernel_var"]["pca_nqe"].append(
+                kernel_variance(test_kernel_matrix)
+            )
+
+            del model, embedder, classical_model_4, classical_model
+
+        print(f"Repetition {i+1} done")
+        gc.collect()
+
+        ################################################################# Writing the data
+
+        payload = {
+            "train_deviation": to_serializable_list(results["train_deviation"]),
+            "test_deviation": to_serializable_list(results["test_deviation"]),
+            "train_kernel_var": to_serializable_list(results["train_kernel_var"]),
+            "test_kernel_var": to_serializable_list(results["test_kernel_var"]),
+            "config": {
+                "dataset": dataset,
+                "use_merlin": use_merlin,
+                "batch_size": batch_size,
+                "num_epochs_training_embedding": num_epochs_training_embedding,
+                "lr": lr,
+                "distance": distance,
+                "samples_per_class": samples_per_class,
+                "num_repetitions": num_repetitions,
+            },
+        }
+
+        results_dir = PROJECT_ROOT / "results"
+        results_dir.mkdir(parents=True, exist_ok=True)
+        backend = "merlin" if use_merlin else "gate_based"
+        output_path = results_dir / f"figure_6_{backend}_results.json"
+        output_path.write_text(json.dumps(payload))
+
+    plot_figure_6(
+        train_deviation=payload["train_deviation"],
+        test_deviation=payload["test_deviation"],
+        train_kernel_var=payload["train_kernel_var"],
+        test_kernel_var=payload["test_kernel_var"],
+        run_dir=results_dir,
+        filename=f"figure_6_{backend}.pdf",
     )
 
 
