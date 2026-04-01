@@ -74,6 +74,7 @@ def run(mode="train", backend="sim:ascella") -> None:
     np.random.seed(0)
     ckpt_dir = "HQPINN/DHO/models"
     case_prefix = "dho_percperc"
+    results_dir = f"HQPINN/DHO/results/{case_prefix}"
 
     if mode == "train":
         model = MM_PINN()
@@ -83,7 +84,7 @@ def run(mode="train", backend="sim:ascella") -> None:
             optimizer=make_optimizer(model, lr=DHO_LR),
             n_epochs=DHO_N_EPOCHS,
             plot_every=DHO_PLOT_EVERY,
-            out_dir=f"HQPINN/DHO/results/{case_prefix}",
+            out_dir=results_dir,
             model_label="percperc",
         )
         os.makedirs(ckpt_dir, exist_ok=True)
@@ -101,7 +102,9 @@ def run(mode="train", backend="sim:ascella") -> None:
             model_factory=MM_PINN,
             make_time_grid=make_time_grid,
             exact_fn=u_exact,
-            plot_fn=plot_model_prediction,
+            plot_fn=lambda u_pred, u_ex, t: plot_model_prediction(
+                u_pred, u_ex, t, save_path=results_dir
+            ),
         )
 
     elif mode == "remote":
@@ -113,7 +116,9 @@ def run(mode="train", backend="sim:ascella") -> None:
             model_factory=MM_PINN,
             make_time_grid=make_time_grid,
             exact_fn=u_exact,
-            plot_fn=plot_model_prediction,
+            plot_fn=lambda u_pred, u_ex, t: plot_model_prediction(
+                u_pred, u_ex, t, save_path=results_dir
+            ),
         )
 
     else:

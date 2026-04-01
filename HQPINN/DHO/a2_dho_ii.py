@@ -34,17 +34,22 @@ class MM_PINN(nn.Module):
     Interferometer-Interferometer PINN with linear fusion to scalar output.
     """
 
-    def __init__(self, processor=None) -> None:
+    def __init__(
+        self,
+        processor=None,
+        *,
+        n_photons: int = 1,
+    ) -> None:
         super().__init__()
 
         # Two distinct quantum branches with independent parameters
         self.branch1 = BranchMerlin(
-            make_interf_qlayer(n_photons=1),
+            make_interf_qlayer(n_photons=n_photons),
             processor=processor,
             feature_map_kind="dho",
         )
         self.branch2 = BranchMerlin(
-            make_interf_qlayer(n_photons=1),
+            make_interf_qlayer(n_photons=n_photons),
             processor=processor,
             feature_map_kind="dho",
         )
@@ -77,7 +82,18 @@ def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_ii/
     print(f"Plot saved to: {save_path}")
 
 
-def run(mode="train", backend="sim:ascella") -> None:
+def _case_prefix(n_photons: int) -> str:
+    if n_photons == 1:
+        return "dho_ii"
+    return f"dho_ii_p{n_photons}"
+
+
+def run(
+    mode="train",
+    backend="sim:ascella",
+    *,
+    n_photons: int = 1,
+) -> None:
     """
     mode = "train" : train the model from scratch and save the checkpoint
     mode = "run"   : load the latest checkpoint and run inference (not implemented here, but can be added)
@@ -87,7 +103,8 @@ def run(mode="train", backend="sim:ascella") -> None:
     np.random.seed(0)
 
     ckpt_dir = "HQPINN/DHO/models/"
-    case_prefix = "dho_ii"
+    case_prefix = _case_prefix(n_photons)
+    results_dir = f"HQPINN/DHO/results/{case_prefix}"
 
     # ======================
     #  MODE TRAIN
@@ -95,7 +112,7 @@ def run(mode="train", backend="sim:ascella") -> None:
     if mode == "train":
         print("=== TRAINING MODE ===")
 
-        model = MM_PINN()
+        model = MM_PINN(n_photons=n_photons)
 
         train_oscillator_pinn(
             model=model,
@@ -103,7 +120,7 @@ def run(mode="train", backend="sim:ascella") -> None:
             optimizer=make_optimizer(model, lr=DHO_LR),
             n_epochs=DHO_N_EPOCHS,
             plot_every=DHO_PLOT_EVERY,
-            out_dir=f"HQPINN/DHO/results/{case_prefix}",
+            out_dir=results_dir,
             model_label="ii",
         )
 
@@ -125,10 +142,15 @@ def run(mode="train", backend="sim:ascella") -> None:
             backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=MM_PINN,
+            model_factory=lambda processor=None: MM_PINN(
+                processor=processor,
+                n_photons=n_photons,
+            ),
             make_time_grid=make_time_grid,
             exact_fn=u_exact,
-            plot_fn=plot_model_prediction,
+            plot_fn=lambda u_pred, u_ex, t: plot_model_prediction(
+                u_pred, u_ex, t, save_path=results_dir
+            ),
         )
 
     # ======================
@@ -140,10 +162,15 @@ def run(mode="train", backend="sim:ascella") -> None:
             backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=MM_PINN,
+            model_factory=lambda processor=None: MM_PINN(
+                processor=processor,
+                n_photons=n_photons,
+            ),
             make_time_grid=make_time_grid,
             exact_fn=u_exact,
-            plot_fn=plot_model_prediction,
+            plot_fn=lambda u_pred, u_ex, t: plot_model_prediction(
+                u_pred, u_ex, t, save_path=results_dir
+            ),
         )
 
     else:
