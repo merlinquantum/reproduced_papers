@@ -1,0 +1,12 @@
+{
+  "experiment": "see-cc",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "n_layers": 4,
+    "n_nodes": 10,
+    "n_qubits": null,
+    "n_photons": null,
+    "q_layers": null
+  }
+}

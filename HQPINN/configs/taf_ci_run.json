@@ -1,0 +1,10 @@
+{
+  "experiment": "taf-ci",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "n_layers": 4,
+    "n_nodes": 40,
+    "n_photons": 2
+  }
+}

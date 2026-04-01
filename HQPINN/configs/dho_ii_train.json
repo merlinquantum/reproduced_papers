@@ -1,0 +1,11 @@
+{
+  "experiment": "dho-ii",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_layers": null,
+    "n_nodes": null,
+    "n_qubits": null,
+    "n_photons": 1
+  }
+}

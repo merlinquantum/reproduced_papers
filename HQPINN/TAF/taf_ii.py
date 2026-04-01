@@ -1,7 +1,6 @@
 # taf_ii.py
 # Interferometer–Interferometer PINN for TAF (Sec. 3.3)
 
-import csv
 import os
 from datetime import datetime
 
@@ -20,8 +19,16 @@ from ..config import (
 )
 from ..layer_merlin import BranchMerlin, make_interf_qlayer
 from ..run_common import run_density_inference_mode
-from ..utils import count_trainable_params, get_latest_checkpoint, make_optimizer
+from ..utils import (
+    count_trainable_params,
+    get_latest_checkpoint,
+    make_optimizer,
+    set_global_seed,
+)
 from .core_taf import (
+    append_summary_row,
+    get_run_id_from_checkpoint,
+    load_training_row_for_run_id,
     load_training_sets,
     load_training_metrics_for_checkpoint,
     save_density_plot,
@@ -68,7 +75,7 @@ MODELS = [
 
 def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
     """Run TAF interferometer-interferometer models and write summary CSV."""
-    torch.manual_seed(0)
+    set_global_seed(0)
 
     data = load_training_sets()
 
@@ -76,108 +83,122 @@ def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
     U_in = torch.tensor([1.225, 272.15, 0.0, 288.15], dtype=DTYPE, device=DEVICE)
 
     ckpt_dir = "HQPINN/TAF/"
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
     if mode == "train":
-        os.makedirs("HQPINN/TAF/results", exist_ok=True)
-        out_csv = f"HQPINN/TAF/results/ii_summary_{timestamp}.csv"
+        summary_csv = "HQPINN/TAF/results/taf_summary.csv"
 
-        with open(out_csv, "w", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(
-                [
-                    "Model",
-                    "Size",
-                    "Trainable parameters",
-                    "Loss",
-                    "Boundary loss",
-                    "PDE loss",
-                ]
+        for label, n_photons_sel in MODELS:
+            set_global_seed(0)
+            print(f"\nTraining TAF-II model: {label} photons")
+
+            case_prefix = f"taf_ii_{label}"
+            model_dir = os.path.join(ckpt_dir, "models")
+            existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
+            if existing_ckpt is not None:
+                try:
+                    torch.load(existing_ckpt, map_location="cpu")
+                except Exception as exc:
+                    print(
+                        f"Checkpoint validation failed for {case_prefix} at "
+                        f"{existing_ckpt}: {exc}; retraining model."
+                    )
+                else:
+                    metrics = load_training_metrics_for_checkpoint(
+                        out_dir=f"HQPINN/TAF/results/{case_prefix}",
+                        model_label=f"ii_{label}",
+                        ckpt_path=existing_ckpt,
+                        case_prefix=case_prefix,
+                    )
+                    if metrics is not None:
+                        print(
+                            f"Skipping {case_prefix}: existing checkpoint found at "
+                            f"{existing_ckpt}"
+                        )
+                        n_params = count_trainable_params(II_PINN(n_photons=n_photons_sel))
+                        case_run_id = get_run_id_from_checkpoint(existing_ckpt, case_prefix)
+                        row = (
+                            load_training_row_for_run_id(
+                                out_dir=f"HQPINN/TAF/results/{case_prefix}",
+                                model_label=f"ii_{label}",
+                                run_id=case_run_id,
+                            )
+                            if case_run_id is not None
+                            else None
+                        )
+                        final_loss, _, _ = metrics
+                        append_summary_row(
+                            summary_csv,
+                            {
+                                "run_id": case_run_id or "",
+                                "Model": "ii",
+                                "Size": label,
+                                "step": row["step"] if row is not None else "",
+                                "elapsed (s)": row["elapsed (s)"] if row is not None else "",
+                                "Trainable parameters": n_params,
+                                "Loss": row["Loss"] if row is not None else f"{final_loss:.6e}",
+                                "BC": row["BC"] if row is not None else "",
+                                "F": row["F"] if row is not None else "",
+                                "L_in": row["L_in"] if row is not None else "",
+                                "L_out": row["L_out"] if row is not None else "",
+                                "L_wall": row["L_wall"] if row is not None else "",
+                                "L_per": row["L_per"] if row is not None else "",
+                            },
+                        )
+                        print(f"Reused latest metrics for {case_prefix} in summary CSV.")
+                        continue
+                    print(
+                        f"Existing checkpoint found for {case_prefix} at "
+                        f"{existing_ckpt}, but no matching metrics CSV was found; "
+                        f"retraining model."
+                    )
+
+            model = II_PINN(n_photons=n_photons_sel).to(DEVICE)
+            optimizer = make_optimizer(model, lr=TAF_LR)
+
+            final_loss, loss_bc, loss_f, n_params = train_taf(
+                model=model,
+                optimizer=optimizer,
+                n_epochs=TAF_ADAM_STEPS,
+                plot_every=TAF_PLOT_EVERY,
+                out_dir=f"HQPINN/TAF/results/{case_prefix}",
+                model_label=f"ii_{label}",
+                run_id=run_id,
+                data=data,
+                U_in=U_in,
+                lbfgs_steps=TAF_LBFGS_STEPS,
+                eps_lambda=TAF_EPSILON_LAMBDA,
+            )
+            row = load_training_row_for_run_id(
+                out_dir=f"HQPINN/TAF/results/{case_prefix}",
+                model_label=f"ii_{label}",
+                run_id=run_id,
             )
 
-            for label, n_photons_sel in MODELS:
-                print(f"\nTraining TAF-II model: {label} photons")
+            append_summary_row(
+                summary_csv,
+                {
+                    "run_id": run_id,
+                    "Model": "ii",
+                    "Size": label,
+                    "step": row["step"] if row is not None else "",
+                    "elapsed (s)": row["elapsed (s)"] if row is not None else "",
+                    "Trainable parameters": n_params,
+                    "Loss": row["Loss"] if row is not None else f"{final_loss:.6e}",
+                    "BC": row["BC"] if row is not None else f"{loss_bc:.6e}",
+                    "F": row["F"] if row is not None else f"{loss_f:.6e}",
+                    "L_in": row["L_in"] if row is not None else "",
+                    "L_out": row["L_out"] if row is not None else "",
+                    "L_wall": row["L_wall"] if row is not None else "",
+                    "L_per": row["L_per"] if row is not None else "",
+                },
+            )
 
-                case_prefix = f"taf_ii_{label}"
-                model_dir = os.path.join(ckpt_dir, "models")
-                existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
-                if existing_ckpt is not None:
-                    try:
-                        torch.load(existing_ckpt, map_location="cpu")
-                    except Exception as exc:
-                        print(
-                            f"Checkpoint validation failed for {case_prefix} at "
-                            f"{existing_ckpt}: {exc}; retraining model."
-                        )
-                    else:
-                        metrics = load_training_metrics_for_checkpoint(
-                            out_dir=f"HQPINN/TAF/results/{case_prefix}",
-                            model_label=f"ii_{label}",
-                            ckpt_path=existing_ckpt,
-                            case_prefix=case_prefix,
-                        )
-                        if metrics is not None:
-                            print(
-                                f"Skipping {case_prefix}: existing checkpoint found at "
-                                f"{existing_ckpt}"
-                            )
-                            n_params = count_trainable_params(
-                                II_PINN(n_photons=n_photons_sel)
-                            )
-                            final_loss, loss_bc, loss_f = metrics
-                            writer.writerow(
-                                [
-                                    "ii",
-                                    label,
-                                    n_params,
-                                    f"{final_loss:.6e}",
-                                    f"{loss_bc:.6e}",
-                                    f"{loss_f:.6e}",
-                                ]
-                            )
-                            print(
-                                f"Reused latest metrics for {case_prefix} in summary CSV."
-                            )
-                            continue
-                        print(
-                            f"Existing checkpoint found for {case_prefix} at "
-                            f"{existing_ckpt}, but no matching metrics CSV was found; "
-                            f"retraining model."
-                        )
+            os.makedirs(model_dir, exist_ok=True)
+            ckpt_path = os.path.join(model_dir, f"{case_prefix}_{run_id}.pt")
+            torch.save(model.state_dict(), ckpt_path)
+            print(f"Model saved to: {ckpt_path}")
 
-                model = II_PINN(n_photons=n_photons_sel).to(DEVICE)
-                optimizer = make_optimizer(model, lr=TAF_LR)
-
-                final_loss, loss_bc, loss_f, n_params = train_taf(
-                    model=model,
-                    optimizer=optimizer,
-                    n_epochs=TAF_ADAM_STEPS,
-                    plot_every=TAF_PLOT_EVERY,
-                    out_dir=f"HQPINN/TAF/results/{case_prefix}",
-                    model_label=f"ii_{label}",
-                    timestamp=timestamp,
-                    data=data,
-                    U_in=U_in,
-                    lbfgs_steps=TAF_LBFGS_STEPS,
-                    eps_lambda=TAF_EPSILON_LAMBDA,
-                )
-
-                writer.writerow(
-                    [
-                        "ii",
-                        label,
-                        n_params,
-                        f"{final_loss:.6e}",
-                        f"{loss_bc:.6e}",
-                        f"{loss_f:.6e}",
-                    ]
-                )
-
-                os.makedirs(model_dir, exist_ok=True)
-                ckpt_path = os.path.join(model_dir, f"{case_prefix}_{timestamp}.pt")
-                torch.save(model.state_dict(), ckpt_path)
-                print(f"Model saved to: {ckpt_path}")
-
-        print(f"Summary CSV saved to: {out_csv}")
+        print(f"Summary CSV appended to: {summary_csv}")
 
     elif mode == "run":
         case_prefix = f"taf_ii_{n_photons}"
@@ -186,8 +207,8 @@ def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            n_photons=n_photons,
-            timestamp=timestamp,
+            plot_label=f"{n_photons} photons",
+            run_id=run_id,
             model_factory=lambda processor=None: II_PINN(
                 n_photons=n_photons, processor=processor
             ),
@@ -201,8 +222,8 @@ def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
             backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            n_photons=n_photons,
-            timestamp=timestamp,
+            plot_label=f"{n_photons} photons",
+            run_id=run_id,
             model_factory=lambda processor=None: II_PINN(
                 n_photons=n_photons, processor=processor
             ),

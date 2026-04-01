@@ -27,6 +27,21 @@ from ..config import (
 matplotlib.use("Agg")
 
 
+DHO_SUMMARY_COLUMNS = [
+    "run_id",
+    "Model",
+    "Size",
+    "epoch",
+    "elapsed time (s)",
+    "Trainable parameters",
+    "Loss",
+    "IC_u",
+    "IC_du",
+    "PDE",
+    "Relative L2 error",
+]
+
+
 # ============================================================
 #  Damped oscillator (dho)
 # ============================================================
@@ -41,6 +56,16 @@ def u_exact(t_array: np.ndarray, mu: float = MU, k: float = K) -> np.ndarray:
     return np.exp(-mu * t_array / 2.0) * (
         np.cos(w * t_array) + (mu / (2.0 * w)) * np.sin(w * t_array)
     )
+
+
+def evaluate_dho_error(model: nn.Module, t_eval: torch.Tensor) -> float:
+    """Relative L2 error on the provided time grid."""
+    with torch.no_grad():
+        u_pred = model(t_eval).detach().cpu().numpy().reshape(-1)
+    u_ref = u_exact(t_eval.detach().cpu().numpy().reshape(-1))
+    num = np.sqrt(np.mean((u_pred - u_ref) ** 2))
+    den = np.sqrt(np.mean(u_ref**2))
+    return float(num / den)
 
 
 def derivative(u: torch.Tensor, t: torch.Tensor) -> torch.Tensor:
@@ -117,6 +142,7 @@ def train_oscillator_pinn(
     plot_every: int,
     out_dir: str,
     model_label: str,
+    run_id: str,
     lambda1: float = LAMBDA1,
     lambda2: float = LAMBDA2,
     loss_fn: Callable[
@@ -126,9 +152,8 @@ def train_oscillator_pinn(
 
     os.makedirs(out_dir, exist_ok=True)
 
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    png_path = os.path.join(out_dir, f"a2-dho-{model_label}_{timestamp}.png")
-    csv_path = os.path.join(out_dir, f"a2-dho-{model_label}_{timestamp}.csv")
+    png_path = os.path.join(out_dir, f"a2-dho-{model_label}_{run_id}.png")
+    csv_path = os.path.join(out_dir, f"a2-dho-{model_label}_{run_id}.csv")
 
     start = datetime.now()
     rows = []
@@ -141,7 +166,7 @@ def train_oscillator_pinn(
             u_ex = u_exact(t_np)
 
         epoch_png_path = os.path.join(
-            out_dir, f"a2-dho-{model_label}_{timestamp}_epoch-{epoch}.png"
+            out_dir, f"a2-dho-{model_label}_{run_id}_epoch-{epoch}.png"
         )
         fig, ax = plt.subplots(figsize=(10, 6))
         ax.plot(t_np, u_pred, label=f"PINN ({model_label})")
@@ -222,3 +247,45 @@ def train_oscillator_pinn(
 
     print(f"\nCSV saved to: {csv_path}")
     print(f"PNG saved to: {png_path}")
+
+
+def load_training_row_for_run_id(
+    out_dir: str,
+    model_label: str,
+    run_id: str,
+) -> dict[str, str] | None:
+    """Return the last row from the detailed CSV for a given model/run_id pair."""
+    csv_path = os.path.join(out_dir, f"a2-dho-{model_label}_{run_id}.csv")
+    if not os.path.isfile(csv_path):
+        return None
+
+    with open(csv_path, newline="") as f:
+        rows = list(csv.DictReader(f))
+    if not rows:
+        return None
+
+    return rows[-1]
+
+
+def get_run_id_from_checkpoint(ckpt_path: str, case_prefix: str) -> str | None:
+    """Extract the run_id encoded in a checkpoint filename."""
+    ckpt_name = os.path.basename(ckpt_path)
+    ckpt_prefix = f"{case_prefix}_"
+    ckpt_suffix = ".pt"
+    if not (ckpt_name.startswith(ckpt_prefix) and ckpt_name.endswith(ckpt_suffix)):
+        return None
+
+    run_id = ckpt_name[len(ckpt_prefix) : -len(ckpt_suffix)]
+    return run_id or None
+
+
+def append_summary_row(summary_path: str, row: dict[str, object]) -> None:
+    """Append one normalized DHO summary row, writing the header on first use."""
+    os.makedirs(os.path.dirname(summary_path), exist_ok=True)
+    write_header = not os.path.exists(summary_path) or os.path.getsize(summary_path) == 0
+
+    with open(summary_path, "a", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=DHO_SUMMARY_COLUMNS)
+        if write_header:
+            writer.writeheader()
+        writer.writerow({column: row.get(column, "") for column in DHO_SUMMARY_COLUMNS})

@@ -1,0 +1,9 @@
+{
+  "experiment": "see-cc",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_layers": 4,
+    "n_nodes": 10
+  }
+}

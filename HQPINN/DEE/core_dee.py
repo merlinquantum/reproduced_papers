@@ -41,6 +41,22 @@ from typing import Optional
 matplotlib.use("Agg")
 
 
+DEE_SUMMARY_COLUMNS = [
+    "run_id",
+    "Model",
+    "Size",
+    "epoch",
+    "elapsed (s)",
+    "Trainable parameters",
+    "Loss",
+    "IC",
+    "BC",
+    "F",
+    "Density error",
+    "Pressure error",
+]
+
+
 # ============================================================
 #  Discontinue Euler Equation (DEE)
 # ============================================================
@@ -269,18 +285,18 @@ def evaluate_dee_errors(model, nx: int = 1000):
 def load_training_loss_for_checkpoint(
     out_dir: str, model_label: str, ckpt_path: str, case_prefix: str
 ) -> Optional[float]:
-    """Return the final Loss from the CSV that matches the checkpoint timestamp."""
+    """Return the final Loss from the CSV that matches the checkpoint run_id."""
     ckpt_name = os.path.basename(ckpt_path)
     ckpt_prefix = f"{case_prefix}_"
     ckpt_suffix = ".pt"
     if not (ckpt_name.startswith(ckpt_prefix) and ckpt_name.endswith(ckpt_suffix)):
         return None
 
-    timestamp = ckpt_name[len(ckpt_prefix) : -len(ckpt_suffix)]
-    if not timestamp:
+    run_id = ckpt_name[len(ckpt_prefix) : -len(ckpt_suffix)]
+    if not run_id:
         return None
 
-    csv_path = os.path.join(out_dir, f"dee-{model_label}_{timestamp}.csv")
+    csv_path = os.path.join(out_dir, f"dee-{model_label}_{run_id}.csv")
     if not os.path.isfile(csv_path):
         return None
 
@@ -292,6 +308,48 @@ def load_training_loss_for_checkpoint(
     return float(rows[-1]["Loss"])
 
 
+def get_run_id_from_checkpoint(ckpt_path: str, case_prefix: str) -> Optional[str]:
+    """Extract the run_id encoded in a checkpoint filename."""
+    ckpt_name = os.path.basename(ckpt_path)
+    ckpt_prefix = f"{case_prefix}_"
+    ckpt_suffix = ".pt"
+    if not (ckpt_name.startswith(ckpt_prefix) and ckpt_name.endswith(ckpt_suffix)):
+        return None
+
+    run_id = ckpt_name[len(ckpt_prefix) : -len(ckpt_suffix)]
+    return run_id or None
+
+
+def load_training_row_for_run_id(
+    out_dir: str,
+    model_label: str,
+    run_id: str,
+) -> Optional[dict[str, str]]:
+    """Return the last row from the detailed CSV for a given model/run_id pair."""
+    csv_path = os.path.join(out_dir, f"dee-{model_label}_{run_id}.csv")
+    if not os.path.isfile(csv_path):
+        return None
+
+    with open(csv_path, newline="") as f:
+        rows = list(csv.DictReader(f))
+    if not rows:
+        return None
+
+    return rows[-1]
+
+
+def append_summary_row(summary_path: str, row: dict[str, object]) -> None:
+    """Append one normalized DEE summary row, writing the header on first use."""
+    os.makedirs(os.path.dirname(summary_path), exist_ok=True)
+    write_header = not os.path.exists(summary_path) or os.path.getsize(summary_path) == 0
+
+    with open(summary_path, "a", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=DEE_SUMMARY_COLUMNS)
+        if write_header:
+            writer.writeheader()
+        writer.writerow({column: row.get(column, "") for column in DEE_SUMMARY_COLUMNS})
+
+
 def train_dee(
     model: nn.Module,
     t_train,  # unused, kept for API consistency
@@ -300,7 +358,7 @@ def train_dee(
     plot_every: int,
     out_dir: str,
     model_label: str,
-    timestamp: str,
+    run_id: str,
     loss_fn: Callable[
         ..., Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
     ] = euler_loss_batched,
@@ -310,14 +368,14 @@ def train_dee(
 
     os.makedirs(out_dir, exist_ok=True)
 
-    rho_pred_png_path = os.path.join(out_dir, f"dee-{model_label}_{timestamp}_rho_pred.png")
+    rho_pred_png_path = os.path.join(out_dir, f"dee-{model_label}_{run_id}_rho_pred.png")
     rho_exact_png_path = os.path.join(
-        out_dir, f"dee-{model_label}_{timestamp}_rho_exact.png"
+        out_dir, f"dee-{model_label}_{run_id}_rho_exact.png"
     )
     rho_error_png_path = os.path.join(
-        out_dir, f"dee-{model_label}_{timestamp}_rho_error.png"
+        out_dir, f"dee-{model_label}_{run_id}_rho_error.png"
     )
-    csv_path = os.path.join(out_dir, f"dee-{model_label}_{timestamp}.csv")
+    csv_path = os.path.join(out_dir, f"dee-{model_label}_{run_id}.csv")
 
     # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
     #     optimizer, factor=0.5, patience=500
@@ -506,8 +564,8 @@ def save_density_plot(
     model: nn.Module,
     ckpt_dir: str,
     case_prefix: str,
-    n_photons: int,
-    timestamp: str,
+    plot_label: str | None,
+    run_id: str,
     backend: str,
 ) -> str:
 
@@ -540,7 +598,7 @@ def save_density_plot(
         results_dir = os.path.join(ckpt_dir, "results")
         os.makedirs(results_dir, exist_ok=True)
 
-        png_path = os.path.join(results_dir, f"{case_prefix}_{backend}_{timestamp}.png")
+        png_path = os.path.join(results_dir, f"{case_prefix}_{backend}_{run_id}.png")
 
         fig, ax = plt.subplots(figsize=(8, 5))
         cs = ax.contourf(
@@ -550,9 +608,11 @@ def save_density_plot(
             levels=50,
         )
         fig.colorbar(cs, ax=ax)
-        ax.set_title(
-            f"Predicted density $\\rho_\\text{{pred}}(x,t)$, {n_photons} photons, backend: {backend}"
-        )
+        title = "Predicted density $\\rho_\\text{pred}(x,t)$"
+        if plot_label:
+            title += f", {plot_label}"
+        title += f", backend: {backend}"
+        ax.set_title(title)
         ax.set_xlabel("x")
         ax.set_ylabel("t")
         fig.tight_layout()
@@ -564,7 +624,7 @@ def save_density_plot(
         model=model,
         ckpt_dir=ckpt_dir,
         case_prefix=case_prefix,
-        timestamp=timestamp,
+        run_id=run_id,
         backend=backend,
         t_slice=2.0,
     )
@@ -577,7 +637,7 @@ def save_rho_slice_plot(
     model: nn.Module,
     ckpt_dir: str,
     case_prefix: str,
-    timestamp: str,
+    run_id: str,
     backend: str,
     t_slice: float = 2.0,
 ) -> str:
@@ -603,7 +663,7 @@ def save_rho_slice_plot(
     t_tag = str(t_val).replace(".", "p")
     png_path = os.path.join(
         results_dir,
-        f"{case_prefix}_{backend}_{timestamp}_rho_x_t_{t_tag}.png",
+        f"{case_prefix}_{backend}_{run_id}_rho_x_t_{t_tag}.png",
     )
 
     fig, ax = plt.subplots(figsize=(8, 4))

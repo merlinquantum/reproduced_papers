@@ -41,6 +41,23 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 
+TAF_SUMMARY_COLUMNS = [
+    "run_id",
+    "Model",
+    "Size",
+    "step",
+    "elapsed (s)",
+    "Trainable parameters",
+    "Loss",
+    "BC",
+    "F",
+    "L_in",
+    "L_out",
+    "L_wall",
+    "L_per",
+]
+
+
 def load_points(path: str) -> torch.Tensor:
     """Load .npy points on configured dtype/device."""
     candidate = Path(path)
@@ -72,18 +89,18 @@ def load_training_sets() -> dict[str, torch.Tensor]:
 def load_training_metrics_for_checkpoint(
     out_dir: str, model_label: str, ckpt_path: str, case_prefix: str
 ) -> Optional[Tuple[float, float, float]]:
-    """Return (Loss, BC, F) from the CSV that matches the checkpoint timestamp."""
+    """Return (Loss, BC, F) from the CSV that matches the checkpoint run_id."""
     ckpt_name = os.path.basename(ckpt_path)
     ckpt_prefix = f"{case_prefix}_"
     ckpt_suffix = ".pt"
     if not (ckpt_name.startswith(ckpt_prefix) and ckpt_name.endswith(ckpt_suffix)):
         return None
 
-    timestamp = ckpt_name[len(ckpt_prefix) : -len(ckpt_suffix)]
-    if not timestamp:
+    run_id = ckpt_name[len(ckpt_prefix) : -len(ckpt_suffix)]
+    if not run_id:
         return None
 
-    csv_path = os.path.join(out_dir, f"taf-{model_label}_{timestamp}.csv")
+    csv_path = os.path.join(out_dir, f"taf-{model_label}_{run_id}.csv")
     if not os.path.isfile(csv_path):
         return None
 
@@ -94,6 +111,48 @@ def load_training_metrics_for_checkpoint(
 
     last = rows[-1]
     return float(last["Loss"]), float(last["BC"]), float(last["F"])
+
+
+def get_run_id_from_checkpoint(ckpt_path: str, case_prefix: str) -> Optional[str]:
+    """Extract the run_id encoded in a checkpoint filename."""
+    ckpt_name = os.path.basename(ckpt_path)
+    ckpt_prefix = f"{case_prefix}_"
+    ckpt_suffix = ".pt"
+    if not (ckpt_name.startswith(ckpt_prefix) and ckpt_name.endswith(ckpt_suffix)):
+        return None
+
+    run_id = ckpt_name[len(ckpt_prefix) : -len(ckpt_suffix)]
+    return run_id or None
+
+
+def load_training_row_for_run_id(
+    out_dir: str,
+    model_label: str,
+    run_id: str,
+) -> Optional[dict[str, str]]:
+    """Return the last row from the detailed CSV for a given model/run_id pair."""
+    csv_path = os.path.join(out_dir, f"taf-{model_label}_{run_id}.csv")
+    if not os.path.isfile(csv_path):
+        return None
+
+    with open(csv_path, newline="") as f:
+        rows = list(csv.DictReader(f))
+    if not rows:
+        return None
+
+    return rows[-1]
+
+
+def append_summary_row(summary_path: str, row: dict[str, object]) -> None:
+    """Append one normalized TAF summary row, writing the header on first use."""
+    os.makedirs(os.path.dirname(summary_path), exist_ok=True)
+    write_header = not os.path.exists(summary_path) or os.path.getsize(summary_path) == 0
+
+    with open(summary_path, "a", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=TAF_SUMMARY_COLUMNS)
+        if write_header:
+            writer.writeheader()
+        writer.writerow({column: row.get(column, "") for column in TAF_SUMMARY_COLUMNS})
 
 
 def unpack_primitives(
@@ -457,7 +516,7 @@ def train_taf(
     plot_every: int,
     out_dir: str,
     model_label: str,
-    timestamp: str,
+    run_id: str,
     data: dict[str, torch.Tensor],
     U_in: torch.Tensor,
     lbfgs_steps: int = TAF_LBFGS_STEPS,
@@ -471,7 +530,7 @@ def train_taf(
     """Train TAF model and return summary metrics."""
     os.makedirs(out_dir, exist_ok=True)
 
-    csv_path = os.path.join(out_dir, f"taf-{model_label}_{timestamp}.csv")
+    csv_path = os.path.join(out_dir, f"taf-{model_label}_{run_id}.csv")
 
     rows: list[list[str]] = []
     start = datetime.now()
@@ -587,12 +646,12 @@ def save_density_plot(
     model: nn.Module,
     ckpt_dir: str,
     case_prefix: str,
-    n_photons: int,
-    timestamp: str,
+    plot_label: str | None,
+    run_id: str,
     backend: str,
 ) -> str:
     """Save a rho(x,y) scatter plot for TAF inference."""
-    del n_photons  # kept for API compatibility with run_common helper
+    del plot_label  # TAF plots do not currently display a model-variant label.
     model.eval()
 
     data = load_training_sets()
@@ -617,7 +676,7 @@ def save_density_plot(
 
     results_dir = os.path.join(ckpt_dir, "results")
     os.makedirs(results_dir, exist_ok=True)
-    png_path = os.path.join(results_dir, f"{case_prefix}_{backend}_{timestamp}.png")
+    png_path = os.path.join(results_dir, f"{case_prefix}_{backend}_{run_id}.png")
 
     fig, ax = plt.subplots(figsize=(8, 4))
     sc = ax.scatter(x, y, c=rho, s=8, cmap="viridis")
@@ -636,7 +695,7 @@ def save_rho_slice_plot(
     model: nn.Module,
     ckpt_dir: str,
     case_prefix: str,
-    timestamp: str,
+    run_id: str,
     backend: str,
     second_coord: float = 2.0,
 ) -> str:
@@ -660,7 +719,7 @@ def save_rho_slice_plot(
     y_tag = str(y_slice).replace(".", "p")
     png_path = os.path.join(
         results_dir,
-        f"{case_prefix}_{backend}_{timestamp}_rho_x_{y_tag}.png",
+        f"{case_prefix}_{backend}_{run_id}_rho_x_{y_tag}.png",
     )
 
     fig, ax = plt.subplots(figsize=(8, 4))

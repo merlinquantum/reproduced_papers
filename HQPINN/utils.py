@@ -1,6 +1,7 @@
 # utils.py
 
 import os
+import random
 from typing import Callable, Optional
 
 import torch
@@ -18,6 +19,17 @@ from .config import (
     SEE_N_BC,
     SEE_N_F,
 )
+
+
+def set_global_seed(seed: int = 0) -> None:
+    """Seed Python, PyTorch, and NumPy RNGs when available."""
+    random.seed(seed)
+    torch.manual_seed(seed)
+    try:
+        import numpy as np
+    except ImportError:
+        return
+    np.random.seed(seed)
 
 
 def make_time_grid():

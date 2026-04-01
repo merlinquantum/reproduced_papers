@@ -204,18 +204,25 @@ class BranchPennylane(nn.Module):
         return out.to(DTYPE)
 
 
-def dho_feature_map(t: torch.Tensor) -> torch.Tensor:
+def dho_feature_map(
+    t: torch.Tensor,
+    n_qubits: int = DEFAULT_N_OUTPUTS,
+) -> torch.Tensor:
     """
     Feature map used for the DHO setting in the paper.
     """
+    if n_qubits < 1:
+        raise ValueError("n_qubits must be >= 1")
+
     if t.dim() == 2:
         t_flat = t.squeeze(-1)
     else:
         t_flat = t
 
     scale = np.pi
+    # Generalizes the original [1, 2, 3] harmonics to any qubit count.
     phi = torch.stack(
-        [scale * t_flat, 2.0 * scale * t_flat, 3.0 * scale * t_flat],
+        [k * scale * t_flat for k in range(1, n_qubits + 1)],
         dim=1,
     )
     return phi

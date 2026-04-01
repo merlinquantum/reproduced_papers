@@ -2,17 +2,25 @@
 # PennyLane–PennyLane PINN
 
 import os
-import csv
 from datetime import datetime
 
 import torch
 import torch.nn as nn
 
 from ..config import SEE_N_EPOCHS, SEE_PLOT_EVERY, N_LAYERS, SEE_LR, DTYPE
-from ..utils import count_trainable_params, get_latest_checkpoint, load_model, make_optimizer
+from ..utils import (
+    count_trainable_params,
+    get_latest_checkpoint,
+    load_model,
+    make_optimizer,
+    set_global_seed,
+)
 from .core_see import (
+    append_summary_row,
     evaluate_see_errors,
+    get_run_id_from_checkpoint,
     load_training_loss_for_checkpoint,
+    load_training_row_for_run_id,
     save_density_plot,
     train_see,
 )
@@ -32,29 +40,29 @@ class PP_PINN(nn.Module):
     a SEE-specific feature map.
     """
 
-    def __init__(self, n_layers: int = N_LAYERS) -> None:
+    def __init__(self, q_layers: int = N_LAYERS) -> None:
         super().__init__()
 
-        qblock_multi_1 = make_quantum_block_multiout(n_layers=n_layers)
-        qblock_multi_2 = make_quantum_block_multiout(n_layers=n_layers)
+        qblock_multi_1 = make_quantum_block_multiout(n_layers=q_layers)
+        qblock_multi_2 = make_quantum_block_multiout(n_layers=q_layers)
 
         # Two parallel PennyLane branches: each (x,t) -> (rho_like, u_like, p_like)
         self.branch1 = BranchPennylane(
             qblock_multi_1,
             feature_map=see_feature_map,
             output_as_column=False,
-            n_layers=n_layers,
+            n_layers=q_layers,
         )
         self.branch2 = BranchPennylane(
             qblock_multi_2,
             feature_map=see_feature_map,
             output_as_column=False,
-            n_layers=n_layers,
+            n_layers=q_layers,
         )
         self.fusion = nn.Linear(6, 3, dtype=DTYPE)
 
-        # Human-readable size label (e.g. "2", "3", "4")
-        self.size_label = f"{n_layers}"
+        # Human-readable quantum-depth label (e.g. "2", "3", "4")
+        self.size_label = f"{q_layers}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
         # Learned linear fusion of both branch outputs.
@@ -71,145 +79,186 @@ MODELS = [
 
 
 def _get_model_config(model_size: str) -> tuple[str, int]:
-    for label, size in MODELS:
+    for label, q_layers in MODELS:
         if label == model_size:
-            return label, size
+            return label, q_layers
     valid = ", ".join(label for label, _ in MODELS)
     raise ValueError(f"Unknown model_size='{model_size}'. Valid values: {valid}")
 
 
-def run(mode="train", backend="sim:ascella", model_size="2"):
+def _resolve_model_config(
+    *,
+    model_size: str | None = None,
+    q_layers: int | None = None,
+) -> tuple[str, int]:
+    if model_size is not None:
+        return _get_model_config(model_size)
+    if q_layers is None:
+        raise ValueError("SEE-PP requires either model_size or q_layers")
+    return str(q_layers), q_layers
+
+
+def run(
+    mode="train",
+    backend="sim:ascella",
+    model_size="2",
+    *,
+    q_layers: int | None = None,
+):
     """Run all SEE PennyLane–PennyLane models and write summary CSV."""
-    torch.manual_seed(0)
+    set_global_seed(0)
 
     ckpt_dir = "HQPINN/SEE/"
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
     if mode == "train":
-        out_csv = f"HQPINN/SEE/results/pp_summary_{timestamp}.csv"
-        os.makedirs("HQPINN/SEE/results", exist_ok=True)
+        summary_csv = "HQPINN/SEE/results/see_summary.csv"
+        if q_layers is not None:
+            models = [_resolve_model_config(q_layers=q_layers)]
+        else:
+            models = MODELS
+        for label, q_layers in models:
+            set_global_seed(0)
+            print(f"\nTraining SEE-PP model: {label} q_layers={q_layers}")
 
-        with open(out_csv, "w", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(
-                [
-                    "Model",
-                    "Size",
-                    "Trainable parameters",
-                    "Loss",
-                    "Density error",
-                    "Pressure error",
-                ]
-            )
-
-            for label, size in MODELS:
-                print(f"\nTraining SEE-PP model: {label} size={size}")
-
-                case_prefix = f"see_pp_{label}"
-                model_dir = os.path.join(ckpt_dir, "models")
-                existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
-                if existing_ckpt is not None:
-                    final_loss = load_training_loss_for_checkpoint(
-                        out_dir=f"HQPINN/SEE/results/{case_prefix}",
-                        model_label=f"pp_{label}",
-                        ckpt_path=existing_ckpt,
-                        case_prefix=case_prefix,
-                    )
-                    if final_loss is not None:
-                        print(
-                            f"Skipping {case_prefix}: existing checkpoint found at "
-                            f"{existing_ckpt}"
-                        )
-                        try:
-                            model = load_model(
-                                existing_ckpt,
-                                lambda processor=None: PP_PINN(n_layers=size),
-                            )
-                            err_rho, err_p = evaluate_see_errors(model)
-                        except Exception as exc:
-                            print(
-                                f"Checkpoint validation failed for {case_prefix} at "
-                                f"{existing_ckpt}: {exc}; retraining model."
-                            )
-                        else:
-                            n_params = count_trainable_params(model)
-                            writer.writerow(
-                                [
-                                    "pp",
-                                    label,
-                                    n_params,
-                                    f"{final_loss:.6e}",
-                                    f"{err_rho:.6e}",
-                                    f"{err_p:.6e}",
-                                ]
-                            )
-                            print(
-                                f"Reused latest metrics for {case_prefix} in summary CSV."
-                            )
-                            continue
-                    print(
-                        f"Existing checkpoint found for {case_prefix} at "
-                        f"{existing_ckpt}, but no matching loss CSV was found; "
-                        f"retraining model."
-                    )
-
-                model = PP_PINN(n_layers=size)
-                optimizer = make_optimizer(model, lr=SEE_LR)
-
-                final_loss, err_rho, err_p, n_params = train_see(
-                    model=model,
-                    t_train=None,  # kept for API consistency
-                    optimizer=optimizer,
-                    n_epochs=SEE_N_EPOCHS,
-                    plot_every=SEE_PLOT_EVERY,
+            case_prefix = f"see_pp_{label}"
+            model_dir = os.path.join(ckpt_dir, "models")
+            existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
+            if existing_ckpt is not None:
+                final_loss = load_training_loss_for_checkpoint(
                     out_dir=f"HQPINN/SEE/results/{case_prefix}",
                     model_label=f"pp_{label}",
-                    timestamp=timestamp,
+                    ckpt_path=existing_ckpt,
+                    case_prefix=case_prefix,
+                )
+                if final_loss is not None:
+                    print(
+                        f"Skipping {case_prefix}: existing checkpoint found at "
+                        f"{existing_ckpt}"
+                    )
+                    try:
+                        model = load_model(
+                            existing_ckpt,
+                            lambda processor=None: PP_PINN(q_layers=q_layers),
+                        )
+                        err_rho, err_p = evaluate_see_errors(model)
+                    except Exception as exc:
+                        print(
+                            f"Checkpoint validation failed for {case_prefix} at "
+                            f"{existing_ckpt}: {exc}; retraining model."
+                        )
+                    else:
+                        n_params = count_trainable_params(model)
+                        case_run_id = get_run_id_from_checkpoint(existing_ckpt, case_prefix)
+                        row = (
+                            load_training_row_for_run_id(
+                                out_dir=f"HQPINN/SEE/results/{case_prefix}",
+                                model_label=f"pp_{label}",
+                                run_id=case_run_id,
+                            )
+                            if case_run_id is not None
+                            else None
+                        )
+                        append_summary_row(
+                            summary_csv,
+                            {
+                                "Model": "pp",
+                                "Size": label,
+                                "run_id": case_run_id or "",
+                                "epoch": row["epoch"] if row is not None else "",
+                                "elapsed (s)": row["elapsed (s)"] if row is not None else "",
+                                "Trainable parameters": n_params,
+                                "Loss": row["Loss"] if row is not None else f"{final_loss:.6e}",
+                                "IC": row["IC"] if row is not None else "",
+                                "BC": row["BC"] if row is not None else "",
+                                "F": row["F"] if row is not None else "",
+                                "Density error": f"{err_rho:.6e}",
+                                "Pressure error": f"{err_p:.6e}",
+                            },
+                        )
+                        print(f"Reused latest metrics for {case_prefix} in summary CSV.")
+                        continue
+                print(
+                    f"Existing checkpoint found for {case_prefix} at "
+                    f"{existing_ckpt}, but no matching loss CSV was found; "
+                    f"retraining model."
                 )
 
-                writer.writerow(
-                    [
-                        "pp",  # model type: PennyLane–PennyLane
-                        label,  # size label ("2", "3", "4")
-                        n_params,
-                        f"{final_loss:.6e}",
-                        f"{err_rho:.6e}",
-                        f"{err_p:.6e}",
-                    ]
-                )
+            model = PP_PINN(q_layers=q_layers)
+            optimizer = make_optimizer(model, lr=SEE_LR)
 
-                os.makedirs(model_dir, exist_ok=True)
-                ckpt_path = os.path.join(model_dir, f"{case_prefix}_{timestamp}.pt")
-                torch.save(model.state_dict(), ckpt_path)
-                print(f"Model saved to: {ckpt_path}")
+            final_loss, err_rho, err_p, n_params = train_see(
+                model=model,
+                t_train=None,  # kept for API consistency
+                optimizer=optimizer,
+                n_epochs=SEE_N_EPOCHS,
+                plot_every=SEE_PLOT_EVERY,
+                out_dir=f"HQPINN/SEE/results/{case_prefix}",
+                model_label=f"pp_{label}",
+                run_id=run_id,
+            )
+            row = load_training_row_for_run_id(
+                out_dir=f"HQPINN/SEE/results/{case_prefix}",
+                model_label=f"pp_{label}",
+                run_id=run_id,
+            )
 
-        print(f"Summary CSV saved to: {out_csv}")
+            append_summary_row(
+                summary_csv,
+                {
+                    "Model": "pp",
+                    "Size": label,
+                    "run_id": run_id,
+                    "epoch": row["epoch"] if row is not None else "",
+                    "elapsed (s)": row["elapsed (s)"] if row is not None else "",
+                    "Trainable parameters": n_params,
+                    "Loss": row["Loss"] if row is not None else f"{final_loss:.6e}",
+                    "IC": row["IC"] if row is not None else "",
+                    "BC": row["BC"] if row is not None else "",
+                    "F": row["F"] if row is not None else "",
+                    "Density error": f"{err_rho:.6e}",
+                    "Pressure error": f"{err_p:.6e}",
+                },
+            )
+
+            os.makedirs(model_dir, exist_ok=True)
+            ckpt_path = os.path.join(model_dir, f"{case_prefix}_{run_id}.pt")
+            torch.save(model.state_dict(), ckpt_path)
+            print(f"Model saved to: {ckpt_path}")
+
+        print(f"Summary CSV appended to: {summary_csv}")
 
     elif mode == "run":
-        label, size = _get_model_config(model_size)
+        label, q_layers = _resolve_model_config(
+            model_size=model_size if q_layers is None else None,
+            q_layers=q_layers,
+        )
         case_prefix = f"see_pp_{label}"
         run_density_inference_mode(
             mode="run",
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            n_photons=size,
-            timestamp=timestamp,
-            model_factory=lambda processor=None: PP_PINN(n_layers=size),
+            plot_label=f"q_layers={q_layers}",
+            run_id=run_id,
+            model_factory=lambda processor=None: PP_PINN(q_layers=q_layers),
             save_plot_fn=save_density_plot,
         )
 
     elif mode == "remote":
         print("Remote mode is not available for SEE-PP. Falling back to local run mode.")
-        label, size = _get_model_config(model_size)
+        label, q_layers = _resolve_model_config(
+            model_size=model_size if q_layers is None else None,
+            q_layers=q_layers,
+        )
         case_prefix = f"see_pp_{label}"
         run_density_inference_mode(
             mode="run",
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            n_photons=size,
-            timestamp=timestamp,
-            model_factory=lambda processor=None: PP_PINN(n_layers=size),
+            plot_label=f"q_layers={q_layers}",
+            run_id=run_id,
+            model_factory=lambda processor=None: PP_PINN(q_layers=q_layers),
             save_plot_fn=save_density_plot,
         )
 

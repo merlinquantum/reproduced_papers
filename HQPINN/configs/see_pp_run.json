@@ -1,0 +1,12 @@
+{
+  "experiment": "see-pp",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "n_layers": null,
+    "n_nodes": null,
+    "n_qubits": null,
+    "n_photons": null,
+    "q_layers": 2
+  }
+}

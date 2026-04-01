@@ -3,7 +3,417 @@ Simple CLI dispatcher for HQPINN experiments.
 
 Usage:
     python -m HQPINN
+    python -m HQPINN --config HQPINN/configs/dho_cc_run.json
 """
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+from typing import Any
+
+
+CONFIGS_DIR = Path(__file__).resolve().parent / "configs"
+DEFAULT_CONFIG_PATH = CONFIGS_DIR / "defaults.json"
+
+
+def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
+    merged = dict(base)
+    for key, value in override.items():
+        if isinstance(merged.get(key), dict) and isinstance(value, dict):
+            merged[key] = _merge_dicts(merged[key], value)
+        else:
+            merged[key] = value
+    return merged
+
+
+def _load_json(path: Path) -> dict[str, Any]:
+    with path.open(encoding="utf-8") as f:
+        data = json.load(f)
+    if not isinstance(data, dict):
+        raise ValueError(f"Expected a JSON object in {path}")
+    return data
+
+
+def _load_config(config_path: str) -> dict[str, Any]:
+    defaults = _load_json(DEFAULT_CONFIG_PATH)
+
+    path = Path(config_path)
+    if not path.is_absolute():
+        path = Path.cwd() / path
+    config = _load_json(path)
+    merged = _merge_dicts(defaults, config)
+
+    experiment = merged.get("experiment")
+    if not experiment:
+        raise ValueError("Config must define 'experiment'")
+
+    mode = merged.get("mode")
+    if mode not in {"train", "run", "remote"}:
+        raise ValueError("Config 'mode' must be 'train', 'run', or 'remote'")
+
+    backend = merged.get("backend")
+    if not isinstance(backend, str) or not backend:
+        raise ValueError("Config must define a non-empty string 'backend'")
+
+    return merged
+
+
+def _require_model_int(
+    model_config: dict[str, Any],
+    key: str,
+    experiment: str,
+) -> int:
+    value = model_config.get(key)
+    if value is None:
+        raise ValueError(f"{experiment} config requires model.{key}")
+    return int(value)
+
+
+def _build_model_size(*parts: int) -> str:
+    return "-".join(str(part) for part in parts)
+
+
+def _run_from_config(config: dict[str, Any]) -> None:
+    experiment = config["experiment"]
+    mode = config["mode"]
+    backend = config["backend"]
+    model_config = config.get("model") or {}
+
+    if experiment == "dho-cc":
+        n_layers = model_config.get("n_layers")
+        n_nodes = model_config.get("n_nodes")
+        if n_layers is None or n_nodes is None:
+            raise ValueError(
+                "dho-cc config requires model.n_layers and model.n_nodes"
+            )
+
+        from .DHO.a2_dho_cc import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            n_layers=int(n_layers),
+            n_nodes=int(n_nodes),
+        )
+        return
+
+    if experiment == "dho-cp":
+        n_layers = model_config.get("n_layers")
+        n_nodes = model_config.get("n_nodes")
+        n_qubits = model_config.get("n_qubits")
+        if n_layers is None or n_nodes is None or n_qubits is None:
+            raise ValueError(
+                "dho-cp config requires model.n_layers, model.n_nodes, and model.n_qubits"
+            )
+
+        from .DHO.a2_dho_cp import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            n_layers=int(n_layers),
+            n_nodes=int(n_nodes),
+            n_qubits=int(n_qubits),
+        )
+        return
+
+    if experiment == "dho-pp":
+        n_qubits = model_config.get("n_qubits")
+        if n_qubits is None:
+            raise ValueError("dho-pp config requires model.n_qubits")
+
+        from .DHO.a2_dho_pp import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            n_qubits=int(n_qubits),
+        )
+        return
+
+    if experiment == "dho-ci":
+        n_layers = model_config.get("n_layers")
+        n_nodes = model_config.get("n_nodes")
+        n_photons = model_config.get("n_photons")
+        if n_layers is None or n_nodes is None or n_photons is None:
+            raise ValueError(
+                "dho-ci config requires model.n_layers, model.n_nodes, and model.n_photons"
+            )
+
+        from .DHO.a2_dho_ci import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            n_layers=int(n_layers),
+            n_nodes=int(n_nodes),
+            n_photons=int(n_photons),
+        )
+        return
+
+    if experiment == "dho-cperc":
+        n_layers = model_config.get("n_layers")
+        n_nodes = model_config.get("n_nodes")
+        if n_layers is None or n_nodes is None:
+            raise ValueError(
+                "dho-cperc config requires model.n_layers and model.n_nodes"
+            )
+
+        from .DHO.a2_dho_cperc import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            n_layers=int(n_layers),
+            n_nodes=int(n_nodes),
+        )
+        return
+
+    if experiment == "dho-ii":
+        n_photons = model_config.get("n_photons")
+        if n_photons is None:
+            raise ValueError("dho-ii config requires model.n_photons")
+
+        from .DHO.a2_dho_ii import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            n_photons=int(n_photons),
+        )
+        return
+
+    if experiment == "dho-percperc":
+        from .DHO.a2_dho_percperc import run
+
+        run(
+            mode=mode,
+            backend=backend,
+        )
+        return
+
+    if experiment == "see-cc":
+        n_layers = model_config.get("n_layers")
+        n_nodes = model_config.get("n_nodes")
+        if n_layers is None or n_nodes is None:
+            raise ValueError(
+                "see-cc config requires model.n_layers and model.n_nodes"
+            )
+
+        from .SEE.see_cc import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            n_layers=int(n_layers),
+            n_nodes=int(n_nodes),
+        )
+        return
+
+    if experiment == "see-ci":
+        n_layers = model_config.get("n_layers")
+        n_nodes = model_config.get("n_nodes")
+        n_photons = model_config.get("n_photons")
+        if n_layers is None or n_nodes is None or n_photons is None:
+            raise ValueError(
+                "see-ci config requires model.n_layers, model.n_nodes, and model.n_photons"
+            )
+
+        from .SEE.see_ci import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            n_layers=int(n_layers),
+            n_nodes=int(n_nodes),
+            n_photons=int(n_photons),
+        )
+        return
+
+    if experiment == "see-cp":
+        n_layers = model_config.get("n_layers")
+        n_nodes = model_config.get("n_nodes")
+        q_layers = model_config.get("q_layers")
+        if n_layers is None or n_nodes is None or q_layers is None:
+            raise ValueError(
+                "see-cp config requires model.n_layers, model.n_nodes, and model.q_layers"
+            )
+
+        from .SEE.see_cp import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            n_layers=int(n_layers),
+            n_nodes=int(n_nodes),
+            q_layers=int(q_layers),
+        )
+        return
+
+    if experiment == "see-ii":
+        n_photons = model_config.get("n_photons")
+        if n_photons is None:
+            raise ValueError("see-ii config requires model.n_photons")
+
+        from .SEE.see_ii import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            n_photons=int(n_photons),
+        )
+        return
+
+    if experiment == "see-pp":
+        q_layers = model_config.get("q_layers")
+        if q_layers is None:
+            raise ValueError("see-pp config requires model.q_layers")
+
+        from .SEE.see_pp import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            q_layers=int(q_layers),
+        )
+        return
+
+    if experiment == "dee-cc":
+        n_layers = _require_model_int(model_config, "n_layers", experiment)
+        n_nodes = _require_model_int(model_config, "n_nodes", experiment)
+
+        from .DEE.dee_cc import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            model_size=_build_model_size(n_nodes, n_layers),
+        )
+        return
+
+    if experiment == "dee-ci":
+        n_layers = _require_model_int(model_config, "n_layers", experiment)
+        n_nodes = _require_model_int(model_config, "n_nodes", experiment)
+        n_photons = _require_model_int(model_config, "n_photons", experiment)
+
+        from .DEE.dee_ci import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            model_size=_build_model_size(n_nodes, n_layers, n_photons),
+        )
+        return
+
+    if experiment == "dee-cp":
+        n_layers = _require_model_int(model_config, "n_layers", experiment)
+        n_nodes = _require_model_int(model_config, "n_nodes", experiment)
+        q_layers = _require_model_int(model_config, "q_layers", experiment)
+
+        from .DEE.dee_cp import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            model_size=_build_model_size(n_nodes, n_layers, q_layers),
+        )
+        return
+
+    if experiment == "dee-ii":
+        n_photons = _require_model_int(model_config, "n_photons", experiment)
+
+        from .DEE.dee_ii import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            n_photons=n_photons,
+        )
+        return
+
+    if experiment == "dee-pp":
+        q_layers = _require_model_int(model_config, "q_layers", experiment)
+
+        from .DEE.dee_pp import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            model_size=_build_model_size(q_layers),
+        )
+        return
+
+    if experiment == "taf-cc":
+        n_layers = _require_model_int(model_config, "n_layers", experiment)
+        n_nodes = _require_model_int(model_config, "n_nodes", experiment)
+
+        from .TAF.taf_cc import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            model_size=_build_model_size(n_nodes, n_layers),
+        )
+        return
+
+    if experiment == "taf-ci":
+        n_layers = _require_model_int(model_config, "n_layers", experiment)
+        n_nodes = _require_model_int(model_config, "n_nodes", experiment)
+        n_photons = _require_model_int(model_config, "n_photons", experiment)
+
+        from .TAF.taf_ci import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            model_size=_build_model_size(n_nodes, n_layers, n_photons),
+        )
+        return
+
+    if experiment == "taf-cp":
+        n_layers = _require_model_int(model_config, "n_layers", experiment)
+        n_nodes = _require_model_int(model_config, "n_nodes", experiment)
+        q_layers = _require_model_int(model_config, "q_layers", experiment)
+
+        from .TAF.taf_cp import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            model_size=_build_model_size(n_nodes, n_layers, q_layers),
+        )
+        return
+
+    if experiment == "taf-ii":
+        n_photons = _require_model_int(model_config, "n_photons", experiment)
+
+        from .TAF.taf_ii import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            n_photons=n_photons,
+        )
+        return
+
+    if experiment == "taf-pp":
+        q_layers = _require_model_int(model_config, "q_layers", experiment)
+
+        from .TAF.taf_pp import run
+
+        run(
+            mode=mode,
+            backend=backend,
+            model_size=_build_model_size(q_layers),
+        )
+        return
+
+    raise NotImplementedError(
+        "Unsupported config-driven experiment: "
+        f"{experiment}. Expected one of the DHO, SEE, DEE, or TAF variants."
+    )
 
 
 def _ask_mode() -> str:
@@ -20,8 +430,7 @@ def _ask_backend(mode: str) -> str:
     return "local"
 
 
-def main() -> None:
-    """Entry point for the HQPINN command-line interface."""
+def _run_interactive() -> None:
     print("Available experiments:")
     print("  dho-cc          -> DHO, Classical–Classical)")
     print("  dho-ci          -> DHO, Classical-Interferometer")
@@ -306,3 +715,22 @@ def main() -> None:
             "dho-ii, dho-percperc, dho-ci, see-cc, see-pp, see-ci, see-ii, see-cp, "
             "dee-cc, dee-ci, dee-cp, dee-ii, dee-pp, taf-cc, taf-ci, taf-cp, taf-ii, taf-pp."
         )
+
+
+def main(argv: list[str] | None = None) -> None:
+    """Entry point for the HQPINN command-line interface."""
+    parser = argparse.ArgumentParser(description="Run HQPINN experiments.")
+    parser.add_argument(
+        "--config",
+        type=str,
+        default=None,
+        help="Path to a JSON config file. Currently supported for DHO and SEE variants.",
+    )
+    args = parser.parse_args(argv)
+
+    if args.config is not None:
+        config = _load_config(args.config)
+        _run_from_config(config)
+        return
+
+    _run_interactive()

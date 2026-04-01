@@ -3,7 +3,6 @@
 
 import os
 from datetime import datetime
-import csv
 
 import torch
 import torch.nn as nn
@@ -14,10 +13,19 @@ from ..config import (
     DEE_PLOT_EVERY,
     DTYPE,
 )
-from ..utils import count_trainable_params, get_latest_checkpoint, load_model, make_optimizer
+from ..utils import (
+    count_trainable_params,
+    get_latest_checkpoint,
+    load_model,
+    make_optimizer,
+    set_global_seed,
+)
 from .core_dee import (
+    append_summary_row,
     evaluate_dee_errors,
+    get_run_id_from_checkpoint,
     load_training_loss_for_checkpoint,
+    load_training_row_for_run_id,
     save_density_plot,
     train_dee,
 )
@@ -73,11 +81,11 @@ MODELS = [
 
 def run(mode="train", backend="sim:ascella", n_photons=2):
     """Run all DEE Interferometer-Interferometer models and write summary CSV."""
-    torch.manual_seed(0)
+    set_global_seed(0)
 
     ckpt_dir = "HQPINN/DEE/"
     # case_prefix = f"see_ii_{n_photons}"
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
     # ======================
     #  MODE TRAIN
@@ -85,108 +93,120 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
 
     if mode == "train":
         print("=== TRAINING MODE ===")
-        out_csv = f"HQPINN/DEE/results/ii_summary_{timestamp}.csv"
-        os.makedirs(os.path.dirname(out_csv), exist_ok=True)
-        with open(out_csv, "w", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(
-                [
-                    "Model",
-                    "Size",
-                    "Trainable parameters",
-                    "Loss",
-                    "Density error",
-                    "Pressure error",
-                ]
-            )
+        summary_csv = "HQPINN/DEE/results/dee_summary.csv"
+        for label, nb_photons in MODELS:
+            set_global_seed(0)
+            print(f"\nTraining DEE-II {nb_photons} photons")
 
-            for label, nb_photons in MODELS:
-                print(f"\nTraining DEE-II {nb_photons} photons")
-
-                case_prefix = f"dee_ii_{nb_photons}"
-                model_dir = os.path.join(ckpt_dir, "models")
-                existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
-                if existing_ckpt is not None:
-                    final_loss = load_training_loss_for_checkpoint(
-                        out_dir=f"HQPINN/DEE/results/{case_prefix}",
-                        model_label=f"ii_{nb_photons}",
-                        ckpt_path=existing_ckpt,
-                        case_prefix=case_prefix,
-                    )
-                    if final_loss is not None:
-                        print(
-                            f"Skipping {case_prefix}: existing checkpoint found at "
-                            f"{existing_ckpt}"
-                        )
-                        try:
-                            model = load_model(
-                                existing_ckpt,
-                                lambda processor=None: II_PINN(
-                                    n_photons=nb_photons, processor=processor
-                                ),
-                            )
-                            err_rho, err_p = evaluate_dee_errors(model)
-                        except Exception as exc:
-                            print(
-                                f"Checkpoint validation failed for {case_prefix} at "
-                                f"{existing_ckpt}: {exc}; retraining model."
-                            )
-                        else:
-                            n_params = count_trainable_params(model)
-                            writer.writerow(
-                                [
-                                    "ii",
-                                    label,
-                                    n_params,
-                                    f"{final_loss:.6e}",
-                                    f"{err_rho:.6e}",
-                                    f"{err_p:.6e}",
-                                ]
-                            )
-                            print(
-                                f"Reused latest metrics for {case_prefix} in summary CSV."
-                            )
-                            continue
-                    print(
-                        f"Existing checkpoint found for {case_prefix} at "
-                        f"{existing_ckpt}, but no matching loss CSV was found; "
-                        f"retraining model."
-                    )
-
-                model = II_PINN(n_photons=nb_photons)
-                optimizer = make_optimizer(model, lr=DEE_LR)
-
-                final_loss, err_rho, err_p, n_params = train_dee(
-                    model=model,
-                    t_train=None,  # kept for API consistency
-                    optimizer=optimizer,
-                    n_epochs=DEE_N_EPOCHS,
-                    plot_every=DEE_PLOT_EVERY,
+            case_prefix = f"dee_ii_{nb_photons}"
+            model_dir = os.path.join(ckpt_dir, "models")
+            existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
+            if existing_ckpt is not None:
+                final_loss = load_training_loss_for_checkpoint(
                     out_dir=f"HQPINN/DEE/results/{case_prefix}",
                     model_label=f"ii_{nb_photons}",
-                    timestamp=timestamp,
+                    ckpt_path=existing_ckpt,
+                    case_prefix=case_prefix,
+                )
+                if final_loss is not None:
+                    print(
+                        f"Skipping {case_prefix}: existing checkpoint found at "
+                        f"{existing_ckpt}"
+                    )
+                    try:
+                        model = load_model(
+                            existing_ckpt,
+                            lambda processor=None: II_PINN(
+                                n_photons=nb_photons, processor=processor
+                            ),
+                        )
+                        err_rho, err_p = evaluate_dee_errors(model)
+                    except Exception as exc:
+                        print(
+                            f"Checkpoint validation failed for {case_prefix} at "
+                            f"{existing_ckpt}: {exc}; retraining model."
+                        )
+                    else:
+                        n_params = count_trainable_params(model)
+                        case_run_id = get_run_id_from_checkpoint(existing_ckpt, case_prefix)
+                        row = (
+                            load_training_row_for_run_id(
+                                out_dir=f"HQPINN/DEE/results/{case_prefix}",
+                                model_label=f"ii_{nb_photons}",
+                                run_id=case_run_id,
+                            )
+                            if case_run_id is not None
+                            else None
+                        )
+                        append_summary_row(
+                            summary_csv,
+                            {
+                                "run_id": case_run_id or "",
+                                "Model": "ii",
+                                "Size": label,
+                                "epoch": row["epoch"] if row is not None else "",
+                                "elapsed (s)": row["elapsed (s)"] if row is not None else "",
+                                "Trainable parameters": n_params,
+                                "Loss": row["Loss"] if row is not None else f"{final_loss:.6e}",
+                                "IC": row["IC"] if row is not None else "",
+                                "BC": row["BC"] if row is not None else "",
+                                "F": row["F"] if row is not None else "",
+                                "Density error": f"{err_rho:.6e}",
+                                "Pressure error": f"{err_p:.6e}",
+                            },
+                        )
+                        print(f"Reused latest metrics for {case_prefix} in summary CSV.")
+                        continue
+                print(
+                    f"Existing checkpoint found for {case_prefix} at "
+                    f"{existing_ckpt}, but no matching loss CSV was found; "
+                    f"retraining model."
                 )
 
-                writer.writerow(
-                    [
-                        "ii",  # model type: Interferometer-Interferometer
-                        label,  # size label ("1", "2", ..., "6")
-                        n_params,
-                        f"{final_loss:.6e}",
-                        f"{err_rho:.6e}",
-                        f"{err_p:.6e}",
-                    ]
-                )
+            model = II_PINN(n_photons=nb_photons)
+            optimizer = make_optimizer(model, lr=DEE_LR)
 
-                # === Save model ===
-                os.makedirs(model_dir, exist_ok=True)
-                # timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-                ckpt_path = os.path.join(model_dir, f"{case_prefix}_{timestamp}.pt")
-                torch.save(model.state_dict(), ckpt_path)
+            final_loss, err_rho, err_p, n_params = train_dee(
+                model=model,
+                t_train=None,  # kept for API consistency
+                optimizer=optimizer,
+                n_epochs=DEE_N_EPOCHS,
+                plot_every=DEE_PLOT_EVERY,
+                out_dir=f"HQPINN/DEE/results/{case_prefix}",
+                model_label=f"ii_{nb_photons}",
+                run_id=run_id,
+            )
+            row = load_training_row_for_run_id(
+                out_dir=f"HQPINN/DEE/results/{case_prefix}",
+                model_label=f"ii_{nb_photons}",
+                run_id=run_id,
+            )
 
-                print(f"Model saved to: {ckpt_path}")
+            append_summary_row(
+                summary_csv,
+                {
+                    "run_id": run_id,
+                    "Model": "ii",
+                    "Size": label,
+                    "epoch": row["epoch"] if row is not None else "",
+                    "elapsed (s)": row["elapsed (s)"] if row is not None else "",
+                    "Trainable parameters": n_params,
+                    "Loss": row["Loss"] if row is not None else f"{final_loss:.6e}",
+                    "IC": row["IC"] if row is not None else "",
+                    "BC": row["BC"] if row is not None else "",
+                    "F": row["F"] if row is not None else "",
+                    "Density error": f"{err_rho:.6e}",
+                    "Pressure error": f"{err_p:.6e}",
+                },
+            )
 
-        print(f"Summary CSV saved to: {out_csv}")
+            os.makedirs(model_dir, exist_ok=True)
+            ckpt_path = os.path.join(model_dir, f"{case_prefix}_{run_id}.pt")
+            torch.save(model.state_dict(), ckpt_path)
+
+            print(f"Model saved to: {ckpt_path}")
+
+        print(f"Summary CSV appended to: {summary_csv}")
 
     # ======================
     #  MODE RUN
@@ -199,8 +219,8 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
             backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            n_photons=n_photons,
-            timestamp=timestamp,
+            plot_label=f"{n_photons} photons",
+            run_id=run_id,
             model_factory=lambda processor=None: II_PINN(
                 n_photons=n_photons, processor=processor
             ),
@@ -218,8 +238,8 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
             backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            n_photons=n_photons,
-            timestamp=timestamp,
+            plot_label=f"{n_photons} photons",
+            run_id=run_id,
             model_factory=lambda processor=None: II_PINN(
                 n_photons=n_photons, processor=processor
             ),

@@ -70,8 +70,8 @@ def run_density_inference_mode(
     backend: str,
     ckpt_dir: str,
     case_prefix: str,
-    n_photons: int,
-    timestamp: str,
+    plot_label: str | None,
+    run_id: str,
     model_factory: Callable[[object], nn.Module],
     save_plot_fn: Callable[..., str],
 ) -> str | None:
@@ -98,8 +98,8 @@ def run_density_inference_mode(
         model=model,
         ckpt_dir=ckpt_dir,
         case_prefix=case_prefix,
-        n_photons=n_photons,
-        timestamp=timestamp,
+        plot_label=plot_label,
+        run_id=run_id,
         backend=backend,
     )
     print(f"Figure saved to: {png_path}")

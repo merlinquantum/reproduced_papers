@@ -1,7 +1,6 @@
 # dee_cp.py
 # Classical–PennyLane PINN
 
-import csv
 import os
 from datetime import datetime
 
@@ -17,10 +16,19 @@ from ..config import (
     DEE_LR,
     DTYPE,
 )
-from ..utils import count_trainable_params, get_latest_checkpoint, load_model, make_optimizer
+from ..utils import (
+    count_trainable_params,
+    get_latest_checkpoint,
+    load_model,
+    make_optimizer,
+    set_global_seed,
+)
 from .core_dee import (
+    append_summary_row,
     evaluate_dee_errors,
+    get_run_id_from_checkpoint,
     load_training_loss_for_checkpoint,
+    load_training_row_for_run_id,
     save_density_plot,
     train_dee,
 )
@@ -40,19 +48,24 @@ class CP_PINN(nn.Module):
 
     def __init__(
         self,
-        size: int = N_LAYERS,
+        q_layers: int = N_LAYERS,
         hidden_width: int = DEE_CC_HIDDEN_WIDTH,
         num_hidden_layers: int = DEE_CC_NUM_HIDDEN_LAYERS,
+        *,
+        size: int | None = None,
     ) -> None:
         super().__init__()
+        if size is not None:
+            # Backward-compatible alias while the rest of the repo catches up.
+            q_layers = size
 
-        qblock_multi_1 = make_quantum_block_multiout(n_layers=size)
+        qblock_multi_1 = make_quantum_block_multiout(n_layers=q_layers)
 
         self.branch1 = BranchPennylane(
             qblock_multi_1,
             feature_map=dee_feature_map,
             output_as_column=False,
-            n_layers=size,
+            n_layers=q_layers,
         )
         self.branch2 = BranchPyTorch(
             in_features=2,
@@ -62,8 +75,7 @@ class CP_PINN(nn.Module):
         )
         self.fusion = nn.Linear(6, 3, dtype=DTYPE)
 
-        # Human-readable size label (e.g. "2", "3", "4")
-        self.size_label = f"{size}"
+        self.size_label = f"{q_layers}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
         # Learned linear fusion of both branch outputs.
@@ -80,135 +92,153 @@ MODELS = [
 
 
 def _get_model_config(model_size: str) -> tuple[str, int, int, int]:
-    for label, width, layers, size in MODELS:
+    for label, width, layers, q_layers in MODELS:
         if label == model_size:
-            return label, width, layers, size
+            return label, width, layers, q_layers
     valid = ", ".join(label for label, *_ in MODELS)
     raise ValueError(f"Unknown model_size='{model_size}'. Valid values: {valid}")
 
 
 def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
     """Run all DEE Classical–PennyLane models and write summary CSV."""
-    torch.manual_seed(0)
+    set_global_seed(0)
 
     ckpt_dir = "HQPINN/DEE/"
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+    run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
     if mode == "train":
-        out_csv = f"HQPINN/DEE/results/cp_summary_{timestamp}.csv"
-        os.makedirs("HQPINN/DEE/results", exist_ok=True)
+        summary_csv = "HQPINN/DEE/results/dee_summary.csv"
 
-        with open(out_csv, "w", newline="") as f:
-            writer = csv.writer(f)
-            writer.writerow(
-                [
-                    "Model",
-                    "Size",
-                    "Trainable parameters",
-                    "Loss",
-                    "Density error",
-                    "Pressure error",
-                ]
-            )
+        for label, width, layers, q_layers in MODELS:
+            set_global_seed(0)
+            print(f"\nTraining DEE-CP model: {label} q_layers={q_layers}")
 
-            for label, width, layers, size in MODELS:
-                print(f"\nTraining DEE-CP model: {label} size={size}")
-
-                case_prefix = f"dee_cp_{label}"
-                model_dir = os.path.join(ckpt_dir, "models")
-                existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
-                if existing_ckpt is not None:
-                    final_loss = load_training_loss_for_checkpoint(
-                        out_dir=f"HQPINN/DEE/results/{case_prefix}",
-                        model_label=f"cp_{label}",
-                        ckpt_path=existing_ckpt,
-                        case_prefix=case_prefix,
-                    )
-                    if final_loss is not None:
-                        print(
-                            f"Skipping {case_prefix}: existing checkpoint found at "
-                            f"{existing_ckpt}"
-                        )
-                        try:
-                            model = load_model(
-                                existing_ckpt,
-                                lambda processor=None: CP_PINN(
-                                    size=size,
-                                    hidden_width=width,
-                                    num_hidden_layers=layers,
-                                ),
-                            )
-                            err_rho, err_p = evaluate_dee_errors(model)
-                        except Exception as exc:
-                            print(
-                                f"Checkpoint validation failed for {case_prefix} at "
-                                f"{existing_ckpt}: {exc}; retraining model."
-                            )
-                        else:
-                            n_params = count_trainable_params(model)
-                            writer.writerow(
-                                [
-                                    "cp",
-                                    label,
-                                    n_params,
-                                    f"{final_loss:.6e}",
-                                    f"{err_rho:.6e}",
-                                    f"{err_p:.6e}",
-                                ]
-                            )
-                            print(
-                                f"Reused latest metrics for {case_prefix} in summary CSV."
-                            )
-                            continue
-                    print(
-                        f"Existing checkpoint found for {case_prefix} at "
-                        f"{existing_ckpt}, but no matching loss CSV was found; "
-                        f"retraining model."
-                    )
-
-                model = CP_PINN(size=size, hidden_width=width, num_hidden_layers=layers)
-                optimizer = make_optimizer(model, lr=DEE_LR)
-
-                final_loss, err_rho, err_p, n_params = train_dee(
-                    model=model,
-                    t_train=None,  # kept for API consistency
-                    optimizer=optimizer,
-                    n_epochs=DEE_N_EPOCHS,
-                    plot_every=DEE_PLOT_EVERY,
+            case_prefix = f"dee_cp_{label}"
+            model_dir = os.path.join(ckpt_dir, "models")
+            existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
+            if existing_ckpt is not None:
+                final_loss = load_training_loss_for_checkpoint(
                     out_dir=f"HQPINN/DEE/results/{case_prefix}",
                     model_label=f"cp_{label}",
-                    timestamp=timestamp,
+                    ckpt_path=existing_ckpt,
+                    case_prefix=case_prefix,
+                )
+                if final_loss is not None:
+                    print(
+                        f"Skipping {case_prefix}: existing checkpoint found at "
+                        f"{existing_ckpt}"
+                    )
+                    try:
+                        model = load_model(
+                            existing_ckpt,
+                            lambda processor=None: CP_PINN(
+                                q_layers=q_layers,
+                                hidden_width=width,
+                                num_hidden_layers=layers,
+                            ),
+                        )
+                        err_rho, err_p = evaluate_dee_errors(model)
+                    except Exception as exc:
+                        print(
+                            f"Checkpoint validation failed for {case_prefix} at "
+                            f"{existing_ckpt}: {exc}; retraining model."
+                        )
+                    else:
+                        n_params = count_trainable_params(model)
+                        case_run_id = get_run_id_from_checkpoint(existing_ckpt, case_prefix)
+                        row = (
+                            load_training_row_for_run_id(
+                                out_dir=f"HQPINN/DEE/results/{case_prefix}",
+                                model_label=f"cp_{label}",
+                                run_id=case_run_id,
+                            )
+                            if case_run_id is not None
+                            else None
+                        )
+                        append_summary_row(
+                            summary_csv,
+                            {
+                                "run_id": case_run_id or "",
+                                "Model": "cp",
+                                "Size": label,
+                                "epoch": row["epoch"] if row is not None else "",
+                                "elapsed (s)": row["elapsed (s)"] if row is not None else "",
+                                "Trainable parameters": n_params,
+                                "Loss": row["Loss"] if row is not None else f"{final_loss:.6e}",
+                                "IC": row["IC"] if row is not None else "",
+                                "BC": row["BC"] if row is not None else "",
+                                "F": row["F"] if row is not None else "",
+                                "Density error": f"{err_rho:.6e}",
+                                "Pressure error": f"{err_p:.6e}",
+                            },
+                        )
+                        print(f"Reused latest metrics for {case_prefix} in summary CSV.")
+                        continue
+                print(
+                    f"Existing checkpoint found for {case_prefix} at "
+                    f"{existing_ckpt}, but no matching loss CSV was found; "
+                    f"retraining model."
                 )
 
-                writer.writerow(
-                    [
-                        "cp",  # model type: Classical–PennyLane
-                        label,
-                        n_params,
-                        f"{final_loss:.6e}",
-                        f"{err_rho:.6e}",
-                        f"{err_p:.6e}",
-                    ]
-                )
+            model = CP_PINN(
+                q_layers=q_layers,
+                hidden_width=width,
+                num_hidden_layers=layers,
+            )
+            optimizer = make_optimizer(model, lr=DEE_LR)
 
-                os.makedirs(model_dir, exist_ok=True)
-                ckpt_path = os.path.join(model_dir, f"{case_prefix}_{timestamp}.pt")
-                torch.save(model.state_dict(), ckpt_path)
-                print(f"Model saved to: {ckpt_path}")
+            final_loss, err_rho, err_p, n_params = train_dee(
+                model=model,
+                t_train=None,  # kept for API consistency
+                optimizer=optimizer,
+                n_epochs=DEE_N_EPOCHS,
+                plot_every=DEE_PLOT_EVERY,
+                out_dir=f"HQPINN/DEE/results/{case_prefix}",
+                model_label=f"cp_{label}",
+                run_id=run_id,
+            )
+            row = load_training_row_for_run_id(
+                out_dir=f"HQPINN/DEE/results/{case_prefix}",
+                model_label=f"cp_{label}",
+                run_id=run_id,
+            )
 
-        print(f"Summary CSV saved to: {out_csv}")
+            append_summary_row(
+                summary_csv,
+                {
+                    "run_id": run_id,
+                    "Model": "cp",
+                    "Size": label,
+                    "epoch": row["epoch"] if row is not None else "",
+                    "elapsed (s)": row["elapsed (s)"] if row is not None else "",
+                    "Trainable parameters": n_params,
+                    "Loss": row["Loss"] if row is not None else f"{final_loss:.6e}",
+                    "IC": row["IC"] if row is not None else "",
+                    "BC": row["BC"] if row is not None else "",
+                    "F": row["F"] if row is not None else "",
+                    "Density error": f"{err_rho:.6e}",
+                    "Pressure error": f"{err_p:.6e}",
+                },
+            )
+
+            os.makedirs(model_dir, exist_ok=True)
+            ckpt_path = os.path.join(model_dir, f"{case_prefix}_{run_id}.pt")
+            torch.save(model.state_dict(), ckpt_path)
+            print(f"Model saved to: {ckpt_path}")
+
+        print(f"Summary CSV appended to: {summary_csv}")
 
     elif mode == "run":
-        label, width, layers, size = _get_model_config(model_size)
+        label, width, layers, q_layers = _get_model_config(model_size)
         case_prefix = f"dee_cp_{label}"
         run_density_inference_mode(
             mode="run",
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            n_photons=size,
-            timestamp=timestamp,
+            plot_label=f"q_layers={q_layers}",
+            run_id=run_id,
             model_factory=lambda processor=None: CP_PINN(
-                size=size,
+                q_layers=q_layers,
                 hidden_width=width,
                 num_hidden_layers=layers,
             ),
@@ -217,17 +247,17 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
 
     elif mode == "remote":
         print("Remote mode is not available for DEE-CP. Falling back to local run mode.")
-        label, width, layers, size = _get_model_config(model_size)
+        label, width, layers, q_layers = _get_model_config(model_size)
         case_prefix = f"dee_cp_{label}"
         run_density_inference_mode(
             mode="run",
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            n_photons=size,
-            timestamp=timestamp,
+            plot_label=f"q_layers={q_layers}",
+            run_id=run_id,
             model_factory=lambda processor=None: CP_PINN(
-                size=size,
+                q_layers=q_layers,
                 hidden_width=width,
                 num_hidden_layers=layers,
             ),
