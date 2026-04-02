@@ -13,11 +13,13 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .runtime import configure_logging, log_run_banner
-
-
-CONFIGS_DIR = Path(__file__).resolve().parent / "configs"
-DEFAULT_CONFIG_PATH = CONFIGS_DIR / "defaults.json"
+from .runtime import (
+    DEFAULT_CONFIG_PATH,
+    apply_runtime_config,
+    configure_logging,
+    log_run_banner,
+    require_file,
+)
 
 
 def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
@@ -31,7 +33,7 @@ def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, An
 
 
 def _load_json(path: Path) -> dict[str, Any]:
-    with path.open(encoding="utf-8") as f:
+    with require_file(path, label="runtime config file").open(encoding="utf-8") as f:
         data = json.load(f)
     if not isinstance(data, dict):
         raise ValueError(f"Expected a JSON object in {path}")
@@ -77,7 +79,8 @@ def _build_model_size(*parts: int) -> str:
     return "-".join(str(part) for part in parts)
 
 
-def _run_from_config(config: dict[str, Any]) -> None:
+def run_from_project(config: dict[str, Any]) -> None:
+    config = apply_runtime_config(config)
     experiment = config["experiment"]
     mode = config["mode"]
     backend = config["backend"]
@@ -734,7 +737,7 @@ def main(argv: list[str] | None = None) -> None:
     if args.config is not None:
         config = _load_config(args.config)
         log_run_banner(config)
-        _run_from_config(config)
+        run_from_project(config)
         return
 
     _run_interactive()

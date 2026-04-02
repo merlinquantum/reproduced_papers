@@ -149,3 +149,8 @@ TAF_X_WALL_FILE = "X_wall.npy"
 TAF_X_WALL_NORMALS_FILE = "X_wall_normals.npy"
 TAF_X_F_FILE = "X_f.npy"
 TAF_X_DATA_INT_FILE = "X_data_int.npy"
+
+
+def set_dtype(dtype: torch.dtype) -> None:
+    global DTYPE
+    DTYPE = dtype
