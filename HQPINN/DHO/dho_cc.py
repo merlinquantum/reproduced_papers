@@ -34,7 +34,7 @@ from .core_dho import (
     u_exact,
 )
 from ..run_common import run_series_inference_mode
-from ..layer_classical import HistoricalDHOBranchPyTorch
+from ..layer_classical import DHOBranchPyTorch
 
 
 class CC_PINN(nn.Module):
@@ -50,11 +50,11 @@ class CC_PINN(nn.Module):
         hidden_width: int = DHO_HIDDEN_WIDTH,
     ) -> None:
         super().__init__()
-        self.branch1 = HistoricalDHOBranchPyTorch(
+        self.branch1 = DHOBranchPyTorch(
             num_hidden_layers=num_hidden_layers,
             hidden_width=hidden_width,
         )
-        self.branch2 = HistoricalDHOBranchPyTorch(
+        self.branch2 = DHOBranchPyTorch(
             num_hidden_layers=num_hidden_layers,
             hidden_width=hidden_width,
         )

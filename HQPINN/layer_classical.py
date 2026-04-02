@@ -70,9 +70,9 @@ class BranchPyTorch(nn.Module):
     #     return self.net(x)
 
 
-class HistoricalDHOBranchPyTorch(nn.Module):
+class DHOBranchPyTorch(nn.Module):
     """
-    Archived DHO classical branch kept for compatibility with the source setup.
+    DHO-specific classical branch kept aligned with the source setup.
     """
 
     def __init__(
@@ -104,38 +104,6 @@ class HistoricalDHOBranchPyTorch(nn.Module):
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
         return self.net(xt)
-
-
-# class DHOBranchPyTorch(nn.Module):
-#     """
-#     Scalar-output classical branch used by the adapted DHO hybrids.
-#     """
-
-#     def __init__(
-#         self,
-#         in_features: int = 1,
-#         out_features: int = 1,
-#         num_hidden_layers: int = DHO_NUM_HIDDEN_LAYERS,
-#         hidden_width: int = DHO_HIDDEN_WIDTH,
-#     ) -> None:
-#         super().__init__()
-
-#         if num_hidden_layers < 1:
-#             raise ValueError("num_hidden_layers must be >= 1")
-
-#         layers = [nn.Linear(in_features, hidden_width, dtype=DTYPE), nn.Tanh()]
-#         for _ in range(num_hidden_layers - 1):
-#             layers.extend(
-#                 [
-#                     nn.Linear(hidden_width, hidden_width, dtype=DTYPE),
-#                     nn.Tanh(),
-#                 ]
-#             )
-#         layers.append(nn.Linear(hidden_width, out_features, dtype=DTYPE))
-#         self.net = nn.Sequential(*layers)
-
-#     def forward(self, xt: torch.Tensor) -> torch.Tensor:
-#         return self.net(xt)
 
 
 class LearnedScalarFusion(nn.Module):
