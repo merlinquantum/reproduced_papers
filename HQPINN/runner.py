@@ -89,7 +89,7 @@ def _run_from_config(config: dict[str, Any]) -> None:
                 "dho-cc config requires model.n_layers and model.n_nodes"
             )
 
-        from .DHO.a2_dho_cc import run
+        from .DHO.dho_cc import run
 
         run(
             mode=mode,
@@ -108,7 +108,7 @@ def _run_from_config(config: dict[str, Any]) -> None:
                 "dho-cp config requires model.n_layers, model.n_nodes, and model.n_qubits"
             )
 
-        from .DHO.a2_dho_cp import run
+        from .DHO.dho_cp import run
 
         run(
             mode=mode,
@@ -124,7 +124,7 @@ def _run_from_config(config: dict[str, Any]) -> None:
         if n_qubits is None:
             raise ValueError("dho-pp config requires model.n_qubits")
 
-        from .DHO.a2_dho_pp import run
+        from .DHO.dho_pp import run
 
         run(
             mode=mode,
@@ -142,7 +142,7 @@ def _run_from_config(config: dict[str, Any]) -> None:
                 "dho-ci config requires model.n_layers, model.n_nodes, and model.n_photons"
             )
 
-        from .DHO.a2_dho_ci import run
+        from .DHO.dho_ci import run
 
         run(
             mode=mode,
@@ -161,7 +161,7 @@ def _run_from_config(config: dict[str, Any]) -> None:
                 "dho-cperc config requires model.n_layers and model.n_nodes"
             )
 
-        from .DHO.a2_dho_cperc import run
+        from .DHO.dho_cperc import run
 
         run(
             mode=mode,
@@ -176,7 +176,7 @@ def _run_from_config(config: dict[str, Any]) -> None:
         if n_photons is None:
             raise ValueError("dho-ii config requires model.n_photons")
 
-        from .DHO.a2_dho_ii import run
+        from .DHO.dho_ii import run
 
         run(
             mode=mode,
@@ -186,7 +186,7 @@ def _run_from_config(config: dict[str, Any]) -> None:
         return
 
     if experiment == "dho-percperc":
-        from .DHO.a2_dho_percperc import run
+        from .DHO.dho_percperc import run
 
         run(
             mode=mode,
@@ -460,49 +460,49 @@ def _run_interactive() -> None:
 
     # DHO experiments
     if choice == "dho-pp":
-        from .DHO.a2_dho_pp import run
+        from .DHO.dho_pp import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
     elif choice == "dho-cc":
-        from .DHO.a2_dho_cc import run
+        from .DHO.dho_cc import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
     elif choice == "dho-cp":
-        from .DHO.a2_dho_cp import run
+        from .DHO.dho_cp import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
     elif choice == "dho-cperc":
-        from .DHO.a2_dho_cperc import run
+        from .DHO.dho_cperc import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
     elif choice == "dho-ii":
-        from .DHO.a2_dho_ii import run
+        from .DHO.dho_ii import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
     elif choice == "dho-percperc":
-        from .DHO.a2_dho_percperc import run
+        from .DHO.dho_percperc import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
     elif choice == "dho-ci":
-        from .DHO.a2_dho_ci import run
+        from .DHO.dho_ci import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)

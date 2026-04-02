@@ -1,4 +1,4 @@
-# a2_dho_cperc.py
+# dho_cperc.py
 # Classical–Perceval PINN with a quantum branch using MerLin QuantumLayer and a classical MLP branch
 
 import os
@@ -24,7 +24,7 @@ from ..utils import (
     make_optimizer,
     set_global_seed,
 )
-from .core_a2_dho import (
+from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
     get_run_id_from_checkpoint,

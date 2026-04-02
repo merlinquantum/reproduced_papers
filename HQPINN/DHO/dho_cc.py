@@ -1,4 +1,4 @@
-# a2_dho_cc.py
+# dho_cc.py
 # Classical–Classical PINN with two parallel MLP branches
 
 import os
@@ -25,7 +25,7 @@ from ..utils import (
     make_optimizer,
     set_global_seed,
 )
-from .core_a2_dho import (
+from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
     get_run_id_from_checkpoint,

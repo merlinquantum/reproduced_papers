@@ -1,23 +1,19 @@
-# a2_dho_cp.py
-# Classical–PennyLane PINN with a quantum branch and a classical MLP branch
+# dho_ii.py
+# Interferometer-Interferometer PINN for the damped oscillator using oscillator_core + merlin_quantum
 
 import os
 from datetime import datetime
 
+import matplotlib
 import matplotlib.pyplot as plt
+
+# Use non-interactive backend for batch image export
+matplotlib.use("Agg")
+
 import torch
 import torch.nn as nn
 
-from ..config import (
-    DEFAULT_N_OUTPUTS,
-    DHO_HIDDEN_WIDTH,
-    DHO_LR,
-    DHO_NUM_HIDDEN_LAYERS,
-    DHO_N_EPOCHS,
-    DHO_PLOT_EVERY,
-    DTYPE,
-    N_LAYERS,
-)
+from ..config import DHO_N_EPOCHS, DHO_PLOT_EVERY, DHO_LR, DTYPE
 from ..utils import (
     count_trainable_params,
     get_latest_checkpoint,
@@ -26,7 +22,7 @@ from ..utils import (
     make_optimizer,
     set_global_seed,
 )
-from .core_a2_dho import (
+from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
     get_run_id_from_checkpoint,
@@ -35,99 +31,105 @@ from .core_a2_dho import (
     u_exact,
 )
 from ..run_common import run_series_inference_mode
-from ..layer_pennylane import make_quantum_block, dho_feature_map, BranchPennylane
-from ..layer_classical import BranchPyTorch
+from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
-class CQ_PINN(nn.Module):
+# ============================================================
+#  MM_PINN model: two MerLin quantum branches
+# ============================================================
+
+
+class MM_PINN(nn.Module):
     """
-    Hybrid Classical–Quantum PINN with linear fusion to scalar output.
+    Interferometer-Interferometer PINN with linear fusion to scalar output.
     """
 
     def __init__(
         self,
+        processor=None,
         *,
-        num_hidden_layers: int = DHO_NUM_HIDDEN_LAYERS,
-        hidden_width: int = DHO_HIDDEN_WIDTH,
-        n_qubits: int = DEFAULT_N_OUTPUTS,
+        n_photons: int = 1,
     ) -> None:
         super().__init__()
 
-        qblock = make_quantum_block(n_qubits=n_qubits)
-
-        self.branch_q = BranchPennylane(
-            qblock,
-            feature_map=lambda t: dho_feature_map(t, n_qubits=n_qubits),
-            output_as_column=True,
-            n_layers=N_LAYERS,
-            n_qubits=n_qubits,
+        # Two distinct quantum branches with independent parameters
+        self.branch1 = BranchMerlin(
+            make_interf_qlayer(n_photons=n_photons),
+            processor=processor,
+            feature_map_kind="dho",
         )
-        self.branch_c = BranchPyTorch(
-            num_hidden_layers=num_hidden_layers,
-            hidden_width=hidden_width,
+        self.branch2 = BranchMerlin(
+            make_interf_qlayer(n_photons=n_photons),
+            processor=processor,
+            feature_map_kind="dho",
         )
-        self.fusion = nn.Linear(4, 1, dtype=DTYPE)
+        self.fusion = nn.Linear(2, 1, dtype=DTYPE)
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
-        out_q = self.branch_q(t)
-        out_c = self.branch_c(t)
-        return self.fusion(torch.cat([out_q, out_c], dim=1))
+        out1 = self.branch1(t)
+        out2 = self.branch2(t)
+        return self.fusion(torch.cat([out1, out2], dim=1))
 
 
-def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_cp/"):
+def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_ii/"):
     plt.figure(figsize=(10, 6))
     plt.plot(t.cpu().numpy(), u_pred, label="Prediction PINN", lw=2)
     plt.plot(t.cpu().numpy(), u_ex, "--", label="Exact solution", lw=2)
     plt.xlabel("t")
     plt.ylabel("u(t)")
-    plt.title("DHO - Classical-PennyLane PINN")
+    plt.title("DHO – Interferometer–Interferometer PINN")
     plt.grid(True)
     plt.legend()
 
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+
     os.makedirs(save_path, exist_ok=True)
-    png_path = os.path.join(save_path, f"dho_cp_plot_{timestamp}.png")
-    plt.savefig(png_path, bbox_inches="tight")
+    save_path = os.path.join(save_path, f"dho_ii_plot_{timestamp}.png")
+
+    plt.savefig(save_path, bbox_inches="tight")
     plt.close()
-    print(f"Plot saved to: {png_path}")
+
+    print(f"Plot saved to: {save_path}")
 
 
-def _case_prefix(n_layers: int, n_nodes: int, n_qubits: int) -> str:
-    if (
-        n_layers == DHO_NUM_HIDDEN_LAYERS
-        and n_nodes == DHO_HIDDEN_WIDTH
-        and n_qubits == DEFAULT_N_OUTPUTS
-    ):
-        return "dho_cp"
-    return f"dho_cp_{n_nodes}-{n_layers}-q{n_qubits}"
+def _case_prefix(n_photons: int) -> str:
+    if n_photons == 1:
+        return "dho_ii"
+    return f"dho_ii_p{n_photons}"
 
 
 def run(
     mode="train",
     backend="sim:ascella",
     *,
-    n_layers: int = DHO_NUM_HIDDEN_LAYERS,
-    n_nodes: int = DHO_HIDDEN_WIDTH,
-    n_qubits: int = DEFAULT_N_OUTPUTS,
+    n_photons: int = 1,
 ) -> None:
-    """Run the Classical–PennyLane DHO PINN experiment."""
+    """
+    mode = "train" : train the model from scratch and save the checkpoint
+    mode = "run"   : load the latest checkpoint and run inference (not implemented here, but can be added)
+    mode = "remote" : load and run in remote
+    """
     set_global_seed(0)
-    ckpt_dir = "HQPINN/DHO/models"
-    case_prefix = _case_prefix(n_layers, n_nodes, n_qubits)
+
+    ckpt_dir = "HQPINN/DHO/models/"
+    case_prefix = _case_prefix(n_photons)
     results_dir = f"HQPINN/DHO/results/{case_prefix}"
     summary_csv = "HQPINN/DHO/results/dho_summary.csv"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
+    # ======================
+    #  MODE TRAIN
+    # ======================
     if mode == "train":
+        print("=== TRAINING MODE ===")
         existing_ckpt = get_latest_checkpoint(ckpt_dir, case_prefix)
         if existing_ckpt is not None:
             try:
                 model = load_model(
                     existing_ckpt,
-                    lambda processor=None: CQ_PINN(
-                        num_hidden_layers=n_layers,
-                        hidden_width=n_nodes,
-                        n_qubits=n_qubits,
+                    lambda processor=None: MM_PINN(
+                        processor=processor,
+                        n_photons=n_photons,
                     ),
                 )
             except Exception as exc:
@@ -139,7 +141,7 @@ def run(
                 t_train = make_time_grid()
                 case_run_id = get_run_id_from_checkpoint(existing_ckpt, case_prefix)
                 row = (
-                    load_training_row_for_run_id(results_dir, "cp", case_run_id)
+                    load_training_row_for_run_id(results_dir, "ii", case_run_id)
                     if case_run_id is not None
                     else None
                 )
@@ -147,8 +149,8 @@ def run(
                     summary_csv,
                     {
                         "run_id": case_run_id or "",
-                        "Model": "cp",
-                        "Size": f"{n_nodes}-{n_layers}-{n_qubits}",
+                        "Model": "ii",
+                        "Size": str(n_photons),
                         "epoch": row["epoch"] if row is not None else "",
                         "elapsed time (s)": row["elapsed time (s)"] if row is not None else "",
                         "Trainable parameters": count_trainable_params(model),
@@ -163,12 +165,9 @@ def run(
                 print(f"Summary CSV appended to: {summary_csv}")
                 return
 
-        model = CQ_PINN(
-            num_hidden_layers=n_layers,
-            hidden_width=n_nodes,
-            n_qubits=n_qubits,
-        )
+        model = MM_PINN(n_photons=n_photons)
         t_train = make_time_grid()
+
         train_oscillator_pinn(
             model=model,
             t_train=t_train,
@@ -176,16 +175,16 @@ def run(
             n_epochs=DHO_N_EPOCHS,
             plot_every=DHO_PLOT_EVERY,
             out_dir=results_dir,
-            model_label="cp",
+            model_label="ii",
             run_id=run_id,
         )
-        row = load_training_row_for_run_id(results_dir, "cp", run_id)
+        row = load_training_row_for_run_id(results_dir, "ii", run_id)
         append_summary_row(
             summary_csv,
             {
                 "run_id": run_id,
-                "Model": "cp",
-                "Size": f"{n_nodes}-{n_layers}-{n_qubits}",
+                "Model": "ii",
+                "Size": str(n_photons),
                 "epoch": row["epoch"] if row is not None else "",
                 "elapsed time (s)": row["elapsed time (s)"] if row is not None else "",
                 "Trainable parameters": count_trainable_params(model),
@@ -196,22 +195,28 @@ def run(
                 "Relative L2 error": f"{evaluate_dho_error(model, t_train):.6e}",
             },
         )
+
+        # === Save model ===
         os.makedirs(ckpt_dir, exist_ok=True)
         ckpt_path = os.path.join(ckpt_dir, f"{case_prefix}_{run_id}.pt")
         torch.save(model.state_dict(), ckpt_path)
+
         print(f"Model saved to: {ckpt_path}")
         print(f"Summary CSV appended to: {summary_csv}")
 
+    # ======================
+    #  MODE RUN
+    # ======================
     elif mode == "run":
+        print("=== RUN MODE ===")
         run_series_inference_mode(
             mode="run",
-            backend="local",
+            backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: CQ_PINN(
-                num_hidden_layers=n_layers,
-                hidden_width=n_nodes,
-                n_qubits=n_qubits,
+            model_factory=lambda processor=None: MM_PINN(
+                processor=processor,
+                n_photons=n_photons,
             ),
             make_time_grid=make_time_grid,
             exact_fn=u_exact,
@@ -220,17 +225,18 @@ def run(
             ),
         )
 
+    # ======================
+    #  MODE RUN REMOTE
+    # ======================
     elif mode == "remote":
-        print("Remote mode is not available for DHO-CP. Falling back to local run mode.")
         run_series_inference_mode(
-            mode="run",
-            backend="local",
+            mode="remote",
+            backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: CQ_PINN(
-                num_hidden_layers=n_layers,
-                hidden_width=n_nodes,
-                n_qubits=n_qubits,
+            model_factory=lambda processor=None: MM_PINN(
+                processor=processor,
+                n_photons=n_photons,
             ),
             make_time_grid=make_time_grid,
             exact_fn=u_exact,

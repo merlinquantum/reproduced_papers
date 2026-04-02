@@ -1,4 +1,4 @@
-# core_a2_dho.py
+# core_dho.py
 
 import os
 import csv
@@ -152,8 +152,8 @@ def train_oscillator_pinn(
 
     os.makedirs(out_dir, exist_ok=True)
 
-    png_path = os.path.join(out_dir, f"a2-dho-{model_label}_{run_id}.png")
-    csv_path = os.path.join(out_dir, f"a2-dho-{model_label}_{run_id}.csv")
+    png_path = os.path.join(out_dir, f"dho-{model_label}_{run_id}.png")
+    csv_path = os.path.join(out_dir, f"dho-{model_label}_{run_id}.csv")
 
     start = datetime.now()
     rows = []
@@ -166,7 +166,7 @@ def train_oscillator_pinn(
             u_ex = u_exact(t_np)
 
         epoch_png_path = os.path.join(
-            out_dir, f"a2-dho-{model_label}_{run_id}_epoch-{epoch}.png"
+            out_dir, f"dho-{model_label}_{run_id}_epoch-{epoch}.png"
         )
         fig, ax = plt.subplots(figsize=(10, 6))
         ax.plot(t_np, u_pred, label=f"PINN ({model_label})")
@@ -255,7 +255,7 @@ def load_training_row_for_run_id(
     run_id: str,
 ) -> dict[str, str] | None:
     """Return the last row from the detailed CSV for a given model/run_id pair."""
-    csv_path = os.path.join(out_dir, f"a2-dho-{model_label}_{run_id}.csv")
+    csv_path = os.path.join(out_dir, f"dho-{model_label}_{run_id}.csv")
     if not os.path.isfile(csv_path):
         return None
 

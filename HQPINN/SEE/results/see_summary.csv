@@ -1,0 +1,2 @@
+run_id,Model,Size,epoch,elapsed (s),Trainable parameters,Loss,IC,BC,F,Density error,Pressure error
+20260401-180759,cc,10-4,20000,60.92,845,1.094e-05,6.845e-06,3.581e-06,5.181e-07,4.158964e-03,2.587267e-04
