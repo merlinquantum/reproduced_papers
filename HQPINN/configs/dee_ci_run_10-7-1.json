@@ -1,0 +1,10 @@
+{
+  "experiment": "dee-ci",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "n_layers": 7,
+    "n_nodes": 10,
+    "n_photons": 1
+  }
+}

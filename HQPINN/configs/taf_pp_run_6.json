@@ -1,0 +1,8 @@
+{
+  "experiment": "taf-pp",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "q_layers": 6
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "experiment": "taf-ii",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "n_photons": 4
+  }
+}

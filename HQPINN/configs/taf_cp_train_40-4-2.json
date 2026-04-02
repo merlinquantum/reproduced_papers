@@ -1,0 +1,10 @@
+{
+  "experiment": "taf-cp",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_layers": 4,
+    "n_nodes": 40,
+    "q_layers": 2
+  }
+}

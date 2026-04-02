@@ -1,0 +1,8 @@
+{
+  "experiment": "dee-ii",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_photons": 2
+  }
+}

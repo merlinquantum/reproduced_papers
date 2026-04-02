@@ -1,0 +1,8 @@
+{
+  "experiment": "dee-pp",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "q_layers": 4
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "experiment": "see-ii",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_photons": 6
+  }
+}
