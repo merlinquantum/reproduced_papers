@@ -20,8 +20,8 @@ from ..utils import (
     load_model,
     make_time_grid,
     make_optimizer,
-    set_global_seed,
 )
+from ..runtime import seed_everything
 from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
@@ -110,7 +110,7 @@ def run(
     mode = "run"   : load the latest checkpoint and run inference (not implemented here, but can be added)
     mode = "remote" : load and run in remote
     """
-    set_global_seed(0)
+    seed_everything(0)
 
     ckpt_dir = "HQPINN/DHO/models/"
     case_prefix = _case_prefix(n_photons)

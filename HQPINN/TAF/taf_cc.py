@@ -24,8 +24,8 @@ from ..utils import (
     count_trainable_params,
     get_latest_checkpoint,
     make_optimizer,
-    set_global_seed,
 )
+from ..runtime import seed_everything
 from ..run_common import run_density_inference_mode
 from .core_taf import (
     append_summary_row,
@@ -87,7 +87,7 @@ def _get_model_config(model_size: str) -> tuple[str, int, int]:
 
 def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
     """Run TAF classical-classical models and write summary CSV."""
-    set_global_seed(0)
+    seed_everything(0)
 
     data = load_training_sets()
 
@@ -100,7 +100,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
         summary_csv = "HQPINN/TAF/results/taf_summary.csv"
 
         for label, width, layers in MODELS:
-            set_global_seed(0)
+            seed_everything(0)
             print(f"\nTraining TAF-CC model: {label} (width={width}, layers={layers})")
 
             case_prefix = f"taf_cc_{label}"

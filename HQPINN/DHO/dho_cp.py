@@ -24,8 +24,8 @@ from ..utils import (
     load_model,
     make_time_grid,
     make_optimizer,
-    set_global_seed,
 )
+from ..runtime import seed_everything
 from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
@@ -111,7 +111,7 @@ def run(
     n_qubits: int = DEFAULT_N_OUTPUTS,
 ) -> None:
     """Run the Classical–PennyLane DHO PINN experiment."""
-    set_global_seed(0)
+    seed_everything(0)
     ckpt_dir = "HQPINN/DHO/models"
     case_prefix = _case_prefix(n_layers, n_nodes, n_qubits)
     results_dir = f"HQPINN/DHO/results/{case_prefix}"

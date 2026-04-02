@@ -1,0 +1,3 @@
+run_id,Model,Size,epoch,elapsed time (s),Trainable parameters,Loss,IC_u,IC_du,PDE,Relative L2 error
+20260402-161703,cc,16-2,1800,3.59,721,3.6180e-02,1.5095e-03,2.1008e-05,3.4668e+02,4.159862e-01
+20260402-163346,cc,16-2,1800,3.33,721,3.6180e-02,1.5095e-03,2.1008e-05,3.4668e+02,4.159862e-01

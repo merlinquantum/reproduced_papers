@@ -15,8 +15,8 @@ from ..utils import (
     load_model,
     make_time_grid,
     make_optimizer,
-    set_global_seed,
 )
+from ..runtime import seed_everything
 from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
@@ -84,7 +84,7 @@ def plot_model_prediction(
 
 def run(mode="train", backend="sim:ascella") -> None:
     """Run the Perceval–Perceval DHO PINN experiment."""
-    set_global_seed(0)
+    seed_everything(0)
     ckpt_dir = "HQPINN/DHO/models"
     case_prefix = "dho_percperc"
     results_dir = f"HQPINN/DHO/results/{case_prefix}"

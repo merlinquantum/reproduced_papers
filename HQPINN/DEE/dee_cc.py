@@ -19,8 +19,8 @@ from ..utils import (
     get_latest_checkpoint,
     load_model,
     make_optimizer,
-    set_global_seed,
 )
+from ..runtime import seed_everything
 from .core_dee import (
     append_summary_row,
     evaluate_dee_errors,
@@ -88,7 +88,7 @@ def _get_model_config(model_size: str) -> tuple[str, int, int]:
 
 def run(mode="train", backend="sim:ascella", model_size="10-4"):
     """Run all DEE classical–classical models and write summary CSV."""
-    set_global_seed(0)
+    seed_everything(0)
 
     ckpt_dir = "HQPINN/DEE/"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -96,7 +96,7 @@ def run(mode="train", backend="sim:ascella", model_size="10-4"):
         summary_csv = "HQPINN/DEE/results/dee_summary.csv"
 
         for label, width, layers in MODELS:
-            set_global_seed(0)
+            seed_everything(0)
             print(f"\nTraining DEE-CC model: {label} (width={width}, layers={layers})")
 
             case_prefix = f"dee_cc_{label}"

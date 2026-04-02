@@ -10,37 +10,14 @@ from __future__ import annotations
 
 import argparse
 import json
-import logging
-import os
 from pathlib import Path
 from typing import Any
+
+from .runtime import configure_logging, log_run_banner
 
 
 CONFIGS_DIR = Path(__file__).resolve().parent / "configs"
 DEFAULT_CONFIG_PATH = CONFIGS_DIR / "defaults.json"
-LOGGER = logging.getLogger(__name__)
-
-
-def _configure_logging() -> None:
-    level_name = os.getenv("HQPINN_LOG_LEVEL", "INFO").upper()
-    level = getattr(logging, level_name, logging.INFO)
-    logging.basicConfig(
-        level=level,
-        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-    )
-
-
-def _log_run_banner(config: dict[str, Any]) -> None:
-    LOGGER.info(
-        "Starting run: experiment=%s mode=%s backend=%s",
-        config.get("experiment"),
-        config.get("mode"),
-        config.get("backend"),
-    )
-    LOGGER.debug(
-        "Resolved config:\n%s",
-        json.dumps(config, indent=2, sort_keys=True),
-    )
 
 
 def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
@@ -744,7 +721,7 @@ def _run_interactive() -> None:
 
 def main(argv: list[str] | None = None) -> None:
     """Entry point for the HQPINN command-line interface."""
-    _configure_logging()
+    configure_logging()
     parser = argparse.ArgumentParser(description="Run HQPINN experiments.")
     parser.add_argument(
         "--config",
@@ -756,7 +733,7 @@ def main(argv: list[str] | None = None) -> None:
 
     if args.config is not None:
         config = _load_config(args.config)
-        _log_run_banner(config)
+        log_run_banner(config)
         _run_from_config(config)
         return
 

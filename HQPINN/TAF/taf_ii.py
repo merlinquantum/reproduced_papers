@@ -23,8 +23,8 @@ from ..utils import (
     count_trainable_params,
     get_latest_checkpoint,
     make_optimizer,
-    set_global_seed,
 )
+from ..runtime import seed_everything
 from .core_taf import (
     append_summary_row,
     get_run_id_from_checkpoint,
@@ -75,7 +75,7 @@ MODELS = [
 
 def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
     """Run TAF interferometer-interferometer models and write summary CSV."""
-    set_global_seed(0)
+    seed_everything(0)
 
     data = load_training_sets()
 
@@ -88,7 +88,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
         summary_csv = "HQPINN/TAF/results/taf_summary.csv"
 
         for label, n_photons_sel in MODELS:
-            set_global_seed(0)
+            seed_everything(0)
             print(f"\nTraining TAF-II model: {label} photons")
 
             case_prefix = f"taf_ii_{label}"

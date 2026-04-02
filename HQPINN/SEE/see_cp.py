@@ -20,8 +20,8 @@ from ..utils import (
     get_latest_checkpoint,
     load_model,
     make_optimizer,
-    set_global_seed,
 )
+from ..runtime import seed_everything
 from .core_see import (
     append_summary_row,
     evaluate_see_errors,
@@ -120,7 +120,7 @@ def run(
     q_layers: int | None = None,
 ):
     """Run all SEE Classical models and write summary CSV."""
-    set_global_seed(0)
+    seed_everything(0)
 
     ckpt_dir = "HQPINN/SEE/"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -137,7 +137,7 @@ def run(
         else:
             models = MODELS
         for label, width, layers, q_layers in models:
-            set_global_seed(0)
+            seed_everything(0)
             print(f"\nTraining SEE-CP model: {label} q_layers={q_layers}")
 
             case_prefix = f"see_cp_{label}"

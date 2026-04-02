@@ -18,8 +18,8 @@ from ..utils import (
     get_latest_checkpoint,
     load_model,
     make_optimizer,
-    set_global_seed,
 )
+from ..runtime import seed_everything
 from .core_dee import (
     append_summary_row,
     evaluate_dee_errors,
@@ -81,7 +81,7 @@ MODELS = [
 
 def run(mode="train", backend="sim:ascella", n_photons=2):
     """Run all DEE Interferometer-Interferometer models and write summary CSV."""
-    set_global_seed(0)
+    seed_everything(0)
 
     ckpt_dir = "HQPINN/DEE/"
     # case_prefix = f"see_ii_{n_photons}"
@@ -95,7 +95,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
         print("=== TRAINING MODE ===")
         summary_csv = "HQPINN/DEE/results/dee_summary.csv"
         for label, nb_photons in MODELS:
-            set_global_seed(0)
+            seed_everything(0)
             print(f"\nTraining DEE-II {nb_photons} photons")
 
             case_prefix = f"dee_ii_{nb_photons}"
