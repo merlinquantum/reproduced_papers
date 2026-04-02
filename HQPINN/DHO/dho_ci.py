@@ -33,7 +33,7 @@ from .core_dho import (
 )
 from ..run_common import run_series_inference_mode
 from ..layer_merlin import make_interf_qlayer, BranchMerlin
-from ..layer_classical import BranchPyTorch
+from ..layer_classical import DHOBranchPyTorch, LearnedScalarFusion
 
 
 # ============================================================
@@ -63,16 +63,16 @@ class CI_PINN(nn.Module):
             feature_map_kind="dho",
         )
         # One classical MLP branch
-        self.branch2 = BranchPyTorch(
+        self.branch2 = DHOBranchPyTorch(
             num_hidden_layers=num_hidden_layers,
             hidden_width=hidden_width,
         )
-        self.fusion = nn.Linear(4, 1, dtype=DTYPE)
+        self.fusion = LearnedScalarFusion()
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
         out_q = self.branch1(t)
         out_c = self.branch2(t)
-        return self.fusion(torch.cat([out_q, out_c], dim=1))
+        return self.fusion(out_q, out_c)
 
 
 def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_ci/"):

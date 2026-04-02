@@ -1,5 +1,4 @@
 # utils.py
-
 import os
 import random
 from typing import Callable, Optional
@@ -156,8 +155,8 @@ def log_training_info(n_epochs, elapsed, final_loss, loss_ic, loss_bc, loss_f, r
 def load_model(
     ckpt_path: str, model_ctor: Callable[..., nn.Module], processor=None
 ) -> nn.Module:
-    model = model_ctor(processor=processor)  # use_remote implicite = False (local SLOS)
     state = torch.load(ckpt_path, map_location="cpu")
+    model = model_ctor(processor=processor)
     model.load_state_dict(state)
     model.eval()
     print(f"Loaded model from: {ckpt_path} remote={processor is not None}")

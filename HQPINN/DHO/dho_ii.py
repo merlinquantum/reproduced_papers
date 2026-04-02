@@ -32,6 +32,7 @@ from .core_dho import (
 )
 from ..run_common import run_series_inference_mode
 from ..layer_merlin import make_interf_qlayer, BranchMerlin
+from ..layer_classical import LearnedScalarFusion
 
 
 # ============================================================
@@ -63,12 +64,12 @@ class MM_PINN(nn.Module):
             processor=processor,
             feature_map_kind="dho",
         )
-        self.fusion = nn.Linear(2, 1, dtype=DTYPE)
+        self.fusion = LearnedScalarFusion()
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
         out1 = self.branch1(t)
         out2 = self.branch2(t)
-        return self.fusion(torch.cat([out1, out2], dim=1))
+        return self.fusion(out1, out2)
 
 
 def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_ii/"):

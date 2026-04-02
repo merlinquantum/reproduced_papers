@@ -36,7 +36,7 @@ from .core_dho import (
 )
 from ..run_common import run_series_inference_mode
 from ..layer_pennylane import make_quantum_block, dho_feature_map, BranchPennylane
-from ..layer_classical import BranchPyTorch
+from ..layer_classical import DHOBranchPyTorch, LearnedScalarFusion
 
 
 class CQ_PINN(nn.Module):
@@ -62,16 +62,16 @@ class CQ_PINN(nn.Module):
             n_layers=N_LAYERS,
             n_qubits=n_qubits,
         )
-        self.branch_c = BranchPyTorch(
+        self.branch_c = DHOBranchPyTorch(
             num_hidden_layers=num_hidden_layers,
             hidden_width=hidden_width,
         )
-        self.fusion = nn.Linear(4, 1, dtype=DTYPE)
+        self.fusion = LearnedScalarFusion()
 
     def forward(self, t: torch.Tensor) -> torch.Tensor:
         out_q = self.branch_q(t)
         out_c = self.branch_c(t)
-        return self.fusion(torch.cat([out_q, out_c], dim=1))
+        return self.fusion(out_q, out_c)
 
 
 def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_cp/"):
