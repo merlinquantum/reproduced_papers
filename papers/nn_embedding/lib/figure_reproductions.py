@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 import torch.nn as nn
 import merlin as ml
+import numpy as np
 import json
 import gc
 from copy import deepcopy
@@ -85,20 +86,20 @@ def reproduce_figure_2(
         "test_accuracies": {key: [] for key in keys},
     }
 
-    # load the data
-    x_train_PCA8, x_test_PCA8, y_train_PCA8, y_test_PCA8 = data_load_and_process(
-        dataset=dataset,
-        feature_reduction=8,
-        classes=[0, 1],
-        samples_per_class=samples_per_class,
-    )
-    x_train, x_test, y_train, y_test = data_load_and_process(
-        dataset=dataset,
-        feature_reduction=False,
-        classes=[0, 1],
-        samples_per_class=samples_per_class,
-    )
     for i in range(num_repetitions):
+        # load the data
+        x_train_PCA8, x_test_PCA8, y_train_PCA8, y_test_PCA8 = data_load_and_process(
+            dataset=dataset,
+            feature_reduction=8,
+            classes=[0, 1],
+            samples_per_class=samples_per_class,
+        )
+        x_train, x_test, y_train, y_test = data_load_and_process(
+            dataset=dataset,
+            feature_reduction=False,
+            classes=[0, 1],
+            samples_per_class=samples_per_class,
+        )
 
         ################################################################# MerLin-based
         if use_merlin:
@@ -489,21 +490,21 @@ def reproduce_figure_3(
         "train_accuracies": {key: [] for key in keys},
         "test_accuracies": {key: [] for key in keys},
     }
-    # load the data
-    x_train_PCA8, x_test_PCA8, y_train_PCA8, y_test_PCA8 = data_load_and_process(
-        dataset=dataset,
-        feature_reduction=8,
-        classes=[0, 1],
-        samples_per_class=samples_per_class,
-    )
-    x_train, x_test, y_train, y_test = data_load_and_process(
-        dataset=dataset,
-        feature_reduction=False,
-        classes=[0, 1],
-        samples_per_class=samples_per_class,
-    )
 
     for i in range(num_repetitions):
+        # load the data
+        x_train_PCA8, x_test_PCA8, y_train_PCA8, y_test_PCA8 = data_load_and_process(
+            dataset=dataset,
+            feature_reduction=8,
+            classes=[0, 1],
+            samples_per_class=samples_per_class,
+        )
+        x_train, x_test, y_train, y_test = data_load_and_process(
+            dataset=dataset,
+            feature_reduction=False,
+            classes=[0, 1],
+            samples_per_class=samples_per_class,
+        )
         ################################################################# MerLin-based
         if use_merlin:
             embedder, classifier, classical_model_8, classical_model = (
@@ -783,7 +784,7 @@ def reproduce_figure_5(
     num_epochs_training_embedding: int = 50,
     lr: float = 0.01,
     distance: str = "Trace",
-    samples_per_class: int = 150,
+    samples_per_class: int = 500,
     num_repetitions: int = 5,
     weights: list[float] = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
 ):
@@ -793,23 +794,22 @@ def reproduce_figure_5(
         "generalization_error": {key: [] for key in keys},
     }
 
-    # load the data
-    x_train_PCA4, x_test_PCA4, y_train_PCA4, y_test_PCA4 = data_load_and_process(
-        dataset=dataset,
-        feature_reduction=8,
-        classes=[0, 1],
-        samples_per_class=samples_per_class,
-    )
-    y_train_PCA4_minus_one = [-1 if y == 0 else 1 for y in y_train_PCA4]
-    x_train, x_test, y_train, y_test = data_load_and_process(
-        dataset=dataset,
-        feature_reduction=False,
-        classes=[0, 1],
-        samples_per_class=samples_per_class,
-    )
-    y_train_minus_one = [-1 if y == 0 else 1 for y in y_train]
-
     for i in range(num_repetitions):
+        # load the data
+        x_train_PCA4, x_test_PCA4, y_train_PCA4, y_test_PCA4 = data_load_and_process(
+            dataset=dataset,
+            feature_reduction=4,
+            classes=[0, 1],
+            samples_per_class=samples_per_class,
+        )
+        y_train_PCA4_minus_one = np.array([-1 if y == 0 else 1 for y in y_train_PCA4])
+        x_train, x_test, y_train, y_test = data_load_and_process(
+            dataset=dataset,
+            feature_reduction=False,
+            classes=[0, 1],
+            samples_per_class=samples_per_class,
+        )
+        y_train_minus_one = np.array([-1 if y == 0 else 1 for y in y_train])
         ################################################################# MerLin-based
         if use_merlin:
             embedder, classical_model_4, classical_model, dim = (
@@ -827,9 +827,9 @@ def reproduce_figure_5(
                 classes=[0, 1],
                 samples_per_class=samples_per_class,
             )
-            y_train_PCA_no_NQE_minus_one = [
-                -1 if y == 0 else 1 for y in y_train_PCA_no_NQE
-            ]
+            y_train_PCA_no_NQE_minus_one = np.array(
+                [-1 if y == 0 else 1 for y in y_train_PCA_no_NQE]
+            )
 
             # PCA_NQE
             print("PCA_NQE")
@@ -851,7 +851,9 @@ def reproduce_figure_5(
             )
             print("Calculating the error")
             kernel_matrix = model.compute_kernel_matrix(x_train_PCA4)
-            errors = get_error_bound(weights, kernel_matrix, y_train_PCA4_minus_one)
+            errors = get_error_bound(
+                weights, kernel_matrix.detach().numpy(), y_train_PCA4_minus_one
+            )
 
             results["generalization_error"]["pca_nqe"].append(errors)
             del model
@@ -876,12 +878,15 @@ def reproduce_figure_5(
             )
             print("Calculating the error")
             kernel_matrix = model.compute_kernel_matrix(x_train)
-            errors = get_error_bound(weights, kernel_matrix, y_train_minus_one)
+            errors = get_error_bound(
+                weights, kernel_matrix.detach().numpy(), y_train_minus_one
+            )
 
             results["generalization_error"]["nqe"].append(errors)
             del model
 
             # No NQE
+            print("No NQE")
             model = NeuralEmbeddingMerLinKernel(
                 classical_model=TransparentModel(),
                 quantum_embedding_layer=deepcopy(embedder),
@@ -889,7 +894,7 @@ def reproduce_figure_5(
             print("Calculating the error")
             kernel_matrix = model.compute_kernel_matrix(x_train_PCA_no_NQE)
             errors = get_error_bound(
-                weights, kernel_matrix, y_train_PCA_no_NQE_minus_one
+                weights, kernel_matrix.detach().numpy(), y_train_PCA_no_NQE_minus_one
             )
             results["generalization_error"]["without_nqe"].append(errors)
 
@@ -919,7 +924,9 @@ def reproduce_figure_5(
             )
             print("Calculating the error")
             kernel_matrix = model.compute_kernel_matrix(x_train_PCA4)
-            errors = get_error_bound(weights, kernel_matrix, y_train_PCA4_minus_one)
+            errors = get_error_bound(
+                weights, kernel_matrix.detach().numpy(), y_train_PCA4_minus_one
+            )
 
             results["generalization_error"]["pca_nqe"].append(errors)
             del model
@@ -945,12 +952,15 @@ def reproduce_figure_5(
             )
             print("Calculating the error")
             kernel_matrix = model.compute_kernel_matrix(x_train)
-            errors = get_error_bound(weights, kernel_matrix, y_train_minus_one)
+            errors = get_error_bound(
+                weights, kernel_matrix.detach().numpy(), y_train_minus_one
+            )
 
             results["generalization_error"]["nqe"].append(errors)
             del model
 
             # No NQE
+            print("No NQE")
             model = NeuralEmbeddingGateBasedKernel(
                 num_qubits=4,
                 classical_model=TransparentModel(),
@@ -958,7 +968,9 @@ def reproduce_figure_5(
             )
             print("Calculating the error")
             kernel_matrix = model.compute_kernel_matrix(x_train_PCA4)
-            errors = get_error_bound(weights, kernel_matrix, y_train_PCA4_minus_one)
+            errors = get_error_bound(
+                weights, kernel_matrix.detach().numpy(), y_train_PCA4_minus_one
+            )
             results["generalization_error"]["without_nqe"].append(errors)
 
             del model, embedder, classical_model_4, classical_model
@@ -1018,21 +1030,20 @@ def reproduce_figure_6(
         "test_kernel_var": {key: [] for key in keys},
     }
 
-    # load the data
-    x_train_PCA4, x_test_PCA4, y_train_PCA4, y_test_PCA4 = data_load_and_process(
-        dataset=dataset,
-        feature_reduction=8,
-        classes=[0, 1],
-        samples_per_class=samples_per_class,
-    )
-    x_train, x_test, y_train, y_test = data_load_and_process(
-        dataset=dataset,
-        feature_reduction=False,
-        classes=[0, 1],
-        samples_per_class=samples_per_class,
-    )
-
     for i in range(num_repetitions):
+        # load the data
+        x_train_PCA4, x_test_PCA4, y_train_PCA4, y_test_PCA4 = data_load_and_process(
+            dataset=dataset,
+            feature_reduction=4,
+            classes=[0, 1],
+            samples_per_class=samples_per_class,
+        )
+        x_train, x_test, y_train, y_test = data_load_and_process(
+            dataset=dataset,
+            feature_reduction=False,
+            classes=[0, 1],
+            samples_per_class=samples_per_class,
+        )
         ################################################################# MerLin-based
         if use_merlin:
             embedder, classical_model_4, classical_model, dim = (
@@ -1339,4 +1350,4 @@ def reproduce_figure_6(
     )
 
 
-reproduce_figure_3(use_merlin=False)
+reproduce_figure_5(use_merlin=True)

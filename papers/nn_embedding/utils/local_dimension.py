@@ -27,4 +27,7 @@ def get_local_dimension(
 
 
 def create_param_ensemble(params: torch.Tensor, num_sample_per_dimension: int = 5):
-    pass
+    def _create_param_ensemble(
+        params: torch.Tensor, index: int, num_sample_per_dimension: int
+    ):
+        pass

@@ -343,8 +343,7 @@ class NeuralEmbeddingGateBasedKernel(nn.Module):
         self.state_embedding_circuit = self._create_state_embedding_circuit()
 
         # Creating the models
-        self.embedding_training_model = self._TrainingModule(self)
-        self.kernel_function = self._ComputeKernel(self)
+        self.kernel_function = self._TrainingModule(self)
 
     def _create_distance_layer(self) -> torch.nn.Module:
         @qml.qnode(self.dev, interface="torch")
@@ -387,28 +386,6 @@ class NeuralEmbeddingGateBasedKernel(nn.Module):
             )
             return probs[:, 0]
 
-    class _ComputeKernel(nn.Module):
-        def __init__(self, main_model):
-            super().__init__()
-            object.__setattr__(self, "main_model", main_model)
-
-        def forward(self, x_1: torch.Tensor, x_2: torch.Tensor) -> torch.Tensor:
-            with torch.no_grad():
-
-                data_1 = self.main_model.classical_encoder(x_1)
-                data_2 = self.main_model.classical_encoder(x_2)
-
-                data_1 = data_1.reshape(data_1.size(0), -1)
-                data_2 = data_2.reshape(data_2.size(0), -1)
-
-                x = torch.cat([data_1, data_2], dim=1)
-                probs = torch.vstack(
-                    tuple(
-                        self.main_model.distance_circuit_layer(sample) for sample in x
-                    )
-                )
-            return probs
-
     def train_embedding(
         self,
         x_train: torch.Tensor,
@@ -449,7 +426,7 @@ class NeuralEmbeddingGateBasedKernel(nn.Module):
         for epoch in range(num_epochs):
 
             # Training loop
-            self.embedding_training_model.train()
+            self.kernel_function.train()
 
             X1_batch, X2_batch, Y_batch = create_random_pairs(
                 batch_size, x_train, y_train
@@ -458,7 +435,7 @@ class NeuralEmbeddingGateBasedKernel(nn.Module):
             x = torch.concatenate([X1_batch, X2_batch], dim=1)
 
             optimizer.zero_grad()
-            outputs = self.embedding_training_model(x)
+            outputs = self.kernel_function(x)
             loss = criterion(outputs, Y_batch)
             loss_list.append(loss.cpu().detach().numpy())
             loss.backward()
@@ -523,11 +500,27 @@ class NeuralEmbeddingGateBasedKernel(nn.Module):
             )
 
     def compute_kernel_matrix(self, X_data: torch.Tensor):
-        output = torch.empty((X_data.size(0), X_data.size(0)))
-        for i in range(X_data.size(0)):
-            output[i, i] = self.kernel_function(X_data[i], X_data[i])
-            for j in range(i + 1, X_data.size(0)):
-                output[i, j] = self.kernel_function(X_data[i], X_data[j])
+        self.kernel_function.eval()
+        n = X_data.size(0)
+        pairs_a = []
+        pairs_b = []
+        for i in range(n):
+            for j in range(i, n):
+                pairs_a.append(X_data[i])
+                pairs_b.append(X_data[j])
+
+        pairs_a = torch.stack(pairs_a)
+        pairs_b = torch.stack(pairs_b)
+        inp = torch.cat((pairs_a, pairs_b), dim=1)
+
+        values = self.kernel_function(inp)
+        output = torch.empty(n, n)
+        output_index = 0
+        for i in range(n):
+            for j in range(i, n):
+                output[i, j] = values[output_index]
+                output[j, i] = values[output_index]
+                output_index += 1
         return output
 
 

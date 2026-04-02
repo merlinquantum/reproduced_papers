@@ -65,9 +65,9 @@ def get_error_bound(weights: np.ndarray, Kernel: np.ndarray, Y_train: np.ndarray
 
     for weight in weights:
         Kernel_MP = np.linalg.pinv(Kernel + weight * np.eye(N), hermitian=True)
-        error_list.append(
-            np.sqrt(Y_train @ Kernel_MP @ Kernel @ Kernel_MP @ Y_train.T / N)
-        )
+        val = Y_train @ Kernel_MP @ Kernel @ Kernel_MP @ Y_train.T / N
+        # To make sure no negative value is in the square root
+        error_list.append(np.sqrt(max(val, 0.0)))
 
     error_list = np.array(error_list)
 
@@ -383,5 +383,5 @@ class TransparentModel(nn.Module):
     def __init__(self):
         super().__init__()
 
-    def forward(x: torch.Tensor):
+    def forward(self, x: torch.Tensor):
         return x
