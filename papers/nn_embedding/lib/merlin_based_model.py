@@ -522,28 +522,24 @@ class NeuralEmbeddingMerLinKernel(nn.Module):
                 loss_lower_bound(rhos0_test, rhos1_test),
             )
 
-    def compute_kernel_matrix(self, X_data: torch.Tensor):
+    def compute_kernel_matrix(self, X_data: torch.Tensor, batch_size: int = 256):
         self.kernel_function.eval()
         n = X_data.size(0)
-        pairs_a = []
-        pairs_b = []
-        for i in range(n):
-            for j in range(i, n):
-                pairs_a.append(X_data[i])
-                pairs_b.append(X_data[j])
-
-        pairs_a = torch.stack(pairs_a)
-        pairs_b = torch.stack(pairs_b)
+        idx_i, idx_j = torch.triu_indices(n, n)
+        pairs_a = X_data[idx_i]
+        pairs_b = X_data[idx_j]
         inp = torch.cat((pairs_a, pairs_b), dim=1)
 
-        values = self.kernel_function(inp)
+        values_list = []
+        with torch.no_grad():
+            for start in range(0, inp.size(0), batch_size):
+                batch = inp[start : start + batch_size]
+                values_list.append(self.kernel_function(batch))
+        values = torch.cat(values_list)
+
         output = torch.empty(n, n)
-        output_index = 0
-        for i in range(n):
-            for j in range(i, n):
-                output[i, j] = values[output_index]
-                output[j, i] = values[output_index]
-                output_index += 1
+        output[idx_i, idx_j] = values
+        output[idx_j, idx_i] = values
         return output
 
 

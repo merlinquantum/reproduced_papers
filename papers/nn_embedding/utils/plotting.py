@@ -512,6 +512,95 @@ def plot_figure_3(
     return _save_plot(fig, filename, run_dir)
 
 
+def plot_figure_4(
+    effective_dimension: dict[str, Sequence[Sequence[float]]],
+    *,
+    samples_per_dataset: int | None = None,
+    n_values: Sequence[float] | None = None,
+    figsize: tuple[float, float] = (6.0, 4.5),
+    run_dir: Path | None = None,
+    filename: str = "figure_4.pdf",
+) -> Path:
+    """Plot figure 4: local effective dimension with and without NQE.
+
+    Parameters
+    ----------
+    effective_dimension
+        Mapping from method name to repeated effective-dimension curves. Each
+        value must be shaped like ``(num_repetitions, num_n_values)``. Expected
+        keys are ``"nqe"`` and ``"without_nqe"``.
+    samples_per_dataset
+        Number of samples used per dataset; used to reconstruct x-axis values
+        as ``range(1, samples_per_dataset + 1, 1000)`` when *n_values* is not
+        given.
+    n_values
+        Optional explicit x-axis values. Overrides *samples_per_dataset*.
+    figsize, run_dir, filename
+        Standard plotting/output configuration.
+    """
+
+    def _to_2d_float_array(values, name):
+        arr = np.asarray(_to_plot_values(values), dtype=float)
+        if arr.ndim != 2:
+            raise ValueError(
+                f"{name} must be a 2D array-like object shaped "
+                "(num_repetitions, num_n_values)."
+            )
+        return arr
+
+    required_keys = ("nqe", "without_nqe")
+    missing = [k for k in required_keys if k not in effective_dimension]
+    if missing:
+        raise ValueError(f"Missing effective dimension for keys: {missing}")
+
+    arrays = {k: _to_2d_float_array(effective_dimension[k], k) for k in required_keys}
+    num_n = arrays["nqe"].shape[1]
+
+    if n_values is not None:
+        n_values = np.asarray(n_values, dtype=float)
+    elif samples_per_dataset is not None:
+        n_values = np.array(list(range(1, samples_per_dataset + 1, 1000)), dtype=float)
+    else:
+        n_values = np.arange(num_n, dtype=float)
+
+    if len(n_values) != num_n:
+        raise ValueError("n_values must have the same length as the data curves.")
+
+    specs = (
+        ("nqe", "With NQE", "#8b8b2a", "-"),
+        ("without_nqe", "Without NQE", "#7b7bc4", "--"),
+    )
+
+    fig, ax = plt.subplots(figsize=figsize)
+
+    for key, label, color, linestyle in specs:
+        mean = arrays[key].mean(axis=0)
+        std = arrays[key].std(axis=0)
+        ax.plot(
+            n_values,
+            mean,
+            color=color,
+            linestyle=linestyle,
+            linewidth=1.8,
+            label=label,
+        )
+        ax.fill_between(
+            n_values,
+            mean - std,
+            mean + std,
+            color=color,
+            alpha=0.25,
+            linewidth=0,
+        )
+
+    ax.set_xlabel("Number of data")
+    ax.set_ylabel("Local effective dimension")
+    ax.legend(loc="center left", frameon=True)
+
+    fig.tight_layout()
+    return _save_plot(fig, filename, run_dir)
+
+
 ### Simple trace distance plot
 def plot_trace_distance(
     train_distances,

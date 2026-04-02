@@ -4,6 +4,18 @@ import torch.nn as nn
 import pennylane as qml
 import merlin as ml
 from copy import deepcopy
+from nngeometry.metrics import FIM
+from nngeometry.object import FMatDense
+from torch.utils.data import DataLoader, TensorDataset
+from scipy.special import gamma as gamma_fun
+from pathlib import Path
+import sys
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+REPO_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(REPO_ROOT))
+sys.path.insert(0, str(PROJECT_ROOT))
+
 
 from papers.nn_embedding.utils.merlin_model_utils import assign_params
 
@@ -107,15 +119,12 @@ def haar_integral_gate_based(num_qubits, samples):
     return randunit_density
 
 
-def random_unitary_photonics(dim: int):
+def random_state_photonics(dim: int):
     """
-    Return a Haar distributed random unitary from U(N)
+    Return a Haar distributed random state vector of dimension dim.
     """
-
-    Z = np.random.randn(dim, dim) + 1.0j * np.random.randn(dim, dim)
-    [Q, R] = np.linalg.qr(Z)
-    D = np.diag(np.diagonal(R) / np.abs(np.diagonal(R)))
-    return np.dot(Q, D)
+    z = np.random.randn(dim) + 1.0j * np.random.randn(dim)
+    return state_vector_to_density_matrix(z / np.linalg.norm(z))
 
 
 def haar_integral_photonics(dim: int, samples):
@@ -124,16 +133,11 @@ def haar_integral_photonics(dim: int, samples):
     Dim is the number of possible states (ex: m choose n for unbunched)
     """
 
-    randunit_density = np.zeros((dim * 2, dim * 2), dtype=complex)
-
-    zero_state = np.zeros(dim * 2, dtype=complex)
-    zero_state[0] = 1
+    randunit_density = np.zeros((dim**2, dim**2), dtype=complex)
 
     for _ in range(samples):
-        U = random_unitary_gate_based(dim)
-        U = np.kron(U, U)
-        A = np.matmul(zero_state, U).reshape(-1, 1)
-        randunit_density += np.kron(A, A.conj().T)
+        A = random_state_photonics(dim)
+        randunit_density += np.kron(A, A)
 
     randunit_density /= samples
 
@@ -154,26 +158,26 @@ def kron(a, b):
     return res.reshape(siz0 + siz1)
 
 
-def two_design_deviation_gate_based(rho: torch.Tensor, num_qubits: int, N: int):
+def two_design_deviation_gate_based(rhos: torch.Tensor, num_qubits: int, N: int):
     """
     N is the number of samples used to define the rhos
     """
     N = rhos.size(dim=0)
     rhos = kron(rhos, rhos)
-    rho = torch.sum(rhos, dim=0) / len(N)
+    rho = torch.sum(rhos, dim=0) / N
     rho = rho.detach().numpy()
     exp = np.linalg.norm(rho - haar_integral_gate_based(num_qubits, N))
     return exp**2
 
 
-def two_design_deviation_photonics(rho: torch.Tensor, dim: int, N: int):
+def two_design_deviation_photonics(rhos: torch.Tensor, dim: int, N: int):
     """
     N is the number of samples used to define the rhos
     Dim is the number of possible states (ex: m choose n for unbunched)
     """
     N = rhos.size(0)
     rhos = kron(rhos, rhos)
-    rho = torch.sum(rhos, 0) / len(N)
+    rho = torch.sum(rhos, 0) / N
     rho = rho.detach().numpy()
     exp = np.linalg.norm(rho - haar_integral_photonics(dim, N))
     return exp**2
@@ -200,12 +204,17 @@ class LinearLoss(nn.Module):
         return (labels + predictions - (2 * labels * predictions)).mean()
 
 
-def state_vector_to_density_matrix(x: torch.Tensor) -> torch.Tensor:
-    if x.ndim == 1:
-        return torch.outer(x, torch.conj(x))
-    if x.ndim == 2:
-        return x.unsqueeze(-1) * torch.conj(x).unsqueeze(-2)
-    raise ValueError("x must have shape (state_dim,) or (batch_size, state_dim)")
+def state_vector_to_density_matrix(
+    x: torch.Tensor | np.ndarray,
+) -> torch.Tensor | np.ndarray:
+    if isinstance(x, torch.Tensor):
+        if x.ndim == 1:
+            return torch.outer(x, torch.conj(x))
+        if x.ndim == 2:
+            return x.unsqueeze(-1) * torch.conj(x).unsqueeze(-2)
+        raise ValueError("x must have shape (state_dim,) or (batch_size, state_dim)")
+    else:
+        return np.outer(x, x.conj())
 
 
 def create_basic_gate_based_model(
@@ -385,3 +394,81 @@ class TransparentModel(nn.Module):
 
     def forward(self, x: torch.Tensor):
         return x
+
+
+def get_local_dimension(
+    model: nn.Module,
+    x: torch.Tensor,
+    y: torch.Tensor,
+    epsilon: float = 0.01,
+    num_samples: int = 100,
+) -> float:
+    dataset = TensorDataset(x, y)
+    loader = DataLoader(dataset, shuffle=True)
+
+    d = sum(param.numel() for param in model.parameters())
+    params = torch.Tensor(model.parameters())
+    total_size = y.size(0)
+
+    values = []
+
+    for n in range(1, total_size + 1, 1000):
+        gamma = 1
+        kappa = gamma * n / (2 * np.pi * np.log(n))
+        V = (np.pi ** (d / 2)) * (epsilon**d) / gamma_fun(d / 2 + 1)
+        params_to_sample = create_param_ensemble(
+            params, d, epsilon=epsilon, num_samples=num_samples
+        )
+
+        trace_sum = 0
+        total_eigs = []
+        for point in params_to_sample:
+            # Assign the params
+            model.eval()
+            for value, param in zip(point, model.parameters()):
+                param.copy_(value)
+            model.train()
+
+            # Compute the trace and eigenvalues
+            fisher_matrix = FIM(model, loader, FMatDense)
+            fisher_matrix.compute_eigendecomposition()
+            total_eigs.qqpend(fisher_matrix.get_eigendecomposition()[0])
+            trace_sum += fisher_matrix.trace()
+
+        eig_normalisation_factor = d * V * num_samples / trace_sum
+
+        # Compute the integral
+        integral = 0
+        for eigs in total_eigs:
+            eig_sum = 0
+            for eig in eigs:
+                eig_sum += np.log(1 + kappa * eig_normalisation_factor * eig)
+            integral += np.exp(0.5 * eig_sum)
+
+        integral /= num_samples
+
+        values.append((2 * np.log((1 / V) * integral)) / (np.log(kappa)))
+
+    return values
+
+
+def create_param_ensemble(
+    params: torch.Tensor, d: int, epsilon: float = 1.0, num_samples: int = 100
+):
+    """
+    Uniformly sample for a d dimension ball, code from
+
+    https://extremelearning.com.au/how-to-generate-uniformly-random-points-on-n-spheres-and-n-balls/
+    """
+    params_flat = params.detach().numpy().flatten()
+
+    u = np.random.normal(
+        0, epsilon, (num_samples, d + 2)
+    )  # an array of (d+2) normally distributed random variables
+    norms = np.sum(u**2, axis=1) ** (0.5)
+    for vector, norm in zip(u, norms):
+        vector /= norm
+
+    x = u[:, 0:d]  # take the first d coordinates
+    x += params_flat  # (num_samples, d) + (d,) broadcasts correctly
+    return torch.from_numpy(x).float().reshape(num_samples, *params.shape)

@@ -142,6 +142,44 @@ def create_trainable_merlin_layer_fig_3(N_layer: int):
     return model
 
 
+def create_merlin_fig_4_models():
+    # Quantum embedding
+    circ = ml.CircuitBuilder(n_modes=6)
+    circ.add_entangling_layer()
+    embedder = ml.QuantumLayer(
+        input_size=0,
+        builder=circ,
+        n_photons=2,
+        measurement_strategy=ml.MeasurementStrategy.AMPLITUDES,
+    )
+    randomize_trainable_parameters(embedder)
+
+    # Quantum classifier
+    circ = ml.CircuitBuilder(n_modes=6)
+    circ.add_entangling_layer()
+    classifier = ml.QuantumLayer(
+        builder=circ,
+        n_photons=2,
+        amplitude_encoding=True,
+        measurement_strategy=ml.MeasurementStrategy.PROBABILITIES,
+    )
+    randomize_trainable_parameters(classifier)
+
+    dim = sum([i.numel() for i in embedder.parameters()])
+
+    # PCA 8
+    classical_model = nn.Sequential(
+        nn.Linear(dim, 10),
+        nn.ReLU(),
+        nn.Linear(10, 10),
+        nn.ReLU(),
+        nn.Linear(10, dim),
+    )
+    randomize_trainable_parameters(classical_model)
+
+    return embedder, classifier, classical_model, dim
+
+
 def create_merlin_fig_5_models():
     # Quantum embedding
     circ = ml.CircuitBuilder(n_modes=6)
