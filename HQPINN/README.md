@@ -11,3 +11,8 @@ Runtime config:
 
 Tests:
 - run everything with `python3 -m unittest discover -s HQPINN/tests`
+
+Batch training:
+- run the full training queue with `bash HQPINN/run_all_train_jobs.sh`
+- the queue includes `dho-pp` and `dho-cp`, and skips the other `-cp` plus the SEE/DEE/TAF `-pp` jobs
+- preview the queue with `bash HQPINN/run_all_train_jobs.sh --dry-run`
