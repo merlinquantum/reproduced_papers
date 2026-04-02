@@ -294,7 +294,8 @@ def run_from_project(config: dict[str, Any]) -> None:
         run(
             mode=mode,
             backend=backend,
-            model_size=_build_model_size(n_nodes, n_layers),
+            n_layers=n_layers,
+            n_nodes=n_nodes,
         )
         return
 
@@ -359,7 +360,8 @@ def run_from_project(config: dict[str, Any]) -> None:
         run(
             mode=mode,
             backend=backend,
-            model_size=_build_model_size(n_nodes, n_layers),
+            n_layers=n_layers,
+            n_nodes=n_nodes,
         )
         return
 

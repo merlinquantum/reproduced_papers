@@ -85,7 +85,27 @@ def _get_model_config(model_size: str) -> tuple[str, int, int]:
     raise ValueError(f"Unknown model_size='{model_size}'. Valid values: {valid}")
 
 
-def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
+def _resolve_model_config(
+    *,
+    model_size: str | None = None,
+    n_nodes: int | None = None,
+    n_layers: int | None = None,
+) -> tuple[str, int, int]:
+    if model_size is not None:
+        return _get_model_config(model_size)
+    if n_nodes is None or n_layers is None:
+        raise ValueError("TAF-CC requires either model_size or both n_nodes and n_layers")
+    return f"{n_nodes}-{n_layers}", n_nodes, n_layers
+
+
+def run(
+    mode="train",
+    backend="sim:ascella",
+    model_size="40-4",
+    *,
+    n_nodes: int | None = None,
+    n_layers: int | None = None,
+) -> None:
     """Run TAF classical-classical models and write summary CSV."""
     seed_everything(0)
 
@@ -98,8 +118,12 @@ def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
     if mode == "train":
         summary_csv = "HQPINN/TAF/results/taf_summary.csv"
+        if n_nodes is not None or n_layers is not None:
+            models = [_resolve_model_config(n_nodes=n_nodes, n_layers=n_layers)]
+        else:
+            models = MODELS
 
-        for label, width, layers in MODELS:
+        for label, width, layers in models:
             seed_everything(0)
             print(f"\nTraining TAF-CC model: {label} (width={width}, layers={layers})")
 
@@ -215,7 +239,11 @@ def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
         print(f"Summary CSV appended to: {summary_csv}")
 
     elif mode == "run":
-        label, width, layers = _get_model_config(model_size)
+        label, width, layers = _resolve_model_config(
+            model_size=model_size,
+            n_nodes=n_nodes,
+            n_layers=n_layers,
+        )
         case_prefix = f"taf_cc_{label}"
         run_density_inference_mode(
             mode="run",
@@ -234,7 +262,11 @@ def run(mode="train", backend="sim:ascella", model_size="40-4") -> None:
         print(
             "Remote mode is not available for TAF-CC. Falling back to local run mode."
         )
-        label, width, layers = _get_model_config(model_size)
+        label, width, layers = _resolve_model_config(
+            model_size=model_size,
+            n_nodes=n_nodes,
+            n_layers=n_layers,
+        )
         case_prefix = f"taf_cc_{label}"
         run_density_inference_mode(
             mode="run",

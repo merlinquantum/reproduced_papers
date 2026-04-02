@@ -40,6 +40,12 @@ DATA_DIR = Path(__file__).resolve().parent / "NACA0012"
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
+TAF_FIELD_LABELS = (
+    ("rho", "density"),
+    ("u", "x-velocity"),
+    ("v", "y-velocity"),
+    ("T", "temperature"),
+)
 
 TAF_SUMMARY_COLUMNS = [
     "run_id",
@@ -84,7 +90,6 @@ def load_training_sets() -> dict[str, torch.Tensor]:
         "X_f": torch.cat([X_data_int, X_f], dim=0),
         "X_wall_normals": load_points(TAF_X_WALL_NORMALS_FILE),
     }
-
 
 def load_training_metrics_for_checkpoint(
     out_dir: str, model_label: str, ckpt_path: str, case_prefix: str
@@ -650,7 +655,7 @@ def save_density_plot(
     run_id: str,
     backend: str,
 ) -> str:
-    """Save a rho(x,y) scatter plot for TAF inference."""
+    """Save TAF primitive-field scatter plots for inference."""
     del plot_label  # TAF plots do not currently display a model-variant label.
     model.eval()
 
@@ -670,25 +675,52 @@ def save_density_plot(
             X_plot = X_data
 
         pred = model(X_plot)
-        rho = pred[:, 0].detach().cpu().numpy()
         x = X_plot[:, 0].detach().cpu().numpy()
         y = X_plot[:, 1].detach().cpu().numpy()
+        pred_np = pred.detach().cpu().numpy()
 
     results_dir = os.path.join(ckpt_dir, "results")
     os.makedirs(results_dir, exist_ok=True)
-    png_path = os.path.join(results_dir, f"{case_prefix}_{backend}_{run_id}.png")
+    saved_paths: list[str] = []
 
-    fig, ax = plt.subplots(figsize=(8, 4))
-    sc = ax.scatter(x, y, c=rho, s=8, cmap="viridis")
-    fig.colorbar(sc, ax=ax, label="rho_pred")
-    ax.set_title(f"Predicted density rho(x,y), backend: {backend}")
-    ax.set_xlabel("x")
-    ax.set_ylabel("y")
-    fig.tight_layout()
-    fig.savefig(png_path, dpi=300)
-    plt.close(fig)
+    def _save_scalar_scatter_plot(
+        *,
+        values: np.ndarray,
+        field_key: str,
+        field_name: str,
+        kind: str,
+        kind_label: str,
+    ) -> str:
+        png_path = os.path.join(
+            results_dir,
+            f"{case_prefix}_{backend}_{run_id}_{field_key}_{kind}.png",
+        )
+        fig, ax = plt.subplots(figsize=(8, 4))
+        sc = ax.scatter(x, y, c=values, s=8, cmap="viridis")
+        fig.colorbar(sc, ax=ax, label=f"{field_key}_{kind}")
+        ax.set_title(f"{kind_label} {field_name} {field_key}(x,y), backend: {backend}")
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        fig.tight_layout()
+        fig.savefig(png_path, dpi=300)
+        plt.close(fig)
+        return png_path
 
-    return png_path
+    for idx, (field_key, field_name) in enumerate(TAF_FIELD_LABELS):
+        saved_paths.append(
+            _save_scalar_scatter_plot(
+                values=pred_np[:, idx],
+                field_key=field_key,
+                field_name=field_name,
+                kind="pred",
+                kind_label="Predicted",
+            )
+        )
+
+    for path in saved_paths[1:]:
+        print(f"Additional figure saved to: {path}")
+
+    return saved_paths[0]
 
 
 def save_rho_slice_plot(
