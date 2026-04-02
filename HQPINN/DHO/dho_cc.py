@@ -51,10 +51,12 @@ class CC_PINN(nn.Module):
     ) -> None:
         super().__init__()
         self.branch1 = DHOBranchPyTorch(
+            out_features=3,
             num_hidden_layers=num_hidden_layers,
             hidden_width=hidden_width,
         )
         self.branch2 = DHOBranchPyTorch(
+            out_features=3,
             num_hidden_layers=num_hidden_layers,
             hidden_width=hidden_width,
         )

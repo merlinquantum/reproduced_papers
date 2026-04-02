@@ -78,7 +78,7 @@ class DHOBranchPyTorch(nn.Module):
     def __init__(
         self,
         in_features: int = 1,
-        out_features: int = 3,
+        out_features: int = 1,
         num_hidden_layers: int = DHO_NUM_HIDDEN_LAYERS,
         hidden_width: int = DHO_HIDDEN_WIDTH,
     ) -> None:
