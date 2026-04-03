@@ -1,5 +1,5 @@
 {
-  "experiment": "taf-pp",
+  "experiment": "taf-qq-pl",
   "mode": "train",
   "backend": "local",
   "model": {

@@ -22,6 +22,32 @@ from .runtime import (
 )
 
 
+EXPERIMENT_ALIASES: dict[str, str] = {
+    "dho-cp": "dho-hy-pl",
+    "dho-ci": "dho-hy-m",
+    "dho-cperc": "dho-hy-mp",
+    "dho-pp": "dho-qq-pl",
+    "dho-ii": "dho-qq-m",
+    "dho-percperc": "dho-qq-mp",
+    "see-cp": "see-hy-pl",
+    "see-ci": "see-hy-m",
+    "see-pp": "see-qq-pl",
+    "see-ii": "see-qq-m",
+    "dee-cp": "dee-hy-pl",
+    "dee-ci": "dee-hy-m",
+    "dee-pp": "dee-qq-pl",
+    "dee-ii": "dee-qq-m",
+    "taf-cp": "taf-hy-pl",
+    "taf-ci": "taf-hy-m",
+    "taf-pp": "taf-qq-pl",
+    "taf-ii": "taf-qq-m",
+}
+
+
+def _canonical_experiment_name(experiment: str) -> str:
+    return EXPERIMENT_ALIASES.get(experiment, experiment)
+
+
 def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
     merged = dict(base)
     for key, value in override.items():
@@ -52,6 +78,9 @@ def _load_config(config_path: str) -> dict[str, Any]:
     experiment = merged.get("experiment")
     if not experiment:
         raise ValueError("Config must define 'experiment'")
+    if not isinstance(experiment, str):
+        raise ValueError("Config 'experiment' must be a string")
+    merged["experiment"] = _canonical_experiment_name(experiment)
 
     mode = merged.get("mode")
     if mode not in {"train", "run", "remote"}:
@@ -102,13 +131,13 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "dho-cp":
+    if experiment == "dho-hy-pl":
         n_layers = model_config.get("n_layers")
         n_nodes = model_config.get("n_nodes")
         n_qubits = model_config.get("n_qubits")
         if n_layers is None or n_nodes is None or n_qubits is None:
             raise ValueError(
-                "dho-cp config requires model.n_layers, model.n_nodes, and model.n_qubits"
+                "dho-hy-pl config requires model.n_layers, model.n_nodes, and model.n_qubits"
             )
 
         from .DHO.dho_cp import run
@@ -122,10 +151,10 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "dho-pp":
+    if experiment == "dho-qq-pl":
         n_qubits = model_config.get("n_qubits")
         if n_qubits is None:
-            raise ValueError("dho-pp config requires model.n_qubits")
+            raise ValueError("dho-qq-pl config requires model.n_qubits")
 
         from .DHO.dho_pp import run
 
@@ -136,13 +165,13 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "dho-ci":
+    if experiment == "dho-hy-m":
         n_layers = model_config.get("n_layers")
         n_nodes = model_config.get("n_nodes")
         n_photons = model_config.get("n_photons")
         if n_layers is None or n_nodes is None or n_photons is None:
             raise ValueError(
-                "dho-ci config requires model.n_layers, model.n_nodes, and model.n_photons"
+                "dho-hy-m config requires model.n_layers, model.n_nodes, and model.n_photons"
             )
 
         from .DHO.dho_ci import run
@@ -156,12 +185,12 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "dho-cperc":
+    if experiment == "dho-hy-mp":
         n_layers = model_config.get("n_layers")
         n_nodes = model_config.get("n_nodes")
         if n_layers is None or n_nodes is None:
             raise ValueError(
-                "dho-cperc config requires model.n_layers and model.n_nodes"
+                "dho-hy-mp config requires model.n_layers and model.n_nodes"
             )
 
         from .DHO.dho_cperc import run
@@ -174,10 +203,10 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "dho-ii":
+    if experiment == "dho-qq-m":
         n_photons = model_config.get("n_photons")
         if n_photons is None:
-            raise ValueError("dho-ii config requires model.n_photons")
+            raise ValueError("dho-qq-m config requires model.n_photons")
 
         from .DHO.dho_ii import run
 
@@ -188,7 +217,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "dho-percperc":
+    if experiment == "dho-qq-mp":
         from .DHO.dho_percperc import run
 
         run(
@@ -213,13 +242,13 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "see-ci":
+    if experiment == "see-hy-m":
         n_layers = model_config.get("n_layers")
         n_nodes = model_config.get("n_nodes")
         n_photons = model_config.get("n_photons")
         if n_layers is None or n_nodes is None or n_photons is None:
             raise ValueError(
-                "see-ci config requires model.n_layers, model.n_nodes, and model.n_photons"
+                "see-hy-m config requires model.n_layers, model.n_nodes, and model.n_photons"
             )
 
         from .SEE.see_ci import run
@@ -233,13 +262,13 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "see-cp":
+    if experiment == "see-hy-pl":
         n_layers = model_config.get("n_layers")
         n_nodes = model_config.get("n_nodes")
         q_layers = model_config.get("q_layers")
         if n_layers is None or n_nodes is None or q_layers is None:
             raise ValueError(
-                "see-cp config requires model.n_layers, model.n_nodes, and model.q_layers"
+                "see-hy-pl config requires model.n_layers, model.n_nodes, and model.q_layers"
             )
 
         from .SEE.see_cp import run
@@ -253,10 +282,10 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "see-ii":
+    if experiment == "see-qq-m":
         n_photons = model_config.get("n_photons")
         if n_photons is None:
-            raise ValueError("see-ii config requires model.n_photons")
+            raise ValueError("see-qq-m config requires model.n_photons")
 
         from .SEE.see_ii import run
 
@@ -267,10 +296,10 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "see-pp":
+    if experiment == "see-qq-pl":
         q_layers = model_config.get("q_layers")
         if q_layers is None:
-            raise ValueError("see-pp config requires model.q_layers")
+            raise ValueError("see-qq-pl config requires model.q_layers")
 
         from .SEE.see_pp import run
 
@@ -295,7 +324,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "dee-ci":
+    if experiment == "dee-hy-m":
         n_layers = _require_model_int(model_config, "n_layers", experiment)
         n_nodes = _require_model_int(model_config, "n_nodes", experiment)
         n_photons = _require_model_int(model_config, "n_photons", experiment)
@@ -309,7 +338,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "dee-cp":
+    if experiment == "dee-hy-pl":
         n_layers = _require_model_int(model_config, "n_layers", experiment)
         n_nodes = _require_model_int(model_config, "n_nodes", experiment)
         q_layers = _require_model_int(model_config, "q_layers", experiment)
@@ -323,7 +352,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "dee-ii":
+    if experiment == "dee-qq-m":
         n_photons = _require_model_int(model_config, "n_photons", experiment)
 
         from .DEE.dee_ii import run
@@ -335,7 +364,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "dee-pp":
+    if experiment == "dee-qq-pl":
         q_layers = _require_model_int(model_config, "q_layers", experiment)
 
         from .DEE.dee_pp import run
@@ -361,7 +390,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "taf-ci":
+    if experiment == "taf-hy-m":
         n_layers = _require_model_int(model_config, "n_layers", experiment)
         n_nodes = _require_model_int(model_config, "n_nodes", experiment)
         n_photons = _require_model_int(model_config, "n_photons", experiment)
@@ -375,7 +404,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "taf-cp":
+    if experiment == "taf-hy-pl":
         n_layers = _require_model_int(model_config, "n_layers", experiment)
         n_nodes = _require_model_int(model_config, "n_nodes", experiment)
         q_layers = _require_model_int(model_config, "q_layers", experiment)
@@ -389,7 +418,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "taf-ii":
+    if experiment == "taf-qq-m":
         n_photons = _require_model_int(model_config, "n_photons", experiment)
 
         from .TAF.taf_ii import run
@@ -401,7 +430,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         )
         return
 
-    if experiment == "taf-pp":
+    if experiment == "taf-qq-pl":
         q_layers = _require_model_int(model_config, "q_layers", experiment)
 
         from .TAF.taf_pp import run
@@ -435,34 +464,34 @@ def _ask_backend(mode: str) -> str:
 
 def _run_interactive() -> None:
     print("Available experiments:")
-    print("  dho-cc          -> DHO, Classical–Classical)")
-    print("  dho-ci          -> DHO, Classical-Interferometer")
-    print("  dho-cp          -> DHO, Classical–PennyLane")
-    print("  dho-cperc       -> DHO, Classical–Perceval")
-    print("  dho-ii          -> DHO, Interferometer–Interferometer")
-    print("  dho-percperc    -> DHO, Perceval–Perceval")
-    print("  dho-pp          -> DHO, PennyLane–PennyLane")
-    print("  see-cc          -> SEE, Classical–Classical")
-    print("  see-ci          -> SEE, Classical–Interferometer")
-    print("  see-cp          -> SEE, Classical–PennyLane")
-    print("  see-ii          -> SEE, Interferometer–Interferometer")
-    print("  see-pp          -> SEE, PennyLane–PennyLane")
-    print("  dee-cc          -> DEE, Classical–Classical")
-    print("  dee-ci          -> DEE, Classical–Interferometer")
-    print("  dee-cp          -> DEE, Classical–PennyLane")
-    print("  dee-ii          -> DEE, Interferometer–Interferometer")
-    print("  dee-pp          -> DEE, PennyLane–PennyLane")
-    print("  taf-cc          -> TAF, Classical–Classical")
-    print("  taf-ci          -> TAF, Classical–Interferometer")
-    print("  taf-cp          -> TAF, Classical–PennyLane")
-    print("  taf-ii          -> TAF, Interferometer–Interferometer")
-    print("  taf-pp          -> TAF, PennyLane–PennyLane")
+    print("  dho-cc          -> DHO, Classical-Classical")
+    print("  dho-hy-m        -> DHO, Hybrid Merlin")
+    print("  dho-hy-pl       -> DHO, Hybrid PennyLane")
+    print("  dho-hy-mp       -> DHO, Hybrid Merlin-Perceval")
+    print("  dho-qq-m        -> DHO, Quantum-Quantum Merlin")
+    print("  dho-qq-mp       -> DHO, Quantum-Quantum Merlin-Perceval")
+    print("  dho-qq-pl       -> DHO, Quantum-Quantum PennyLane")
+    print("  see-cc          -> SEE, Classical-Classical")
+    print("  see-hy-m        -> SEE, Hybrid Merlin")
+    print("  see-hy-pl       -> SEE, Hybrid PennyLane")
+    print("  see-qq-m        -> SEE, Quantum-Quantum Merlin")
+    print("  see-qq-pl       -> SEE, Quantum-Quantum PennyLane")
+    print("  dee-cc          -> DEE, Classical-Classical")
+    print("  dee-hy-m        -> DEE, Hybrid Merlin")
+    print("  dee-hy-pl       -> DEE, Hybrid PennyLane")
+    print("  dee-qq-m        -> DEE, Quantum-Quantum Merlin")
+    print("  dee-qq-pl       -> DEE, Quantum-Quantum PennyLane")
+    print("  taf-cc          -> TAF, Classical-Classical")
+    print("  taf-hy-m        -> TAF, Hybrid Merlin")
+    print("  taf-hy-pl       -> TAF, Hybrid PennyLane")
+    print("  taf-qq-m        -> TAF, Quantum-Quantum Merlin")
+    print("  taf-qq-pl       -> TAF, Quantum-Quantum PennyLane")
 
     print()
-    choice = input("Which experiment do you want to run? ").strip()
+    choice = _canonical_experiment_name(input("Which experiment do you want to run? ").strip())
 
     # DHO experiments
-    if choice == "dho-pp":
+    if choice == "dho-qq-pl":
         from .DHO.dho_pp import run
 
         mode = _ask_mode()
@@ -476,35 +505,35 @@ def _run_interactive() -> None:
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
-    elif choice == "dho-cp":
+    elif choice == "dho-hy-pl":
         from .DHO.dho_cp import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
-    elif choice == "dho-cperc":
+    elif choice == "dho-hy-mp":
         from .DHO.dho_cperc import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
-    elif choice == "dho-ii":
+    elif choice == "dho-qq-m":
         from .DHO.dho_ii import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
-    elif choice == "dho-percperc":
+    elif choice == "dho-qq-mp":
         from .DHO.dho_percperc import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
-    elif choice == "dho-ci":
+    elif choice == "dho-hy-m":
         from .DHO.dho_ci import run
 
         mode = _ask_mode()
@@ -523,7 +552,7 @@ def _run_interactive() -> None:
             model_size = input("Model size? [10-4/10-7/20-4] ").strip() or "10-4"
             run(mode=mode, backend=backend, model_size=model_size)
 
-    elif choice == "see-cp":
+    elif choice == "see-hy-pl":
         from .SEE.see_cp import run
 
         mode = _ask_mode()
@@ -536,7 +565,7 @@ def _run_interactive() -> None:
             )
             run(mode=mode, backend=backend, model_size=model_size)
 
-    elif choice == "see-ii":
+    elif choice == "see-qq-m":
         from .SEE.see_ii import run
 
         mode = _ask_mode()
@@ -551,7 +580,7 @@ def _run_interactive() -> None:
                 n_photons=n_photons,
             )
 
-    elif choice == "see-pp":
+    elif choice == "see-qq-pl":
         from .SEE.see_pp import run
 
         mode = _ask_mode()
@@ -562,7 +591,7 @@ def _run_interactive() -> None:
             model_size = input("Model size? [2/3/4] ").strip() or "2"
             run(mode=mode, backend=backend, model_size=model_size)
 
-    elif choice == "see-ci":
+    elif choice == "see-hy-m":
         from .SEE.see_ci import run
 
         mode = _ask_mode()
@@ -591,7 +620,7 @@ def _run_interactive() -> None:
             model_size = input("Model size? [10-4/10-7/20-4] ").strip() or "10-4"
             run(mode=mode, backend=backend, model_size=model_size)
 
-    elif choice == "dee-ii":
+    elif choice == "dee-qq-m":
         from .DEE.dee_ii import run
 
         mode = _ask_mode()
@@ -606,7 +635,7 @@ def _run_interactive() -> None:
                 n_photons=n_photons,
             )
 
-    elif choice == "dee-ci":
+    elif choice == "dee-hy-m":
         from .DEE.dee_ci import run
 
         mode = _ask_mode()
@@ -623,7 +652,7 @@ def _run_interactive() -> None:
                 model_size=model_size,
             )
 
-    elif choice == "dee-cp":
+    elif choice == "dee-hy-pl":
         from .DEE.dee_cp import run
 
         mode = _ask_mode()
@@ -640,7 +669,7 @@ def _run_interactive() -> None:
                 model_size=model_size,
             )
 
-    elif choice == "dee-pp":
+    elif choice == "dee-qq-pl":
         from .DEE.dee_pp import run
 
         mode = _ask_mode()
@@ -663,7 +692,7 @@ def _run_interactive() -> None:
             model_size = input("Model size? [40-4/40-7/80-4] ").strip() or "40-4"
             run(mode=mode, backend=backend, model_size=model_size)
 
-    elif choice == "taf-ci":
+    elif choice == "taf-hy-m":
         from .TAF.taf_ci import run
 
         mode = _ask_mode()
@@ -676,7 +705,7 @@ def _run_interactive() -> None:
             )
             run(mode=mode, backend=backend, model_size=model_size)
 
-    elif choice == "taf-cp":
+    elif choice == "taf-hy-pl":
         from .TAF.taf_cp import run
 
         mode = _ask_mode()
@@ -689,7 +718,7 @@ def _run_interactive() -> None:
             )
             run(mode=mode, backend=backend, model_size=model_size)
 
-    elif choice == "taf-ii":
+    elif choice == "taf-qq-m":
         from .TAF.taf_ii import run
 
         mode = _ask_mode()
@@ -700,7 +729,7 @@ def _run_interactive() -> None:
             n_photons = int(input("Number of photons? [1/../6] ").strip() or "2")
             run(mode=mode, backend=backend, n_photons=n_photons)
 
-    elif choice == "taf-pp":
+    elif choice == "taf-qq-pl":
         from .TAF.taf_pp import run
 
         mode = _ask_mode()
@@ -714,9 +743,9 @@ def _run_interactive() -> None:
     else:
         print(f"Unknown experiment: {choice}")
         print(
-            "Please choose one of: dho-pp, dho-cc, dho-cp, dho-cperc, "
-            "dho-ii, dho-percperc, dho-ci, see-cc, see-pp, see-ci, see-ii, see-cp, "
-            "dee-cc, dee-ci, dee-cp, dee-ii, dee-pp, taf-cc, taf-ci, taf-cp, taf-ii, taf-pp."
+            "Please choose one of: dho-cc, dho-hy-m, dho-hy-pl, dho-hy-mp, "
+            "dho-qq-m, dho-qq-mp, dho-qq-pl, see-cc, see-hy-m, see-hy-pl, see-qq-m, see-qq-pl, "
+            "dee-cc, dee-hy-m, dee-hy-pl, dee-qq-m, dee-qq-pl, taf-cc, taf-hy-m, taf-hy-pl, taf-qq-m, taf-qq-pl."
         )
 
 

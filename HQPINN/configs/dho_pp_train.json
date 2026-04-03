@@ -1,5 +1,5 @@
 {
-  "experiment": "dho-pp",
+  "experiment": "dho-qq-pl",
   "mode": "train",
   "backend": "local",
   "model": {

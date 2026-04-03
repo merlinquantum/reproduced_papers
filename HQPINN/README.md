@@ -211,11 +211,12 @@ $$
 Implemented architecture variants:
 
 - `cc`: classical-classical
-- `ci`: classical-interferometer
-- `cp`: classical-PennyLane
-- `ii`: interferometer-interferometer
-- `pp`: PennyLane-PennyLane
-- `cperc` and `percperc`: Perceval/Merlin variants specific to `DHO`
+- `hy-pl`: hybrid PennyLane
+- `hy-m`: hybrid Merlin
+- `hy-mp`: hybrid Merlin-Perceval
+- `qq-pl`: quantum-quantum PennyLane
+- `qq-m`: quantum-quantum Merlin
+- `qq-mp`: quantum-quantum Merlin-Perceval (`DHO` only)
 
 ### Contexts
 
@@ -310,8 +311,8 @@ This reproduction reflects practical CPU constraints.
 
 - `SEE`, `DEE`, and `TAF` use mini-batched training. The main reproduced settings use `n_f_batch = 256`, and `TAF` also uses `n_wall_batch = 128` before a final full-batch L-BFGS refinement.
 - The two branches are combined through a learned linear fusion layer to keep the readout compact and parameter budgets comparable across baselines.
-- PennyLane variants outside `DHO` were not rerun in the consolidated reproduction because their CPU cost would be prohibitively high without a sizeable compute cluster. This is why [`HQPINN/run_all_train_jobs.sh`](/Users/jerome/git/reproduced_papers_fork/HQPINN/run_all_train_jobs.sh) focuses on `DHO` plus the `cc`, `ci`, and `ii` families for `SEE`, `DEE`, and `TAF`.
-- For `DHO`, we also tested Perceval-based photonic variants (`dho-cperc` and `dho-percperc`) in addition to the generic Merlin interferometer approach.
+- PennyLane variants outside `DHO` were not rerun in the consolidated reproduction because their CPU cost would be prohibitively high without a sizeable compute cluster. This is why [`HQPINN/run_all_train_jobs.sh`](/Users/jerome/git/reproduced_papers_fork/HQPINN/run_all_train_jobs.sh) focuses on `DHO` plus the `cc`, `hy-m`, and `qq-m` families for `SEE`, `DEE`, and `TAF`.
+- For `DHO`, we also tested Merlin-Perceval variants (`dho-hy-mp` and `dho-qq-mp`) in addition to the generic Merlin interferometer approach.
 
 ## Installation
 

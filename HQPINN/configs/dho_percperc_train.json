@@ -1,5 +1,5 @@
 {
-  "experiment": "dho-percperc",
+  "experiment": "dho-qq-mp",
   "mode": "train",
   "backend": "local",
   "model": {

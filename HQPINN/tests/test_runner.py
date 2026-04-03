@@ -14,37 +14,37 @@ CONFIGS_DIR = Path("HQPINN/configs")
 
 EXPERIMENT_MODULES = {
     "dho-cc": "HQPINN.DHO.dho_cc",
-    "dho-cp": "HQPINN.DHO.dho_cp",
-    "dho-pp": "HQPINN.DHO.dho_pp",
-    "dho-ci": "HQPINN.DHO.dho_ci",
-    "dho-cperc": "HQPINN.DHO.dho_cperc",
-    "dho-ii": "HQPINN.DHO.dho_ii",
-    "dho-percperc": "HQPINN.DHO.dho_percperc",
+    "dho-hy-pl": "HQPINN.DHO.dho_cp",
+    "dho-qq-pl": "HQPINN.DHO.dho_pp",
+    "dho-hy-m": "HQPINN.DHO.dho_ci",
+    "dho-hy-mp": "HQPINN.DHO.dho_cperc",
+    "dho-qq-m": "HQPINN.DHO.dho_ii",
+    "dho-qq-mp": "HQPINN.DHO.dho_percperc",
     "see-cc": "HQPINN.SEE.see_cc",
-    "see-ci": "HQPINN.SEE.see_ci",
-    "see-cp": "HQPINN.SEE.see_cp",
-    "see-ii": "HQPINN.SEE.see_ii",
-    "see-pp": "HQPINN.SEE.see_pp",
+    "see-hy-m": "HQPINN.SEE.see_ci",
+    "see-hy-pl": "HQPINN.SEE.see_cp",
+    "see-qq-m": "HQPINN.SEE.see_ii",
+    "see-qq-pl": "HQPINN.SEE.see_pp",
     "dee-cc": "HQPINN.DEE.dee_cc",
-    "dee-ci": "HQPINN.DEE.dee_ci",
-    "dee-cp": "HQPINN.DEE.dee_cp",
-    "dee-ii": "HQPINN.DEE.dee_ii",
-    "dee-pp": "HQPINN.DEE.dee_pp",
+    "dee-hy-m": "HQPINN.DEE.dee_ci",
+    "dee-hy-pl": "HQPINN.DEE.dee_cp",
+    "dee-qq-m": "HQPINN.DEE.dee_ii",
+    "dee-qq-pl": "HQPINN.DEE.dee_pp",
     "taf-cc": "HQPINN.TAF.taf_cc",
-    "taf-ci": "HQPINN.TAF.taf_ci",
-    "taf-cp": "HQPINN.TAF.taf_cp",
-    "taf-ii": "HQPINN.TAF.taf_ii",
-    "taf-pp": "HQPINN.TAF.taf_pp",
+    "taf-hy-m": "HQPINN.TAF.taf_ci",
+    "taf-hy-pl": "HQPINN.TAF.taf_cp",
+    "taf-qq-m": "HQPINN.TAF.taf_ii",
+    "taf-qq-pl": "HQPINN.TAF.taf_pp",
 }
 
-LAYER_NODE_EXPERIMENTS = {"dho-cc", "dho-cperc", "see-cc", "dee-cc", "taf-cc"}
-LAYER_NODE_PHOTON_EXPERIMENTS = {"dho-ci", "see-ci"}
-LAYER_NODE_Q_LAYER_EXPERIMENTS = {"see-cp"}
-PHOTON_EXPERIMENTS = {"dho-ii", "see-ii", "dee-ii", "taf-ii"}
-Q_LAYER_EXPERIMENTS = {"see-pp"}
-MODEL_SIZE_LAYER_NODE_PHOTON_EXPERIMENTS = {"dee-ci", "taf-ci"}
-MODEL_SIZE_LAYER_NODE_Q_LAYER_EXPERIMENTS = {"dee-cp", "taf-cp"}
-MODEL_SIZE_Q_LAYER_EXPERIMENTS = {"dee-pp", "taf-pp"}
+LAYER_NODE_EXPERIMENTS = {"dho-cc", "dho-hy-mp", "see-cc", "dee-cc", "taf-cc"}
+LAYER_NODE_PHOTON_EXPERIMENTS = {"dho-hy-m", "see-hy-m"}
+LAYER_NODE_Q_LAYER_EXPERIMENTS = {"see-hy-pl"}
+PHOTON_EXPERIMENTS = {"dho-qq-m", "see-qq-m", "dee-qq-m", "taf-qq-m"}
+Q_LAYER_EXPERIMENTS = {"see-qq-pl"}
+MODEL_SIZE_LAYER_NODE_PHOTON_EXPERIMENTS = {"dee-hy-m", "taf-hy-m"}
+MODEL_SIZE_LAYER_NODE_Q_LAYER_EXPERIMENTS = {"dee-hy-pl", "taf-hy-pl"}
+MODEL_SIZE_Q_LAYER_EXPERIMENTS = {"dee-qq-pl", "taf-qq-pl"}
 
 
 def _copy_model_ints(model: dict, *keys: str) -> dict:
@@ -63,11 +63,11 @@ def _expected_kwargs(config: dict) -> dict:
         "backend": config["backend"],
     }
 
-    if experiment == "dho-cp":
+    if experiment == "dho-hy-pl":
         kwargs |= _copy_model_ints(model, "n_layers", "n_nodes", "n_qubits")
         return kwargs
 
-    if experiment == "dho-pp":
+    if experiment == "dho-qq-pl":
         kwargs |= _copy_model_ints(model, "n_qubits")
         return kwargs
 

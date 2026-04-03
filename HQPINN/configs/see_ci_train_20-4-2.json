@@ -1,5 +1,5 @@
 {
-  "experiment": "see-ci",
+  "experiment": "see-hy-m",
   "mode": "train",
   "backend": "local",
   "model": {
