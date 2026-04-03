@@ -1,4 +1,4 @@
-# dho_ii.py
+# dho_qq_m.py
 # Interferometer-Interferometer PINN for the damped oscillator using oscillator_core + merlin_quantum
 
 import os

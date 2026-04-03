@@ -1,5 +1,5 @@
-# taf_ci.py
-# Classical–Interferometer PINN for TAF (Sec. 3.3)
+# dee_hy_m.py
+# Classical–Interferometer PINN for DEE
 
 import os
 from datetime import datetime
@@ -8,74 +8,75 @@ import torch
 import torch.nn as nn
 
 from ..config import (
-    DEVICE,
+    DEE_CC_NUM_HIDDEN_LAYERS,
+    DEE_CC_HIDDEN_WIDTH,
+    DEE_N_EPOCHS,
+    DEE_PLOT_EVERY,
+    DEE_LR,
     DTYPE,
-    TAF_ADAM_STEPS,
-    TAF_CC_HIDDEN_WIDTH,
-    TAF_CC_NUM_HIDDEN_LAYERS,
-    TAF_EPSILON_LAMBDA,
-    TAF_LBFGS_STEPS,
-    TAF_LR,
-    TAF_N_OUTPUTS,
-    TAF_PLOT_EVERY,
 )
-from ..layer_classical import BranchPyTorch
-from ..layer_merlin import BranchMerlin, make_interf_qlayer
-from ..run_common import run_density_inference_mode
 from ..utils import (
     count_trainable_params,
     get_latest_checkpoint,
+    load_model,
     make_optimizer,
 )
 from ..runtime import seed_everything
-from .core_taf import (
+from .core_dee import (
     append_summary_row,
+    evaluate_dee_errors,
     get_run_id_from_checkpoint,
+    load_training_loss_for_checkpoint,
     load_training_row_for_run_id,
-    load_training_sets,
-    load_training_metrics_for_checkpoint,
     save_density_plot,
-    train_taf,
+    train_dee,
 )
+from ..run_common import run_density_inference_mode
+from ..layer_classical import BranchPyTorch
+from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
 class CI_PINN(nn.Module):
-    """Classical-Interferometer TAF PINN with independent branch parameters."""
+    """
+    Classical-Interferometer PINN with one classical branch and one quantum branch.
+    """
 
     def __init__(
         self,
         n_photons: int,
-        hidden_width: int = TAF_CC_HIDDEN_WIDTH,
-        num_hidden_layers: int = TAF_CC_NUM_HIDDEN_LAYERS,
+        hidden_width: int = DEE_CC_HIDDEN_WIDTH,
+        num_hidden_layers: int = DEE_CC_NUM_HIDDEN_LAYERS,
         processor=None,
     ) -> None:
         super().__init__()
 
         self.branch1 = BranchPyTorch(
             in_features=2,
-            out_features=TAF_N_OUTPUTS,
+            out_features=3,
             num_hidden_layers=num_hidden_layers,
             hidden_width=hidden_width,
         )
         self.branch2 = BranchMerlin(
             make_interf_qlayer(n_photons=n_photons),
-            n_outputs=TAF_N_OUTPUTS,
+            n_outputs=3,
             processor=processor,
-            feature_map_kind="taf",
+            feature_map_kind="dee",
         )
-        self.fusion = nn.Linear(2 * TAF_N_OUTPUTS, TAF_N_OUTPUTS, dtype=DTYPE)
+        self.fusion = nn.Linear(6, 3, dtype=DTYPE)
 
-    def forward(self, xy: torch.Tensor) -> torch.Tensor:
+        self.size_label = f"{hidden_width}-{num_hidden_layers}"
+
+    def forward(self, xt: torch.Tensor) -> torch.Tensor:
+        out1 = self.branch1(xt)
+        out2 = self.branch2(xt)
         # Learned linear fusion of both branch outputs.
-        out1 = self.branch1(xy)
-        out2 = self.branch2(xy)
         return self.fusion(torch.cat([out1, out2], dim=1))
 
 
 MODELS = [
-    ("40-4-2", 40, 4, 2),
-    ("40-7-2", 40, 7, 2),
-    ("80-4-2", 80, 4, 2),
+    ("10-4-1", 10, 4, 1),
+    ("10-7-1", 10, 7, 1),
+    ("20-4-1", 20, 4, 1),
 ]
 
 
@@ -87,77 +88,74 @@ def _get_model_config(model_size: str) -> tuple[str, int, int, int]:
     raise ValueError(f"Unknown model_size='{model_size}'. Valid values: {valid}")
 
 
-def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
-    """Run TAF classical-interferometer models and write summary CSV."""
+def run(mode="train", backend="sim:ascella", model_size="10-4-1"):
+    """Run DEE Classical-Interferometer models and write summary CSV."""
     seed_everything(0)
 
-    data = load_training_sets()
-
-    # Sec. 3.3 inlet values (SI)
-    U_in = torch.tensor([1.225, 272.15, 0.0, 288.15], dtype=DTYPE, device=DEVICE)
-
-    ckpt_dir = "HQPINN/TAF/"
+    ckpt_dir = "HQPINN/DEE/"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
-    if mode == "train":
-        summary_csv = "HQPINN/TAF/results/taf_summary.csv"
 
+    if mode == "train":
+        print("=== TRAINING MODE ===")
+        summary_csv = "HQPINN/DEE/results/dee_summary.csv"
         for label, width, layers, n_photons in MODELS:
             seed_everything(0)
             print(
-                f"\nTraining TAF-CI model: {label} "
-                f"(width={width}, layers={layers}, {n_photons} photons)"
+                f"\nTraining DEE-CI model: {label} (width={width}, layers={layers}, {n_photons} photons)"
             )
 
-            case_prefix = f"taf_ci_{label}"
+            case_prefix = f"dee_ci_{label}"
             model_dir = os.path.join(ckpt_dir, "models")
             existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
             if existing_ckpt is not None:
-                try:
-                    torch.load(existing_ckpt, map_location="cpu")
-                except Exception as exc:
+                final_loss = load_training_loss_for_checkpoint(
+                    out_dir=f"HQPINN/DEE/results/{case_prefix}",
+                    model_label=f"ci_{label}",
+                    ckpt_path=existing_ckpt,
+                    case_prefix=case_prefix,
+                )
+                if final_loss is not None:
                     print(
-                        f"Checkpoint validation failed for {case_prefix} at "
-                        f"{existing_ckpt}: {exc}; retraining model."
+                        f"Skipping {case_prefix}: existing checkpoint found at "
+                        f"{existing_ckpt}"
                     )
-                else:
-                    metrics = load_training_metrics_for_checkpoint(
-                        out_dir=f"HQPINN/TAF/results/{case_prefix}",
-                        model_label=f"ci_{label}",
-                        ckpt_path=existing_ckpt,
-                        case_prefix=case_prefix,
-                    )
-                    if metrics is not None:
-                        print(
-                            f"Skipping {case_prefix}: existing checkpoint found at "
-                            f"{existing_ckpt}"
-                        )
-                        n_params = count_trainable_params(
-                            CI_PINN(
+                    try:
+                        model = load_model(
+                            existing_ckpt,
+                            lambda processor=None: CI_PINN(
                                 n_photons=n_photons,
                                 hidden_width=width,
                                 num_hidden_layers=layers,
-                            )
+                                processor=processor,
+                            ),
                         )
+                        err_rho, err_p = evaluate_dee_errors(model)
+                    except Exception as exc:
+                        print(
+                            f"Checkpoint validation failed for {case_prefix} at "
+                            f"{existing_ckpt}: {exc}; retraining model."
+                        )
+                    else:
+                        n_params = count_trainable_params(model)
                         case_run_id = get_run_id_from_checkpoint(
                             existing_ckpt, case_prefix
                         )
                         row = (
                             load_training_row_for_run_id(
-                                out_dir=f"HQPINN/TAF/results/{case_prefix}",
+                                out_dir=f"HQPINN/DEE/results/{case_prefix}",
                                 model_label=f"ci_{label}",
                                 run_id=case_run_id,
                             )
                             if case_run_id is not None
                             else None
                         )
-                        final_loss, _, _ = metrics
                         append_summary_row(
                             summary_csv,
                             {
                                 "run_id": case_run_id or "",
                                 "Model": "ci",
                                 "Size": label,
-                                "step": row["step"] if row is not None else "",
+                                "epoch": row["epoch"] if row is not None else "",
                                 "elapsed (s)": row["elapsed (s)"]
                                 if row is not None
                                 else "",
@@ -165,46 +163,40 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                                 "Loss": row["Loss"]
                                 if row is not None
                                 else f"{final_loss:.6e}",
+                                "IC": row["IC"] if row is not None else "",
                                 "BC": row["BC"] if row is not None else "",
                                 "F": row["F"] if row is not None else "",
-                                "L_in": row["L_in"] if row is not None else "",
-                                "L_out": row["L_out"] if row is not None else "",
-                                "L_wall": row["L_wall"] if row is not None else "",
-                                "L_per": row["L_per"] if row is not None else "",
+                                "Density error": f"{err_rho:.6e}",
+                                "Pressure error": f"{err_p:.6e}",
                             },
                         )
                         print(
                             f"Reused latest metrics for {case_prefix} in summary CSV."
                         )
                         continue
-                    print(
-                        f"Existing checkpoint found for {case_prefix} at "
-                        f"{existing_ckpt}, but no matching metrics CSV was found; "
-                        f"retraining model."
-                    )
+                print(
+                    f"Existing checkpoint found for {case_prefix} at "
+                    f"{existing_ckpt}, but no matching loss CSV was found; "
+                    f"retraining model."
+                )
 
             model = CI_PINN(
-                n_photons=n_photons,
-                hidden_width=width,
-                num_hidden_layers=layers,
-            ).to(DEVICE)
-            optimizer = make_optimizer(model, lr=TAF_LR)
+                n_photons=n_photons, hidden_width=width, num_hidden_layers=layers
+            )
+            optimizer = make_optimizer(model, lr=DEE_LR)
 
-            final_loss, loss_bc, loss_f, n_params = train_taf(
+            final_loss, err_rho, err_p, n_params = train_dee(
                 model=model,
+                t_train=None,
                 optimizer=optimizer,
-                n_epochs=TAF_ADAM_STEPS,
-                plot_every=TAF_PLOT_EVERY,
-                out_dir=f"HQPINN/TAF/results/{case_prefix}",
+                n_epochs=DEE_N_EPOCHS,
+                plot_every=DEE_PLOT_EVERY,
+                out_dir=f"HQPINN/DEE/results/{case_prefix}",
                 model_label=f"ci_{label}",
                 run_id=run_id,
-                data=data,
-                U_in=U_in,
-                lbfgs_steps=TAF_LBFGS_STEPS,
-                eps_lambda=TAF_EPSILON_LAMBDA,
             )
             row = load_training_row_for_run_id(
-                out_dir=f"HQPINN/TAF/results/{case_prefix}",
+                out_dir=f"HQPINN/DEE/results/{case_prefix}",
                 model_label=f"ci_{label}",
                 run_id=run_id,
             )
@@ -215,16 +207,15 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                     "run_id": run_id,
                     "Model": "ci",
                     "Size": label,
-                    "step": row["step"] if row is not None else "",
+                    "epoch": row["epoch"] if row is not None else "",
                     "elapsed (s)": row["elapsed (s)"] if row is not None else "",
                     "Trainable parameters": n_params,
                     "Loss": row["Loss"] if row is not None else f"{final_loss:.6e}",
-                    "BC": row["BC"] if row is not None else f"{loss_bc:.6e}",
-                    "F": row["F"] if row is not None else f"{loss_f:.6e}",
-                    "L_in": row["L_in"] if row is not None else "",
-                    "L_out": row["L_out"] if row is not None else "",
-                    "L_wall": row["L_wall"] if row is not None else "",
-                    "L_per": row["L_per"] if row is not None else "",
+                    "IC": row["IC"] if row is not None else "",
+                    "BC": row["BC"] if row is not None else "",
+                    "F": row["F"] if row is not None else "",
+                    "Density error": f"{err_rho:.6e}",
+                    "Pressure error": f"{err_p:.6e}",
                 },
             )
 
@@ -237,10 +228,10 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
 
     elif mode == "run":
         label, width, layers, n_photons = _get_model_config(model_size)
-        case_prefix = f"taf_ci_{label}"
+        case_prefix = f"dee_ci_{label}"
         run_density_inference_mode(
             mode="run",
-            backend="local",
+            backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
             plot_label=f"{n_photons} photons",
@@ -256,7 +247,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
 
     elif mode == "remote":
         label, width, layers, n_photons = _get_model_config(model_size)
-        case_prefix = f"taf_ci_{label}"
+        case_prefix = f"dee_ci_{label}"
         run_density_inference_mode(
             mode="remote",
             backend=backend,

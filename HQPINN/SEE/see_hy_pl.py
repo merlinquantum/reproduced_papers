@@ -1,5 +1,5 @@
-# see_ci.py
-# Classical–Interferometer PINN
+# see_hy_pl.py
+# Classical–PennyLane PINN
 
 import os
 from datetime import datetime
@@ -12,7 +12,7 @@ from ..config import (
     SEE_CC_HIDDEN_WIDTH,
     SEE_N_EPOCHS,
     SEE_PLOT_EVERY,
-    SEE_LR,
+    N_LAYERS,
     DTYPE,
 )
 from ..utils import (
@@ -32,48 +32,51 @@ from .core_see import (
     train_see,
 )
 from ..run_common import run_density_inference_mode
+from ..layer_pennylane import (
+    make_quantum_block_multiout,
+    see_feature_map,
+    BranchPennylane,
+)
 from ..layer_classical import BranchPyTorch
-from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
-class CI_PINN(nn.Module):
+class CP_PINN(nn.Module):
     """
-    Classical-Interferometer PINN with one classical branch and one quantum branch.
-    The quantum branch is a MerLin interferometer with independent parameters.
+    Classical–PennyLane PINN with one quantum branch and one classical MLP branch.
     """
 
     def __init__(
         self,
-        n_photons: int,
+        q_layers: int = N_LAYERS,
         hidden_width: int = SEE_CC_HIDDEN_WIDTH,
         num_hidden_layers: int = SEE_CC_NUM_HIDDEN_LAYERS,
-        processor=None,
     ) -> None:
         super().__init__()
 
-        # Two parallel classical branches: each (x,t) -> (rho,u,p)
-        self.branch1 = BranchPyTorch(
+        qblock_multi_1 = make_quantum_block_multiout(n_layers=q_layers)
+
+        self.branch1 = BranchPennylane(
+            qblock_multi_1,
+            feature_map=see_feature_map,
+            output_as_column=False,
+            n_layers=q_layers,
+        )
+        self.branch2 = BranchPyTorch(
             in_features=2,
             out_features=3,
             num_hidden_layers=num_hidden_layers,
             hidden_width=hidden_width,
         )
-        self.branch2 = BranchMerlin(
-            make_interf_qlayer(n_photons=n_photons),
-            n_outputs=3,
-            processor=processor,
-            feature_map_kind="see",
-        )
         self.fusion = nn.Linear(6, 3, dtype=DTYPE)
 
-        # Human-readable size label, e.g. "10-4"
-        self.size_label = f"{hidden_width}-{num_hidden_layers}"
+        # Human-readable quantum-depth label (e.g. "2", "3", "4")
+        self.size_label = f"{q_layers}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
         # Learned linear fusion of both branch outputs.
-        out1 = self.branch1(xt)
-        out2 = self.branch2(xt)
-        return self.fusion(torch.cat([out1, out2], dim=1))
+        out1 = self.branch1(xt)  # [N, 3]
+        out2 = self.branch2(xt)  # [N, 3]
+        return self.fusion(torch.cat([out1, out2], dim=1))  # [N, 3]
 
 
 MODELS = [
@@ -84,9 +87,9 @@ MODELS = [
 
 
 def _get_model_config(model_size: str) -> tuple[str, int, int, int]:
-    for label, width, layers, n_photons in MODELS:
+    for label, width, layers, q_layers in MODELS:
         if label == model_size:
-            return label, width, layers, n_photons
+            return label, width, layers, q_layers
     valid = ", ".join(label for label, *_ in MODELS)
     raise ValueError(f"Unknown model_size='{model_size}'. Valid values: {valid}")
 
@@ -96,15 +99,15 @@ def _resolve_model_config(
     model_size: str | None = None,
     n_nodes: int | None = None,
     n_layers: int | None = None,
-    n_photons: int | None = None,
+    q_layers: int | None = None,
 ) -> tuple[str, int, int, int]:
     if model_size is not None:
         return _get_model_config(model_size)
-    if n_nodes is None or n_layers is None or n_photons is None:
+    if n_nodes is None or n_layers is None or q_layers is None:
         raise ValueError(
-            "SEE-CI requires either model_size or n_nodes, n_layers, and n_photons"
+            "SEE-CP requires either model_size or n_nodes, n_layers, and q_layers"
         )
-    return f"{n_nodes}-{n_layers}-{n_photons}", n_nodes, n_layers, n_photons
+    return f"{n_nodes}-{n_layers}-{q_layers}", n_nodes, n_layers, q_layers
 
 
 def run(
@@ -114,40 +117,36 @@ def run(
     *,
     n_nodes: int | None = None,
     n_layers: int | None = None,
-    n_photons: int | None = None,
+    q_layers: int | None = None,
 ):
-    """Run SEE Classical-Interferometer models and write summary CSV."""
+    """Run all SEE Classical models and write summary CSV."""
     seed_everything(0)
 
     ckpt_dir = "HQPINN/SEE/"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
-
     if mode == "train":
-        print("=== TRAINING MODE ===")
         summary_csv = "HQPINN/SEE/results/see_summary.csv"
-        if n_nodes is not None or n_layers is not None or n_photons is not None:
+        if n_nodes is not None or n_layers is not None or q_layers is not None:
             models = [
                 _resolve_model_config(
                     n_nodes=n_nodes,
                     n_layers=n_layers,
-                    n_photons=n_photons,
+                    q_layers=q_layers,
                 )
             ]
         else:
             models = MODELS
-        for label, width, layers, n_photons in models:
+        for label, width, layers, q_layers in models:
             seed_everything(0)
-            print(
-                f"\nTraining SEE-CI model: {label} (width={width}, layers={layers}, {n_photons} photons)"
-            )
+            print(f"\nTraining SEE-CP model: {label} q_layers={q_layers}")
 
-            case_prefix = f"see_ci_{label}"
+            case_prefix = f"see_cp_{label}"
             model_dir = os.path.join(ckpt_dir, "models")
             existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
             if existing_ckpt is not None:
                 final_loss = load_training_loss_for_checkpoint(
                     out_dir=f"HQPINN/SEE/results/{case_prefix}",
-                    model_label=f"ci_{label}",
+                    model_label=f"cp_{label}",
                     ckpt_path=existing_ckpt,
                     case_prefix=case_prefix,
                 )
@@ -159,11 +158,10 @@ def run(
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None: CI_PINN(
-                                n_photons=n_photons,
+                            lambda processor=None: CP_PINN(
+                                q_layers=q_layers,
                                 hidden_width=width,
                                 num_hidden_layers=layers,
-                                processor=processor,
                             ),
                         )
                         err_rho, err_p = evaluate_see_errors(model)
@@ -180,7 +178,7 @@ def run(
                         row = (
                             load_training_row_for_run_id(
                                 out_dir=f"HQPINN/SEE/results/{case_prefix}",
-                                model_label=f"ci_{label}",
+                                model_label=f"cp_{label}",
                                 run_id=case_run_id,
                             )
                             if case_run_id is not None
@@ -189,7 +187,7 @@ def run(
                         append_summary_row(
                             summary_csv,
                             {
-                                "Model": "ci",
+                                "Model": "cp",
                                 "Size": label,
                                 "run_id": case_run_id or "",
                                 "epoch": row["epoch"] if row is not None else "",
@@ -217,10 +215,12 @@ def run(
                     f"retraining model."
                 )
 
-            model = CI_PINN(
-                n_photons=n_photons, hidden_width=width, num_hidden_layers=layers
+            model = CP_PINN(
+                q_layers=q_layers,
+                hidden_width=width,
+                num_hidden_layers=layers,
             )
-            optimizer = make_optimizer(model, lr=SEE_LR)
+            optimizer = make_optimizer(model, lr=5e-4)
 
             final_loss, err_rho, err_p, n_params = train_see(
                 model=model,
@@ -229,19 +229,19 @@ def run(
                 n_epochs=SEE_N_EPOCHS,
                 plot_every=SEE_PLOT_EVERY,
                 out_dir=f"HQPINN/SEE/results/{case_prefix}",
-                model_label=f"ci_{label}",
+                model_label=f"cp_{label}",
                 run_id=run_id,
             )
             row = load_training_row_for_run_id(
                 out_dir=f"HQPINN/SEE/results/{case_prefix}",
-                model_label=f"ci_{label}",
+                model_label=f"cp_{label}",
                 run_id=run_id,
             )
 
             append_summary_row(
                 summary_csv,
                 {
-                    "Model": "ci",
+                    "Model": "cp",
                     "Size": label,
                     "run_id": run_id,
                     "epoch": row["epoch"] if row is not None else "",
@@ -264,57 +264,58 @@ def run(
         print(f"Summary CSV appended to: {summary_csv}")
 
     elif mode == "run":
-        label, width, layers, n_photons = _resolve_model_config(
+        label, width, layers, q_layers = _resolve_model_config(
             model_size=(
                 model_size
-                if n_nodes is None and n_layers is None and n_photons is None
+                if n_nodes is None and n_layers is None and q_layers is None
                 else None
             ),
             n_nodes=n_nodes,
             n_layers=n_layers,
-            n_photons=n_photons,
+            q_layers=q_layers,
         )
-        case_prefix = f"see_ci_{label}"
+        case_prefix = f"see_cp_{label}"
         run_density_inference_mode(
             mode="run",
-            backend=backend,
+            backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            plot_label=f"{n_photons} photons",
+            plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: CI_PINN(
-                n_photons=n_photons,
+            model_factory=lambda processor=None: CP_PINN(
+                q_layers=q_layers,
                 hidden_width=width,
                 num_hidden_layers=layers,
-                processor=processor,
             ),
             save_plot_fn=save_density_plot,
         )
 
     elif mode == "remote":
-        label, width, layers, n_photons = _resolve_model_config(
+        print(
+            "Remote mode is not available for SEE-CP. Falling back to local run mode."
+        )
+        label, width, layers, q_layers = _resolve_model_config(
             model_size=(
                 model_size
-                if n_nodes is None and n_layers is None and n_photons is None
+                if n_nodes is None and n_layers is None and q_layers is None
                 else None
             ),
             n_nodes=n_nodes,
             n_layers=n_layers,
-            n_photons=n_photons,
+            q_layers=q_layers,
         )
-        case_prefix = f"see_ci_{label}"
+        case_prefix = f"see_cp_{label}"
         run_density_inference_mode(
-            mode="remote",
-            backend=backend,
+            mode="run",
+            backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            plot_label=f"{n_photons} photons",
+            plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: CI_PINN(
-                n_photons=n_photons,
+            model_factory=lambda processor=None: CP_PINN(
+                q_layers=q_layers,
                 hidden_width=width,
                 num_hidden_layers=layers,
-                processor=processor,
             ),
             save_plot_fn=save_density_plot,
         )

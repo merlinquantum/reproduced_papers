@@ -1,4 +1,4 @@
-# dho_cp.py
+# dho_hy_pl.py
 # Classical–PennyLane PINN with a quantum branch and a classical MLP branch
 
 import os

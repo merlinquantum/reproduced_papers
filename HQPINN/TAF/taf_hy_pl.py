@@ -1,4 +1,4 @@
-# taf_cp.py
+# taf_hy_pl.py
 # Classical–PennyLane PINN for TAF (Sec. 3.3)
 
 import os

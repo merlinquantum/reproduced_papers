@@ -351,13 +351,13 @@ python3 -m HQPINN --config HQPINN/configs/dho_cc_train.json
 Train a `SEE` case:
 
 ```bash
-python3 -m HQPINN --config HQPINN/configs/see_ci_train_10-4-2.json
+python3 -m HQPINN --config HQPINN/configs/see_hy_m_train_10-4-2.json
 ```
 
 Train a `DEE` case:
 
 ```bash
-python3 -m HQPINN --config HQPINN/configs/dee_ii_train_1.json
+python3 -m HQPINN --config HQPINN/configs/dee_qq_m_train_1.json
 ```
 
 Train a `TAF` case:

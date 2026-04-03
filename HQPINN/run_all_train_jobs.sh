@@ -18,7 +18,7 @@ Usage:
   bash HQPINN/run_all_train_jobs.sh --dry-run
 
 Runs HQPINN training configs sequentially, starting with classical-classical jobs.
-Includes `dho-pp` and `dho-cp`, but skips the other `-cp` and SEE/DEE/TAF `-pp` jobs.
+Includes `dho-qq-pl` and `dho-hy-pl`, but skips the other `-hy-pl` and SEE/DEE/TAF `-qq-pl` jobs.
 Order is grouped to start with classical-classical models.
 EOF
 }
@@ -65,27 +65,27 @@ add_group() {
 
 # 1) DHO jobs first.
 add_path "HQPINN/configs/dho_cc_train.json"
-add_path "HQPINN/configs/dho_cperc_train.json"
-add_path "HQPINN/configs/dho_ci_train.json"
-add_path "HQPINN/configs/dho_cp_train.json"
-add_path "HQPINN/configs/dho_ii_train.json"
-add_path "HQPINN/configs/dho_percperc_train.json"
-add_path "HQPINN/configs/dho_pp_train.json"
+add_path "HQPINN/configs/dho_hy_mp_train.json"
+add_path "HQPINN/configs/dho_hy_m_train.json"
+add_path "HQPINN/configs/dho_hy_pl_train.json"
+add_path "HQPINN/configs/dho_qq_m_train.json"
+add_path "HQPINN/configs/dho_qq_mp_train.json"
+add_path "HQPINN/configs/dho_qq_pl_train.json"
 
 # 2) SEE jobs.
 add_group "HQPINN/configs/see_cc_train_*.json" "HQPINN/configs/see_cc_train.json"
-add_group "HQPINN/configs/see_ci_train_*.json" "HQPINN/configs/see_ci_train.json"
-add_group "HQPINN/configs/see_ii_train_*.json" "HQPINN/configs/see_ii_train.json"
+add_group "HQPINN/configs/see_hy_m_train_*.json" "HQPINN/configs/see_hy_m_train.json"
+add_group "HQPINN/configs/see_qq_m_train_*.json" "HQPINN/configs/see_qq_m_train.json"
 
 # 3) DEE jobs.
 add_group "HQPINN/configs/dee_cc_train_*.json" "HQPINN/configs/dee_cc_train.json"
-add_group "HQPINN/configs/dee_ci_train_*.json" "HQPINN/configs/dee_ci_train.json"
-add_group "HQPINN/configs/dee_ii_train_*.json" "HQPINN/configs/dee_ii_train.json"
+add_group "HQPINN/configs/dee_hy_m_train_*.json" "HQPINN/configs/dee_hy_m_train.json"
+add_group "HQPINN/configs/dee_qq_m_train_*.json" "HQPINN/configs/dee_qq_m_train.json"
 
 # 4) TAF jobs.
 add_group "HQPINN/configs/taf_cc_train_*.json" "HQPINN/configs/taf_cc_train.json"
-add_group "HQPINN/configs/taf_ci_train_*.json" "HQPINN/configs/taf_ci_train.json"
-add_group "HQPINN/configs/taf_ii_train_*.json" "HQPINN/configs/taf_ii_train.json"
+add_group "HQPINN/configs/taf_hy_m_train_*.json" "HQPINN/configs/taf_hy_m_train.json"
+add_group "HQPINN/configs/taf_qq_m_train_*.json" "HQPINN/configs/taf_qq_m_train.json"
 
 total_jobs="${#jobs[@]}"
 if (( total_jobs == 0 )); then

@@ -1,5 +1,5 @@
-# dee_cp.py
-# Classical–PennyLane PINN
+# see_hy_m.py
+# Classical–Interferometer PINN
 
 import os
 from datetime import datetime
@@ -8,12 +8,11 @@ import torch
 import torch.nn as nn
 
 from ..config import (
-    DEE_CC_NUM_HIDDEN_LAYERS,
-    DEE_CC_HIDDEN_WIDTH,
-    DEE_N_EPOCHS,
-    DEE_PLOT_EVERY,
-    N_LAYERS,
-    DEE_LR,
+    SEE_CC_NUM_HIDDEN_LAYERS,
+    SEE_CC_HIDDEN_WIDTH,
+    SEE_N_EPOCHS,
+    SEE_PLOT_EVERY,
+    SEE_LR,
     DTYPE,
 )
 from ..utils import (
@@ -23,65 +22,58 @@ from ..utils import (
     make_optimizer,
 )
 from ..runtime import seed_everything
-from .core_dee import (
+from .core_see import (
     append_summary_row,
-    evaluate_dee_errors,
+    evaluate_see_errors,
     get_run_id_from_checkpoint,
     load_training_loss_for_checkpoint,
     load_training_row_for_run_id,
     save_density_plot,
-    train_dee,
+    train_see,
 )
 from ..run_common import run_density_inference_mode
-from ..layer_pennylane import (
-    make_quantum_block_multiout,
-    dee_feature_map,
-    BranchPennylane,
-)
 from ..layer_classical import BranchPyTorch
+from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
-class CP_PINN(nn.Module):
+class CI_PINN(nn.Module):
     """
-    Classical–PennyLane PINN with one quantum branch and one classical MLP branch.
+    Classical-Interferometer PINN with one classical branch and one quantum branch.
+    The quantum branch is a MerLin interferometer with independent parameters.
     """
 
     def __init__(
         self,
-        q_layers: int = N_LAYERS,
-        hidden_width: int = DEE_CC_HIDDEN_WIDTH,
-        num_hidden_layers: int = DEE_CC_NUM_HIDDEN_LAYERS,
-        *,
-        size: int | None = None,
+        n_photons: int,
+        hidden_width: int = SEE_CC_HIDDEN_WIDTH,
+        num_hidden_layers: int = SEE_CC_NUM_HIDDEN_LAYERS,
+        processor=None,
     ) -> None:
         super().__init__()
-        if size is not None:
-            # Backward-compatible alias while the rest of the repo catches up.
-            q_layers = size
 
-        qblock_multi_1 = make_quantum_block_multiout(n_layers=q_layers)
-
-        self.branch1 = BranchPennylane(
-            qblock_multi_1,
-            feature_map=dee_feature_map,
-            output_as_column=False,
-            n_layers=q_layers,
-        )
-        self.branch2 = BranchPyTorch(
+        # Two parallel classical branches: each (x,t) -> (rho,u,p)
+        self.branch1 = BranchPyTorch(
             in_features=2,
             out_features=3,
             num_hidden_layers=num_hidden_layers,
             hidden_width=hidden_width,
         )
+        self.branch2 = BranchMerlin(
+            make_interf_qlayer(n_photons=n_photons),
+            n_outputs=3,
+            processor=processor,
+            feature_map_kind="see",
+        )
         self.fusion = nn.Linear(6, 3, dtype=DTYPE)
 
-        self.size_label = f"{q_layers}"
+        # Human-readable size label, e.g. "10-4"
+        self.size_label = f"{hidden_width}-{num_hidden_layers}"
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:
         # Learned linear fusion of both branch outputs.
-        out1 = self.branch1(xt)  # [N, 3]
-        out2 = self.branch2(xt)  # [N, 3]
-        return self.fusion(torch.cat([out1, out2], dim=1))  # [N, 3]
+        out1 = self.branch1(xt)
+        out2 = self.branch2(xt)
+        return self.fusion(torch.cat([out1, out2], dim=1))
 
 
 MODELS = [
@@ -92,33 +84,70 @@ MODELS = [
 
 
 def _get_model_config(model_size: str) -> tuple[str, int, int, int]:
-    for label, width, layers, q_layers in MODELS:
+    for label, width, layers, n_photons in MODELS:
         if label == model_size:
-            return label, width, layers, q_layers
+            return label, width, layers, n_photons
     valid = ", ".join(label for label, *_ in MODELS)
     raise ValueError(f"Unknown model_size='{model_size}'. Valid values: {valid}")
 
 
-def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
-    """Run all DEE Classical–PennyLane models and write summary CSV."""
+def _resolve_model_config(
+    *,
+    model_size: str | None = None,
+    n_nodes: int | None = None,
+    n_layers: int | None = None,
+    n_photons: int | None = None,
+) -> tuple[str, int, int, int]:
+    if model_size is not None:
+        return _get_model_config(model_size)
+    if n_nodes is None or n_layers is None or n_photons is None:
+        raise ValueError(
+            "SEE-CI requires either model_size or n_nodes, n_layers, and n_photons"
+        )
+    return f"{n_nodes}-{n_layers}-{n_photons}", n_nodes, n_layers, n_photons
+
+
+def run(
+    mode="train",
+    backend="sim:ascella",
+    model_size="10-4-2",
+    *,
+    n_nodes: int | None = None,
+    n_layers: int | None = None,
+    n_photons: int | None = None,
+):
+    """Run SEE Classical-Interferometer models and write summary CSV."""
     seed_everything(0)
 
-    ckpt_dir = "HQPINN/DEE/"
+    ckpt_dir = "HQPINN/SEE/"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
+
     if mode == "train":
-        summary_csv = "HQPINN/DEE/results/dee_summary.csv"
-
-        for label, width, layers, q_layers in MODELS:
+        print("=== TRAINING MODE ===")
+        summary_csv = "HQPINN/SEE/results/see_summary.csv"
+        if n_nodes is not None or n_layers is not None or n_photons is not None:
+            models = [
+                _resolve_model_config(
+                    n_nodes=n_nodes,
+                    n_layers=n_layers,
+                    n_photons=n_photons,
+                )
+            ]
+        else:
+            models = MODELS
+        for label, width, layers, n_photons in models:
             seed_everything(0)
-            print(f"\nTraining DEE-CP model: {label} q_layers={q_layers}")
+            print(
+                f"\nTraining SEE-CI model: {label} (width={width}, layers={layers}, {n_photons} photons)"
+            )
 
-            case_prefix = f"dee_cp_{label}"
+            case_prefix = f"see_ci_{label}"
             model_dir = os.path.join(ckpt_dir, "models")
             existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
             if existing_ckpt is not None:
                 final_loss = load_training_loss_for_checkpoint(
-                    out_dir=f"HQPINN/DEE/results/{case_prefix}",
-                    model_label=f"cp_{label}",
+                    out_dir=f"HQPINN/SEE/results/{case_prefix}",
+                    model_label=f"ci_{label}",
                     ckpt_path=existing_ckpt,
                     case_prefix=case_prefix,
                 )
@@ -130,13 +159,14 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None: CP_PINN(
-                                q_layers=q_layers,
+                            lambda processor=None: CI_PINN(
+                                n_photons=n_photons,
                                 hidden_width=width,
                                 num_hidden_layers=layers,
+                                processor=processor,
                             ),
                         )
-                        err_rho, err_p = evaluate_dee_errors(model)
+                        err_rho, err_p = evaluate_see_errors(model)
                     except Exception as exc:
                         print(
                             f"Checkpoint validation failed for {case_prefix} at "
@@ -149,8 +179,8 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
                         )
                         row = (
                             load_training_row_for_run_id(
-                                out_dir=f"HQPINN/DEE/results/{case_prefix}",
-                                model_label=f"cp_{label}",
+                                out_dir=f"HQPINN/SEE/results/{case_prefix}",
+                                model_label=f"ci_{label}",
                                 run_id=case_run_id,
                             )
                             if case_run_id is not None
@@ -159,9 +189,9 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
                         append_summary_row(
                             summary_csv,
                             {
-                                "run_id": case_run_id or "",
-                                "Model": "cp",
+                                "Model": "ci",
                                 "Size": label,
+                                "run_id": case_run_id or "",
                                 "epoch": row["epoch"] if row is not None else "",
                                 "elapsed (s)": row["elapsed (s)"]
                                 if row is not None
@@ -187,35 +217,33 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
                     f"retraining model."
                 )
 
-            model = CP_PINN(
-                q_layers=q_layers,
-                hidden_width=width,
-                num_hidden_layers=layers,
+            model = CI_PINN(
+                n_photons=n_photons, hidden_width=width, num_hidden_layers=layers
             )
-            optimizer = make_optimizer(model, lr=DEE_LR)
+            optimizer = make_optimizer(model, lr=SEE_LR)
 
-            final_loss, err_rho, err_p, n_params = train_dee(
+            final_loss, err_rho, err_p, n_params = train_see(
                 model=model,
                 t_train=None,  # kept for API consistency
                 optimizer=optimizer,
-                n_epochs=DEE_N_EPOCHS,
-                plot_every=DEE_PLOT_EVERY,
-                out_dir=f"HQPINN/DEE/results/{case_prefix}",
-                model_label=f"cp_{label}",
+                n_epochs=SEE_N_EPOCHS,
+                plot_every=SEE_PLOT_EVERY,
+                out_dir=f"HQPINN/SEE/results/{case_prefix}",
+                model_label=f"ci_{label}",
                 run_id=run_id,
             )
             row = load_training_row_for_run_id(
-                out_dir=f"HQPINN/DEE/results/{case_prefix}",
-                model_label=f"cp_{label}",
+                out_dir=f"HQPINN/SEE/results/{case_prefix}",
+                model_label=f"ci_{label}",
                 run_id=run_id,
             )
 
             append_summary_row(
                 summary_csv,
                 {
-                    "run_id": run_id,
-                    "Model": "cp",
+                    "Model": "ci",
                     "Size": label,
+                    "run_id": run_id,
                     "epoch": row["epoch"] if row is not None else "",
                     "elapsed (s)": row["elapsed (s)"] if row is not None else "",
                     "Trainable parameters": n_params,
@@ -236,40 +264,57 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
         print(f"Summary CSV appended to: {summary_csv}")
 
     elif mode == "run":
-        label, width, layers, q_layers = _get_model_config(model_size)
-        case_prefix = f"dee_cp_{label}"
+        label, width, layers, n_photons = _resolve_model_config(
+            model_size=(
+                model_size
+                if n_nodes is None and n_layers is None and n_photons is None
+                else None
+            ),
+            n_nodes=n_nodes,
+            n_layers=n_layers,
+            n_photons=n_photons,
+        )
+        case_prefix = f"see_ci_{label}"
         run_density_inference_mode(
             mode="run",
-            backend="local",
+            backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            plot_label=f"q_layers={q_layers}",
+            plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: CP_PINN(
-                q_layers=q_layers,
+            model_factory=lambda processor=None: CI_PINN(
+                n_photons=n_photons,
                 hidden_width=width,
                 num_hidden_layers=layers,
+                processor=processor,
             ),
             save_plot_fn=save_density_plot,
         )
 
     elif mode == "remote":
-        print(
-            "Remote mode is not available for DEE-CP. Falling back to local run mode."
+        label, width, layers, n_photons = _resolve_model_config(
+            model_size=(
+                model_size
+                if n_nodes is None and n_layers is None and n_photons is None
+                else None
+            ),
+            n_nodes=n_nodes,
+            n_layers=n_layers,
+            n_photons=n_photons,
         )
-        label, width, layers, q_layers = _get_model_config(model_size)
-        case_prefix = f"dee_cp_{label}"
+        case_prefix = f"see_ci_{label}"
         run_density_inference_mode(
-            mode="run",
-            backend="local",
+            mode="remote",
+            backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            plot_label=f"q_layers={q_layers}",
+            plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: CP_PINN(
-                q_layers=q_layers,
+            model_factory=lambda processor=None: CI_PINN(
+                n_photons=n_photons,
                 hidden_width=width,
                 num_hidden_layers=layers,
+                processor=processor,
             ),
             save_plot_fn=save_density_plot,
         )

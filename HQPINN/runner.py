@@ -140,7 +140,7 @@ def run_from_project(config: dict[str, Any]) -> None:
                 "dho-hy-pl config requires model.n_layers, model.n_nodes, and model.n_qubits"
             )
 
-        from .DHO.dho_cp import run
+        from .DHO.dho_hy_pl import run
 
         run(
             mode=mode,
@@ -156,7 +156,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         if n_qubits is None:
             raise ValueError("dho-qq-pl config requires model.n_qubits")
 
-        from .DHO.dho_pp import run
+        from .DHO.dho_qq_pl import run
 
         run(
             mode=mode,
@@ -174,7 +174,7 @@ def run_from_project(config: dict[str, Any]) -> None:
                 "dho-hy-m config requires model.n_layers, model.n_nodes, and model.n_photons"
             )
 
-        from .DHO.dho_ci import run
+        from .DHO.dho_hy_m import run
 
         run(
             mode=mode,
@@ -193,7 +193,7 @@ def run_from_project(config: dict[str, Any]) -> None:
                 "dho-hy-mp config requires model.n_layers and model.n_nodes"
             )
 
-        from .DHO.dho_cperc import run
+        from .DHO.dho_hy_mp import run
 
         run(
             mode=mode,
@@ -208,7 +208,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         if n_photons is None:
             raise ValueError("dho-qq-m config requires model.n_photons")
 
-        from .DHO.dho_ii import run
+        from .DHO.dho_qq_m import run
 
         run(
             mode=mode,
@@ -218,7 +218,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         return
 
     if experiment == "dho-qq-mp":
-        from .DHO.dho_percperc import run
+        from .DHO.dho_qq_mp import run
 
         run(
             mode=mode,
@@ -251,7 +251,7 @@ def run_from_project(config: dict[str, Any]) -> None:
                 "see-hy-m config requires model.n_layers, model.n_nodes, and model.n_photons"
             )
 
-        from .SEE.see_ci import run
+        from .SEE.see_hy_m import run
 
         run(
             mode=mode,
@@ -271,7 +271,7 @@ def run_from_project(config: dict[str, Any]) -> None:
                 "see-hy-pl config requires model.n_layers, model.n_nodes, and model.q_layers"
             )
 
-        from .SEE.see_cp import run
+        from .SEE.see_hy_pl import run
 
         run(
             mode=mode,
@@ -287,7 +287,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         if n_photons is None:
             raise ValueError("see-qq-m config requires model.n_photons")
 
-        from .SEE.see_ii import run
+        from .SEE.see_qq_m import run
 
         run(
             mode=mode,
@@ -301,7 +301,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         if q_layers is None:
             raise ValueError("see-qq-pl config requires model.q_layers")
 
-        from .SEE.see_pp import run
+        from .SEE.see_qq_pl import run
 
         run(
             mode=mode,
@@ -329,7 +329,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         n_nodes = _require_model_int(model_config, "n_nodes", experiment)
         n_photons = _require_model_int(model_config, "n_photons", experiment)
 
-        from .DEE.dee_ci import run
+        from .DEE.dee_hy_m import run
 
         run(
             mode=mode,
@@ -343,7 +343,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         n_nodes = _require_model_int(model_config, "n_nodes", experiment)
         q_layers = _require_model_int(model_config, "q_layers", experiment)
 
-        from .DEE.dee_cp import run
+        from .DEE.dee_hy_pl import run
 
         run(
             mode=mode,
@@ -355,7 +355,7 @@ def run_from_project(config: dict[str, Any]) -> None:
     if experiment == "dee-qq-m":
         n_photons = _require_model_int(model_config, "n_photons", experiment)
 
-        from .DEE.dee_ii import run
+        from .DEE.dee_qq_m import run
 
         run(
             mode=mode,
@@ -367,7 +367,7 @@ def run_from_project(config: dict[str, Any]) -> None:
     if experiment == "dee-qq-pl":
         q_layers = _require_model_int(model_config, "q_layers", experiment)
 
-        from .DEE.dee_pp import run
+        from .DEE.dee_qq_pl import run
 
         run(
             mode=mode,
@@ -395,7 +395,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         n_nodes = _require_model_int(model_config, "n_nodes", experiment)
         n_photons = _require_model_int(model_config, "n_photons", experiment)
 
-        from .TAF.taf_ci import run
+        from .TAF.taf_hy_m import run
 
         run(
             mode=mode,
@@ -409,7 +409,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         n_nodes = _require_model_int(model_config, "n_nodes", experiment)
         q_layers = _require_model_int(model_config, "q_layers", experiment)
 
-        from .TAF.taf_cp import run
+        from .TAF.taf_hy_pl import run
 
         run(
             mode=mode,
@@ -421,7 +421,7 @@ def run_from_project(config: dict[str, Any]) -> None:
     if experiment == "taf-qq-m":
         n_photons = _require_model_int(model_config, "n_photons", experiment)
 
-        from .TAF.taf_ii import run
+        from .TAF.taf_qq_m import run
 
         run(
             mode=mode,
@@ -433,7 +433,7 @@ def run_from_project(config: dict[str, Any]) -> None:
     if experiment == "taf-qq-pl":
         q_layers = _require_model_int(model_config, "q_layers", experiment)
 
-        from .TAF.taf_pp import run
+        from .TAF.taf_qq_pl import run
 
         run(
             mode=mode,
@@ -492,7 +492,7 @@ def _run_interactive() -> None:
 
     # DHO experiments
     if choice == "dho-qq-pl":
-        from .DHO.dho_pp import run
+        from .DHO.dho_qq_pl import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
@@ -506,35 +506,35 @@ def _run_interactive() -> None:
         run(mode=mode, backend=backend)
 
     elif choice == "dho-hy-pl":
-        from .DHO.dho_cp import run
+        from .DHO.dho_hy_pl import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
     elif choice == "dho-hy-mp":
-        from .DHO.dho_cperc import run
+        from .DHO.dho_hy_mp import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
     elif choice == "dho-qq-m":
-        from .DHO.dho_ii import run
+        from .DHO.dho_qq_m import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
     elif choice == "dho-qq-mp":
-        from .DHO.dho_percperc import run
+        from .DHO.dho_qq_mp import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
         run(mode=mode, backend=backend)
 
     elif choice == "dho-hy-m":
-        from .DHO.dho_ci import run
+        from .DHO.dho_hy_m import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
@@ -553,7 +553,7 @@ def _run_interactive() -> None:
             run(mode=mode, backend=backend, model_size=model_size)
 
     elif choice == "see-hy-pl":
-        from .SEE.see_cp import run
+        from .SEE.see_hy_pl import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
@@ -566,7 +566,7 @@ def _run_interactive() -> None:
             run(mode=mode, backend=backend, model_size=model_size)
 
     elif choice == "see-qq-m":
-        from .SEE.see_ii import run
+        from .SEE.see_qq_m import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
@@ -581,7 +581,7 @@ def _run_interactive() -> None:
             )
 
     elif choice == "see-qq-pl":
-        from .SEE.see_pp import run
+        from .SEE.see_qq_pl import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
@@ -592,7 +592,7 @@ def _run_interactive() -> None:
             run(mode=mode, backend=backend, model_size=model_size)
 
     elif choice == "see-hy-m":
-        from .SEE.see_ci import run
+        from .SEE.see_hy_m import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
@@ -621,7 +621,7 @@ def _run_interactive() -> None:
             run(mode=mode, backend=backend, model_size=model_size)
 
     elif choice == "dee-qq-m":
-        from .DEE.dee_ii import run
+        from .DEE.dee_qq_m import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
@@ -636,7 +636,7 @@ def _run_interactive() -> None:
             )
 
     elif choice == "dee-hy-m":
-        from .DEE.dee_ci import run
+        from .DEE.dee_hy_m import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
@@ -653,7 +653,7 @@ def _run_interactive() -> None:
             )
 
     elif choice == "dee-hy-pl":
-        from .DEE.dee_cp import run
+        from .DEE.dee_hy_pl import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
@@ -670,7 +670,7 @@ def _run_interactive() -> None:
             )
 
     elif choice == "dee-qq-pl":
-        from .DEE.dee_pp import run
+        from .DEE.dee_qq_pl import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
@@ -693,7 +693,7 @@ def _run_interactive() -> None:
             run(mode=mode, backend=backend, model_size=model_size)
 
     elif choice == "taf-hy-m":
-        from .TAF.taf_ci import run
+        from .TAF.taf_hy_m import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
@@ -706,7 +706,7 @@ def _run_interactive() -> None:
             run(mode=mode, backend=backend, model_size=model_size)
 
     elif choice == "taf-hy-pl":
-        from .TAF.taf_cp import run
+        from .TAF.taf_hy_pl import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
@@ -719,7 +719,7 @@ def _run_interactive() -> None:
             run(mode=mode, backend=backend, model_size=model_size)
 
     elif choice == "taf-qq-m":
-        from .TAF.taf_ii import run
+        from .TAF.taf_qq_m import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)
@@ -730,7 +730,7 @@ def _run_interactive() -> None:
             run(mode=mode, backend=backend, n_photons=n_photons)
 
     elif choice == "taf-qq-pl":
-        from .TAF.taf_pp import run
+        from .TAF.taf_qq_pl import run
 
         mode = _ask_mode()
         backend = _ask_backend(mode)

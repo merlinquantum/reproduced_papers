@@ -1,4 +1,4 @@
-# dho_cperc.py
+# dho_hy_mp.py
 # Classical–Perceval PINN with a quantum branch using MerLin QuantumLayer and a classical MLP branch
 
 import os

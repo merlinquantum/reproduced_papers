@@ -1,5 +1,5 @@
-# taf_pp.py
-# PennyLane–PennyLane PINN for TAF (Sec. 3.3)
+# taf_hy_m.py
+# Classical–Interferometer PINN for TAF (Sec. 3.3)
 
 import os
 from datetime import datetime
@@ -10,19 +10,17 @@ import torch.nn as nn
 from ..config import (
     DEVICE,
     DTYPE,
-    N_LAYERS,
     TAF_ADAM_STEPS,
+    TAF_CC_HIDDEN_WIDTH,
+    TAF_CC_NUM_HIDDEN_LAYERS,
     TAF_EPSILON_LAMBDA,
     TAF_LBFGS_STEPS,
     TAF_LR,
     TAF_N_OUTPUTS,
     TAF_PLOT_EVERY,
 )
-from ..layer_pennylane import (
-    BranchPennylane,
-    make_quantum_block_multiout,
-    taf_feature_map,
-)
+from ..layer_classical import BranchPyTorch
+from ..layer_merlin import BranchMerlin, make_interf_qlayer
 from ..run_common import run_density_inference_mode
 from ..utils import (
     count_trainable_params,
@@ -41,69 +39,56 @@ from .core_taf import (
 )
 
 
-class PP_PINN(nn.Module):
-    """PennyLane-PennyLane TAF PINN with two independent quantum branches."""
+class CI_PINN(nn.Module):
+    """Classical-Interferometer TAF PINN with independent branch parameters."""
 
     def __init__(
         self,
-        q_layers: int = N_LAYERS,
-        *,
-        n_layers: int | None = None,
+        n_photons: int,
+        hidden_width: int = TAF_CC_HIDDEN_WIDTH,
+        num_hidden_layers: int = TAF_CC_NUM_HIDDEN_LAYERS,
+        processor=None,
     ) -> None:
         super().__init__()
-        if n_layers is not None:
-            # Backward-compatible alias while the rest of the repo catches up.
-            q_layers = n_layers
 
-        qblock_multi_1 = make_quantum_block_multiout(
-            n_layers=q_layers, n_qubits=TAF_N_OUTPUTS
+        self.branch1 = BranchPyTorch(
+            in_features=2,
+            out_features=TAF_N_OUTPUTS,
+            num_hidden_layers=num_hidden_layers,
+            hidden_width=hidden_width,
         )
-        qblock_multi_2 = make_quantum_block_multiout(
-            n_layers=q_layers, n_qubits=TAF_N_OUTPUTS
+        self.branch2 = BranchMerlin(
+            make_interf_qlayer(n_photons=n_photons),
+            n_outputs=TAF_N_OUTPUTS,
+            processor=processor,
+            feature_map_kind="taf",
         )
-
-        self.branch1 = BranchPennylane(
-            qblock_multi_1,
-            feature_map=taf_feature_map,
-            output_as_column=False,
-            n_layers=q_layers,
-            n_qubits=TAF_N_OUTPUTS,
-        )
-        self.branch2 = BranchPennylane(
-            qblock_multi_2,
-            feature_map=taf_feature_map,
-            output_as_column=False,
-            n_layers=q_layers,
-            n_qubits=TAF_N_OUTPUTS,
-        )
-
-        # Two branches of TAF_N_OUTPUTS quantum outputs each.
         self.fusion = nn.Linear(2 * TAF_N_OUTPUTS, TAF_N_OUTPUTS, dtype=DTYPE)
-        self.size_label = f"{q_layers}"
 
     def forward(self, xy: torch.Tensor) -> torch.Tensor:
-        out1 = self.branch1(xy)  # [N, TAF_N_OUTPUTS]
-        out2 = self.branch2(xy)  # [N, TAF_N_OUTPUTS]
-        return self.fusion(torch.cat([out1, out2], dim=1))  # [N, TAF_N_OUTPUTS]
+        # Learned linear fusion of both branch outputs.
+        out1 = self.branch1(xy)
+        out2 = self.branch2(xy)
+        return self.fusion(torch.cat([out1, out2], dim=1))
 
 
 MODELS = [
-    ("2", 2),
-    ("4", 4),
-    ("6", 6),
+    ("40-4-2", 40, 4, 2),
+    ("40-7-2", 40, 7, 2),
+    ("80-4-2", 80, 4, 2),
 ]
 
 
-def _get_model_config(model_size: str) -> tuple[str, int]:
-    for label, q_layers in MODELS:
+def _get_model_config(model_size: str) -> tuple[str, int, int, int]:
+    for label, width, layers, n_photons in MODELS:
         if label == model_size:
-            return label, q_layers
-    valid = ", ".join(label for label, _ in MODELS)
+            return label, width, layers, n_photons
+    valid = ", ".join(label for label, *_ in MODELS)
     raise ValueError(f"Unknown model_size='{model_size}'. Valid values: {valid}")
 
 
-def run(mode="train", backend="sim:ascella", model_size="2") -> None:
-    """Run TAF PennyLane-PennyLane models and write summary CSV."""
+def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
+    """Run TAF classical-interferometer models and write summary CSV."""
     seed_everything(0)
 
     data = load_training_sets()
@@ -116,11 +101,14 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
     if mode == "train":
         summary_csv = "HQPINN/TAF/results/taf_summary.csv"
 
-        for label, q_layers in MODELS:
+        for label, width, layers, n_photons in MODELS:
             seed_everything(0)
-            print(f"\nTraining TAF-PP model: {label} q_layers={q_layers}")
+            print(
+                f"\nTraining TAF-CI model: {label} "
+                f"(width={width}, layers={layers}, {n_photons} photons)"
+            )
 
-            case_prefix = f"taf_pp_{label}"
+            case_prefix = f"taf_ci_{label}"
             model_dir = os.path.join(ckpt_dir, "models")
             existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
             if existing_ckpt is not None:
@@ -134,7 +122,7 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                 else:
                     metrics = load_training_metrics_for_checkpoint(
                         out_dir=f"HQPINN/TAF/results/{case_prefix}",
-                        model_label=f"pp_{label}",
+                        model_label=f"ci_{label}",
                         ckpt_path=existing_ckpt,
                         case_prefix=case_prefix,
                     )
@@ -143,14 +131,20 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                             f"Skipping {case_prefix}: existing checkpoint found at "
                             f"{existing_ckpt}"
                         )
-                        n_params = count_trainable_params(PP_PINN(q_layers=q_layers))
+                        n_params = count_trainable_params(
+                            CI_PINN(
+                                n_photons=n_photons,
+                                hidden_width=width,
+                                num_hidden_layers=layers,
+                            )
+                        )
                         case_run_id = get_run_id_from_checkpoint(
                             existing_ckpt, case_prefix
                         )
                         row = (
                             load_training_row_for_run_id(
                                 out_dir=f"HQPINN/TAF/results/{case_prefix}",
-                                model_label=f"pp_{label}",
+                                model_label=f"ci_{label}",
                                 run_id=case_run_id,
                             )
                             if case_run_id is not None
@@ -161,7 +155,7 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                             summary_csv,
                             {
                                 "run_id": case_run_id or "",
-                                "Model": "pp",
+                                "Model": "ci",
                                 "Size": label,
                                 "step": row["step"] if row is not None else "",
                                 "elapsed (s)": row["elapsed (s)"]
@@ -189,7 +183,11 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                         f"retraining model."
                     )
 
-            model = PP_PINN(q_layers=q_layers).to(DEVICE)
+            model = CI_PINN(
+                n_photons=n_photons,
+                hidden_width=width,
+                num_hidden_layers=layers,
+            ).to(DEVICE)
             optimizer = make_optimizer(model, lr=TAF_LR)
 
             final_loss, loss_bc, loss_f, n_params = train_taf(
@@ -198,7 +196,7 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                 n_epochs=TAF_ADAM_STEPS,
                 plot_every=TAF_PLOT_EVERY,
                 out_dir=f"HQPINN/TAF/results/{case_prefix}",
-                model_label=f"pp_{label}",
+                model_label=f"ci_{label}",
                 run_id=run_id,
                 data=data,
                 U_in=U_in,
@@ -207,7 +205,7 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
             )
             row = load_training_row_for_run_id(
                 out_dir=f"HQPINN/TAF/results/{case_prefix}",
-                model_label=f"pp_{label}",
+                model_label=f"ci_{label}",
                 run_id=run_id,
             )
 
@@ -215,7 +213,7 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                 summary_csv,
                 {
                     "run_id": run_id,
-                    "Model": "pp",
+                    "Model": "ci",
                     "Size": label,
                     "step": row["step"] if row is not None else "",
                     "elapsed (s)": row["elapsed (s)"] if row is not None else "",
@@ -238,33 +236,40 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
         print(f"Summary CSV appended to: {summary_csv}")
 
     elif mode == "run":
-        label, q_layers = _get_model_config(model_size)
-        case_prefix = f"taf_pp_{label}"
+        label, width, layers, n_photons = _get_model_config(model_size)
+        case_prefix = f"taf_ci_{label}"
         run_density_inference_mode(
             mode="run",
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            plot_label=f"q_layers={q_layers}",
+            plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: PP_PINN(q_layers=q_layers),
+            model_factory=lambda processor=None: CI_PINN(
+                n_photons=n_photons,
+                hidden_width=width,
+                num_hidden_layers=layers,
+                processor=processor,
+            ),
             save_plot_fn=save_density_plot,
         )
 
     elif mode == "remote":
-        print(
-            "Remote mode is not available for TAF-PP. Falling back to local run mode."
-        )
-        label, q_layers = _get_model_config(model_size)
-        case_prefix = f"taf_pp_{label}"
+        label, width, layers, n_photons = _get_model_config(model_size)
+        case_prefix = f"taf_ci_{label}"
         run_density_inference_mode(
-            mode="run",
-            backend="local",
+            mode="remote",
+            backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            plot_label=f"q_layers={q_layers}",
+            plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: PP_PINN(q_layers=q_layers),
+            model_factory=lambda processor=None: CI_PINN(
+                n_photons=n_photons,
+                hidden_width=width,
+                num_hidden_layers=layers,
+                processor=processor,
+            ),
             save_plot_fn=save_density_plot,
         )
 

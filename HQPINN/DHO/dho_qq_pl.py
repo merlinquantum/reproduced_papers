@@ -1,4 +1,4 @@
-# dho_pp.py
+# dho_qq_pl.py
 # PennyLane–PennyLane PINN with two parallel quantum branches
 
 import os

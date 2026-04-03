@@ -1,4 +1,4 @@
-# dee_pp.py
+# dee_qq_pl.py
 # PennyLane–PennyLane PINN
 
 import os

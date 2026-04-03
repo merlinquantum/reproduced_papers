@@ -1,4 +1,4 @@
-# dho_percperc.py
+# dho_qq_mp.py
 # MerLin–MerLin PINN with two parallel quantum branches using MerLin QuantumLayer
 
 import os
