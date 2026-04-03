@@ -4,8 +4,8 @@ __pycache__/
 **/__pycache__/
 **/.ipynb_checkpoints/
 *.log
-DHO/models/**/*.pt
-SEE/models/**/*.pt
-DEE/models/**/*.pt
-TAF/models/**/*.pt
+lib/DHO/models/**/*.pt
+lib/SEE/models/**/*.pt
+lib/DEE/models/**/*.pt
+lib/TAF/models/**/*.pt
 models/**/*.pt

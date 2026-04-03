@@ -6,10 +6,10 @@ from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SELECTED_RESULT_FILES = {
-    "DHO": PROJECT_ROOT / "DHO" / "results" / "dho_summary.csv",
-    "SEE": PROJECT_ROOT / "SEE" / "results" / "see_summary.csv",
-    "DEE": PROJECT_ROOT / "DEE" / "results" / "dee_summary.csv",
-    "TAF": PROJECT_ROOT / "TAF" / "results" / "cc_summary.csv",
+    "DHO": PROJECT_ROOT / "lib" / "DHO" / "results" / "dho_summary.csv",
+    "SEE": PROJECT_ROOT / "lib" / "SEE" / "results" / "see_summary.csv",
+    "DEE": PROJECT_ROOT / "lib" / "DEE" / "results" / "dee_summary.csv",
+    "TAF": PROJECT_ROOT / "lib" / "TAF" / "results" / "cc_summary.csv",
 }
 
 

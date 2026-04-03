@@ -14,14 +14,18 @@ HQPINN/
 ├── cli.json
 ├── lib/
 │   ├── __init__.py
-│   └── runner.py
+│   ├── runner.py
+│   ├── DHO/
+│   ├── SEE/
+│   ├── DEE/
+│   └── TAF/
 ├── models/
 ├── results/
 ├── tests/
 └── utils/
 ```
 
-The historical implementation folders (`DHO/`, `SEE/`, `DEE/`, `TAF/`) are intentionally kept in place for backward compatibility. The shared runner entrypoint is `HQPINN.lib.runner.train_and_evaluate(cfg, run_dir)`.
+The shared runner entrypoint is `HQPINN.lib.runner.train_and_evaluate(cfg, run_dir)`. Benchmark code and benchmark-specific artifacts now live under `HQPINN/lib/`.
 
 ## Reproduced Paper
 
@@ -433,26 +437,26 @@ bash HQPINN/run_all_train_jobs.sh --dry-run
 
 ### `TAF` Case
 
-The `.npy` files for the NACA0012 case are already present in `HQPINN/TAF/NACA0012/`. To regenerate them:
+The `.npy` files for the NACA0012 case are already present in `HQPINN/lib/TAF/NACA0012/`. To regenerate them:
 
 ```bash
-python3 -m HQPINN.TAF.generate_aerofoil_training_sets
+python3 -m HQPINN.lib.TAF.generate_aerofoil_training_sets
 ```
 
 ## Where To Look At Results
 
 - Curated top-level snapshots: `HQPINN/results/`
-- `DHO`: `HQPINN/DHO/results/dho_summary.csv`
-- `SEE`: `HQPINN/SEE/results/see_summary.csv`
-- `DEE`: `HQPINN/DEE/results/dee_summary.csv`
-- `TAF`: `HQPINN/TAF/results/`
+- `DHO`: `HQPINN/lib/DHO/results/dho_summary.csv`
+- `SEE`: `HQPINN/lib/SEE/results/see_summary.csv`
+- `DEE`: `HQPINN/lib/DEE/results/dee_summary.csv`
+- `TAF`: `HQPINN/lib/TAF/results/`
 
 Checkpoints are saved in:
 
-- `HQPINN/DHO/models/`
-- `HQPINN/SEE/models/`
-- `HQPINN/DEE/models/`
-- `HQPINN/TAF/models/`
+- `HQPINN/lib/DHO/models/`
+- `HQPINN/lib/SEE/models/`
+- `HQPINN/lib/DEE/models/`
+- `HQPINN/lib/TAF/models/`
 
 ## Quick Structure
 
@@ -462,9 +466,9 @@ Checkpoints are saved in:
 - `HQPINN/results/`: curated result snapshots mirrored from legacy folders
 - `HQPINN/models/`: top-level placeholder for consolidated checkpoints
 - `HQPINN/utils/`: command-line helpers and wrappers
-- `HQPINN/DHO/`: damped harmonic oscillator
-- `HQPINN/SEE/`: smooth 1D Euler
-- `HQPINN/DEE/`: discontinuous 1D Euler
-- `HQPINN/TAF/`: 2D transonic flow around a NACA0012 airfoil
+- `HQPINN/lib/DHO/`: damped harmonic oscillator
+- `HQPINN/lib/SEE/`: smooth 1D Euler
+- `HQPINN/lib/DEE/`: discontinuous 1D Euler
+- `HQPINN/lib/TAF/`: 2D transonic flow around a NACA0012 airfoil
 - `HQPINN/configs/`: ready-to-run configs
 - `HQPINN/run_all_train_jobs.sh`: standard training batch

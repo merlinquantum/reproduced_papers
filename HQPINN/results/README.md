@@ -9,7 +9,7 @@ This folder contains selected outputs mirrored from the benchmark-specific resul
 
 The detailed artifacts produced by the original scripts remain in:
 
-- `HQPINN/DHO/results/`
-- `HQPINN/SEE/results/`
-- `HQPINN/DEE/results/`
-- `HQPINN/TAF/results/`
+- `HQPINN/lib/DHO/results/`
+- `HQPINN/lib/SEE/results/`
+- `HQPINN/lib/DEE/results/`
+- `HQPINN/lib/TAF/results/`

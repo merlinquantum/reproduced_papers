@@ -12,10 +12,10 @@ from HQPINN.runtime import DEFAULT_CONFIG_PATH
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 SELECTED_RESULT_FILES = {
-    "DHO": PROJECT_ROOT / "DHO" / "results" / "dho_summary.csv",
-    "SEE": PROJECT_ROOT / "SEE" / "results" / "see_summary.csv",
-    "DEE": PROJECT_ROOT / "DEE" / "results" / "dee_summary.csv",
-    "TAF": PROJECT_ROOT / "TAF" / "results" / "cc_summary.csv",
+    "DHO": PROJECT_ROOT / "lib" / "DHO" / "results" / "dho_summary.csv",
+    "SEE": PROJECT_ROOT / "lib" / "SEE" / "results" / "see_summary.csv",
+    "DEE": PROJECT_ROOT / "lib" / "DEE" / "results" / "dee_summary.csv",
+    "TAF": PROJECT_ROOT / "lib" / "TAF" / "results" / "cc_summary.csv",
 }
 
 
@@ -65,10 +65,11 @@ def train_and_evaluate(cfg: Mapping[str, Any], run_dir: str | Path) -> dict[str,
     """
     Shared-runner entrypoint for HQPINN.
 
-    Current domain implementations still write checkpoints and detailed artifacts to
-    the legacy per-benchmark folders (`DHO/`, `SEE/`, `DEE/`, `TAF/`). This wrapper
-    normalizes config loading for the shared runner, ensures `run_dir` exists, then
-    mirrors selected summary files into the top-level `results/` folder.
+    Current domain implementations keep their detailed artifacts alongside the
+    benchmark code in `lib/DHO/`, `lib/SEE/`, `lib/DEE/`, and `lib/TAF/`. This
+    wrapper normalizes config loading for the shared runner, ensures `run_dir`
+    exists, then mirrors selected summary files into the top-level `results/`
+    folder.
     """
     resolved_run_dir = Path(run_dir).resolve()
     resolved_run_dir.mkdir(parents=True, exist_ok=True)
