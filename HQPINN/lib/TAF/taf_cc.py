@@ -19,7 +19,7 @@ from ...config import (
     TAF_N_OUTPUTS,
     TAF_PLOT_EVERY,
 )
-from ...layer_classical import BranchPyTorch
+from ..layer_classical import BranchPyTorch
 from ...utils import (
     count_trainable_params,
     get_latest_checkpoint,

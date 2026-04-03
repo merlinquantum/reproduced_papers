@@ -20,7 +20,7 @@ from perceval import PS, BS
 
 from math import comb
 
-from .config import DEFAULT_N_OUTPUTS, N_LAYERS, DTYPE, DEE_X0, DEE_U
+from ..config import DEFAULT_N_OUTPUTS, N_LAYERS, DTYPE, DEE_X0, DEE_U
 
 
 # ============================================================

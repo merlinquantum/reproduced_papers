@@ -33,8 +33,8 @@ from .core_dho import (
     u_exact,
 )
 from ...run_common import run_series_inference_mode
-from ...layer_pennylane import make_quantum_block, dho_feature_map, BranchPennylane
-from ...layer_classical import LearnedScalarFusion
+from ..layer_pennylane import make_quantum_block, dho_feature_map, BranchPennylane
+from ..layer_classical import LearnedScalarFusion
 
 
 class PP_PINN(nn.Module):

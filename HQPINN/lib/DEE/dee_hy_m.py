@@ -32,8 +32,8 @@ from .core_dee import (
     train_dee,
 )
 from ...run_common import run_density_inference_mode
-from ...layer_classical import BranchPyTorch
-from ...layer_merlin import make_interf_qlayer, BranchMerlin
+from ..layer_classical import BranchPyTorch
+from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
 class CI_PINN(nn.Module):

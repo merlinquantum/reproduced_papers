@@ -12,7 +12,7 @@ the pure-MLP branch used in:
 import torch
 import torch.nn as nn
 
-from .config import DTYPE, DHO_NUM_HIDDEN_LAYERS, DHO_HIDDEN_WIDTH
+from ..config import DTYPE, DHO_NUM_HIDDEN_LAYERS, DHO_HIDDEN_WIDTH
 
 
 class BranchPyTorch(nn.Module):

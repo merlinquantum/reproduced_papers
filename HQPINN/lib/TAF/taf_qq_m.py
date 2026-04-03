@@ -17,7 +17,7 @@ from ...config import (
     TAF_N_OUTPUTS,
     TAF_PLOT_EVERY,
 )
-from ...layer_merlin import BranchMerlin, make_interf_qlayer
+from ..layer_merlin import BranchMerlin, make_interf_qlayer
 from ...run_common import run_density_inference_mode
 from ...utils import (
     count_trainable_params,

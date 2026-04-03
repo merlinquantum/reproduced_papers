@@ -35,8 +35,8 @@ from .core_dho import (
     u_exact,
 )
 from ...run_common import run_series_inference_mode
-from ...layer_pennylane import make_quantum_block, dho_feature_map, BranchPennylane
-from ...layer_classical import DHOBranchPyTorch, LearnedScalarFusion
+from ..layer_pennylane import make_quantum_block, dho_feature_map, BranchPennylane
+from ..layer_classical import DHOBranchPyTorch, LearnedScalarFusion
 
 
 class CQ_PINN(nn.Module):

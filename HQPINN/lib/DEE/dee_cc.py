@@ -31,7 +31,7 @@ from .core_dee import (
     train_dee,
 )
 from ...run_common import run_density_inference_mode
-from ...layer_classical import BranchPyTorch
+from ..layer_classical import BranchPyTorch
 
 
 class CC_PINN(nn.Module):

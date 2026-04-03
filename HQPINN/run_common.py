@@ -5,7 +5,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from .layer_merlin import make_merlin_processor
+from .lib.layer_merlin import make_merlin_processor
 from .utils import get_latest_checkpoint, load_model
 
 

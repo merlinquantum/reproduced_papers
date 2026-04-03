@@ -16,7 +16,7 @@ import torch
 import torch.nn as nn
 import pennylane as qml
 
-from .config import DEFAULT_N_OUTPUTS, N_LAYERS, DTYPE, DEE_X0, DEE_U
+from ..config import DEFAULT_N_OUTPUTS, N_LAYERS, DTYPE, DEE_X0, DEE_U
 
 
 import warnings

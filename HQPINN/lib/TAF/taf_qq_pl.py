@@ -18,7 +18,7 @@ from ...config import (
     TAF_N_OUTPUTS,
     TAF_PLOT_EVERY,
 )
-from ...layer_pennylane import (
+from ..layer_pennylane import (
     BranchPennylane,
     make_quantum_block_multiout,
     taf_feature_map,

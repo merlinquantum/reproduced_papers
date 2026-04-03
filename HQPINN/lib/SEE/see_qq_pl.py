@@ -25,7 +25,7 @@ from .core_see import (
     train_see,
 )
 from ...run_common import run_density_inference_mode
-from ...layer_pennylane import (
+from ..layer_pennylane import (
     make_quantum_block_multiout,
     see_feature_map,
     BranchPennylane,

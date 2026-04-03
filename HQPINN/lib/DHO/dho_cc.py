@@ -34,7 +34,7 @@ from .core_dho import (
     u_exact,
 )
 from ...run_common import run_series_inference_mode
-from ...layer_classical import DHOBranchPyTorch
+from ..layer_classical import DHOBranchPyTorch
 
 
 class CC_PINN(nn.Module):

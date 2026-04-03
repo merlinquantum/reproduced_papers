@@ -32,8 +32,8 @@ from .core_dho import (
     u_exact,
 )
 from ...run_common import run_series_inference_mode
-from ...layer_merlin import make_interf_qlayer, BranchMerlin
-from ...layer_classical import DHOBranchPyTorch, LearnedScalarFusion
+from ..layer_merlin import make_interf_qlayer, BranchMerlin
+from ..layer_classical import DHOBranchPyTorch, LearnedScalarFusion
 
 
 # ============================================================
