@@ -106,6 +106,7 @@ def run(
     backend="sim:ascella",
     *,
     n_photons: int = 1,
+    force_retrain: bool = False,
 ) -> None:
     """
     mode = "train" : train the model from scratch and save the checkpoint
@@ -125,7 +126,9 @@ def run(
     # ======================
     if mode == "train":
         print("=== TRAINING MODE ===")
-        existing_ckpt = get_latest_checkpoint(ckpt_dir, case_prefix)
+        existing_ckpt = None if force_retrain else get_latest_checkpoint(ckpt_dir, case_prefix)
+        if force_retrain:
+            print(f"Forcing retraining for {case_prefix}; existing checkpoints will be ignored.")
         if existing_ckpt is not None:
             try:
                 model = load_model(

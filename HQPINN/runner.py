@@ -136,6 +136,8 @@ def run_from_project(config: dict[str, Any]) -> None:
     mode = config["mode"]
     backend = config["backend"]
     model_config = config.get("model") or {}
+    shared_runner_config = config.get("shared_runner") or {}
+    force_retrain = bool(shared_runner_config.get("force_retrain", False))
 
     if experiment == "dho-cc":
         n_layers = model_config.get("n_layers")
@@ -150,6 +152,7 @@ def run_from_project(config: dict[str, Any]) -> None:
             backend=backend,
             n_layers=int(n_layers),
             n_nodes=int(n_nodes),
+            **({"force_retrain": True} if force_retrain else {}),
         )
         return
 
@@ -204,6 +207,7 @@ def run_from_project(config: dict[str, Any]) -> None:
             n_layers=int(n_layers),
             n_nodes=int(n_nodes),
             n_photons=int(n_photons),
+            **({"force_retrain": True} if force_retrain else {}),
         )
         return
 
@@ -236,6 +240,7 @@ def run_from_project(config: dict[str, Any]) -> None:
             mode=mode,
             backend=backend,
             n_photons=int(n_photons),
+            **({"force_retrain": True} if force_retrain else {}),
         )
         return
 

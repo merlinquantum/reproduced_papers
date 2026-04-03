@@ -98,6 +98,7 @@ def run(
     *,
     n_layers: int = DHO_NUM_HIDDEN_LAYERS,
     n_nodes: int = DHO_HIDDEN_WIDTH,
+    force_retrain: bool = False,
 ):
     """Run the Classical–Classical DHO PINN experiment."""
     seed_everything(0)
@@ -108,7 +109,9 @@ def run(
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
     if mode == "train":
-        existing_ckpt = get_latest_checkpoint(ckpt_dir, case_prefix)
+        existing_ckpt = None if force_retrain else get_latest_checkpoint(ckpt_dir, case_prefix)
+        if force_retrain:
+            print(f"Forcing retraining for {case_prefix}; existing checkpoints will be ignored.")
         if existing_ckpt is not None:
             try:
                 model = load_model(
