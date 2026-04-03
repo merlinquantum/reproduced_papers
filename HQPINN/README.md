@@ -2,131 +2,213 @@
 
 ## Reproduced Paper
 
-This implementation aims to reproduce the paper:
+This folder reproduces:
 
 - **Hybrid Quantum Physics-informed Neural Network: Towards Efficient Learning of High-speed Flows**
 - **Authors**: Fong Yew Leong, Wei-Bin Ewe, Si Bui Quang Tran, Zhongyuan Zhang, Jun Yong Khoo
 - **arXiv**: `http://arxiv.org/abs/2503.02202`
 
-The repository reproduces the main idea of the paper: comparing several hybrid quantum/classical PINN architectures across multiple physics problems, from a simple 1D benchmark to transonic flow around a NACA0012 airfoil.
+The paper compares hybrid quantum/classical PINNs across four case studies, from a 1D benchmark to 2D transonic flow around a NACA0012 airfoil.
 
 ### Methodology
 
 #### Governing Equations
 
-For the fluid dynamics case studies, the paper starts from the inviscid compressible Euler equations:
+For the fluid-dynamics case studies, the governing equations are the inviscid compressible Euler equations:
 
-```text
-∂t U + ∇ · G(U) = 0
-```
+$$
+\partial_t U + \nabla \cdot G(U) = 0
+$$
 
 with state vector
 
-```text
-U = (ρ, ρu, ρv, ρE)^T
-```
+$$
+U = (\rho, \rho u, \rho v, \rho E)^T
+$$
 
-where `ρ` is density, `(u, v)` are velocity components, `E` is total energy, and `p` is pressure. The equation of state is
+where $\rho$ is density, $(u, v)$ are velocity components, $E$ is total energy, and $p$ is pressure. The equation of state is
 
-```text
-p = (γ - 1) (ρE - 1/2 ρ ||u||^2)
-```
+$$
+p = (\gamma - 1)\left(\rho E - \frac{1}{2}\rho \lVert u \rVert^2\right)
+$$
 
-and the ideal-gas relation used in the paper is
+with $\gamma = 1.4$ for air, together with the ideal-gas relation
 
-```text
-p = ρRT
-```
+$$
+p = \rho R T
+$$
 
-with `γ = 1.4` for air. For the steady 2D transonic airfoil case, the governing equation simplifies to
+For the steady 2D airfoil case, this becomes
 
-```text
-∇ · G(U) = 0
-```
+$$
+\nabla \cdot G(U) = 0
+$$
 
-For the introductory `DHO` case study in Appendix A.2, the governing equation is the 1D damped harmonic oscillator ODE:
+For `DHO` (Appendix A.2), the governing equation is
 
-```text
-m ∂tt u + μ ∂t u + k u = 0,   t ∈ (0, 1]
-```
+$$
+m \partial_{tt} u + \mu \partial_t u + k u = 0, \qquad t \in (0, 1]
+$$
 
 #### PINN Loss
 
-Following the paper, the neural network approximation `U_NN(x, t)` is trained by minimizing a data term and a physics term. The residual is defined as
+Section 2.2 defines a data loss and a physics loss. For the unsteady Euler formulation, the residual is
 
-```text
-F(x, t) = ∂t U_NN(x, t) + ∇ · G(U_NN(x, t))
-```
+$$
+F(x, t) = \partial_t U_{NN}(x, t) + \nabla \cdot G(U_{NN}(x, t))
+$$
 
-and the total PINN objective is
+This is not a prediction-minus-ground-truth error: it is the governing equation evaluated on the network output, so the target is zero when the prediction satisfies the physics. The total objective is
 
-```text
-L = L_BC + L_F
-```
+$$
+\mathcal{L} = \mathcal{L}_{BC} + \mathcal{L}_F
+$$
 
-where:
-
-- `L_BC` is the mean-squared error on initial and boundary condition points
-- `L_F` is the mean-squared error on collocation points enforcing the governing equations
+- $\mathcal{L}_{BC}$ is the data loss, including initial and boundary condition points
+- $\mathcal{L}_F$ is the physics loss, computed from collocation points through the residual
 
 In the paper notation:
 
-```text
-L_BC = (1 / N_B) Σ_j |U_NN(x_j^B, t_j^B) - U(x_j^B, t_j^B)|^2
-L_F  = (1 / N_F) Σ_j |F(x_j^F, t_j^F)|^2
-```
+$$
+\mathcal{L}_{BC} = \frac{1}{N_B}\sum_j \left| U_{NN}(x_j^B, t_j^B) - U(x_j^B, t_j^B) \right|^2
+$$
 
-For `DHO`, the paper uses a problem-specific PINN loss combining the initial displacement, initial derivative, and ODE residual terms.
+$$
+\mathcal{L}_F = \frac{1}{N_F}\sum_j \left| F(x_j^F, t_j^F) \right|^2
+$$
+
+`DHO` uses a separate problem-specific loss with an initial displacement term, an initial derivative term, and an ODE residual term.
 
 #### Parameterized Quantum Circuit
 
-The quantum part of the method is based on a parameterized quantum circuit, or `PQC`. In the paper, the PQC is a variational quantum model `f(θ, φ)` where:
+The quantum part is a parameterized quantum circuit (`PQC`), written as
 
-- `φ` encodes data or features
-- `θ` contains trainable circuit parameters
-- the output is an observable expectation value
+$$
+f(\theta, \varphi) = \langle \psi(\theta, \varphi) \vert O \vert \psi(\theta, \varphi) \rangle
+$$
 
-This is written as:
-
-```text
-f(θ, φ) = <ψ(θ, φ)| O |ψ(θ, φ)>
-```
-
-The paper uses a data-reuploading structure that alternates feature-map layers `S(φ)` and trainable ansatz layers `A(θ)`. In the HQPINN setting, Pauli-Z expectations on the qubits provide the quantum branch outputs.
+The circuit alternates feature-map layers $S(\varphi)$ and trainable ansatz layers $A(\theta)$. In HQPINN, Pauli-$Z$ expectations provide the quantum branch outputs.
 
 #### HQPINN
 
-The main idea of the paper is the `HQPINN`, a hybrid quantum physics-informed neural network with two parallel branches:
+`HQPINN` uses two parallel branches:
 
 - a quantum branch built from a PQC
-- a classical branch built from a standard neural network
+- a classical branch built from a neural network
 
-Both branches receive the same physical inputs, such as `(x, t)` in 1D Euler or `(x, y)` in the steady airfoil case. Their outputs are linearly fused to predict the physical state variables. In the paper, this is the hybrid alternative to:
-
-- fully classical models
-- fully quantum models
-
-The objective is to check whether this hybrid design preserves the physics-informed training structure of PINNs while benefiting from expressive quantum features.
+Their outputs are linearly fused to predict the physical state variables. The paper compares this hybrid model to classical-classical and quantum-quantum baselines.
 
 ### DHO - Damped Harmonic Oscillator
 
-This is the simplest case study in the repository: a 1D damped harmonic oscillator governed by an ordinary differential equation. In the paper, it is described in **Appendix A.2**. It serves as a lightweight benchmark to compare the different classical, hybrid, and quantum-only PINN architectures before moving to harder PDE problems.
+`DHO` is the introductory benchmark from **Appendix A.2**.
+
+Main equations:
+
+$$
+m \partial_{tt} u + \mu \partial_t u + k u = 0, \qquad t \in (0, 1]
+$$
+
+with
+
+$$
+m = 1, \qquad \mu = 4, \qquad k = 400
+$$
 
 ### SEE - Smooth Euler Equation
 
-This case study corresponds to the smooth 1D Euler setup used in Section 3.1 of the paper. It is a fluid dynamics benchmark with a smooth solution, used to evaluate how well the different architectures learn coupled physical quantities such as density, velocity, and pressure in a relatively well-behaved regime.
+`SEE` corresponds to **Section 3.1**.
+
+Main equations:
+
+$$
+\partial_t U + \partial_x F(U) = 0
+$$
+
+with
+
+$$
+U = (\rho, u, p)
+$$
+
+initial condition
+
+$$
+U_0 = (\rho_0, u_0, p_0) = (1.0 + 0.2 \sin(\pi x), 1.0, 1.0)
+$$
+
+and traveling-wave solution
+
+$$
+(\rho, u, p) = (1.0 + 0.2 \sin(\pi (x - t)), 1.0, 1.0)
+$$
 
 ### DEE - Discontinuous Euler Equation
 
-This case study corresponds to the discontinuous 1D Euler setup used in Section 3.2 of the paper. Compared with `SEE`, this problem is harder because the target solution includes a discontinuity, making it a more demanding test for PINN stability and approximation quality.
+`DEE` corresponds to **Section 3.2**.
+
+Main equations:
+
+$$
+\partial_t U + \partial_x F(U) = 0
+$$
+
+with
+
+$$
+U = (\rho, u, p)
+$$
+
+boundary states
+
+$$
+(\rho_L, u_L, p_L) = (\rho_R, u_R, p_R) = (1.0, 0.1, 1.0)
+$$
+
+and exact solution
+
+$$
+\rho(x, t) =
+\begin{cases}
+1.4, & x < 0.5 + 0.1 t \\
+1.0, & x > 0.5 + 0.1 t
+\end{cases}
+$$
+
+$$
+u(x, t) = 0.1, \qquad p(x, t) = 1.0
+$$
 
 ### TAF - Transonic Airfoil Flow
 
-This is the most advanced case study in the paper and corresponds to the 2D transonic NACA0012 airfoil flow problem from Section 3.3. It is the closest setting to the paper's main application goal: learning high-speed flow fields with hybrid quantum physics-informed neural networks under realistic boundary and PDE constraints.
+`TAF` corresponds to **Section 3.3**.
 
-## Paper Experiments
+Main equations:
 
-The architecture variants implemented in the code are:
+$$
+\nabla \cdot G(U) = 0
+$$
+
+with
+
+$$
+U = (\rho, u, v, T)
+$$
+
+computational domain
+
+$$
+x \in (-1, 3.5), \qquad y \in (-2.25, 2.25)
+$$
+
+and inlet condition
+
+$$
+U_{in} = (\rho_{in}, u_{in}, v_{in}, T_{in}) = (1.225, 272.15, 0.0, 288.15)
+$$
+
+## Experiments
+
+Implemented architecture variants:
 
 - `cc`: classical-classical
 - `ci`: classical-interferometer
@@ -135,99 +217,101 @@ The architecture variants implemented in the code are:
 - `pp`: PennyLane-PennyLane
 - `cperc` and `percperc`: Perceval/Merlin variants specific to `DHO`
 
-### Experimental Contexts
+### Contexts
 
 #### `DHO`
 
-`DHO` is the introductory benchmark from **Appendix A.2**. It is a 1D damped harmonic oscillator used to test whether the hybrid classical-quantum design already helps on a simple PINN problem before moving to Euler flows.
+`DHO` comes from **Appendix A.2**.
 
-Paper setup:
+Setup:
 
-- ODE: `m ∂tt u + μ ∂t u + k u = 0`
-- domain: `t ∈ (0, 1]`
-- parameters: `m = 1`, `μ = 4`, `k = 400`
-- optimization setup in the paper: Adam with learning rate `0.002` up to about `2000` epochs
-- model context: 3-qubit / 3-layer PQC and a classical MLP with 2 hidden layers of width 16
+- ODE: $m \partial_{tt} u + \mu \partial_t u + k u = 0$
+- domain: $t \in (0, 1]$
+- parameters: $m = 1$, $\mu = 4$, $k = 400$
+- optimization: Adam, learning rate `0.002`, about `2000` epochs
+- model: 3-qubit / 3-layer PQC and a classical MLP with 2 hidden layers of width 16
 
 #### `SEE`
 
-`SEE` corresponds to **Section 3.1**, the smooth Euler equation in the harmonic regime. This is the well-behaved 1D Euler benchmark used to test the architectures when the target solution is smooth.
+`SEE` corresponds to **Section 3.1**.
 
-Paper setup:
+Setup:
 
 - initial condition:
 
-```text
-U0 = (ρ0, u0, p0) = (1.0 + 0.2 sin(πx), 1.0, 1.0)
-```
+$$
+U_0 = (\rho_0, u_0, p_0) = (1.0 + 0.2 \sin(\pi x), 1.0, 1.0)
+$$
 
-- exact traveling-wave solution:
+- traveling-wave solution:
 
-```text
-(ρ, u, p) = (1.0 + 0.2 sin(π(x - t)), 1.0, 1.0)
-```
+$$
+(\rho, u, p) = (1.0 + 0.2 \sin(\pi (x - t)), 1.0, 1.0)
+$$
 
-- domain: `x ∈ (-1, 1)`, `t ∈ (0, 2)`
+- domain: $x \in (-1, 1)$, $t \in (0, 2)$
 - boundary conditions: periodic
-- training samples in the paper: `N_ic = 50`, `N_bc = 50`, `N_F = 2000`
+- training samples: $N_{ic} = 50$, $N_{bc} = 50$, $N_F = 2000$
 
 #### `DEE`
 
-`DEE` corresponds to **Section 3.2**, the discontinuous Euler equation with a moving contact discontinuity. This is a harder 1D benchmark than `SEE`, because the target density field is no longer smooth.
+`DEE` corresponds to **Section 3.2**.
 
-Paper setup:
+Setup:
 
-- left and right boundary states:
+- boundary states:
 
-```text
-(ρL, uL, pL) = (ρR, uR, pR) = (1.0, 0.1, 1.0)
-```
+$$
+(\rho_L, u_L, p_L) = (\rho_R, u_R, p_R) = (1.0, 0.1, 1.0)
+$$
 
 - exact solution:
 
-```text
-ρ(x, t) = 1.4  if x < 0.5 + 0.1 t
-ρ(x, t) = 1.0  if x > 0.5 + 0.1 t
-u(x, t) = 0.1
-p(x, t) = 1.0
-```
+$$
+\rho(x, t) =
+\begin{cases}
+1.4, & x < 0.5 + 0.1 t \\
+1.0, & x > 0.5 + 0.1 t
+\end{cases}
+$$
 
-- domain: `x ∈ (0, 1)`, `t ∈ (0, 2)`
+$$
+u(x, t) = 0.1, \qquad p(x, t) = 1.0
+$$
+
+- domain: $x \in (0, 1)$, $t \in (0, 2)$
 - boundary conditions: Dirichlet
-- training samples in the paper: `N_ic = 60`, `N_bc = 60`, `N_F = 1000`
+- training samples: $N_{ic} = 60$, $N_{bc} = 60$, $N_F = 1000$
 
 #### `TAF`
 
-`TAF` corresponds to **Section 3.3**, the 2D transonic airfoil flow case. This is the main high-speed-flow application in the paper and the most demanding benchmark in the repository.
+`TAF` corresponds to **Section 3.3**.
 
-Paper setup:
+Setup:
 
 - governing equation: steady 2D Euler equation
-- geometry: `NACA0012` airfoil with chord `(0, 1)`
-- computational domain: `x ∈ (-1, 3.5)`, `y ∈ (-2.25, 2.25)`
-- predicted variables: `(ρ, u, v, T)`
+- geometry: `NACA0012` airfoil with chord $(0, 1)$
+- computational domain: $x \in (-1, 3.5)$, $y \in (-2.25, 2.25)$
+- predicted variables: $(\rho, u, v, T)$
 - inlet condition:
 
-```text
-U_in = (ρ_in, u_in, v_in, T_in) = (1.225, 272.15, 0.0, 288.15)
-```
+$$
+U_{in} = (\rho_{in}, u_{in}, v_{in}, T_{in}) = (1.225, 272.15, 0.0, 288.15)
+$$
 
-- outlet condition: `P_out = 0`
+- outlet condition: $P_{out} = 0$
 - side boundaries: periodic
 - wall condition: free-slip on the airfoil surface
-- paper training setup: 40 boundary points per boundary, 4000 domain points for physics loss, adaptive gradient weight, Adam for 40000 steps with learning rate `0.0005`, then L-BFGS for 2000 steps
+- training: 40 boundary points per boundary, 4000 domain points for physics loss, adaptive gradient weight, Adam for 40000 steps with learning rate `0.0005`, then L-BFGS for 2000 steps
 
 ## Reproduction Limitations
 
-- The reproduction is **more advanced for `DHO`, `SEE`, and `DEE`** than for `TAF`.
-- The scripts and configs cover more variants than the ones that have actually been rerun and archived in the summary CSV files.
-- The standard batch script `HQPINN/run_all_train_jobs.sh` does not launch every experiment.
-  It includes all `DHO` jobs.
-  It launches `SEE`, `DEE`, and `TAF` in `cc`, `ci`, and `ii`.
-  It **skips** `cp` variants outside `DHO`.
-  It also **skips** `pp` variants for `SEE`, `DEE`, and `TAF`.
-- Quantum variants are significantly more expensive to run than `cc`.
-- Some summary CSV files contain duplicated rows when an existing checkpoint is reused and appended again to the summary.
+This reproduction reflects practical CPU constraints.
+
+- `SEE`, `DEE`, and `TAF` use mini-batched training. The main reproduced settings use `n_f_batch = 256`, and `TAF` also uses `n_wall_batch = 128` before a final full-batch L-BFGS refinement.
+- The two branches are combined through a learned linear fusion layer to keep the readout compact and parameter budgets comparable across baselines.
+- PennyLane variants outside `DHO` were not rerun in the consolidated reproduction because their CPU cost would be prohibitively high without a sizeable compute cluster. This is why [`HQPINN/run_all_train_jobs.sh`](/Users/jerome/git/reproduced_papers_fork/HQPINN/run_all_train_jobs.sh) focuses on `DHO` plus the `cc`, `ci`, and `ii` families for `SEE`, `DEE`, and `TAF`.
+- For `DHO`, we also tested Perceval-based photonic variants (`dho-cperc` and `dho-percperc`) in addition to the generic Merlin interferometer approach.
 
 ## Installation
 
@@ -241,7 +325,7 @@ pip install -r HQPINN/requirements.txt
 
 ## How To Run The Experiments
 
-### General Interface
+### Interface
 
 Interactive mode:
 
@@ -249,13 +333,13 @@ Interactive mode:
 python3 -m HQPINN
 ```
 
-Recommended config-based mode:
+Config-based mode:
 
 ```bash
 python3 -m HQPINN --config <path/to/config.json>
 ```
 
-### Launch Examples
+### Examples
 
 Train a `DHO` case:
 
@@ -281,7 +365,7 @@ Train a `TAF` case:
 python3 -m HQPINN --config HQPINN/configs/taf_cc_train_40-4.json
 ```
 
-Run inference / plotting for an already trained model:
+Run inference / plotting for a trained model:
 
 ```bash
 python3 -m HQPINN --config HQPINN/configs/see_cc_run_10-4.json
@@ -289,13 +373,13 @@ python3 -m HQPINN --config HQPINN/configs/see_cc_run_10-4.json
 
 ### Batch Training
 
-To launch the standard training queue:
+Launch the standard training queue:
 
 ```bash
 bash HQPINN/run_all_train_jobs.sh
 ```
 
-To preview the queue without running it:
+Preview the queue:
 
 ```bash
 bash HQPINN/run_all_train_jobs.sh --dry-run
@@ -303,9 +387,7 @@ bash HQPINN/run_all_train_jobs.sh --dry-run
 
 ### `TAF` Case
 
-The required `.npy` files for the NACA0012 case are already present in `HQPINN/TAF/NACA0012/`.
-
-If needed, they can be regenerated with:
+The `.npy` files for the NACA0012 case are already present in `HQPINN/TAF/NACA0012/`. To regenerate them:
 
 ```bash
 python3 -m HQPINN.TAF.generate_aerofoil_training_sets
