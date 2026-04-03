@@ -35,6 +35,7 @@ from ...config import (
     DEE_RHO_R,
     DEE_X0,
 )
+from ...paths import results_dir_for_model_dir
 from ...utils import (
     count_trainable_params,
     log_training_info,
@@ -620,7 +621,7 @@ def save_density_plot(
         T_np = T.cpu().numpy()
         rho_pred_np = rho_pred.cpu().numpy()
 
-        results_dir = os.path.join(ckpt_dir, "results")
+        results_dir = results_dir_for_model_dir(ckpt_dir)
         os.makedirs(results_dir, exist_ok=True)
 
         png_path = os.path.join(results_dir, f"{case_prefix}_{backend}_{run_id}.png")
@@ -683,7 +684,7 @@ def save_rho_slice_plot(
     rho_pred_np = rho_pred.detach().cpu().numpy()
     rho_exact_np = rho_exact.detach().cpu().numpy()
 
-    results_dir = os.path.join(ckpt_dir, "results")
+    results_dir = results_dir_for_model_dir(ckpt_dir)
     os.makedirs(results_dir, exist_ok=True)
     t_tag = str(t_val).replace(".", "p")
     png_path = os.path.join(

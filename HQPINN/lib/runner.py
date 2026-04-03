@@ -7,7 +7,6 @@ from typing import Any, Mapping
 
 from HQPINN.runner import run_from_project
 from HQPINN.runtime import DEFAULT_CONFIG_PATH
-from HQPINN.utils.sync_selected_results import sync_selected_results as _sync_selected_results
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -43,15 +42,16 @@ def _resolve_config(cfg: Mapping[str, Any]) -> dict[str, Any]:
         resolved = _merge_dicts(resolved, _load_json_object(config_file))
 
     return _merge_dicts(resolved, inline_cfg)
+
+
 def train_and_evaluate(cfg: Mapping[str, Any], run_dir: str | Path) -> dict[str, Any]:
     """
     Shared-runner entrypoint for HQPINN.
 
-    Current domain implementations keep their detailed artifacts alongside the
-    benchmark code in `lib/DHO/`, `lib/SEE/`, `lib/DEE/`, and `lib/TAF/`. This
-    wrapper normalizes config loading for the shared runner, ensures `run_dir`
-    exists, then mirrors benchmark result artifacts into the top-level
-    `results/` folder.
+    This wrapper normalizes config loading for the shared runner and ensures
+    `run_dir` exists before delegating to benchmark code, which writes
+    checkpoints and result artifacts directly into the top-level `models/`
+    and `results/` folders.
     """
     resolved_run_dir = Path(run_dir).resolve()
     resolved_run_dir.mkdir(parents=True, exist_ok=True)
@@ -62,7 +62,6 @@ def train_and_evaluate(cfg: Mapping[str, Any], run_dir: str | Path) -> dict[str,
     config["shared_runner"] = shared_runner_cfg
 
     run_from_project(config)
-    _sync_selected_results()
 
     return {
         "status": "completed",

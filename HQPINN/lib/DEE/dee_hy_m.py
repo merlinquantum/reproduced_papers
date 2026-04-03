@@ -92,12 +92,12 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-1"):
     """Run DEE Classical-Interferometer models and write summary CSV."""
     seed_everything(0)
 
-    ckpt_dir = "HQPINN/lib/DEE/"
+    ckpt_dir = "HQPINN/models/DEE"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
     if mode == "train":
         print("=== TRAINING MODE ===")
-        summary_csv = "HQPINN/lib/DEE/results/dee_summary.csv"
+        summary_csv = "HQPINN/results/DEE/dee_summary.csv"
         for label, width, layers, n_photons in MODELS:
             seed_everything(0)
             print(
@@ -105,11 +105,11 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-1"):
             )
 
             case_prefix = f"dee_hy_m_{label}"
-            model_dir = os.path.join(ckpt_dir, "models")
+            model_dir = ckpt_dir
             existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
             if existing_ckpt is not None:
                 final_loss = load_training_loss_for_checkpoint(
-                    out_dir=f"HQPINN/lib/DEE/results/{case_prefix}",
+                    out_dir=f"HQPINN/results/DEE/{case_prefix}",
                     model_label=f"hy-m_{label}",
                     ckpt_path=existing_ckpt,
                     case_prefix=case_prefix,
@@ -138,7 +138,7 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-1"):
                         )
                         row = (
                             load_training_row_for_run_id(
-                                out_dir=f"HQPINN/lib/DEE/results/{case_prefix}",
+                                out_dir=f"HQPINN/results/DEE/{case_prefix}",
                                 model_label=f"hy-m_{label}",
                                 run_id=case_run_id,
                             )
@@ -195,12 +195,12 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-1"):
                 optimizer=optimizer,
                 n_epochs=DEE_N_EPOCHS,
                 plot_every=DEE_PLOT_EVERY,
-                out_dir=f"HQPINN/lib/DEE/results/{case_prefix}",
+                out_dir=f"HQPINN/results/DEE/{case_prefix}",
                 model_label=f"hy-m_{label}",
                 run_id=run_id,
             )
             row = load_training_row_for_run_id(
-                out_dir=f"HQPINN/lib/DEE/results/{case_prefix}",
+                out_dir=f"HQPINN/results/DEE/{case_prefix}",
                 model_label=f"hy-m_{label}",
                 run_id=run_id,
             )

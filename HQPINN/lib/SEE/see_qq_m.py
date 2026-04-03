@@ -88,7 +88,7 @@ def run(mode="train", backend="sim:ascella", n_photons: int | None = None):
     """Run all SEE Interferometer-Interferometer models and write summary CSV."""
     seed_everything(0)
 
-    ckpt_dir = "HQPINN/lib/SEE/"
+    ckpt_dir = "HQPINN/models/SEE"
     # case_prefix = f"see_qq_m_{n_photons}"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
@@ -98,7 +98,7 @@ def run(mode="train", backend="sim:ascella", n_photons: int | None = None):
 
     if mode == "train":
         print("=== TRAINING MODE ===")
-        summary_csv = "HQPINN/lib/SEE/results/see_summary.csv"
+        summary_csv = "HQPINN/results/SEE/see_summary.csv"
         if n_photons is not None:
             models = [_resolve_model_config(n_photons)]
         else:
@@ -108,11 +108,11 @@ def run(mode="train", backend="sim:ascella", n_photons: int | None = None):
             print(f"\nTraining SEE-QQ-M {nb_photons} photons")
 
             case_prefix = f"see_qq_m_{nb_photons}"
-            model_dir = os.path.join(ckpt_dir, "models")
+            model_dir = ckpt_dir
             existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
             if existing_ckpt is not None:
                 final_loss = load_training_loss_for_checkpoint(
-                    out_dir=f"HQPINN/lib/SEE/results/{case_prefix}",
+                    out_dir=f"HQPINN/results/SEE/{case_prefix}",
                     model_label=f"qq-m_{nb_photons}",
                     ckpt_path=existing_ckpt,
                     case_prefix=case_prefix,
@@ -138,7 +138,7 @@ def run(mode="train", backend="sim:ascella", n_photons: int | None = None):
                         )
                         row = (
                             load_training_row_for_run_id(
-                                out_dir=f"HQPINN/lib/SEE/results/{case_prefix}",
+                                out_dir=f"HQPINN/results/SEE/{case_prefix}",
                                 model_label=f"qq-m_{nb_photons}",
                                 run_id=case_run_id,
                             )
@@ -193,12 +193,12 @@ def run(mode="train", backend="sim:ascella", n_photons: int | None = None):
                 optimizer=optimizer,
                 n_epochs=SEE_N_EPOCHS,
                 plot_every=SEE_PLOT_EVERY,
-                out_dir=f"HQPINN/lib/SEE/results/{case_prefix}",
+                out_dir=f"HQPINN/results/SEE/{case_prefix}",
                 model_label=f"qq-m_{nb_photons}",
                 run_id=run_id,
             )
             row = load_training_row_for_run_id(
-                out_dir=f"HQPINN/lib/SEE/results/{case_prefix}",
+                out_dir=f"HQPINN/results/SEE/{case_prefix}",
                 model_label=f"qq-m_{nb_photons}",
                 run_id=run_id,
             )

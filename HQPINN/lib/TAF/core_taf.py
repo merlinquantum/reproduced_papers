@@ -34,6 +34,7 @@ from ...config import (
     TAF_Y_MAX,
     TAF_Y_MIN,
 )
+from ...paths import results_dir_for_model_dir
 from ...utils import count_trainable_params
 
 
@@ -710,7 +711,7 @@ def save_density_plot(
         y = X_plot[:, 1].detach().cpu().numpy()
         pred_np = pred.detach().cpu().numpy()
 
-    results_dir = os.path.join(ckpt_dir, "results")
+    results_dir = results_dir_for_model_dir(ckpt_dir)
     os.makedirs(results_dir, exist_ok=True)
     saved_paths: list[str] = []
 
@@ -777,7 +778,7 @@ def save_rho_slice_plot(
         xy_t = torch.tensor(xy, dtype=DTYPE, device=DEVICE)
         rho_pred = model(xy_t)[:, 0].detach().cpu().numpy()
 
-    results_dir = os.path.join(ckpt_dir, "results")
+    results_dir = results_dir_for_model_dir(ckpt_dir)
     os.makedirs(results_dir, exist_ok=True)
     y_tag = str(y_slice).replace(".", "p")
     png_path = os.path.join(

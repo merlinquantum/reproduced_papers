@@ -445,26 +445,26 @@ python3 -m HQPINN.lib.TAF.generate_aerofoil_training_sets
 
 ## Where To Look At Results
 
-- Mirrored top-level artifacts: `HQPINN/results/`
-- `DHO`: `HQPINN/lib/DHO/results/dho_summary.csv`
-- `SEE`: `HQPINN/lib/SEE/results/see_summary.csv`
-- `DEE`: `HQPINN/lib/DEE/results/dee_summary.csv`
-- `TAF`: `HQPINN/lib/TAF/results/`
+- Canonical result artifacts: `HQPINN/results/`
+- `DHO`: `HQPINN/results/DHO/dho_summary.csv`
+- `SEE`: `HQPINN/results/SEE/see_summary.csv`
+- `DEE`: `HQPINN/results/DEE/dee_summary.csv`
+- `TAF`: `HQPINN/results/TAF/taf_summary.csv`
 
 Checkpoints are saved in:
 
-- `HQPINN/lib/DHO/models/`
-- `HQPINN/lib/SEE/models/`
-- `HQPINN/lib/DEE/models/`
-- `HQPINN/lib/TAF/models/`
+- `HQPINN/models/DHO/`
+- `HQPINN/models/SEE/`
+- `HQPINN/models/DEE/`
+- `HQPINN/models/TAF/`
 
 ## Quick Structure
 
 - `HQPINN/lib/runner.py`: shared-runner entrypoint
 - `HQPINN/cli.json`: shared-runner schema
 - `HQPINN/notebook.ipynb`: interactive notebook scaffold
-- `HQPINN/results/`: mirrored summaries, detailed CSVs, and PNGs from legacy folders
-- `HQPINN/models/`: top-level placeholder for consolidated checkpoints
+- `HQPINN/results/`: canonical summaries, detailed CSVs, and PNGs
+- `HQPINN/models/`: canonical checkpoints
 - `HQPINN/utils/`: command-line helpers and wrappers
 - `HQPINN/lib/DHO/`: damped harmonic oscillator
 - `HQPINN/lib/SEE/`: smooth 1D Euler

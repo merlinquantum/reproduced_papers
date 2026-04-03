@@ -74,7 +74,7 @@ class MM_PINN(nn.Module):
         return self.fusion(out1, out2)
 
 
-def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/lib/DHO/results/dho_qq_m/"):
+def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/results/DHO/dho_qq_m/"):
     plt.figure(figsize=(10, 6))
     plt.plot(t.cpu().numpy(), u_pred, label="Prediction PINN", lw=2)
     plt.plot(t.cpu().numpy(), u_ex, "--", label="Exact solution", lw=2)
@@ -115,10 +115,10 @@ def run(
     """
     seed_everything(0)
 
-    ckpt_dir = "HQPINN/lib/DHO/models/"
+    ckpt_dir = "HQPINN/models/DHO"
     case_prefix = _case_prefix(n_photons)
-    results_dir = f"HQPINN/lib/DHO/results/{case_prefix}"
-    summary_csv = "HQPINN/lib/DHO/results/dho_summary.csv"
+    results_dir = f"HQPINN/results/DHO/{case_prefix}"
+    summary_csv = "HQPINN/results/DHO/dho_summary.csv"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
     # ======================

@@ -1,6 +1,6 @@
-# HQPINN Mirrored Results
+# HQPINN Results
 
-This folder mirrors benchmark artifacts from the benchmark-specific result directories.
+This folder is the canonical location for benchmark result artifacts.
 
 Examples:
 
@@ -11,11 +11,4 @@ Examples:
 - `results/SEE/see_cc_10-7/*.png`
 - `results/DEE/dee_summary.csv`
 - `results/DEE/dee_cc_10-4/*.csv`
-- `results/TAF/cc_summary.csv`
-
-Source directories:
-
-- `HQPINN/lib/DHO/results/`
-- `HQPINN/lib/SEE/results/`
-- `HQPINN/lib/DEE/results/`
-- `HQPINN/lib/TAF/results/`
+- `results/TAF/taf_summary.csv`

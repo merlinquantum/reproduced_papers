@@ -84,7 +84,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
     """Run all DEE Interferometer-Interferometer models and write summary CSV."""
     seed_everything(0)
 
-    ckpt_dir = "HQPINN/lib/DEE/"
+    ckpt_dir = "HQPINN/models/DEE"
     # case_prefix = f"see_qq_m_{n_photons}"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
@@ -94,17 +94,17 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
 
     if mode == "train":
         print("=== TRAINING MODE ===")
-        summary_csv = "HQPINN/lib/DEE/results/dee_summary.csv"
+        summary_csv = "HQPINN/results/DEE/dee_summary.csv"
         for label, nb_photons in MODELS:
             seed_everything(0)
             print(f"\nTraining DEE-QQ-M {nb_photons} photons")
 
             case_prefix = f"dee_qq_m_{nb_photons}"
-            model_dir = os.path.join(ckpt_dir, "models")
+            model_dir = ckpt_dir
             existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
             if existing_ckpt is not None:
                 final_loss = load_training_loss_for_checkpoint(
-                    out_dir=f"HQPINN/lib/DEE/results/{case_prefix}",
+                    out_dir=f"HQPINN/results/DEE/{case_prefix}",
                     model_label=f"qq-m_{nb_photons}",
                     ckpt_path=existing_ckpt,
                     case_prefix=case_prefix,
@@ -130,7 +130,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
                         )
                         row = (
                             load_training_row_for_run_id(
-                                out_dir=f"HQPINN/lib/DEE/results/{case_prefix}",
+                                out_dir=f"HQPINN/results/DEE/{case_prefix}",
                                 model_label=f"qq-m_{nb_photons}",
                                 run_id=case_run_id,
                             )
@@ -185,12 +185,12 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
                 optimizer=optimizer,
                 n_epochs=DEE_N_EPOCHS,
                 plot_every=DEE_PLOT_EVERY,
-                out_dir=f"HQPINN/lib/DEE/results/{case_prefix}",
+                out_dir=f"HQPINN/results/DEE/{case_prefix}",
                 model_label=f"qq-m_{nb_photons}",
                 run_id=run_id,
             )
             row = load_training_row_for_run_id(
-                out_dir=f"HQPINN/lib/DEE/results/{case_prefix}",
+                out_dir=f"HQPINN/results/DEE/{case_prefix}",
                 model_label=f"qq-m_{nb_photons}",
                 run_id=run_id,
             )

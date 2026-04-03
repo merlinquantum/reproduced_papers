@@ -119,12 +119,12 @@ def run(
     """Run SEE Classical-Interferometer models and write summary CSV."""
     seed_everything(0)
 
-    ckpt_dir = "HQPINN/lib/SEE/"
+    ckpt_dir = "HQPINN/models/SEE"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
     if mode == "train":
         print("=== TRAINING MODE ===")
-        summary_csv = "HQPINN/lib/SEE/results/see_summary.csv"
+        summary_csv = "HQPINN/results/SEE/see_summary.csv"
         if n_nodes is not None or n_layers is not None or n_photons is not None:
             models = [
                 _resolve_model_config(
@@ -142,11 +142,11 @@ def run(
             )
 
             case_prefix = f"see_hy_m_{label}"
-            model_dir = os.path.join(ckpt_dir, "models")
+            model_dir = ckpt_dir
             existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
             if existing_ckpt is not None:
                 final_loss = load_training_loss_for_checkpoint(
-                    out_dir=f"HQPINN/lib/SEE/results/{case_prefix}",
+                    out_dir=f"HQPINN/results/SEE/{case_prefix}",
                         model_label=f"hy-m_{label}",
                     ckpt_path=existing_ckpt,
                     case_prefix=case_prefix,
@@ -175,7 +175,7 @@ def run(
                         )
                         row = (
                             load_training_row_for_run_id(
-                                out_dir=f"HQPINN/lib/SEE/results/{case_prefix}",
+                                out_dir=f"HQPINN/results/SEE/{case_prefix}",
                                 model_label=f"hy-m_{label}",
                                 run_id=case_run_id,
                             )
@@ -232,12 +232,12 @@ def run(
                 optimizer=optimizer,
                 n_epochs=SEE_N_EPOCHS,
                 plot_every=SEE_PLOT_EVERY,
-                out_dir=f"HQPINN/lib/SEE/results/{case_prefix}",
+                out_dir=f"HQPINN/results/SEE/{case_prefix}",
                 model_label=f"hy-m_{label}",
                 run_id=run_id,
             )
             row = load_training_row_for_run_id(
-                out_dir=f"HQPINN/lib/SEE/results/{case_prefix}",
+                out_dir=f"HQPINN/results/SEE/{case_prefix}",
                 model_label=f"hy-m_{label}",
                 run_id=run_id,
             )

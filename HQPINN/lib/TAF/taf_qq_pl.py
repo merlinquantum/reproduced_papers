@@ -111,17 +111,17 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
     # Sec. 3.3 inlet values (SI)
     U_in = torch.tensor([1.225, 272.15, 0.0, 288.15], dtype=DTYPE, device=DEVICE)
 
-    ckpt_dir = "HQPINN/lib/TAF/"
+    ckpt_dir = "HQPINN/models/TAF"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
     if mode == "train":
-        summary_csv = "HQPINN/lib/TAF/results/taf_summary.csv"
+        summary_csv = "HQPINN/results/TAF/taf_summary.csv"
 
         for label, q_layers in MODELS:
             seed_everything(0)
             print(f"\nTraining TAF-QQ-PL model: {label} q_layers={q_layers}")
 
             case_prefix = f"taf_qq_pl_{label}"
-            model_dir = os.path.join(ckpt_dir, "models")
+            model_dir = ckpt_dir
             existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
             if existing_ckpt is not None:
                 try:
@@ -133,7 +133,7 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                     )
                 else:
                     metrics = load_training_metrics_for_checkpoint(
-                        out_dir=f"HQPINN/lib/TAF/results/{case_prefix}",
+                        out_dir=f"HQPINN/results/TAF/{case_prefix}",
                         model_label=f"qq-pl_{label}",
                         ckpt_path=existing_ckpt,
                         case_prefix=case_prefix,
@@ -148,7 +148,7 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                         )
                         row = (
                             load_training_row_for_run_id(
-                                out_dir=f"HQPINN/lib/TAF/results/{case_prefix}",
+                                out_dir=f"HQPINN/results/TAF/{case_prefix}",
                                 model_label=f"qq-pl_{label}",
                                 run_id=case_run_id,
                             )
@@ -201,7 +201,7 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                 optimizer=optimizer,
                 n_epochs=TAF_ADAM_STEPS,
                 plot_every=TAF_PLOT_EVERY,
-                out_dir=f"HQPINN/lib/TAF/results/{case_prefix}",
+                out_dir=f"HQPINN/results/TAF/{case_prefix}",
                 model_label=f"qq-pl_{label}",
                 run_id=run_id,
                 data=data,
@@ -210,7 +210,7 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                 eps_lambda=TAF_EPSILON_LAMBDA,
             )
             row = load_training_row_for_run_id(
-                out_dir=f"HQPINN/lib/TAF/results/{case_prefix}",
+                out_dir=f"HQPINN/results/TAF/{case_prefix}",
                 model_label=f"qq-pl_{label}",
                 run_id=run_id,
             )

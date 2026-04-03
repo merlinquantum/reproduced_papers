@@ -13,13 +13,8 @@ def _resolve_checkpoint(
     *,
     ckpt_dir: str,
     case_prefix: str,
-    use_models_subdir: bool,
 ) -> str | None:
-    # SEE/DEE checkpoints live in `<ckpt_dir>/models`, while DHO uses `ckpt_dir` directly.
-    checkpoint_root = (
-        os.path.join(ckpt_dir, "models") if use_models_subdir else ckpt_dir
-    )
-    ckpt_path = get_latest_checkpoint(checkpoint_root, case_prefix)
+    ckpt_path = get_latest_checkpoint(ckpt_dir, case_prefix)
     if ckpt_path is None:
         return None
     return ckpt_path
@@ -77,9 +72,7 @@ def run_density_inference_mode(
     """
     Shared helper for SEE/DEE inference modes (`run` and `remote`).
     """
-    ckpt_path = _resolve_checkpoint(
-        ckpt_dir=ckpt_dir, case_prefix=case_prefix, use_models_subdir=True
-    )
+    ckpt_path = _resolve_checkpoint(ckpt_dir=ckpt_dir, case_prefix=case_prefix)
     if ckpt_path is None:
         return None
 
@@ -119,9 +112,7 @@ def run_series_inference_mode(
     """
     Shared helper for DHO inference modes (`run` and `remote`).
     """
-    ckpt_path = _resolve_checkpoint(
-        ckpt_dir=ckpt_dir, case_prefix=case_prefix, use_models_subdir=False
-    )
+    ckpt_path = _resolve_checkpoint(ckpt_dir=ckpt_dir, case_prefix=case_prefix)
     if ckpt_path is None:
         return
 

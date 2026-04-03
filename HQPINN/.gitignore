@@ -9,3 +9,8 @@ lib/SEE/models/**/*.pt
 lib/DEE/models/**/*.pt
 lib/TAF/models/**/*.pt
 models/**/*.pt
+
+doc/
+results/**/**/
+lib/**/results/
+lib/**/models/

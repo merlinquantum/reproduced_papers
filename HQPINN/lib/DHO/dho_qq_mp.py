@@ -63,7 +63,7 @@ class MM_PINN(nn.Module):
 
 
 def plot_model_prediction(
-    u_pred, u_ex, t, save_path="HQPINN/lib/DHO/results/dho_qq_mp/"
+    u_pred, u_ex, t, save_path="HQPINN/results/DHO/dho_qq_mp/"
 ):
     plt.figure(figsize=(10, 6))
     plt.plot(t.cpu().numpy(), u_pred, label="Prediction PINN", lw=2)
@@ -85,10 +85,10 @@ def plot_model_prediction(
 def run(mode="train", backend="sim:ascella") -> None:
     """Run the Perceval–Perceval DHO PINN experiment."""
     seed_everything(0)
-    ckpt_dir = "HQPINN/lib/DHO/models"
+    ckpt_dir = "HQPINN/models/DHO"
     case_prefix = "dho_qq_mp"
-    results_dir = f"HQPINN/lib/DHO/results/{case_prefix}"
-    summary_csv = "HQPINN/lib/DHO/results/dho_summary.csv"
+    results_dir = f"HQPINN/results/DHO/{case_prefix}"
+    summary_csv = "HQPINN/results/DHO/dho_summary.csv"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
     if mode == "train":
