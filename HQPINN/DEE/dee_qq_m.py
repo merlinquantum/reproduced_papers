@@ -85,7 +85,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
     seed_everything(0)
 
     ckpt_dir = "HQPINN/DEE/"
-    # case_prefix = f"see_ii_{n_photons}"
+    # case_prefix = f"see_qq_m_{n_photons}"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
     # ======================
@@ -97,23 +97,19 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
         summary_csv = "HQPINN/DEE/results/dee_summary.csv"
         for label, nb_photons in MODELS:
             seed_everything(0)
-            print(f"\nTraining DEE-II {nb_photons} photons")
+            print(f"\nTraining DEE-QQ-M {nb_photons} photons")
 
-            case_prefix = f"dee_ii_{nb_photons}"
+            case_prefix = f"dee_qq_m_{nb_photons}"
             model_dir = os.path.join(ckpt_dir, "models")
             existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
             if existing_ckpt is not None:
                 final_loss = load_training_loss_for_checkpoint(
                     out_dir=f"HQPINN/DEE/results/{case_prefix}",
-                    model_label=f"ii_{nb_photons}",
+                    model_label=f"qq-m_{nb_photons}",
                     ckpt_path=existing_ckpt,
                     case_prefix=case_prefix,
                 )
                 if final_loss is not None:
-                    print(
-                        f"Skipping {case_prefix}: existing checkpoint found at "
-                        f"{existing_ckpt}"
-                    )
                     try:
                         model = load_model(
                             existing_ckpt,
@@ -135,17 +131,20 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
                         row = (
                             load_training_row_for_run_id(
                                 out_dir=f"HQPINN/DEE/results/{case_prefix}",
-                                model_label=f"ii_{nb_photons}",
+                                model_label=f"qq-m_{nb_photons}",
                                 run_id=case_run_id,
                             )
                             if case_run_id is not None
                             else None
                         )
-                        append_summary_row(
+                        print(
+                            f"Skipping training for {case_prefix}: existing checkpoint found at {existing_ckpt}."
+                        )
+                        is_duplicate = append_summary_row(
                             summary_csv,
                             {
                                 "run_id": case_run_id or "",
-                                "Model": "ii",
+                                "Model": "qq-m",
                                 "Size": label,
                                 "epoch": row["epoch"] if row is not None else "",
                                 "elapsed (s)": row["elapsed (s)"]
@@ -162,13 +161,18 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
                                 "Pressure error": f"{err_p:.6e}",
                             },
                         )
-                        print(
-                            f"Reused latest metrics for {case_prefix} in summary CSV."
-                        )
+                        if is_duplicate:
+                            print(
+                                f"Duplicate summary row appended for run_id={case_run_id} to: {summary_csv}"
+                            )
+                        else:
+                            print(f"Summary CSV appended to: {summary_csv}")
+                        print(f"Reused checkpoint metrics for {case_prefix}.")
+                        print()
                         continue
                 print(
                     f"Existing checkpoint found for {case_prefix} at "
-                    f"{existing_ckpt}, but no matching loss CSV was found; "
+                    f"{existing_ckpt}, but no matching training CSV was found; "
                     f"retraining model."
                 )
 
@@ -182,20 +186,20 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
                 n_epochs=DEE_N_EPOCHS,
                 plot_every=DEE_PLOT_EVERY,
                 out_dir=f"HQPINN/DEE/results/{case_prefix}",
-                model_label=f"ii_{nb_photons}",
+                model_label=f"qq-m_{nb_photons}",
                 run_id=run_id,
             )
             row = load_training_row_for_run_id(
                 out_dir=f"HQPINN/DEE/results/{case_prefix}",
-                model_label=f"ii_{nb_photons}",
+                model_label=f"qq-m_{nb_photons}",
                 run_id=run_id,
             )
 
-            append_summary_row(
+            is_duplicate = append_summary_row(
                 summary_csv,
                 {
                     "run_id": run_id,
-                    "Model": "ii",
+                    "Model": "qq-m",
                     "Size": label,
                     "epoch": row["epoch"] if row is not None else "",
                     "elapsed (s)": row["elapsed (s)"] if row is not None else "",
@@ -214,15 +218,20 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
             torch.save(model.state_dict(), ckpt_path)
 
             print(f"Model saved to: {ckpt_path}")
-
-        print(f"Summary CSV appended to: {summary_csv}")
+            if is_duplicate:
+                print(
+                    f"Duplicate summary row appended for run_id={run_id} to: {summary_csv}"
+                )
+            else:
+                print(f"Summary CSV appended to: {summary_csv}")
+            print()
 
     # ======================
     #  MODE RUN
     # ======================
 
     elif mode == "run":
-        case_prefix = f"dee_ii_{n_photons}"
+        case_prefix = f"dee_qq_m_{n_photons}"
         run_density_inference_mode(
             mode="run",
             backend=backend,
@@ -241,7 +250,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
     # ======================
 
     elif mode == "remote":
-        case_prefix = f"dee_ii_{n_photons}"
+        case_prefix = f"dee_qq_m_{n_photons}"
         run_density_inference_mode(
             mode="remote",
             backend=backend,

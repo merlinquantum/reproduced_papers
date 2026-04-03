@@ -105,7 +105,7 @@ def _resolve_model_config(
         return _get_model_config(model_size)
     if n_nodes is None or n_layers is None or q_layers is None:
         raise ValueError(
-            "SEE-CP requires either model_size or n_nodes, n_layers, and q_layers"
+            "SEE-HY-PL requires either model_size or n_nodes, n_layers, and q_layers"
         )
     return f"{n_nodes}-{n_layers}-{q_layers}", n_nodes, n_layers, q_layers
 
@@ -138,23 +138,19 @@ def run(
             models = MODELS
         for label, width, layers, q_layers in models:
             seed_everything(0)
-            print(f"\nTraining SEE-CP model: {label} q_layers={q_layers}")
+            print(f"\nTraining SEE-HY-PL model: {label} q_layers={q_layers}")
 
-            case_prefix = f"see_cp_{label}"
+            case_prefix = f"see_hy_pl_{label}"
             model_dir = os.path.join(ckpt_dir, "models")
             existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
             if existing_ckpt is not None:
                 final_loss = load_training_loss_for_checkpoint(
                     out_dir=f"HQPINN/SEE/results/{case_prefix}",
-                    model_label=f"cp_{label}",
+                    model_label=f"hy-pl_{label}",
                     ckpt_path=existing_ckpt,
                     case_prefix=case_prefix,
                 )
                 if final_loss is not None:
-                    print(
-                        f"Skipping {case_prefix}: existing checkpoint found at "
-                        f"{existing_ckpt}"
-                    )
                     try:
                         model = load_model(
                             existing_ckpt,
@@ -178,16 +174,19 @@ def run(
                         row = (
                             load_training_row_for_run_id(
                                 out_dir=f"HQPINN/SEE/results/{case_prefix}",
-                                model_label=f"cp_{label}",
+                                model_label=f"hy-pl_{label}",
                                 run_id=case_run_id,
                             )
                             if case_run_id is not None
                             else None
                         )
-                        append_summary_row(
+                        print(
+                            f"Skipping training for {case_prefix}: existing checkpoint found at {existing_ckpt}."
+                        )
+                        is_duplicate = append_summary_row(
                             summary_csv,
                             {
-                                "Model": "cp",
+                                "Model": "hy-pl",
                                 "Size": label,
                                 "run_id": case_run_id or "",
                                 "epoch": row["epoch"] if row is not None else "",
@@ -205,13 +204,18 @@ def run(
                                 "Pressure error": f"{err_p:.6e}",
                             },
                         )
-                        print(
-                            f"Reused latest metrics for {case_prefix} in summary CSV."
-                        )
+                        if is_duplicate:
+                            print(
+                                f"Duplicate summary row appended for run_id={case_run_id} to: {summary_csv}"
+                            )
+                        else:
+                            print(f"Summary CSV appended to: {summary_csv}")
+                        print(f"Reused checkpoint metrics for {case_prefix}.")
+                        print()
                         continue
                 print(
                     f"Existing checkpoint found for {case_prefix} at "
-                    f"{existing_ckpt}, but no matching loss CSV was found; "
+                    f"{existing_ckpt}, but no matching training CSV was found; "
                     f"retraining model."
                 )
 
@@ -229,19 +233,19 @@ def run(
                 n_epochs=SEE_N_EPOCHS,
                 plot_every=SEE_PLOT_EVERY,
                 out_dir=f"HQPINN/SEE/results/{case_prefix}",
-                model_label=f"cp_{label}",
+                model_label=f"hy-pl_{label}",
                 run_id=run_id,
             )
             row = load_training_row_for_run_id(
                 out_dir=f"HQPINN/SEE/results/{case_prefix}",
-                model_label=f"cp_{label}",
+                model_label=f"hy-pl_{label}",
                 run_id=run_id,
             )
 
-            append_summary_row(
+            is_duplicate = append_summary_row(
                 summary_csv,
                 {
-                    "Model": "cp",
+                    "Model": "hy-pl",
                     "Size": label,
                     "run_id": run_id,
                     "epoch": row["epoch"] if row is not None else "",
@@ -260,8 +264,13 @@ def run(
             ckpt_path = os.path.join(model_dir, f"{case_prefix}_{run_id}.pt")
             torch.save(model.state_dict(), ckpt_path)
             print(f"Model saved to: {ckpt_path}")
-
-        print(f"Summary CSV appended to: {summary_csv}")
+            if is_duplicate:
+                print(
+                    f"Duplicate summary row appended for run_id={run_id} to: {summary_csv}"
+                )
+            else:
+                print(f"Summary CSV appended to: {summary_csv}")
+            print()
 
     elif mode == "run":
         label, width, layers, q_layers = _resolve_model_config(
@@ -274,7 +283,7 @@ def run(
             n_layers=n_layers,
             q_layers=q_layers,
         )
-        case_prefix = f"see_cp_{label}"
+        case_prefix = f"see_hy_pl_{label}"
         run_density_inference_mode(
             mode="run",
             backend="local",
@@ -292,7 +301,7 @@ def run(
 
     elif mode == "remote":
         print(
-            "Remote mode is not available for SEE-CP. Falling back to local run mode."
+            "Remote mode is not available for SEE-HY-PL. Falling back to local run mode."
         )
         label, width, layers, q_layers = _resolve_model_config(
             model_size=(
@@ -304,7 +313,7 @@ def run(
             n_layers=n_layers,
             q_layers=q_layers,
         )
-        case_prefix = f"see_cp_{label}"
+        case_prefix = f"see_hy_pl_{label}"
         run_density_inference_mode(
             mode="run",
             backend="local",

@@ -149,8 +149,7 @@ def run(
                     )
                     if metrics is not None:
                         print(
-                            f"Skipping {case_prefix}: existing checkpoint found at "
-                            f"{existing_ckpt}"
+                            f"Skipping training for {case_prefix}: existing checkpoint found at {existing_ckpt}."
                         )
                         n_params = count_trainable_params(
                             CC_PINN(hidden_width=width, num_hidden_layers=layers)
@@ -168,7 +167,7 @@ def run(
                             else None
                         )
                         final_loss, _, _ = metrics
-                        append_summary_row(
+                        is_duplicate = append_summary_row(
                             summary_csv,
                             {
                                 "run_id": case_run_id or "",
@@ -190,13 +189,18 @@ def run(
                                 "L_per": row["L_per"] if row is not None else "",
                             },
                         )
-                        print(
-                            f"Reused latest metrics for {case_prefix} in summary CSV."
-                        )
+                        if is_duplicate:
+                            print(
+                                f"Duplicate summary row appended for run_id={case_run_id} to: {summary_csv}"
+                            )
+                        else:
+                            print(f"Summary CSV appended to: {summary_csv}")
+                        print(f"Reused checkpoint metrics for {case_prefix}.")
+                        print()
                         continue
                     print(
                         f"Existing checkpoint found for {case_prefix} at "
-                        f"{existing_ckpt}, but no matching metrics CSV was found; "
+                        f"{existing_ckpt}, but no matching training CSV was found; "
                         f"retraining model."
                     )
 
@@ -222,7 +226,7 @@ def run(
                 run_id=run_id,
             )
 
-            append_summary_row(
+            is_duplicate = append_summary_row(
                 summary_csv,
                 {
                     "run_id": run_id,
@@ -245,8 +249,13 @@ def run(
             ckpt_path = os.path.join(model_dir, f"{case_prefix}_{run_id}.pt")
             torch.save(model.state_dict(), ckpt_path)
             print(f"Model saved to: {ckpt_path}")
-
-        print(f"Summary CSV appended to: {summary_csv}")
+            if is_duplicate:
+                print(
+                    f"Duplicate summary row appended for run_id={run_id} to: {summary_csv}"
+                )
+            else:
+                print(f"Summary CSV appended to: {summary_csv}")
+            print()
 
     elif mode == "run":
         label, width, layers = _resolve_model_config(

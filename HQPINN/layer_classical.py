@@ -5,7 +5,7 @@ In the paper's hybrid architecture, each model is built from one or more
 parallel branches whose outputs are combined downstream. This module provides
 the pure-MLP branch used in:
 - fully classical baselines (CC),
-- hybrid classical+quantum variants (e.g., CI/CP),
+- hybrid classical+quantum variants (e.g., HY-M/HY-PL),
 - shared readout setups for DHO/SEE/DEE experiments.
 """
 

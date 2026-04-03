@@ -120,8 +120,8 @@ def run(
                 )
             except Exception as exc:
                 print(
-                    f"Existing checkpoint found for {case_prefix} at "
-                    f"{existing_ckpt}, but loading failed: {exc}; retraining model."
+                    f"Checkpoint validation failed for {case_prefix} at "
+                    f"{existing_ckpt}: {exc}; retraining model."
                 )
             else:
                 t_train = make_time_grid()
@@ -131,7 +131,7 @@ def run(
                     if case_run_id is not None
                     else None
                 )
-                append_summary_row(
+                is_duplicate = append_summary_row(
                     summary_csv,
                     {
                         "run_id": case_run_id or "",
@@ -150,9 +150,16 @@ def run(
                     },
                 )
                 print(
-                    f"Skipping training for {case_prefix}: existing checkpoint found."
+                    f"Skipping training for {case_prefix}: existing checkpoint found at {existing_ckpt}."
                 )
-                print(f"Summary CSV appended to: {summary_csv}")
+                if is_duplicate:
+                    print(
+                        f"Duplicate summary row appended for run_id={case_run_id} to: {summary_csv}"
+                    )
+                else:
+                    print(f"Summary CSV appended to: {summary_csv}")
+                print(f"Reused checkpoint metrics for {case_prefix}.")
+                print()
                 return
 
         model = CC_PINN(num_hidden_layers=n_layers, hidden_width=n_nodes)
@@ -168,7 +175,7 @@ def run(
             run_id=run_id,
         )
         row = load_training_row_for_run_id(results_dir, "cc", run_id)
-        append_summary_row(
+        is_duplicate = append_summary_row(
             summary_csv,
             {
                 "run_id": run_id,
@@ -188,7 +195,13 @@ def run(
         ckpt_path = os.path.join(ckpt_dir, f"{case_prefix}_{run_id}.pt")
         torch.save(model.state_dict(), ckpt_path)
         print(f"Model saved to: {ckpt_path}")
-        print(f"Summary CSV appended to: {summary_csv}")
+        if is_duplicate:
+            print(
+                f"Duplicate summary row appended for run_id={run_id} to: {summary_csv}"
+            )
+        else:
+            print(f"Summary CSV appended to: {summary_csv}")
+        print()
 
     elif mode == "run":
         run_series_inference_mode(

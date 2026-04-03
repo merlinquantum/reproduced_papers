@@ -72,7 +72,7 @@ class CM_PINN(nn.Module):
         return self.fusion(out_q, out_c)
 
 
-def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_cperc/"):
+def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_hy_mp/"):
     plt.figure(figsize=(10, 6))
     plt.plot(t.cpu().numpy(), u_pred, label="Prediction PINN", lw=2)
     plt.plot(t.cpu().numpy(), u_ex, "--", label="Exact solution", lw=2)
@@ -84,7 +84,7 @@ def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_cpe
 
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     os.makedirs(save_path, exist_ok=True)
-    png_path = os.path.join(save_path, f"dho_cperc_plot_{timestamp}.png")
+    png_path = os.path.join(save_path, f"dho_hy_mp_plot_{timestamp}.png")
     plt.savefig(png_path, bbox_inches="tight")
     plt.close()
     print(f"Plot saved to: {png_path}")
@@ -92,8 +92,8 @@ def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_cpe
 
 def _case_prefix(n_layers: int, n_nodes: int) -> str:
     if n_layers == DHO_NUM_HIDDEN_LAYERS and n_nodes == DHO_HIDDEN_WIDTH:
-        return "dho_cperc"
-    return f"dho_cperc_{n_nodes}-{n_layers}"
+        return "dho_hy_mp"
+    return f"dho_hy_mp_{n_nodes}-{n_layers}"
 
 
 def run(
@@ -125,22 +125,22 @@ def run(
                 )
             except Exception as exc:
                 print(
-                    f"Existing checkpoint found for {case_prefix} at "
-                    f"{existing_ckpt}, but loading failed: {exc}; retraining model."
+                    f"Checkpoint validation failed for {case_prefix} at "
+                    f"{existing_ckpt}: {exc}; retraining model."
                 )
             else:
                 t_train = make_time_grid()
                 case_run_id = get_run_id_from_checkpoint(existing_ckpt, case_prefix)
                 row = (
-                    load_training_row_for_run_id(results_dir, "cperc", case_run_id)
+                    load_training_row_for_run_id(results_dir, "hy-mp", case_run_id)
                     if case_run_id is not None
                     else None
                 )
-                append_summary_row(
+                is_duplicate = append_summary_row(
                     summary_csv,
                     {
                         "run_id": case_run_id or "",
-                        "Model": "cperc",
+                        "Model": "hy-mp",
                         "Size": f"{n_nodes}-{n_layers}",
                         "epoch": row["epoch"] if row is not None else "",
                         "elapsed time (s)": row["elapsed time (s)"]
@@ -155,9 +155,16 @@ def run(
                     },
                 )
                 print(
-                    f"Skipping training for {case_prefix}: existing checkpoint found."
+                    f"Skipping training for {case_prefix}: existing checkpoint found at {existing_ckpt}."
                 )
-                print(f"Summary CSV appended to: {summary_csv}")
+                if is_duplicate:
+                    print(
+                        f"Duplicate summary row appended for run_id={case_run_id} to: {summary_csv}"
+                    )
+                else:
+                    print(f"Summary CSV appended to: {summary_csv}")
+                print(f"Reused checkpoint metrics for {case_prefix}.")
+                print()
                 return
 
         model = CM_PINN(
@@ -172,15 +179,15 @@ def run(
             n_epochs=DHO_N_EPOCHS,
             plot_every=DHO_PLOT_EVERY,
             out_dir=results_dir,
-            model_label="cperc",
+            model_label="hy-mp",
             run_id=run_id,
         )
-        row = load_training_row_for_run_id(results_dir, "cperc", run_id)
-        append_summary_row(
+        row = load_training_row_for_run_id(results_dir, "hy-mp", run_id)
+        is_duplicate = append_summary_row(
             summary_csv,
             {
                 "run_id": run_id,
-                "Model": "cperc",
+                "Model": "hy-mp",
                 "Size": f"{n_nodes}-{n_layers}",
                 "epoch": row["epoch"] if row is not None else "",
                 "elapsed time (s)": row["elapsed time (s)"] if row is not None else "",
@@ -196,7 +203,13 @@ def run(
         ckpt_path = os.path.join(ckpt_dir, f"{case_prefix}_{run_id}.pt")
         torch.save(model.state_dict(), ckpt_path)
         print(f"Model saved to: {ckpt_path}")
-        print(f"Summary CSV appended to: {summary_csv}")
+        if is_duplicate:
+            print(
+                f"Duplicate summary row appended for run_id={run_id} to: {summary_csv}"
+            )
+        else:
+            print(f"Summary CSV appended to: {summary_csv}")
+        print()
 
     elif mode == "run":
         run_series_inference_mode(

@@ -338,18 +338,43 @@ def load_training_row_for_run_id(
     return rows[-1]
 
 
-def append_summary_row(summary_path: str, row: dict[str, object]) -> None:
-    """Append one normalized DEE summary row, writing the header on first use."""
+def append_summary_row(summary_path: str, row: dict[str, object]) -> bool:
+    """
+    Append one normalized DEE summary row, writing the header on first use.
+
+    Returns True when the same `(run_id, Model, Size)` triplet was already
+    present before the append, and False otherwise.
+    """
     os.makedirs(os.path.dirname(summary_path), exist_ok=True)
     write_header = (
         not os.path.exists(summary_path) or os.path.getsize(summary_path) == 0
     )
+
+    is_duplicate = False
+    if not write_header:
+        with open(summary_path, newline="") as f:
+            existing_rows = list(csv.DictReader(f))
+        row_key = (
+            str(row.get("run_id", "")),
+            str(row.get("Model", "")),
+            str(row.get("Size", "")),
+        )
+        for existing in existing_rows:
+            existing_key = (
+                existing.get("run_id", ""),
+                existing.get("Model", ""),
+                existing.get("Size", ""),
+            )
+            if existing_key == row_key:
+                is_duplicate = True
+                break
 
     with open(summary_path, "a", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=DEE_SUMMARY_COLUMNS)
         if write_header:
             writer.writeheader()
         writer.writerow({column: row.get(column, "") for column in DEE_SUMMARY_COLUMNS})
+    return is_duplicate
 
 
 def train_dee(
