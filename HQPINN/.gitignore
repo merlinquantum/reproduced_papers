@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+**/__pycache__/
+**/.ipynb_checkpoints/
+*.log
+DHO/models/**/*.pt
+SEE/models/**/*.pt
+DEE/models/**/*.pt
+TAF/models/**/*.pt
+models/**/*.pt

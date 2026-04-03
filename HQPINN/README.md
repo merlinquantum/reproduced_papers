@@ -1,5 +1,28 @@
 # HQPINN
 
+## Mandatory Reproduction Layout
+
+`HQPINN` now exposes the mandatory reproduction façade expected by the shared runner:
+
+```text
+HQPINN/
+├── .gitignore
+├── notebook.ipynb
+├── README.md
+├── requirements.txt
+├── configs/
+├── cli.json
+├── lib/
+│   ├── __init__.py
+│   └── runner.py
+├── models/
+├── results/
+├── tests/
+└── utils/
+```
+
+The historical implementation folders (`DHO/`, `SEE/`, `DEE/`, `TAF/`) are intentionally kept in place for backward compatibility. The shared runner entrypoint is `HQPINN.lib.runner.train_and_evaluate(cfg, run_dir)`.
+
 ## Reproduced Paper
 
 This folder reproduces:
@@ -340,6 +363,22 @@ Config-based mode:
 python3 -m HQPINN --config <path/to/config.json>
 ```
 
+Shared runner mode:
+
+```python
+from HQPINN.lib.runner import train_and_evaluate
+
+train_and_evaluate(
+    {
+        "experiment": "see-cc",
+        "mode": "train",
+        "backend": "local",
+        "model": {"n_layers": 4, "n_nodes": 10},
+    },
+    "runs/see-cc",
+)
+```
+
 ### Examples
 
 Train a `DHO` case:
@@ -380,6 +419,12 @@ Launch the standard training queue:
 bash HQPINN/run_all_train_jobs.sh
 ```
 
+Equivalent wrapper in the mandatory `utils/` folder:
+
+```bash
+bash HQPINN/utils/run_all_train_jobs.sh
+```
+
 Preview the queue:
 
 ```bash
@@ -396,6 +441,7 @@ python3 -m HQPINN.TAF.generate_aerofoil_training_sets
 
 ## Where To Look At Results
 
+- Curated top-level snapshots: `HQPINN/results/`
 - `DHO`: `HQPINN/DHO/results/dho_summary.csv`
 - `SEE`: `HQPINN/SEE/results/see_summary.csv`
 - `DEE`: `HQPINN/DEE/results/dee_summary.csv`
@@ -410,6 +456,12 @@ Checkpoints are saved in:
 
 ## Quick Structure
 
+- `HQPINN/lib/runner.py`: shared-runner entrypoint
+- `HQPINN/cli.json`: shared-runner schema
+- `HQPINN/notebook.ipynb`: interactive notebook scaffold
+- `HQPINN/results/`: curated result snapshots mirrored from legacy folders
+- `HQPINN/models/`: top-level placeholder for consolidated checkpoints
+- `HQPINN/utils/`: command-line helpers and wrappers
 - `HQPINN/DHO/`: damped harmonic oscillator
 - `HQPINN/SEE/`: smooth 1D Euler
 - `HQPINN/DEE/`: discontinuous 1D Euler

@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HQPINN Shared Runner Schema",
+  "description": "Schema consumed by the shared reproduction runner for HQPINN.",
+  "entrypoint": "HQPINN.lib.runner:train_and_evaluate",
+  "default_config": "HQPINN/configs/defaults.json",
+  "type": "object",
+  "required": [
+    "experiment"
+  ],
+  "properties": {
+    "config_path": {
+      "type": "string",
+      "description": "Optional JSON config path merged before inline overrides."
+    },
+    "experiment": {
+      "type": "string",
+      "enum": [
+        "dho-cc",
+        "dho-hy-pl",
+        "dho-hy-m",
+        "dho-hy-mp",
+        "dho-qq-pl",
+        "dho-qq-m",
+        "dho-qq-mp",
+        "see-cc",
+        "see-hy-pl",
+        "see-hy-m",
+        "see-qq-pl",
+        "see-qq-m",
+        "dee-cc",
+        "dee-hy-pl",
+        "dee-hy-m",
+        "dee-qq-pl",
+        "dee-qq-m",
+        "taf-cc",
+        "taf-hy-pl",
+        "taf-hy-m",
+        "taf-qq-pl",
+        "taf-qq-m"
+      ]
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "train",
+        "run",
+        "remote"
+      ],
+      "default": "run"
+    },
+    "backend": {
+      "type": "string",
+      "default": "local"
+    },
+    "dtype": {
+      "type": "string",
+      "enum": [
+        "float16",
+        "float32",
+        "float64",
+        "complex64",
+        "complex128",
+        "half",
+        "float",
+        "double",
+        "cfloat",
+        "cdouble"
+      ],
+      "default": "float64"
+    },
+    "model": {
+      "type": "object",
+      "properties": {
+        "n_layers": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "n_nodes": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "n_qubits": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "n_photons": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "q_layers": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "default": {}
+    }
+  },
+  "additionalProperties": true
+}

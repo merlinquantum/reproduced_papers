@@ -1,0 +1,90 @@
+from __future__ import annotations
+
+from copy import deepcopy
+import json
+from pathlib import Path
+import shutil
+from typing import Any, Mapping
+
+from HQPINN.runner import run_from_project
+from HQPINN.runtime import DEFAULT_CONFIG_PATH
+
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+SELECTED_RESULT_FILES = {
+    "DHO": PROJECT_ROOT / "DHO" / "results" / "dho_summary.csv",
+    "SEE": PROJECT_ROOT / "SEE" / "results" / "see_summary.csv",
+    "DEE": PROJECT_ROOT / "DEE" / "results" / "dee_summary.csv",
+    "TAF": PROJECT_ROOT / "TAF" / "results" / "cc_summary.csv",
+}
+
+
+def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
+    merged = deepcopy(base)
+    for key, value in override.items():
+        if isinstance(merged.get(key), dict) and isinstance(value, dict):
+            merged[key] = _merge_dicts(merged[key], value)
+        else:
+            merged[key] = deepcopy(value)
+    return merged
+
+
+def _load_json_object(path: Path) -> dict[str, Any]:
+    with path.open(encoding="utf-8") as handle:
+        payload = json.load(handle)
+    if not isinstance(payload, dict):
+        raise ValueError(f"Expected a JSON object in {path}")
+    return payload
+
+
+def _resolve_config(cfg: Mapping[str, Any]) -> dict[str, Any]:
+    inline_cfg = deepcopy(dict(cfg))
+    config_path = inline_cfg.pop("config_path", None)
+
+    resolved = _load_json_object(DEFAULT_CONFIG_PATH)
+    if config_path:
+        config_file = Path(config_path)
+        if not config_file.is_absolute():
+            config_file = Path.cwd() / config_file
+        resolved = _merge_dicts(resolved, _load_json_object(config_file))
+
+    return _merge_dicts(resolved, inline_cfg)
+
+
+def _sync_selected_results() -> None:
+    results_root = PROJECT_ROOT / "results"
+    for group_name, source in SELECTED_RESULT_FILES.items():
+        if not source.is_file():
+            continue
+        destination_dir = results_root / group_name
+        destination_dir.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, destination_dir / source.name)
+
+
+def train_and_evaluate(cfg: Mapping[str, Any], run_dir: str | Path) -> dict[str, Any]:
+    """
+    Shared-runner entrypoint for HQPINN.
+
+    Current domain implementations still write checkpoints and detailed artifacts to
+    the legacy per-benchmark folders (`DHO/`, `SEE/`, `DEE/`, `TAF/`). This wrapper
+    normalizes config loading for the shared runner, ensures `run_dir` exists, then
+    mirrors selected summary files into the top-level `results/` folder.
+    """
+    resolved_run_dir = Path(run_dir).resolve()
+    resolved_run_dir.mkdir(parents=True, exist_ok=True)
+
+    config = _resolve_config(cfg)
+    shared_runner_cfg = dict(config.get("shared_runner") or {})
+    shared_runner_cfg["run_dir"] = str(resolved_run_dir)
+    config["shared_runner"] = shared_runner_cfg
+
+    run_from_project(config)
+    _sync_selected_results()
+
+    return {
+        "status": "completed",
+        "run_dir": str(resolved_run_dir),
+        "experiment": config.get("experiment"),
+        "mode": config.get("mode"),
+        "backend": config.get("backend"),
+    }
