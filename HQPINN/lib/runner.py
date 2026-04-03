@@ -3,20 +3,14 @@ from __future__ import annotations
 from copy import deepcopy
 import json
 from pathlib import Path
-import shutil
 from typing import Any, Mapping
 
 from HQPINN.runner import run_from_project
 from HQPINN.runtime import DEFAULT_CONFIG_PATH
+from HQPINN.utils.sync_selected_results import sync_selected_results as _sync_selected_results
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-SELECTED_RESULT_FILES = {
-    "DHO": PROJECT_ROOT / "lib" / "DHO" / "results" / "dho_summary.csv",
-    "SEE": PROJECT_ROOT / "lib" / "SEE" / "results" / "see_summary.csv",
-    "DEE": PROJECT_ROOT / "lib" / "DEE" / "results" / "dee_summary.csv",
-    "TAF": PROJECT_ROOT / "lib" / "TAF" / "results" / "cc_summary.csv",
-}
 
 
 def _merge_dicts(base: dict[str, Any], override: dict[str, Any]) -> dict[str, Any]:
@@ -49,18 +43,6 @@ def _resolve_config(cfg: Mapping[str, Any]) -> dict[str, Any]:
         resolved = _merge_dicts(resolved, _load_json_object(config_file))
 
     return _merge_dicts(resolved, inline_cfg)
-
-
-def _sync_selected_results() -> None:
-    results_root = PROJECT_ROOT / "results"
-    for group_name, source in SELECTED_RESULT_FILES.items():
-        if not source.is_file():
-            continue
-        destination_dir = results_root / group_name
-        destination_dir.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(source, destination_dir / source.name)
-
-
 def train_and_evaluate(cfg: Mapping[str, Any], run_dir: str | Path) -> dict[str, Any]:
     """
     Shared-runner entrypoint for HQPINN.
@@ -68,8 +50,8 @@ def train_and_evaluate(cfg: Mapping[str, Any], run_dir: str | Path) -> dict[str,
     Current domain implementations keep their detailed artifacts alongside the
     benchmark code in `lib/DHO/`, `lib/SEE/`, `lib/DEE/`, and `lib/TAF/`. This
     wrapper normalizes config loading for the shared runner, ensures `run_dir`
-    exists, then mirrors selected summary files into the top-level `results/`
-    folder.
+    exists, then mirrors benchmark result artifacts into the top-level
+    `results/` folder.
     """
     resolved_run_dir = Path(run_dir).resolve()
     resolved_run_dir.mkdir(parents=True, exist_ok=True)

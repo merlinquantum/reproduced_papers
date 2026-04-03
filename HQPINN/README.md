@@ -445,7 +445,7 @@ python3 -m HQPINN.lib.TAF.generate_aerofoil_training_sets
 
 ## Where To Look At Results
 
-- Curated top-level snapshots: `HQPINN/results/`
+- Mirrored top-level artifacts: `HQPINN/results/`
 - `DHO`: `HQPINN/lib/DHO/results/dho_summary.csv`
 - `SEE`: `HQPINN/lib/SEE/results/see_summary.csv`
 - `DEE`: `HQPINN/lib/DEE/results/dee_summary.csv`
@@ -463,7 +463,7 @@ Checkpoints are saved in:
 - `HQPINN/lib/runner.py`: shared-runner entrypoint
 - `HQPINN/cli.json`: shared-runner schema
 - `HQPINN/notebook.ipynb`: interactive notebook scaffold
-- `HQPINN/results/`: curated result snapshots mirrored from legacy folders
+- `HQPINN/results/`: mirrored summaries, detailed CSVs, and PNGs from legacy folders
 - `HQPINN/models/`: top-level placeholder for consolidated checkpoints
 - `HQPINN/utils/`: command-line helpers and wrappers
 - `HQPINN/lib/DHO/`: damped harmonic oscillator

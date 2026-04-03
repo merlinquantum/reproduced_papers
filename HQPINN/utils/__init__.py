@@ -1,21 +1,20 @@
-# utils.py
 import os
 from typing import Callable, Optional
 
 import torch
 import torch.nn as nn
 
-from .config import (
-    DTYPE,
+from ..config import (
     DEVICE,
     DHO_N_SAMPLES,
-    SEE_X_MIN,
-    SEE_X_MAX,
-    SEE_T_MIN,
-    SEE_T_MAX,
-    SEE_N_IC,
+    DTYPE,
     SEE_N_BC,
     SEE_N_F,
+    SEE_N_IC,
+    SEE_T_MAX,
+    SEE_T_MIN,
+    SEE_X_MAX,
+    SEE_X_MIN,
 )
 
 
@@ -31,13 +30,6 @@ def make_optimizer(model, lr):
     return torch.optim.Adam(model.parameters(), lr=lr)
 
 
-# ==========================
-#  SEE – Smooth Euler Equation (Sec. 3.1)
-#  1D Euler, solution lisse:
-#  x ∈ (-1, 1), t ∈ (0, 2)
-# ==========================
-
-
 def sample_ic_points():
     """
     Generate Initial Condition (IC) points for the Smooth Euler Equation.
@@ -50,13 +42,9 @@ def sample_ic_points():
     We approximate this continuous constraint by sampling SEE_N_IC random x-points
     in the spatial domain, and pairing them with t = 0.
     """
-    # Sample x uniformly in (0,1) then map to (SEE_X_MIN, SEE_X_MAX)
     x_ic = torch.rand(SEE_N_IC, 1, dtype=DTYPE, device=DEVICE)
     x_ic = SEE_X_MIN + (SEE_X_MAX - SEE_X_MIN) * x_ic
-
-    # Initial condition line: all points are at t = 0
     t_ic = torch.zeros_like(x_ic)
-
     return x_ic, t_ic
 
 
@@ -77,14 +65,10 @@ def sample_bc_points():
         ||U(x_left, t_bc) - U(x_right, t_bc)||^2
     which encourages periodicity across the domain boundaries.
     """
-    # Sample times uniformly in (0,1) then map to (SEE_T_MIN, SEE_T_MAX)
     t_bc = torch.rand(SEE_N_BC, 1, dtype=DTYPE, device=DEVICE)
     t_bc = SEE_T_MIN + (SEE_T_MAX - SEE_T_MIN) * t_bc
-
-    # Create the matching boundary x-locations at the same times t_bc
     x_left = torch.full_like(t_bc, SEE_X_MIN)
     x_right = torch.full_like(t_bc, SEE_X_MAX)
-
     return x_left, x_right, t_bc
 
 
@@ -100,14 +84,10 @@ def sample_collocation_points():
         F(x_f, t_f) ≈ 0
     at many interior points (collocation points).
     """
-    # Spatial samples: map uniform (0,1) to (SEE_X_MIN, SEE_X_MAX)
     x_f = torch.rand(SEE_N_F, 1, dtype=DTYPE, device=DEVICE)
     x_f = SEE_X_MIN + (SEE_X_MAX - SEE_X_MIN) * x_f
-
-    # Temporal samples: map uniform (0,1) to (SEE_T_MIN, SEE_T_MAX)
     t_f = torch.rand(SEE_N_F, 1, dtype=DTYPE, device=DEVICE)
     t_f = SEE_T_MIN + (SEE_T_MAX - SEE_T_MIN) * t_f
-
     return x_f, t_f
 
 
@@ -137,8 +117,6 @@ def log_training_info(n_epochs, elapsed, final_loss, loss_ic, loss_bc, loss_f, r
         ]
     )
 
-    return
-
 
 def load_model(
     ckpt_path: str, model_ctor: Callable[..., nn.Module], processor=None
@@ -165,7 +143,7 @@ def get_latest_checkpoint(ckpt_dir: str, case_prefix: str) -> Optional[str]:
         print(f"No checkpoints matching {case_prefix}_*.pt in {ckpt_dir}")
         return None
 
-    files.sort()  # lexicographique => avec timestamp YYYYMMDD-HHMMSS c'est chronologique
+    files.sort()
     latest = files[-1]
     ckpt_path = os.path.join(ckpt_dir, latest)
     print(f"Latest checkpoint found: {ckpt_path}")
