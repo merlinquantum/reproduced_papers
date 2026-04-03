@@ -91,10 +91,7 @@ def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/DHO/results/dho_cpe
 
 
 def _case_prefix(n_layers: int, n_nodes: int) -> str:
-    if (
-        n_layers == DHO_NUM_HIDDEN_LAYERS
-        and n_nodes == DHO_HIDDEN_WIDTH
-    ):
+    if n_layers == DHO_NUM_HIDDEN_LAYERS and n_nodes == DHO_HIDDEN_WIDTH:
         return "dho_cperc"
     return f"dho_cperc_{n_nodes}-{n_layers}"
 
@@ -146,7 +143,9 @@ def run(
                         "Model": "cperc",
                         "Size": f"{n_nodes}-{n_layers}",
                         "epoch": row["epoch"] if row is not None else "",
-                        "elapsed time (s)": row["elapsed time (s)"] if row is not None else "",
+                        "elapsed time (s)": row["elapsed time (s)"]
+                        if row is not None
+                        else "",
                         "Trainable parameters": count_trainable_params(model),
                         "Loss": row["Loss"] if row is not None else "",
                         "IC_u": row["IC_u"] if row is not None else "",
@@ -155,7 +154,9 @@ def run(
                         "Relative L2 error": f"{evaluate_dho_error(model, t_train):.6e}",
                     },
                 )
-                print(f"Skipping training for {case_prefix}: existing checkpoint found.")
+                print(
+                    f"Skipping training for {case_prefix}: existing checkpoint found."
+                )
                 print(f"Summary CSV appended to: {summary_csv}")
                 return
 

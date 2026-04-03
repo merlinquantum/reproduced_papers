@@ -47,7 +47,9 @@ class BranchPyTorch(nn.Module):
                     nn.Tanh(),
                 ]
             )
-        layers.append(nn.Linear(hidden_width, out_features, dtype=DTYPE))  # output layer
+        layers.append(
+            nn.Linear(hidden_width, out_features, dtype=DTYPE)
+        )  # output layer
         self.net = nn.Sequential(*layers)
 
     def forward(self, xt: torch.Tensor) -> torch.Tensor:

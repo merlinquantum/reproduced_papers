@@ -341,7 +341,9 @@ def load_training_row_for_run_id(
 def append_summary_row(summary_path: str, row: dict[str, object]) -> None:
     """Append one normalized DEE summary row, writing the header on first use."""
     os.makedirs(os.path.dirname(summary_path), exist_ok=True)
-    write_header = not os.path.exists(summary_path) or os.path.getsize(summary_path) == 0
+    write_header = (
+        not os.path.exists(summary_path) or os.path.getsize(summary_path) == 0
+    )
 
     with open(summary_path, "a", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=DEE_SUMMARY_COLUMNS)
@@ -368,7 +370,9 @@ def train_dee(
 
     os.makedirs(out_dir, exist_ok=True)
 
-    rho_pred_png_path = os.path.join(out_dir, f"dee-{model_label}_{run_id}_rho_pred.png")
+    rho_pred_png_path = os.path.join(
+        out_dir, f"dee-{model_label}_{run_id}_rho_pred.png"
+    )
     rho_exact_png_path = os.path.join(
         out_dir, f"dee-{model_label}_{run_id}_rho_exact.png"
     )
@@ -390,7 +394,6 @@ def train_dee(
     x_f_all, t_f_all = sample_collocation_points()
 
     for epoch in range(n_epochs):
-
         optimizer.zero_grad()
 
         # Compute the three loss components
@@ -535,9 +538,7 @@ def train_dee(
         fig, ax = plt.subplots(figsize=(8, 5))
         cs = ax.contourf(X_np, T_np, rho_err_np, levels=50, cmap="bwr")
         fig.colorbar(cs, ax=ax)
-        ax.set_title(
-            "Density error $\\rho_\\text{pred}(x,t)-\\rho_\\text{exact}(x,t)$"
-        )
+        ax.set_title("Density error $\\rho_\\text{pred}(x,t)-\\rho_\\text{exact}(x,t)$")
         ax.set_xlabel("x")
         ax.set_ylabel("t")
         fig.tight_layout()

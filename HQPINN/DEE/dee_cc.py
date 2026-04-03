@@ -95,7 +95,9 @@ def _resolve_model_config(
     if model_size is not None:
         return _get_model_config(model_size)
     if n_nodes is None or n_layers is None:
-        raise ValueError("DEE-CC requires either model_size or both n_nodes and n_layers")
+        raise ValueError(
+            "DEE-CC requires either model_size or both n_nodes and n_layers"
+        )
     return f"{n_nodes}-{n_layers}", n_nodes, n_layers
 
 
@@ -153,7 +155,9 @@ def run(
                         )
                     else:
                         n_params = count_trainable_params(model)
-                        case_run_id = get_run_id_from_checkpoint(existing_ckpt, case_prefix)
+                        case_run_id = get_run_id_from_checkpoint(
+                            existing_ckpt, case_prefix
+                        )
                         row = (
                             load_training_row_for_run_id(
                                 out_dir=f"HQPINN/DEE/results/{case_prefix}",
@@ -170,9 +174,13 @@ def run(
                                 "Model": "cc",
                                 "Size": label,
                                 "epoch": row["epoch"] if row is not None else "",
-                                "elapsed (s)": row["elapsed (s)"] if row is not None else "",
+                                "elapsed (s)": row["elapsed (s)"]
+                                if row is not None
+                                else "",
                                 "Trainable parameters": n_params,
-                                "Loss": row["Loss"] if row is not None else f"{final_loss:.6e}",
+                                "Loss": row["Loss"]
+                                if row is not None
+                                else f"{final_loss:.6e}",
                                 "IC": row["IC"] if row is not None else "",
                                 "BC": row["BC"] if row is not None else "",
                                 "F": row["F"] if row is not None else "",
@@ -180,7 +188,9 @@ def run(
                                 "Pressure error": f"{err_p:.6e}",
                             },
                         )
-                        print(f"Reused latest metrics for {case_prefix} in summary CSV.")
+                        print(
+                            f"Reused latest metrics for {case_prefix} in summary CSV."
+                        )
                         continue
                 print(
                     f"Existing checkpoint found for {case_prefix} at "
@@ -253,7 +263,9 @@ def run(
         )
 
     elif mode == "remote":
-        print("Remote mode is not available for DEE-CC. Falling back to local run mode.")
+        print(
+            "Remote mode is not available for DEE-CC. Falling back to local run mode."
+        )
         label, width, layers = _resolve_model_config(
             model_size=model_size,
             n_nodes=n_nodes,

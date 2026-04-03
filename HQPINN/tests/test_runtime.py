@@ -32,7 +32,9 @@ class RuntimeDtypeTests(unittest.TestCase):
         self.assertEqual(raw["dtype"], "float32")
         self.assertIsInstance(normalized["dtype"], DtypeSpec)
         self.assertEqual(normalized["dtype"].label, "float32")
-        self.assertEqual(normalized["model"]["weights_dtype"].torch_dtype, torch.float64)
+        self.assertEqual(
+            normalized["model"]["weights_dtype"].torch_dtype, torch.float64
+        )
 
     def test_apply_runtime_config_updates_project_dtype(self) -> None:
         initial_dtype = project_config.DTYPE

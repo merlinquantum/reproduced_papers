@@ -430,10 +430,7 @@ np.save(output_dir / "X_wall_normals.npy", X_wall_normals)
 np.save(output_dir / "X_data_int.npy", X_data_int)
 np.save(output_dir / "X_f.npy", X_f)
 
-print(
-    "Saved: X_in, X_out, X_top, X_bot, X_wall, X_wall_normals, "
-    "X_data_int, X_f"
-)
+print("Saved: X_in, X_out, X_top, X_bot, X_wall, X_wall_normals, X_data_int, X_f")
 print("Saved to directory:", output_dir)
 print(
     "Domain bounds: x_min,x_max =",

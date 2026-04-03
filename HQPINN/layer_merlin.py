@@ -362,9 +362,7 @@ def make_merlin_processor(processor="sim:ascella") -> ML.MerlinProcessor:
         "acella": "sim:ascella",
     }
     if raw_backend not in backend_aliases:
-        raise ValueError(
-            f"Unknown backend '{processor}'. Valid values: sim:ascella."
-        )
+        raise ValueError(f"Unknown backend '{processor}'. Valid values: sim:ascella.")
 
     backend = backend_aliases[raw_backend]
     if backend != raw_backend:

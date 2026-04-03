@@ -185,7 +185,6 @@ def train_oscillator_pinn(
     # Training loop
     # -------------------------------------------------------
     for epoch in range(n_epochs):
-
         optimizer.zero_grad()
         lic_u, lic_du, lf = loss_fn(model, t_train)
         loss = lic_u + lambda1 * lic_du + lambda2 * lf
@@ -282,7 +281,9 @@ def get_run_id_from_checkpoint(ckpt_path: str, case_prefix: str) -> str | None:
 def append_summary_row(summary_path: str, row: dict[str, object]) -> None:
     """Append one normalized DHO summary row, writing the header on first use."""
     os.makedirs(os.path.dirname(summary_path), exist_ok=True)
-    write_header = not os.path.exists(summary_path) or os.path.getsize(summary_path) == 0
+    write_header = (
+        not os.path.exists(summary_path) or os.path.getsize(summary_path) == 0
+    )
 
     with open(summary_path, "a", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=DHO_SUMMARY_COLUMNS)

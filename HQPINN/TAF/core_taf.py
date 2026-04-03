@@ -91,6 +91,7 @@ def load_training_sets() -> dict[str, torch.Tensor]:
         "X_wall_normals": load_points(TAF_X_WALL_NORMALS_FILE),
     }
 
+
 def load_training_metrics_for_checkpoint(
     out_dir: str, model_label: str, ckpt_path: str, case_prefix: str
 ) -> Optional[Tuple[float, float, float]]:
@@ -151,7 +152,9 @@ def load_training_row_for_run_id(
 def append_summary_row(summary_path: str, row: dict[str, object]) -> None:
     """Append one normalized TAF summary row, writing the header on first use."""
     os.makedirs(os.path.dirname(summary_path), exist_ok=True)
-    write_header = not os.path.exists(summary_path) or os.path.getsize(summary_path) == 0
+    write_header = (
+        not os.path.exists(summary_path) or os.path.getsize(summary_path) == 0
+    )
 
     with open(summary_path, "a", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=TAF_SUMMARY_COLUMNS)

@@ -152,7 +152,9 @@ def run(
                         "Model": "ci",
                         "Size": f"{n_nodes}-{n_layers}-{n_photons}",
                         "epoch": row["epoch"] if row is not None else "",
-                        "elapsed time (s)": row["elapsed time (s)"] if row is not None else "",
+                        "elapsed time (s)": row["elapsed time (s)"]
+                        if row is not None
+                        else "",
                         "Trainable parameters": count_trainable_params(model),
                         "Loss": row["Loss"] if row is not None else "",
                         "IC_u": row["IC_u"] if row is not None else "",
@@ -161,7 +163,9 @@ def run(
                         "Relative L2 error": f"{evaluate_dho_error(model, t_train):.6e}",
                     },
                 )
-                print(f"Skipping training for {case_prefix}: existing checkpoint found.")
+                print(
+                    f"Skipping training for {case_prefix}: existing checkpoint found."
+                )
                 print(f"Summary CSV appended to: {summary_csv}")
                 return
 

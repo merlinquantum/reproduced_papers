@@ -114,8 +114,12 @@ def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
                             f"Skipping {case_prefix}: existing checkpoint found at "
                             f"{existing_ckpt}"
                         )
-                        n_params = count_trainable_params(II_PINN(n_photons=n_photons_sel))
-                        case_run_id = get_run_id_from_checkpoint(existing_ckpt, case_prefix)
+                        n_params = count_trainable_params(
+                            II_PINN(n_photons=n_photons_sel)
+                        )
+                        case_run_id = get_run_id_from_checkpoint(
+                            existing_ckpt, case_prefix
+                        )
                         row = (
                             load_training_row_for_run_id(
                                 out_dir=f"HQPINN/TAF/results/{case_prefix}",
@@ -133,9 +137,13 @@ def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
                                 "Model": "ii",
                                 "Size": label,
                                 "step": row["step"] if row is not None else "",
-                                "elapsed (s)": row["elapsed (s)"] if row is not None else "",
+                                "elapsed (s)": row["elapsed (s)"]
+                                if row is not None
+                                else "",
                                 "Trainable parameters": n_params,
-                                "Loss": row["Loss"] if row is not None else f"{final_loss:.6e}",
+                                "Loss": row["Loss"]
+                                if row is not None
+                                else f"{final_loss:.6e}",
                                 "BC": row["BC"] if row is not None else "",
                                 "F": row["F"] if row is not None else "",
                                 "L_in": row["L_in"] if row is not None else "",
@@ -144,7 +152,9 @@ def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
                                 "L_per": row["L_per"] if row is not None else "",
                             },
                         )
-                        print(f"Reused latest metrics for {case_prefix} in summary CSV.")
+                        print(
+                            f"Reused latest metrics for {case_prefix} in summary CSV."
+                        )
                         continue
                     print(
                         f"Existing checkpoint found for {case_prefix} at "

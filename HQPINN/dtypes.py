@@ -64,7 +64,9 @@ def coerce_dtype_spec(value: Any) -> DtypeSpec:
             torch_dtype=torch_dtype,
         )
     if isinstance(value, (tuple, list)) and len(value) == 2:
-        return coerce_dtype_spec(value[1] if isinstance(value[1], torch.dtype) else value[0])
+        return coerce_dtype_spec(
+            value[1] if isinstance(value[1], torch.dtype) else value[0]
+        )
     if isinstance(value, Mapping):
         if "label" in value:
             return coerce_dtype_spec(value["label"])

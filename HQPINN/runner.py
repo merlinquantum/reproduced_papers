@@ -90,9 +90,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         n_layers = model_config.get("n_layers")
         n_nodes = model_config.get("n_nodes")
         if n_layers is None or n_nodes is None:
-            raise ValueError(
-                "dho-cc config requires model.n_layers and model.n_nodes"
-            )
+            raise ValueError("dho-cc config requires model.n_layers and model.n_nodes")
 
         from .DHO.dho_cc import run
 
@@ -203,9 +201,7 @@ def run_from_project(config: dict[str, Any]) -> None:
         n_layers = model_config.get("n_layers")
         n_nodes = model_config.get("n_nodes")
         if n_layers is None or n_nodes is None:
-            raise ValueError(
-                "see-cc config requires model.n_layers and model.n_nodes"
-            )
+            raise ValueError("see-cc config requires model.n_layers and model.n_nodes")
 
         from .SEE.see_cc import run
 

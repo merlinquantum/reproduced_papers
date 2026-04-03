@@ -144,7 +144,9 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                             f"{existing_ckpt}"
                         )
                         n_params = count_trainable_params(PP_PINN(q_layers=q_layers))
-                        case_run_id = get_run_id_from_checkpoint(existing_ckpt, case_prefix)
+                        case_run_id = get_run_id_from_checkpoint(
+                            existing_ckpt, case_prefix
+                        )
                         row = (
                             load_training_row_for_run_id(
                                 out_dir=f"HQPINN/TAF/results/{case_prefix}",
@@ -162,9 +164,13 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                                 "Model": "pp",
                                 "Size": label,
                                 "step": row["step"] if row is not None else "",
-                                "elapsed (s)": row["elapsed (s)"] if row is not None else "",
+                                "elapsed (s)": row["elapsed (s)"]
+                                if row is not None
+                                else "",
                                 "Trainable parameters": n_params,
-                                "Loss": row["Loss"] if row is not None else f"{final_loss:.6e}",
+                                "Loss": row["Loss"]
+                                if row is not None
+                                else f"{final_loss:.6e}",
                                 "BC": row["BC"] if row is not None else "",
                                 "F": row["F"] if row is not None else "",
                                 "L_in": row["L_in"] if row is not None else "",
@@ -173,7 +179,9 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                                 "L_per": row["L_per"] if row is not None else "",
                             },
                         )
-                        print(f"Reused latest metrics for {case_prefix} in summary CSV.")
+                        print(
+                            f"Reused latest metrics for {case_prefix} in summary CSV."
+                        )
                         continue
                     print(
                         f"Existing checkpoint found for {case_prefix} at "
@@ -244,7 +252,9 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
         )
 
     elif mode == "remote":
-        print("Remote mode is not available for TAF-PP. Falling back to local run mode.")
+        print(
+            "Remote mode is not available for TAF-PP. Falling back to local run mode."
+        )
         label, q_layers = _get_model_config(model_size)
         case_prefix = f"taf_pp_{label}"
         run_density_inference_mode(

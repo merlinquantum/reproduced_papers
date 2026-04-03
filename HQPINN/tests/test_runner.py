@@ -115,7 +115,9 @@ class RunnerDispatchTests(unittest.TestCase):
         config_paths = sorted(
             path for path in CONFIGS_DIR.glob("*.json") if path.name != "defaults.json"
         )
-        self.assertTrue(config_paths, "Expected HQPINN/configs to contain runnable configs")
+        self.assertTrue(
+            config_paths, "Expected HQPINN/configs to contain runnable configs"
+        )
 
         for config_path in config_paths:
             config = runner._load_config(str(config_path))

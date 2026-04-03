@@ -16,7 +16,9 @@ def _resolve_checkpoint(
     use_models_subdir: bool,
 ) -> str | None:
     # SEE/DEE checkpoints live in `<ckpt_dir>/models`, while DHO uses `ckpt_dir` directly.
-    checkpoint_root = os.path.join(ckpt_dir, "models") if use_models_subdir else ckpt_dir
+    checkpoint_root = (
+        os.path.join(ckpt_dir, "models") if use_models_subdir else ckpt_dir
+    )
     ckpt_path = get_latest_checkpoint(checkpoint_root, case_prefix)
     if ckpt_path is None:
         return None
@@ -36,9 +38,7 @@ def _load_model_for_mode(
     # `remote` rebuilds the model with a Merlin remote processor attached.
     if mode == "run":
         if warn_if_backend_ignored and backend.lower() != "local":
-            print(
-                f"Backend '{backend}' is not used in run mode; use mode='remote'."
-            )
+            print(f"Backend '{backend}' is not used in run mode; use mode='remote'.")
         model = load_model(ckpt_path, lambda processor=None: model_factory(processor))
 
     elif mode == "remote":
@@ -47,8 +47,7 @@ def _load_model_for_mode(
         # Force explicit cloud/simulator backend selection in remote mode.
         if backend.lower() == "local":
             raise ValueError(
-                "backend='local' is not allowed in remote mode. "
-                "Use: sim:ascella."
+                "backend='local' is not allowed in remote mode. Use: sim:ascella."
             )
         processor = make_merlin_processor(backend)
         model = load_model(
