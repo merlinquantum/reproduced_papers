@@ -3,12 +3,14 @@
 
 import os
 from datetime import datetime
+import sys
 
 import matplotlib
-import matplotlib.pyplot as plt
 
-# Use non-interactive backend for batch image export
-matplotlib.use("Agg")
+# Keep batch exports headless, but do not disable inline notebook rendering.
+if "ipykernel" not in sys.modules:
+    matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 import torch
 import torch.nn as nn

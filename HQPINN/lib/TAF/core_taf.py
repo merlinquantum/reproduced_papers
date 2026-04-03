@@ -6,6 +6,7 @@ import csv
 import os
 from datetime import datetime
 from pathlib import Path
+import sys
 from typing import Optional, Tuple
 
 import matplotlib
@@ -37,7 +38,9 @@ from ...utils import count_trainable_params
 
 
 DATA_DIR = Path(__file__).resolve().parent / "NACA0012"
-matplotlib.use("Agg")
+# Keep batch exports headless, but do not disable inline notebook rendering.
+if "ipykernel" not in sys.modules:
+    matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 TAF_FIELD_LABELS = (

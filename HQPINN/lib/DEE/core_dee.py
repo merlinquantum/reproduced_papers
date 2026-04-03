@@ -3,12 +3,17 @@
 import os
 import csv
 from datetime import datetime
+import sys
 from typing import Tuple, Callable, Optional
 
 import torch
 import torch.nn as nn
 
 import matplotlib
+
+# Keep batch exports headless, but do not disable inline notebook rendering.
+if "ipykernel" not in sys.modules:
+    matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from ...config import (
@@ -34,12 +39,6 @@ from ...utils import (
     count_trainable_params,
     log_training_info,
 )
-
-from typing import Optional
-
-# Use non-interactive backend for batch image export
-matplotlib.use("Agg")
-
 
 DEE_SUMMARY_COLUMNS = [
     "run_id",

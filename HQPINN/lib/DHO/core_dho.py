@@ -3,6 +3,7 @@
 import os
 import csv
 from datetime import datetime
+import sys
 from typing import Tuple, Callable
 
 import numpy as np
@@ -11,6 +12,10 @@ import torch.nn as nn
 from torch.autograd import grad
 
 import matplotlib
+
+# Keep batch exports headless, but do not disable inline notebook rendering.
+if "ipykernel" not in sys.modules:
+    matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 from ...config import (
@@ -22,10 +27,6 @@ from ...config import (
     DTYPE,
     DEVICE,
 )
-
-# Use non-interactive backend for batch image export
-matplotlib.use("Agg")
-
 
 DHO_SUMMARY_COLUMNS = [
     "run_id",
