@@ -137,6 +137,7 @@ class NeuralEmbeddingMerLinModel(nn.Module):
         def __init__(self, main_model):
             super().__init__()
             object.__setattr__(self, "main_model", main_model)
+            self.quantum_classifier = main_model.quantum_classifier
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
             with torch.no_grad():

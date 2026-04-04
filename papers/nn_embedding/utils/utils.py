@@ -4,8 +4,6 @@ import torch.nn as nn
 import pennylane as qml
 import merlin as ml
 from copy import deepcopy
-from nngeometry.metrics import FIM
-from nngeometry.object import FMatDense
 from torch.utils.data import DataLoader, TensorDataset
 from scipy.special import gamma as gamma_fun
 from pathlib import Path
@@ -403,16 +401,13 @@ def get_local_dimension(
     epsilon: float = 0.01,
     num_samples: int = 100,
 ) -> float:
-    dataset = TensorDataset(x, y)
-    loader = DataLoader(dataset, shuffle=True)
-
     d = sum(param.numel() for param in model.parameters())
-    params = torch.Tensor(model.parameters())
+    params = [p for p in model.parameters()]
     total_size = y.size(0)
 
     values = []
 
-    for n in range(1, total_size + 1, 1000):
+    for n in range(2, total_size + 1, 1000):
         gamma = 1
         kappa = gamma * n / (2 * np.pi * np.log(n))
         V = (np.pi ** (d / 2)) * (epsilon**d) / gamma_fun(d / 2 + 1)
@@ -420,20 +415,41 @@ def get_local_dimension(
             params, d, epsilon=epsilon, num_samples=num_samples
         )
 
+        subset = TensorDataset(x[:n], y[:n])
+        sub_loader = DataLoader(subset, shuffle=True)
+
         trace_sum = 0
         total_eigs = []
         for point in params_to_sample:
             # Assign the params
             model.eval()
-            for value, param in zip(point, model.parameters()):
-                param.copy_(value)
+            with torch.no_grad():
+                for value, param in zip(point, model.parameters()):
+                    param.copy_(value)
             model.train()
 
-            # Compute the trace and eigenvalues
-            fisher_matrix = FIM(model, loader, FMatDense)
-            fisher_matrix.compute_eigendecomposition()
-            total_eigs.qqpend(fisher_matrix.get_eigendecomposition()[0])
-            trace_sum += fisher_matrix.trace()
+            # Compute the empirical Fisher information matrix, copilot
+            fim = torch.zeros(d, d)
+            count = 0
+            for x_batch, _ in sub_loader:
+                output = model(x_batch)
+                log_output = torch.log(output + 1e-10)
+                for k in range(output.shape[-1]):
+                    model.zero_grad()
+                    log_output[0, k].backward(retain_graph=True)
+                    grads = torch.cat(
+                        [
+                            p.grad.flatten()
+                            for p in model.parameters()
+                            if p.grad is not None
+                        ]
+                    )
+                    fim += torch.outer(grads, grads) * output[0, k].detach()
+                count += 1
+            fim = fim.detach().numpy() / max(count, 1)
+            eigs = np.linalg.eigvalsh(fim)
+            total_eigs.append(eigs)
+            trace_sum += np.trace(fim)
 
         eig_normalisation_factor = d * V * num_samples / trace_sum
 
@@ -453,14 +469,15 @@ def get_local_dimension(
 
 
 def create_param_ensemble(
-    params: torch.Tensor, d: int, epsilon: float = 1.0, num_samples: int = 100
+    params: list[torch.Tensor], d: int, epsilon: float = 1.0, num_samples: int = 100
 ):
     """
     Uniformly sample for a d dimension ball, code from
 
     https://extremelearning.com.au/how-to-generate-uniformly-random-points-on-n-spheres-and-n-balls/
     """
-    params_flat = params.detach().numpy().flatten()
+    shapes = [p.shape for p in params]
+    params_flat = np.concatenate([p.detach().numpy().flatten() for p in params])
 
     u = np.random.normal(
         0, epsilon, (num_samples, d + 2)
@@ -471,4 +488,19 @@ def create_param_ensemble(
 
     x = u[:, 0:d]  # take the first d coordinates
     x += params_flat  # (num_samples, d) + (d,) broadcasts correctly
-    return torch.from_numpy(x).float().reshape(num_samples, *params.shape)
+
+    # Split each sample back into tensors matching original parameter shapes
+    ensemble = []
+    for i in range(num_samples):
+        point = []
+        offset = 0
+        for shape in shapes:
+            numel = int(np.prod(shape))
+            point.append(
+                torch.from_numpy(x[i, offset : offset + numel].copy())
+                .float()
+                .reshape(shape)
+            )
+            offset += numel
+        ensemble.append(point)
+    return ensemble

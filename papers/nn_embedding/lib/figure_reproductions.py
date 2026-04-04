@@ -811,6 +811,8 @@ def reproduce_figure_4(
             n_clusters_per_class=4,
             return_X_y=True,
         )
+        X = torch.Tensor(X)
+        Y = torch.Tensor(Y)
         for j in range(num_repetitions_per_dataset):
             ################################################################# MerLin-based
             if use_merlin:
@@ -1563,4 +1565,4 @@ def reproduce_figure_6(
     )
 
 
-reproduce_figure_6(use_merlin=False)
+reproduce_figure_4(use_merlin=True)
