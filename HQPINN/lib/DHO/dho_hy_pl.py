@@ -26,6 +26,7 @@ from ...utils import (
     make_optimizer,
 )
 from ...runtime import seed_everything
+from ...paths import results_case_dir_for_model_dir
 from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
@@ -114,7 +115,7 @@ def run(
     seed_everything(0)
     ckpt_dir = "HQPINN/models/DHO"
     case_prefix = _case_prefix(n_layers, n_nodes, n_qubits)
-    results_dir = f"HQPINN/results/DHO/{case_prefix}"
+    results_dir = results_case_dir_for_model_dir(ckpt_dir, case_prefix)
     summary_csv = "HQPINN/results/DHO/dho_summary.csv"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 

@@ -35,7 +35,7 @@ from ...config import (
     DEE_RHO_R,
     DEE_X0,
 )
-from ...paths import results_dir_for_model_dir
+from ...paths import results_case_dir_for_model_dir
 from ...utils import (
     count_trainable_params,
     log_training_info,
@@ -570,6 +570,14 @@ def train_dee(
         fig.savefig(rho_error_png_path, dpi=300)
         plt.close(fig)
 
+    rho_slice_png_path = _save_rho_slice_plot_to_dir(
+        model=model,
+        output_dir=out_dir,
+        file_prefix=f"dee-{model_label}_{run_id}",
+        t_slice=2.0,
+        n_points=400,
+    )
+
     # Evaluate density and pressure errors on (x,t) grid
     err_rho, err_p = evaluate_dee_errors(model)
 
@@ -581,8 +589,52 @@ def train_dee(
     print(f"PNG saved to: {rho_pred_png_path}")
     print(f"PNG saved to: {rho_exact_png_path}")
     print(f"PNG saved to: {rho_error_png_path}")
+    print(f"PNG saved to: {rho_slice_png_path}")
 
     return final_loss, err_rho, err_p, n_params
+
+
+def _save_rho_slice_plot_to_dir(
+    *,
+    model: nn.Module,
+    output_dir: str,
+    file_prefix: str,
+    t_slice: float,
+    n_points: int,
+) -> str:
+    """Save one DEE density slice into an explicit output directory."""
+    model.eval()
+    t_val = min(max(float(t_slice), DEE_T_MIN), DEE_T_MAX)
+
+    with torch.no_grad():
+        x = torch.linspace(DEE_X_MIN, DEE_X_MAX, n_points, dtype=DTYPE, device=DEVICE)
+        t = torch.full_like(x, t_val)
+        xt = torch.stack([x, t], dim=1)
+
+        rho_pred = model(xt)[:, 0]
+        rho_exact = exact_rho(x[:, None], t[:, None]).squeeze(1)
+
+    x_np = x.detach().cpu().numpy()
+    rho_pred_np = rho_pred.detach().cpu().numpy()
+    rho_exact_np = rho_exact.detach().cpu().numpy()
+
+    os.makedirs(output_dir, exist_ok=True)
+    t_tag = str(t_val).replace(".", "p")
+    png_path = os.path.join(output_dir, f"{file_prefix}_rho_x_t_{t_tag}.png")
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.plot(x_np, rho_pred_np, lw=2, label="NN")
+    ax.plot(x_np, rho_exact_np, "--", lw=2, label="Exact")
+    ax.set_xlabel("x")
+    ax.set_ylabel("rho")
+    ax.set_title(f"rho(x, t={t_val:.2f})")
+    ax.grid(True)
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(png_path, dpi=300)
+    plt.close(fig)
+
+    return png_path
 
 
 # Displaying of the result
@@ -594,6 +646,12 @@ def save_density_plot(
     run_id: str,
     backend: str,
 ) -> str:
+    """
+    Save the DEE density contour used in `run` and `remote` modes.
+
+    A 1D density slice is saved as well because the moving shock is easier to
+    inspect on a line plot than on a full contour.
+    """
 
     model.eval()
 
@@ -621,7 +679,7 @@ def save_density_plot(
         T_np = T.cpu().numpy()
         rho_pred_np = rho_pred.cpu().numpy()
 
-        results_dir = results_dir_for_model_dir(ckpt_dir)
+        results_dir = results_case_dir_for_model_dir(ckpt_dir, case_prefix)
         os.makedirs(results_dir, exist_ok=True)
 
         png_path = os.path.join(results_dir, f"{case_prefix}_{backend}_{run_id}.png")
@@ -667,41 +725,13 @@ def save_rho_slice_plot(
     backend: str,
     t_slice: float = 2.0,
 ) -> str:
-    """Save rho(x, t_slice) prediction (and exact profile) for DEE."""
-    model.eval()
-    t_val = min(max(float(t_slice), DEE_T_MIN), DEE_T_MAX)
-
+    """Save rho(x, t_slice) together with the exact moving-front profile."""
     n_points = 400 if backend.lower() == "local" else 120
-    with torch.no_grad():
-        x = torch.linspace(DEE_X_MIN, DEE_X_MAX, n_points, dtype=DTYPE, device=DEVICE)
-        t = torch.full_like(x, t_val)
-        xt = torch.stack([x, t], dim=1)
-
-        rho_pred = model(xt)[:, 0]
-        rho_exact = exact_rho(x[:, None], t[:, None]).squeeze(1)
-
-    x_np = x.detach().cpu().numpy()
-    rho_pred_np = rho_pred.detach().cpu().numpy()
-    rho_exact_np = rho_exact.detach().cpu().numpy()
-
-    results_dir = results_dir_for_model_dir(ckpt_dir)
-    os.makedirs(results_dir, exist_ok=True)
-    t_tag = str(t_val).replace(".", "p")
-    png_path = os.path.join(
-        results_dir,
-        f"{case_prefix}_{backend}_{run_id}_rho_x_t_{t_tag}.png",
+    results_dir = results_case_dir_for_model_dir(ckpt_dir, case_prefix)
+    return _save_rho_slice_plot_to_dir(
+        model=model,
+        output_dir=results_dir,
+        file_prefix=f"{case_prefix}_{backend}_{run_id}",
+        t_slice=t_slice,
+        n_points=n_points,
     )
-
-    fig, ax = plt.subplots(figsize=(8, 4))
-    ax.plot(x_np, rho_pred_np, lw=2, label="NN")
-    ax.plot(x_np, rho_exact_np, "--", lw=2, label="Exact")
-    ax.set_xlabel("x")
-    ax.set_ylabel("rho")
-    ax.set_title(f"rho(x, t={t_val:.2f})")
-    ax.grid(True)
-    ax.legend()
-    fig.tight_layout()
-    fig.savefig(png_path, dpi=300)
-    plt.close(fig)
-
-    return png_path

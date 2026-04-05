@@ -357,6 +357,14 @@ poly_y = Xw_y
 #   2) Remove points that fall inside the airfoil polygon.
 #   3) If we don't have enough points left, sample extra points.
 #   4) Shuffle and keep the requested total number.
+#
+# Note on limitations:
+#   In the original TAF setting these interior coordinates would normally be
+#   paired with CFD reference states. This repo only ships the coordinates, so
+#   the resulting files mainly serve geometry-aware residual training.
+#   We also tried more aggressive no-CFD variants such as near-airfoil
+#   oversampling, but they did not produce a clear improvement and are not kept
+#   in this baseline generator.
 
 # Oversample because many points will be rejected (inside the airfoil)
 oversample_factor = 2.5

@@ -340,6 +340,9 @@ This reproduction reflects practical CPU constraints.
 - The two branches are combined through a learned linear fusion layer to keep the readout compact and parameter budgets comparable across baselines.
 - PennyLane variants outside `DHO` were not rerun in the consolidated reproduction because their CPU cost would be prohibitively high without a sizeable compute cluster. This is why [`HQPINN/run_all_train_jobs.sh`](/Users/jerome/git/reproduced_papers_fork/HQPINN/run_all_train_jobs.sh) focuses on `DHO` plus the `cc`, `hy-m`, and `qq-m` families for `SEE`, `DEE`, and `TAF`.
 - For `DHO`, we also tested Merlin-Perceval variants (`dho-hy-mp` and `dho-qq-mp`) in addition to the generic Merlin interferometer approach.
+- `TAF` is the least faithful case in this repo because the internal CFD reference fields used by the original supervised-plus-PINN setup are not bundled here. The files `X_data_int.npy` are available, but their target states `U_data_int = (\rho, u, v, T)` are not, so those points are reused as additional PDE collocation points instead of supervised samples.
+- As a consequence, the current `TAF` training problem is strongly under-constrained: a nearly uniform field can still satisfy the inlet, outlet, periodic, wall, and weighted Euler-residual terms well enough to produce low losses without reproducing a convincing Figure 7 flow structure.
+- We also tried stronger no-CFD heuristics during development, in particular near-airfoil collocation oversampling and a stratified near/far PDE residual average. These attempts did not produce a clear qualitative improvement, so the main branch keeps the simpler baseline and documents the limitation explicitly.
 
 ## Installation
 
@@ -442,6 +445,16 @@ The `.npy` files for the NACA0012 case are already present in `HQPINN/lib/TAF/NA
 ```bash
 python3 -m HQPINN.lib.TAF.generate_aerofoil_training_sets
 ```
+
+TAF training and inference now both save Figure-7-style prediction plots under the case-specific subdirectories in `HQPINN/results/TAF/<case_prefix>/`.
+
+The generated TAF geometry files are still useful without CFD targets because they define the airfoil wall, normals, outer boundaries, and the collocation cloud. The main missing piece is the internal supervised state on `X_data_int`, which is why the current TAF results should be read as a geometry-aware PINN baseline rather than as a full reproduction of the paper's supervised transonic airfoil setup.
+
+### `DEE` Figures
+
+DEE training and inference both save their density contour plots and the companion `rho(x, t=2)` slice under the matching case-specific subdirectories in `HQPINN/results/DEE/<case_prefix>/`.
+
+`DHO` and `SEE` follow the same convention: train/run/remote artifacts are written into `HQPINN/results/<benchmark>/<case_prefix>/`, with the benchmark-level summary CSVs kept at the root of `HQPINN/results/<benchmark>/`.
 
 ## Where To Look At Results
 
