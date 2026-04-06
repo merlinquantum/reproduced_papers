@@ -9,7 +9,6 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
-
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PAPERS_DIR = REPO_ROOT / "papers"
 SKIP_PAPERS = {"shared"}
