@@ -2,7 +2,7 @@
 {
   "description": "Default parameters for Nearest Centroid Classification",
   "seed": 42,
-  "outdir": "results",
+  "outdir": "outdir",
   "device": "cpu",
   "dataset": {
     "name": "mnist",

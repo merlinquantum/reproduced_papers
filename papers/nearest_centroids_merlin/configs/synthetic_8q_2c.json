@@ -2,7 +2,7 @@
   "description": "Synthetic 8Q 2C configuration",
   "seed": 123,
   "device": "cpu",
-  "outdir": "results",
+  "outdir": "outdir",
   "dataset": {
     "name": "synthetic",
     "n_components": 8,

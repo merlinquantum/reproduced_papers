@@ -1,7 +1,7 @@
 {
   "description": "Mnist 4Class configuration",
   "seed": 42,
-  "outdir": "results",
+  "outdir": "outdir",
   "logging": {
     "level": "info"
   },

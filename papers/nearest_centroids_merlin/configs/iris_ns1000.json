@@ -2,7 +2,7 @@
   "description": "IRIS dataset with 1000 shots (Paper Figure 9)",
   "seed": 123,
   "device": "cpu",
-  "outdir": "results",
+  "outdir": "outdir",
   "dataset": {
     "name": "iris",
     "n_components": 4
