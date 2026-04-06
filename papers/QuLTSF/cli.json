@@ -1,0 +1,68 @@
+{
+  "description": "QuLTSF reproduction runner",
+  "arguments": [
+    {
+      "flags": ["--epochs"],
+      "help": "Override number of training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.epochs"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Override dataset batch size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.batch_size"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Override learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lr"}
+    },
+    {
+      "flags": ["--sequence-length"],
+      "help": "Override input sequence length",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.sequence_length"}
+    },
+    {
+      "flags": ["--prediction-horizon"],
+      "help": "Override prediction horizon",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.prediction_horizon"}
+    },
+    {
+      "flags": ["--model-name"],
+      "help": "Model variant: qultsf_reference, photonic_qultsf, or qultsf_original",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.name"}
+    },
+    {
+      "flags": ["--num-qubits"],
+      "help": "Number of qubits for the original QuLTSF hybrid model",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.params.num_qubits"}
+    },
+    {
+      "flags": ["--num-layers"],
+      "help": "Number of variational layers for the original QuLTSF hybrid model",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.params.num_layers"}
+    },
+    {
+      "flags": ["--qml-device"],
+      "help": "PennyLane device name for the original QuLTSF hybrid model",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.params.qml_device"}
+    }
+  ]
+}

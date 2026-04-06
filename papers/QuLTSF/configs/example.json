@@ -1,0 +1,26 @@
+{
+  "description": "Example QuLTSF photonic run",
+  "dataset": {
+    "path": "weather.csv",
+    "time_column": "date",
+    "features_mode": "MS",
+    "target": "OT",
+    "sequence_length": 336,
+    "prediction_horizon": 96,
+    "batch_size": 16
+  },
+  "model": {
+    "name": "photonic_qultsf",
+    "params": {
+      "latent_dim": 4,
+      "hidden_dim": 16,
+      "shots": 0
+    }
+  },
+  "training": {
+    "epochs": 10,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "weight_decay": 0.0
+  }
+}
