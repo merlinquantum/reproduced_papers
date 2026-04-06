@@ -194,7 +194,9 @@ def validate_paper(paper_dir: Path) -> ValidationResult:
             with config_path.open("r", encoding="utf-8") as handle:
                 json.load(handle)
         except json.JSONDecodeError as exc:
-            result.errors.append(f"invalid JSON in `{config_path.relative_to(REPO_ROOT)}`: {exc}")
+            result.errors.append(
+                f"invalid JSON in `{config_path.relative_to(REPO_ROOT)}`: {exc}"
+            )
             continue
 
     results_dir = paper_dir / "results"
