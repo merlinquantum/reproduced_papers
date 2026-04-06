@@ -6,21 +6,42 @@ We encourage contributions of new quantum ML paper reproductions. Please follow 
 
 ```
 papers/NAME/            # Non-ambiguous acronym or fullname of the reproduced paper
-├── .gitignore            # specific .gitignore rules for clean repository
-├── notebook.ipynb        # Interactive exploration of key concepts
-├── README.md             # Paper overview and results overview
-├── requirements.txt      # additional requirements for the scripts
-├── configs/              # defaults + experiment configs consumed by the repo root runner
-├── cli.json              # CLI schema for the shared runner
-├── lib/                  # code used by the shared runner and notebooks
-│   └── runner.py         # required entrypoint: lib.runner.train_and_evaluate(cfg, run_dir)
-├── models/               # Trained models
-├── results/              # Selected generated figures, tables, or outputs from trained models
-├── tests/                # Validation tests
-└── utils/                # additional commandline utilities for visualization, launch of multiple trainings, etc...
+├── .gitignore            [recommended] specific ignore rules for clean repository
+├── notebook.ipynb        [required] interactive exploration of key concepts
+├── README.md             [required] paper overview and results overview
+├── requirements.txt      [required] additional requirements for the scripts
+├── configs/              [required] defaults + experiment configs consumed by the repo root runner
+├── cli.json              [required] CLI schema for the shared runner
+├── lib/                  [required] code used by the shared runner and notebooks
+│   └── runner.py         [required] entrypoint: lib.runner.train_and_evaluate(cfg, run_dir)
+├── models/               [recommended] trained models
+├── results/              [recommended] selected generated figures, tables, or outputs from trained models
+├── tests/                [required] validation tests
+└── utils/                [required] additional commandline utilities for visualization, launch of multiple trainings, etc...
 ```
 
 `data/` is shared at repository root (not inside each paper): write datasets/artifacts under `data/<NAME>/`.
+
+Nested multi-part papers are also supported when one publication is split into independent subprojects. In that case the container directory holds shared documentation only, and each part must follow the full reproduction structure on its own:
+
+```text
+papers/NAME/
+├── README.md
+├── .gitignore
+├── requirements.txt
+├── PART1/
+│   ├── cli.json
+│   ├── configs/defaults.json
+│   ├── lib/runner.py
+│   ├── notebook.ipynb
+│   ├── tests/
+│   └── utils/
+└── PART2/
+    └── ...
+```
+
+Example: `papers/fock_state_expressivity/VQC_classif/` and its sibling directories are validated as separate reproductions; the parent `papers/fock_state_expressivity/` is not expected to expose its own `cli.json` or `lib/runner.py`.
+In this multi-part layout, a shared parent `.gitignore` is acceptable for all subprojects.
 
 ## Reproduction template (starter kit)
 
@@ -138,8 +159,25 @@ pip install pre-commit
 pre-commit install
 ```
 
+**Run the paper-structure validator manually:**
+```bash
+# Validate every paper under papers/
+python3 scripts/check_paper_structure.py --all
+
+# Validate one paper by passing any path inside it
+python3 scripts/check_paper_structure.py papers/nearest_centroids_merlin/configs/defaults.json
+
+# Validate one subproject inside a multi-part paper
+python3 scripts/check_paper_structure.py papers/fock_state_expressivity/VQC_classif/configs/defaults.json
+
+# Validate only the files currently staged for commit
+python3 scripts/check_paper_structure.py $(git diff --cached --name-only)
+```
+
+The validator checks the repository paper layout described above, including required top-level files/directories, the presence of `lib/runner.py`, valid JSON configs, and accidental committed `results/run_*` artifacts that should live under `outdir/`.
+
 ## Configuration
 
 - Code style rules are defined in `pyproject.toml`
 - GitHub Actions automatically check all PRs and pushes
-- Pre-commit hooks run ruff automatically before commits
+- Pre-commit hooks run ruff and the paper-structure validator automatically before commits

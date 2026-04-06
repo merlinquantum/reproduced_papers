@@ -7,3 +7,10 @@ repos:
         language_version: python3
       - id: ruff-format
         language_version: python3
+  - repo: local
+    hooks:
+      - id: check-paper-structure
+        name: check-paper-structure
+        entry: python3 scripts/check_paper_structure.py
+        language: system
+        pass_filenames: true
