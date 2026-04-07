@@ -253,7 +253,7 @@ def run(
 
     elif mode == "run":
         label, width, layers = _resolve_model_config(
-            model_size=model_size,
+            model_size=model_size if n_nodes is None and n_layers is None else None,
             n_nodes=n_nodes,
             n_layers=n_layers,
         )
@@ -276,7 +276,7 @@ def run(
             "Remote mode is not available for DEE-CC. Falling back to local run mode."
         )
         label, width, layers = _resolve_model_config(
-            model_size=model_size,
+            model_size=model_size if n_nodes is None and n_layers is None else None,
             n_nodes=n_nodes,
             n_layers=n_layers,
         )

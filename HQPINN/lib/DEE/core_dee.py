@@ -6,6 +6,7 @@ from datetime import datetime
 import sys
 from typing import Tuple, Callable, Optional
 
+import numpy as np
 import torch
 import torch.nn as nn
 
@@ -55,6 +56,270 @@ DEE_SUMMARY_COLUMNS = [
     "Density error",
     "Pressure error",
 ]
+
+DEE_PAPER_CMAP = "jet"
+DEE_PAPER_RHO_MIN = 1.0
+DEE_PAPER_RHO_MAX = 1.4
+DEE_PAPER_RHO_TICKS = (1.0, 1.1, 1.2, 1.3, 1.4)
+DEE_PAPER_ABS_ERR_MAX = 0.18
+DEE_PAPER_ABS_ERR_TICKS = (0.05, 0.10, 0.15)
+DEE_PAPER_X_TICKS = (0.0, 0.25, 0.50, 0.75, 1.0)
+DEE_PAPER_T_TICKS = (0.0, 0.5, 1.0, 1.5, 2.0)
+DEE_PAPER_BOX_ASPECT = 0.95
+DEE_PAPER_FIELD_ALPHA_WITH_POINTS = 0.42
+DEE_PAPER_RESIDUAL_MARKER_SIZE = 28
+DEE_PAPER_BOUNDARY_MARKER_SIZE = 30
+DEE_PAPER_REFERENCE_FIGSIZE = (11.6, 4.9)
+DEE_PAPER_SINGLE_FIGSIZE = (6.2, 4.8)
+
+
+def _build_dee_plot_grid(
+    nx: int, nt: int
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    x = torch.linspace(DEE_X_MIN, DEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
+    t = torch.linspace(DEE_T_MIN, DEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
+    X, T = torch.meshgrid(x, t, indexing="ij")
+    xt = torch.stack([X.reshape(-1), T.reshape(-1)], dim=1)
+    return X, T, xt
+
+
+def _evaluate_dee_density_fields(
+    model: nn.Module,
+    nx: int,
+    nt: int,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    with torch.no_grad():
+        X, T, xt = _build_dee_plot_grid(nx, nt)
+        U_pred = model(xt)
+        rho_pred = U_pred[:, 0].reshape(nx, nt)
+        rho_exact = exact_rho(X, T)
+        rho_abs_err = torch.abs(rho_pred - rho_exact)
+
+    return (
+        X.cpu().numpy(),
+        T.cpu().numpy(),
+        rho_pred.cpu().numpy(),
+        rho_exact.cpu().numpy(),
+        rho_abs_err.cpu().numpy(),
+    )
+
+
+def _stack_dee_training_points(
+    x_ic: torch.Tensor,
+    t_ic: torch.Tensor,
+    x_left: torch.Tensor,
+    x_right: torch.Tensor,
+    t_bc: torch.Tensor,
+    x_f: torch.Tensor,
+    t_f: torch.Tensor,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    residual_xt = torch.cat([x_f, t_f], dim=1)
+    boundary_xt = torch.cat(
+        [
+            torch.cat([x_ic, x_left, x_right], dim=0),
+            torch.cat([t_ic, t_bc, t_bc], dim=0),
+        ],
+        dim=1,
+    )
+    return residual_xt, boundary_xt
+
+
+def _sample_dee_training_points() -> tuple[torch.Tensor, torch.Tensor]:
+    x_ic, t_ic = sample_ic_points()
+    x_left, x_right, t_bc = sample_bc_points()
+    x_f, t_f = sample_collocation_points()
+    return _stack_dee_training_points(x_ic, t_ic, x_left, x_right, t_bc, x_f, t_f)
+
+
+def _predict_dee_rho_at_points(model: nn.Module, xt: torch.Tensor) -> np.ndarray:
+    with torch.no_grad():
+        rho = model(xt)[:, 0]
+    return np.clip(rho.detach().cpu().numpy(), DEE_PAPER_RHO_MIN, DEE_PAPER_RHO_MAX)
+
+
+def _overlay_dee_training_points(
+    ax: plt.Axes,
+    model: nn.Module,
+    residual_xt: torch.Tensor | None = None,
+    boundary_xt: torch.Tensor | None = None,
+) -> None:
+    if residual_xt is None or boundary_xt is None:
+        residual_xt, boundary_xt = _sample_dee_training_points()
+
+    residual_rho = _predict_dee_rho_at_points(model, residual_xt)
+    boundary_rho = _predict_dee_rho_at_points(model, boundary_xt)
+
+    residual_np = residual_xt.detach().cpu().numpy()
+    boundary_np = boundary_xt.detach().cpu().numpy()
+
+    ax.scatter(
+        residual_np[:, 0],
+        residual_np[:, 1],
+        c=residual_rho,
+        cmap=DEE_PAPER_CMAP,
+        vmin=DEE_PAPER_RHO_MIN,
+        vmax=DEE_PAPER_RHO_MAX,
+        s=DEE_PAPER_RESIDUAL_MARKER_SIZE,
+        edgecolors=(0.0, 0.0, 0.0, 0.18),
+        linewidths=0.2,
+        alpha=1.0,
+        zorder=3,
+    )
+    ax.scatter(
+        boundary_np[:, 0],
+        boundary_np[:, 1],
+        c=boundary_rho,
+        cmap=DEE_PAPER_CMAP,
+        vmin=DEE_PAPER_RHO_MIN,
+        vmax=DEE_PAPER_RHO_MAX,
+        s=DEE_PAPER_BOUNDARY_MARKER_SIZE,
+        edgecolors="k",
+        linewidths=0.85,
+        zorder=4,
+    )
+
+
+def _style_dee_axis(ax: plt.Axes, title: str) -> None:
+    ax.set_title(title)
+    ax.set_xlabel("x")
+    ax.set_ylabel("t")
+    ax.set_xlim(DEE_X_MIN, DEE_X_MAX)
+    ax.set_ylim(DEE_T_MIN, DEE_T_MAX)
+    ax.set_xticks(DEE_PAPER_X_TICKS)
+    ax.set_yticks(DEE_PAPER_T_TICKS)
+    ax.set_box_aspect(DEE_PAPER_BOX_ASPECT)
+
+
+def _plot_dee_density_panel(
+    ax: plt.Axes,
+    X_np: np.ndarray,
+    T_np: np.ndarray,
+    rho_np: np.ndarray,
+    title: str,
+    model_for_training_points: nn.Module | None = None,
+    residual_xt: torch.Tensor | None = None,
+    boundary_xt: torch.Tensor | None = None,
+):
+    rho_for_plot = np.clip(rho_np, DEE_PAPER_RHO_MIN, DEE_PAPER_RHO_MAX)
+    field_alpha = (
+        DEE_PAPER_FIELD_ALPHA_WITH_POINTS
+        if model_for_training_points is not None
+        else 1.0
+    )
+    contour = ax.contourf(
+        X_np,
+        T_np,
+        rho_for_plot,
+        levels=np.linspace(DEE_PAPER_RHO_MIN, DEE_PAPER_RHO_MAX, 200),
+        cmap=DEE_PAPER_CMAP,
+        alpha=field_alpha,
+    )
+    _style_dee_axis(ax, title)
+    if model_for_training_points is not None:
+        _overlay_dee_training_points(
+            ax,
+            model_for_training_points,
+            residual_xt=residual_xt,
+            boundary_xt=boundary_xt,
+        )
+    return contour
+
+
+def _plot_dee_abs_error_panel(
+    ax: plt.Axes,
+    X_np: np.ndarray,
+    T_np: np.ndarray,
+    rho_abs_err_np: np.ndarray,
+    title: str,
+):
+    rho_abs_err_for_plot = np.clip(rho_abs_err_np, 0.0, DEE_PAPER_ABS_ERR_MAX)
+    contour = ax.contourf(
+        X_np,
+        T_np,
+        rho_abs_err_for_plot,
+        levels=np.linspace(0.0, DEE_PAPER_ABS_ERR_MAX, 200),
+        cmap=DEE_PAPER_CMAP,
+    )
+    _style_dee_axis(ax, title)
+    return contour
+
+
+def _save_dee_single_panel_figure(
+    png_path: str,
+    contour,
+    fig: plt.Figure,
+    ax: plt.Axes,
+    ticks: tuple[float, ...],
+    cbar_format: str | None = None,
+) -> None:
+    fig.colorbar(
+        contour,
+        ax=ax,
+        orientation="horizontal",
+        pad=0.12,
+        ticks=ticks,
+        format=cbar_format,
+    )
+    fig.savefig(png_path, dpi=300)
+    plt.close(fig)
+
+
+def _save_dee_reference_figure(
+    png_path: str,
+    X_np: np.ndarray,
+    T_np: np.ndarray,
+    rho_pred_np: np.ndarray,
+    rho_abs_err_np: np.ndarray,
+    plot_label: str | None,
+    model_for_training_points: nn.Module | None = None,
+    residual_xt: torch.Tensor | None = None,
+    boundary_xt: torch.Tensor | None = None,
+) -> None:
+    fig, axes = plt.subplots(
+        1,
+        2,
+        figsize=DEE_PAPER_REFERENCE_FIGSIZE,
+        constrained_layout=True,
+    )
+
+    rho_title = r"$\rho$"
+    if plot_label:
+        rho_title += f", {plot_label}"
+    rho_contour = _plot_dee_density_panel(
+        axes[0],
+        X_np,
+        T_np,
+        rho_pred_np,
+        rho_title,
+        model_for_training_points=model_for_training_points,
+        residual_xt=residual_xt,
+        boundary_xt=boundary_xt,
+    )
+    err_contour = _plot_dee_abs_error_panel(
+        axes[1],
+        X_np,
+        T_np,
+        rho_abs_err_np,
+        r"$|\Delta \rho|$",
+    )
+
+    fig.colorbar(
+        rho_contour,
+        ax=axes[0],
+        orientation="horizontal",
+        pad=0.12,
+        ticks=DEE_PAPER_RHO_TICKS,
+    )
+    fig.colorbar(
+        err_contour,
+        ax=axes[1],
+        orientation="horizontal",
+        pad=0.12,
+        ticks=DEE_PAPER_ABS_ERR_TICKS,
+        format="%.2f",
+    )
+    fig.savefig(png_path, dpi=300)
+    plt.close(fig)
 
 
 # ============================================================
@@ -511,64 +776,81 @@ def train_dee(
         writer.writerow(["epoch", "elapsed (s)", "Loss", "IC", "BC", "F"])
         writer.writerows(rows)
 
-    # Final evaluation grid for PNG outputs
-    with torch.no_grad():
-        nx, nt = DEE_NX_SAMPLES, DEE_NT_SAMPLES
-        x = torch.linspace(DEE_X_MIN, DEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
-        t = torch.linspace(DEE_T_MIN, DEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
-        X, T = torch.meshgrid(x, t, indexing="ij")
-        xt = torch.stack([X.reshape(-1), T.reshape(-1)], dim=1)
+    residual_xt, boundary_xt = _stack_dee_training_points(
+        x_ic_all,
+        t_ic_all,
+        x_left_all,
+        x_right_all,
+        t_bc_all,
+        x_f_all,
+        t_f_all,
+    )
+    X_np, T_np, rho_pred_np, rho_exact_np, rho_abs_err_np = _evaluate_dee_density_fields(
+        model=model,
+        nx=DEE_NX_SAMPLES,
+        nt=DEE_NT_SAMPLES,
+    )
 
-        U_pred = model(xt)
-        rho_pred = U_pred[:, 0].reshape(nx, nt)
+    fig, ax = plt.subplots(
+        figsize=DEE_PAPER_SINGLE_FIGSIZE,
+        constrained_layout=True,
+    )
+    rho_pred_contour = _plot_dee_density_panel(
+        ax,
+        X_np,
+        T_np,
+        rho_pred_np,
+        rf"$\rho$, epoch={n_epochs}",
+        model_for_training_points=model,
+        residual_xt=residual_xt,
+        boundary_xt=boundary_xt,
+    )
+    _save_dee_single_panel_figure(
+        rho_pred_png_path,
+        rho_pred_contour,
+        fig,
+        ax,
+        DEE_PAPER_RHO_TICKS,
+    )
 
-        # Exact density
-        rho_exact = exact_rho(X, T)  # [nx, nt]
+    fig, ax = plt.subplots(
+        figsize=DEE_PAPER_SINGLE_FIGSIZE,
+        constrained_layout=True,
+    )
+    rho_exact_contour = _plot_dee_density_panel(
+        ax,
+        X_np,
+        T_np,
+        rho_exact_np,
+        r"Exact $\rho$",
+    )
+    _save_dee_single_panel_figure(
+        rho_exact_png_path,
+        rho_exact_contour,
+        fig,
+        ax,
+        DEE_PAPER_RHO_TICKS,
+    )
 
-        # Error (still in Tensor)
-        rho_error = rho_pred - rho_exact  # Tensor [nx, nt]
-
-        # ---- Only now: convert everything to numpy for plotting ----
-        X_np = X.cpu().numpy()
-        T_np = T.cpu().numpy()
-        rho_pred_np = rho_pred.cpu().numpy()
-        rho_exact_np = rho_exact.cpu().numpy()
-        rho_err_np = rho_error.cpu().numpy()
-
-        # 1) Predicted density
-        fig, ax = plt.subplots(figsize=(8, 5))  # 8x5 inches
-        cs = ax.contourf(
-            X_np, T_np, rho_pred_np, levels=50
-        )  # 50 contour levels for smooth color gradation
-        fig.colorbar(cs, ax=ax)
-        ax.set_title("Predicted density $\\rho_\\text{pred}(x,t)$")
-        ax.set_xlabel("x")
-        ax.set_ylabel("t")
-        fig.tight_layout()
-        fig.savefig(rho_pred_png_path, dpi=300)
-        plt.close(fig)
-
-        # 2) Exact density
-        fig, ax = plt.subplots(figsize=(8, 5))
-        cs = ax.contourf(X_np, T_np, rho_exact_np, levels=50)
-        fig.colorbar(cs, ax=ax)
-        ax.set_title("Exact density $\\rho_\\text{exact}(x,t)$")
-        ax.set_xlabel("x")
-        ax.set_ylabel("t")
-        fig.tight_layout()
-        fig.savefig(rho_exact_png_path, dpi=300)
-        plt.close(fig)
-
-        # 3) Error (pred - exact)
-        fig, ax = plt.subplots(figsize=(8, 5))
-        cs = ax.contourf(X_np, T_np, rho_err_np, levels=50, cmap="bwr")
-        fig.colorbar(cs, ax=ax)
-        ax.set_title("Density error $\\rho_\\text{pred}(x,t)-\\rho_\\text{exact}(x,t)$")
-        ax.set_xlabel("x")
-        ax.set_ylabel("t")
-        fig.tight_layout()
-        fig.savefig(rho_error_png_path, dpi=300)
-        plt.close(fig)
+    fig, ax = plt.subplots(
+        figsize=DEE_PAPER_SINGLE_FIGSIZE,
+        constrained_layout=True,
+    )
+    rho_abs_err_contour = _plot_dee_abs_error_panel(
+        ax,
+        X_np,
+        T_np,
+        rho_abs_err_np,
+        rf"$|\Delta \rho|$, epoch={n_epochs}",
+    )
+    _save_dee_single_panel_figure(
+        rho_error_png_path,
+        rho_abs_err_contour,
+        fig,
+        ax,
+        DEE_PAPER_ABS_ERR_TICKS,
+        cbar_format="%.2f",
+    )
 
     rho_slice_png_path = _save_rho_slice_plot_to_dir(
         model=model,
@@ -655,54 +937,37 @@ def save_density_plot(
 
     model.eval()
 
-    with torch.no_grad():
-        nx, nt = DEE_NX_SAMPLES, DEE_NT_SAMPLES
-        if backend.lower() != "local":
-            # Remote backends create many cloud jobs; downsample for robustness.
-            orig_nx, orig_nt = nx, nt
-            nx = min(nx, 30)
-            nt = min(nt, 30)
-            if (nx, nt) != (orig_nx, orig_nt):
-                print(
-                    f"Remote backend detected: reduced grid for plotting "
-                    f"from {orig_nx}x{orig_nt} to {nx}x{nt}."
-                )
-        x = torch.linspace(DEE_X_MIN, DEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
-        t = torch.linspace(DEE_T_MIN, DEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
-        X, T = torch.meshgrid(x, t, indexing="ij")
-        xt = torch.stack([X.reshape(-1), T.reshape(-1)], dim=1)
+    nx, nt = DEE_NX_SAMPLES, DEE_NT_SAMPLES
+    if backend.lower() != "local":
+        # Remote backends create many cloud jobs; downsample for robustness.
+        orig_nx, orig_nt = nx, nt
+        nx = min(nx, 30)
+        nt = min(nt, 30)
+        if (nx, nt) != (orig_nx, orig_nt):
+            print(
+                f"Remote backend detected: reduced grid for plotting "
+                f"from {orig_nx}x{orig_nt} to {nx}x{nt}."
+            )
 
-        U_pred = model(xt)
-        rho_pred = U_pred[:, 0].reshape(nx, nt)
+    X_np, T_np, rho_pred_np, _, rho_abs_err_np = _evaluate_dee_density_fields(
+        model=model,
+        nx=nx,
+        nt=nt,
+    )
 
-        X_np = X.cpu().numpy()
-        T_np = T.cpu().numpy()
-        rho_pred_np = rho_pred.cpu().numpy()
+    results_dir = results_case_dir_for_model_dir(ckpt_dir, case_prefix)
+    os.makedirs(results_dir, exist_ok=True)
 
-        results_dir = results_case_dir_for_model_dir(ckpt_dir, case_prefix)
-        os.makedirs(results_dir, exist_ok=True)
-
-        png_path = os.path.join(results_dir, f"{case_prefix}_{backend}_{run_id}.png")
-
-        fig, ax = plt.subplots(figsize=(8, 5))
-        cs = ax.contourf(
-            X_np,
-            T_np,
-            rho_pred_np,
-            levels=50,
-        )
-        fig.colorbar(cs, ax=ax)
-        title = "Predicted density $\\rho_\\text{pred}(x,t)$"
-        if plot_label:
-            title += f", {plot_label}"
-        title += f", backend: {backend}"
-        ax.set_title(title)
-        ax.set_xlabel("x")
-        ax.set_ylabel("t")
-        fig.tight_layout()
-
-        fig.savefig(png_path, dpi=300)
-        plt.close(fig)
+    png_path = os.path.join(results_dir, f"{case_prefix}_{backend}_{run_id}.png")
+    _save_dee_reference_figure(
+        png_path=png_path,
+        X_np=X_np,
+        T_np=T_np,
+        rho_pred_np=rho_pred_np,
+        rho_abs_err_np=rho_abs_err_np,
+        plot_label=plot_label,
+        model_for_training_points=model,
+    )
 
     rho_slice_path = save_rho_slice_plot(
         model=model,

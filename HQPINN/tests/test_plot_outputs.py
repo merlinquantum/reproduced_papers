@@ -215,6 +215,36 @@ class PlotOutputTests(unittest.TestCase):
                 Path(tmp_dir) / "see_cc_10-4_local_run123.png",
             )
 
+    def test_train_see_saves_expected_plots_into_case_dir(self) -> None:
+        model = _DummySEEModel()
+        optimizer = torch.optim.SGD(model.parameters(), lr=1e-3)
+
+        def _fake_loss_fn(*args, **kwargs):
+            base = model.linear.weight.sum() * 0.0
+            return base + 1.0, base + 2.0, base + 3.0
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            with (
+                patch.object(core_see, "SEE_NX_SAMPLES", 8),
+                patch.object(core_see, "SEE_NT_SAMPLES", 6),
+                patch.object(core_see, "evaluate_see_errors", return_value=(0.0, 0.0)),
+            ):
+                core_see.train_see(
+                    model=model,
+                    t_train=None,
+                    optimizer=optimizer,
+                    n_epochs=1,
+                    plot_every=1,
+                    out_dir=tmp_dir,
+                    model_label="cc_10-4",
+                    run_id="run123",
+                    loss_fn=_fake_loss_fn,
+                )
+
+            self.assertTrue((Path(tmp_dir) / "see-cc_10-4_run123_rho_pred.png").is_file())
+            self.assertTrue((Path(tmp_dir) / "see-cc_10-4_run123_rho_exact.png").is_file())
+            self.assertTrue((Path(tmp_dir) / "see-cc_10-4_run123_rho_error.png").is_file())
+
     def test_dho_cc_run_mode_uses_case_specific_results_dir(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             captured = {}

@@ -6,6 +6,7 @@ from datetime import datetime
 import sys
 from typing import Tuple, Callable, Optional
 
+import numpy as np
 import torch
 import torch.nn as nn
 
@@ -40,6 +41,160 @@ SEE_SUMMARY_COLUMNS = [
     "Density error",
     "Pressure error",
 ]
+
+SEE_PAPER_CMAP = "jet"
+SEE_PAPER_RHO_MIN = 0.8
+SEE_PAPER_RHO_MAX = 1.2
+SEE_PAPER_RHO_TICKS = (0.8, 0.9, 1.0, 1.1, 1.2)
+SEE_PAPER_ABS_ERR_MAX = 0.004
+SEE_PAPER_ABS_ERR_TICKS = (0.000, 0.001, 0.002, 0.003, 0.004)
+SEE_PAPER_X_TICKS = (-1.0, -0.5, 0.0, 0.5, 1.0)
+SEE_PAPER_T_TICKS = (0.0, 0.5, 1.0, 1.5, 2.0)
+
+
+def _build_see_plot_grid(nx: int, nt: int) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    x = torch.linspace(SEE_X_MIN, SEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
+    t = torch.linspace(SEE_T_MIN, SEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
+    X, T = torch.meshgrid(x, t, indexing="ij")
+    xt = torch.stack([X.reshape(-1), T.reshape(-1)], dim=1)
+    return X, T, xt
+
+
+def _evaluate_see_density_fields(
+    model: nn.Module,
+    nx: int,
+    nt: int,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    with torch.no_grad():
+        X, T, xt = _build_see_plot_grid(nx, nt)
+        U_pred = model(xt)
+        rho_pred = U_pred[:, 0].reshape(nx, nt)
+        rho_exact = exact_rho(X, T)
+        rho_abs_err = torch.abs(rho_pred - rho_exact)
+
+    return (
+        X.cpu().numpy(),
+        T.cpu().numpy(),
+        rho_pred.cpu().numpy(),
+        rho_exact.cpu().numpy(),
+        rho_abs_err.cpu().numpy(),
+    )
+
+
+def _style_see_axis(ax: plt.Axes, title: str) -> None:
+    ax.set_title(title)
+    ax.set_xlabel("x")
+    ax.set_ylabel("t")
+    ax.set_xlim(SEE_X_MIN, SEE_X_MAX)
+    ax.set_ylim(SEE_T_MIN, SEE_T_MAX)
+    ax.set_xticks(SEE_PAPER_X_TICKS)
+    ax.set_yticks(SEE_PAPER_T_TICKS)
+    ax.set_aspect("equal", adjustable="box")
+
+
+def _plot_see_density_panel(
+    ax: plt.Axes,
+    X_np: np.ndarray,
+    T_np: np.ndarray,
+    rho_np: np.ndarray,
+    title: str,
+):
+    rho_for_plot = np.clip(rho_np, SEE_PAPER_RHO_MIN, SEE_PAPER_RHO_MAX)
+    contour = ax.contourf(
+        X_np,
+        T_np,
+        rho_for_plot,
+        levels=np.linspace(SEE_PAPER_RHO_MIN, SEE_PAPER_RHO_MAX, 200),
+        cmap=SEE_PAPER_CMAP,
+    )
+    _style_see_axis(ax, title)
+    return contour
+
+
+def _plot_see_abs_error_panel(
+    ax: plt.Axes,
+    X_np: np.ndarray,
+    T_np: np.ndarray,
+    rho_abs_err_np: np.ndarray,
+    title: str,
+):
+    rho_abs_err_for_plot = np.clip(rho_abs_err_np, 0.0, SEE_PAPER_ABS_ERR_MAX)
+    contour = ax.contourf(
+        X_np,
+        T_np,
+        rho_abs_err_for_plot,
+        levels=np.linspace(0.0, SEE_PAPER_ABS_ERR_MAX, 200),
+        cmap=SEE_PAPER_CMAP,
+    )
+    _style_see_axis(ax, title)
+    return contour
+
+
+def _save_see_single_panel_figure(
+    png_path: str,
+    contour,
+    fig: plt.Figure,
+    ax: plt.Axes,
+    ticks: tuple[float, ...],
+    cbar_format: str | None = None,
+) -> None:
+    fig.colorbar(
+        contour,
+        ax=ax,
+        orientation="horizontal",
+        pad=0.12,
+        ticks=ticks,
+        format=cbar_format,
+    )
+    fig.savefig(png_path, dpi=300)
+    plt.close(fig)
+
+
+def _save_see_reference_figure(
+    png_path: str,
+    X_np: np.ndarray,
+    T_np: np.ndarray,
+    rho_pred_np: np.ndarray,
+    rho_abs_err_np: np.ndarray,
+    plot_label: str | None,
+) -> None:
+    fig, axes = plt.subplots(1, 2, figsize=(9.2, 5.8), constrained_layout=True)
+
+    rho_title = r"$\rho$"
+    if plot_label:
+        rho_title += f", {plot_label}"
+    rho_contour = _plot_see_density_panel(
+        axes[0],
+        X_np,
+        T_np,
+        rho_pred_np,
+        rho_title,
+    )
+    err_contour = _plot_see_abs_error_panel(
+        axes[1],
+        X_np,
+        T_np,
+        rho_abs_err_np,
+        r"$|\Delta \rho|$",
+    )
+
+    fig.colorbar(
+        rho_contour,
+        ax=axes[0],
+        orientation="horizontal",
+        pad=0.12,
+        ticks=SEE_PAPER_RHO_TICKS,
+    )
+    fig.colorbar(
+        err_contour,
+        ax=axes[1],
+        orientation="horizontal",
+        pad=0.12,
+        ticks=SEE_PAPER_ABS_ERR_TICKS,
+        format="%.3f",
+    )
+    fig.savefig(png_path, dpi=300)
+    plt.close(fig)
 
 
 # ============================================================
@@ -381,64 +536,61 @@ def train_see(
         writer.writerow(["epoch", "elapsed (s)", "Loss", "IC", "BC", "F"])
         writer.writerows(rows)
 
-    # Final evaluation grid for PNG outputs
-    with torch.no_grad():
-        nx, nt = SEE_NX_SAMPLES, SEE_NT_SAMPLES
-        x = torch.linspace(SEE_X_MIN, SEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
-        t = torch.linspace(SEE_T_MIN, SEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
-        X, T = torch.meshgrid(x, t, indexing="ij")
-        xt = torch.stack([X.reshape(-1), T.reshape(-1)], dim=1)
+    # Final evaluation grid for PNG outputs.
+    X_np, T_np, rho_pred_np, rho_exact_np, rho_abs_err_np = _evaluate_see_density_fields(
+        model=model,
+        nx=SEE_NX_SAMPLES,
+        nt=SEE_NT_SAMPLES,
+    )
 
-        U_pred = model(xt)
-        rho_pred = U_pred[:, 0].reshape(nx, nt)
+    fig, ax = plt.subplots(figsize=(5.2, 5.6), constrained_layout=True)
+    rho_pred_contour = _plot_see_density_panel(
+        ax,
+        X_np,
+        T_np,
+        rho_pred_np,
+        rf"$\rho$, epoch={n_epochs}",
+    )
+    _save_see_single_panel_figure(
+        rho_pred_png_path,
+        rho_pred_contour,
+        fig,
+        ax,
+        SEE_PAPER_RHO_TICKS,
+    )
 
-        # Exact density
-        rho_exact = exact_rho(X, T)  # [nx, nt]
+    fig, ax = plt.subplots(figsize=(5.2, 5.6), constrained_layout=True)
+    rho_exact_contour = _plot_see_density_panel(
+        ax,
+        X_np,
+        T_np,
+        rho_exact_np,
+        r"Exact $\rho$",
+    )
+    _save_see_single_panel_figure(
+        rho_exact_png_path,
+        rho_exact_contour,
+        fig,
+        ax,
+        SEE_PAPER_RHO_TICKS,
+    )
 
-        # Error (still in Tensor)
-        rho_error = rho_pred - rho_exact  # Tensor [nx, nt]
-
-        # ---- Only now: convert everything to numpy for plotting ----
-        X_np = X.cpu().numpy()
-        T_np = T.cpu().numpy()
-        rho_pred_np = rho_pred.cpu().numpy()
-        rho_exact_np = rho_exact.cpu().numpy()
-        rho_err_np = rho_error.cpu().numpy()
-
-        # 1) Predicted density
-        fig, ax = plt.subplots(figsize=(8, 5))  # 8x5 inches
-        cs = ax.contourf(
-            X_np, T_np, rho_pred_np, levels=50
-        )  # 50 contour levels for smooth color gradation
-        fig.colorbar(cs, ax=ax)
-        ax.set_title("Predicted density $\\rho_\\text{pred}(x,t)$")
-        ax.set_xlabel("x")
-        ax.set_ylabel("t")
-        fig.tight_layout()
-        fig.savefig(rho_pred_png_path, dpi=300)
-        plt.close(fig)
-
-        # 2) Exact density
-        fig, ax = plt.subplots(figsize=(8, 5))
-        cs = ax.contourf(X_np, T_np, rho_exact_np, levels=50)
-        fig.colorbar(cs, ax=ax)
-        ax.set_title("Exact density $\\rho_\\text{exact}(x,t)$")
-        ax.set_xlabel("x")
-        ax.set_ylabel("t")
-        fig.tight_layout()
-        fig.savefig(rho_exact_png_path, dpi=300)
-        plt.close(fig)
-
-        # 3) Error (pred - exact)
-        fig, ax = plt.subplots(figsize=(8, 5))
-        cs = ax.contourf(X_np, T_np, rho_err_np, levels=50, cmap="bwr")
-        fig.colorbar(cs, ax=ax)
-        ax.set_title("Density error $\\rho_\\text{pred}(x,t)-\\rho_\\text{exact}(x,t)$")
-        ax.set_xlabel("x")
-        ax.set_ylabel("t")
-        fig.tight_layout()
-        fig.savefig(rho_error_png_path, dpi=300)
-        plt.close(fig)
+    fig, ax = plt.subplots(figsize=(5.2, 5.6), constrained_layout=True)
+    rho_abs_err_contour = _plot_see_abs_error_panel(
+        ax,
+        X_np,
+        T_np,
+        rho_abs_err_np,
+        rf"$|\Delta \rho|$, epoch={n_epochs}",
+    )
+    _save_see_single_panel_figure(
+        rho_error_png_path,
+        rho_abs_err_contour,
+        fig,
+        ax,
+        SEE_PAPER_ABS_ERR_TICKS,
+        cbar_format="%.3f",
+    )
 
     # Evaluate density and pressure errors on (x,t) grid
     err_rho, err_p = evaluate_see_errors(model)
@@ -467,50 +619,30 @@ def save_density_plot(
 
     model.eval()
 
-    with torch.no_grad():
-        nx, nt = SEE_NX_SAMPLES, SEE_NT_SAMPLES
-        if backend.lower() != "local":
-            # Remote backends create many cloud jobs; downsample for robustness.
-            nx = min(nx, 30)
-            nt = min(nt, 30)
-            print(
-                f"Remote backend detected: using reduced grid {nx}x{nt} for plotting."
-            )
-        x = torch.linspace(SEE_X_MIN, SEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
-        t = torch.linspace(SEE_T_MIN, SEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
-        X, T = torch.meshgrid(x, t, indexing="ij")
-        xt = torch.stack([X.reshape(-1), T.reshape(-1)], dim=1)
+    nx, nt = SEE_NX_SAMPLES, SEE_NT_SAMPLES
+    if backend.lower() != "local":
+        # Remote backends create many cloud jobs; downsample for robustness.
+        nx = min(nx, 30)
+        nt = min(nt, 30)
+        print(f"Remote backend detected: using reduced grid {nx}x{nt} for plotting.")
 
-        U_pred = model(xt)
-        rho_pred = U_pred[:, 0].reshape(nx, nt)
+    X_np, T_np, rho_pred_np, _, rho_abs_err_np = _evaluate_see_density_fields(
+        model=model,
+        nx=nx,
+        nt=nt,
+    )
 
-        X_np = X.cpu().numpy()
-        T_np = T.cpu().numpy()
-        rho_pred_np = rho_pred.cpu().numpy()
+    results_dir = results_case_dir_for_model_dir(ckpt_dir, case_prefix)
+    os.makedirs(results_dir, exist_ok=True)
 
-        results_dir = results_case_dir_for_model_dir(ckpt_dir, case_prefix)
-        os.makedirs(results_dir, exist_ok=True)
-
-        png_path = os.path.join(results_dir, f"{case_prefix}_{backend}_{run_id}.png")
-
-        fig, ax = plt.subplots(figsize=(8, 5))
-        cs = ax.contourf(
-            X_np,
-            T_np,
-            rho_pred_np,
-            levels=50,
-        )
-        fig.colorbar(cs, ax=ax)
-        title = "Predicted density $\\rho_\\text{pred}(x,t)$"
-        if plot_label:
-            title += f", {plot_label}"
-        title += f", backend: {backend}"
-        ax.set_title(title)
-        ax.set_xlabel("x")
-        ax.set_ylabel("t")
-        fig.tight_layout()
-
-        fig.savefig(png_path, dpi=300)
-        plt.close(fig)
+    png_path = os.path.join(results_dir, f"{case_prefix}_{backend}_{run_id}.png")
+    _save_see_reference_figure(
+        png_path=png_path,
+        X_np=X_np,
+        T_np=T_np,
+        rho_pred_np=rho_pred_np,
+        rho_abs_err_np=rho_abs_err_np,
+        plot_label=plot_label,
+    )
 
     return png_path

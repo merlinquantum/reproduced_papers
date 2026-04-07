@@ -438,6 +438,18 @@ Preview the queue:
 bash HQPINN/run_all_train_jobs.sh --dry-run
 ```
 
+Launch only the `SEE` and `DEE` hybrid PennyLane training queue:
+
+```bash
+bash HQPINN/run_see_dee_hy_pl_jobs.sh
+```
+
+Wrapper under `utils/`:
+
+```bash
+bash HQPINN/utils/run_see_dee_hy_pl_jobs.sh --dry-run
+```
+
 ### `TAF` Case
 
 The `.npy` files for the NACA0012 case are already present in `HQPINN/lib/TAF/NACA0012/`. To regenerate them:
