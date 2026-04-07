@@ -80,6 +80,8 @@ def data_load_and_process(
     feature_reduction="resize256",
     classes=[0, 1],
     samples_per_class: int | None = None,
+    shuffle: bool = True,
+    shuffle_seed: int = 42,
 ):
     """
     This part of the code was originally written to use Brain signal dataset.
@@ -128,6 +130,12 @@ def data_load_and_process(
     )
 
     if feature_reduction == False:
+        if shuffle:
+            rng = np.random.default_rng(shuffle_seed)
+            train_perm = rng.permutation(len(x_train))
+            test_perm = rng.permutation(len(x_test))
+            x_train, y_train = x_train[train_perm], y_train[train_perm]
+            x_test, y_test = x_test[test_perm], y_test[test_perm]
         return (
             torch.as_tensor(x_train, dtype=torch.float32),
             torch.as_tensor(x_test, dtype=torch.float32),
@@ -145,6 +153,12 @@ def data_load_and_process(
 
         x_train = _normalize_pca_features(X_train)
         x_test = _normalize_pca_features(X_test)
+        if shuffle:
+            rng = np.random.default_rng(shuffle_seed)
+            train_perm = rng.permutation(len(x_train))
+            test_perm = rng.permutation(len(x_test))
+            x_train, y_train = x_train[train_perm], y_train[train_perm]
+            x_test, y_test = x_test[test_perm], y_test[test_perm]
         return (
             torch.as_tensor(x_train, dtype=torch.float32),
             torch.as_tensor(x_test, dtype=torch.float32),

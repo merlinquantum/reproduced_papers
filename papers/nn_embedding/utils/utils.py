@@ -71,17 +71,24 @@ def loss_lower_bound(rhos_0: torch.Tensor, rhos_1: torch.Tensor) -> float:
 
 def get_error_bound(weights: np.ndarray, Kernel: np.ndarray, Y_train: np.ndarray):
     N = len(Y_train)
+    # TODO Add it to compute_kernel_instead!
+    # Per copilot to make sure that even numerically, the kernel matrix is trace preserving
+    # The fidelity kernel is theoretically PSD, but float32 quantum simulation
+    # introduces small negative eigenvalues. Project onto the PSD cone.
+    K = Kernel.astype(np.float64)
+    eigvals, eigvecs = np.linalg.eigh(K)
+    eigvals = np.maximum(eigvals, 0.0)
+    K = eigvecs @ np.diag(eigvals) @ eigvecs.T
+
+    Y = Y_train.astype(np.float64)
     error_list = []
 
     for weight in weights:
-        Kernel_MP = np.linalg.pinv(Kernel + weight * np.eye(N), hermitian=True)
-        val = Y_train @ Kernel_MP @ Kernel @ Kernel_MP @ Y_train.T / N
-        # To make sure no negative value is in the square root
-        error_list.append(np.sqrt(max(val, 0.0)))
+        Kernel_MP = np.linalg.pinv(K + weight * np.eye(N), hermitian=True)
+        val = Y @ Kernel_MP @ K @ Kernel_MP @ Y.transpose() / N
+        error_list.append(np.sqrt(val))
 
-    error_list = np.array(error_list)
-
-    return error_list
+    return np.array(error_list)
 
 
 def random_unitary_gate_based(n):
@@ -400,26 +407,31 @@ def get_local_dimension(
     y: torch.Tensor,
     epsilon: float = 0.01,
     num_samples: int = 100,
+    fim_subsample: int = 500,
 ) -> float:
     d = sum(param.numel() for param in model.parameters())
+    eye = np.eye(d)
     params = [p for p in model.parameters()]
     total_size = y.size(0)
 
     values = []
 
-    for n in range(2, total_size + 1, 1000):
+    for n in range(250, total_size + 1, (total_size - 250) // 5):
         gamma = 1
         kappa = gamma * n / (2 * np.pi * np.log(n))
-        V = (np.pi ** (d / 2)) * (epsilon**d) / gamma_fun(d / 2 + 1)
         params_to_sample = create_param_ensemble(
             params, d, epsilon=epsilon, num_samples=num_samples
         )
 
-        subset = TensorDataset(x[:n], y[:n])
+        # COPILOT, LOI DES GRANDS NOMBRES: Subsample data for FIM — it is a statistical expectation so a
+        # representative subset is sufficient and avoids O(n) forward passes.
+        fim_n = min(fim_subsample, n)
+        indices = np.random.choice(n, fim_n, replace=False)
+        subset = TensorDataset(x[indices], y[indices])
         sub_loader = DataLoader(subset, shuffle=True)
 
         trace_sum = 0
-        total_eigs = []
+        fims = []
         for point in params_to_sample:
             # Assign the params
             model.eval()
@@ -428,7 +440,7 @@ def get_local_dimension(
                     param.copy_(value)
             model.train()
 
-            # Compute the empirical Fisher information matrix, copilot
+            # Compute the empirical Fisher information matrix
             fim = torch.zeros(d, d)
             count = 0
             for x_batch, _ in sub_loader:
@@ -447,23 +459,21 @@ def get_local_dimension(
                     fim += torch.outer(grads, grads) * output[0, k].detach()
                 count += 1
             fim = fim.detach().numpy() / max(count, 1)
-            eigs = np.linalg.eigvalsh(fim)
-            total_eigs.append(eigs)
+            fims.append(fim)
             trace_sum += np.trace(fim)
 
-        eig_normalisation_factor = d * V * num_samples / trace_sum
+        fim_normalisation_factor = d * num_samples * kappa / trace_sum
 
-        # Compute the integral
+        # Compute the integral using slogdet (numerically stable for large d)
         integral = 0
-        for eigs in total_eigs:
-            eig_sum = 0
-            for eig in eigs:
-                eig_sum += np.log(1 + kappa * eig_normalisation_factor * eig)
-            integral += np.exp(0.5 * eig_sum)
+        for fim in fims:
+            _, logdet = np.linalg.slogdet(eye + fim_normalisation_factor * fim)
+            integral += np.exp(0.5 * logdet)
 
         integral /= num_samples
 
-        values.append((2 * np.log((1 / V) * integral)) / (np.log(kappa)))
+        values.append((2 * np.log(integral)) / (np.log(kappa)))
+        print(f"Led of {values[-1]}")
 
     return values
 

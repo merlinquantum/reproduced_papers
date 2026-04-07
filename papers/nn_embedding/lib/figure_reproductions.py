@@ -805,7 +805,7 @@ def reproduce_figure_4(
     for i in range(num_datasets):
 
         X, Y = make_classification(
-            n_samples=samples_per_datatset,
+            n_samples=int(1e6),
             n_features=dim,
             n_informative=4,
             n_clusters_per_class=4,
@@ -828,8 +828,8 @@ def reproduce_figure_4(
                 )
                 print("Training embedding")
                 model.train_embedding(
-                    x_train=X,
-                    y_train=Y,
+                    x_train=X[samples_per_datatset:],
+                    y_train=Y[samples_per_datatset:],
                     distance=distance,
                     batch_size=batch_size,
                     num_epochs=num_epochs_training_embedding,
@@ -969,12 +969,12 @@ def reproduce_figure_5(
     dataset: str = "mnist",
     use_merlin: bool = False,
     batch_size: int = 100,
-    num_epochs_training_embedding: int = 50,
+    num_epochs_training_embedding: int = 1000,
     lr: float = 0.01,
     distance: str = "Trace",
     samples_per_class: int = 500,
     num_repetitions: int = 5,
-    weights: list[float] = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+    weights: list[float] = np.arange(0.1, 1, 0.1).tolist(),
 ):
     keys = ("pca_nqe", "nqe", "without_nqe")
 
@@ -1003,26 +1003,11 @@ def reproduce_figure_5(
             embedder, classical_model_4, classical_model, dim = (
                 create_merlin_fig_5_models()
             )
-            # Create a dataset that has the correct dimension for the encoder
-            (
-                x_train_PCA_no_NQE,
-                _,
-                y_train_PCA_no_NQE,
-                _,
-            ) = data_load_and_process(
-                dataset=dataset,
-                feature_reduction=dim,
-                classes=[0, 1],
-                samples_per_class=samples_per_class,
-            )
-            y_train_PCA_no_NQE_minus_one = np.array(
-                [-1 if y == 0 else 1 for y in y_train_PCA_no_NQE]
-            )
 
             # PCA_NQE
             print("PCA_NQE")
             model = NeuralEmbeddingMerLinKernel(
-                classical_model=classical_model_4,
+                classical_model=deepcopy(classical_model_4),
                 quantum_embedding_layer=deepcopy(embedder),
             )
             print("Training embedding")
@@ -1073,17 +1058,20 @@ def reproduce_figure_5(
             results["generalization_error"]["nqe"].append(errors)
             del model
 
-            # No NQE
+            # No NQE — use PCA-4 data with a fresh (untrained) classical encoder
+            # that maps 4 features to embedder param count, same architecture as
+            # PCA-NQE but without training the embedding.
             print("No NQE")
             model = NeuralEmbeddingMerLinKernel(
-                classical_model=TransparentModel(),
+                classical_model=deepcopy(classical_model_4),
                 quantum_embedding_layer=deepcopy(embedder),
             )
             print("Calculating the error")
-            kernel_matrix = model.compute_kernel_matrix(x_train_PCA_no_NQE)
+            kernel_matrix = model.compute_kernel_matrix(x_train_PCA4)
             errors = get_error_bound(
-                weights, kernel_matrix.detach().numpy(), y_train_PCA_no_NQE_minus_one
+                weights, kernel_matrix.detach().numpy(), y_train_PCA4_minus_one
             )
+
             results["generalization_error"]["without_nqe"].append(errors)
 
             del model, embedder, classical_model_4, classical_model
@@ -1565,4 +1553,4 @@ def reproduce_figure_6(
     )
 
 
-reproduce_figure_4(use_merlin=True)
+reproduce_figure_5(use_merlin=True)
