@@ -1,4 +1,5 @@
 import numpy as np
+import argparse
 import torch
 import torch.nn as nn
 import pennylane as qml
@@ -63,11 +64,14 @@ def loss_lower_bound(rhos_0: torch.Tensor, rhos_1: torch.Tensor) -> float:
     """
     Empirical risk is lower bounded by this quantity
     """
-    N = rhos_0.size(dim=0) + rhos_1.size(dim=1)
+    N_0 = rhos_0.size(dim=0)
+    N_1 = rhos_1.size(dim=0)
 
     return 0.5 * (
         1
-        - calculate_distance(torch.sum(rhos_0, dim=0) / N, torch.sum(rhos_1, dim=0) / N)
+        - calculate_distance(
+            torch.sum(rhos_0, dim=0) / N_0, torch.sum(rhos_1, dim=0) / N_1
+        )
     )
 
 
@@ -360,6 +364,7 @@ def to_serializable_list(values):
     return values
 
 
+# By copilot, changes the order to keep the value ranges, but only works with
 def randomize_trainable_parameters(module: nn.Module) -> None:
     """Force a fresh random initialization for each repetition.
 
@@ -368,25 +373,24 @@ def randomize_trainable_parameters(module: nn.Module) -> None:
     stay independent while preserving the original value range. Only Merlin
     quantum-layer trainable tensors are additionally resampled in ``[-pi, pi]``.
     """
-    for submodule in module.modules():
-        if submodule is module:
-            continue
-        if hasattr(submodule, "reset_parameters"):
-            submodule.reset_parameters()
-            if not isinstance(submodule, ml.QuantumLayer):
-                for param in submodule.parameters(recurse=False):
-                    if param.requires_grad and param.numel() > 1:
-                        with torch.no_grad():
-                            shuffled = param.reshape(-1)[
-                                torch.randperm(param.numel(), device=param.device)
-                            ].reshape_as(param)
-                            param.copy_(shuffled)
-
     if isinstance(module, ml.QuantumLayer):
         for param in module.parameters():
             if param.requires_grad:
                 with torch.no_grad():
                     param.uniform_(-torch.pi, torch.pi)
+    else:
+        for submodule in module.modules():
+            if hasattr(submodule, "reset_parameters"):
+                submodule.reset_parameters()
+                if not isinstance(submodule, ml.QuantumLayer):
+                    for param in submodule.parameters(recurse=False):
+                        if param.requires_grad and param.numel() > 1:
+                            with torch.no_grad():
+                                # Shuffle to keep same initial value ranges
+                                shuffled = param.reshape(-1)[
+                                    torch.randperm(param.numel(), device=param.device)
+                                ].reshape_as(param)
+                                param.copy_(shuffled)
 
 
 class TransparentModel(nn.Module):
@@ -512,3 +516,142 @@ def create_param_ensemble(
             offset += numel
         ensemble.append(point)
     return ensemble
+
+
+def int_list(arg):
+    return list(map(int, arg.split(",")))
+
+
+def float_list(arg):
+    return list(map(float, arg.split(",")))
+
+
+def str_to_bool(s):
+    if isinstance(s, bool):
+        return s
+    if s == "True":
+        return True
+    return False
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Neural Quantum Embedding experiments")
+    parser.add_argument(
+        "--exp_to_run",
+        type=str,
+        default="FIG2",
+        help="Which experiment to run: 'FIG2', 'FIG3', 'FIG4', 'FIG5', 'FIG6' (default: 'FIG2')",
+    )
+    parser.add_argument(
+        "--dataset",
+        type=str,
+        default="mnist",
+        help="Dataset to use (default: 'mnist')",
+    )
+    parser.add_argument(
+        "--use_merlin",
+        action="store_true",
+        help="Use MerLin (photonic) backend instead of gate-based",
+    )
+    parser.add_argument(
+        "--batch_size",
+        type=int,
+        default=100,
+        help="Batch size for training (default: 100)",
+    )
+    parser.add_argument(
+        "--num_epochs_training_embedding",
+        type=int,
+        default=50,
+        help="Number of epochs for embedding training (default: 50)",
+    )
+    parser.add_argument(
+        "--num_epochs_training_classifier",
+        type=int,
+        default=1000,
+        help="Number of epochs for classifier training (default: 1000)",
+    )
+    parser.add_argument(
+        "--lr",
+        type=float,
+        default=0.01,
+        help="Learning rate (default: 0.01)",
+    )
+    parser.add_argument(
+        "--distance",
+        type=str,
+        default="Trace",
+        help="Distance metric (default: 'Trace')",
+    )
+    parser.add_argument(
+        "--samples_per_class",
+        type=int,
+        default=150,
+        help="Samples per class (default: 150)",
+    )
+    parser.add_argument(
+        "--num_classes",
+        type=int,
+        default=2,
+        help="Number of classes (default: 2)",
+    )
+    parser.add_argument(
+        "--num_repetitions",
+        type=int,
+        default=5,
+        help="Number of repetitions (default: 5)",
+    )
+    parser.add_argument(
+        "--layers_to_test",
+        type=int_list,
+        default=[1, 2, 3],
+        help="Layers to test for FIG3, comma-separated (default: '1,2,3')",
+    )
+    parser.add_argument(
+        "--samples_per_datatset",
+        type=int,
+        default=400,
+        help="Samples per dataset for FIG4 (default: 400)",
+    )
+    parser.add_argument(
+        "--num_datasets",
+        type=int,
+        default=10,
+        help="Number of datasets for FIG4 (default: 10)",
+    )
+    parser.add_argument(
+        "--num_repetitions_per_dataset",
+        type=int,
+        default=20,
+        help="Repetitions per dataset for FIG4 (default: 20)",
+    )
+    parser.add_argument(
+        "--epsilon",
+        type=float,
+        default=0.01,
+        help="Epsilon for FIG4 (default: 0.01)",
+    )
+    parser.add_argument(
+        "--num_samples_int",
+        type=int,
+        default=100,
+        help="Number of integration samples for FIG4 (default: 100)",
+    )
+    parser.add_argument(
+        "--weights",
+        type=float_list,
+        default=np.arange(0.1, 1, 0.1).tolist(),
+        help="Weights for FIG5, comma-separated (default: '0.1,0.2,...,0.9')",
+    )
+    parser.add_argument(
+        "--config",
+        type=str,
+        default=None,
+        help="Optional JSON config file to override CLI arguments",
+    )
+    parser.add_argument(
+        "--dont_generate_graph",
+        action="store_true",
+        help="Disable graph generation",
+    )
+    return parser.parse_args()

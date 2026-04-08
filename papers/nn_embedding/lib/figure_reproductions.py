@@ -75,6 +75,8 @@ def reproduce_figure_2(
     samples_per_class: int = 150,
     num_classes: int = 2,
     num_repetitions: int = 5,
+    run_dir: Path = None,
+    generate_graph: bool = True,
 ):
     keys = ("pca_nqe", "nqe", "without_nqe")
     embedding_keys = ("pca_nqe", "nqe")
@@ -437,36 +439,40 @@ def reproduce_figure_2(
             },
         }
 
-        results_dir = PROJECT_ROOT / "results"
+        results_dir = run_dir if run_dir is not None else PROJECT_ROOT / "results"
         results_dir.mkdir(parents=True, exist_ok=True)
         backend = "merlin" if use_merlin else "gate_based"
         output_path = results_dir / f"figure_2_{backend}_results.json"
         output_path.write_text(json.dumps(payload, indent=2))
         print(f"Saved results to {output_path}")
 
-    plot_figure_2_bc(
-        train_pca_nqe=results["training_distances"]["pca_nqe"],
-        train_nqe=results["training_distances"]["nqe"],
-        test_pca_nqe=results["testing_distances"]["pca_nqe"],
-        test_nqe=results["testing_distances"]["nqe"],
-        baseline_trace_distance=results["training_distances"]["without_nqe"],
-        pca_nqe_losses=results["loss_lists_classifier"]["pca_nqe"],
-        nqe_losses=results["loss_lists_classifier"]["nqe"],
-        without_nqe_losses=results["loss_lists_classifier"]["without_nqe"],
-        lower_bound_pca_nqe=results["train_lower_bounds"]["pca_nqe"],
-        lower_bound_nqe=results["train_lower_bounds"]["nqe"],
-        lower_bound_without_nqe=results["train_lower_bounds"]["without_nqe"],
-        accuracy_rows=[
-            (
-                "Without NQE",
-                [curve[-1] for curve in results["test_accuracies"]["without_nqe"]],
-            ),
-            ("PCA-NQE", [curve[-1] for curve in results["test_accuracies"]["pca_nqe"]]),
-            ("NQE", [curve[-1] for curve in results["test_accuracies"]["nqe"]]),
-        ],
-        run_dir=results_dir,
-        filename=f"figure_2_bc_{backend}.pdf",
-    )
+    if generate_graph:
+        plot_figure_2_bc(
+            train_pca_nqe=results["training_distances"]["pca_nqe"],
+            train_nqe=results["training_distances"]["nqe"],
+            test_pca_nqe=results["testing_distances"]["pca_nqe"],
+            test_nqe=results["testing_distances"]["nqe"],
+            baseline_trace_distance=results["training_distances"]["without_nqe"],
+            pca_nqe_losses=results["loss_lists_classifier"]["pca_nqe"],
+            nqe_losses=results["loss_lists_classifier"]["nqe"],
+            without_nqe_losses=results["loss_lists_classifier"]["without_nqe"],
+            lower_bound_pca_nqe=results["train_lower_bounds"]["pca_nqe"],
+            lower_bound_nqe=results["train_lower_bounds"]["nqe"],
+            lower_bound_without_nqe=results["train_lower_bounds"]["without_nqe"],
+            accuracy_rows=[
+                (
+                    "Without NQE",
+                    [curve[-1] for curve in results["test_accuracies"]["without_nqe"]],
+                ),
+                (
+                    "PCA-NQE",
+                    [curve[-1] for curve in results["test_accuracies"]["pca_nqe"]],
+                ),
+                ("NQE", [curve[-1] for curve in results["test_accuracies"]["nqe"]]),
+            ],
+            run_dir=results_dir,
+            filename=f"figure_2_bc_{backend}.pdf",
+        )
 
     return payload
 
@@ -483,6 +489,8 @@ def reproduce_figure_3(
     num_classes: int = 2,
     num_repetitions: int = 5,
     layers_to_test: list[int] = [1, 2, 3],
+    run_dir: Path = None,
+    generate_graph: bool = True,
 ):
     keys = ["pca_nqe", "nqe"]
     for i in layers_to_test:
@@ -764,19 +772,20 @@ def reproduce_figure_3(
             },
         }
 
-        results_dir = PROJECT_ROOT / "results"
+        results_dir = run_dir if run_dir is not None else PROJECT_ROOT / "results"
         results_dir.mkdir(parents=True, exist_ok=True)
         backend = "merlin" if use_merlin else "gate_based"
         output_path = results_dir / f"figure_3_{backend}_results.json"
         output_path.write_text(json.dumps(payload))
 
-    plot_figure_3(
-        loss_lists_classifier=payload["loss_lists_classifier"],
-        test_accuracies=payload["test_accuracies"],
-        layers_to_test=payload["config"]["layers_to_test"],
-        run_dir=results_dir,
-        filename=f"figure_3_{backend}.pdf",
-    )
+    if generate_graph:
+        plot_figure_3(
+            loss_lists_classifier=payload["loss_lists_classifier"],
+            test_accuracies=payload["test_accuracies"],
+            layers_to_test=payload["config"]["layers_to_test"],
+            run_dir=results_dir,
+            filename=f"figure_3_{backend}.pdf",
+        )
 
 
 def reproduce_figure_4(
@@ -790,6 +799,8 @@ def reproduce_figure_4(
     num_repetitions_per_dataset: int = 20,
     epsilon: float = 0.01,
     num_samples_int: int = 100,
+    run_dir: Path = None,
+    generate_graph: bool = True,
 ):
     keys = ("nqe", "without_nqe")
 
@@ -943,7 +954,7 @@ def reproduce_figure_4(
                 },
             }
 
-            results_dir = PROJECT_ROOT / "results"
+            results_dir = run_dir if run_dir is not None else PROJECT_ROOT / "results"
             results_dir.mkdir(parents=True, exist_ok=True)
             backend = "merlin" if use_merlin else "gate_based"
             output_path = results_dir / f"figure_4_{backend}_results.json"
@@ -953,12 +964,13 @@ def reproduce_figure_4(
                 f"Repetition {j+1}/{num_repetitions_per_dataset} done for datatset {i+1}/{num_datasets}"
             )
 
-    plot_figure_4(
-        effective_dimension=payload["effective_dimension"],
-        n_values=results.get("n_values"),
-        run_dir=results_dir,
-        filename=f"figure_4_{backend}.pdf",
-    )
+    if generate_graph:
+        plot_figure_4(
+            effective_dimension=payload["effective_dimension"],
+            n_values=results.get("n_values"),
+            run_dir=results_dir,
+            filename=f"figure_4_{backend}.pdf",
+        )
 
 
 # Following the paper even though the code does not say this,
@@ -973,6 +985,8 @@ def reproduce_figure_5(
     samples_per_class: int = 500,
     num_repetitions: int = 5,
     weights: list[float] = np.arange(0.1, 1, 0.1).tolist(),
+    run_dir: Path = None,
+    generate_graph: bool = True,
 ):
     keys = ("pca_nqe", "nqe", "without_nqe")
 
@@ -1137,7 +1151,7 @@ def reproduce_figure_5(
             print("No NQE")
             model = NeuralEmbeddingGateBasedKernel(
                 num_qubits=4,
-                classical_model=TransparentModel(),
+                classical_model=deepcopy(classical_model_4),
                 quantum_embedding_layer=EmbeddingCallable().Four_QuantumEmbedding1,
             )
             print("Calculating the error")
@@ -1171,18 +1185,19 @@ def reproduce_figure_5(
             },
         }
 
-        results_dir = PROJECT_ROOT / "results"
+        results_dir = run_dir if run_dir is not None else PROJECT_ROOT / "results"
         results_dir.mkdir(parents=True, exist_ok=True)
         backend = "merlin" if use_merlin else "gate_based"
         output_path = results_dir / f"figure_5_{backend}_results.json"
         output_path.write_text(json.dumps(payload))
 
-    plot_figure_5(
-        generalization_error=payload["generalization_error"],
-        weights=weights,
-        run_dir=results_dir,
-        filename=f"figure_5_{backend}.pdf",
-    )
+    if generate_graph:
+        plot_figure_5(
+            generalization_error=payload["generalization_error"],
+            weights=weights,
+            run_dir=results_dir,
+            filename=f"figure_5_{backend}.pdf",
+        )
 
 
 def reproduce_figure_6(
@@ -1194,6 +1209,8 @@ def reproduce_figure_6(
     distance: str = "Trace",
     samples_per_class: int = 150,
     num_repetitions: int = 5,
+    run_dir: Path = None,
+    generate_graph: bool = True,
 ):
     keys = ("pca_nqe", "nqe", "without_nqe")
 
@@ -1535,20 +1552,18 @@ def reproduce_figure_6(
             },
         }
 
-        results_dir = PROJECT_ROOT / "results"
+        results_dir = run_dir if run_dir is not None else PROJECT_ROOT / "results"
         results_dir.mkdir(parents=True, exist_ok=True)
         backend = "merlin" if use_merlin else "gate_based"
         output_path = results_dir / f"figure_6_{backend}_results.json"
         output_path.write_text(json.dumps(payload))
 
-    plot_figure_6(
-        train_deviation=payload["train_deviation"],
-        test_deviation=payload["test_deviation"],
-        train_kernel_var=payload["train_kernel_var"],
-        test_kernel_var=payload["test_kernel_var"],
-        run_dir=results_dir,
-        filename=f"figure_6_{backend}.pdf",
-    )
-
-
-reproduce_figure_2(use_merlin=False)
+    if generate_graph:
+        plot_figure_6(
+            train_deviation=payload["train_deviation"],
+            test_deviation=payload["test_deviation"],
+            train_kernel_var=payload["train_kernel_var"],
+            test_kernel_var=payload["test_kernel_var"],
+            run_dir=results_dir,
+            filename=f"figure_6_{backend}.pdf",
+        )
