@@ -2,11 +2,10 @@
 File from the original repo
 """
 
-from os import listdir
 import numpy as np
 import torch
-from sklearn.decomposition import PCA
 from sklearn.datasets import fetch_openml
+from sklearn.decomposition import PCA
 from sklearn.model_selection import train_test_split
 
 
@@ -78,7 +77,7 @@ def _limit_samples_per_class(
 def data_load_and_process(
     dataset,
     feature_reduction="resize256",
-    classes=[0, 1],
+    classes=None,
     samples_per_class: int | None = None,
     shuffle: bool = True,
     shuffle_seed: int = 42,
@@ -102,6 +101,9 @@ def data_load_and_process(
         y_train = [1 if y == 1 else -1 for y in y_train]
         y_test = [1 if y ==1 else -1 for y in y_test]
     """
+
+    if classes is None:
+        classes = [0, 1]
 
     if dataset in {"mnist", "fashion"}:
         x_train, x_test, y_train, y_test = _load_openml_dataset(dataset)
@@ -129,7 +131,7 @@ def data_load_and_process(
         x_test, y_test, samples_per_class, random_state=43
     )
 
-    if feature_reduction == False:
+    if not feature_reduction:
         if shuffle:
             rng = np.random.default_rng(shuffle_seed)
             train_perm = rng.permutation(len(x_train))

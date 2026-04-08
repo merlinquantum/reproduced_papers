@@ -1,31 +1,29 @@
-import pennylane as qml
-import torch
-import torch.nn as nn
-import merlin as ml
 import sys
 from pathlib import Path
+
+import merlin as ml
+import pennylane as qml
+import torch
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from papers.nn_embedding.utils.utils import (
-    pick_random_data,
-    calculate_distance,
-    LinearLoss,
-    create_basic_gate_based_model,
-    create_trainable_embedding_gate_based_model,
-    create_basic_merlin_model,
-    create_trainable_embedding_merlin_model,
-    state_vector_to_density_matrix,
-    loss_lower_bound,
-)
-
-from papers.nn_embedding.utils.merlin_model_utils import (
+from papers.nn_embedding.utils.merlin_model_utils import (  # noqa: E402
     assign_params,
 )
-from papers.nn_embedding.utils.merlin_models import create_trainable_merlin_layer_fig_3
+from papers.nn_embedding.utils.utils import (  # noqa: E402
+    LinearLoss,
+    calculate_distance,
+    create_basic_gate_based_model,
+    create_basic_merlin_model,
+    create_trainable_embedding_gate_based_model,
+    create_trainable_embedding_merlin_model,
+    loss_lower_bound,
+    pick_random_data,
+    state_vector_to_density_matrix,
+)
 
 
 def train_gate_based(
@@ -76,7 +74,6 @@ def train_gate_based(
     loss_list = []
 
     for epoch in range(num_epochs):
-
         ## Training loop
         model.train()
 
@@ -92,7 +89,7 @@ def train_gate_based(
 
         loss_list.append(loss.cpu().detach().numpy())
 
-        print(f"Epoch {epoch+1} had a loss of {loss_list[-1]}")
+        print(f"Epoch {epoch + 1} had a loss of {loss_list[-1]}")
 
         if return_data:
             ### Evaluate the accuracy
@@ -115,7 +112,6 @@ def train_gate_based(
                 test_accs.append(acc)
 
     if return_data:
-
         ## Calculate the distance between encoded states
         device = qml.device("default.qubit", wires=num_qubits)
 
@@ -213,7 +209,6 @@ def train_merlin_based(
     loss_list = []
 
     for epoch in range(num_epochs):
-
         ## Training loop
         model.train()
 
@@ -229,7 +224,7 @@ def train_merlin_based(
 
         loss_list.append(loss.cpu().detach().numpy())
 
-        print(f"Epoch {epoch+1} had a loss of {loss_list[-1]}")
+        print(f"Epoch {epoch + 1} had a loss of {loss_list[-1]}")
 
         if return_data:
             ### Evaluate the accuracy

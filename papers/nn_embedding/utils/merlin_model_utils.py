@@ -2,10 +2,9 @@
 LLM helped me a lot to to implemented in details about what I wanted here
 """
 
-import sympy as sp
 import merlin as ml
+import sympy as sp
 import torch
-import torch.nn as nn
 
 
 def ordered_variable_params(circuit):

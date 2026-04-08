@@ -1,14 +1,14 @@
-import numpy as np
 import argparse
+import sys
+from copy import deepcopy
+from pathlib import Path
+
+import merlin as ml
+import numpy as np
+import pennylane as qml
 import torch
 import torch.nn as nn
-import pennylane as qml
-import merlin as ml
-from copy import deepcopy
 from torch.utils.data import DataLoader, TensorDataset
-from scipy.special import gamma as gamma_fun
-from pathlib import Path
-import sys
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -16,7 +16,7 @@ sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
 
-from papers.nn_embedding.utils.merlin_model_utils import assign_params
+from papers.nn_embedding.utils.merlin_model_utils import assign_params  # noqa: E402
 
 ############################################################################################################
 # From the code of the paper
@@ -411,7 +411,7 @@ def get_local_dimension(
 ) -> float:
     d = sum(param.numel() for param in model.parameters())
     eye = np.eye(d)
-    params = [p for p in model.parameters()]
+    params = list(model.parameters())
     total_size = y.size(0)
 
     values = []

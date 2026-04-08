@@ -1,27 +1,26 @@
-import torch
-import torch.nn as nn
-import pennylane as qml
-import numpy as np
-from merlin import LexGrouping
-
 import sys
 from pathlib import Path
+
+import pennylane as qml
+import torch
+import torch.nn as nn
+from merlin import LexGrouping
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from papers.nn_embedding.utils.utils import (
-    create_random_pairs,
-    pick_random_data,
-    calculate_distance,
-    LinearLoss,
-    loss_lower_bound,
-)
-from papers.nn_embedding.utils.gate_based_embedding import (
-    EmbeddingCallable,
+from papers.nn_embedding.utils.gate_based_embedding import (  # noqa: E402
     QCNN,
+    EmbeddingCallable,
+)
+from papers.nn_embedding.utils.utils import (  # noqa: E402
+    LinearLoss,
+    calculate_distance,
+    create_random_pairs,
+    loss_lower_bound,
+    pick_random_data,
 )
 
 
@@ -163,7 +162,6 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             )
 
         for epoch in range(num_epochs):
-
             # Training loop
             self.embedding_training_model.train()
 
@@ -182,7 +180,7 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
 
             self.embedding_training_model.eval()
 
-            print(f"Epoch {epoch+1} had a loss of {loss_list[-1]}")
+            print(f"Epoch {epoch + 1} had a loss of {loss_list[-1]}")
 
             # Distance evaluation
             if return_data:
@@ -258,7 +256,6 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
         loss_list = []
 
         for epoch in range(num_epochs):
-
             ### Training loop
             self.model.train()
 
@@ -282,7 +279,7 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
 
             loss_list.append(loss.cpu().detach().numpy())
 
-            print(f"Epoch {epoch+1} had a loss of {loss_list[-1]}")
+            print(f"Epoch {epoch + 1} had a loss of {loss_list[-1]}")
 
             if return_data:
                 ### Evaluate the accuracy
@@ -414,7 +411,6 @@ class NeuralEmbeddingGateBasedKernel(nn.Module):
             )
 
         for epoch in range(num_epochs):
-
             # Training loop
             self.kernel_function.train()
 
@@ -433,7 +429,7 @@ class NeuralEmbeddingGateBasedKernel(nn.Module):
 
             self.kernel_function.eval()
 
-            print(f"Epoch {epoch+1} had a loss of {loss_list[-1]}")
+            print(f"Epoch {epoch + 1} had a loss of {loss_list[-1]}")
 
             # Distance evaluation
             if return_data:

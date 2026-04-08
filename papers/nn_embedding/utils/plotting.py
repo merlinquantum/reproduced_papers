@@ -313,7 +313,7 @@ def plot_figure_2_bc(
         )
         table.auto_set_font_size(False)
         table.set_fontsize(9)
-        for (row, col), cell in table.get_celld().items():
+        for (row, _col), cell in table.get_celld().items():
             if row == 0:
                 cell.set_text_props(weight="semibold")
 
@@ -504,7 +504,7 @@ def plot_figure_3(
     )
     table.auto_set_font_size(False)
     table.set_fontsize(9)
-    for (row, col), cell in table.get_celld().items():
+    for (row, _col), cell in table.get_celld().items():
         if row == 0:
             cell.set_text_props(weight="semibold")
 

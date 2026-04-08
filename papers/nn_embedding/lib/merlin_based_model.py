@@ -1,10 +1,10 @@
+import sys
+from copy import deepcopy
+from pathlib import Path
+
+import merlin as ml
 import torch
 import torch.nn as nn
-import merlin as ml
-from copy import deepcopy
-
-import sys
-from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
@@ -12,20 +12,20 @@ sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
 
-from papers.nn_embedding.utils.merlin_model_utils import (
-    rename_params_in_current_order,
-    count_parameters_with_prefixes,
-    strip_simple_negation_expressions,
-    compute_x2_permutation,
+from papers.nn_embedding.utils.merlin_model_utils import (  # noqa: E402
     assign_params,
+    compute_x2_permutation,
+    count_parameters_with_prefixes,
+    rename_params_in_current_order,
+    strip_simple_negation_expressions,
 )
-from papers.nn_embedding.utils.utils import (
-    create_random_pairs,
-    pick_random_data,
-    calculate_distance,
-    state_vector_to_density_matrix,
+from papers.nn_embedding.utils.utils import (  # noqa: E402
     LinearLoss,
+    calculate_distance,
+    create_random_pairs,
     loss_lower_bound,
+    pick_random_data,
+    state_vector_to_density_matrix,
 )
 
 
@@ -191,7 +191,6 @@ class NeuralEmbeddingMerLinModel(nn.Module):
             )
 
         for epoch in range(num_epochs):
-
             # Training loop
             self.embedding_training_model.train()
 
@@ -210,7 +209,7 @@ class NeuralEmbeddingMerLinModel(nn.Module):
 
             self.embedding_training_model.eval()
 
-            print(f"Epoch {epoch+1} had a loss of {loss_list[-1]}")
+            print(f"Epoch {epoch + 1} had a loss of {loss_list[-1]}")
 
             # Distance evaluation
             if return_data:
@@ -272,7 +271,6 @@ class NeuralEmbeddingMerLinModel(nn.Module):
         loss_list = []
 
         for epoch in range(num_epochs):
-
             ### Training loop
             self.model.train()
 
@@ -296,7 +294,7 @@ class NeuralEmbeddingMerLinModel(nn.Module):
 
             loss_list.append(loss.cpu().detach().numpy())
 
-            print(f"Epoch {epoch+1} had a loss of {loss_list[-1]}")
+            print(f"Epoch {epoch + 1} had a loss of {loss_list[-1]}")
 
             if return_data:
                 ### Evaluate the accuracy
@@ -462,7 +460,6 @@ class NeuralEmbeddingMerLinKernel(nn.Module):
             )
 
         for epoch in range(num_epochs):
-
             # Training loop
             self.kernel_function.train()
 
@@ -481,7 +478,7 @@ class NeuralEmbeddingMerLinKernel(nn.Module):
 
             self.kernel_function.eval()
 
-            print(f"Epoch {epoch+1} had a loss of {loss_list[-1]}")
+            print(f"Epoch {epoch + 1} had a loss of {loss_list[-1]}")
 
             # Distance evaluation
             if return_data:

@@ -1,12 +1,12 @@
-import sys
-from pathlib import Path
-import torch
-import merlin as ml
-import numpy as np
-import json
 import gc
+import json
+import sys
 from copy import deepcopy
 from math import comb
+from pathlib import Path
+
+import numpy as np
+import torch
 from sklearn.datasets import make_classification
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -15,52 +15,52 @@ sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
 
-from papers.nn_embedding.lib.merlin_based_model import (
-    NeuralEmbeddingMerLinModel,
-    NeuralEmbeddingMerLinKernel,
-)
-from papers.nn_embedding.lib.gate_based_model import (
-    NeuralEmbeddingGateBasedModel,
+from papers.nn_embedding.lib.gate_based_model import (  # noqa: E402
     NeuralEmbeddingGateBasedKernel,
+    NeuralEmbeddingGateBasedModel,
 )
-from papers.nn_embedding.utils.merlin_models import (
-    create_merlin_fig_2_models,
-    create_merlin_fig_3_models,
-    create_trainable_merlin_layer_fig_3,
-    create_merlin_fig_4_models,
-    create_merlin_fig_5_models,
+from papers.nn_embedding.lib.merlin_based_model import (  # noqa: E402
+    NeuralEmbeddingMerLinKernel,
+    NeuralEmbeddingMerLinModel,
 )
-from papers.nn_embedding.utils.gate_based_models import (
-    create_gate_based_fig_2_3_models,
-    create_gate_based_fig_5_models,
-)
-from papers.nn_embedding.utils.gate_based_embedding import (
-    EmbeddingCallable,
-    FourQCNN,
-    QCNN,
-)
-from papers.nn_embedding.lib.training_without_nqe import (
+from papers.nn_embedding.lib.training_without_nqe import (  # noqa: E402
     train_gate_based,
     train_merlin_based,
 )
-from papers.nn_embedding.utils.data import data_load_and_process
-from papers.nn_embedding.utils.utils import (
-    to_serializable_list,
-    get_error_bound,
-    TransparentModel,
-    assign_params,
-    state_vector_to_density_matrix,
-    two_design_deviation_gate_based,
-    two_design_deviation_photonics,
-    kernel_variance,
-    get_local_dimension,
+from papers.nn_embedding.utils.data import data_load_and_process  # noqa: E402
+from papers.nn_embedding.utils.gate_based_embedding import (  # noqa: E402
+    QCNN,
+    EmbeddingCallable,
+    FourQCNN,
 )
-from papers.nn_embedding.utils.plotting import (
+from papers.nn_embedding.utils.gate_based_models import (  # noqa: E402
+    create_gate_based_fig_2_3_models,
+    create_gate_based_fig_5_models,
+)
+from papers.nn_embedding.utils.merlin_models import (  # noqa: E402
+    create_merlin_fig_2_models,
+    create_merlin_fig_3_models,
+    create_merlin_fig_4_models,
+    create_merlin_fig_5_models,
+    create_trainable_merlin_layer_fig_3,
+)
+from papers.nn_embedding.utils.plotting import (  # noqa: E402
     plot_figure_2_bc,
     plot_figure_3,
     plot_figure_4,
     plot_figure_5,
     plot_figure_6,
+)
+from papers.nn_embedding.utils.utils import (  # noqa: E402
+    TransparentModel,
+    assign_params,
+    get_error_bound,
+    get_local_dimension,
+    kernel_variance,
+    state_vector_to_density_matrix,
+    to_serializable_list,
+    two_design_deviation_gate_based,
+    two_design_deviation_photonics,
 )
 
 
@@ -408,7 +408,7 @@ def reproduce_figure_2(
             results["test_accuracies"]["without_nqe"].append(test_accs)
             del classical_model_8, classical_model
 
-        print(f"Repetition {i+1} done")
+        print(f"Repetition {i + 1} done")
         gc.collect()
 
         ################################################################# Writing the results
@@ -488,10 +488,13 @@ def reproduce_figure_3(
     samples_per_class: int = 150,
     num_classes: int = 2,
     num_repetitions: int = 5,
-    layers_to_test: list[int] = [1, 2, 3],
+    layers_to_test: list[int] | None = None,
     run_dir: Path = None,
     generate_graph: bool = True,
 ):
+    if layers_to_test is None:
+        layers_to_test = [1, 2, 3]
+
     keys = ["pca_nqe", "nqe"]
     for i in layers_to_test:
         keys.append(f"layer_{i}")
@@ -746,7 +749,7 @@ def reproduce_figure_3(
                 results["train_accuracies"][f"layer_{layer}"].append(train_accs)
                 results["test_accuracies"][f"layer_{layer}"].append(test_accs)
 
-        print(f"Repetition {i+1} done")
+        print(f"Repetition {i + 1} done")
         gc.collect()
 
         ################################################################# Writing the data
@@ -814,7 +817,6 @@ def reproduce_figure_4(
         dim = 4
 
     for i in range(num_datasets):
-
         X, Y = make_classification(
             n_samples=int(1e6),
             n_features=dim,
@@ -931,7 +933,7 @@ def reproduce_figure_4(
 
                 del model, embedder, classical_model_4
 
-            print(f"Repetition {i+1} done")
+            print(f"Repetition {i + 1} done")
             gc.collect()
 
             ################################################################# Writing the data
@@ -961,7 +963,7 @@ def reproduce_figure_4(
             output_path.write_text(json.dumps(payload))
 
             print(
-                f"Repetition {j+1}/{num_repetitions_per_dataset} done for datatset {i+1}/{num_datasets}"
+                f"Repetition {j + 1}/{num_repetitions_per_dataset} done for datatset {i + 1}/{num_datasets}"
             )
 
     if generate_graph:
@@ -1163,7 +1165,7 @@ def reproduce_figure_5(
 
             del model, classical_model_4, classical_model
 
-        print(f"Repetition {i+1} done")
+        print(f"Repetition {i + 1} done")
         gc.collect()
 
         ################################################################# Writing the data
@@ -1530,7 +1532,7 @@ def reproduce_figure_6(
 
             del model, embedder, classical_model_4, classical_model
 
-        print(f"Repetition {i+1} done")
+        print(f"Repetition {i + 1} done")
         gc.collect()
 
         ################################################################# Writing the data

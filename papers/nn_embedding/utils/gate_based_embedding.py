@@ -8,19 +8,19 @@ from pennylane import numpy as np
 
 # exp(ixZ) gate
 def exp_Z(x, wires, inverse=False):
-    if inverse == False:
+    if not inverse:
         qml.RZ(-2 * x, wires=wires)
-    elif inverse == True:
+    elif inverse:
         qml.RZ(2 * x, wires=wires)
 
 
 # exp(ixZZ) gate
 def exp_ZZ1(x, wires, inverse=False):
-    if inverse == False:
+    if not inverse:
         qml.CNOT(wires=wires)
         qml.RZ(-2 * x, wires=wires[1])
         qml.CNOT(wires=wires)
-    elif inverse == True:
+    elif inverse:
         qml.CNOT(wires=wires)
         qml.RZ(2 * x, wires=wires[1])
         qml.CNOT(wires=wires)
@@ -28,11 +28,11 @@ def exp_ZZ1(x, wires, inverse=False):
 
 # exp(i(pi - x1)(pi - x2)ZZ) gate
 def exp_ZZ2(x1, x2, wires, inverse=False):
-    if inverse == False:
+    if not inverse:
         qml.CNOT(wires=wires)
         qml.RZ(-2 * (np.pi - x1) * (np.pi - x2), wires=wires[1])
         qml.CNOT(wires=wires)
-    elif inverse == True:
+    elif inverse:
         qml.CNOT(wires=wires)
         qml.RZ(2 * (np.pi - x1) * (np.pi - x2), wires=wires[1])
         qml.CNOT(wires=wires)
@@ -44,7 +44,7 @@ class EmbeddingCallable:
 
     # Quantum Embedding 1 for model 1 (Conventional ZZ feature embedding)
     def QuantumEmbedding1(self, input):
-        for i in range(self.N_layers):
+        for _ in range(self.N_layers):
             for j in range(8):
                 qml.Hadamard(wires=j)
                 exp_Z(input[..., j], wires=j)
@@ -54,7 +54,7 @@ class EmbeddingCallable:
 
     def QuantumEmbedding1Trainable(self, input, params):
         param_index = 0
-        for i in range(self.N_layers):
+        for _ in range(self.N_layers):
             for j in range(8):
                 qml.RY(params[param_index], wires=j)
                 param_index += 1
@@ -82,7 +82,7 @@ class EmbeddingCallable:
 
     # Quantum Embedding 2 for model 2
     def QuantumEmbedding2(self, input):
-        for i in range(self.N_layers):
+        for _ in range(self.N_layers):
             for j in range(8):
                 qml.Hadamard(wires=j)
                 exp_Z(input[..., j], wires=j)
@@ -92,7 +92,7 @@ class EmbeddingCallable:
 
     def QuantumEmbedding2Trainable(self, input, params):
         param_index = 0
-        for i in range(self.N_layers):
+        for _ in range(self.N_layers):
             for j in range(8):
                 qml.RY(params[param_index], wires=j)
                 param_index += 1
@@ -120,7 +120,7 @@ class EmbeddingCallable:
 
     # Add 4 qubit embedding for demonstrations
     def Four_QuantumEmbedding1(self, input):
-        for i in range(self.N_layers):
+        for _ in range(self.N_layers):
             for j in range(4):
                 qml.Hadamard(wires=j)
                 exp_Z(input[..., j], wires=j)
@@ -130,7 +130,7 @@ class EmbeddingCallable:
 
     def Four_QuantumEmbedding1Trainable(self, input, params):
         param_index = 0
-        for i in range(self.N_layers):
+        for _ in range(self.N_layers):
             for j in range(4):
                 qml.RY(params[param_index], wires=j)
                 param_index += 1
@@ -157,7 +157,7 @@ class EmbeddingCallable:
             exp_ZZ2(input[..., 3], input[..., 0], wires=[3, 0])
 
     def Four_QuantumEmbedding2(self, input):
-        for i in range(self.N_layers):
+        for _ in range(self.N_layers):
             for j in range(4):
                 qml.Hadamard(wires=j)
                 exp_Z(input[..., j], wires=j)
@@ -167,7 +167,7 @@ class EmbeddingCallable:
 
     def Four_QuantumEmbedding2Trainable(self, input, params):
         param_index = 0
-        for i in range(self.N_layers):
+        for _ in range(self.N_layers):
             for j in range(4):
                 qml.RY(params[param_index], wires=j)
                 param_index += 1

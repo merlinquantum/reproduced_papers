@@ -1,5 +1,6 @@
 import sys
 from pathlib import Path
+
 import pytest
 import torch
 import torch.nn as nn
@@ -9,11 +10,14 @@ REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from papers.nn_embedding.lib.gate_based_model import (
-    NeuralEmbeddingGateBasedModel,
+from papers.nn_embedding.lib.gate_based_model import (  # noqa: E402
     NeuralEmbeddingGateBasedKernel,
+    NeuralEmbeddingGateBasedModel,
 )
-from papers.nn_embedding.utils.gate_based_embedding import EmbeddingCallable, QCNN
+from papers.nn_embedding.utils.gate_based_embedding import (  # noqa: E402
+    QCNN,
+    EmbeddingCallable,
+)
 
 
 @pytest.fixture

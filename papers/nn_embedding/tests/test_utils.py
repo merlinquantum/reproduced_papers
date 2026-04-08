@@ -1,42 +1,42 @@
+import sys
+from copy import deepcopy
+from pathlib import Path
+
+import merlin as ml
+import numpy as np
 import pytest
 import torch
-import numpy as np
-import merlin as ml
-
-import sys
-from pathlib import Path
-from copy import deepcopy
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 REPO_ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from papers.nn_embedding.utils.utils import (
-    calculate_distance,
-    LinearLoss,
-    create_random_pairs,
-    pick_random_data,
-    loss_lower_bound,
-    get_error_bound,
-    random_unitary_gate_based,
-    haar_integral_gate_based,
-    random_state_photonics,
-    haar_integral_photonics,
-    kron,
-    kernel_variance,
-    state_vector_to_density_matrix,
-    randomize_trainable_parameters,
-    TransparentModel,
-    create_param_ensemble,
-)
-from papers.nn_embedding.utils.merlin_model_utils import (
+from papers.nn_embedding.utils.merlin_model_utils import (  # noqa: E402
+    assign_params,
+    compute_x2_permutation,
+    count_parameters_with_prefixes,
     ordered_variable_params,
     rename_params_in_current_order,
     strip_simple_negation_expressions,
-    count_parameters_with_prefixes,
-    compute_x2_permutation,
-    assign_params,
+)  # noqa: E402
+from papers.nn_embedding.utils.utils import (  # noqa: E402
+    LinearLoss,
+    TransparentModel,
+    calculate_distance,
+    create_param_ensemble,
+    create_random_pairs,
+    get_error_bound,
+    haar_integral_gate_based,
+    haar_integral_photonics,
+    kernel_variance,
+    kron,
+    loss_lower_bound,
+    pick_random_data,
+    random_state_photonics,
+    random_unitary_gate_based,
+    randomize_trainable_parameters,
+    state_vector_to_density_matrix,
 )
 
 
