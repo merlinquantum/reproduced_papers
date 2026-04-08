@@ -60,9 +60,9 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
     def _create_distance_layer(self) -> torch.nn.Module:
         @qml.qnode(self.dev, interface="torch")
         def distance_qnode(inputs):
-            split = len(inputs) // 2
-            self.quantum_embedding_layer(inputs[0:split])
-            qml.adjoint(self.quantum_embedding_layer)(inputs[split:])
+            split = inputs.shape[-1] // 2
+            self.quantum_embedding_layer(inputs[..., :split])
+            qml.adjoint(self.quantum_embedding_layer)(inputs[..., split:])
             return qml.probs(wires=range(self.num_qubits))
 
         return qml.qnn.TorchLayer(distance_qnode, weight_shapes={})
@@ -107,9 +107,7 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
             data_2 = data_2.reshape(data_2.size(0), -1)
 
             x = torch.cat([data_1, data_2], dim=1)
-            probs = torch.vstack(
-                tuple(self.main_model.distance_circuit_layer(sample) for sample in x)
-            )
+            probs = self.main_model.distance_circuit_layer(x)
             return probs[:, 0]
 
     class _TrainedEmbeddingModel(nn.Module):
@@ -124,13 +122,7 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
                     embedding_params.size(0), -1
                 )
 
-            probs = torch.stack(
-                tuple(
-                    self.main_model.complete_circuit_layer(sample)
-                    for sample in embedding_params
-                ),
-                dim=0,
-            )
+            probs = self.main_model.complete_circuit_layer(embedding_params)
             return self.main_model.output_grouper(probs)
 
     def train_embedding(
@@ -348,9 +340,9 @@ class NeuralEmbeddingGateBasedKernel(nn.Module):
     def _create_distance_layer(self) -> torch.nn.Module:
         @qml.qnode(self.dev, interface="torch")
         def distance_qnode(inputs):
-            split = len(inputs) // 2
-            self.quantum_embedding_layer(inputs[0:split])
-            qml.adjoint(self.quantum_embedding_layer)(inputs[split:])
+            split = inputs.shape[-1] // 2
+            self.quantum_embedding_layer(inputs[..., :split])
+            qml.adjoint(self.quantum_embedding_layer)(inputs[..., split:])
             return qml.probs(wires=range(self.num_qubits))
 
         return qml.qnn.TorchLayer(distance_qnode, weight_shapes={})
@@ -381,9 +373,7 @@ class NeuralEmbeddingGateBasedKernel(nn.Module):
             data_2 = data_2.reshape(data_2.size(0), -1)
 
             x = torch.cat([data_1, data_2], dim=1)
-            probs = torch.vstack(
-                tuple(self.main_model.distance_circuit_layer(sample) for sample in x)
-            )
+            probs = self.main_model.distance_circuit_layer(x)
             return probs[:, 0]
 
     def train_embedding(

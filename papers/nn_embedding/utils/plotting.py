@@ -564,7 +564,7 @@ def plot_figure_4(
         n_values = np.arange(num_n, dtype=float)
 
     if len(n_values) != num_n:
-        raise ValueError("n_values must have the same length as the data curves.")
+        n_values = np.arange(num_n, dtype=float)
 
     specs = (
         ("nqe", "With NQE", "#8b8b2a", "-"),

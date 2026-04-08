@@ -69,7 +69,7 @@ def reproduce_figure_2(
     use_merlin: bool = False,
     batch_size: int = 100,
     num_epochs_training_embedding: int = 50,
-    num_epochs_training_classifier: int = 50,
+    num_epochs_training_classifier: int = 1000,
     lr: float = 0.01,
     distance: str = "Trace",
     samples_per_class: int = 150,
@@ -476,7 +476,7 @@ def reproduce_figure_3(
     use_merlin: bool = False,
     batch_size: int = 100,
     num_epochs_training_embedding: int = 50,
-    num_epochs_training_classifier: int = 50,
+    num_epochs_training_classifier: int = 1000,
     lr: float = 0.01,
     distance: str = "Trace",
     samples_per_class: int = 150,
@@ -838,11 +838,11 @@ def reproduce_figure_4(
                 )
                 print("Calculating the dimension")
 
-                results["effective_dimension"]["nqe"].append(
-                    get_local_dimension(
-                        model.model, X, Y, epsilon=epsilon, num_samples=num_samples_int
-                    )
+                n_vals, led_vals = get_local_dimension(
+                    model.model, X, Y, epsilon=epsilon, num_samples=num_samples_int
                 )
+                results["effective_dimension"]["nqe"].append(led_vals)
+                results["n_values"] = n_vals
                 del model
 
                 # No NQE
@@ -854,11 +854,10 @@ def reproduce_figure_4(
                 )
                 print("Calculating the dimension")
 
-                results["effective_dimension"]["without_nqe"].append(
-                    get_local_dimension(
-                        model.model, X, Y, epsilon=epsilon, num_samples=num_samples_int
-                    )
+                n_vals, led_vals = get_local_dimension(
+                    model.model, X, Y, epsilon=epsilon, num_samples=num_samples_int
                 )
+                results["effective_dimension"]["without_nqe"].append(led_vals)
 
                 del model, embedder, classifier, classical_model
 
@@ -886,11 +885,11 @@ def reproduce_figure_4(
                 )
                 print("Calculating the dimension")
 
-                results["effective_dimension"]["nqe"].append(
-                    get_local_dimension(
-                        model.model, X, Y, epsilon=epsilon, num_samples=num_samples_int
-                    )
+                n_vals, led_vals = get_local_dimension(
+                    model.model, X, Y, epsilon=epsilon, num_samples=num_samples_int
                 )
+                results["effective_dimension"]["nqe"].append(led_vals)
+                results["n_values"] = n_vals
                 del model
 
                 # No NQE
@@ -914,11 +913,10 @@ def reproduce_figure_4(
                 )
                 print("Calculating the dimension")
 
-                results["effective_dimension"]["without_nqe"].append(
-                    get_local_dimension(
-                        model.model, X, Y, epsilon=epsilon, num_samples=num_samples_int
-                    )
+                n_vals, led_vals = get_local_dimension(
+                    model.model, X, Y, epsilon=epsilon, num_samples=num_samples_int
                 )
+                results["effective_dimension"]["without_nqe"].append(led_vals)
 
                 del model, embedder, classical_model_4
 
@@ -957,7 +955,7 @@ def reproduce_figure_4(
 
     plot_figure_4(
         effective_dimension=payload["effective_dimension"],
-        samples_per_dataset=samples_per_datatset,
+        n_values=results.get("n_values"),
         run_dir=results_dir,
         filename=f"figure_4_{backend}.pdf",
     )
@@ -1553,4 +1551,4 @@ def reproduce_figure_6(
     )
 
 
-reproduce_figure_5(use_merlin=True)
+reproduce_figure_2(use_merlin=False)

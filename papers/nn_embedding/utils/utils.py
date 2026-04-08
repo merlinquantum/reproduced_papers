@@ -58,14 +58,16 @@ def calculate_distance(
         raise ValueError("No distance with that name")
 
 
+# According to the code, not the paper
 def loss_lower_bound(rhos_0: torch.Tensor, rhos_1: torch.Tensor) -> float:
     """
     Empirical risk is lower bounded by this quantity
     """
     N = rhos_0.size(dim=0) + rhos_1.size(dim=1)
 
-    return 0.5 - calculate_distance(
-        torch.sum(rhos_0, dim=0) / N, torch.sum(rhos_1, dim=0) / N
+    return 0.5 * (
+        1
+        - calculate_distance(torch.sum(rhos_0, dim=0) / N, torch.sum(rhos_1, dim=0) / N)
     )
 
 
@@ -249,10 +251,7 @@ def create_basic_gate_based_model(
             self.complete_circuit_layer = complete_circuit_layer
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
-            probs = torch.stack(
-                tuple(self.complete_circuit_layer(sample) for sample in x),
-                dim=0,
-            )
+            probs = self.complete_circuit_layer(x)
             return self.output_grouper(probs)
 
     return BasicModel()
@@ -289,10 +288,7 @@ def create_trainable_embedding_gate_based_model(
             self.complete_circuit_layer = complete_circuit_layer
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
-            probs = torch.stack(
-                tuple(self.complete_circuit_layer(sample) for sample in x),
-                dim=0,
-            )
+            probs = self.complete_circuit_layer(x)
             return self.output_grouper(probs)
 
     return BasicModel()
@@ -415,8 +411,10 @@ def get_local_dimension(
     total_size = y.size(0)
 
     values = []
+    n_values = []
 
     for n in range(250, total_size + 1, (total_size - 250) // 5):
+        n_values.append(n)
         gamma = 1
         kappa = gamma * n / (2 * np.pi * np.log(n))
         params_to_sample = create_param_ensemble(
@@ -475,7 +473,7 @@ def get_local_dimension(
         values.append((2 * np.log(integral)) / (np.log(kappa)))
         print(f"Led of {values[-1]}")
 
-    return values
+    return n_values, values
 
 
 def create_param_ensemble(
