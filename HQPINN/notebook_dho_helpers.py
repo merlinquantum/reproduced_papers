@@ -2,12 +2,19 @@ from __future__ import annotations
 
 import csv
 import importlib
+import sys
 from pathlib import Path
 from time import perf_counter
 
 import matplotlib.pyplot as plt
 import numpy as np
 import torch
+
+PACKAGE_ROOT = Path(__file__).resolve().parent
+REPO_ROOT = PACKAGE_ROOT.parent
+
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 try:
     from IPython import get_ipython
@@ -22,31 +29,49 @@ except ImportError:
     class Markdown(str):
         pass
 
-from .config import (
-    DEFAULT_N_OUTPUTS,
-    DHO_HIDDEN_WIDTH,
-    DHO_LR,
-    DHO_N_EPOCHS,
-    DHO_N_SAMPLES,
-    DHO_NUM_HIDDEN_LAYERS,
-    DHO_PLOT_EVERY,
-    DTYPE,
-    K,
-    LAMBDA1,
-    LAMBDA2,
-    M,
-    MU,
-)
-from .lib.DHO.core_dho import oscillator_loss, u_exact
-from .runtime import seed_everything
-from .utils import count_trainable_params, make_optimizer, make_time_grid
+try:
+    from .config import (
+        DEFAULT_N_OUTPUTS,
+        DHO_HIDDEN_WIDTH,
+        DHO_LR,
+        DHO_N_EPOCHS,
+        DHO_N_SAMPLES,
+        DHO_NUM_HIDDEN_LAYERS,
+        DHO_PLOT_EVERY,
+        DTYPE,
+        K,
+        LAMBDA1,
+        LAMBDA2,
+        M,
+        MU,
+    )
+    from .lib.DHO.core_dho import oscillator_loss, u_exact
+    from .runtime import seed_everything
+    from .utils import count_trainable_params, make_optimizer, make_time_grid
+except ImportError:
+    from HQPINN.config import (
+        DEFAULT_N_OUTPUTS,
+        DHO_HIDDEN_WIDTH,
+        DHO_LR,
+        DHO_N_EPOCHS,
+        DHO_N_SAMPLES,
+        DHO_NUM_HIDDEN_LAYERS,
+        DHO_PLOT_EVERY,
+        DTYPE,
+        K,
+        LAMBDA1,
+        LAMBDA2,
+        M,
+        MU,
+    )
+    from HQPINN.lib.DHO.core_dho import oscillator_loss, u_exact
+    from HQPINN.runtime import seed_everything
+    from HQPINN.utils import count_trainable_params, make_optimizer, make_time_grid
 
 ip = get_ipython()
 if ip is not None:
     ip.run_line_magic("matplotlib", "inline")
 
-PACKAGE_ROOT = Path(__file__).resolve().parent
-REPO_ROOT = PACKAGE_ROOT.parent
 RESULTS_ROOT = REPO_ROOT / "HQPINN" / "results" / "DHO"
 SUMMARY_PATH = RESULTS_ROOT / "dho_summary.csv"
 
@@ -155,6 +180,41 @@ plt.style.use("seaborn-v0_8-whitegrid")
 plt.rcParams["figure.figsize"] = (7, 4)
 plt.rcParams["axes.spines.top"] = False
 plt.rcParams["axes.spines.right"] = False
+
+
+def display_exact_dho_solution() -> None:
+    t_exact = np.linspace(0.0, 1.0, 400)
+    u_ref = u_exact(t_exact)
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.plot(t_exact, u_ref, color="#1f77b4", linewidth=2.5)
+    ax.set_title("Exact DHO solution")
+    ax.set_xlabel("t")
+    ax.set_ylabel("u(t)")
+    fig.tight_layout()
+    plt.show()
+
+
+def display_dho_setup() -> None:
+    t_train = make_time_grid()
+
+    print("DHO constants")
+    print("-" * 72)
+    print(f"m={M}, mu={MU}, k={K}")
+    print()
+    print("Training setup used in this reproduction")
+    print("-" * 72)
+    print("optimizer                : Adam")
+    print(f"learning rate            : {DHO_LR}")
+    print(f"epochs                   : {DHO_N_EPOCHS}")
+    print(f"loss history             : one entry every {DHO_PLOT_EVERY} epochs")
+    print(f"time grid                : {DHO_N_SAMPLES} points on [0, 1]")
+    print(f"interior training points : {int(t_train.shape[0])} (t=0 handled separately)")
+    print(f"loss weights             : lambda1={LAMBDA1}, lambda2={LAMBDA2}")
+    print(f"dtype                    : {DTYPE}")
+
+    display(Markdown("### Variants Compared in This Notebook"))
+    display(Markdown(model_overview_markdown()))
 
 
 def load_symbol(path: str):
@@ -284,12 +344,16 @@ def model_overview_markdown() -> str:
     return "\n".join(lines)
 
 
+def result_display_label(result: dict[str, object]) -> str:
+    return str(result.get("paper_label") or result.get("name"))
+
+
 def plot_loss_curve(result: dict[str, object]) -> None:
     epochs = [point["epoch"] for point in result["history"]]
     losses = [point["loss"] for point in result["history"]]
     fig, ax = plt.subplots(figsize=(7.5, 3.8))
     ax.plot(epochs, losses, marker="o", lw=2.2, color=result["color"])
-    ax.set_title(f"Learning curve - {result['paper_label']} ({result['name']})")
+    ax.set_title(f"Learning curve - {result_display_label(result)}")
     ax.set_xlabel("epoch")
     ax.set_ylabel("loss")
     ax.set_yscale("log")
@@ -336,9 +400,9 @@ def plot_ut_curve(result: dict[str, object]) -> None:
             u_pred,
             color=result["color"],
             lw=2.4,
-            label=f"Prediction ({result['name']})",
+            label="Prediction",
         )
-        ax.set_title(f"Trajectory u(t) - {result['paper_label']} ({result['name']})")
+        ax.set_title(f"Trajectory u(t) - {result_display_label(result)}")
         ax.set_xlabel("t")
         ax.set_ylabel("u(t)")
         ax.legend()
@@ -353,7 +417,7 @@ def plot_ut_curve(result: dict[str, object]) -> None:
             image = plt.imread(png_path)
             fig, ax = plt.subplots(figsize=(7.5, 4.5))
             ax.imshow(image)
-            ax.set_title(f"Trajectory u(t) - {result['paper_label']} ({result['name']})")
+            ax.set_title(f"Trajectory u(t) - {result_display_label(result)}")
             ax.axis("off")
             fig.tight_layout()
             plt.show()
@@ -362,7 +426,8 @@ def plot_ut_curve(result: dict[str, object]) -> None:
 
 
 def display_case_report(result: dict[str, object]) -> None:
-    display(Markdown(f"### {result['paper_label']} (`{result['name']}`)"))
+    display(Markdown(f"### {result_display_label(result)}"))
+    print(f"Code     : {result['name']}")
     print(f"Branches : {result['branch_1']} + {result['branch_2']}")
     print(f"Source   : {result['source']}")
     print(
@@ -478,6 +543,8 @@ __all__ = [
     "count_trainable_params",
     "make_optimizer",
     "make_time_grid",
+    "display_exact_dho_solution",
+    "display_dho_setup",
     "build_model",
     "load_saved_case",
     "model_overview_markdown",

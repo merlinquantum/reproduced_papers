@@ -22,7 +22,7 @@ GAMMA = 1.4
 # ==========================
 
 DHO_LR = 0.002
-DHO_N_EPOCHS = 1801
+DHO_N_EPOCHS = 1800
 DHO_PLOT_EVERY = 100
 DHO_N_SAMPLES = 200
 
