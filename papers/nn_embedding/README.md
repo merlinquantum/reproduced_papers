@@ -124,9 +124,9 @@ To use later \begin{equation}
 - The possible configs options are described in the cli.json file.
 
 - At the papers level, to reproduce figure i between $\{2,3,4,5,6\}$ :
-
- > python3 implementation.py --paper nn_embedding --config configs/fig_i_exp.json
-
+```
+python3 implementation.py --paper nn_embedding --config configs/fig_i_exp.json
+```
 #### Run the tests
 
 - At the papers level:
