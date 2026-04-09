@@ -10,7 +10,7 @@
   "outdir": "results",
   "exp_to_run": "FIG3",
   "dataset": "mnist",
-  "use_merlin": "True",
+  "use_merlin": "False",
   "batch_size": 100,
   "num_epochs_training_embedding": 1000,
   "num_epochs_training_classifier": 1000,

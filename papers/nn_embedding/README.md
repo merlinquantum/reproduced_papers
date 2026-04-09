@@ -1,5 +1,5 @@
 # Neural Quantum Embedding
-The paper that was reproduced and inspired this encoding analysis was: “[Neural Quantum Embedding: Pushing the Limits of Quantum Supervised Learning](https://arxiv.org/abs/2311.11412v2 )” by Hur et al., 2024 .
+ “[Neural Quantum Embedding: Pushing the Limits of Quantum Supervised Learning](https://arxiv.org/abs/2311.11412v2 )” by Hur et al., 2024 .
 
 Code provided: https://github.com/takh04/neural-quantum-embedding  
 
