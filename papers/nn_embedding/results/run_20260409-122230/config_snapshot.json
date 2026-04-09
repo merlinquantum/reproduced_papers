@@ -1,0 +1,28 @@
+{
+  "seed": 1337,
+  "dtype": null,
+  "device": "cpu",
+  "logging": {
+    "level": "info"
+  },
+  "data_root": "/Users/lfvigneux/Documents/GitHub/reproduced_papers/data",
+  "description": "Run the FIG3 experiment",
+  "outdir": "results",
+  "exp_to_run": "FIG3",
+  "dataset": "mnist",
+  "use_merlin": "True",
+  "batch_size": 100,
+  "num_epochs_training_embedding": 1000,
+  "num_epochs_training_classifier": 1000,
+  "lr": 0.01,
+  "distance": "Trace",
+  "samples_per_class": 150,
+  "num_classes": 2,
+  "num_repetitions": 5,
+  "dont_generate_graph": "False",
+  "layers_to_test": [
+    1,
+    2,
+    3
+  ]
+}

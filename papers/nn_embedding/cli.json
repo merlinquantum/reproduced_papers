@@ -51,6 +51,13 @@
       "apply": {"kind": "config_path", "path": "lr"}
     },
     {
+      "flags": ["--distance"],
+      "help": "Distance metric: 'Trace' or 'Hilbert-Schmidt' (default: 'Trace')",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "distance"}
+    },
+    {
       "flags": ["--samples_per_class"],
       "help": "Samples per class (default: 150)",
       "type": "int",
@@ -63,6 +70,13 @@
       "type": "int",
       "default": null,
       "apply": {"kind": "config_path", "path": "num_repetitions"}
+    },
+    {
+      "flags": ["--num_classes"],
+      "help": "Number of classes for FIG2/FIG3 (default: 2)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_classes"}
     },
     {
       "flags": ["--layers_to_test"],
@@ -84,6 +98,41 @@
       "type": "int",
       "default": null,
       "apply": {"kind": "config_path", "path": "num_repetitions_per_dataset"}
+    },
+    {
+      "flags": ["--samples_per_datatset"],
+      "help": "Samples per dataset for FIG4 (default: 400)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "samples_per_datatset"}
+    },
+    {
+      "flags": ["--epsilon"],
+      "help": "Epsilon for FIG4 (default: 0.01)",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "epsilon"}
+    },
+    {
+      "flags": ["--num_samples_int"],
+      "help": "Number of integration samples for FIG4 (default: 100)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_samples_int"}
+    },
+    {
+      "flags": ["--weights"],
+      "help": "Weights for FIG5, comma-separated (default: '0.1,0.2,...,0.9')",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "weights"}
+    },
+    {
+      "flags": ["--dont_generate_graph"],
+      "help": "Disable graph generation",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dont_generate_graph"}
     }
   ]
 }

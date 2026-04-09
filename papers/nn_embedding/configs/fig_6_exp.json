@@ -5,9 +5,10 @@
     "dataset": "mnist",
     "use_merlin": "False",
     "batch_size": 100,
-    "num_epochs_training_embedding": 50,
+    "num_epochs_training_embedding": 1000,
     "lr": 0.01,
     "distance": "Trace",
-    "samples_per_class": 150,
-    "num_repetitions": 5
+    "samples_per_class": 500,
+    "num_repetitions": 8,
+    "dont_generate_graph":"False"
 }

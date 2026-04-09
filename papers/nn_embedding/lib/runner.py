@@ -58,9 +58,11 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         )
     elif exp_to_run == "FIG3":
         print("Running the FIG3 experiment")
-        layers = cfg.get("layers_to_test", [1, 2, 3])
+        layers = cfg.get("layers_to_test", None)
         if isinstance(layers, str):
             layers = list(map(int, layers.split(",")))
+        elif isinstance(layers, list):
+            layers = [int(x) for x in layers]
         reproduce_figure_3(
             dataset=cfg.get("dataset", "mnist"),
             use_merlin=use_merlin,
@@ -96,9 +98,11 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         )
     elif exp_to_run == "FIG5":
         print("Running the FIG5 experiment")
-        weights = cfg.get("weights")
+        weights = cfg.get("weights", None)
         if isinstance(weights, str):
             weights = list(map(float, weights.split(",")))
+        elif isinstance(weights, list):
+            weights = [float(w) for w in weights]
         reproduce_figure_5(
             dataset=cfg.get("dataset", "mnist"),
             use_merlin=use_merlin,

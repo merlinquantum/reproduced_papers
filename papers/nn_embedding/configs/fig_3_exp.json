@@ -5,12 +5,13 @@
     "dataset": "mnist",
     "use_merlin": "False",
     "batch_size": 100,
-    "num_epochs_training_embedding": 50,
+    "num_epochs_training_embedding": 1000,
     "num_epochs_training_classifier": 1000,
     "lr": 0.01,
     "distance": "Trace",
     "samples_per_class": 150,
     "num_classes": 2,
     "num_repetitions": 5,
-    "layers_to_test": "1,2,3"
+    "layers_to_test": [1, 2, 3],
+    "dont_generate_graph":"False"
 }

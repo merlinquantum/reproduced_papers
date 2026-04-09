@@ -11,5 +11,6 @@
     "num_datasets": 10,
     "num_repetitions_per_dataset": 20,
     "epsilon": 0.01,
-    "num_samples_int": 100
+    "num_samples_int": 100,
+    "dont_generate_graph":"False"
 }

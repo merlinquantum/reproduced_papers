@@ -625,7 +625,6 @@ def reproduce_figure_3(
                     return_data=True,
                     num_classes=num_classes,
                     trainable_embedding=True,
-                    num_layers=layer,
                 )
 
                 results["loss_lists_classifier"][f"layer_{layer}"].append(loss_list)
@@ -1206,10 +1205,10 @@ def reproduce_figure_6(
     dataset: str = "mnist",
     use_merlin: bool = False,
     batch_size: int = 100,
-    num_epochs_training_embedding: int = 50,
+    num_epochs_training_embedding: int = 1000,
     lr: float = 0.01,
     distance: str = "Trace",
-    samples_per_class: int = 150,
+    samples_per_class: int = 500,
     num_repetitions: int = 5,
     run_dir: Path = None,
     generate_graph: bool = True,
@@ -1530,7 +1529,7 @@ def reproduce_figure_6(
                 kernel_variance(test_kernel_matrix)
             )
 
-            del model, embedder, classical_model_4, classical_model
+            del model, classical_model_4, classical_model
 
         print(f"Repetition {i + 1} done")
         gc.collect()
