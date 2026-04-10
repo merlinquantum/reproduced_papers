@@ -78,6 +78,50 @@ def reproduce_figure_2(
     run_dir: Path = None,
     generate_graph: bool = True,
 ):
+    """Reproduce figure 2 for the fixed-embedding comparison.
+
+    This experiment compares PCA-NQE, NQE, and a baseline without embedding
+    training on a binary classification task. It records the embedding loss,
+    encoded-state distances, lower bounds, classifier loss curves, and final
+    train/test accuracies across repeated runs. Results are serialized to JSON
+    and, when requested, plotted as the figure 2 panels.
+
+    Parameters
+    ----------
+    dataset : str, optional
+        Dataset name passed to ``data_load_and_process`` (default: ``"mnist"``).
+    use_merlin : bool, optional
+        If ``True``, run the MerLin photonic implementation; otherwise use the
+        gate-based PennyLane implementation (default: ``False``).
+    batch_size : int, optional
+        Mini-batch size used during training (default: ``100``).
+    num_epochs_training_embedding : int, optional
+        Number of epochs for the embedding-training phase (default: ``50``).
+    num_epochs_training_classifier : int, optional
+        Number of epochs for the classifier-training phase (default: ``1000``).
+    lr : float, optional
+        Learning rate used for optimization (default: ``0.01``).
+    distance : str, optional
+        Distance metric used during embedding training (default: ``"Trace"``).
+    samples_per_class : int, optional
+        Number of data points drawn per class (default: ``150``).
+    num_classes : int, optional
+        Number of target classes (default: ``2``).
+    num_repetitions : int, optional
+        Number of independent repetitions to complete (default: ``5``).
+    run_dir : Path, optional
+        Output directory used for JSON artifacts and generated plots
+        (default: ``None``, which falls back to the paper results directory).
+    generate_graph : bool, optional
+        If ``True``, generate the figure PDF in addition to the JSON results
+        (default: ``True``).
+
+    Returns
+    -------
+    dict
+        Serialized experiment payload containing the recorded metrics and the
+        configuration used for the run.
+    """
     keys = ("pca_nqe", "nqe", "without_nqe")
     embedding_keys = ("pca_nqe", "nqe")
 
@@ -492,6 +536,48 @@ def reproduce_figure_3(
     run_dir: Path = None,
     generate_graph: bool = True,
 ):
+    """Reproduce figure 3 for trainable-embedding comparisons.
+
+    This experiment compares PCA-NQE and NQE against trainable embedding
+    baselines with different numbers of data-reuploading layers. For each
+    repetition it trains the relevant models, records classifier loss curves
+    and accuracies, writes the aggregated results to JSON, and optionally saves
+    the figure 3 plot.
+
+    Parameters
+    ----------
+    dataset : str, optional
+        Dataset name passed to ``data_load_and_process`` (default: ``"mnist"``).
+    use_merlin : bool, optional
+        If ``True``, run the MerLin photonic implementation; otherwise use the
+        gate-based PennyLane implementation (default: ``False``).
+    batch_size : int, optional
+        Mini-batch size used during training (default: ``100``).
+    num_epochs_training_embedding : int, optional
+        Number of epochs for the embedding-training phase of NQE models.
+        (default: ``50``).
+    num_epochs_training_classifier : int, optional
+        Number of epochs for classifier training (default: ``1000``).
+    lr : float, optional
+        Learning rate used for optimization (default: ``0.01``).
+    distance : str, optional
+        Distance metric used during embedding training (default: ``"Trace"``).
+    samples_per_class : int, optional
+        Number of data points drawn per class (default: ``150``).
+    num_classes : int, optional
+        Number of target classes (default: ``2``).
+    num_repetitions : int, optional
+        Number of independent repetitions to complete (default: ``5``).
+    layers_to_test : list[int] | None, optional
+        Reuploading-layer counts to benchmark against NQE. If ``None``, uses
+        ``[1, 2, 3]`` (default: ``None``).
+    run_dir : Path, optional
+        Output directory used for JSON artifacts and generated plots
+        (default: ``None``, which falls back to the paper results directory).
+    generate_graph : bool, optional
+        If ``True``, generate the figure PDF in addition to the JSON results
+        (default: ``True``).
+    """
     if layers_to_test is None:
         layers_to_test = [1, 2, 3]
 
@@ -804,6 +890,48 @@ def reproduce_figure_4(
     run_dir: Path = None,
     generate_graph: bool = True,
 ):
+    """Reproduce figure 4 by estimating the local effective dimension.
+
+    Synthetic datasets are generated repeatedly, NQE and no-NQE models are
+    evaluated, and the local effective dimension is estimated from sampled
+    parameter neighborhoods. The raw curves are saved to JSON and optionally
+    rendered as the figure 4 plot.
+
+    Parameters
+    ----------
+    use_merlin : bool, optional
+        If ``True``, run the MerLin photonic implementation; otherwise use the
+        gate-based PennyLane implementation (default: ``False``).
+    batch_size : int, optional
+        Mini-batch size used during embedding training (default: ``25``).
+    num_epochs_training_embedding : int, optional
+        Number of epochs for the embedding-training phase (default: ``100``).
+    lr : float, optional
+        Learning rate used for optimization (default: ``0.01``).
+    distance : str, optional
+        Distance metric used during embedding training (default: ``"Trace"``).
+    samples_per_dataset : int, optional
+        Number of samples reserved for training inside each synthetic dataset.
+        The full synthetic dataset size remains fixed at ``1e6``
+        (default: ``400``).
+    num_datasets : int, optional
+        Number of synthetic datasets to generate (default: ``10``).
+    num_repetitions_per_dataset : int, optional
+        Number of local-dimension evaluations performed per dataset
+        (default: ``20``).
+    epsilon : float, optional
+        Radius of the parameter neighborhood used for local-dimension sampling
+        (default: ``0.01``).
+    num_samples_int : int, optional
+        Number of parameter samples used to approximate the integral term
+        (default: ``100``).
+    run_dir : Path, optional
+        Output directory used for JSON artifacts and generated plots
+        (default: ``None``, which falls back to the paper results directory).
+    generate_graph : bool, optional
+        If ``True``, generate the figure PDF in addition to the JSON results
+        (default: ``True``).
+    """
     keys = ("nqe", "without_nqe")
 
     results = {
@@ -909,20 +1037,10 @@ def reproduce_figure_4(
                 print("No NQE")
                 model = NeuralEmbeddingGateBasedModel(
                     num_qubits=4,
-                    classical_model=TransparentModel,
+                    classical_model=TransparentModel(),
                     quantum_embedding_layer=EmbeddingCallable().Four_QuantumEmbedding1,
                     quantum_classifier=FourQCNN,
                     quantum_classifier_params_shape=(30),
-                )
-                print("Training embedding")
-                model.train_embedding(
-                    x_train=X,
-                    y_train=Y,
-                    distance=distance,
-                    batch_size=batch_size,
-                    num_epochs=num_epochs_training_embedding,
-                    lr=lr,
-                    return_data=False,
                 )
                 print("Calculating the dimension")
 
@@ -931,7 +1049,7 @@ def reproduce_figure_4(
                 )
                 results["effective_dimension"]["without_nqe"].append(led_vals)
 
-                del model, embedder, classical_model_4
+                del model, classical_model_4
 
             print(f"Repetition {i + 1} done")
             gc.collect()
@@ -990,6 +1108,43 @@ def reproduce_figure_5(
     run_dir: Path = None,
     generate_graph: bool = True,
 ):
+    """Reproduce figure 5 for the generalization-error upper bound.
+
+    This experiment measures how the estimated generalization bound varies with
+    the regularization weight for PCA-NQE, NQE, and a baseline without
+    embedding training. Kernel matrices are computed after training, converted
+    to error bounds for each regularization value, written to JSON, and
+    optionally plotted as figure 5.
+
+    Parameters
+    ----------
+    dataset : str, optional
+        Dataset name passed to ``data_load_and_process`` (default: ``"mnist"``).
+    use_merlin : bool, optional
+        If ``True``, run the MerLin photonic implementation; otherwise use the
+        gate-based PennyLane implementation (default: ``False``).
+    batch_size : int, optional
+        Mini-batch size used during embedding training (default: ``100``).
+    num_epochs_training_embedding : int, optional
+        Number of epochs for the embedding-training phase (default: ``1000``).
+    lr : float, optional
+        Learning rate used for optimization (default: ``0.01``).
+    distance : str, optional
+        Distance metric used during embedding training (default: ``"Trace"``).
+    samples_per_class : int, optional
+        Number of data points drawn per class (default: ``500``).
+    num_repetitions : int, optional
+        Number of independent repetitions to complete (default: ``5``).
+    weights : list[float], optional
+        Regularization weights used when evaluating the error bound
+        (default: ``np.arange(0.1, 1, 0.1).tolist()``).
+    run_dir : Path, optional
+        Output directory used for JSON artifacts and generated plots
+        (default: ``None``, which falls back to the paper results directory).
+    generate_graph : bool, optional
+        If ``True``, generate the figure PDF in addition to the JSON results
+        (default: ``True``).
+    """
     keys = ("pca_nqe", "nqe", "without_nqe")
 
     results = {
@@ -1214,6 +1369,39 @@ def reproduce_figure_6(
     run_dir: Path = None,
     generate_graph: bool = True,
 ):
+    """Reproduce figure 6 for expressivity and kernel-variance metrics.
+
+    This experiment compares PCA-NQE, NQE, and a baseline without embedding
+    training using two metrics: deviation from a 2-design and kernel variance.
+    Metrics are computed on both train and test splits across repeated runs,
+    saved to JSON, and optionally rendered as the figure 6 plot.
+
+    Parameters
+    ----------
+    dataset : str, optional
+        Dataset name passed to ``data_load_and_process`` (default: ``"mnist"``).
+    use_merlin : bool, optional
+        If ``True``, run the MerLin photonic implementation; otherwise use the
+        gate-based PennyLane implementation (default: ``False``).
+    batch_size : int, optional
+        Mini-batch size used during embedding training (default: ``100``).
+    num_epochs_training_embedding : int, optional
+        Number of epochs for the embedding-training phase (default: ``1000``).
+    lr : float, optional
+        Learning rate used for optimization (default: ``0.01``).
+    distance : str, optional
+        Distance metric used during embedding training (default: ``"Trace"``).
+    samples_per_class : int, optional
+        Number of data points drawn per class (default: ``500``).
+    num_repetitions : int, optional
+        Number of independent repetitions to complete (default: ``5``).
+    run_dir : Path, optional
+        Output directory used for JSON artifacts and generated plots
+        (default: ``None``, which falls back to the paper results directory).
+    generate_graph : bool, optional
+        If ``True``, generate the figure PDF in addition to the JSON results
+        (default: ``True``).
+    """
     keys = ("pca_nqe", "nqe", "without_nqe")
 
     results = {

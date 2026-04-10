@@ -1,5 +1,7 @@
-"""
-File from the original repo
+"""Gate-based quantum embedding circuits.
+
+Adapted from the original repository:
+https://github.com/takh04/neural-quantum-embedding
 """
 
 import pennylane as qml

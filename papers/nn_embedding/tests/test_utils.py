@@ -1,3 +1,7 @@
+"""
+Note: An LLM was used to create some tests.
+"""
+
 import sys
 from copy import deepcopy
 from pathlib import Path

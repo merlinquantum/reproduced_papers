@@ -19,7 +19,8 @@ sys.path.insert(0, str(PROJECT_ROOT))
 from papers.nn_embedding.utils.merlin_model_utils import assign_params  # noqa: E402
 
 ############################################################################################################
-# From the code of the paper
+# Adapted from the original repository:
+# https://github.com/takh04/neural-quantum-embedding
 
 
 def create_random_pairs(batch_size, X, Y):
@@ -77,10 +78,7 @@ def loss_lower_bound(rhos_0: torch.Tensor, rhos_1: torch.Tensor) -> float:
 
 def get_error_bound(weights: np.ndarray, Kernel: np.ndarray, Y_train: np.ndarray):
     N = len(Y_train)
-    # TODO Add it to compute_kernel_instead!
-    # Per copilot to make sure that even numerically, the kernel matrix is trace preserving
-    # The fidelity kernel is theoretically PSD, but float32 quantum simulation
-    # introduces small negative eigenvalues. Project onto the PSD cone.
+    # TODO Add it to compute_kernel_instead
     K = Kernel.astype(np.float64)
     eigvals, eigvecs = np.linalg.eigh(K)
     eigvals = np.maximum(eigvals, 0.0)
@@ -483,10 +481,31 @@ def get_local_dimension(
 def create_param_ensemble(
     params: list[torch.Tensor], d: int, epsilon: float = 1.0, num_samples: int = 100
 ):
-    """
-    Uniformly sample for a d dimension ball, code from
+    """Sample parameter vectors uniformly from a *d*-dimensional ball.
 
-    https://extremelearning.com.au/how-to-generate-uniformly-random-points-on-n-spheres-and-n-balls/
+    Each sample is drawn uniformly inside a ball of radius *epsilon*
+    centered at the current parameter values using Muller's method [1]_.
+
+    Parameters
+    ----------
+    params : list[torch.Tensor]
+        Current model parameters (used as the ball center).
+    d : int
+        Total number of scalar parameters (dimension of the ball).
+    epsilon : float, optional
+        Radius of the sampling ball (default: 1.0).
+    num_samples : int, optional
+        Number of parameter vectors to generate (default: 100).
+
+    Returns
+    -------
+    list[list[torch.Tensor]]
+        A list of *num_samples* parameter vectors, each split into
+        tensors matching the shapes of *params*.
+
+    References
+    ----------
+    .. [1] https://extremelearning.com.au/how-to-generate-uniformly-random-points-on-n-spheres-and-n-balls/
     """
     shapes = [p.shape for p in params]
     params_flat = np.concatenate([p.detach().numpy().flatten() for p in params])

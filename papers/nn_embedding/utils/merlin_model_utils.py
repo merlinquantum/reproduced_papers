@@ -1,5 +1,6 @@
-"""
-LLM helped me a lot to to implemented in details about what I wanted here
+"""MerLin circuit utilities — parameter ordering, renaming, and assignment.
+
+Note: An LLM was used to help implement the detailed logic in this module.
 """
 
 import merlin as ml

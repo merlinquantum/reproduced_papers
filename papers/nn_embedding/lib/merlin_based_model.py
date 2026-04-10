@@ -30,6 +30,14 @@ from papers.nn_embedding.utils.utils import (  # noqa: E402
 
 
 class NeuralEmbeddingMerLinModel(nn.Module):
+    """Photonic hybrid model used for MerLin classification experiments.
+
+    The model combines a classical encoder with a frozen photonic embedding
+    layer and a trainable photonic classifier. It exposes the two-stage
+    training procedure used in the paper: embedding training followed by
+    classifier training.
+    """
+
     def __init__(
         self,
         classical_model: nn.Module,
@@ -37,9 +45,24 @@ class NeuralEmbeddingMerLinModel(nn.Module):
         quantum_classifier: ml.QuantumLayer,
         num_classes: int = 2,
     ):
-        """
-        The quantum classifier must have amplitude encoding on and return probs
-        The embedding_layer must return amplitudes and have no input parameters, only trainable ones. The input state must also be a basis state
+        """Initialize a MerLin neural embedding classifier.
+
+        Parameters
+        ----------
+        classical_model : nn.Module
+            Classical encoder that maps input data to the trainable parameters
+            of the quantum embedding layer.
+        quantum_embedding_layer : ml.QuantumLayer
+            Photonic embedding layer that returns amplitudes, takes no direct
+            data input parameters, and is parameterized only through the values
+            produced by ``classical_model`` that will be assigned through the
+            QuantumLayer's trainable parameters.
+        quantum_classifier : ml.QuantumLayer
+            Photonic classifier layer with amplitude encoding enabled and a
+            probabilistic output measurement.
+        num_classes : int, optional
+            Number of output classes grouped from the quantum probabilities
+            (default: ``2``).
         """
         super().__init__()
         self.classical_encoder = classical_model
@@ -124,11 +147,6 @@ class NeuralEmbeddingMerLinModel(nn.Module):
             data_1 = data_1.reshape(data_1.size(0), -1)
             data_2 = data_2.reshape(data_2.size(0), -1)
 
-            # # Not exact but similar
-            # states_1 = self.main_model.quantum_embedding_layer(data_1)
-            # states_2 = self.main_model.quantum_embedding_layer(data_2)
-            # return torch.linalg.vecdot(states_2, states_1, dim=1)
-
             return self.main_model.similarity_layer(data_1, data_2)[
                 ..., self.target_index
             ]
@@ -166,6 +184,43 @@ class NeuralEmbeddingMerLinModel(nn.Module):
         opt: torch.optim = torch.optim.Adam,
         return_data: bool = False,
     ) -> list[list[float]] | None:
+        """Train the classical encoder to maximize class separation.
+
+        Parameters
+        ----------
+        x_train : torch.Tensor
+            Training inputs.
+        y_train : torch.Tensor
+            Training labels.
+        x_test : torch.Tensor, optional
+            Test inputs used for metric tracking when ``return_data`` is
+            enabled (default: ``None``).
+        y_test : torch.Tensor, optional
+            Test labels used for metric tracking when ``return_data`` is
+            enabled (default: ``None``).
+        distance : str, optional
+            Distance metric used to monitor class separation
+            (default: ``"Trace"``).
+        batch_size : int, optional
+            Number of random pairs sampled per optimization step
+            (default: ``25``).
+        num_epochs : int, optional
+            Number of embedding-training epochs (default: ``100``).
+        lr : float, optional
+            Learning rate used by the optimizer (default: ``0.01``).
+        opt : torch.optim, optional
+            Optimizer class used for training (default: ``torch.optim.Adam``).
+        return_data : bool, optional
+            If ``True``, also return tracked losses, distances, and lower
+            bounds for the train and test sets (default: ``False``).
+
+        Returns
+        -------
+        list[list[float]] | tuple | None
+            Returns ``None`` when ``return_data`` is ``False``. Otherwise
+            returns the loss history, train/test distance histories, and the
+            train/test empirical lower bounds.
+        """
         optimizer = opt(self.classical_encoder.parameters(), lr=lr)
         criterion = torch.nn.MSELoss()
 
@@ -263,6 +318,39 @@ class NeuralEmbeddingMerLinModel(nn.Module):
         opt: torch.optim = torch.optim.Adam,
         return_data: bool = False,
     ) -> list[list[float]] | None:
+        """Train the photonic classifier after freezing the learned embedding.
+
+        Parameters
+        ----------
+        x_train : torch.Tensor
+            Training inputs.
+        y_train : torch.Tensor
+            Training labels.
+        x_test : torch.Tensor, optional
+            Test inputs used for accuracy tracking when ``return_data`` is
+            enabled (default: ``None``).
+        y_test : torch.Tensor, optional
+            Test labels used for accuracy tracking when ``return_data`` is
+            enabled (default: ``None``).
+        batch_size : int, optional
+            Number of training examples drawn per optimization step
+            (default: ``25``).
+        num_epochs : int, optional
+            Number of classifier-training epochs (default: ``100``).
+        lr : float, optional
+            Learning rate used by the optimizer (default: ``0.01``).
+        opt : torch.optim, optional
+            Optimizer class used for training (default: ``torch.optim.Adam``).
+        return_data : bool, optional
+            If ``True``, also return the loss history and train/test accuracy
+            histories (default: ``False``).
+
+        Returns
+        -------
+        list[list[float]] | tuple | None
+            Returns ``None`` when ``return_data`` is ``False``. Otherwise
+            returns the loss history together with train and test accuracies.
+        """
         optimizer = opt(self.quantum_classifier.parameters(), lr=lr)
         criterion = LinearLoss()
 
@@ -326,14 +414,29 @@ class NeuralEmbeddingMerLinModel(nn.Module):
 
 
 class NeuralEmbeddingMerLinKernel(nn.Module):
+    """Photonic hybrid model specialized for kernel computations.
+
+    This variant keeps the embedding-training machinery but exposes a kernel
+    evaluation interface instead of a trainable classifier head.
+    """
+
     def __init__(
         self,
         classical_model: nn.Module,
         quantum_embedding_layer: ml.QuantumLayer,
     ):
-        """
-        The quantum classifier must have amplitude encoding on and return probs
-        The embedding_layer must return amplitudes and have no input parameters, only trainable ones. The input state must also be a basis state
+        """Initialize a MerLin neural embedding kernel model.
+
+        Parameters
+        ----------
+        classical_model : nn.Module
+            Classical encoder that maps input data to the trainable parameters
+            of the quantum embedding layer.
+        quantum_embedding_layer : ml.QuantumLayer
+            Photonic embedding layer that returns amplitudes, takes no direct
+            data input parameters, and is parameterized only through the values
+            produced by ``classical_model`` that will be assigned through the
+            QuantumLayer's trainable parameters.
         """
         super().__init__()
         self.classical_encoder = classical_model
@@ -435,6 +538,43 @@ class NeuralEmbeddingMerLinKernel(nn.Module):
         opt: torch.optim = torch.optim.Adam,
         return_data: bool = False,
     ) -> list[list[float]] | None:
+        """Train the classical encoder for kernel-based experiments.
+
+        Parameters
+        ----------
+        x_train : torch.Tensor
+            Training inputs.
+        y_train : torch.Tensor
+            Training labels.
+        x_test : torch.Tensor, optional
+            Test inputs used for metric tracking when ``return_data`` is
+            enabled (default: ``None``).
+        y_test : torch.Tensor, optional
+            Test labels used for metric tracking when ``return_data`` is
+            enabled (default: ``None``).
+        distance : str, optional
+            Distance metric used to monitor class separation
+            (default: ``"Trace"``).
+        batch_size : int, optional
+            Number of random pairs sampled per optimization step
+            (default: ``25``).
+        num_epochs : int, optional
+            Number of embedding-training epochs (default: ``100``).
+        lr : float, optional
+            Learning rate used by the optimizer (default: ``0.01``).
+        opt : torch.optim, optional
+            Optimizer class used for training (default: ``torch.optim.Adam``).
+        return_data : bool, optional
+            If ``True``, also return tracked losses, distances, and lower
+            bounds for the train and test sets (default: ``False``).
+
+        Returns
+        -------
+        list[list[float]] | tuple | None
+            Returns ``None`` when ``return_data`` is ``False``. Otherwise
+            returns the loss history, train/test distance histories, and the
+            train/test empirical lower bounds.
+        """
         optimizer = opt(self.classical_encoder.parameters(), lr=lr)
         criterion = torch.nn.MSELoss()
 
@@ -521,6 +661,21 @@ class NeuralEmbeddingMerLinKernel(nn.Module):
             )
 
     def compute_kernel_matrix(self, X_data: torch.Tensor, batch_size: int = 256):
+        """Compute the symmetric kernel matrix for a dataset.
+
+        Parameters
+        ----------
+        X_data : torch.Tensor
+            Input dataset for which to evaluate all pairwise kernel values.
+        batch_size : int, optional
+            Number of upper-triangular pairs evaluated per forward pass
+            (default: ``256``).
+
+        Returns
+        -------
+        torch.Tensor
+            Symmetric kernel matrix of shape ``(n_samples, n_samples)``.
+        """
         self.kernel_function.eval()
         n = X_data.size(0)
         idx_i, idx_j = torch.triu_indices(n, n)
@@ -547,6 +702,17 @@ class NeuralEmbeddingMerLinKernel(nn.Module):
 
 
 def create_basic_merlin_model() -> NeuralEmbeddingMerLinModel:
+    """Create the default MerLin hybrid model used for basic experiments.
+
+    The returned model couples a single entangling-layer photonic embedder, a
+    single entangling-layer photonic classifier, and a small fully connected
+    classical encoder that maps 8 features to the embedder parameter space.
+
+    Returns
+    -------
+    NeuralEmbeddingMerLinModel
+        Initialized MerLin hybrid model with the default architecture.
+    """
     # Quantum embedding
     circ = ml.CircuitBuilder(n_modes=8)
     circ.add_entangling_layer()

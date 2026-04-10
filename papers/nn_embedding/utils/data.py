@@ -1,5 +1,7 @@
-"""
-File from the original repo
+"""Data loading functions.
+
+Adapted from the original repository:
+https://github.com/takh04/neural-quantum-embedding
 """
 
 import numpy as np

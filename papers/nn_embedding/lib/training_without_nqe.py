@@ -45,6 +45,61 @@ def train_gate_based(
     trainable_embedding: bool = False,
     embedding_params_shape: tuple[int, ...] | None = None,
 ) -> list[list[float]] | None:
+    """Train a gate-based baseline without the two-stage NQE procedure.
+
+    This helper is used for the comparison models where the classifier is
+    trained directly, with either a fixed embedding or a jointly trainable
+    embedding circuit.
+
+    Parameters
+    ----------
+    num_qubits : int
+        Number of qubits used by the quantum circuit.
+    quantum_embedding_circuit : callable
+        Gate-based embedding circuit applied before classification.
+    quantum_classifier_circuit : callable
+        Gate-based classifier circuit applied after the embedding.
+    quantum_classifier_params_shape : tuple[int, ...]
+        Shape of the trainable classifier parameters.
+    x_train : torch.Tensor
+        Training inputs.
+    y_train : torch.Tensor
+        Training labels.
+    x_test : torch.Tensor
+        Test inputs.
+    y_test : torch.Tensor
+        Test labels.
+    batch_size : int, optional
+        Number of training examples drawn per optimization step
+        (default: ``25``).
+    num_epochs : int, optional
+        Number of training epochs (default: ``100``).
+    lr : float, optional
+        Learning rate used by the optimizer (default: ``0.01``).
+    opt : torch.optim, optional
+        Optimizer class used for training (default: ``torch.optim.Adam``).
+    return_data : bool, optional
+        If ``True``, also return loss, accuracy, distance, and lower-bound
+        metrics for train and test data (default: ``False``).
+    num_classes : int, optional
+        Number of output classes (default: ``2``).
+    distance : str, optional
+        Distance metric used when reporting encoded-state separation
+        (default: ``"Trace"``).
+    trainable_embedding : bool, optional
+        If ``True``, include trainable embedding parameters in the model
+        (default: ``False``).
+    embedding_params_shape : tuple[int, ...] | None, optional
+        Shape of the trainable embedding parameters when
+        ``trainable_embedding`` is enabled (default: ``None``).
+
+    Returns
+    -------
+    list[list[float]] | tuple | None
+        Returns ``None`` when ``return_data`` is ``False``. Otherwise returns
+        the loss history, train/test accuracies, train/test distances, and the
+        train/test empirical lower bounds.
+    """
 
     ### Creating the model
     if trainable_embedding:
@@ -189,6 +244,54 @@ def train_merlin_based(
     distance: str = "Trace",
     trainable_embedding: bool = False,
 ):
+    """Train a MerLin photonic baseline without the two-stage NQE procedure.
+
+    This helper is used for the comparison models where the photonic
+    classifier is trained directly, with either a fixed embedding or a jointly
+    trainable embedding layer.
+
+    Parameters
+    ----------
+    quantum_embedding_layer : ml.QuantumLayer
+        Photonic embedding layer used to encode the inputs.
+    quantum_classifier : ml.QuantumLayer
+        Photonic classifier layer optimized during training.
+    x_train : torch.Tensor
+        Training inputs.
+    y_train : torch.Tensor
+        Training labels.
+    x_test : torch.Tensor
+        Test inputs.
+    y_test : torch.Tensor
+        Test labels.
+    batch_size : int, optional
+        Number of training examples drawn per optimization step
+        (default: ``25``).
+    num_epochs : int, optional
+        Number of training epochs (default: ``100``).
+    lr : float, optional
+        Learning rate used by the optimizer (default: ``0.01``).
+    opt : torch.optim, optional
+        Optimizer class used for training (default: ``torch.optim.Adam``).
+    return_data : bool, optional
+        If ``True``, also return loss, accuracy, distance, and lower-bound
+        metrics for train and test data (default: ``False``).
+    num_classes : int, optional
+        Number of output classes (default: ``2``).
+    distance : str, optional
+        Distance metric used when reporting encoded-state separation
+        (default: ``"Trace"``).
+    trainable_embedding : bool, optional
+        If ``True``, optimize a model with a trainable embedding layer
+        (default: ``False``).
+
+    Returns
+    -------
+    list[list[float]] | tuple | None
+        Returns ``None`` when ``return_data`` is ``False``. Otherwise returns
+        the loss history, train/test accuracies, train/test distances, and the
+        train/test empirical lower bounds.
+    """
     if trainable_embedding:
         model = create_trainable_embedding_merlin_model(
             quantum_embedding_layer, quantum_classifier, num_classes

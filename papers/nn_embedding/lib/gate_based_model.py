@@ -25,6 +25,13 @@ from papers.nn_embedding.utils.utils import (  # noqa: E402
 
 
 class NeuralEmbeddingGateBasedModel(nn.Module):
+    """Gate-based hybrid model used for classification experiments.
+
+    The model combines a classical encoder with a fixed quantum embedding and a
+    trainable quantum classifier. It exposes two training stages matching the
+    paper workflow: embedding training followed by classifier training.
+    """
+
     def __init__(
         self,
         num_qubits: int,
@@ -34,9 +41,26 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
         quantum_classifier_params_shape: tuple[int, ...],
         num_classes: int = 2,
     ):
-        """
-        The quantum_embedding_layer must not have other
-        trainable parameters that the ones in the input parameter of the function
+        """Initialize a gate-based neural embedding classifier.
+
+        Parameters
+        ----------
+        num_qubits : int
+            Number of qubits used by the quantum device and circuits.
+        classical_model : nn.Module
+            Classical encoder that maps input data to embedding parameters.
+        quantum_embedding_layer : callable
+            Quantum embedding circuit. It must take its trainable values only
+            from the provided input tensor and should not own additional
+            trainable parameters.
+        quantum_classifier : callable
+            Quantum classifier circuit applied after the embedding.
+        quantum_classifier_params_shape : tuple[int, ...]
+            Shape of the trainable classifier parameters passed to the quantum
+            classifier TorchLayer.
+        num_classes : int, optional
+            Number of output classes grouped from the quantum probabilities
+            (default: ``2``).
         """
         super().__init__()
         self.num_qubits = num_qubits
@@ -113,7 +137,6 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
         def __init__(self, main_model):
             super().__init__()
             object.__setattr__(self, "main_model", main_model)
-            # TODO, verify that that object is workning its not the same implementation as before
             self.quantum_classifier = main_model.complete_circuit_layer
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -139,6 +162,47 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
         opt: torch.optim = torch.optim.Adam,
         return_data: bool = False,
     ) -> list[list[float]] | None:
+        """Train the classical encoder to maximize class separation.
+
+        During this phase, the classical encoder is optimized so that embedded
+        states from different classes become more distinguishable according to
+        the chosen distance metric.
+
+        Parameters
+        ----------
+        x_train : torch.Tensor
+            Training inputs.
+        y_train : torch.Tensor
+            Training labels.
+        x_test : torch.Tensor, optional
+            Test inputs used for metric tracking when ``return_data`` is
+            enabled (default: ``None``).
+        y_test : torch.Tensor, optional
+            Test labels used for metric tracking when ``return_data`` is
+            enabled (default: ``None``).
+        distance : str, optional
+            Distance metric used to monitor class separation
+            (default: ``"Trace"``).
+        batch_size : int, optional
+            Number of random pairs sampled per optimization step
+            (default: ``25``).
+        num_epochs : int, optional
+            Number of embedding-training epochs (default: ``100``).
+        lr : float, optional
+            Learning rate used by the optimizer (default: ``0.01``).
+        opt : torch.optim, optional
+            Optimizer class used for training (default: ``torch.optim.Adam``).
+        return_data : bool, optional
+            If ``True``, also return tracked losses, distances, and lower
+            bounds for the train and test sets (default: ``False``).
+
+        Returns
+        -------
+        list[list[float]] | tuple | None
+            Returns ``None`` when ``return_data`` is ``False``. Otherwise
+            returns the loss history, train/test distance histories, and the
+            train/test empirical lower bounds.
+        """
         optimizer = opt(self.classical_encoder.parameters(), lr=lr)
         criterion = torch.nn.MSELoss()
 
@@ -250,6 +314,39 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
         opt: torch.optim = torch.optim.Adam,
         return_data: bool = False,
     ) -> list[list[float]] | None:
+        """Train the quantum classifier after freezing the learned embedding.
+
+        Parameters
+        ----------
+        x_train : torch.Tensor
+            Training inputs.
+        y_train : torch.Tensor
+            Training labels.
+        x_test : torch.Tensor, optional
+            Test inputs used for accuracy tracking when ``return_data`` is
+            enabled (default: ``None``).
+        y_test : torch.Tensor, optional
+            Test labels used for accuracy tracking when ``return_data`` is
+            enabled (default: ``None``).
+        batch_size : int, optional
+            Number of training examples drawn per optimization step
+            (default: ``25``).
+        num_epochs : int, optional
+            Number of classifier-training epochs (default: ``100``).
+        lr : float, optional
+            Learning rate used by the optimizer (default: ``0.01``).
+        opt : torch.optim, optional
+            Optimizer class used for training (default: ``torch.optim.Adam``).
+        return_data : bool, optional
+            If ``True``, also return the loss history and train/test accuracy
+            histories (default: ``False``).
+
+        Returns
+        -------
+        list[list[float]] | tuple | None
+            Returns ``None`` when ``return_data`` is ``False``. Otherwise
+            returns the loss history together with train and test accuracies.
+        """
         optimizer = opt(self.complete_circuit_layer.parameters(), lr=lr)
         criterion = LinearLoss()
 
@@ -313,15 +410,30 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
 
 
 class NeuralEmbeddingGateBasedKernel(nn.Module):
+    """Gate-based hybrid model specialized for kernel computations.
+
+    This variant keeps the embedding-training machinery but exposes a kernel
+    evaluation interface instead of a trainable classifier head.
+    """
+
     def __init__(
         self,
         num_qubits: int,
         classical_model: nn.Module,
         quantum_embedding_layer: callable,
     ):
-        """
-        The quantum_embedding_layer must not have other
-        trainable parameters that the ones in the input parameter of the function
+        """Initialize a gate-based neural embedding kernel model.
+
+        Parameters
+        ----------
+        num_qubits : int
+            Number of qubits used by the quantum device and circuits.
+        classical_model : nn.Module
+            Classical encoder that maps input data to embedding parameters.
+        quantum_embedding_layer : callable
+            Quantum embedding circuit. It must take its trainable values only
+            from the provided input tensor and should not own additional
+            trainable parameters.
         """
         super().__init__()
         self.num_qubits = num_qubits
@@ -388,6 +500,43 @@ class NeuralEmbeddingGateBasedKernel(nn.Module):
         opt: torch.optim = torch.optim.Adam,
         return_data: bool = False,
     ) -> list[list[float]] | None:
+        """Train the classical encoder for kernel-based experiments.
+
+        Parameters
+        ----------
+        x_train : torch.Tensor
+            Training inputs.
+        y_train : torch.Tensor
+            Training labels.
+        x_test : torch.Tensor, optional
+            Test inputs used for metric tracking when ``return_data`` is
+            enabled (default: ``None``).
+        y_test : torch.Tensor, optional
+            Test labels used for metric tracking when ``return_data`` is
+            enabled (default: ``None``).
+        distance : str, optional
+            Distance metric used to monitor class separation
+            (default: ``"Trace"``).
+        batch_size : int, optional
+            Number of random pairs sampled per optimization step
+            (default: ``25``).
+        num_epochs : int, optional
+            Number of embedding-training epochs (default: ``100``).
+        lr : float, optional
+            Learning rate used by the optimizer (default: ``0.01``).
+        opt : torch.optim, optional
+            Optimizer class used for training (default: ``torch.optim.Adam``).
+        return_data : bool, optional
+            If ``True``, also return tracked losses, distances, and lower
+            bounds for the train and test sets (default: ``False``).
+
+        Returns
+        -------
+        list[list[float]] | tuple | None
+            Returns ``None`` when ``return_data`` is ``False``. Otherwise
+            returns the loss history, train/test distance histories, and the
+            train/test empirical lower bounds.
+        """
         optimizer = opt(self.classical_encoder.parameters(), lr=lr)
         criterion = torch.nn.MSELoss()
 
@@ -488,6 +637,21 @@ class NeuralEmbeddingGateBasedKernel(nn.Module):
             )
 
     def compute_kernel_matrix(self, X_data: torch.Tensor, batch_size: int = 256):
+        """Compute the symmetric kernel matrix for a dataset.
+
+        Parameters
+        ----------
+        X_data : torch.Tensor
+            Input dataset for which to evaluate all pairwise kernel values.
+        batch_size : int, optional
+            Number of upper-triangular pairs evaluated per forward pass
+            (default: ``256``).
+
+        Returns
+        -------
+        torch.Tensor
+            Symmetric kernel matrix of shape ``(n_samples, n_samples)``.
+        """
         self.kernel_function.eval()
         n = X_data.size(0)
         idx_i, idx_j = torch.triu_indices(n, n)
@@ -518,13 +682,20 @@ def create_paper_models() -> tuple[
     NeuralEmbeddingGateBasedModel,
     NeuralEmbeddingGateBasedModel,
 ]:
-    """
-    Hybrid Model 1 transforms 8 dimensional features to 8 dimensional features using Fully connected classical NN.
+    """Create the three gate-based model variants described in the paper.
 
-    Hybrid Model 2 transforms 8 dimensional features to 16 dimensional features.
+    The returned models correspond to the architectures used across the gate-
+    based reproductions:
 
-    Hybrid Model 3 transforms 28 * 28 dimensional features to 16 dimensional features using CNN.
-    16 dimensional features are used as a rotation angle of the ZZ feature embedding.
+    1. an 8-to-8 fully connected encoder with ``QuantumEmbedding1``;
+    2. an 8-to-16 fully connected encoder with ``QuantumEmbedding2``;
+    3. a convolutional encoder mapping MNIST inputs to 16 embedding features
+       with ``QuantumEmbedding2``.
+
+    Returns
+    -------
+    tuple[NeuralEmbeddingGateBasedModel, NeuralEmbeddingGateBasedModel, NeuralEmbeddingGateBasedModel]
+        The three initialized gate-based models in paper order.
     """
     ###Model 1
     classical_model = nn.Sequential(

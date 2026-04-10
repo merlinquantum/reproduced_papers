@@ -189,7 +189,7 @@ Here, only sub-plot a was reproduced as we analyze the 0 and 1 digits of the MNI
 
 #### Discussion
 
-We clearly observe the same trends as the paper for the reproductions showing a clear advantage for NQE methods against trainable encodings. Better accuracy across and faster loss decrease is observed just like with fixed embeddings in figure 2.
+We clearly observe the same trends as the paper for the reproductions showing a clear advantage for NQE methods against trainable encodings. Better accuracy across and faster loss decrease is observed just like with fixed embeddings in figure 2. The MerLin advantage versus trainable unitaries seems to be larger.
 
 
 ### 6.3. Figure 4
@@ -208,7 +208,7 @@ For more details about the parameters of the local effective dimension and the w
 ![](results/figure_4/figure_4_merlin.png)
 
 #### Discussion
-Since the effective dimension was calculated with Qiskit in the paper and the translation from photonic to gate-based is not trivial, the metric was calculated explicitly in a non efficient manner. That is why  less synthetic datasets and repetitions were used to create this figure. However, we see the same trends as the paper figure. Although, the MerLin dimension is a little bigger across the figure. The difference between the methods is about the samen as the one shown in the paper.
+Since the effective dimension was calculated with Qiskit in the paper and the translation from photonic to gate-based is not trivial, the metric was calculated explicitly in a non efficient manner. That is why  less synthetic datasets and repetitions were used to create this figure. However, we see the same trends as the paper figure. Although, the MerLin dimension is a little bigger across the figure. The difference between the methods is about the same as the one shown in the paper.
 
 ### 6.4. Figure 5
 
@@ -399,7 +399,7 @@ batch_size = 25
 num_epochs_training_embedding = 100
 lr = 0.01
 distance = "Trace"
-samples_per_datatset = 1e6
+samples_per_dataset = 1e6
 num_datasets = 10
 num_repetitions_per_dataset = 20
 epsilon = "Unknown"
@@ -413,13 +413,15 @@ batch_size = 25
 num_epochs_training_embedding = 100
 lr = 0.01
 distance = "Trace"
-samples_per_datatset = 400
+samples_per_dataset = 400
 num_datasets = 3
 num_repetitions_per_dataset = 3
 epsilon = 0.01
 num_samples_int = 100
 </pre>
 <b>Model 3</b>
+
+<b>The samples_per_dataset is only for the training, the full 1e6 points are used for the LED computation.</b>
 </td>
 <td>
 <pre>
@@ -427,13 +429,15 @@ batch_size = 25
 num_epochs_training_embedding = 100
 lr = 0.01
 distance = "Trace"
-samples_per_datatset = 400
+samples_per_dataset = 400
 num_datasets = 3
 num_repetitions_per_dataset = 3
 epsilon = 0.01
 num_samples_int = 100
 </pre>
 <b>Model 3</b>
+
+<b>The samples_per_dataset is only for the training, the full 1e6 points are used for the LED computation.</b>
 </td>
 </tr>
 <tr>
