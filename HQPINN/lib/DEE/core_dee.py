@@ -38,8 +38,11 @@ from ...config import (
 )
 from ...paths import results_case_dir_for_model_dir
 from ...utils import (
+    append_or_replace_training_row,
     count_trainable_params,
     log_training_info,
+    save_training_checkpoint,
+    write_metrics_csv,
 )
 
 DEE_SUMMARY_COLUMNS = [
@@ -651,6 +654,9 @@ def train_dee(
     out_dir: str,
     model_label: str,
     run_id: str,
+    checkpoint_path: str | None = None,
+    checkpoint_every: int | None = None,
+    resume_state: dict | None = None,
     loss_fn: Callable[
         ..., Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
     ] = euler_loss_batched,
@@ -670,51 +676,108 @@ def train_dee(
         out_dir, f"dee-{model_label}_{run_id}_rho_error.png"
     )
     csv_path = os.path.join(out_dir, f"dee-{model_label}_{run_id}.csv")
+    csv_header = ["epoch", "elapsed (s)", "Loss", "IC", "BC", "F"]
 
     # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
     #     optimizer, factor=0.5, patience=500
     # )
 
-    rows = []
+    rows = [list(row) for row in (resume_state or {}).get("rows", [])]
     start = datetime.now()
+    start_epoch = int((resume_state or {}).get("epoch", -1)) + 1
+    elapsed_offset = float((resume_state or {}).get("elapsed_s", 0.0))
+    checkpoint_every = checkpoint_every or plot_every
+    last_completed_epoch = start_epoch - 1
+    last_elapsed = elapsed_offset
 
     # Fixed training samples: draw once and reuse for all epochs.
-    x_ic_all, t_ic_all = sample_ic_points()
-    x_left_all, x_right_all, t_bc_all = sample_bc_points()
-    x_f_all, t_f_all = sample_collocation_points()
+    sample_state = (resume_state or {}).get("extra_state", {}).get("training_points")
+    if sample_state is None:
+        x_ic_all, t_ic_all = sample_ic_points()
+        x_left_all, x_right_all, t_bc_all = sample_bc_points()
+        x_f_all, t_f_all = sample_collocation_points()
+    else:
+        x_ic_all = sample_state["x_ic_all"]
+        t_ic_all = sample_state["t_ic_all"]
+        x_left_all = sample_state["x_left_all"]
+        x_right_all = sample_state["x_right_all"]
+        t_bc_all = sample_state["t_bc_all"]
+        x_f_all = sample_state["x_f_all"]
+        t_f_all = sample_state["t_f_all"]
 
-    for epoch in range(n_epochs):
-        optimizer.zero_grad()
+    checkpoint_extra_state = {
+        "training_points": {
+            "x_ic_all": x_ic_all,
+            "t_ic_all": t_ic_all,
+            "x_left_all": x_left_all,
+            "x_right_all": x_right_all,
+            "t_bc_all": t_bc_all,
+            "x_f_all": x_f_all,
+            "t_f_all": t_f_all,
+        }
+    }
 
-        # Compute the three loss components
-        loss_ic, loss_bc, loss_f = loss_fn(
-            model,
-            x_ic_all,
-            t_ic_all,
-            x_left_all,
-            x_right_all,
-            t_bc_all,
-            x_f_all,
-            t_f_all,
-        )
-        loss = loss_ic + loss_bc + loss_f
+    try:
+        for epoch in range(start_epoch, n_epochs):
+            optimizer.zero_grad()
 
-        loss.backward()
-        optimizer.step()
-
-        # Logging every plot_every epochs
-        if epoch % plot_every == 0:
-            elapsed = (datetime.now() - start).total_seconds()
-
-            log_training_info(
-                n_epochs=epoch,
-                elapsed=elapsed,
-                final_loss=loss,
-                loss_ic=loss_ic,
-                loss_bc=loss_bc,
-                loss_f=loss_f,
-                rows=rows,
+            # Compute the three loss components
+            loss_ic, loss_bc, loss_f = loss_fn(
+                model,
+                x_ic_all,
+                t_ic_all,
+                x_left_all,
+                x_right_all,
+                t_bc_all,
+                x_f_all,
+                t_f_all,
             )
+            loss = loss_ic + loss_bc + loss_f
+
+            loss.backward()
+            optimizer.step()
+            elapsed = elapsed_offset + (datetime.now() - start).total_seconds()
+            last_completed_epoch = epoch
+            last_elapsed = elapsed
+
+            # Logging every plot_every epochs
+            if epoch % plot_every == 0:
+                log_training_info(
+                    n_epochs=epoch,
+                    elapsed=elapsed,
+                    final_loss=loss,
+                    loss_ic=loss_ic,
+                    loss_bc=loss_bc,
+                    loss_f=loss_f,
+                    rows=rows,
+                )
+
+            if checkpoint_path is not None and (epoch + 1) % checkpoint_every == 0:
+                save_training_checkpoint(
+                    checkpoint_path,
+                    model=model,
+                    optimizer=optimizer,
+                    run_id=run_id,
+                    epoch=epoch,
+                    elapsed_s=elapsed,
+                    rows=rows,
+                    extra_state=checkpoint_extra_state,
+                )
+                write_metrics_csv(csv_path, csv_header, rows)
+    except KeyboardInterrupt:
+        if checkpoint_path is not None:
+            save_training_checkpoint(
+                checkpoint_path,
+                model=model,
+                optimizer=optimizer,
+                run_id=run_id,
+                epoch=last_completed_epoch,
+                elapsed_s=last_elapsed,
+                rows=rows,
+                extra_state=checkpoint_extra_state,
+            )
+            write_metrics_csv(csv_path, csv_header, rows)
+        raise
 
         # scheduler.step(loss.item())  # Adjust learning rate based on total loss
 
@@ -758,23 +821,31 @@ def train_dee(
         t_f_all,
     )
     final_loss = (loss_ic + loss_bc + loss_f).item()
-    elapsed = (datetime.now() - start).total_seconds()
+    elapsed = elapsed_offset + (datetime.now() - start).total_seconds()
 
-    log_training_info(
-        n_epochs=n_epochs,
-        elapsed=elapsed,
-        final_loss=final_loss,
-        loss_ic=loss_ic,
-        loss_bc=loss_bc,
-        loss_f=loss_f,
-        rows=rows,
+    append_or_replace_training_row(
+        rows,
+        [
+            n_epochs,
+            f"{elapsed:.2f}",
+            f"{final_loss:.3e}",
+            f"{loss_ic.item():.3e}",
+            f"{loss_bc.item():.3e}",
+            f"{loss_f.item():.3e}",
+        ],
     )
-
-    # Save CSV
-    with open(csv_path, "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(["epoch", "elapsed (s)", "Loss", "IC", "BC", "F"])
-        writer.writerows(rows)
+    write_metrics_csv(csv_path, csv_header, rows)
+    if checkpoint_path is not None:
+        save_training_checkpoint(
+            checkpoint_path,
+            model=model,
+            optimizer=optimizer,
+            run_id=run_id,
+            epoch=n_epochs - 1,
+            elapsed_s=elapsed,
+            rows=rows,
+            extra_state=checkpoint_extra_state,
+        )
 
     residual_xt, boundary_xt = _stack_dee_training_points(
         x_ic_all,

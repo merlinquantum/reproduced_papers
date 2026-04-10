@@ -36,7 +36,12 @@ from ...config import (
     TAF_Y_MIN,
 )
 from ...paths import results_case_dir_for_model_dir
-from ...utils import count_trainable_params
+from ...utils import (
+    append_or_replace_training_row,
+    count_trainable_params,
+    save_training_checkpoint,
+    write_metrics_csv,
+)
 
 
 DATA_DIR = Path(__file__).resolve().parent / "NACA0012"
@@ -571,7 +576,8 @@ def log_training_info(
         f"L_per={loss_per.item():.3e}"
     )
 
-    rows.append(
+    append_or_replace_training_row(
+        rows,
         [
             str(epoch),
             f"{elapsed:.2f}",
@@ -582,7 +588,7 @@ def log_training_info(
             f"{loss_out.item():.3e}",
             f"{loss_wall.item():.3e}",
             f"{loss_per.item():.3e}",
-        ]
+        ],
     )
 
 
@@ -596,6 +602,9 @@ def train_taf(
     run_id: str,
     data: dict[str, torch.Tensor],
     U_in: torch.Tensor,
+    checkpoint_path: str | None = None,
+    checkpoint_every: int | None = None,
+    resume_state: dict | None = None,
     lbfgs_steps: int = TAF_LBFGS_STEPS,
     eps_lambda: float = TAF_EPSILON_LAMBDA,
     n_f_batch: Optional[int] = 256,
@@ -608,45 +617,108 @@ def train_taf(
     os.makedirs(out_dir, exist_ok=True)
 
     csv_path = os.path.join(out_dir, f"taf-{model_label}_{run_id}.csv")
+    csv_header = [
+        "step",
+        "elapsed (s)",
+        "Loss",
+        "BC",
+        "F",
+        "L_in",
+        "L_out",
+        "L_wall",
+        "L_per",
+    ]
 
-    rows: list[list[str]] = []
+    rows: list[list[str]] = [list(row) for row in (resume_state or {}).get("rows", [])]
     start = datetime.now()
+    extra_state = dict((resume_state or {}).get("extra_state", {}))
+    adam_complete = bool(extra_state.get("adam_complete", False))
+    start_epoch = int((resume_state or {}).get("epoch", 0)) + 1
+    elapsed_offset = float((resume_state or {}).get("elapsed_s", 0.0))
+    checkpoint_every = checkpoint_every or plot_every
+    last_completed_epoch = start_epoch - 1
+    last_elapsed = elapsed_offset
 
     model.train()
-    for epoch in range(1, n_epochs + 1):
-        optimizer.zero_grad()
+    try:
+        if not adam_complete:
+            for epoch in range(start_epoch, n_epochs + 1):
+                optimizer.zero_grad()
 
-        # Paper objective:
-        #   L = L_bc + L_f
-        L_in, L_out, L_wall, L_per = loss_boundary_terms(
-            model,
-            data,
-            U_in,
-            n_in_batch=n_in_batch,
-            n_out_batch=n_out_batch,
-            n_wall_batch=n_wall_batch,
-            n_per_batch=n_per_batch,
-        )
-        L_bc = L_in + L_out + L_wall + L_per
-        L_f = loss_pde(model, data, eps_lambda=eps_lambda, n_f_batch=n_f_batch)
-        L_total = L_bc + L_f
-        L_total.backward()
-        optimizer.step()
+                # Paper objective:
+                #   L = L_bc + L_f
+                L_in, L_out, L_wall, L_per = loss_boundary_terms(
+                    model,
+                    data,
+                    U_in,
+                    n_in_batch=n_in_batch,
+                    n_out_batch=n_out_batch,
+                    n_wall_batch=n_wall_batch,
+                    n_per_batch=n_per_batch,
+                )
+                L_bc = L_in + L_out + L_wall + L_per
+                L_f = loss_pde(model, data, eps_lambda=eps_lambda, n_f_batch=n_f_batch)
+                L_total = L_bc + L_f
+                L_total.backward()
+                optimizer.step()
+                elapsed = elapsed_offset + (datetime.now() - start).total_seconds()
+                last_completed_epoch = epoch
+                last_elapsed = elapsed
 
-        if epoch % plot_every == 0:
-            elapsed = (datetime.now() - start).total_seconds()
-            log_training_info(
-                epoch,
-                elapsed,
-                L_total,
-                L_bc,
-                L_f,
-                L_in,
-                L_out,
-                L_wall,
-                L_per,
-                rows,
+                if epoch % plot_every == 0:
+                    log_training_info(
+                        epoch,
+                        elapsed,
+                        L_total,
+                        L_bc,
+                        L_f,
+                        L_in,
+                        L_out,
+                        L_wall,
+                        L_per,
+                        rows,
+                    )
+
+                if checkpoint_path is not None and epoch % checkpoint_every == 0:
+                    save_training_checkpoint(
+                        checkpoint_path,
+                        model=model,
+                        optimizer=optimizer,
+                        run_id=run_id,
+                        epoch=epoch,
+                        elapsed_s=elapsed,
+                        rows=rows,
+                        extra_state={"adam_complete": False},
+                    )
+                    write_metrics_csv(csv_path, csv_header, rows)
+
+            adam_complete = True
+            if checkpoint_path is not None:
+                save_training_checkpoint(
+                    checkpoint_path,
+                    model=model,
+                    optimizer=optimizer,
+                    run_id=run_id,
+                    epoch=n_epochs,
+                    elapsed_s=last_elapsed,
+                    rows=rows,
+                    extra_state={"adam_complete": True},
+                )
+                write_metrics_csv(csv_path, csv_header, rows)
+    except KeyboardInterrupt:
+        if checkpoint_path is not None:
+            save_training_checkpoint(
+                checkpoint_path,
+                model=model,
+                optimizer=optimizer,
+                run_id=run_id,
+                epoch=last_completed_epoch,
+                elapsed_s=last_elapsed,
+                rows=rows,
+                extra_state={"adam_complete": adam_complete},
             )
+            write_metrics_csv(csv_path, csv_header, rows)
+        raise
 
     if lbfgs_steps > 0:
         print("Switching to L-BFGS...")
@@ -677,7 +749,7 @@ def train_taf(
     L_f = loss_pde(model, data, eps_lambda=eps_lambda, n_f_batch=None)
     L_total = L_bc + L_f
 
-    elapsed = (datetime.now() - start).total_seconds()
+    elapsed = elapsed_offset + (datetime.now() - start).total_seconds()
     log_training_info(
         n_epochs,
         elapsed,
@@ -690,23 +762,18 @@ def train_taf(
         L_per,
         rows,
     )
-
-    with open(csv_path, "w", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(
-            [
-                "step",
-                "elapsed (s)",
-                "Loss",
-                "BC",
-                "F",
-                "L_in",
-                "L_out",
-                "L_wall",
-                "L_per",
-            ]
+    write_metrics_csv(csv_path, csv_header, rows)
+    if checkpoint_path is not None:
+        save_training_checkpoint(
+            checkpoint_path,
+            model=model,
+            optimizer=optimizer,
+            run_id=run_id,
+            epoch=n_epochs,
+            elapsed_s=elapsed,
+            rows=rows,
+            extra_state={"adam_complete": True},
         )
-        writer.writerows(rows)
 
     saved_plot_paths = _save_primitive_field_plots(
         model=model,

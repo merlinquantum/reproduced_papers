@@ -24,8 +24,10 @@ from ..layer_merlin import BranchMerlin, make_interf_qlayer
 from ...run_common import run_density_inference_mode
 from ...utils import (
     count_trainable_params,
+    finalize_training_session,
     get_latest_checkpoint,
     make_optimizer,
+    prepare_training_session,
 )
 from ...runtime import seed_everything
 from .core_taf import (
@@ -193,6 +195,13 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                 num_hidden_layers=layers,
             ).to(DEVICE)
             optimizer = make_optimizer(model, lr=TAF_LR)
+            case_run_id, resume_state, resume_ckpt_path = prepare_training_session(
+                model=model,
+                optimizer=optimizer,
+                ckpt_dir=ckpt_dir,
+                case_prefix=case_prefix,
+                default_run_id=run_id,
+            )
 
             final_loss, loss_bc, loss_f, n_params = train_taf(
                 model=model,
@@ -201,22 +210,24 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                 plot_every=TAF_PLOT_EVERY,
                 out_dir=f"HQPINN/results/TAF/{case_prefix}",
                 model_label=f"hy-m_{label}",
-                run_id=run_id,
+                run_id=case_run_id,
                 data=data,
                 U_in=U_in,
+                checkpoint_path=resume_ckpt_path,
+                resume_state=resume_state,
                 lbfgs_steps=TAF_LBFGS_STEPS,
                 eps_lambda=TAF_EPSILON_LAMBDA,
             )
             row = load_training_row_for_run_id(
                 out_dir=f"HQPINN/results/TAF/{case_prefix}",
                 model_label=f"hy-m_{label}",
-                run_id=run_id,
+                run_id=case_run_id,
             )
 
             is_duplicate = append_summary_row(
                 summary_csv,
                 {
-                    "run_id": run_id,
+                    "run_id": case_run_id,
                     "Model": "hy-m",
                     "Size": label,
                     "step": row["step"] if row is not None else "",
@@ -232,13 +243,16 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                 },
             )
 
-            os.makedirs(model_dir, exist_ok=True)
-            ckpt_path = os.path.join(model_dir, f"{case_prefix}_{run_id}.pt")
-            torch.save(model.state_dict(), ckpt_path)
-            print(f"Model saved to: {ckpt_path}")
+            finalize_training_session(
+                model=model,
+                ckpt_dir=model_dir,
+                case_prefix=case_prefix,
+                run_id=case_run_id,
+                resume_checkpoint_path=resume_ckpt_path,
+            )
             if is_duplicate:
                 print(
-                    f"Duplicate summary row appended for run_id={run_id} to: {summary_csv}"
+                    f"Duplicate summary row appended for run_id={case_run_id} to: {summary_csv}"
                 )
             else:
                 print(f"Summary CSV appended to: {summary_csv}")

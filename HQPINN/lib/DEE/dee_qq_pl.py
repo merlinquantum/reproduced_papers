@@ -10,9 +10,11 @@ import torch.nn as nn
 from ...config import DEE_N_EPOCHS, DEE_PLOT_EVERY, N_LAYERS, DEE_LR, DTYPE
 from ...utils import (
     count_trainable_params,
+    finalize_training_session,
     get_latest_checkpoint,
     load_model,
     make_optimizer,
+    prepare_training_session,
 )
 from ...runtime import seed_everything
 from .core_dee import (
@@ -182,6 +184,13 @@ def run(mode="train", backend="sim:ascella", model_size="2"):
 
             model = PP_PINN(q_layers=q_layers)
             optimizer = make_optimizer(model, lr=DEE_LR)
+            case_run_id, resume_state, resume_ckpt_path = prepare_training_session(
+                model=model,
+                optimizer=optimizer,
+                ckpt_dir=ckpt_dir,
+                case_prefix=case_prefix,
+                default_run_id=run_id,
+            )
 
             final_loss, err_rho, err_p, n_params = train_dee(
                 model=model,
@@ -191,18 +200,20 @@ def run(mode="train", backend="sim:ascella", model_size="2"):
                 plot_every=DEE_PLOT_EVERY,
                 out_dir=f"HQPINN/results/DEE/{case_prefix}",
                 model_label=f"qq-pl_{label}",
-                run_id=run_id,
+                run_id=case_run_id,
+                checkpoint_path=resume_ckpt_path,
+                resume_state=resume_state,
             )
             row = load_training_row_for_run_id(
                 out_dir=f"HQPINN/results/DEE/{case_prefix}",
                 model_label=f"qq-pl_{label}",
-                run_id=run_id,
+                run_id=case_run_id,
             )
 
             is_duplicate = append_summary_row(
                 summary_csv,
                 {
-                    "run_id": run_id,
+                    "run_id": case_run_id,
                     "Model": "qq-pl",
                     "Size": label,
                     "epoch": row["epoch"] if row is not None else "",
@@ -217,13 +228,16 @@ def run(mode="train", backend="sim:ascella", model_size="2"):
                 },
             )
 
-            os.makedirs(model_dir, exist_ok=True)
-            ckpt_path = os.path.join(model_dir, f"{case_prefix}_{run_id}.pt")
-            torch.save(model.state_dict(), ckpt_path)
-            print(f"Model saved to: {ckpt_path}")
+            finalize_training_session(
+                model=model,
+                ckpt_dir=model_dir,
+                case_prefix=case_prefix,
+                run_id=case_run_id,
+                resume_checkpoint_path=resume_ckpt_path,
+            )
             if is_duplicate:
                 print(
-                    f"Duplicate summary row appended for run_id={run_id} to: {summary_csv}"
+                    f"Duplicate summary row appended for run_id={case_run_id} to: {summary_csv}"
                 )
             else:
                 print(f"Summary CSV appended to: {summary_csv}")

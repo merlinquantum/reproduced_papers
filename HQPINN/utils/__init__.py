@@ -1,5 +1,6 @@
+import csv
 import os
-from typing import Callable, Optional
+from typing import Any, Callable, Optional
 
 import torch
 import torch.nn as nn
@@ -96,6 +97,27 @@ def count_trainable_params(model: nn.Module) -> int:
     return sum(p.numel() for p in model.parameters() if p.requires_grad)
 
 
+def append_or_replace_training_row(rows: list[list[object]], row: list[object]) -> None:
+    """Append one metrics row, or replace the last row when it targets the same step."""
+    if rows and str(rows[-1][0]) == str(row[0]):
+        rows[-1] = row
+        return
+    rows.append(row)
+
+
+def write_metrics_csv(
+    csv_path: str,
+    header: list[str],
+    rows: list[list[object]],
+) -> None:
+    """Persist the full in-memory metrics table to disk."""
+    os.makedirs(os.path.dirname(csv_path), exist_ok=True)
+    with open(csv_path, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(header)
+        writer.writerows(rows)
+
+
 def log_training_info(n_epochs, elapsed, final_loss, loss_ic, loss_bc, loss_f, rows):
     """Log training information for debugging and monitoring."""
     print(
@@ -106,7 +128,8 @@ def log_training_info(n_epochs, elapsed, final_loss, loss_ic, loss_bc, loss_f, r
         f"F={loss_f.item():.3e}"
     )
 
-    rows.append(
+    append_or_replace_training_row(
+        rows,
         [
             n_epochs,
             f"{elapsed:.2f}",
@@ -114,7 +137,7 @@ def log_training_info(n_epochs, elapsed, final_loss, loss_ic, loss_bc, loss_f, r
             f"{loss_ic.item():.3e}",
             f"{loss_bc.item():.3e}",
             f"{loss_f.item():.3e}",
-        ]
+        ],
     )
 
 
@@ -122,6 +145,8 @@ def load_model(
     ckpt_path: str, model_ctor: Callable[..., nn.Module], processor=None
 ) -> nn.Module:
     state = torch.load(ckpt_path, map_location="cpu")
+    if isinstance(state, dict) and "model_state_dict" in state:
+        state = state["model_state_dict"]
     model = model_ctor(processor=processor)
     model.load_state_dict(state)
     model.eval()
@@ -159,3 +184,126 @@ def load_latest_model_local(
     if ckpt_path is None:
         return None
     return load_model(ckpt_path, model_ctor)
+
+
+def get_resume_checkpoint_path(ckpt_dir: str, case_prefix: str) -> str:
+    """Return the hidden path used for interrupted-training state."""
+    return os.path.join(ckpt_dir, f".{case_prefix}_resume.pt")
+
+
+def save_training_checkpoint(
+    checkpoint_path: str,
+    *,
+    model: nn.Module,
+    optimizer: torch.optim.Optimizer,
+    run_id: str,
+    epoch: int,
+    elapsed_s: float,
+    rows: list[list[object]],
+    extra_state: Optional[dict[str, Any]] = None,
+) -> None:
+    """Save enough state to resume training from the last completed step."""
+    os.makedirs(os.path.dirname(checkpoint_path), exist_ok=True)
+    state = {
+        "model_state_dict": model.state_dict(),
+        "optimizer_state_dict": optimizer.state_dict(),
+        "run_id": run_id,
+        "epoch": int(epoch),
+        "elapsed_s": float(elapsed_s),
+        "rows": [list(row) for row in rows],
+        "rng_state": torch.get_rng_state(),
+    }
+    if extra_state:
+        state["extra_state"] = extra_state
+    torch.save(state, checkpoint_path)
+    print(
+        f"Training checkpoint saved to: {checkpoint_path} "
+        f"(run_id={run_id}, epoch={epoch})"
+    )
+
+
+def load_training_checkpoint(
+    checkpoint_path: str,
+    *,
+    model: nn.Module,
+    optimizer: Optional[torch.optim.Optimizer] = None,
+) -> dict[str, Any]:
+    """Load a resumable training checkpoint into model and optimizer."""
+    state = torch.load(checkpoint_path, map_location="cpu")
+    if not isinstance(state, dict) or "model_state_dict" not in state:
+        raise ValueError(f"{checkpoint_path} is not a resumable training checkpoint")
+
+    model.load_state_dict(state["model_state_dict"])
+    if optimizer is not None and "optimizer_state_dict" in state:
+        optimizer.load_state_dict(state["optimizer_state_dict"])
+    if "rng_state" in state:
+        torch.set_rng_state(state["rng_state"])
+
+    print(
+        f"Resumed training from: {checkpoint_path} "
+        f"(run_id={state.get('run_id', '')}, epoch={state.get('epoch', '')})"
+    )
+    return state
+
+
+def remove_resume_checkpoint(checkpoint_path: str) -> None:
+    """Delete an interrupted-training checkpoint if it exists."""
+    if os.path.exists(checkpoint_path):
+        os.remove(checkpoint_path)
+
+
+def prepare_training_session(
+    *,
+    model: nn.Module,
+    optimizer: torch.optim.Optimizer,
+    ckpt_dir: str,
+    case_prefix: str,
+    default_run_id: str,
+    force_retrain: bool = False,
+) -> tuple[str, Optional[dict[str, Any]], str]:
+    """Load a resumable checkpoint when available and return session metadata."""
+    resume_checkpoint_path = get_resume_checkpoint_path(ckpt_dir, case_prefix)
+
+    if force_retrain:
+        if os.path.exists(resume_checkpoint_path):
+            remove_resume_checkpoint(resume_checkpoint_path)
+            print(f"Removed interrupted-training checkpoint: {resume_checkpoint_path}")
+        return default_run_id, None, resume_checkpoint_path
+
+    if not os.path.isfile(resume_checkpoint_path):
+        return default_run_id, None, resume_checkpoint_path
+
+    try:
+        state = load_training_checkpoint(
+            resume_checkpoint_path,
+            model=model,
+            optimizer=optimizer,
+        )
+    except Exception as exc:
+        print(
+            f"Interrupted-training checkpoint at {resume_checkpoint_path} "
+            f"could not be loaded: {exc}; starting from scratch."
+        )
+        remove_resume_checkpoint(resume_checkpoint_path)
+        return default_run_id, None, resume_checkpoint_path
+
+    resumed_run_id = str(state.get("run_id") or default_run_id)
+    return resumed_run_id, state, resume_checkpoint_path
+
+
+def finalize_training_session(
+    *,
+    model: nn.Module,
+    ckpt_dir: str,
+    case_prefix: str,
+    run_id: str,
+    resume_checkpoint_path: Optional[str] = None,
+) -> str:
+    """Write the final inference checkpoint and clear the resumable one."""
+    os.makedirs(ckpt_dir, exist_ok=True)
+    ckpt_path = os.path.join(ckpt_dir, f"{case_prefix}_{run_id}.pt")
+    torch.save(model.state_dict(), ckpt_path)
+    if resume_checkpoint_path is not None:
+        remove_resume_checkpoint(resume_checkpoint_path)
+    print(f"Model saved to: {ckpt_path}")
+    return ckpt_path

@@ -27,6 +27,11 @@ from ...config import (
     DTYPE,
     DEVICE,
 )
+from ...utils import (
+    append_or_replace_training_row,
+    save_training_checkpoint,
+    write_metrics_csv,
+)
 
 DHO_SUMMARY_COLUMNS = [
     "run_id",
@@ -146,6 +151,9 @@ def train_oscillator_pinn(
     run_id: str,
     lambda1: float = LAMBDA1,
     lambda2: float = LAMBDA2,
+    checkpoint_path: str | None = None,
+    checkpoint_every: int | None = None,
+    resume_state: dict | None = None,
     loss_fn: Callable[
         [nn.Module, torch.Tensor], Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
     ] = oscillator_loss,
@@ -155,10 +163,23 @@ def train_oscillator_pinn(
 
     png_path = os.path.join(out_dir, f"dho-{model_label}_{run_id}.png")
     csv_path = os.path.join(out_dir, f"dho-{model_label}_{run_id}.csv")
+    csv_header = [
+        "epoch",
+        "elapsed time (s)",
+        "Loss",
+        "IC_u",
+        "IC_du",
+        "PDE",
+    ]
 
     start = datetime.now()
-    rows = []
+    rows = [list(row) for row in (resume_state or {}).get("rows", [])]
+    start_epoch = int((resume_state or {}).get("epoch", -1)) + 1
+    elapsed_offset = float((resume_state or {}).get("elapsed_s", 0.0))
+    checkpoint_every = checkpoint_every or plot_every
     snapshot_epochs = {600, 1200}
+    last_completed_epoch = start_epoch - 1
+    last_elapsed = elapsed_offset
 
     def save_prediction_png(epoch: int, elapsed_s: float) -> str:
         with torch.no_grad():
@@ -185,58 +206,93 @@ def train_oscillator_pinn(
     # -------------------------------------------------------
     # Training loop
     # -------------------------------------------------------
-    for epoch in range(n_epochs):
-        optimizer.zero_grad()
-        lic_u, lic_du, lf = loss_fn(model, t_train)
-        loss = lic_u + lambda1 * lic_du + lambda2 * lf
+    try:
+        for epoch in range(start_epoch, n_epochs):
+            optimizer.zero_grad()
+            lic_u, lic_du, lf = loss_fn(model, t_train)
+            loss = lic_u + lambda1 * lic_du + lambda2 * lf
 
-        loss.backward()
-        optimizer.step()
-        elapsed = (datetime.now() - start).total_seconds()
+            loss.backward()
+            optimizer.step()
+            elapsed = elapsed_offset + (datetime.now() - start).total_seconds()
+            last_completed_epoch = epoch
+            last_elapsed = elapsed
 
-        if epoch % plot_every == 0:
-            print(f"Epoch {epoch:4d} | Elapsed: {elapsed:.2f}seconds")
-            print(
-                f"  Loss={loss.item():.4e} | "
-                f"IC_u={lic_u:.4e} | IC_du={lic_du:.4e} | PDE={lf:.4e}"
+            if epoch % plot_every == 0:
+                print(f"Epoch {epoch:4d} | Elapsed: {elapsed:.2f}seconds")
+                print(
+                    f"  Loss={loss.item():.4e} | "
+                    f"IC_u={lic_u:.4e} | IC_du={lic_du:.4e} | PDE={lf:.4e}"
+                )
+                append_or_replace_training_row(
+                    rows,
+                    [
+                        epoch,
+                        f"{elapsed:.2f}",
+                        f"{loss.item():.4e}",
+                        f"{lic_u:.4e}",
+                        f"{lic_du:.4e}",
+                        f"{lf:.4e}",
+                    ],
+                )
+
+            if epoch in snapshot_epochs:
+                epoch_png_path = save_prediction_png(epoch=epoch, elapsed_s=elapsed)
+                print(f"PNG snapshot saved to: {epoch_png_path}")
+
+            if checkpoint_path is not None and (epoch + 1) % checkpoint_every == 0:
+                save_training_checkpoint(
+                    checkpoint_path,
+                    model=model,
+                    optimizer=optimizer,
+                    run_id=run_id,
+                    epoch=epoch,
+                    elapsed_s=elapsed,
+                    rows=rows,
+                )
+                write_metrics_csv(csv_path, csv_header, rows)
+    except KeyboardInterrupt:
+        if checkpoint_path is not None:
+            save_training_checkpoint(
+                checkpoint_path,
+                model=model,
+                optimizer=optimizer,
+                run_id=run_id,
+                epoch=last_completed_epoch,
+                elapsed_s=last_elapsed,
+                rows=rows,
             )
+            write_metrics_csv(csv_path, csv_header, rows)
+        raise
 
-            # -------------------------------------------------------
-            # Append this epoch to CSV
-            # -------------------------------------------------------
-
-            # for ti, ui, dui, d2ui in zip(t_np, u_np, du_np, d2u_np):
-            rows.append(
-                [
-                    epoch,
-                    f"{elapsed:.2f}",
-                    f"{loss.item():.4e}",
-                    f"{lic_u:.4e}",
-                    f"{lic_du:.4e}",
-                    f"{lf:.4e}",
-                ]
-            )
-
-        if epoch in snapshot_epochs:
-            epoch_png_path = save_prediction_png(epoch=epoch, elapsed_s=elapsed)
-            print(f"PNG snapshot saved to: {epoch_png_path}")
-
-    with open(csv_path, "a", newline="") as f:
-        writer = csv.writer(f)
-        writer.writerow(
-            [
-                "epoch",
-                "elapsed time (s)",
-                "Loss",
-                "IC_u",
-                "IC_du",
-                "PDE",
-            ]
+    lic_u, lic_du, lf = loss_fn(model, t_train)
+    final_loss = lic_u + lambda1 * lic_du + lambda2 * lf
+    elapsed = elapsed_offset + (datetime.now() - start).total_seconds()
+    append_or_replace_training_row(
+        rows,
+        [
+            n_epochs - 1,
+            f"{elapsed:.2f}",
+            f"{final_loss.item():.4e}",
+            f"{lic_u:.4e}",
+            f"{lic_du:.4e}",
+            f"{lf:.4e}",
+        ],
+    )
+    write_metrics_csv(csv_path, csv_header, rows)
+    if checkpoint_path is not None:
+        save_training_checkpoint(
+            checkpoint_path,
+            model=model,
+            optimizer=optimizer,
+            run_id=run_id,
+            epoch=n_epochs - 1,
+            elapsed_s=elapsed,
+            rows=rows,
         )
-        writer.writerows(rows)
 
     stop = datetime.now()
-    elapsed = (stop - start).total_seconds()
+    elapsed = elapsed_offset + (stop - start).total_seconds()
 
     # -------------------------------------------------------
     # Final PNG (only the prediction vs exact plot)

@@ -18,10 +18,12 @@ from ...config import (
 )
 from ...utils import (
     count_trainable_params,
+    finalize_training_session,
     get_latest_checkpoint,
     load_model,
     make_time_grid,
     make_optimizer,
+    prepare_training_session,
 )
 from ...runtime import seed_everything
 from ...paths import results_case_dir_for_model_dir
@@ -165,16 +167,26 @@ def run(
                 return
 
         model = PP_PINN(n_qubits=n_qubits)
+        optimizer = make_optimizer(model, lr=DHO_LR)
+        run_id, resume_state, resume_ckpt_path = prepare_training_session(
+            model=model,
+            optimizer=optimizer,
+            ckpt_dir=ckpt_dir,
+            case_prefix=case_prefix,
+            default_run_id=run_id,
+        )
         t_train = make_time_grid()
         train_oscillator_pinn(
             model=model,
             t_train=t_train,
-            optimizer=make_optimizer(model, lr=DHO_LR),
+            optimizer=optimizer,
             n_epochs=DHO_N_EPOCHS,
             plot_every=DHO_PLOT_EVERY,
             out_dir=results_dir,
             model_label="qq-pl",
             run_id=run_id,
+            checkpoint_path=resume_ckpt_path,
+            resume_state=resume_state,
         )
         row = load_training_row_for_run_id(results_dir, "qq-pl", run_id)
         is_duplicate = append_summary_row(
@@ -193,10 +205,13 @@ def run(
                 "Relative L2 error": f"{evaluate_dho_error(model, t_train):.6e}",
             },
         )
-        os.makedirs(ckpt_dir, exist_ok=True)
-        ckpt_path = os.path.join(ckpt_dir, f"{case_prefix}_{run_id}.pt")
-        torch.save(model.state_dict(), ckpt_path)
-        print(f"Model saved to: {ckpt_path}")
+        finalize_training_session(
+            model=model,
+            ckpt_dir=ckpt_dir,
+            case_prefix=case_prefix,
+            run_id=run_id,
+            resume_checkpoint_path=resume_ckpt_path,
+        )
         if is_duplicate:
             print(
                 f"Duplicate summary row appended for run_id={run_id} to: {summary_csv}"
