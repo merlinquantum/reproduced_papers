@@ -8,8 +8,8 @@
     "lr": 0.01,
     "distance": "Trace",
     "samples_per_datatset": 400,
-    "num_datasets": 10,
-    "num_repetitions_per_dataset": 20,
+    "num_datasets": 3,
+    "num_repetitions_per_dataset": 3,
     "epsilon": 0.01,
     "num_samples_int": 100,
     "dont_generate_graph":"False"

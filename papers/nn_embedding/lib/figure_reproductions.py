@@ -819,7 +819,8 @@ def reproduce_figure_4(
         X, Y = make_classification(
             n_samples=int(1e6),
             n_features=dim,
-            n_informative=4,
+            n_informative=3,
+            n_redundant=1,
             n_clusters_per_class=4,
             return_X_y=True,
         )

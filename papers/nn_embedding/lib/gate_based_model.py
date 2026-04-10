@@ -113,6 +113,8 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
         def __init__(self, main_model):
             super().__init__()
             object.__setattr__(self, "main_model", main_model)
+            # TODO, verify that that object is workning its not the same implementation as before
+            self.quantum_classifier = main_model.complete_circuit_layer
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
             with torch.no_grad():
@@ -121,7 +123,7 @@ class NeuralEmbeddingGateBasedModel(nn.Module):
                     embedding_params.size(0), -1
                 )
 
-            probs = self.main_model.complete_circuit_layer(embedding_params)
+            probs = self.quantum_classifier(embedding_params)
             return self.main_model.output_grouper(probs)
 
     def train_embedding(
