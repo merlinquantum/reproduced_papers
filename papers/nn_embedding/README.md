@@ -202,13 +202,13 @@ For more details about the parameters of the local effective dimension and the w
 ![](img_paper/fig_4_paper.png)
 
 #### Gate-based reproduction
-**Comming soon!**
+![](results/figure_4/figure_4_gate_based.png)
 
 #### MerLin reproduction
 ![](results/figure_4/figure_4_merlin.png)
 
 #### Discussion
-Since the effective dimension was calculated with Qiskit in the paper and the translation from photonic to gate-based is not trivial, the metric was calculated explicitly in a non efficient manner. That is why  less synthetic datasets and repetitions were used to create this figure. However, we see the same trends as the paper figure. Although, the MerLin dimension is a little bigger across the figure. The difference between the methods is about the same as the one shown in the paper.
+Since the effective dimension was calculated with Qiskit in the paper and the translation from photonic to gate-based is not trivial, the metric was calculated explicitly in a non efficient manner. That is why  less synthetic datasets and repetitions were used to create this figure. However, we see the same trends as the paper figure. Although, the dimensions are a little bigger across the figures. The difference between the methods is about the same as the one shown in the paper. The change in values may be caused by the value of the $\gamma$ parameter in the LED computation. It is unknown in the paper the value that was chosen.
 
 ### 6.4. Figure 5
 
