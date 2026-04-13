@@ -368,8 +368,6 @@ class NeuralEmbeddingMerLinModel(nn.Module):
             outputs = self.model(X_batch)
 
             """
-            Pourquoi pas donner les logits avec argmax: So the answer is:
-
             argmax throws away the gradient information
             the loss needs a differentiable quantity
             argmax is only for converting scores to final class labels at evaluation time

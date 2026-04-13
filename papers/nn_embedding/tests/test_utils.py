@@ -81,7 +81,6 @@ def fidelity_layer(trainable_merlin_layer):
         input_state=encoder_1.input_state,
         n_photons=encoder_1.n_photons,
         amplitude_encoding=False,
-        computation_space=encoder_1.computation_space,
         measurement_strategy=encoder_1.measurement_strategy,
         device=encoder_1.device,
         dtype=encoder_1.dtype,
@@ -191,10 +190,10 @@ def test_count_parameters_with_prefixes(trainable_merlin_layer):
 
 
 def test_compute_x2_permutation(fidelity_layer):
-    _, _, _, _, fidelity_layer = fidelity_layer
+    _, _, _, _, layer = fidelity_layer
 
-    perm_x2 = compute_x2_permutation(fidelity_layer)
-    spec = fidelity_layer.computation_process.converter.spec_mappings
+    perm_x2 = compute_x2_permutation(layer)
+    spec = layer.computation_process.converter.spec_mappings
 
     x1_names = spec["x_1_"]
     x2_names = spec["x_2_"]

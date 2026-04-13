@@ -608,6 +608,7 @@ def plot_trace_distance(
     *,
     run_dir: Path | None = None,
     filename: str = "trace_distance.pdf",
+    show: bool = False,
 ) -> Path:
     train_distances = _to_plot_values(train_distances)
     test_distances = _to_plot_values(test_distances)
@@ -646,7 +647,11 @@ def plot_trace_distance(
         ax.set_ylabel("Trace Distance")
         ax.set_xlim(min(iterations) - 0.5, max(iterations) + 0.5)
     fig.tight_layout()
-    return _save_plot(fig, filename, run_dir)
+    if show:
+        plt.show()
+        plt.clf()
+    else:
+        return _save_plot(fig, filename, run_dir)
 
 
 ### Quick loss plot
@@ -655,6 +660,7 @@ def quick_loss_plot(
     *,
     run_dir: Path | None = None,
     filename: str = "quick_loss_plot.pdf",
+    show: bool = False,
 ) -> Path:
     loss = _to_plot_values(loss)
     iterations = list(range(len(loss)))
@@ -664,7 +670,12 @@ def quick_loss_plot(
     ax.set_xlabel("Iteration")
     ax.set_ylabel("Loss")
     fig.tight_layout()
-    return _save_plot(fig, filename, run_dir)
+
+    if show:
+        plt.show()
+        plt.clf()
+    else:
+        return _save_plot(fig, filename, run_dir)
 
 
 ### Accuracies
@@ -674,6 +685,7 @@ def plot_accuracies(
     *,
     run_dir: Path | None = None,
     filename: str = "accuracies.pdf",
+    show: bool = False,
 ) -> Path:
     train_accuracies = _to_plot_values(train_accuracies)
     test_accuracies = _to_plot_values(test_accuracies)
@@ -699,7 +711,11 @@ def plot_accuracies(
         ax.set_xlim(min(iterations), max(iterations) if iterations else 0)
 
     fig.tight_layout()
-    return _save_plot(fig, filename, run_dir)
+    if show:
+        plt.show()
+        plt.clf()
+    else:
+        return _save_plot(fig, filename, run_dir)
 
 
 def plot_figure_5(

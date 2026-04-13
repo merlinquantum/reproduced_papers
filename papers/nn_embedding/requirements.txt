@@ -1,0 +1,7 @@
+merlinquantum
+pytest
+regex
+pennylane
+matplotlib
+opt_einsum
+pylatexenc>=2.10
