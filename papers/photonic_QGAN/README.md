@@ -92,9 +92,20 @@
 - `hp_study`: runs `HalvingGridSearchCV` over ideal-mode training hyperparameters and ranks
   candidates using final SSIM averaged across configured setups/input-states/digits.
 
+## Open question: SPSA vs Adam
+
+An important open question in this reproduction is the comparison between the original paper's `SPSA`-based training and the `Adam`-based training used in the current default pipeline.
+
+At this stage, the repository should not treat the optimizer swap as a neutral implementation detail. The optimizer can affect convergence speed, stability, gradient-noise sensitivity, final sample quality, and the fairness of any comparison with the original results. For that reason, the effect of `SPSA` versus `Adam` still needs to be studied both:
+
+- mathematically: by analysing the update rules, noise sensitivity, estimator bias/variance, and the expected interaction with the photonic QGAN loss landscape;
+- experimentally: by running controlled comparisons under matched architectures, datasets, seeds, iteration budgets, and evaluation metrics.
+
+The current `Adam` hyperparameter study is therefore best interpreted as an exploration of a modified training regime, not yet as a definitive answer to whether `Adam` reproduces or improves on the original `SPSA` setting.
+
 ## Hyperparameter study results
 
-When replacing SPSA by Adam optimizer, different hyperparameters needed to be studied to reproduce similar results as in the original paper using [Halving search](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.HalvingGridSearchCV.html#sklearn.model_selection.HalvingGridSearchCV). The study explored the following hyperparameter ranges:
+Because the current implementation defaults to `Adam` while the original paper relied on `SPSA`, a dedicated hyperparameter study was run to understand the behaviour of this modified training setup using [Halving search](https://scikit-learn.org/stable/modules/generated/sklearn.model_selection.HalvingGridSearchCV.html#sklearn.model_selection.HalvingGridSearchCV). This study helps characterize the `Adam` regime, but it does not by itself settle the broader `SPSA` versus `Adam` comparison. The study explored the following hyperparameter ranges:
 
 | Parameter | Range | Impact |
 |-----------|-------|--------|
