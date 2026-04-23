@@ -276,57 +276,57 @@ Here, we display the training curves and samples for digit `0` using the request
 
 #### setup A
 <p float="left">
-  <img src="./results-final/all-configs-spsa/ideal-0/setup_a/config_0_input_01010/all_runs_report.png" width="45%" />
-  <img src="./results-final/all-configs-spsa/ideal-0/setup_a/config_0_input_1011/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-spsa/ideal-0/setup_a/config_0_input_01010/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-spsa/ideal-0/setup_a/config_0_input_1011/all_runs_report.png" width="45%" />
 </p>
 
 #### setup B
 <p float="left">
-  <img src="./results-final/all-configs-spsa/ideal-0/setup_b/config_0_input_01010/all_runs_report.png" width="45%" />
-  <img src="./results-final/all-configs-spsa/ideal-0/setup_b/config_0_input_00100100/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-spsa/ideal-0/setup_b/config_0_input_01010/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-spsa/ideal-0/setup_b/config_0_input_00100100/all_runs_report.png" width="45%" />
 </p>
 
 #### setup C
 <p float="left">
-  <img src="./results-final/all-configs-spsa/ideal-0/setup_c/config_0_input_01010/all_runs_report.png" width="45%" />
-  <img src="./results-final/all-configs-spsa/ideal-0/setup_c/config_0_input_1011/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-spsa/ideal-0/setup_c/config_0_input_01010/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-spsa/ideal-0/setup_c/config_0_input_1011/all_runs_report.png" width="45%" />
 </p>
 
 #### setup D
 <p float="left">
-  <img src="./results-final/all-configs-spsa/ideal-0/setup_d/config_0_input_01010/all_runs_report.png" width="45%" />
-  <img src="./results-final/all-configs-spsa/ideal-0/setup_d/config_0_input_00100100/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-spsa/ideal-0/setup_d/config_0_input_01010/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-spsa/ideal-0/setup_d/config_0_input_00100100/all_runs_report.png" width="45%" />
 </p>
 
 ### `results-final/all-configs-0`
 
 #### setup A
 <p float="left">
-  <img src="./results-final/all-configs-0/ideal-0/setup_a/config_9_input_01010/all_runs_report.png" width="45%" />
-  <img src="./results-final/all-configs-0/ideal-0/setup_a/config_6_input_1011/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-0/ideal-0/setup_a/config_9_input_01010/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-0/ideal-0/setup_a/config_6_input_1011/all_runs_report.png" width="45%" />
 </p>
 
 #### setup B
 <p float="left">
-  <img src="./results-final/all-configs-0/ideal-0/setup_b/config_10_input_01010/all_runs_report.png" width="45%" />
-  <img src="./results-final/all-configs-0/ideal-0/setup_b/config_18_input_00100100/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-0/ideal-0/setup_b/config_10_input_01010/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-0/ideal-0/setup_b/config_18_input_00100100/all_runs_report.png" width="45%" />
 </p>
 
 #### setup C
 <p float="left">
-  <img src="./results-final/all-configs-0/ideal-0/setup_c/config_11_input_01010/all_runs_report.png" width="45%" />
-  <img src="./results-final/all-configs-0/ideal-0/setup_c/config_7_input_1011/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-0/ideal-0/setup_c/config_11_input_01010/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-0/ideal-0/setup_c/config_7_input_1011/all_runs_report.png" width="45%" />
 </p>
 
 #### setup D
 <p float="left">
-  <img src="./results-final/all-configs-0/ideal-0/setup_d/config_12_input_01010/all_runs_report.png" width="45%" />
-  <img src="./results-final/all-configs-0/ideal-0/setup_d/config_20_input_00100100/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-0/ideal-0/setup_d/config_12_input_01010/all_runs_report.png" width="45%" />
+  <img src="./assets/results-final/all-configs-0/ideal-0/setup_d/config_20_input_00100100/all_runs_report.png" width="45%" />
 </p>
 
 ### SSIM plots
 
 <p float="left">
-  <img src="./results-final/all-configs-spsa/ideal-0/ssim_vs_diversity.png" width="45%" />
-  <img src="./results-final/all-configs-0/ideal-0/ssim_vs_diversity.png" width="45%" />
+  <img src="./assets/results-final/all-configs-spsa/ideal-0/ssim_vs_diversity.png" width="45%" />
+  <img src="./assets/results-final/all-configs-0/ideal-0/ssim_vs_diversity.png" width="45%" />
 </p>
