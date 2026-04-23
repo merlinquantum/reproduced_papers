@@ -13,9 +13,9 @@ class ParametrizedQuantumCircuit:
         arch=None,
         use_clements=False,
     ):
+        self.m = m
         if arch is None:
             arch = ["var", "var", "var", "enc", "var", "var", "var"]
-        self.m = m
         self.arch = arch
         if use_clements:
             self.circuit = self.get_circuit_clements_based()
@@ -26,16 +26,16 @@ class ParametrizedQuantumCircuit:
         self.var_param_names = [p.name for p in self.var_params]
         self.enc_param_names = [p.name for p in self.enc_params]
 
-    def get_variational_layer(self, layer_idx):
+    def get_variational_layer(self, layer_index):
         modes = self.m
-        var = pcvl.Circuit(modes, name="var_" + str(layer_idx))
+        var = pcvl.Circuit(modes, name="var_" + str(layer_index))
         # add phase shifters
         for m in range(modes):
             var.add(
                 m,
                 PS(
                     pcvl.P(
-                        "phi_" + str(m) + "_" + str(layer_idx + 1),
+                        "phi_" + str(m) + "_" + str(layer_index + 1),
                         min_v=0,
                         max_v=2 * np.pi,
                         periodic=True,
@@ -49,13 +49,13 @@ class ParametrizedQuantumCircuit:
                 (m, m + 1),
                 BS(
                     pcvl.P(
-                        "theta_" + str(m) + "_" + str(layer_idx + 1),
+                        "theta_" + str(m) + "_" + str(layer_index + 1),
                         min_v=0,
                         max_v=2 * np.pi,
                         periodic=True,
                     ),
                     pcvl.P(
-                        "psi_" + str(m) + "_" + str(layer_idx + 1),
+                        "psi_" + str(m) + "_" + str(layer_index + 1),
                         min_v=0,
                         max_v=2 * np.pi,
                         periodic=True,
@@ -67,13 +67,13 @@ class ParametrizedQuantumCircuit:
                 (m, m + 1),
                 BS(
                     pcvl.P(
-                        "theta_" + str(m) + "_" + str(layer_idx + 1),
+                        "theta_" + str(m) + "_" + str(layer_index + 1),
                         min_v=0,
                         max_v=2 * np.pi,
                         periodic=True,
                     ),
                     pcvl.P(
-                        "psi_" + str(m) + "_" + str(layer_idx + 1),
+                        "psi_" + str(m) + "_" + str(layer_index + 1),
                         min_v=0,
                         max_v=2 * np.pi,
                         periodic=True,
@@ -82,10 +82,10 @@ class ParametrizedQuantumCircuit:
             )
         return var
 
-    def get_variational_clements_layer(self, layer_idx):
+    def get_variational_clements_layer(self, layer_index):
         modes = self.m
         mode_range = tuple([val.item() for val in np.arange(modes, dtype=int)])
-        var_clem = pcvl.Circuit(modes, name="var_clem_" + str(layer_idx))
+        var_clem = pcvl.Circuit(modes, name="var_clem_" + str(layer_index))
 
         # add generic interferometer (Clements based)
         var_clem.add(
@@ -93,22 +93,22 @@ class ParametrizedQuantumCircuit:
             pcvl.Circuit.generic_interferometer(
                 modes,
                 lambda i: BS(
-                    theta=pcvl.P("theta_" + str(i) + "_" + str(layer_idx + 1)),
-                    phi_tr=pcvl.P("psi_" + str(i) + "_" + str(layer_idx + 1)),
+                    theta=pcvl.P("theta_" + str(i) + "_" + str(layer_index + 1)),
+                    phi_tr=pcvl.P("psi_" + str(i) + "_" + str(layer_index + 1)),
                 ),
             ),
         )
 
         return var_clem
 
-    def get_encoding_layer(self, layer_idx, mode_range):
+    def get_encoding_layer(self, layer_index, mode_range):
         modes = self.m
-        enc = pcvl.Circuit(modes, name="enc_" + str(layer_idx))
+        enc = pcvl.Circuit(modes, name="enc_" + str(layer_index))
 
         # add phase shifters
         for m in mode_range:
             pcvl.P(
-                "enc_" + str(m) + "_" + str(layer_idx + 1),
+                "enc_" + str(m) + "_" + str(layer_index + 1),
                 min_v=0,
                 max_v=2 * np.pi,
                 periodic=True,
@@ -117,7 +117,7 @@ class ParametrizedQuantumCircuit:
                 m,
                 PS(
                     pcvl.P(
-                        "enc_" + str(m) + "_" + str(layer_idx + 1),
+                        "enc_" + str(m) + "_" + str(layer_index + 1),
                         min_v=0,
                         max_v=2 * np.pi,
                         periodic=True,

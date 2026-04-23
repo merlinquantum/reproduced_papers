@@ -5,7 +5,7 @@
       "flags": ["--mode"],
       "help": "Run mode",
       "type": "str",
-      "choices": ["smoke", "digits", "ideal"],
+      "choices": ["smoke", "digits", "ideal", "hp_study"],
       "default": null,
       "apply": { "kind": "config_path", "path": "run.mode" }
     },
@@ -73,13 +73,6 @@
       "apply": { "kind": "config_path", "path": "digits.digits" }
     },
     {
-      "flags": ["--digits-spsa-iters"],
-      "help": "SPSA iterations for digits mode",
-      "type": "int",
-      "default": null,
-      "apply": { "kind": "config_path", "path": "training.digits.spsa_iter_num" }
-    },
-    {
       "flags": ["--digits-opt-iters"],
       "help": "Optimizer iterations for digits mode",
       "type": "int",
@@ -94,18 +87,18 @@
       "apply": { "kind": "config_path", "path": "training.digits.lrD" }
     },
     {
-      "flags": ["--digits-spsa-a"],
-      "help": "SPSA a parameter for digits mode",
+      "flags": ["--digits-lrg"],
+      "help": "Generator learning rate for digits mode",
       "type": "float",
       "default": null,
-      "apply": { "kind": "config_path", "path": "training.digits.spsa_a" }
+      "apply": { "kind": "config_path", "path": "training.digits.lrG" }
     },
     {
-      "flags": ["--digits-spsa-k"],
-      "help": "SPSA k parameter for digits mode",
+      "flags": ["--ideal-opt-iters"],
+      "help": "Optimizer iterations for ideal mode",
       "type": "int",
       "default": null,
-      "apply": { "kind": "config_path", "path": "training.digits.spsa_k" }
+      "apply": { "kind": "config_path", "path": "training.ideal.opt_iter_num" }
     },
     {
       "flags": ["--digits-arch"],
@@ -143,20 +136,6 @@
       "apply": { "kind": "config_path", "path": "digits.pnr" }
     },
     {
-      "flags": ["--ideal-spsa-iters"],
-      "help": "SPSA iterations for ideal mode",
-      "type": "int",
-      "default": null,
-      "apply": { "kind": "config_path", "path": "training.ideal.spsa_iter_num" }
-    },
-    {
-      "flags": ["--ideal-opt-iters"],
-      "help": "Optimizer iterations for ideal mode",
-      "type": "int",
-      "default": null,
-      "apply": { "kind": "config_path", "path": "training.ideal.opt_iter_num" }
-    },
-    {
       "flags": ["--ideal-lrd"],
       "help": "Discriminator learning rate for ideal mode",
       "type": "float",
@@ -164,11 +143,32 @@
       "apply": { "kind": "config_path", "path": "training.ideal.lrD" }
     },
     {
+      "flags": ["--ideal-lrg"],
+      "help": "Generator learning rate for ideal mode",
+      "type": "float",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "training.ideal.lrG" }
+    },
+    {
       "flags": ["--ideal-config-grid"],
       "help": "JSON file path for the ideal config grid",
       "type": "path",
       "default": null,
       "apply": { "kind": "config_path", "path": "ideal.config_grid_path" }
+    },
+    {
+      "flags": ["--ideal-digit"],
+      "help": "Single digit label used to filter Optdigits in ideal mode (overridden by --ideal-digits)",
+      "type": "int",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "ideal.digit" }
+    },
+    {
+      "flags": ["--ideal-digits"],
+      "help": "Comma-separated digit labels for ideal mode (e.g. 0,1,3); produces one ideal-{digit}/ folder per digit",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": { "kind": "config_path", "path": "ideal.digits" }
     }
   ]
 }

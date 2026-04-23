@@ -1,14 +1,20 @@
+import merlin as ML
 import numpy as np
 import perceval as pcvl
 import torch
 import torch.nn as nn
+import torch.nn.functional as F
 from utils.mappings import get_output_map, map_generator_output
 from utils.pqc import ParametrizedQuantumCircuit
 
 
 class ClassicalGenerator(nn.Module):
-    def __init__(self):
+    def __init__(self, noise_dim=2, image_size=8, hidden_dim=64):
         super().__init__()
+        self.noise_dim = int(noise_dim)
+        self.image_size = int(image_size)
+        self.hidden_dim = int(hidden_dim)
+        output_dim = int(np.prod((self.image_size, self.image_size)))
 
         def block(in_feat, out_feat, normalize=True):
             layers = [nn.Linear(in_feat, out_feat)]
@@ -18,17 +24,188 @@ class ClassicalGenerator(nn.Module):
             return layers
 
         self.model = nn.Sequential(
-            *block(2, 4, normalize=False), nn.Linear(4, int(np.prod((8, 8)))), nn.Tanh()
+            *block(self.noise_dim, self.hidden_dim, normalize=False),
+            nn.Linear(self.hidden_dim, output_dim),
+            nn.Tanh(),
         )
 
     def forward(self, z):
         img = self.model(z)
-        img = img.view(img.size(0), 64)
+        img = img.view(img.size(0), self.image_size * self.image_size)
         return img
 
 
-# TODO: where the QuantumLayer of MerLin should be used
-class PatchGenerator:
+class PatchGenerator(nn.Module):
+    def __init__(
+        self,
+        image_size,
+        gen_count,
+        gen_arch,
+        input_state,
+        pnr,
+        lossy,
+        remote_token=None,
+        use_clements=False,
+        sim=False,
+    ):
+        super().__init__()
+        self.image_size = image_size
+        self.gen_count = gen_count
+        self.input_state = input_state
+
+        # Here I have replaced the list of ParametrizedQuantumCircuit
+        # By a list of quantum layers based on these circuits
+        self.models = nn.ModuleList()
+        for _ in range(gen_count):
+            pcvl_circuit = ParametrizedQuantumCircuit(
+                len(input_state), gen_arch, use_clements
+            )
+            circuit_var_params = pcvl_circuit.var_param_names
+            circuit_enc_params = pcvl_circuit.enc_param_names
+            num_enc_params = len(circuit_enc_params)
+
+            layer = ML.QuantumLayer(
+                input_size=num_enc_params,
+                circuit=pcvl_circuit.circuit,
+                input_parameters=circuit_enc_params,
+                trainable_parameters=circuit_var_params,
+                input_state=self.input_state,
+                measurement_strategy=ML.MeasurementStrategy.PROBABILITIES,
+                computation_space=ML.ComputationSpace.FOCK,
+            )
+
+            self.models.append(layer)
+
+        # Define mapping
+        self.output_keys = self.models[0].output_keys
+        rev_map = {}
+        possible_outputs = []
+
+        def state_to_int(state, pnr):
+            m = len(state)
+            res = 0
+            for i in range(m):
+                if pnr:
+                    res += state[i] * (m + 1) ** (m - i)
+                elif state[i] != 0:
+                    res += 2 ** (m - i)
+            return res
+
+        # Mirror get_output_map: with threshold detectors (non-pnr) and lossy source,
+        # only keep states where every mode has count < 2.
+        if pnr or not lossy:
+            possible_state_keys = self.output_keys
+        else:
+            possible_state_keys = [
+                key for key in self.output_keys if all(i < 2 for i in key)
+            ]
+
+        for key in possible_state_keys:
+            int_state = state_to_int(key, pnr)
+            if int_state in rev_map.keys():
+                rev_map[int_state].append(key)
+            else:
+                rev_map[int_state] = [key]
+            if int_state not in possible_outputs:
+                possible_outputs.append(int_state)
+
+        self.output_map = {}
+        for index, int_state in enumerate(sorted(possible_outputs)):
+            for basic_state in rev_map[int_state]:
+                self.output_map[basic_state] = index
+
+        self.bin_count = np.max(list(self.output_map.values())) + 1
+        self.expected_size = self.image_size * self.image_size // self.gen_count
+
+        # Precompute per-column index tensors for dist_to_image.
+        # When lossy and not pnr, output_map covers only a subset of output_keys;
+        # restrict to those columns so no KeyError is raised.
+        self._mapped_col_indices = torch.tensor(
+            [i for i, k in enumerate(self.output_keys) if k in self.output_map],
+            dtype=torch.long,
+        )
+        self._idx_cpu = torch.tensor(
+            [self.output_map[k] for k in self.output_keys if k in self.output_map],
+            dtype=torch.long,
+        )
+
+    def dist_to_image(self, raw_results_list):
+        patches = []
+        B = None
+        K = len(self.output_keys)
+
+        for res in raw_results_list:
+            # res: [B, K]
+            if res.numel() == 0:
+                continue
+
+            # for each of the generators results, rearrange prob distribution according to get_output_map
+            if res.shape[1] != K:
+                raise ValueError(
+                    f"res has K={res.shape[1]} cols but len(output_keys)={K}"
+                )
+
+            if B is None:
+                B = res.shape[0]
+            elif res.shape[0] != B:
+                raise ValueError(
+                    f"Batch size mismatch: got {res.shape[0]} vs expected {B}"
+                )
+
+            device = res.device
+            dtype = res.dtype
+            idx = self._idx_cpu.to(device=device)
+            col_idx = self._mapped_col_indices.to(device=device)
+
+            # Restrict to columns present in output_map (filtered subset when lossy and not pnr)
+            res_mapped = res.index_select(1, col_idx)  # [B, len(mapped)]
+
+            gen_out = torch.zeros((B, self.bin_count), device=device, dtype=dtype)
+            gen_out.index_add_(1, idx, res_mapped)
+
+            # Normalize by the probability mass that landed in mapped (kept) bins.
+            # In lossy/non-PNR mode this can be 0 for samples where all probability
+            # fell into filtered-out multi-photon states; clamp ensures no NaN/inf
+            # and the result is a zero distribution for those samples.
+            total_count = res_mapped.sum(dim=1, keepdim=True)  # [B, 1]
+            gen_out = gen_out / total_count.clamp(min=1e-8)
+
+            # map to the right number of pixels with map_generator_output
+            gen_out_len = gen_out.shape[1]
+            expected_len = self.expected_size
+
+            if gen_out_len > expected_len:
+                surplus_half = (gen_out_len - expected_len) // 2
+                img_gen = gen_out[:, surplus_half : surplus_half + expected_len]
+            else:
+                left = (expected_len - gen_out_len) // 2
+                right = expected_len - gen_out_len - left
+                img_gen = F.pad(gen_out, (left, right))
+
+            # Normalize patch by its max (avoid divide-by-zero)
+            mx = img_gen.max(dim=1, keepdim=True).values
+            img_gen = img_gen / (mx + 1e-8)
+
+            # Concatenate into one long "img_patch" tensor
+            patches.append(img_gen)
+
+        # Concatenate into one patch
+        if len(patches) == 0:
+            return torch.empty(0)
+
+        return torch.cat(patches, dim=1)
+
+    def forward(self, z):
+        # Get results from each generator which is a quantum layer
+        raw_results_list = [m(z) for m in self.models]
+
+        # Map to image
+        img = self.dist_to_image(raw_results_list)
+
+        return img
+
+
+class PatchGeneratorLegacy:
     def __init__(
         self,
         image_size,
@@ -114,6 +291,12 @@ class PatchGenerator:
         return iteration_list
 
     def generate(self, noise=None, it_list=None):
+        # Do the mapping to get an image
+        # what the mapping does:
+        # for 1 item in a batch, get results for all generators in the patchgenerator
+        # for each of them, rearrange prob distribution according to get_output_map
+        # then map to the right number of pixels with map_generator_output
+        # then concatenate all in one array --> that's one image
         if noise is not None:
             self.noise = noise
 
@@ -141,6 +324,8 @@ class PatchGenerator:
         out_map = self.output_map
         fake_data = []
         for noise_item in result_list:
+            # There are (n_batch, n_generators) items in the whole list
+            # We create one data sample per batch item, based on all generators
             fake_data_sample = []
             for gen_item in noise_item:
                 res = gen_item["results"]
@@ -151,18 +336,19 @@ class PatchGenerator:
                     try:
                         gen_out[out_map[key]] += res[key]
                         total_count += res[key]
-                    except Exception:
-                        pass
+                    except KeyError:
+                        continue
                 # print(np.sum(gen_out / self.sample_count), np.sum(gen_out / total_count))
-                if total_count > 0:
-                    gen_out /= total_count
+                gen_out /= total_count
+                # The probabilities are re-ordered according to the mapping
+                # gen_out is a np array of the re-ordered probabilities of size bin_count
+                # map_generator_output then maps gen_out to the right number of pixels
                 out_modes = map_generator_output(
                     gen_out, self.image_size * self.image_size // self.gen_count
                 )
-                max_mode = np.max(out_modes)
-                if max_mode > 0:
-                    out_modes = out_modes / max_mode
-                fake_data_sample.extend(out_modes)
+                # add linearly to fake data sample
+                mx = np.max(out_modes)
+                fake_data_sample.extend(out_modes / mx if mx > 0 else out_modes)
 
             fake_data.append(fake_data_sample)
         fake_data = torch.FloatTensor(fake_data)

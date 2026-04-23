@@ -1,0 +1,75 @@
+{
+  "description": "Classical-generator baseline aligned with photonic-qgan-main/notebooks/classical_gan.ipynb.",
+  "seed": 0,
+  "dtype": "float32",
+  "device": "cpu",
+  "outdir": "results",
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  },
+  "run": {
+    "mode": "digits",
+    "write_to_disk": true,
+    "runs": 1,
+    "progress": true,
+    "log_every": 100
+  },
+  "dataset": {
+    "csv_path": "photonic_QGAN/optdigits_csv.csv"
+  },
+  "model": {
+    "image_size": 8,
+    "batch_size": 4,
+    "lossy": false,
+    "use_clements": false,
+    "sim": false,
+    "remote_token": null,
+    "generator_type": "classical"
+  },
+  "training": {
+    "digits": {
+      "opt_iter_num": 1500,
+      "lrD": 0.0015,
+      "lrG": 0.0015,
+      "adam_beta1": 0.5,
+      "adam_beta2": 0.999,
+      "real_label": 1.0,
+      "fake_label": 0.0,
+      "gen_target": 1.0,
+      "d_steps": 1,
+      "g_steps": 1
+    },
+    "ideal": {
+      "opt_iter_num": 1500,
+      "lrD": 0.0015,
+      "lrG": 0.0015,
+      "adam_beta1": 0.5,
+      "adam_beta2": 0.999,
+      "real_label": 1.0,
+      "fake_label": 0.0,
+      "gen_target": 1.0,
+      "d_steps": 1,
+      "g_steps": 1
+    }
+  },
+  "digits": {
+    "arch": ["var", "var", "enc[2]", "var", "var"],
+    "noise_dim": 2,
+    "input_state": [0, 1, 0, 1, 0],
+    "gen_count": 4,
+    "pnr": false,
+    "digit_start": 0,
+    "digit_end": 0,
+    "digits": [0]
+  },
+  "ideal": {
+    "use_default_grid": false,
+    "config_grid_path": null,
+    "digit": 0,
+    "setup": "setup_c",
+    "input_state": "01010",
+    "gen_count": 4,
+    "pnr": false
+  }
+}
