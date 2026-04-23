@@ -1,0 +1,7 @@
+qiskit-ibm-runtime
+jupyter
+matplotlib
+pylatexenc
+torch==2.8.0
+merlinquantum==0.2.3
+scikit-learn
