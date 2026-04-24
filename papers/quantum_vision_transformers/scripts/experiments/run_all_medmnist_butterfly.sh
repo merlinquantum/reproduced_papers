@@ -56,7 +56,7 @@ if '${m}' in ('D', 'D_full'):
 json.dump(c, sys.stdout, indent=2)
 " > "$tmp_cfg"
 
-            python implementation.py \
+            python ../../implementation.py --paper quantum_vision_transformers \
                 --config "$tmp_cfg" --seed "$s" --outdir "$out" \
                 $EXTRA 2>&1 | tee "${out}.log"
 

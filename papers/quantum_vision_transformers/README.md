@@ -68,7 +68,7 @@
 
 ```
 QVT/
-├── implementation.py               CLI entry point
+├── implementation.py               Compatibility shim to the shared root CLI
 ├── verify.py                       All-model verification checklist
 ├── requirements.txt
 ├── configs/
@@ -98,20 +98,25 @@ QVT/
 ```bash
 cd papers/quantum_vision_transformers
 pip install -r requirements.txt
-python verify.py                                    # check all models build and grad-flow
-bash scripts/validation/smoke_test.sh                          # 3 epochs each (A–F)
-bash scripts/experiments/run_all_retina_lite.sh                # quick lite benchmark
-bash scripts/experiments/run_all_retina_butterfly.sh           # butterfly paper-relevant models
-bash scripts/experiments/run_all_medmnist_butterfly_lite_retina_sized.sh  # MedMNIST lite with Retina-sized train subsets
-bash scripts/experiments/run_all_medmnist_butterfly_lite_subset.sh        # MedMNIST lite with configurable train subset size
-bash scripts/reproduction/run_paper_retina_benchmark.sh        # exact paper benchmark family on RetinaMNIST
-bash scripts/reproduction/run_paper_medmnist_benchmark.sh      # exact paper benchmark family on all MedMNIST datasets
-bash scripts/experiments/run_extensions_comparison.sh          # full comparison
+python ../../implementation.py --paper quantum_vision_transformers --config configs/paper/model_a_retina.json
+bash scripts/validation/validate.sh                            # check all models build and grad-flow
+bash scripts/suites/run_retina_cpu_suite.sh --device cpu       # paper + butterfly CPU workflow
+bash scripts/suites/run_medmnist_cpu_suite.sh --device cpu     # MedMNIST CPU workflow
 python scripts/analysis/generate_figures.py outdir/            # figures (all)
 python scripts/analysis/generate_figures.py outdir/ --profile lite  # lite figures only
 ```
 
 `requirements.txt` now installs the vendored [third_party/merlinquantum](/C:/Users/BenjaminSTOTT/PycharmProjects/reproduced_papers/third_party/merlinquantum) checkout in editable mode, so a full repo clone is required on any machine where you want the local MerLin performance fixes.
+
+## Shared runner usage
+
+Run QVT through the repo-root shared CLI:
+
+```bash
+python implementation.py --paper quantum_vision_transformers --config papers/quantum_vision_transformers/configs/paper/model_a_retina.json
+```
+
+For paper-local convenience, the existing `scripts/` wrappers still work, but they now call the shared root runner internally.
 
 ## Server / GPU setup
 

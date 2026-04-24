@@ -71,7 +71,7 @@ if c.get("model_type") in ("D", "E"):
 json.dump(c, fp=open("/dev/stdout", "w"), indent=2)
 PY
 
-        python implementation.py \
+        python ../../implementation.py --paper quantum_vision_transformers \
             --config "$tmp_cfg" --seed "$s" --outdir "$out" \
             $EXTRA 2>&1 | tee "${out}.log"
 

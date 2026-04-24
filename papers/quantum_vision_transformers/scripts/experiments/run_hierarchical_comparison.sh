@@ -45,7 +45,7 @@ for tag_prefix in "B" "D" "D_full" "E" "F"; do
         echo "════════════════════════════════════════"
         echo "  ${tag_prefix}  seed ${s}"
         echo "════════════════════════════════════════"
-        python implementation.py \
+        python ../../implementation.py --paper quantum_vision_transformers \
             --config "$cfg" --seed "$s" --outdir "$out" \
             $EXTRA 2>&1 | tee "${out}.log"
     done

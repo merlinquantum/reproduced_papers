@@ -28,14 +28,14 @@ import time
 import numpy as np
 import torch
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
+ROOT = pathlib.Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from implementation import resolve_runtime_dtype
 from lib.config import validate_run_config
 from lib.data import get_medmnist_loaders
 from lib.models import QVTModel
+from lib.runner import resolve_runtime_dtype
 from lib.training import train
 
 try:

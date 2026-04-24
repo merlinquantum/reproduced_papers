@@ -15,6 +15,16 @@ The `scripts/` tree is grouped by purpose rather than kept as one flat directory
 - `scripts/analysis/generate_figures.py`
   Regenerate figures from `outdir/`.
 
+## Runner contract
+
+The paper is now discoverable through the repo-root shared CLI:
+
+```bash
+python implementation.py --paper quantum_vision_transformers --config papers/quantum_vision_transformers/configs/paper/model_a_retina.json
+```
+
+The shell wrappers in this directory already invoke that root runner internally.
+
 ## Layout
 
 - `analysis/`

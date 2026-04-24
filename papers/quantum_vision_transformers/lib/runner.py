@@ -17,7 +17,7 @@ from .models import QVTModel
 from .training import train
 
 
-def _resolve_runtime_dtype(cfg: dict) -> torch.dtype:
+def resolve_runtime_dtype(cfg: dict) -> torch.dtype:
     """Resolve the runtime real dtype from the normalized config."""
 
     precision_mode = cfg.get("precision_mode", "baseline")
@@ -85,7 +85,7 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         _list_models()
         return
 
-    runtime_dtype = _resolve_runtime_dtype(cfg)
+    runtime_dtype = resolve_runtime_dtype(cfg)
     torch.set_default_dtype(runtime_dtype)
 
     device_cfg = str(cfg.get("device", "cpu"))
@@ -144,4 +144,4 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
     )
 
 
-__all__ = ["train_and_evaluate"]
+__all__ = ["train_and_evaluate", "resolve_runtime_dtype"]

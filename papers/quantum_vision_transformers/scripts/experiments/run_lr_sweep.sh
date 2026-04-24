@@ -51,7 +51,7 @@ c['lr_quantum'] = ${lrq}
 c['lr_milestones'] = [20, 25]
 json.dump(c, open('${tmp}', 'w'), indent=2)
 "
-            python implementation.py --config "$tmp" --seed $SEED --outdir "$out" \
+            python ../../implementation.py --paper quantum_vision_transformers --config "$tmp" --seed $SEED --outdir "$out" \
                 $EXTRA 2>&1 | tail -5
             rm -f "$tmp"
         done

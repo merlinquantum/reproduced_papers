@@ -81,7 +81,7 @@ for entry in "${RUNS[@]}"; do
         echo "════════════════════════════════════════════════════"
 
         mkdir -p "$out"
-        if python implementation.py \
+        if python ../../implementation.py --paper quantum_vision_transformers \
             --config "$cfg" --seed "$s" --outdir "$out" \
             $EXTRA 2>&1 | tee "${out}/train.log"; then
             if [ -f "${out}/results.json" ]; then

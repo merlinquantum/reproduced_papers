@@ -56,7 +56,7 @@ for entry in "${CONFIGS[@]}"; do
         echo "  Paper benchmark ${tag_prefix}  seed ${s}"
         echo "========================================"
 
-        python implementation.py \
+        python ../../implementation.py --paper quantum_vision_transformers \
             --config "$cfg" --seed "$s" --outdir "$out" \
             $EXTRA 2>&1 | tee "${out}.log"
     done

@@ -35,7 +35,7 @@ for m in $MODELS; do
         echo "════════════════════════════════════════"
         echo "  Model ${m}  seed ${s}  (generic)"
         echo "════════════════════════════════════════"
-        python implementation.py \
+        python ../../implementation.py --paper quantum_vision_transformers \
             --config "$cfg" --seed "$s" --outdir "$out" \
             $EXTRA 2>&1 | tee "${out}.log"
     done
