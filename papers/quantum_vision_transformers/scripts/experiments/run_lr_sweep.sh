@@ -41,7 +41,7 @@ for m in $MODELS; do
 
             echo "════ ${m}  lr=${lrc}  lr_q=${lrq} ════"
 
-            tmp=$(mktemp)
+            tmp=$(mktemp --suffix=.json)
             python3 -c "
 import json
 with open('${cfg}') as f: c = json.load(f)

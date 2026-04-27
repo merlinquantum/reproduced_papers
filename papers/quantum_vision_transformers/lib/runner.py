@@ -17,8 +17,21 @@ from .models import QVTModel
 from .training import train
 
 
-def resolve_runtime_dtype(cfg: dict) -> torch.dtype:
-    """Resolve the runtime real dtype from the normalized config."""
+def resolve_runtime_dtype(cfg: dict, dtype_override: str | None = None) -> torch.dtype:
+    """Resolve the runtime real dtype from the normalized config.
+
+    When ``dtype_override`` is provided, it takes precedence over ``precision_mode``.
+    This is mainly used for explicit comparisons in tests/benchmarks.
+    """
+
+    if dtype_override is not None:
+        # Accept the same dtype strings as the shared runtime.
+        resolved_override = dtype_torch(dtype_override)
+        if resolved_override is not None:
+            return resolved_override
+        label = dtype_label(dtype_override)
+        if label:
+            return getattr(torch, label)
 
     precision_mode = cfg.get("precision_mode", "baseline")
     if precision_mode == "gpu_friendly":

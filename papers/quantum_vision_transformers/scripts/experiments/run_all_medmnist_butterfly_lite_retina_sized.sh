@@ -51,7 +51,7 @@ for ds in "${DATASETS[@]}"; do
             echo "════ Model ${m}  ${ds}  butterfly  lite  retina-sized train  seed ${s} ════"
 
             mkdir -p "$out"
-            tmp_cfg=$(mktemp)
+            tmp_cfg=$(mktemp --suffix=.json)
 
             python - <<PY > "$tmp_cfg"
 import json

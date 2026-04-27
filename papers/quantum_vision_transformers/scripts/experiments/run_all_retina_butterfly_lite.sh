@@ -40,7 +40,7 @@ for m in $MODELS; do
         echo "========================================"
 
         mkdir -p "$out"
-        tmp_cfg=$(mktemp)
+        tmp_cfg=$(mktemp --suffix=.json)
 
         python - <<PY > "$tmp_cfg"
 import json

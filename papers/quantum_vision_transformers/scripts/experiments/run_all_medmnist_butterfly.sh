@@ -41,7 +41,7 @@ for ds in "${DATASETS[@]}"; do
             echo "════ Model ${m}  ${ds}  butterfly  seed ${s} ════"
 
             # Create a temporary config with the right dataset and butterfly layout
-            tmp_cfg=$(mktemp)
+            tmp_cfg=$(mktemp --suffix=.json)
             python -c "
 import json, sys
 with open('${cfg}') as f: c = json.load(f)

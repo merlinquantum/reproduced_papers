@@ -61,7 +61,7 @@ for ds in "${DATASETS[@]}"; do
             echo "  Paper benchmark ${tag_prefix}  ${ds}  seed ${s}"
             echo "========================================"
 
-            tmp_cfg=$(mktemp)
+            tmp_cfg=$(mktemp --suffix=.json)
             python - <<PY > "$tmp_cfg"
 import json
 with open("${cfg}") as f:

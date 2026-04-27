@@ -37,7 +37,7 @@ for m in $MODELS; do
         echo "════════════════════════════════════════"
 
         # Create a temporary config with the butterfly circuit family
-        tmp_cfg=$(mktemp)
+        tmp_cfg=$(mktemp --suffix=.json)
         python -c "
 import json, sys
 with open('${cfg}') as f: c = json.load(f)

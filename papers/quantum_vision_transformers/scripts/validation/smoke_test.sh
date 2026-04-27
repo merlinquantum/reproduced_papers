@@ -28,7 +28,7 @@ for m in "${MODELS[@]}"; do
     echo ""
     echo "════ Smoke: Model ${m} (3 ep, 1 layer) ════"
 
-    tmp=$(mktemp)
+    tmp=$(mktemp --suffix=.json)
     python -c "
 import json
 with open('${cfg}') as f: c = json.load(f)
@@ -36,7 +36,8 @@ c['epochs'] = 3; c['n_layers'] = 1
 json.dump(c, open('${tmp}', 'w'), indent=2)
 "
     if python ../../implementation.py --paper quantum_vision_transformers --config "$tmp" --seed 42 --outdir "$out" 2>&1 | tail -8; then
-        if [ -f "${out}/results.json" ]; then
+        results_file=$(find "$out" -name results.json -print | sort | tail -1)
+        if [ -n "$results_file" ] && [ -f "$results_file" ]; then
             echo "  ✓ Model ${m} OK"
             PASSED=$((PASSED + 1))
         else

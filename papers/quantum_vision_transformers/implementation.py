@@ -17,6 +17,13 @@ if str(REPO_ROOT) not in sys.path:
 from runtime_lib import run_from_project
 
 
+def resolve_runtime_dtype(cfg: dict, dtype_override: str | None = None):
+    # Used by paper-local tests; keep import lazy so the shim works from any CWD.
+    from lib.runner import resolve_runtime_dtype as _resolve_runtime_dtype
+
+    return _resolve_runtime_dtype(cfg, dtype_override)
+
+
 def main(argv: list[str] | None = None) -> int:
     project_dir = Path(__file__).resolve().parent
     run_from_project(project_dir, argv)
