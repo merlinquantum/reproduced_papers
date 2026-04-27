@@ -446,10 +446,11 @@ def get_local_dimension(
             model.train()
 
             # Compute the empirical Fisher information matrix
-            fim = torch.zeros(d, d, device=output.device, dtype=output.dtype)
             count = 0
             for x_batch, _ in sub_loader:
                 output = model(x_batch)
+                if count == 0:
+                    fim = torch.zeros(d, d, device=output.device, dtype=output.dtype)
                 log_output = torch.log(output + 1e-10)
                 for k in range(output.shape[-1]):
                     model.zero_grad()
