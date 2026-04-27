@@ -1,0 +1,16 @@
+{
+    "description": "Run the FIG4 experiment",
+    "outdir": "results",
+    "exp_to_run": "FIG4",
+    "use_merlin": "False",
+    "batch_size": 25,
+    "num_epochs_training_embedding": 100,
+    "lr": 0.01,
+    "distance": "Trace",
+    "samples_per_dataset": 400,
+    "num_datasets": 3,
+    "num_repetitions_per_dataset": 3,
+    "epsilon": 0.01,
+    "num_samples_int": 100,
+    "dont_generate_graph":"False"
+}

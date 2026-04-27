@@ -1,0 +1,16 @@
+{
+    "description": "Run the default (FIG2) experiment",
+    "outdir": "results",
+    "exp_to_run": "FIG2",
+    "dataset": "mnist",
+    "use_merlin": "True",
+    "batch_size": 100,
+    "num_epochs_training_embedding": 20,
+    "num_epochs_training_classifier": 20,
+    "lr": 0.01,
+    "distance": "Trace",
+    "samples_per_class": 100,
+    "num_classes": 2,
+    "num_repetitions": 1,
+    "dont_generate_graph":"True"
+}

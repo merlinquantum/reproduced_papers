@@ -1,0 +1,14 @@
+{
+    "description": "Run the FIG6 experiment",
+    "outdir": "results",
+    "exp_to_run": "FIG6",
+    "dataset": "mnist",
+    "use_merlin": "False",
+    "batch_size": 100,
+    "num_epochs_training_embedding": 1000,
+    "lr": 0.01,
+    "distance": "Trace",
+    "samples_per_class": 500,
+    "num_repetitions": 8,
+    "dont_generate_graph":"False"
+}

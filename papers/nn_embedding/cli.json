@@ -1,0 +1,138 @@
+{
+  "description": "CLI schema for the Neural Quantum Embedding experiments",
+  "arguments": [
+    {
+      "flags": ["--exp_to_run"],
+      "help": "Which experiment to run: 'FIG2', 'FIG3', 'FIG4', 'FIG5', 'FIG6' (default: 'FIG2')",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "exp_to_run"}
+    },
+    {
+      "flags": ["--dataset"],
+      "help": "Dataset to use (default: 'mnist')",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset"}
+    },
+    {
+      "flags": ["--use_merlin"],
+      "help": "Use MerLin (photonic) backend instead of gate-based",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "use_merlin"}
+    },
+    {
+      "flags": ["--batch_size"],
+      "help": "Batch size for training (default: 100)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "batch_size"}
+    },
+    {
+      "flags": ["--num_epochs_training_embedding"],
+      "help": "Number of epochs for embedding training (default: 50)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_epochs_training_embedding"}
+    },
+    {
+      "flags": ["--num_epochs_training_classifier"],
+      "help": "Number of epochs for classifier training (default: 1000)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_epochs_training_classifier"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Learning rate (default: 0.01)",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "lr"}
+    },
+    {
+      "flags": ["--distance"],
+      "help": "Distance metric: 'Trace' or 'Hilbert-Schmidt' (default: 'Trace')",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "distance"}
+    },
+    {
+      "flags": ["--samples_per_class"],
+      "help": "Samples per class (default: 150)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "samples_per_class"}
+    },
+    {
+      "flags": ["--num_repetitions"],
+      "help": "Number of repetitions (default: 5)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_repetitions"}
+    },
+    {
+      "flags": ["--num_classes"],
+      "help": "Number of classes for FIG2/FIG3 (default: 2)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_classes"}
+    },
+    {
+      "flags": ["--layers_to_test"],
+      "help": "Layers to test for FIG3, comma-separated (default: '1,2,3')",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "layers_to_test"}
+    },
+    {
+      "flags": ["--num_datasets"],
+      "help": "Number of datasets for FIG4 (default: 10)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_datasets"}
+    },
+    {
+      "flags": ["--num_repetitions_per_dataset"],
+      "help": "Repetitions per dataset for FIG4 (default: 20)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_repetitions_per_dataset"}
+    },
+    {
+      "flags": ["--samples_per_dataset"],
+      "help": "Samples per dataset for FIG4 (default: 400)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "samples_per_dataset"}
+    },
+    {
+      "flags": ["--epsilon"],
+      "help": "Epsilon for FIG4 (default: 0.01)",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "epsilon"}
+    },
+    {
+      "flags": ["--num_samples_int"],
+      "help": "Number of integration samples for FIG4 (default: 100)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_samples_int"}
+    },
+    {
+      "flags": ["--weights"],
+      "help": "Weights for FIG5, comma-separated (default: '0.1,0.2,...,0.9')",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "weights"}
+    },
+    {
+      "flags": ["--dont_generate_graph"],
+      "help": "Disable graph generation",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dont_generate_graph"}
+    }
+  ]
+}
