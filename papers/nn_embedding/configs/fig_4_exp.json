@@ -7,7 +7,7 @@
     "num_epochs_training_embedding": 100,
     "lr": 0.01,
     "distance": "Trace",
-    "samples_per_datatset": 400,
+    "samples_per_dataset": 400,
     "num_datasets": 3,
     "num_repetitions_per_dataset": 3,
     "epsilon": 0.01,

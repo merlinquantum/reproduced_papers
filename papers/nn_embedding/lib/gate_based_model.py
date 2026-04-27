@@ -711,7 +711,7 @@ def create_paper_models() -> tuple[
         classical_model=classical_model,
         quantum_embedding_layer=EmbeddingCallable().QuantumEmbedding1,
         quantum_classifier=QCNN,
-        quantum_classifier_params_shape=(45),
+        quantum_classifier_params_shape=(45,),
     )
 
     ###Model 2
@@ -724,7 +724,7 @@ def create_paper_models() -> tuple[
         classical_model=classical_model,
         quantum_embedding_layer=EmbeddingCallable().QuantumEmbedding2,
         quantum_classifier=QCNN,
-        quantum_classifier_params_shape=(45),
+        quantum_classifier_params_shape=(45,),
     )
 
     ###Model 3
@@ -743,7 +743,7 @@ def create_paper_models() -> tuple[
         classical_model=classical_model,
         quantum_embedding_layer=EmbeddingCallable().QuantumEmbedding2,
         quantum_classifier=QCNN,
-        quantum_classifier_params_shape=(45),
+        quantum_classifier_params_shape=(45,),
     )
 
     return model_1, model_2, model_3

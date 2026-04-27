@@ -156,7 +156,6 @@ def haar_integral_photonics(dim: int, samples):
 def kron(a, b):
     """
     Kronecker product of matrices a and b with leading batch dimensions.
-    Batch dimensions are broadcast. The number of them mush
     :type a: torch.Tensor
     :type b: torch.Tensor
     :rtype: torch.Tensor
@@ -194,13 +193,11 @@ def two_design_deviation_photonics(rhos: torch.Tensor, dim: int, N: int):
 
 def kernel_variance(kernel_matrix: torch.Tensor) -> float:
     N = kernel_matrix.size(0)
-    Kernel_offD = []
-    for i in range(N):
-        for j in range(i + 1, N):
-            Kernel_offD.append(kernel_matrix[i][j])
+    Kernel_offD_indexes = torch.triu_indices(N, N, offset=1)
+    Kernel_offD = kernel_matrix[Kernel_offD_indexes]
+    std = Kernel_offD.flatten().std()
 
-    Kernel_offD = np.array(Kernel_offD)
-    return Kernel_offD.std() ** 2
+    return float(std.item()) ** 2
 
 
 ############################################################################################################
@@ -311,19 +308,21 @@ def create_basic_merlin_model(
             for param in self.embedder.parameters():
                 param.requires_grad = False
 
+            self.quantum_classifier = deepcopy(quantum_classifier)
+
         def forward(self, x: torch.Tensor) -> torch.Tensor:
             with torch.no_grad():
                 x = x.reshape(x.size(0), -1)
                 states = assign_params(self.embedder, x)
 
-            probs = quantum_classifier(states)
+            probs = self.quantum_classifier(states)
 
             return self.output_grouper(probs)
 
     return BasicModel()
 
 
-def create_trainable_embedding_merlin_model(
+def create_with_input_embedding_merlin_model(
     quantum_embedding_layer: ml.QuantumLayer,
     quantum_classifier: ml.QuantumLayer,
     num_classes: int = 2,
@@ -335,13 +334,12 @@ def create_trainable_embedding_merlin_model(
                 quantum_classifier.output_size, num_classes
             )
             self.embedder = deepcopy(quantum_embedding_layer)
-            for param in self.embedder.parameters():
-                param.requires_grad = False
+            self.quantum_classifier = deepcopy(quantum_classifier)
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
             states = self.embedder(x)
 
-            probs = quantum_classifier(states)
+            probs = self.quantum_classifier(states)
 
             return self.output_grouper(probs)
 
@@ -362,7 +360,7 @@ def to_serializable_list(values):
     return values
 
 
-# By copilot, changes the order to keep the value ranges, but only works with
+# By copilot, changes the order to keep the value ranges.
 def randomize_trainable_parameters(module: nn.Module) -> None:
     """Force a fresh random initialization for each repetition.
 
@@ -406,16 +404,23 @@ def get_local_dimension(
     epsilon: float = 0.01,
     num_samples: int = 100,
     fim_subsample: int = 500,
+    min_value_of_step: int = 250,
 ) -> float:
     d = sum(param.numel() for param in model.parameters())
     eye = np.eye(d)
     params = list(model.parameters())
     total_size = y.size(0)
+    if min_value_of_step > total_size - 5:
+        raise ValueError(
+            "The minium value per step must be smaller than the dataset size -5."
+        )
 
     values = []
     n_values = []
 
-    for n in range(250, total_size + 1, (total_size - 250) // 5):
+    for n in range(
+        min_value_of_step, total_size + 1, (total_size - min_value_of_step) // 5
+    ):
         n_values.append(n)
         gamma = 1
         kappa = gamma * n / (2 * np.pi * np.log(n))
@@ -423,7 +428,7 @@ def get_local_dimension(
             params, d, epsilon=epsilon, num_samples=num_samples
         )
 
-        # COPILOT, LOI DES GRANDS NOMBRES: Subsample data for FIM — it is a statistical expectation so a
+        # Copilot; Big number law: Subsample data for FIM — it is a statistical expectation so a
         # representative subset is sufficient and avoids O(n) forward passes.
         fim_n = min(fim_subsample, n)
         indices = np.random.choice(n, fim_n, replace=False)
@@ -441,7 +446,7 @@ def get_local_dimension(
             model.train()
 
             # Compute the empirical Fisher information matrix
-            fim = torch.zeros(d, d)
+            fim = torch.zeros(d, d, device=output.device, dtype=output.dtype)
             count = 0
             for x_batch, _ in sub_loader:
                 output = model(x_batch)
@@ -458,7 +463,7 @@ def get_local_dimension(
                     )
                     fim += torch.outer(grads, grads) * output[0, k].detach()
                 count += 1
-            fim = fim.detach().numpy() / max(count, 1)
+            fim = (fim / max(count, 1)).detach().cpu().numpy()
             fims.append(fim)
             trace_sum += np.trace(fim)
 
@@ -508,7 +513,7 @@ def create_param_ensemble(
     .. [1] https://extremelearning.com.au/how-to-generate-uniformly-random-points-on-n-spheres-and-n-balls/
     """
     shapes = [p.shape for p in params]
-    params_flat = np.concatenate([p.detach().numpy().flatten() for p in params])
+    params_flat = np.concatenate([p.detach().cpu().numpy().flatten() for p in params])
 
     u = np.random.normal(
         0, epsilon, (num_samples, d + 2)
@@ -627,7 +632,7 @@ def parse_args():
         help="Layers to test for FIG3, comma-separated (default: '1,2,3')",
     )
     parser.add_argument(
-        "--samples_per_datatset",
+        "--samples_per_dataset",
         type=int,
         default=400,
         help="Samples per dataset for FIG4 (default: 400)",

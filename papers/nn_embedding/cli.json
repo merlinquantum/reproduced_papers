@@ -100,11 +100,11 @@
       "apply": {"kind": "config_path", "path": "num_repetitions_per_dataset"}
     },
     {
-      "flags": ["--samples_per_datatset"],
+      "flags": ["--samples_per_dataset"],
       "help": "Samples per dataset for FIG4 (default: 400)",
       "type": "int",
       "default": null,
-      "apply": {"kind": "config_path", "path": "samples_per_datatset"}
+      "apply": {"kind": "config_path", "path": "samples_per_dataset"}
     },
     {
       "flags": ["--epsilon"],

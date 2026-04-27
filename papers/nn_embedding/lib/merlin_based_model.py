@@ -699,7 +699,7 @@ class NeuralEmbeddingMerLinKernel(nn.Module):
 ########################################################################################################
 
 
-def create_basic_merlin_model() -> NeuralEmbeddingMerLinModel:
+def create_merlin_models_paper() -> NeuralEmbeddingMerLinModel:
     """Create the default MerLin hybrid model used for basic experiments.
 
     The returned model couples a single entangling-layer photonic embedder, a
