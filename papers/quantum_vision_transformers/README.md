@@ -97,7 +97,9 @@ QVT/
 
 ```bash
 cd papers/quantum_vision_transformers
-pip install -r requirements.txt
+cd ../..
+pip install -r papers/quantum_vision_transformers/requirements.txt
+cd papers/quantum_vision_transformers
 python ../../implementation.py --paper quantum_vision_transformers --config configs/paper/model_a_retina.json
 bash scripts/validation/validate.sh                            # check all models build and grad-flow
 bash scripts/suites/run_retina_cpu_suite.sh --device cpu       # paper + butterfly CPU workflow
@@ -106,7 +108,7 @@ python scripts/analysis/generate_figures.py outdir/            # figures (all)
 python scripts/analysis/generate_figures.py outdir/ --profile lite  # lite figures only
 ```
 
-`requirements.txt` now installs the vendored [third_party/merlinquantum](/C:/Users/BenjaminSTOTT/PycharmProjects/reproduced_papers/third_party/merlinquantum) checkout in editable mode, so a full repo clone is required on any machine where you want the local MerLin performance fixes.
+`requirements.txt` installs the vendored `third_party/merlinquantum` checkout in editable mode, so it must be installed from the repo root (as shown above) and a full repo clone is required.
 
 ## Shared runner usage
 

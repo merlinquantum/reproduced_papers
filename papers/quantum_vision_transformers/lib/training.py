@@ -29,11 +29,36 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 
 def _auc(probs: np.ndarray, labels: np.ndarray, n_classes: int) -> float:
+    """Compute ROC AUC.
+
+    Avoid importing scikit-learn on the hot path (it is expensive to import and
+    dominates smoke-test runtime). For binary classification we use a small
+    NumPy implementation; for multi-class we fall back to scikit-learn when
+    available.
+    """
+
     try:
-        from sklearn.metrics import roc_auc_score
-        from sklearn.preprocessing import label_binarize
+        labels = np.asarray(labels).astype(int)
+        probs = np.asarray(probs)
         if n_classes == 2:
-            return float(roc_auc_score(labels, probs[:, 1]))
+            scores = probs[:, 1].astype(float)
+            # Rank-based AUC (equivalent to Mann-Whitney U statistic).
+            order = np.argsort(scores, kind="mergesort")
+            ranks = np.empty_like(order, dtype=float)
+            ranks[order] = np.arange(1, len(scores) + 1, dtype=float)
+            pos = labels == 1
+            n_pos = int(pos.sum())
+            n_neg = int((~pos).sum())
+            if n_pos == 0 or n_neg == 0:
+                return 0.0
+            sum_ranks_pos = float(ranks[pos].sum())
+            auc = (sum_ranks_pos - n_pos * (n_pos + 1) / 2.0) / (n_pos * n_neg)
+            return float(auc)
+
+        # Multi-class: keep the reference implementation when sklearn is present.
+        from sklearn.metrics import roc_auc_score  # type: ignore
+        from sklearn.preprocessing import label_binarize  # type: ignore
+
         lb = label_binarize(labels, classes=list(range(n_classes)))
         return float(roc_auc_score(lb, probs, multi_class="ovr", average="macro"))
     except Exception:
