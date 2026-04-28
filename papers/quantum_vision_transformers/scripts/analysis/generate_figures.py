@@ -5,7 +5,7 @@ Generate figures from QVT experiment results.
 Usage:
     python scripts/analysis/generate_figures.py outdir/
     python scripts/analysis/generate_figures.py outdir/ --dataset retinamnist
-    python scripts/analysis/generate_figures.py outdir/ --out figures/
+    python scripts/analysis/generate_figures.py outdir/ --out results/figures/
     python scripts/analysis/generate_figures.py outdir/ --profile lite
 
 Scans for results.json files, groups by model/dataset/profile/seed, and produces:
@@ -70,8 +70,8 @@ def default_figure_root(results_root: str) -> str:
     norm_root = os.path.normpath(results_root)
     if os.path.basename(norm_root) == "outdir":
         project_root = os.path.dirname(norm_root)
-        return os.path.join(project_root, "figures")
-    return os.path.join(norm_root, "figures")
+        return os.path.join(project_root, "results", "figures")
+    return os.path.join(norm_root, "results", "figures")
 
 
 def result_profile(r: dict) -> str:

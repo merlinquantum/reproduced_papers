@@ -7,7 +7,7 @@
 #
 # Each model is trained on RetinaMNIST with 3 seeds (42, 123, 7).
 # Results land in outdir/{tag}/results.json.
-# Figures are generated at the end in outdir/figures/.
+# Figures are generated at the end in results/figures/.
 #
 # Already-completed runs are skipped (safe to re-run after interruption).
 #
@@ -103,7 +103,7 @@ echo ""
 echo "════════════════════════════════════════════════════════"
 echo "  Generating figures..."
 echo "════════════════════════════════════════════════════════"
-python scripts/analysis/generate_figures.py outdir/ --out outdir/figures
+python scripts/analysis/generate_figures.py outdir/ --out results/figures
 
 # ── Summary ──
 ELAPSED=$(( $(date +%s) - STARTED ))
@@ -117,6 +117,6 @@ echo "║  Done: ${DONE}  Skipped: ${SKIPPED}  Failed: ${FAILED}  Total: ${TOTAL
 echo "║  Time: ${HOURS}h ${MINS}m                                          ║"
 echo "║                                                          ║"
 echo "║  Results:  outdir/*/results.json                         ║"
-echo "║  Figures:  outdir/figures/                               ║"
-echo "║  Summary:  outdir/figures/summary.csv                    ║"
+echo "║  Figures:  results/figures/                              ║"
+echo "║  Summary:  results/figures/summary.csv                   ║"
 echo "╚══════════════════════════════════════════════════════════╝"

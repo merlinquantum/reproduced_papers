@@ -1,0 +1,6 @@
+variant,variant_label,base_model,family,profile,n_runs,mean_test_auc,std_test_auc,mean_test_acc,std_test_acc,mean_best_val_auc,mean_time_s,total_params,attn_params,auc_per_1k_params,auc_per_hour
+D|generic|full|standard,"D: Compound [generic, full]",D,generic,full,1,0.7565757610605155,0.0,0.5325,0.0,0.832149198827841,12566.9,11509,4224,0.06573774967942614,0.2167338595690151
+D_full|butterfly|full|standard,"D: Compound (full sector) [butterfly, full]",D_full,butterfly,full,1,0.7313390334986076,0.0,0.5225,0.0,0.8323883570366408,765.2,8917,1664,0.08201626483106511,3.440695923412163
+D_full|generic|full|standard,"D: Compound (full sector) [generic, full]",D_full,generic,full,1,0.6505838450246703,0.0,0.435,0.0,0.7105336010572472,45.1,12533,5248,0.05190966608351315,51.93130470263443
+F|generic|full|standard,"F: Hierarchical (3ph) [generic, full]",F,generic,full,1,0.6414301665354276,0.0,0.435,0.0,0.6696300776461722,24.1,9461,2208,0.06779729061784458,95.81529458620496
+E|generic|full|standard,"E: Multi-sector [generic, full]",E,generic,full,1,0.6355764617674039,0.0,0.4325,0.0,0.6460517495612843,84.5,11509,4224,0.05522429939763697,27.077813755771057

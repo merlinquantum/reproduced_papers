@@ -5,7 +5,7 @@ Build objective summary tables for RetinaMNIST CPU results.
 Usage:
     python scripts/analysis/analyze_retina_cpu_results.py outdir/
 
-Writes CSV tables under reports/retina_cpu/ by default.
+Writes CSV tables under results/reports/retina_cpu/ by default.
 """
 
 import argparse
@@ -31,8 +31,8 @@ def default_report_root(results_root: str) -> str:
     norm_root = os.path.normpath(results_root)
     if os.path.basename(norm_root) == "outdir":
         project_root = os.path.dirname(norm_root)
-        return os.path.join(project_root, "reports", "retina_cpu")
-    return os.path.join(norm_root, "reports", "retina_cpu")
+        return os.path.join(project_root, "results", "reports", "retina_cpu")
+    return os.path.join(norm_root, "results", "reports", "retina_cpu")
 
 
 def keep_retina_results(results):

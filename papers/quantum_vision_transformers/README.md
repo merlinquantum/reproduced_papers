@@ -104,7 +104,7 @@ python ../../implementation.py --paper quantum_vision_transformers --config conf
 bash scripts/validation/validate.sh                            # check all models build and grad-flow
 bash scripts/suites/run_retina_cpu_suite.sh --device cpu       # paper + butterfly CPU workflow
 bash scripts/suites/run_medmnist_cpu_suite.sh --device cpu     # MedMNIST CPU workflow
-python scripts/analysis/generate_figures.py outdir/            # figures (all)
+python scripts/analysis/generate_figures.py outdir/            # figures (all) -> results/figures/
 python scripts/analysis/generate_figures.py outdir/ --profile lite  # lite figures only
 ```
 
