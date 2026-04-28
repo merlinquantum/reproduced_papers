@@ -28,9 +28,20 @@ import time
 import numpy as np
 import torch
 
-ROOT = pathlib.Path(__file__).resolve().parents[2]
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
+HERE = pathlib.Path(__file__).resolve()
+REPO_ROOT = None
+for parent in [HERE.parent, *HERE.parents]:
+    if (parent / "runtime_lib").is_dir() and (parent / "implementation.py").exists():
+        REPO_ROOT = parent
+        break
+if REPO_ROOT is None:  # pragma: no cover
+    raise RuntimeError("Could not locate repo root containing runtime_lib/")
+
+PROJECT_ROOT = HERE.parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 from lib.config import validate_run_config
 from lib.data import get_medmnist_loaders
@@ -66,7 +77,7 @@ def _build_config(
     circuit_family: str,
     seed: int,
 ) -> dict:
-    cfg_path = ROOT / MODEL_CONFIGS[model]
+    cfg_path = PROJECT_ROOT / MODEL_CONFIGS[model]
     cfg = json.loads(cfg_path.read_text())
     cfg["seed"] = seed
     cfg["device"] = device
