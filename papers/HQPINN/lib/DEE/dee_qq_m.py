@@ -7,13 +7,13 @@ from datetime import datetime
 import torch
 import torch.nn as nn
 
-from ...config import (
+from ..config import (
     DEE_N_EPOCHS,
     DEE_LR,
     DEE_PLOT_EVERY,
     DTYPE,
 )
-from ...utils import (
+from ..utils import (
     count_trainable_params,
     finalize_training_session,
     get_latest_checkpoint,
@@ -21,7 +21,7 @@ from ...utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ...runtime import seed_everything
+from ..runtime import seed_everything
 from .core_dee import (
     append_summary_row,
     evaluate_dee_errors,
@@ -31,7 +31,7 @@ from .core_dee import (
     save_density_plot,
     train_dee,
 )
-from ...run_common import run_density_inference_mode
+from ..run_common import run_density_inference_mode
 from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
@@ -86,7 +86,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
     """Run all DEE Interferometer-Interferometer models and write summary CSV."""
     seed_everything(0)
 
-    ckpt_dir = "HQPINN/models/DEE"
+    ckpt_dir = "models/DEE"
     # case_prefix = f"see_qq_m_{n_photons}"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
@@ -96,7 +96,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
 
     if mode == "train":
         print("=== TRAINING MODE ===")
-        summary_csv = "HQPINN/results/DEE/dee_summary.csv"
+        summary_csv = "results/DEE/dee_summary.csv"
         for label, nb_photons in MODELS:
             seed_everything(0)
             print(f"\nTraining DEE-QQ-M {nb_photons} photons")
@@ -106,7 +106,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
             existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
             if existing_ckpt is not None:
                 final_loss = load_training_loss_for_checkpoint(
-                    out_dir=f"HQPINN/results/DEE/{case_prefix}",
+                    out_dir=f"results/DEE/{case_prefix}",
                     model_label=f"qq-m_{nb_photons}",
                     ckpt_path=existing_ckpt,
                     case_prefix=case_prefix,
@@ -132,7 +132,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
                         )
                         row = (
                             load_training_row_for_run_id(
-                                out_dir=f"HQPINN/results/DEE/{case_prefix}",
+                                out_dir=f"results/DEE/{case_prefix}",
                                 model_label=f"qq-m_{nb_photons}",
                                 run_id=case_run_id,
                             )
@@ -194,14 +194,14 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
                 optimizer=optimizer,
                 n_epochs=DEE_N_EPOCHS,
                 plot_every=DEE_PLOT_EVERY,
-                out_dir=f"HQPINN/results/DEE/{case_prefix}",
+                out_dir=f"results/DEE/{case_prefix}",
                 model_label=f"qq-m_{nb_photons}",
                 run_id=case_run_id,
                 checkpoint_path=resume_ckpt_path,
                 resume_state=resume_state,
             )
             row = load_training_row_for_run_id(
-                out_dir=f"HQPINN/results/DEE/{case_prefix}",
+                out_dir=f"results/DEE/{case_prefix}",
                 model_label=f"qq-m_{nb_photons}",
                 run_id=case_run_id,
             )

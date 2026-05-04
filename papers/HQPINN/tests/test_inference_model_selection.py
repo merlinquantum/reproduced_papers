@@ -3,8 +3,8 @@ from __future__ import annotations
 import unittest
 from unittest.mock import patch
 
-from HQPINN.lib.DEE import dee_cc
-from HQPINN.lib.TAF import taf_cc
+from lib.DEE import dee_cc
+from lib.TAF import taf_cc
 
 
 class InferenceModelSelectionTests(unittest.TestCase):
@@ -17,7 +17,7 @@ class InferenceModelSelectionTests(unittest.TestCase):
 
             with self.subTest(mode=mode):
                 with patch(
-                    "HQPINN.lib.TAF.taf_cc.run_density_inference_mode",
+                    "lib.TAF.taf_cc.run_density_inference_mode",
                     side_effect=_capture,
                 ):
                     taf_cc.run(mode=mode, backend="local", n_nodes=40, n_layers=7)
@@ -33,7 +33,7 @@ class InferenceModelSelectionTests(unittest.TestCase):
 
             with self.subTest(mode=mode):
                 with patch(
-                    "HQPINN.lib.DEE.dee_cc.run_density_inference_mode",
+                    "lib.DEE.dee_cc.run_density_inference_mode",
                     side_effect=_capture,
                 ):
                     dee_cc.run(mode=mode, backend="local", n_nodes=10, n_layers=7)

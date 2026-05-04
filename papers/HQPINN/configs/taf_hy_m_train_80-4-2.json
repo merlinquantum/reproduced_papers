@@ -6,5 +6,6 @@
     "n_layers": 4,
     "n_nodes": 80,
     "n_photons": 2
-  }
+  },
+  "description": "HQPINN taf hy m train 80-4-2 configuration."
 }

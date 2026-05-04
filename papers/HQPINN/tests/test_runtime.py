@@ -4,15 +4,15 @@ import unittest
 
 import torch
 
-import HQPINN
-import HQPINN.config as project_config
-from HQPINN.dtypes import DtypeSpec, coerce_dtype_spec, dtype_label, dtype_torch
-from HQPINN.runtime import apply_runtime_config, normalize_dtype_config
+import lib.config as project_config
+from lib import runner
+from lib.dtypes import DtypeSpec, coerce_dtype_spec, dtype_label, dtype_torch
+from lib.runtime import apply_runtime_config, normalize_dtype_config
 
 
 class RuntimeDtypeTests(unittest.TestCase):
-    def test_package_exports_public_entrypoint(self) -> None:
-        self.assertEqual(HQPINN.run_from_project.__name__, "run_from_project")
+    def test_shared_runner_exports_public_entrypoint(self) -> None:
+        self.assertEqual(runner.train_and_evaluate.__name__, "train_and_evaluate")
 
     def test_dtype_aliases_are_normalized(self) -> None:
         spec = coerce_dtype_spec("double")

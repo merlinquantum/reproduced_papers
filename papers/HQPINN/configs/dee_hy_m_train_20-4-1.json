@@ -6,5 +6,6 @@
     "n_layers": 4,
     "n_nodes": 20,
     "n_photons": 1
-  }
+  },
+  "description": "HQPINN dee hy m train 20-4-1 configuration."
 }

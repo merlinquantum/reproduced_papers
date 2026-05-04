@@ -8,5 +8,6 @@
     "n_qubits": null,
     "n_photons": 2,
     "q_layers": null
-  }
+  },
+  "description": "HQPINN see qq m train configuration."
 }

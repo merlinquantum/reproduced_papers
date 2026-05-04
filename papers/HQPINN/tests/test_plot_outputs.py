@@ -7,10 +7,10 @@ from unittest.mock import patch
 
 import torch
 
-from HQPINN.lib.DEE import core_dee
-from HQPINN.lib.DHO import dho_cc
-from HQPINN.lib.SEE import core_see
-from HQPINN.lib.TAF import core_taf
+from lib.DEE import core_dee
+from lib.DHO import dho_cc
+from lib.SEE import core_see
+from lib.TAF import core_taf
 
 
 class _DummyTAFModel(torch.nn.Module):
@@ -122,7 +122,7 @@ class PlotOutputTests(unittest.TestCase):
             ):
                 png_path = core_taf.save_density_plot(
                     model=_DummyTAFModel(),
-                    ckpt_dir="HQPINN/models/TAF",
+                    ckpt_dir="models/TAF",
                     case_prefix="taf_cc_40-4",
                     plot_label=None,
                     run_id="run123",
@@ -177,7 +177,7 @@ class PlotOutputTests(unittest.TestCase):
             ):
                 png_path = core_dee.save_density_plot(
                     model=_DummyDEEModel(),
-                    ckpt_dir="HQPINN/models/DEE",
+                    ckpt_dir="models/DEE",
                     case_prefix="dee_cc_10-4",
                     plot_label=None,
                     run_id="run123",
@@ -202,7 +202,7 @@ class PlotOutputTests(unittest.TestCase):
             ):
                 png_path = core_see.save_density_plot(
                     model=_DummySEEModel(),
-                    ckpt_dir="HQPINN/models/SEE",
+                    ckpt_dir="models/SEE",
                     case_prefix="see_cc_10-4",
                     plot_label=None,
                     run_id="run123",

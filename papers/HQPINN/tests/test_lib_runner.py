@@ -5,9 +5,9 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from HQPINN.lib.runner import train_and_evaluate
-from HQPINN.utils.sync_selected_models import sync_selected_models
-from HQPINN.utils.sync_selected_results import sync_selected_results
+from lib.runner import train_and_evaluate
+from utils.sync_selected_models import sync_selected_models
+from utils.sync_selected_results import sync_selected_results
 
 
 class SharedRunnerTests(unittest.TestCase):
@@ -86,7 +86,7 @@ class SharedRunnerTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             run_dir = Path(tmp_dir) / "runs" / "dho-cc"
 
-            with patch("HQPINN.lib.runner.run_from_project") as mocked_run:
+            with patch("lib.runner.run_from_project") as mocked_run:
                 result = train_and_evaluate(
                     {
                         "experiment": "dho-cc",
@@ -118,7 +118,7 @@ class SharedRunnerTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             run_dir = Path(tmp_dir) / "runs" / "dho-qq-m"
 
-            with patch("HQPINN.lib.runner.run_from_project") as mocked_run:
+            with patch("lib.runner.run_from_project") as mocked_run:
                 train_and_evaluate(
                     {
                         "experiment": "dho-qq-m",

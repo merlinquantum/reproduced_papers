@@ -3,7 +3,7 @@ generate_aerofoil_training_sets.py
 
 Generates training datasets for the 2D transonic NACA0012 problem.
 
-Outputs .npy files in TAF/NACA0012/:
+Outputs .npy files in data/HQPINN/NACA0012/:
   - X_in.npy            (inlet points)            shape (N_in, 2)
   - X_out.npy           (outlet points)           shape (N_out, 2)
   - X_top.npy           (top boundary points)     shape (N_top, 2)
@@ -19,15 +19,18 @@ Dependencies:
   numpy, (matplotlib optional for quick plot)
 """
 
-import numpy as np
 from pathlib import Path
+import sys
+
+import numpy as np
 
 # ----------------------------
 # 0) Settings / parameters
 # ----------------------------
 try:
-    # Package execution: python -m HQPINN.lib.TAF.generate_aerofoil_training_sets
-    from ...config import (
+    # Package execution from the paper root:
+    # python -m lib.TAF.generate_aerofoil_training_sets
+    from ..config import (
         TAF_CHORD_X0,
         TAF_CHORD_X1,
         TAF_N_BOUNDARY,
@@ -40,40 +43,25 @@ try:
         TAF_Y_MIN,
     )
 except ImportError:
-    try:
-        # Direct script execution: ensure HQPINN is importable
-        import sys
+    project_root = Path(__file__).resolve().parents[2]
+    if str(project_root) not in sys.path:
+        sys.path.insert(0, str(project_root))
 
-        pkg_root = Path(__file__).resolve().parents[2]
-        if str(pkg_root) not in sys.path:
-            sys.path.insert(0, str(pkg_root))
-
-        from config import (
-            TAF_CHORD_X0,
-            TAF_CHORD_X1,
-            TAF_N_BOUNDARY,
-            TAF_N_DATA_INTERNAL,
-            TAF_N_DOMAIN_TOTAL,
-            TAF_N_WALL,
-            TAF_X_MAX,
-            TAF_X_MIN,
-            TAF_Y_MAX,
-            TAF_Y_MIN,
-        )
-    except ImportError:
-        # Direct script execution from repo root
-        from HQPINN.config import (
-            TAF_CHORD_X0,
-            TAF_CHORD_X1,
-            TAF_N_BOUNDARY,
-            TAF_N_DATA_INTERNAL,
-            TAF_N_DOMAIN_TOTAL,
-            TAF_N_WALL,
-            TAF_X_MAX,
-            TAF_X_MIN,
-            TAF_Y_MAX,
-            TAF_Y_MIN,
-        )
+    from lib.config import (
+        TAF_CHORD_X0,
+        TAF_CHORD_X1,
+        TAF_N_BOUNDARY,
+        TAF_N_DATA_INTERNAL,
+        TAF_N_DOMAIN_TOTAL,
+        TAF_N_WALL,
+        TAF_X_MAX,
+        TAF_X_MIN,
+        TAF_Y_MAX,
+        TAF_Y_MIN,
+    )
+    from lib.paths import data_dir_for_benchmark
+else:
+    from ..paths import data_dir_for_benchmark
 
 rng = np.random.default_rng(0)
 
@@ -425,8 +413,7 @@ X_f = points_outside[TAF_N_DATA_INTERNAL:]
 # ----------------------------
 # 6) Save files and print summary
 # ----------------------------
-script_path = Path(__file__).resolve()
-output_dir = script_path.parent / "NACA0012"
+output_dir = data_dir_for_benchmark("NACA0012")
 output_dir.mkdir(parents=True, exist_ok=True)
 
 np.save(output_dir / "X_in.npy", X_in)

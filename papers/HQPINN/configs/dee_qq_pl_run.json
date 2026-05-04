@@ -4,5 +4,6 @@
   "backend": "local",
   "model": {
     "q_layers": 2
-  }
+  },
+  "description": "HQPINN dee qq pl run configuration."
 }

@@ -4,5 +4,6 @@
   "backend": "local",
   "model": {
     "n_photons": 4
-  }
+  },
+  "description": "HQPINN see qq m run 4 configuration."
 }

@@ -7,5 +7,6 @@
     "n_nodes": null,
     "n_qubits": null,
     "n_photons": 1
-  }
+  },
+  "description": "HQPINN dho qq m run configuration."
 }

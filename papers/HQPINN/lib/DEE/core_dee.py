@@ -17,7 +17,7 @@ if "ipykernel" not in sys.modules:
     matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from ...config import (
+from ..config import (
     DTYPE,
     DEVICE,
     GAMMA,
@@ -36,8 +36,8 @@ from ...config import (
     DEE_RHO_R,
     DEE_X0,
 )
-from ...paths import results_case_dir_for_model_dir
-from ...utils import (
+from ..paths import results_case_dir_for_model_dir
+from ..utils import (
     append_or_replace_training_row,
     count_trainable_params,
     log_training_info,

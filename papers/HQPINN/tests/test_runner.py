@@ -6,35 +6,35 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from HQPINN import run_from_project
-from HQPINN import runner
+from lib import runner
+from lib.runner import run_from_project
 
 
-CONFIGS_DIR = Path("HQPINN/configs")
+CONFIGS_DIR = Path("configs")
 
 EXPERIMENT_MODULES = {
-    "dho-cc": "HQPINN.lib.DHO.dho_cc",
-    "dho-hy-pl": "HQPINN.lib.DHO.dho_hy_pl",
-    "dho-qq-pl": "HQPINN.lib.DHO.dho_qq_pl",
-    "dho-hy-m": "HQPINN.lib.DHO.dho_hy_m",
-    "dho-hy-mp": "HQPINN.lib.DHO.dho_hy_mp",
-    "dho-qq-m": "HQPINN.lib.DHO.dho_qq_m",
-    "dho-qq-mp": "HQPINN.lib.DHO.dho_qq_mp",
-    "see-cc": "HQPINN.lib.SEE.see_cc",
-    "see-hy-m": "HQPINN.lib.SEE.see_hy_m",
-    "see-hy-pl": "HQPINN.lib.SEE.see_hy_pl",
-    "see-qq-m": "HQPINN.lib.SEE.see_qq_m",
-    "see-qq-pl": "HQPINN.lib.SEE.see_qq_pl",
-    "dee-cc": "HQPINN.lib.DEE.dee_cc",
-    "dee-hy-m": "HQPINN.lib.DEE.dee_hy_m",
-    "dee-hy-pl": "HQPINN.lib.DEE.dee_hy_pl",
-    "dee-qq-m": "HQPINN.lib.DEE.dee_qq_m",
-    "dee-qq-pl": "HQPINN.lib.DEE.dee_qq_pl",
-    "taf-cc": "HQPINN.lib.TAF.taf_cc",
-    "taf-hy-m": "HQPINN.lib.TAF.taf_hy_m",
-    "taf-hy-pl": "HQPINN.lib.TAF.taf_hy_pl",
-    "taf-qq-m": "HQPINN.lib.TAF.taf_qq_m",
-    "taf-qq-pl": "HQPINN.lib.TAF.taf_qq_pl",
+    "dho-cc": "lib.DHO.dho_cc",
+    "dho-hy-pl": "lib.DHO.dho_hy_pl",
+    "dho-qq-pl": "lib.DHO.dho_qq_pl",
+    "dho-hy-m": "lib.DHO.dho_hy_m",
+    "dho-hy-mp": "lib.DHO.dho_hy_mp",
+    "dho-qq-m": "lib.DHO.dho_qq_m",
+    "dho-qq-mp": "lib.DHO.dho_qq_mp",
+    "see-cc": "lib.SEE.see_cc",
+    "see-hy-m": "lib.SEE.see_hy_m",
+    "see-hy-pl": "lib.SEE.see_hy_pl",
+    "see-qq-m": "lib.SEE.see_qq_m",
+    "see-qq-pl": "lib.SEE.see_qq_pl",
+    "dee-cc": "lib.DEE.dee_cc",
+    "dee-hy-m": "lib.DEE.dee_hy_m",
+    "dee-hy-pl": "lib.DEE.dee_hy_pl",
+    "dee-qq-m": "lib.DEE.dee_qq_m",
+    "dee-qq-pl": "lib.DEE.dee_qq_pl",
+    "taf-cc": "lib.TAF.taf_cc",
+    "taf-hy-m": "lib.TAF.taf_hy_m",
+    "taf-hy-pl": "lib.TAF.taf_hy_pl",
+    "taf-qq-m": "lib.TAF.taf_qq_m",
+    "taf-qq-pl": "lib.TAF.taf_qq_pl",
 }
 
 LAYER_NODE_EXPERIMENTS = {"dho-cc", "dho-hy-mp", "see-cc", "dee-cc", "taf-cc"}
@@ -116,7 +116,7 @@ class RunnerDispatchTests(unittest.TestCase):
             path for path in CONFIGS_DIR.glob("*.json") if path.name != "defaults.json"
         )
         self.assertTrue(
-            config_paths, "Expected HQPINN/configs to contain runnable configs"
+            config_paths, "Expected configs to contain runnable configs"
         )
 
         for config_path in config_paths:

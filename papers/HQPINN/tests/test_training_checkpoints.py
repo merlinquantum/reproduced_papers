@@ -7,7 +7,7 @@ from pathlib import Path
 import torch
 import torch.nn as nn
 
-from HQPINN.utils import (
+from lib.utils import (
     finalize_training_session,
     get_resume_checkpoint_path,
     prepare_training_session,

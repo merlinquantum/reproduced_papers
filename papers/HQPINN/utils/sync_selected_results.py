@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from collections.abc import Mapping
 import shutil
+from collections.abc import Mapping
 from pathlib import Path
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 RESULT_SOURCE_DIRS = {

@@ -17,3 +17,5 @@ perceval-quandela>=1.1.0
 merlinquantum>=0.3.1
 
 ruff>=0.15.9
+
+pytest

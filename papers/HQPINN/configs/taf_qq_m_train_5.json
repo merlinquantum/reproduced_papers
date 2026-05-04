@@ -4,5 +4,6 @@
   "backend": "local",
   "model": {
     "n_photons": 5
-  }
+  },
+  "description": "HQPINN taf qq m train 5 configuration."
 }

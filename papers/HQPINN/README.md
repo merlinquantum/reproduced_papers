@@ -1,499 +1,384 @@
-# HQPINN
+# Hybrid Quantum Physics-informed Neural Network - Reproduction
 
-## Mandatory Reproduction Layout
+## Reference and Attribution
 
-`HQPINN` now exposes the mandatory reproduction façade expected by the shared runner:
+This reproduction targets **Hybrid Quantum Physics-informed Neural Network: Towards Efficient Learning of High-speed Flows** by Fong Yew Leong, Wei-Bin Ewe, Si Bui Quang Tran, Zhongyuan Zhang, and Jun Yong Khoo.
 
-```text
-HQPINN/
-├── .gitignore
-├── notebook.ipynb
-├── README.md
-├── requirements.txt
-├── configs/
-├── cli.json
-├── lib/
-│   ├── __init__.py
-│   ├── runner.py
-│   ├── DHO/
-│   ├── SEE/
-│   ├── DEE/
-│   └── TAF/
-├── models/
-├── results/
-├── tests/
-└── utils/
-```
+- arXiv: <http://arxiv.org/abs/2503.02202>
+- Original repository: not used as a runtime dependency here
+- License: follow the repository license and cite the original paper when using these experiments
 
-The shared runner entrypoint is `HQPINN.lib.runner.train_and_evaluate(cfg, run_dir)`. Benchmark code and benchmark-specific artifacts now live under `HQPINN/lib/`.
+## Original Paper
 
-## Reproduced Paper
+The paper studies hybrid quantum/classical physics-informed neural networks for high-speed-flow problems. It compares classical-classical, hybrid quantum-classical, and quantum-quantum branch architectures on four cases:
 
-This folder reproduces:
+- `DHO`: damped harmonic oscillator from Appendix A.2
+- `SEE`: smooth 1D Euler equation from Section 3.1
+- `DEE`: discontinuous 1D Euler equation from Section 3.2
+- `TAF`: steady 2D transonic flow around a NACA0012 airfoil from Section 3.3
 
-- **Hybrid Quantum Physics-informed Neural Network: Towards Efficient Learning of High-speed Flows**
-- **Authors**: Fong Yew Leong, Wei-Bin Ewe, Si Bui Quang Tran, Zhongyuan Zhang, Jun Yong Khoo
-- **arXiv**: `http://arxiv.org/abs/2503.02202`
+The PINN objective combines data or boundary-condition terms with physics residual terms computed through automatic differentiation. Quantum branches use PennyLane circuits or Merlin/Perceval photonic layers, depending on the configured variant.
 
-The paper compares hybrid quantum/classical PINNs across four case studies, from a 1D benchmark to 2D transonic flow around a NACA0012 airfoil.
+## Reproduction Scope
 
-### Methodology
-
-#### Governing Equations
-
-For the fluid-dynamics case studies, the governing equations are the inviscid compressible Euler equations:
-
-$$
-\partial_t U + \nabla \cdot G(U) = 0
-$$
-
-with state vector
-
-$$
-U = (\rho, \rho u, \rho v, \rho E)^T
-$$
-
-where $\rho$ is density, $(u, v)$ are velocity components, $E$ is total energy, and $p$ is pressure. The equation of state is
-
-$$
-p = (\gamma - 1)\left(\rho E - \frac{1}{2}\rho \lVert u \rVert^2\right)
-$$
-
-with $\gamma = 1.4$ for air, together with the ideal-gas relation
-
-$$
-p = \rho R T
-$$
-
-For the steady 2D airfoil case, this becomes
-
-$$
-\nabla \cdot G(U) = 0
-$$
-
-For `DHO` (Appendix A.2), the governing equation is
-
-$$
-m \partial_{tt} u + \mu \partial_t u + k u = 0, \qquad t \in (0, 1]
-$$
-
-#### PINN Loss
-
-Section 2.2 defines a data loss and a physics loss. For the unsteady Euler formulation, the residual is
-
-$$
-F(x, t) = \partial_t U_{NN}(x, t) + \nabla \cdot G(U_{NN}(x, t))
-$$
-
-This is not a prediction-minus-ground-truth error: it is the governing equation evaluated on the network output, so the target is zero when the prediction satisfies the physics. The total objective is
-
-$$
-\mathcal{L} = \mathcal{L}_{BC} + \mathcal{L}_F
-$$
-
-- $\mathcal{L}_{BC}$ is the data loss, including initial and boundary condition points
-- $\mathcal{L}_F$ is the physics loss, computed from collocation points through the residual
-
-In the paper notation:
-
-$$
-\mathcal{L}_{BC} = \frac{1}{N_B}\sum_j \left| U_{NN}(x_j^B, t_j^B) - U(x_j^B, t_j^B) \right|^2
-$$
-
-$$
-\mathcal{L}_F = \frac{1}{N_F}\sum_j \left| F(x_j^F, t_j^F) \right|^2
-$$
-
-`DHO` uses a separate problem-specific loss with an initial displacement term, an initial derivative term, and an ODE residual term.
-
-#### Parameterized Quantum Circuit
-
-The quantum part is a parameterized quantum circuit (`PQC`), written as
-
-$$
-f(\theta, \varphi) = \langle \psi(\theta, \varphi) \vert O \vert \psi(\theta, \varphi) \rangle
-$$
-
-The circuit alternates feature-map layers $S(\varphi)$ and trainable ansatz layers $A(\theta)$. In HQPINN, Pauli-$Z$ expectations provide the quantum branch outputs.
-
-#### HQPINN
-
-`HQPINN` uses two parallel branches:
-
-- a quantum branch built from a PQC
-- a classical branch built from a neural network
-
-Their outputs are linearly fused to predict the physical state variables. The paper compares this hybrid model to classical-classical and quantum-quantum baselines.
-
-### DHO - Damped Harmonic Oscillator
-
-`DHO` is the introductory benchmark from **Appendix A.2**.
-
-Main equations:
-
-$$
-m \partial_{tt} u + \mu \partial_t u + k u = 0, \qquad t \in (0, 1]
-$$
-
-with
-
-$$
-m = 1, \qquad \mu = 4, \qquad k = 400
-$$
-
-### SEE - Smooth Euler Equation
-
-`SEE` corresponds to **Section 3.1**.
-
-Main equations:
-
-$$
-\partial_t U + \partial_x F(U) = 0
-$$
-
-with
-
-$$
-U = (\rho, u, p)
-$$
-
-initial condition
-
-$$
-U_0 = (\rho_0, u_0, p_0) = (1.0 + 0.2 \sin(\pi x), 1.0, 1.0)
-$$
-
-and traveling-wave solution
-
-$$
-(\rho, u, p) = (1.0 + 0.2 \sin(\pi (x - t)), 1.0, 1.0)
-$$
-
-### DEE - Discontinuous Euler Equation
-
-`DEE` corresponds to **Section 3.2**.
-
-Main equations:
-
-$$
-\partial_t U + \partial_x F(U) = 0
-$$
-
-with
-
-$$
-U = (\rho, u, p)
-$$
-
-boundary states
-
-$$
-(\rho_L, u_L, p_L) = (\rho_R, u_R, p_R) = (1.0, 0.1, 1.0)
-$$
-
-and exact solution
-
-$$
-\rho(x, t) =
-\begin{cases}
-1.4, & x < 0.5 + 0.1 t \\
-1.0, & x > 0.5 + 0.1 t
-\end{cases}
-$$
-
-$$
-u(x, t) = 0.1, \qquad p(x, t) = 1.0
-$$
-
-### TAF - Transonic Airfoil Flow
-
-`TAF` corresponds to **Section 3.3**.
-
-Main equations:
-
-$$
-\nabla \cdot G(U) = 0
-$$
-
-with
-
-$$
-U = (\rho, u, v, T)
-$$
-
-computational domain
-
-$$
-x \in (-1, 3.5), \qquad y \in (-2.25, 2.25)
-$$
-
-and inlet condition
-
-$$
-U_{in} = (\rho_{in}, u_{in}, v_{in}, T_{in}) = (1.225, 272.15, 0.0, 288.15)
-$$
-
-## Experiments
-
-Implemented architecture variants:
+This folder implements the four benchmark families and these architecture variants:
 
 - `cc`: classical-classical
 - `hy-pl`: hybrid PennyLane
 - `hy-m`: hybrid Merlin
-- `hy-mp`: hybrid Merlin-Perceval
+- `hy-mp`: hybrid Merlin-Perceval for `DHO`
 - `qq-pl`: quantum-quantum PennyLane
 - `qq-m`: quantum-quantum Merlin
-- `qq-mp`: quantum-quantum Merlin-Perceval (`DHO` only)
+- `qq-mp`: quantum-quantum Merlin-Perceval for `DHO`
 
-### Contexts
+The shared runtime entrypoint is:
 
-#### `DHO`
+```text
+lib.runner.train_and_evaluate(cfg, run_dir)
+```
 
-`DHO` comes from **Appendix A.2**.
+## MerLin Usage
 
-Setup:
+MerLin is used for the photonic quantum branches, not as the top-level runtime.
+The repository runtime still enters through `implementation.py`, then HQPINN
+dispatches to the configured benchmark and architecture.
 
-- ODE: $m \partial_{tt} u + \mu \partial_t u + k u = 0$
-- domain: $t \in (0, 1]$
-- parameters: $m = 1$, $\mu = 4$, $k = 400$
-- optimization: Adam, learning rate `0.002`, about `2000` epochs
-- model: 3-qubit / 3-layer PQC and a classical MLP with 2 hidden layers of width 16
+The MerLin integration is centralized in `lib/layer_merlin.py`:
 
-#### `SEE`
+- `make_interf_qlayer(n_photons)` builds the interferometer-style MerLin
+  `QuantumLayer` used by the `hy-m` and `qq-m` configs.
+- `make_perceval_qlayer()` builds the DHO-only Perceval circuit used by the
+  `hy-mp` and `qq-mp` configs.
+- `BranchMerlin` wraps the quantum layer as a PyTorch module so it can be used
+  like any other PINN branch.
+- `make_merlin_processor(backend)` builds the optional remote execution
+  processor used in `mode=remote`.
 
-`SEE` corresponds to **Section 3.1**.
+During local training, MerLin is evaluated as a differentiable local
+`QuantumLayer`. The branch maps physical inputs to angle features, runs the
+trainable photonic circuit, groups Fock-space probabilities with MerLin's
+measurement strategy, then applies a small linear readout before fusion with the
+other branch outputs. The benchmark-specific feature maps are:
 
-Setup:
+| Benchmark | MerLin feature map input |
+| --- | --- |
+| `DHO` | time `t`, encoded as harmonic angle features. |
+| `SEE` | `(x, t)`, including the traveling-wave coordinate `x - t`. |
+| `DEE` | `(x, t)`, including the shock-relative coordinate `x - (x0 + u*t)`. |
+| `TAF` | `(x, y)`, including a compact coordinate interaction `x - y`. |
 
-- initial condition:
+Architecture variants use MerLin as follows:
 
-$$
-U_0 = (\rho_0, u_0, p_0) = (1.0 + 0.2 \sin(\pi x), 1.0, 1.0)
-$$
+| Variant | MerLin role |
+| --- | --- |
+| `hy-m` | One MerLin branch plus one classical MLP branch. |
+| `qq-m` | Two independent MerLin branches. |
+| `hy-mp` | DHO-only Perceval/MerLin branch plus one classical MLP branch. |
+| `qq-mp` | DHO-only pair of Perceval/MerLin branches. |
 
-- traveling-wave solution:
+Remote mode is inference-only. It loads a local checkpoint, rebuilds the MerLin
+branch with a `MerlinProcessor`, and evaluates the saved model on the selected
+backend, for example:
 
-$$
-(\rho, u, p) = (1.0 + 0.2 \sin(\pi (x - t)), 1.0, 1.0)
-$$
+```bash
+python implementation.py --paper HQPINN --config configs/dho_hy_m_run.json --mode remote --backend sim:ascella
+```
 
-- domain: $x \in (-1, 1)$, $t \in (0, 2)$
-- boundary conditions: periodic
-- training samples: $N_{ic} = 50$, $N_{bc} = 50$, $N_F = 2000$
+Remote mode does not train with remote gradients. Training configs run locally;
+use remote mode only after a matching checkpoint exists in `models/`.
 
-#### `DEE`
+## Updates and Deviations
 
-`DEE` corresponds to **Section 3.2**.
+- The paper now runs through the repository-level `implementation.py` shared runtime.
+- `python -m HQPINN` is no longer a supported entrypoint.
+- The default config is a lightweight `DHO` inference smoke config.
+- Full experiment settings are kept in named JSON configs under `configs/`.
+- TAF geometry data lives under `data/HQPINN/NACA0012/`.
+- TAF does not include the original internal CFD target fields for `X_data_int`; those points are reused as additional collocation points.
+- PennyLane variants outside `DHO` are expensive on CPU and are not part of the standard batch launcher.
 
-Setup:
+## Project Layout
 
-- boundary states:
+```text
+papers/HQPINN/
+|-- README.md
+|-- requirements.txt
+|-- notebook.ipynb
+|-- notebook_dho_helpers.py
+|-- cli.json
+|-- configs/
+|-- lib/
+|   |-- runner.py
+|   |-- config.py
+|   |-- DHO/
+|   |-- SEE/
+|   |-- DEE/
+|   `-- TAF/
+|-- tests/
+|-- utils/
+|-- models/
+|-- outdir/
+`-- assets/
+```
 
-$$
-(\rho_L, u_L, p_L) = (\rho_R, u_R, p_R) = (1.0, 0.1, 1.0)
-$$
+Shared data is stored outside the paper folder:
 
-- exact solution:
+```text
+data/HQPINN/NACA0012/
+```
 
-$$
-\rho(x, t) =
-\begin{cases}
-1.4, & x < 0.5 + 0.1 t \\
-1.0, & x > 0.5 + 0.1 t
-\end{cases}
-$$
-
-$$
-u(x, t) = 0.1, \qquad p(x, t) = 1.0
-$$
-
-- domain: $x \in (0, 1)$, $t \in (0, 2)$
-- boundary conditions: Dirichlet
-- training samples: $N_{ic} = 60$, $N_{bc} = 60$, $N_F = 1000$
-
-#### `TAF`
-
-`TAF` corresponds to **Section 3.3**.
-
-Setup:
-
-- governing equation: steady 2D Euler equation
-- geometry: `NACA0012` airfoil with chord $(0, 1)$
-- computational domain: $x \in (-1, 3.5)$, $y \in (-2.25, 2.25)$
-- predicted variables: $(\rho, u, v, T)$
-- inlet condition:
-
-$$
-U_{in} = (\rho_{in}, u_{in}, v_{in}, T_{in}) = (1.225, 272.15, 0.0, 288.15)
-$$
-
-- outlet condition: $P_{out} = 0$
-- side boundaries: periodic
-- wall condition: free-slip on the airfoil surface
-- training: 40 boundary points per boundary, 4000 domain points for physics loss, adaptive gradient weight, Adam for 40000 steps with learning rate `0.0005`, then L-BFGS for 2000 steps
-
-## Reproduction Limitations
-
-This reproduction reflects practical CPU constraints.
-
-- `SEE`, `DEE`, and `TAF` use mini-batched training. The main reproduced settings use `n_f_batch = 256`, and `TAF` also uses `n_wall_batch = 128` before a final full-batch L-BFGS refinement.
-- The two branches are combined through a learned linear fusion layer to keep the readout compact and parameter budgets comparable across baselines.
-- PennyLane variants outside `DHO` were not rerun in the consolidated reproduction because their CPU cost would be prohibitively high without a sizeable compute cluster. This is why [`HQPINN/run_all_train_jobs.sh`](/Users/jerome/git/reproduced_papers_fork/HQPINN/run_all_train_jobs.sh) focuses on `DHO` plus the `cc`, `hy-m`, and `qq-m` families for `SEE`, `DEE`, and `TAF`.
-- For `DHO`, we also tested Merlin-Perceval variants (`dho-hy-mp` and `dho-qq-mp`) in addition to the generic Merlin interferometer approach.
-- `TAF` is the least faithful case in this repo because the internal CFD reference fields used by the original supervised-plus-PINN setup are not bundled here. The files `X_data_int.npy` are available, but their target states `U_data_int = (\rho, u, v, T)` are not, so those points are reused as additional PDE collocation points instead of supervised samples.
-- As a consequence, the current `TAF` training problem is strongly under-constrained: a nearly uniform field can still satisfy the inlet, outlet, periodic, wall, and weighted Euler-residual terms well enough to produce low losses without reproducing a convincing Figure 7 flow structure.
-- We also tried stronger no-CFD heuristics during development, in particular near-airfoil collocation oversampling and a stratified near/far PDE residual average. These attempts did not produce a clear qualitative improvement, so the main branch keeps the simpler baseline and documents the limitation explicitly.
-
-## Installation
+## Install
 
 From the repository root:
 
 ```bash
-python3 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate
-pip install -r HQPINN/requirements.txt
+pip install -r papers/HQPINN/requirements.txt
 ```
 
-## How To Run The Experiments
+Install `pytest` as well when running the test suite.
 
-### Interface
+## How to Run
 
-Interactive mode:
+Use `configs/defaults.json` only as a shared-runtime smoke check. It verifies
+discovery, config merging, imports, and output routing with a tiny DHO
+classical inference run; it is not a paper result.
+
+List discovered papers:
 
 ```bash
-python3 -m HQPINN
+python implementation.py --list-papers
 ```
 
-Config-based mode:
+Show HQPINN options:
 
 ```bash
-python3 -m HQPINN --config <path/to/config.json>
+python implementation.py --paper HQPINN --help
 ```
 
-Shared runner mode:
-
-```python
-from HQPINN.lib.runner import train_and_evaluate
-
-train_and_evaluate(
-    {
-        "experiment": "see-cc",
-        "mode": "train",
-        "backend": "local",
-        "model": {"n_layers": 4, "n_nodes": 10},
-    },
-    "runs/see-cc",
-)
-```
-
-### Examples
-
-Train a `DHO` case:
+Run the default smoke config:
 
 ```bash
-python3 -m HQPINN --config HQPINN/configs/dho_cc_train.json
+python implementation.py --paper HQPINN --config configs/defaults.json
 ```
 
-Train a `SEE` case:
+For a real experiment, train first, then run the matching inference config:
 
 ```bash
-python3 -m HQPINN --config HQPINN/configs/see_hy_m_train_10-4-2.json
+python implementation.py --paper HQPINN --config configs/dho_cc_train.json
+python implementation.py --paper HQPINN --config configs/dho_cc_run.json
 ```
 
-Train a `DEE` case:
+Run larger named experiments from the repository root:
 
 ```bash
-python3 -m HQPINN --config HQPINN/configs/dee_qq_m_train_1.json
+python implementation.py --paper HQPINN --config configs/see_hy_m_train_10-4-2.json
+python implementation.py --paper HQPINN --config configs/dee_qq_m_train_1.json
+python implementation.py --paper HQPINN --config configs/taf_cc_train_40-4.json
 ```
 
-Train a `TAF` case:
+Run from inside the paper folder:
 
 ```bash
-python3 -m HQPINN --config HQPINN/configs/taf_cc_train_40-4.json
+cd papers/HQPINN
+python ../../implementation.py --config configs/defaults.json
 ```
 
-Run inference / plotting for a trained model:
+Batch launchers:
 
 ```bash
-python3 -m HQPINN --config HQPINN/configs/see_cc_run_10-4.json
+cd papers/HQPINN
+bash utils/run_all_train_jobs.sh --dry-run
+bash utils/run_see_dee_hy_pl_jobs.sh --dry-run
 ```
 
-### Batch Training
+`utils/run_all_train_jobs.sh` covers the standard local training queue:
+classical-classical, Merlin hybrid, and Merlin quantum-quantum jobs, plus the
+DHO PennyLane jobs. It skips most SEE/DEE/TAF PennyLane jobs because they are
+slow on CPU. Use `utils/run_see_dee_hy_pl_jobs.sh` when those hybrid PennyLane
+jobs are explicitly needed.
 
-Launch the standard training queue:
+## Configuration
+
+`cli.json` is the authoritative paper-specific CLI schema. Global flags such as `--config`, `--outdir`, `--seed`, `--dtype`, `--device`, `--log-level`, and `--data-root` are injected by the shared runtime.
+
+Important paper-specific options:
+
+- `--experiment`: benchmark and architecture variant
+- `--mode`: `train`, `run`, or `remote`
+- `--backend`: local or remote backend label
+- `--n-layers`, `--n-nodes`, `--n-qubits`, `--n-photons`, `--q-layers`: model-size controls
+- `--force-retrain`: ignore reusable checkpoints where supported
+
+Every JSON config includes a `description` field for traceability.
+
+### Choosing a Config
+
+Config names follow this pattern:
+
+```text
+configs/<benchmark>_<architecture>_<mode>[_<size>].json
+```
+
+The same values appear inside the JSON as `experiment`, `mode`, `backend`, and
+`model`. Prefer editing or copying a named config over passing many CLI
+overrides when running a long experiment.
+
+| Name part | Values | Meaning |
+| --- | --- | --- |
+| `benchmark` | `dho`, `see`, `dee`, `taf` | Damped oscillator, smooth Euler, discontinuous Euler, or transonic airfoil. |
+| `architecture` | `cc`, `hy_m`, `hy_pl`, `qq_m`, `qq_pl` | Classical-classical, hybrid Merlin, hybrid PennyLane, quantum-quantum Merlin, or quantum-quantum PennyLane. |
+| DHO-only architecture | `hy_mp`, `qq_mp` | Merlin-Perceval variants implemented only for DHO. |
+| `mode` | `train`, `run` | `train` creates checkpoints and result summaries. `run` loads a matching local checkpoint and writes inference artifacts. |
+| `backend` | `local` in committed configs | Remote execution is selected by overriding `--mode remote --backend <backend>` for Merlin inference. |
+
+Size suffixes encode the model dimensions used by the runner:
+
+| Config example | Size meaning |
+| --- | --- |
+| `see_cc_train_10-7.json` | `n_nodes=10`, `n_layers=7`. |
+| `taf_hy_m_train_80-4-2.json` | `n_nodes=80`, `n_layers=4`, `n_photons=2`. |
+| `dee_hy_pl_run_20-4-2.json` | `n_nodes=20`, `n_layers=4`, `q_layers=2`. |
+| `dee_qq_m_run_5.json` | Merlin quantum-quantum model with `n_photons=5`. |
+| `see_qq_pl_train_3.json` | PennyLane quantum-quantum model with `q_layers=3`. |
+
+Plain configs without a size suffix use the default size for that family. For
+SEE and DEE the classical hidden width/depth choices are `10-4`, `10-7`, and
+`20-4`. For TAF they are `40-4`, `40-7`, and `80-4`. DHO configs use one compact
+size per architecture.
+
+Architecture fields required in `model`:
+
+| Architecture | Required model keys |
+| --- | --- |
+| `cc` | `n_layers`, `n_nodes` |
+| `hy_m` | `n_layers`, `n_nodes`, `n_photons` |
+| `hy_pl` | `n_layers`, `n_nodes`, `q_layers`; DHO uses `n_qubits` instead of `q_layers` |
+| `qq_m` | `n_photons` |
+| `qq_pl` | `q_layers`; DHO uses `n_qubits` instead of `q_layers` |
+| `hy_mp` | DHO only; `n_layers`, `n_nodes` |
+| `qq_mp` | DHO only; no extra model-size key |
+
+Recommended experiment order:
+
+1. Run `configs/defaults.json` to check the shared runtime.
+2. Run `configs/dho_cc_train.json` as the smallest training path.
+3. Run the `*_cc_train*.json` files for the benchmark baselines.
+4. Run matching `*_run*.json` configs after checkpoints exist in `models/`.
+5. Add Merlin variants next, then PennyLane variants when the local environment
+   and runtime budget are ready.
+
+## Data
+
+TAF geometry files are committed under:
+
+```text
+data/HQPINN/NACA0012/
+```
+
+To regenerate them:
 
 ```bash
-bash HQPINN/run_all_train_jobs.sh
+cd papers/HQPINN
+python -m lib.TAF.generate_aerofoil_training_sets
 ```
 
-Equivalent wrapper in the mandatory `utils/` folder:
+The shared runtime also accepts `--data-root` or `DATA_DIR` to point at an alternate repository-level data directory.
+
+## Outputs
+
+Each shared-runtime invocation creates:
+
+```text
+papers/HQPINN/outdir/run_YYYYMMDD-HHMMSS/
+|-- config_snapshot.json
+`-- run.log
+```
+
+Training and inference runs write local regenerated artifacts under
+`papers/HQPINN/results/`. Treat that folder as a working output directory unless
+you intentionally curate a small result for documentation.
+
+Committed result artifacts are kept in `papers/HQPINN/assets/`:
+
+- `papers/HQPINN/assets/DHO/dho_summary.csv`
+- `papers/HQPINN/assets/SEE/see_summary.csv`
+- `papers/HQPINN/assets/DEE/dee_summary.csv`
+- `papers/HQPINN/assets/DHO/dho_cc/*.png`
+- `papers/HQPINN/assets/SEE/see_cc_10-4/*.png`
+- `papers/HQPINN/assets/DEE/dee_cc_10-4/*.png`
+
+Curated checkpoints are written under:
+
+```text
+papers/HQPINN/models/<benchmark>/
+```
+
+## Results Obtained
+
+The committed results in `assets/` are small classical-classical baseline runs
+used as a documentation snapshot. They are not the full paper matrix.
+
+| Benchmark | Config | Run ID | Main metric |
+| --- | --- | --- | --- |
+| `DHO` | `configs/dho_cc_train.json` | `20260504-163330` | Relative L2 error `4.161749e-01` |
+| `SEE` | `configs/see_cc_train_10-4.json` | `20260504-163400` | Density error `4.158964e-03`; pressure error `2.587267e-04` |
+| `DEE` | `configs/dee_cc_train_10-4.json` | `20260504-163726` | Density error `3.934973e-02`; pressure error `5.138812e-05` |
+
+### Curated Figures
+
+DHO classical-classical prediction against the exact oscillator solution:
+
+![DHO classical-classical prediction](assets/DHO/dho_cc/dho-cc_20260504-163330.png)
+
+SEE classical-classical density prediction and absolute density error:
+
+![SEE classical-classical density prediction](assets/SEE/see_cc_10-4/see-cc_10-4_20260504-163400_rho_pred.png)
+
+![SEE classical-classical density error](assets/SEE/see_cc_10-4/see-cc_10-4_20260504-163400_rho_error.png)
+
+DEE classical-classical density prediction and final-time density slice:
+
+![DEE classical-classical density prediction](assets/DEE/dee_cc_10-4/dee-cc_10-4_20260504-163726_rho_pred.png)
+
+![DEE classical-classical density slice at t=2](assets/DEE/dee_cc_10-4/dee-cc_10-4_20260504-163726_rho_x_t_2p0.png)
+
+Current qualitative status:
+
+- `DHO`, `SEE`, and `DEE` have runnable train and inference paths.
+- `TAF` is implemented as a geometry-aware PINN baseline because the original internal CFD target fields are unavailable.
+- The default smoke config verifies shared-runtime wiring without training a model.
+- No committed TAF figure is currently included in `assets/`.
+
+## Comparison with the Paper
+
+The implementation follows the paper's benchmark split and architecture naming. The main known mismatch is `TAF`: without supervised CFD targets for internal points, the reproduction cannot fully match the paper's transonic-airfoil results or Figure 7 flow structure.
+
+## Limitations
+
+- Some quantum variants require PennyLane, Merlin, and Perceval installations that are sensitive to local versions.
+- `remote` mode requires a non-local backend and the corresponding Merlin runtime credentials/configuration.
+- CPU-only full runs can be slow, especially PennyLane variants outside `DHO`.
+- Missing checkpoints cause inference configs to finish without producing a prediction artifact.
+
+## Tests
+
+From the paper folder:
 
 ```bash
-bash HQPINN/utils/run_all_train_jobs.sh
+cd papers/HQPINN
+python -m pytest -q
 ```
 
-Preview the queue:
+Shared-runtime checks from the repository root:
 
 ```bash
-bash HQPINN/run_all_train_jobs.sh --dry-run
+python implementation.py --list-papers
+python implementation.py --paper HQPINN --help
+python implementation.py --paper HQPINN --config configs/defaults.json
 ```
 
-Launch only the `SEE` and `DEE` hybrid PennyLane training queue:
+## Citation and License
 
-```bash
-bash HQPINN/run_see_dee_hy_pl_jobs.sh
-```
-
-Wrapper under `utils/`:
-
-```bash
-bash HQPINN/utils/run_see_dee_hy_pl_jobs.sh --dry-run
-```
-
-### `TAF` Case
-
-The `.npy` files for the NACA0012 case are already present in `HQPINN/lib/TAF/NACA0012/`. To regenerate them:
-
-```bash
-python3 -m HQPINN.lib.TAF.generate_aerofoil_training_sets
-```
-
-TAF training and inference now both save Figure-7-style prediction plots under the case-specific subdirectories in `HQPINN/results/TAF/<case_prefix>/`.
-
-The generated TAF geometry files are still useful without CFD targets because they define the airfoil wall, normals, outer boundaries, and the collocation cloud. The main missing piece is the internal supervised state on `X_data_int`, which is why the current TAF results should be read as a geometry-aware PINN baseline rather than as a full reproduction of the paper's supervised transonic airfoil setup.
-
-### `DEE` Figures
-
-DEE training and inference both save their density contour plots and the companion `rho(x, t=2)` slice under the matching case-specific subdirectories in `HQPINN/results/DEE/<case_prefix>/`.
-
-`DHO` and `SEE` follow the same convention: train/run/remote artifacts are written into `HQPINN/results/<benchmark>/<case_prefix>/`, with the benchmark-level summary CSVs kept at the root of `HQPINN/results/<benchmark>/`.
-
-## Where To Look At Results
-
-- Canonical result artifacts: `HQPINN/results/`
-- `DHO`: `HQPINN/results/DHO/dho_summary.csv`
-- `SEE`: `HQPINN/results/SEE/see_summary.csv`
-- `DEE`: `HQPINN/results/DEE/dee_summary.csv`
-- `TAF`: `HQPINN/results/TAF/taf_summary.csv`
-
-Checkpoints are saved in:
-
-- `HQPINN/models/DHO/`
-- `HQPINN/models/SEE/`
-- `HQPINN/models/DEE/`
-- `HQPINN/models/TAF/`
-
-## Quick Structure
-
-- `HQPINN/lib/runner.py`: shared-runner entrypoint
-- `HQPINN/cli.json`: shared-runner schema
-- `HQPINN/notebook.ipynb`: interactive notebook scaffold
-- `HQPINN/results/`: canonical summaries, detailed CSVs, and PNGs
-- `HQPINN/models/`: canonical checkpoints
-- `HQPINN/utils/`: command-line helpers and wrappers
-- `HQPINN/lib/DHO/`: damped harmonic oscillator
-- `HQPINN/lib/SEE/`: smooth 1D Euler
-- `HQPINN/lib/DEE/`: discontinuous 1D Euler
-- `HQPINN/lib/TAF/`: 2D transonic flow around a NACA0012 airfoil
-- `HQPINN/configs/`: ready-to-run configs
-- `HQPINN/run_all_train_jobs.sh`: standard training batch
+Cite the original arXiv paper when using these reproduced experiments. Follow this repository's license for the reproduction code and any additional license terms of PennyLane, Merlin, Perceval, PyTorch, NumPy, and Matplotlib.

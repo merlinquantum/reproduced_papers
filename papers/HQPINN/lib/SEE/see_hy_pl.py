@@ -7,7 +7,7 @@ from datetime import datetime
 import torch
 import torch.nn as nn
 
-from ...config import (
+from ..config import (
     SEE_CC_NUM_HIDDEN_LAYERS,
     SEE_CC_HIDDEN_WIDTH,
     SEE_N_EPOCHS,
@@ -15,7 +15,7 @@ from ...config import (
     N_LAYERS,
     DTYPE,
 )
-from ...utils import (
+from ..utils import (
     count_trainable_params,
     finalize_training_session,
     get_latest_checkpoint,
@@ -23,7 +23,7 @@ from ...utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ...runtime import seed_everything
+from ..runtime import seed_everything
 from .core_see import (
     append_summary_row,
     evaluate_see_errors,
@@ -33,7 +33,7 @@ from .core_see import (
     save_density_plot,
     train_see,
 )
-from ...run_common import run_density_inference_mode
+from ..run_common import run_density_inference_mode
 from ..layer_pennylane import (
     make_quantum_block_multiout,
     see_feature_map,
@@ -124,10 +124,10 @@ def run(
     """Run all SEE Classical models and write summary CSV."""
     seed_everything(0)
 
-    ckpt_dir = "HQPINN/models/SEE"
+    ckpt_dir = "models/SEE"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
     if mode == "train":
-        summary_csv = "HQPINN/results/SEE/see_summary.csv"
+        summary_csv = "results/SEE/see_summary.csv"
         if n_nodes is not None or n_layers is not None or q_layers is not None:
             models = [
                 _resolve_model_config(
@@ -147,7 +147,7 @@ def run(
             existing_ckpt = get_latest_checkpoint(model_dir, case_prefix)
             if existing_ckpt is not None:
                 final_loss = load_training_loss_for_checkpoint(
-                    out_dir=f"HQPINN/results/SEE/{case_prefix}",
+                    out_dir=f"results/SEE/{case_prefix}",
                     model_label=f"hy-pl_{label}",
                     ckpt_path=existing_ckpt,
                     case_prefix=case_prefix,
@@ -175,7 +175,7 @@ def run(
                         )
                         row = (
                             load_training_row_for_run_id(
-                                out_dir=f"HQPINN/results/SEE/{case_prefix}",
+                                out_dir=f"results/SEE/{case_prefix}",
                                 model_label=f"hy-pl_{label}",
                                 run_id=case_run_id,
                             )
@@ -241,14 +241,14 @@ def run(
                 optimizer=optimizer,
                 n_epochs=SEE_N_EPOCHS,
                 plot_every=SEE_PLOT_EVERY,
-                out_dir=f"HQPINN/results/SEE/{case_prefix}",
+                out_dir=f"results/SEE/{case_prefix}",
                 model_label=f"hy-pl_{label}",
                 run_id=case_run_id,
                 checkpoint_path=resume_ckpt_path,
                 resume_state=resume_state,
             )
             row = load_training_row_for_run_id(
-                out_dir=f"HQPINN/results/SEE/{case_prefix}",
+                out_dir=f"results/SEE/{case_prefix}",
                 model_label=f"hy-pl_{label}",
                 run_id=case_run_id,
             )

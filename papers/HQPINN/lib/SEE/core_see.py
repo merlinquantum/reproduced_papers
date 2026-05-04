@@ -17,9 +17,9 @@ if "ipykernel" not in sys.modules:
     matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from ...config import *
-from ...paths import results_case_dir_for_model_dir
-from ...utils import (
+from ..config import *
+from ..paths import results_case_dir_for_model_dir
+from ..utils import (
     append_or_replace_training_row,
     sample_ic_points,
     sample_bc_points,

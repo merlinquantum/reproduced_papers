@@ -6,5 +6,6 @@
     "n_layers": 4,
     "n_nodes": 20,
     "q_layers": 2
-  }
+  },
+  "description": "HQPINN see hy pl train 20-4-2 configuration."
 }

@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 
-from ...config import (
+from ..config import (
     DHO_HIDDEN_WIDTH,
     DHO_LR,
     DHO_NUM_HIDDEN_LAYERS,
@@ -15,7 +15,7 @@ from ...config import (
     DHO_PLOT_EVERY,
     DTYPE,
 )
-from ...utils import (
+from ..utils import (
     count_trainable_params,
     finalize_training_session,
     get_latest_checkpoint,
@@ -24,8 +24,8 @@ from ...utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ...runtime import seed_everything
-from ...paths import results_case_dir_for_model_dir
+from ..runtime import seed_everything
+from ..paths import results_case_dir_for_model_dir
 from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
@@ -34,7 +34,7 @@ from .core_dho import (
     train_oscillator_pinn,
     u_exact,
 )
-from ...run_common import run_series_inference_mode
+from ..run_common import run_series_inference_mode
 from ..layer_merlin import make_interf_qlayer, BranchMerlin
 from ..layer_classical import DHOBranchPyTorch, LearnedScalarFusion
 
@@ -78,7 +78,7 @@ class CI_PINN(nn.Module):
         return self.fusion(out_q, out_c)
 
 
-def plot_model_prediction(u_pred, u_ex, t, save_path="HQPINN/results/DHO/dho_hy_m/"):
+def plot_model_prediction(u_pred, u_ex, t, save_path="results/DHO/dho_hy_m/"):
     plt.figure(figsize=(10, 6))
     plt.plot(t.cpu().numpy(), u_pred, label="Prediction PINN", lw=2)
     plt.plot(t.cpu().numpy(), u_ex, "--", label="Exact solution", lw=2)
@@ -117,10 +117,10 @@ def run(
 ) -> None:
     """Run the Classical–Interferometer DHO PINN experiment."""
     seed_everything(0)
-    ckpt_dir = "HQPINN/models/DHO"
+    ckpt_dir = "models/DHO"
     case_prefix = _case_prefix(n_layers, n_nodes, n_photons)
     results_dir = results_case_dir_for_model_dir(ckpt_dir, case_prefix)
-    summary_csv = "HQPINN/results/DHO/dho_summary.csv"
+    summary_csv = "results/DHO/dho_summary.csv"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
     if mode == "train":

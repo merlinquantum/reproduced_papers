@@ -10,11 +10,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import torch
 
-PACKAGE_ROOT = Path(__file__).resolve().parent
-REPO_ROOT = PACKAGE_ROOT.parent
+PROJECT_ROOT = Path(__file__).resolve().parent
+REPO_ROOT = PROJECT_ROOT.parents[1]
 
-if str(REPO_ROOT) not in sys.path:
-    sys.path.insert(0, str(REPO_ROOT))
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 try:
     from IPython import get_ipython
@@ -30,7 +30,7 @@ except ImportError:
         pass
 
 try:
-    from .config import (
+    from lib.config import (
         DEFAULT_N_OUTPUTS,
         DHO_HIDDEN_WIDTH,
         DHO_LR,
@@ -45,11 +45,11 @@ try:
         M,
         MU,
     )
-    from .lib.DHO.core_dho import oscillator_loss, u_exact
-    from .runtime import seed_everything
-    from .utils import count_trainable_params, make_optimizer, make_time_grid
+    from lib.DHO.core_dho import oscillator_loss, u_exact
+    from lib.runtime import seed_everything
+    from lib.utils import count_trainable_params, make_optimizer, make_time_grid
 except ImportError:
-    from HQPINN.config import (
+    from lib.config import (
         DEFAULT_N_OUTPUTS,
         DHO_HIDDEN_WIDTH,
         DHO_LR,
@@ -64,15 +64,15 @@ except ImportError:
         M,
         MU,
     )
-    from HQPINN.lib.DHO.core_dho import oscillator_loss, u_exact
-    from HQPINN.runtime import seed_everything
-    from HQPINN.utils import count_trainable_params, make_optimizer, make_time_grid
+    from lib.DHO.core_dho import oscillator_loss, u_exact
+    from lib.runtime import seed_everything
+    from lib.utils import count_trainable_params, make_optimizer, make_time_grid
 
 ip = get_ipython()
 if ip is not None:
     ip.run_line_magic("matplotlib", "inline")
 
-RESULTS_ROOT = REPO_ROOT / "HQPINN" / "results" / "DHO"
+RESULTS_ROOT = PROJECT_ROOT / "results" / "DHO"
 SUMMARY_PATH = RESULTS_ROOT / "dho_summary.csv"
 
 MODEL_SPECS = [
@@ -84,7 +84,7 @@ MODEL_SPECS = [
         "branches": "MLP + MLP",
         "size_hint": "16-2",
         "case_prefix": "dho_cc",
-        "factory_path": "HQPINN.lib.DHO.dho_cc:CC_PINN",
+        "factory_path": "lib.DHO.dho_cc:CC_PINN",
         "factory_kwargs": {
             "num_hidden_layers": DHO_NUM_HIDDEN_LAYERS,
             "hidden_width": DHO_HIDDEN_WIDTH,
@@ -99,7 +99,7 @@ MODEL_SPECS = [
         "branches": "PQC + PQC",
         "size_hint": str(DEFAULT_N_OUTPUTS),
         "case_prefix": "dho_qq_pl",
-        "factory_path": "HQPINN.lib.DHO.dho_qq_pl:PP_PINN",
+        "factory_path": "lib.DHO.dho_qq_pl:PP_PINN",
         "factory_kwargs": {"n_qubits": DEFAULT_N_OUTPUTS},
         "color": "#72B7B2",
     },
@@ -111,7 +111,7 @@ MODEL_SPECS = [
         "branches": "PQC + MLP",
         "size_hint": f"{DHO_HIDDEN_WIDTH}-{DHO_NUM_HIDDEN_LAYERS}-{DEFAULT_N_OUTPUTS}",
         "case_prefix": "dho_hy_pl",
-        "factory_path": "HQPINN.lib.DHO.dho_hy_pl:CQ_PINN",
+        "factory_path": "lib.DHO.dho_hy_pl:CQ_PINN",
         "factory_kwargs": {
             "num_hidden_layers": DHO_NUM_HIDDEN_LAYERS,
             "hidden_width": DHO_HIDDEN_WIDTH,
@@ -127,7 +127,7 @@ MODEL_SPECS = [
         "branches": "interferometer + interferometer",
         "size_hint": "1",
         "case_prefix": "dho_qq_m",
-        "factory_path": "HQPINN.lib.DHO.dho_qq_m:MM_PINN",
+        "factory_path": "lib.DHO.dho_qq_m:MM_PINN",
         "factory_kwargs": {"n_photons": 1},
         "color": "#54A24B",
     },
@@ -139,7 +139,7 @@ MODEL_SPECS = [
         "branches": "Perceval + Perceval",
         "size_hint": "default",
         "case_prefix": "dho_qq_mp",
-        "factory_path": "HQPINN.lib.DHO.dho_qq_mp:MM_PINN",
+        "factory_path": "lib.DHO.dho_qq_mp:MM_PINN",
         "factory_kwargs": {},
         "color": "#B279A2",
     },
@@ -151,7 +151,7 @@ MODEL_SPECS = [
         "branches": "interferometer + MLP",
         "size_hint": f"{DHO_HIDDEN_WIDTH}-{DHO_NUM_HIDDEN_LAYERS}-1",
         "case_prefix": "dho_hy_m",
-        "factory_path": "HQPINN.lib.DHO.dho_hy_m:CI_PINN",
+        "factory_path": "lib.DHO.dho_hy_m:CI_PINN",
         "factory_kwargs": {
             "num_hidden_layers": DHO_NUM_HIDDEN_LAYERS,
             "hidden_width": DHO_HIDDEN_WIDTH,
@@ -167,7 +167,7 @@ MODEL_SPECS = [
         "branches": "Perceval + MLP",
         "size_hint": f"{DHO_HIDDEN_WIDTH}-{DHO_NUM_HIDDEN_LAYERS}",
         "case_prefix": "dho_hy_mp",
-        "factory_path": "HQPINN.lib.DHO.dho_hy_mp:CM_PINN",
+        "factory_path": "lib.DHO.dho_hy_mp:CM_PINN",
         "factory_kwargs": {
             "num_hidden_layers": DHO_NUM_HIDDEN_LAYERS,
             "hidden_width": DHO_HIDDEN_WIDTH,
@@ -235,7 +235,7 @@ def build_model(spec: dict[str, object]):
 
 
 def checkpoint_path(case_prefix: str, run_id: str) -> Path:
-    return REPO_ROOT / "HQPINN" / "models" / "DHO" / f"{case_prefix}_{run_id}.pt"
+    return PROJECT_ROOT / "models" / "DHO" / f"{case_prefix}_{run_id}.pt"
 
 
 def prediction_png_path(model_name: str, run_id: str) -> Path:

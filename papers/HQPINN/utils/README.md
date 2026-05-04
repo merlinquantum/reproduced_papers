@@ -2,7 +2,7 @@
 
 Available helpers:
 
-- `__init__.py`: shared Python utility functions exposed as `HQPINN.utils`
+- `run_all_train_jobs.sh`: standard shared-runtime training batch launcher
+- `run_see_dee_hy_pl_jobs.sh`: focused SEE/DEE PennyLane launcher
 - `sync_selected_models.py`: migration helper to copy legacy checkpoints from `lib/*/models/` into `models/`
-- `run_all_train_jobs.sh`: wrapper around the historical batch launcher
 - `sync_selected_results.py`: migration helper to copy legacy artifacts from `lib/*/results/` into `results/`

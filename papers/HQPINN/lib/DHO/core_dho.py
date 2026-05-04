@@ -18,7 +18,7 @@ if "ipykernel" not in sys.modules:
     matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from ...config import (
+from ..config import (
     M,
     MU,
     K,
@@ -27,7 +27,7 @@ from ...config import (
     DTYPE,
     DEVICE,
 )
-from ...utils import (
+from ..utils import (
     append_or_replace_training_row,
     save_training_checkpoint,
     write_metrics_csv,

@@ -15,7 +15,7 @@ import torch
 import torch.nn as nn
 from matplotlib.path import Path as MplPath
 
-from ...config import (
+from ..config import (
     DEVICE,
     DTYPE,
     GAMMA,
@@ -35,8 +35,8 @@ from ...config import (
     TAF_Y_MAX,
     TAF_Y_MIN,
 )
-from ...paths import results_case_dir_for_model_dir
-from ...utils import (
+from ..paths import data_dir_for_benchmark, results_case_dir_for_model_dir
+from ..utils import (
     append_or_replace_training_row,
     count_trainable_params,
     save_training_checkpoint,
@@ -44,7 +44,7 @@ from ...utils import (
 )
 
 
-DATA_DIR = Path(__file__).resolve().parent / "NACA0012"
+DATA_DIR = data_dir_for_benchmark("NACA0012")
 # Keep batch exports headless, but do not disable inline notebook rendering.
 if "ipykernel" not in sys.modules:
     matplotlib.use("Agg")

@@ -7,5 +7,6 @@
     "n_nodes": 16,
     "n_qubits": null,
     "n_photons": 1
-  }
+  },
+  "description": "HQPINN dho hy m train configuration."
 }

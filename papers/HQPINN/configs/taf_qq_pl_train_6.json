@@ -4,5 +4,6 @@
   "backend": "local",
   "model": {
     "q_layers": 6
-  }
+  },
+  "description": "HQPINN taf qq pl train 6 configuration."
 }

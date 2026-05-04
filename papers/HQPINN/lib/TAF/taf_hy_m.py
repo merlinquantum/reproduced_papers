@@ -7,7 +7,7 @@ from datetime import datetime
 import torch
 import torch.nn as nn
 
-from ...config import (
+from ..config import (
     DEVICE,
     DTYPE,
     TAF_ADAM_STEPS,
@@ -21,15 +21,15 @@ from ...config import (
 )
 from ..layer_classical import BranchPyTorch
 from ..layer_merlin import BranchMerlin, make_interf_qlayer
-from ...run_common import run_density_inference_mode
-from ...utils import (
+from ..run_common import run_density_inference_mode
+from ..utils import (
     count_trainable_params,
     finalize_training_session,
     get_latest_checkpoint,
     make_optimizer,
     prepare_training_session,
 )
-from ...runtime import seed_everything
+from ..runtime import seed_everything
 from .core_taf import (
     append_summary_row,
     get_run_id_from_checkpoint,
@@ -98,10 +98,10 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
     # Sec. 3.3 inlet values (SI)
     U_in = torch.tensor([1.225, 272.15, 0.0, 288.15], dtype=DTYPE, device=DEVICE)
 
-    ckpt_dir = "HQPINN/models/TAF"
+    ckpt_dir = "models/TAF"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
     if mode == "train":
-        summary_csv = "HQPINN/results/TAF/taf_summary.csv"
+        summary_csv = "results/TAF/taf_summary.csv"
 
         for label, width, layers, n_photons in MODELS:
             seed_everything(0)
@@ -123,7 +123,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                     )
                 else:
                     metrics = load_training_metrics_for_checkpoint(
-                        out_dir=f"HQPINN/results/TAF/{case_prefix}",
+                        out_dir=f"results/TAF/{case_prefix}",
                         model_label=f"hy-m_{label}",
                         ckpt_path=existing_ckpt,
                         case_prefix=case_prefix,
@@ -144,7 +144,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                         )
                         row = (
                             load_training_row_for_run_id(
-                                out_dir=f"HQPINN/results/TAF/{case_prefix}",
+                                out_dir=f"results/TAF/{case_prefix}",
                                 model_label=f"hy-m_{label}",
                                 run_id=case_run_id,
                             )
@@ -208,7 +208,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                 optimizer=optimizer,
                 n_epochs=TAF_ADAM_STEPS,
                 plot_every=TAF_PLOT_EVERY,
-                out_dir=f"HQPINN/results/TAF/{case_prefix}",
+                out_dir=f"results/TAF/{case_prefix}",
                 model_label=f"hy-m_{label}",
                 run_id=case_run_id,
                 data=data,
@@ -219,7 +219,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                 eps_lambda=TAF_EPSILON_LAMBDA,
             )
             row = load_training_row_for_run_id(
-                out_dir=f"HQPINN/results/TAF/{case_prefix}",
+                out_dir=f"results/TAF/{case_prefix}",
                 model_label=f"hy-m_{label}",
                 run_id=case_run_id,
             )
