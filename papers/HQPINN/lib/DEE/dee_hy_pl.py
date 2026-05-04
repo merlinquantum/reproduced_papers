@@ -1,21 +1,28 @@
 # dee_hy_pl.py
 # Classical–PennyLane PINN
 
-import os
 from datetime import datetime
 
 import torch
 import torch.nn as nn
 
 from ..config import (
-    DEE_CC_NUM_HIDDEN_LAYERS,
     DEE_CC_HIDDEN_WIDTH,
+    DEE_CC_NUM_HIDDEN_LAYERS,
+    DEE_LR,
     DEE_N_EPOCHS,
     DEE_PLOT_EVERY,
-    N_LAYERS,
-    DEE_LR,
     DTYPE,
+    N_LAYERS,
 )
+from ..layer_classical import BranchPyTorch
+from ..layer_pennylane import (
+    BranchPennylane,
+    dee_feature_map,
+    make_quantum_block_multiout,
+)
+from ..run_common import run_density_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
@@ -24,7 +31,6 @@ from ..utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ..runtime import seed_everything
 from .core_dee import (
     append_summary_row,
     evaluate_dee_errors,
@@ -34,16 +40,9 @@ from .core_dee import (
     save_density_plot,
     train_dee,
 )
-from ..run_common import run_density_inference_mode
-from ..layer_pennylane import (
-    make_quantum_block_multiout,
-    dee_feature_map,
-    BranchPennylane,
-)
-from ..layer_classical import BranchPyTorch
 
 
-class CP_PINN(nn.Module):
+class ClassicalPennyLanePinn(nn.Module):
     """
     Classical–PennyLane PINN with one quantum branch and one classical MLP branch.
     """
@@ -128,10 +127,12 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None: CP_PINN(
-                                q_layers=q_layers,
-                                hidden_width=width,
-                                num_hidden_layers=layers,
+                            lambda processor=None, q_layers=q_layers, width=width, layers=layers: (
+                                ClassicalPennyLanePinn(
+                                    q_layers=q_layers,
+                                    hidden_width=width,
+                                    num_hidden_layers=layers,
+                                )
                             ),
                         )
                         err_rho, err_p = evaluate_dee_errors(model)
@@ -193,7 +194,7 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
                     f"retraining model."
                 )
 
-            model = CP_PINN(
+            model = ClassicalPennyLanePinn(
                 q_layers=q_layers,
                 hidden_width=width,
                 num_hidden_layers=layers,
@@ -268,7 +269,7 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
             case_prefix=case_prefix,
             plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: CP_PINN(
+            model_factory=lambda processor=None: ClassicalPennyLanePinn(
                 q_layers=q_layers,
                 hidden_width=width,
                 num_hidden_layers=layers,
@@ -289,7 +290,7 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
             case_prefix=case_prefix,
             plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: CP_PINN(
+            model_factory=lambda processor=None: ClassicalPennyLanePinn(
                 q_layers=q_layers,
                 hidden_width=width,
                 num_hidden_layers=layers,

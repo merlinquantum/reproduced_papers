@@ -1,18 +1,20 @@
 # see_qq_m.py
 # Interferometer-Interferometer PINN for the damped oscillator using oscillator_core + merlin_quantum
 
-import os
 from datetime import datetime
 
 import torch
 import torch.nn as nn
 
 from ..config import (
-    SEE_N_EPOCHS,
-    SEE_LR,
-    SEE_PLOT_EVERY,
     DTYPE,
+    SEE_LR,
+    SEE_N_EPOCHS,
+    SEE_PLOT_EVERY,
 )
+from ..layer_merlin import BranchMerlin, make_interf_qlayer
+from ..run_common import run_density_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
@@ -21,7 +23,6 @@ from ..utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ..runtime import seed_everything
 from .core_see import (
     append_summary_row,
     evaluate_see_errors,
@@ -31,11 +32,9 @@ from .core_see import (
     save_density_plot,
     train_see,
 )
-from ..run_common import run_density_inference_mode
-from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
-class II_PINN(nn.Module):
+class InterferometerInterferometerPinn(nn.Module):
     """
     Interferometer-Interferometer PINN:
 
@@ -123,8 +122,10 @@ def run(mode="train", backend="sim:ascella", n_photons: int | None = None):
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None: II_PINN(
-                                n_photons=nb_photons, processor=processor
+                            lambda processor=None, nb_photons=nb_photons: (
+                                InterferometerInterferometerPinn(
+                                    n_photons=nb_photons, processor=processor
+                                )
                             ),
                         )
                         err_rho, err_p = evaluate_see_errors(model)
@@ -186,7 +187,7 @@ def run(mode="train", backend="sim:ascella", n_photons: int | None = None):
                     f"retraining model."
                 )
 
-            model = II_PINN(n_photons=nb_photons)
+            model = InterferometerInterferometerPinn(n_photons=nb_photons)
             optimizer = make_optimizer(model, lr=SEE_LR)
             case_run_id, resume_state, resume_ckpt_path = prepare_training_session(
                 model=model,
@@ -262,7 +263,7 @@ def run(mode="train", backend="sim:ascella", n_photons: int | None = None):
             case_prefix=case_prefix,
             plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: II_PINN(
+            model_factory=lambda processor=None: InterferometerInterferometerPinn(
                 n_photons=n_photons, processor=processor
             ),
             save_plot_fn=save_density_plot,
@@ -283,7 +284,7 @@ def run(mode="train", backend="sim:ascella", n_photons: int | None = None):
             case_prefix=case_prefix,
             plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: II_PINN(
+            model_factory=lambda processor=None: InterferometerInterferometerPinn(
                 n_photons=n_photons, processor=processor
             ),
             save_plot_fn=save_density_plot,

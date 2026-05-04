@@ -2,9 +2,8 @@ from __future__ import annotations
 
 import unittest
 
-import torch
-
 import lib.config as project_config
+import torch
 from lib import runner
 from lib.dtypes import DtypeSpec, coerce_dtype_spec, dtype_label, dtype_torch
 from lib.runtime import apply_runtime_config, normalize_dtype_config

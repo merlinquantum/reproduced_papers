@@ -1,20 +1,27 @@
 # see_hy_pl.py
 # Classical–PennyLane PINN
 
-import os
 from datetime import datetime
 
 import torch
 import torch.nn as nn
 
 from ..config import (
-    SEE_CC_NUM_HIDDEN_LAYERS,
+    DTYPE,
+    N_LAYERS,
     SEE_CC_HIDDEN_WIDTH,
+    SEE_CC_NUM_HIDDEN_LAYERS,
     SEE_N_EPOCHS,
     SEE_PLOT_EVERY,
-    N_LAYERS,
-    DTYPE,
 )
+from ..layer_classical import BranchPyTorch
+from ..layer_pennylane import (
+    BranchPennylane,
+    make_quantum_block_multiout,
+    see_feature_map,
+)
+from ..run_common import run_density_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
@@ -23,7 +30,6 @@ from ..utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ..runtime import seed_everything
 from .core_see import (
     append_summary_row,
     evaluate_see_errors,
@@ -33,16 +39,9 @@ from .core_see import (
     save_density_plot,
     train_see,
 )
-from ..run_common import run_density_inference_mode
-from ..layer_pennylane import (
-    make_quantum_block_multiout,
-    see_feature_map,
-    BranchPennylane,
-)
-from ..layer_classical import BranchPyTorch
 
 
-class CP_PINN(nn.Module):
+class ClassicalPennyLanePinn(nn.Module):
     """
     Classical–PennyLane PINN with one quantum branch and one classical MLP branch.
     """
@@ -156,10 +155,12 @@ def run(
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None: CP_PINN(
-                                q_layers=q_layers,
-                                hidden_width=width,
-                                num_hidden_layers=layers,
+                            lambda processor=None, q_layers=q_layers, width=width, layers=layers: (
+                                ClassicalPennyLanePinn(
+                                    q_layers=q_layers,
+                                    hidden_width=width,
+                                    num_hidden_layers=layers,
+                                )
                             ),
                         )
                         err_rho, err_p = evaluate_see_errors(model)
@@ -221,7 +222,7 @@ def run(
                     f"retraining model."
                 )
 
-            model = CP_PINN(
+            model = ClassicalPennyLanePinn(
                 q_layers=q_layers,
                 hidden_width=width,
                 num_hidden_layers=layers,
@@ -305,7 +306,7 @@ def run(
             case_prefix=case_prefix,
             plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: CP_PINN(
+            model_factory=lambda processor=None: ClassicalPennyLanePinn(
                 q_layers=q_layers,
                 hidden_width=width,
                 num_hidden_layers=layers,
@@ -335,7 +336,7 @@ def run(
             case_prefix=case_prefix,
             plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: CP_PINN(
+            model_factory=lambda processor=None: ClassicalPennyLanePinn(
                 q_layers=q_layers,
                 hidden_width=width,
                 num_hidden_layers=layers,

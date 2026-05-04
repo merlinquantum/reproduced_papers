@@ -1,7 +1,6 @@
 # taf_hy_pl.py
 # Classical–PennyLane PINN for TAF (Sec. 3.3)
 
-import os
 from datetime import datetime
 
 import torch
@@ -26,6 +25,7 @@ from ..layer_pennylane import (
     taf_feature_map,
 )
 from ..run_common import run_density_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
@@ -33,19 +33,18 @@ from ..utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ..runtime import seed_everything
 from .core_taf import (
     append_summary_row,
     get_run_id_from_checkpoint,
+    load_training_metrics_for_checkpoint,
     load_training_row_for_run_id,
     load_training_sets,
-    load_training_metrics_for_checkpoint,
     save_density_plot,
     train_taf,
 )
 
 
-class CP_PINN(nn.Module):
+class ClassicalPennyLanePinn(nn.Module):
     """Classical-PennyLane TAF PINN with independent branch parameters."""
 
     def __init__(
@@ -111,7 +110,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
     data = load_training_sets()
 
     # Sec. 3.3 inlet values (SI)
-    U_in = torch.tensor([1.225, 272.15, 0.0, 288.15], dtype=DTYPE, device=DEVICE)
+    inlet_state = torch.tensor([1.225, 272.15, 0.0, 288.15], dtype=DTYPE, device=DEVICE)
 
     ckpt_dir = "models/TAF"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -148,7 +147,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                             f"Skipping training for {case_prefix}: existing checkpoint found at {existing_ckpt}."
                         )
                         n_params = count_trainable_params(
-                            CP_PINN(
+                            ClassicalPennyLanePinn(
                                 q_layers=q_layers,
                                 hidden_width=width,
                                 num_hidden_layers=layers,
@@ -204,7 +203,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                         f"retraining model."
                     )
 
-            model = CP_PINN(
+            model = ClassicalPennyLanePinn(
                 q_layers=q_layers,
                 hidden_width=width,
                 num_hidden_layers=layers,
@@ -227,7 +226,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
                 model_label=f"hy-pl_{label}",
                 run_id=case_run_id,
                 data=data,
-                U_in=U_in,
+                inlet_state=inlet_state,
                 checkpoint_path=resume_ckpt_path,
                 resume_state=resume_state,
                 lbfgs_steps=TAF_LBFGS_STEPS,
@@ -283,7 +282,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
             case_prefix=case_prefix,
             plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: CP_PINN(
+            model_factory=lambda processor=None: ClassicalPennyLanePinn(
                 q_layers=q_layers,
                 hidden_width=width,
                 num_hidden_layers=layers,
@@ -304,7 +303,7 @@ def run(mode="train", backend="sim:ascella", model_size="40-4-2") -> None:
             case_prefix=case_prefix,
             plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: CP_PINN(
+            model_factory=lambda processor=None: ClassicalPennyLanePinn(
                 q_layers=q_layers,
                 hidden_width=width,
                 num_hidden_layers=layers,

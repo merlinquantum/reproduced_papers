@@ -1,31 +1,40 @@
 # core_see.py
 
-import os
 import csv
-from datetime import datetime
+import os
 import sys
-from typing import Tuple, Callable, Optional
+from datetime import datetime
+from typing import Callable, Optional
 
+import matplotlib
 import numpy as np
 import torch
 import torch.nn as nn
-
-import matplotlib
 
 # Keep batch exports headless, but do not disable inline notebook rendering.
 if "ipykernel" not in sys.modules:
     matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-from ..config import *
+from ..config import (
+    DEVICE,
+    DTYPE,
+    GAMMA,
+    SEE_NT_SAMPLES,
+    SEE_NX_SAMPLES,
+    SEE_T_MAX,
+    SEE_T_MIN,
+    SEE_X_MAX,
+    SEE_X_MIN,
+)
 from ..paths import results_case_dir_for_model_dir
 from ..utils import (
     append_or_replace_training_row,
-    sample_ic_points,
-    sample_bc_points,
-    sample_collocation_points,
     count_trainable_params,
     log_training_info,
+    sample_bc_points,
+    sample_collocation_points,
+    sample_ic_points,
     save_training_checkpoint,
     write_metrics_csv,
 )
@@ -55,12 +64,14 @@ SEE_PAPER_X_TICKS = (-1.0, -0.5, 0.0, 0.5, 1.0)
 SEE_PAPER_T_TICKS = (0.0, 0.5, 1.0, 1.5, 2.0)
 
 
-def _build_see_plot_grid(nx: int, nt: int) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+def _build_see_plot_grid(
+    nx: int, nt: int
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     x = torch.linspace(SEE_X_MIN, SEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
     t = torch.linspace(SEE_T_MIN, SEE_T_MAX, nt, dtype=DTYPE, device=DEVICE)
-    X, T = torch.meshgrid(x, t, indexing="ij")
-    xt = torch.stack([X.reshape(-1), T.reshape(-1)], dim=1)
-    return X, T, xt
+    x_grid, t_grid = torch.meshgrid(x, t, indexing="ij")
+    xt = torch.stack([x_grid.reshape(-1), t_grid.reshape(-1)], dim=1)
+    return x_grid, t_grid, xt
 
 
 def _evaluate_see_density_fields(
@@ -69,15 +80,15 @@ def _evaluate_see_density_fields(
     nt: int,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     with torch.no_grad():
-        X, T, xt = _build_see_plot_grid(nx, nt)
-        U_pred = model(xt)
-        rho_pred = U_pred[:, 0].reshape(nx, nt)
-        rho_exact = exact_rho(X, T)
+        x_grid, t_grid, xt = _build_see_plot_grid(nx, nt)
+        predicted_state = model(xt)
+        rho_pred = predicted_state[:, 0].reshape(nx, nt)
+        rho_exact = exact_rho(x_grid, t_grid)
         rho_abs_err = torch.abs(rho_pred - rho_exact)
 
     return (
-        X.cpu().numpy(),
-        T.cpu().numpy(),
+        x_grid.cpu().numpy(),
+        t_grid.cpu().numpy(),
         rho_pred.cpu().numpy(),
         rho_exact.cpu().numpy(),
         rho_abs_err.cpu().numpy(),
@@ -97,15 +108,15 @@ def _style_see_axis(ax: plt.Axes, title: str) -> None:
 
 def _plot_see_density_panel(
     ax: plt.Axes,
-    X_np: np.ndarray,
-    T_np: np.ndarray,
+    x_grid_np: np.ndarray,
+    t_grid_np: np.ndarray,
     rho_np: np.ndarray,
     title: str,
 ):
     rho_for_plot = np.clip(rho_np, SEE_PAPER_RHO_MIN, SEE_PAPER_RHO_MAX)
     contour = ax.contourf(
-        X_np,
-        T_np,
+        x_grid_np,
+        t_grid_np,
         rho_for_plot,
         levels=np.linspace(SEE_PAPER_RHO_MIN, SEE_PAPER_RHO_MAX, 200),
         cmap=SEE_PAPER_CMAP,
@@ -116,15 +127,15 @@ def _plot_see_density_panel(
 
 def _plot_see_abs_error_panel(
     ax: plt.Axes,
-    X_np: np.ndarray,
-    T_np: np.ndarray,
+    x_grid_np: np.ndarray,
+    t_grid_np: np.ndarray,
     rho_abs_err_np: np.ndarray,
     title: str,
 ):
     rho_abs_err_for_plot = np.clip(rho_abs_err_np, 0.0, SEE_PAPER_ABS_ERR_MAX)
     contour = ax.contourf(
-        X_np,
-        T_np,
+        x_grid_np,
+        t_grid_np,
         rho_abs_err_for_plot,
         levels=np.linspace(0.0, SEE_PAPER_ABS_ERR_MAX, 200),
         cmap=SEE_PAPER_CMAP,
@@ -155,8 +166,8 @@ def _save_see_single_panel_figure(
 
 def _save_see_reference_figure(
     png_path: str,
-    X_np: np.ndarray,
-    T_np: np.ndarray,
+    x_grid_np: np.ndarray,
+    t_grid_np: np.ndarray,
     rho_pred_np: np.ndarray,
     rho_abs_err_np: np.ndarray,
     plot_label: str | None,
@@ -168,15 +179,15 @@ def _save_see_reference_figure(
         rho_title += f", {plot_label}"
     rho_contour = _plot_see_density_panel(
         axes[0],
-        X_np,
-        T_np,
+        x_grid_np,
+        t_grid_np,
         rho_pred_np,
         rho_title,
     )
     err_contour = _plot_see_abs_error_panel(
         axes[1],
-        X_np,
-        T_np,
+        x_grid_np,
+        t_grid_np,
         rho_abs_err_np,
         r"$|\Delta \rho|$",
     )
@@ -222,7 +233,7 @@ def euler_loss_batched(
     n_f_batch: Optional[int] = 256,
     n_ic_batch: Optional[int] = None,
     n_bc_batch: Optional[int] = None,
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     """
     Mini-batching
 
@@ -238,16 +249,16 @@ def euler_loss_batched(
     # ==========================
     # 1. Initial condition loss
     # ==========================
-    x_ic, t_ic = sample_ic_points()  # [N_ic, 1]
-    N_ic = x_ic.size(0)
-    if n_ic_batch is not None and n_ic_batch < N_ic:
-        idx_ic = torch.randperm(N_ic)[:n_ic_batch]
+    x_ic, t_ic = sample_ic_points()  # [n_ic_points, 1]
+    n_ic_points = x_ic.size(0)
+    if n_ic_batch is not None and n_ic_batch < n_ic_points:
+        idx_ic = torch.randperm(n_ic_points)[:n_ic_batch]
         x_ic = x_ic[idx_ic]
         t_ic = t_ic[idx_ic]
-    X_ic = torch.cat([x_ic, t_ic], dim=1)  # [N_ic_batch, 2]
+    ic_inputs = torch.cat([x_ic, t_ic], dim=1)  # [N_ic_batch, 2]
 
-    U_ic = model(X_ic)  # [N_ic_batch, 3]
-    rho_ic, u_ic, p_ic = U_ic.split(1, dim=1)
+    ic_predictions = model(ic_inputs)  # [N_ic_batch, 3]
+    rho_ic, u_ic, p_ic = ic_predictions.split(1, dim=1)
 
     rho_ic_exact = 1.0 + 0.2 * torch.sin(torch.pi * x_ic)
     u_ic_exact = torch.ones_like(x_ic)
@@ -262,64 +273,72 @@ def euler_loss_batched(
     # ==========================
     # 2. Periodic boundary loss
     # ==========================
-    x_left, x_right, t_bc = sample_bc_points()  # [N_bc, 1]
-    N_bc = x_left.size(0)
-    if n_bc_batch is not None and n_bc_batch < N_bc:
-        idx_bc = torch.randperm(N_bc)[:n_bc_batch]
+    x_left, x_right, t_bc = sample_bc_points()  # [n_bc_points, 1]
+    n_bc_points = x_left.size(0)
+    if n_bc_batch is not None and n_bc_batch < n_bc_points:
+        idx_bc = torch.randperm(n_bc_points)[:n_bc_batch]
         x_left = x_left[idx_bc]
         x_right = x_right[idx_bc]
         t_bc = t_bc[idx_bc]
 
-    X_left = torch.cat([x_left, t_bc], dim=1)
-    X_right = torch.cat([x_right, t_bc], dim=1)
+    left_inputs = torch.cat([x_left, t_bc], dim=1)
+    right_inputs = torch.cat([x_right, t_bc], dim=1)
 
-    U_left = model(X_left)
-    U_right = model(X_right)
+    left_predictions = model(left_inputs)
+    right_predictions = model(right_inputs)
 
-    loss_bc = torch.mean((U_left - U_right) ** 2)
+    loss_bc = torch.mean((left_predictions - right_predictions) ** 2)
 
     # ==========================
     # 3. PDE residual loss (batched)
     # ==========================
-    x_f, t_f = sample_collocation_points()  # [N_f, 1]
-    N_f = x_f.size(0)
+    x_f, t_f = sample_collocation_points()  # [n_collocation_points, 1]
+    n_collocation_points = x_f.size(0)
 
-    if n_f_batch is not None and n_f_batch < N_f:
-        idx_f = torch.randperm(N_f)[:n_f_batch]
+    if n_f_batch is not None and n_f_batch < n_collocation_points:
+        idx_f = torch.randperm(n_collocation_points)[:n_f_batch]
         x_f = x_f[idx_f]
         t_f = t_f[idx_f]
 
-    X_f = torch.cat([x_f, t_f], dim=1)  # [n_f_batch, 2]
-    X_f = X_f.clone().detach().to(DTYPE).to(DEVICE)
-    X_f.requires_grad_(True)
+    collocation_inputs = torch.cat([x_f, t_f], dim=1)  # [n_f_batch, 2]
+    collocation_inputs = collocation_inputs.clone().detach().to(DTYPE).to(DEVICE)
+    collocation_inputs.requires_grad_(True)
 
-    U_f = model(X_f)  # [n_f_batch, 3]
-    rho, u, p = U_f.split(1, dim=1)
+    collocation_predictions = model(collocation_inputs)  # [n_f_batch, 3]
+    rho, u, p = collocation_predictions.split(1, dim=1)
 
     gamma = GAMMA
 
     e = p / ((gamma - 1.0) * rho)
-    E = e + 0.5 * u**2
+    specific_total_energy = e + 0.5 * u**2
 
-    U1 = rho
-    U2 = rho * u
-    U3 = rho * E
+    conserved_density = rho
+    conserved_momentum = rho * u
+    conserved_energy = rho * specific_total_energy
 
-    F1 = rho * u
-    F2 = rho * u**2 + p
-    F3 = u * (rho * E + p)
+    mass_flux = rho * u
+    momentum_flux = rho * u**2 + p
+    energy_flux = u * (rho * specific_total_energy + p)
 
-    U1_t = partial_derivative(U1, X_f, index=1)
-    U2_t = partial_derivative(U2, X_f, index=1)
-    U3_t = partial_derivative(U3, X_f, index=1)
+    density_time_grad = partial_derivative(
+        conserved_density, collocation_inputs, index=1
+    )
+    momentum_time_grad = partial_derivative(
+        conserved_momentum, collocation_inputs, index=1
+    )
+    energy_time_grad = partial_derivative(conserved_energy, collocation_inputs, index=1)
 
-    F1_x = partial_derivative(F1, X_f, index=0)
-    F2_x = partial_derivative(F2, X_f, index=0)
-    F3_x = partial_derivative(F3, X_f, index=0)
+    mass_flux_space_grad = partial_derivative(mass_flux, collocation_inputs, index=0)
+    momentum_flux_space_grad = partial_derivative(
+        momentum_flux, collocation_inputs, index=0
+    )
+    energy_flux_space_grad = partial_derivative(
+        energy_flux, collocation_inputs, index=0
+    )
 
-    r1 = U1_t + F1_x
-    r2 = U2_t + F2_x
-    r3 = U3_t + F3_x
+    r1 = density_time_grad + mass_flux_space_grad
+    r2 = momentum_time_grad + momentum_flux_space_grad
+    r3 = energy_time_grad + energy_flux_space_grad
 
     loss_f = torch.mean(r1**2 + r2**2 + r3**2)
 
@@ -340,7 +359,7 @@ def exact_solution(x: torch.Tensor, t: torch.Tensor):
 
 
 def evaluate_see_errors(model, nx: int = 1000):
-    """Relative L2 errors computed at t = T."""
+    """Relative L2 errors computed at t = t_grid."""
     t_final = SEE_T_MAX
     x = torch.linspace(SEE_X_MIN, SEE_X_MAX, nx, dtype=DTYPE, device=DEVICE)
     t = torch.full_like(x, t_final)
@@ -348,8 +367,8 @@ def evaluate_see_errors(model, nx: int = 1000):
     xt = torch.stack([x, t], dim=1)
 
     with torch.no_grad():
-        U_pred = model(xt)
-        rho_pred, u_pred, p_pred = U_pred.split(1, dim=1)
+        predicted_state = model(xt)
+        rho_pred, u_pred, p_pred = predicted_state.split(1, dim=1)
 
     rho_exact, u_exact, p_exact = exact_solution(x[:, None], t[:, None])
 
@@ -470,7 +489,7 @@ def train_see(
     checkpoint_every: int | None = None,
     resume_state: dict | None = None,
     loss_fn: Callable[
-        [nn.Module], Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
+        [nn.Module], tuple[torch.Tensor, torch.Tensor, torch.Tensor]
     ] = euler_loss_batched,
     # ] = euler_loss,
 ):
@@ -583,17 +602,19 @@ def train_see(
         )
 
     # Final evaluation grid for PNG outputs.
-    X_np, T_np, rho_pred_np, rho_exact_np, rho_abs_err_np = _evaluate_see_density_fields(
-        model=model,
-        nx=SEE_NX_SAMPLES,
-        nt=SEE_NT_SAMPLES,
+    x_grid_np, t_grid_np, rho_pred_np, rho_exact_np, rho_abs_err_np = (
+        _evaluate_see_density_fields(
+            model=model,
+            nx=SEE_NX_SAMPLES,
+            nt=SEE_NT_SAMPLES,
+        )
     )
 
     fig, ax = plt.subplots(figsize=(5.2, 5.6), constrained_layout=True)
     rho_pred_contour = _plot_see_density_panel(
         ax,
-        X_np,
-        T_np,
+        x_grid_np,
+        t_grid_np,
         rho_pred_np,
         rf"$\rho$, epoch={n_epochs}",
     )
@@ -608,8 +629,8 @@ def train_see(
     fig, ax = plt.subplots(figsize=(5.2, 5.6), constrained_layout=True)
     rho_exact_contour = _plot_see_density_panel(
         ax,
-        X_np,
-        T_np,
+        x_grid_np,
+        t_grid_np,
         rho_exact_np,
         r"Exact $\rho$",
     )
@@ -624,8 +645,8 @@ def train_see(
     fig, ax = plt.subplots(figsize=(5.2, 5.6), constrained_layout=True)
     rho_abs_err_contour = _plot_see_abs_error_panel(
         ax,
-        X_np,
-        T_np,
+        x_grid_np,
+        t_grid_np,
         rho_abs_err_np,
         rf"$|\Delta \rho|$, epoch={n_epochs}",
     )
@@ -672,7 +693,7 @@ def save_density_plot(
         nt = min(nt, 30)
         print(f"Remote backend detected: using reduced grid {nx}x{nt} for plotting.")
 
-    X_np, T_np, rho_pred_np, _, rho_abs_err_np = _evaluate_see_density_fields(
+    x_grid_np, t_grid_np, rho_pred_np, _, rho_abs_err_np = _evaluate_see_density_fields(
         model=model,
         nx=nx,
         nt=nt,
@@ -684,8 +705,8 @@ def save_density_plot(
     png_path = os.path.join(results_dir, f"{case_prefix}_{backend}_{run_id}.png")
     _save_see_reference_figure(
         png_path=png_path,
-        X_np=X_np,
-        T_np=T_np,
+        x_grid_np=x_grid_np,
+        t_grid_np=t_grid_np,
         rho_pred_np=rho_pred_np,
         rho_abs_err_np=rho_abs_err_np,
         plot_label=plot_label,

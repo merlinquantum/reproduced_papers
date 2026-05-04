@@ -9,7 +9,6 @@ from unittest.mock import patch
 from lib import runner
 from lib.runner import run_from_project
 
-
 CONFIGS_DIR = Path("configs")
 
 EXPERIMENT_MODULES = {
@@ -115,9 +114,7 @@ class RunnerDispatchTests(unittest.TestCase):
         config_paths = sorted(
             path for path in CONFIGS_DIR.glob("*.json") if path.name != "defaults.json"
         )
-        self.assertTrue(
-            config_paths, "Expected configs to contain runnable configs"
-        )
+        self.assertTrue(config_paths, "Expected configs to contain runnable configs")
 
         for config_path in config_paths:
             config = runner._load_config(str(config_path))
@@ -127,7 +124,7 @@ class RunnerDispatchTests(unittest.TestCase):
             calls: list[dict] = []
             stub_module = types.ModuleType(module_name)
 
-            def _stub_run(**kwargs):
+            def _stub_run(calls=calls, **kwargs):
                 calls.append(kwargs)
 
             stub_module.run = _stub_run

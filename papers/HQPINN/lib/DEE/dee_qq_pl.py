@@ -1,13 +1,19 @@
 # dee_qq_pl.py
 # PennyLane–PennyLane PINN
 
-import os
 from datetime import datetime
 
 import torch
 import torch.nn as nn
 
-from ..config import DEE_N_EPOCHS, DEE_PLOT_EVERY, N_LAYERS, DEE_LR, DTYPE
+from ..config import DEE_LR, DEE_N_EPOCHS, DEE_PLOT_EVERY, DTYPE, N_LAYERS
+from ..layer_pennylane import (
+    BranchPennylane,
+    dee_feature_map,
+    make_quantum_block_multiout,
+)
+from ..run_common import run_density_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
@@ -16,7 +22,6 @@ from ..utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ..runtime import seed_everything
 from .core_dee import (
     append_summary_row,
     evaluate_dee_errors,
@@ -26,15 +31,9 @@ from .core_dee import (
     save_density_plot,
     train_dee,
 )
-from ..run_common import run_density_inference_mode
-from ..layer_pennylane import (
-    make_quantum_block_multiout,
-    dee_feature_map,
-    BranchPennylane,
-)
 
 
-class PP_PINN(nn.Module):
+class PennyLanePennyLanePinn(nn.Module):
     """
     PennyLane–PennyLane PINN with two parallel quantum branches.
 
@@ -121,7 +120,9 @@ def run(mode="train", backend="sim:ascella", model_size="2"):
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None: PP_PINN(q_layers=q_layers),
+                            lambda processor=None, q_layers=q_layers: (
+                                PennyLanePennyLanePinn(q_layers=q_layers)
+                            ),
                         )
                         err_rho, err_p = evaluate_dee_errors(model)
                     except Exception as exc:
@@ -182,7 +183,7 @@ def run(mode="train", backend="sim:ascella", model_size="2"):
                     f"retraining model."
                 )
 
-            model = PP_PINN(q_layers=q_layers)
+            model = PennyLanePennyLanePinn(q_layers=q_layers)
             optimizer = make_optimizer(model, lr=DEE_LR)
             case_run_id, resume_state, resume_ckpt_path = prepare_training_session(
                 model=model,
@@ -253,7 +254,9 @@ def run(mode="train", backend="sim:ascella", model_size="2"):
             case_prefix=case_prefix,
             plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: PP_PINN(q_layers=q_layers),
+            model_factory=lambda processor=None: PennyLanePennyLanePinn(
+                q_layers=q_layers
+            ),
             save_plot_fn=save_density_plot,
         )
 
@@ -270,7 +273,9 @@ def run(mode="train", backend="sim:ascella", model_size="2"):
             case_prefix=case_prefix,
             plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: PP_PINN(q_layers=q_layers),
+            model_factory=lambda processor=None: PennyLanePennyLanePinn(
+                q_layers=q_layers
+            ),
             save_plot_fn=save_density_plot,
         )
 

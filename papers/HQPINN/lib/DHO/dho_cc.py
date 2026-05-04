@@ -12,22 +12,24 @@ import torch.nn as nn
 from ..config import (
     DHO_HIDDEN_WIDTH,
     DHO_LR,
-    DHO_NUM_HIDDEN_LAYERS,
     DHO_N_EPOCHS,
+    DHO_NUM_HIDDEN_LAYERS,
     DHO_PLOT_EVERY,
     DTYPE,
 )
+from ..layer_classical import DHOBranchPyTorch
+from ..paths import results_case_dir_for_model_dir
+from ..run_common import run_series_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
     get_latest_checkpoint,
     load_model,
-    make_time_grid,
     make_optimizer,
+    make_time_grid,
     prepare_training_session,
 )
-from ..runtime import seed_everything
-from ..paths import results_case_dir_for_model_dir
 from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
@@ -36,11 +38,9 @@ from .core_dho import (
     train_oscillator_pinn,
     u_exact,
 )
-from ..run_common import run_series_inference_mode
-from ..layer_classical import DHOBranchPyTorch
 
 
-class CC_PINN(nn.Module):
+class ClassicalClassicalPinn(nn.Module):
     """
     Classical–Classical PINN with two parallel MLP branches
     and a linear fusion readout to a scalar u(t).
@@ -112,14 +112,18 @@ def run(
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
     if mode == "train":
-        existing_ckpt = None if force_retrain else get_latest_checkpoint(ckpt_dir, case_prefix)
+        existing_ckpt = (
+            None if force_retrain else get_latest_checkpoint(ckpt_dir, case_prefix)
+        )
         if force_retrain:
-            print(f"Forcing retraining for {case_prefix}; existing checkpoints will be ignored.")
+            print(
+                f"Forcing retraining for {case_prefix}; existing checkpoints will be ignored."
+            )
         if existing_ckpt is not None:
             try:
                 model = load_model(
                     existing_ckpt,
-                    lambda processor=None: CC_PINN(
+                    lambda processor=None: ClassicalClassicalPinn(
                         num_hidden_layers=n_layers,
                         hidden_width=n_nodes,
                     ),
@@ -168,7 +172,7 @@ def run(
                 print()
                 return
 
-        model = CC_PINN(num_hidden_layers=n_layers, hidden_width=n_nodes)
+        model = ClassicalClassicalPinn(num_hidden_layers=n_layers, hidden_width=n_nodes)
         optimizer = make_optimizer(model, DHO_LR)
         run_id, resume_state, resume_ckpt_path = prepare_training_session(
             model=model,
@@ -229,7 +233,7 @@ def run(
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: CC_PINN(
+            model_factory=lambda processor=None: ClassicalClassicalPinn(
                 num_hidden_layers=n_layers,
                 hidden_width=n_nodes,
             ),
@@ -249,7 +253,7 @@ def run(
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: CC_PINN(
+            model_factory=lambda processor=None: ClassicalClassicalPinn(
                 num_hidden_layers=n_layers,
                 hidden_width=n_nodes,
             ),

@@ -1,20 +1,23 @@
 # dee_hy_m.py
 # Classical–Interferometer PINN for DEE
 
-import os
 from datetime import datetime
 
 import torch
 import torch.nn as nn
 
 from ..config import (
-    DEE_CC_NUM_HIDDEN_LAYERS,
     DEE_CC_HIDDEN_WIDTH,
+    DEE_CC_NUM_HIDDEN_LAYERS,
+    DEE_LR,
     DEE_N_EPOCHS,
     DEE_PLOT_EVERY,
-    DEE_LR,
     DTYPE,
 )
+from ..layer_classical import BranchPyTorch
+from ..layer_merlin import BranchMerlin, make_interf_qlayer
+from ..run_common import run_density_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
@@ -23,7 +26,6 @@ from ..utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ..runtime import seed_everything
 from .core_dee import (
     append_summary_row,
     evaluate_dee_errors,
@@ -33,12 +35,9 @@ from .core_dee import (
     save_density_plot,
     train_dee,
 )
-from ..run_common import run_density_inference_mode
-from ..layer_classical import BranchPyTorch
-from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
-class CI_PINN(nn.Module):
+class ClassicalInterferometerPinn(nn.Module):
     """
     Classical-Interferometer PINN with one classical branch and one quantum branch.
     """
@@ -120,11 +119,13 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-1"):
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None: CI_PINN(
-                                n_photons=n_photons,
-                                hidden_width=width,
-                                num_hidden_layers=layers,
-                                processor=processor,
+                            lambda processor=None, n_photons=n_photons, width=width, layers=layers: (
+                                ClassicalInterferometerPinn(
+                                    n_photons=n_photons,
+                                    hidden_width=width,
+                                    num_hidden_layers=layers,
+                                    processor=processor,
+                                )
                             ),
                         )
                         err_rho, err_p = evaluate_dee_errors(model)
@@ -186,7 +187,7 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-1"):
                     f"retraining model."
                 )
 
-            model = CI_PINN(
+            model = ClassicalInterferometerPinn(
                 n_photons=n_photons, hidden_width=width, num_hidden_layers=layers
             )
             optimizer = make_optimizer(model, lr=DEE_LR)
@@ -259,7 +260,7 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-1"):
             case_prefix=case_prefix,
             plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: CI_PINN(
+            model_factory=lambda processor=None: ClassicalInterferometerPinn(
                 n_photons=n_photons,
                 hidden_width=width,
                 num_hidden_layers=layers,
@@ -278,7 +279,7 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-1"):
             case_prefix=case_prefix,
             plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: CI_PINN(
+            model_factory=lambda processor=None: ClassicalInterferometerPinn(
                 n_photons=n_photons,
                 hidden_width=width,
                 num_hidden_layers=layers,

@@ -12,23 +12,25 @@ from ..config import (
     DEFAULT_N_OUTPUTS,
     DHO_HIDDEN_WIDTH,
     DHO_LR,
-    DHO_NUM_HIDDEN_LAYERS,
     DHO_N_EPOCHS,
+    DHO_NUM_HIDDEN_LAYERS,
     DHO_PLOT_EVERY,
-    DTYPE,
     N_LAYERS,
 )
+from ..layer_classical import DHOBranchPyTorch, LearnedScalarFusion
+from ..layer_pennylane import BranchPennylane, dho_feature_map, make_quantum_block
+from ..paths import results_case_dir_for_model_dir
+from ..run_common import run_series_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
     get_latest_checkpoint,
     load_model,
-    make_time_grid,
     make_optimizer,
+    make_time_grid,
     prepare_training_session,
 )
-from ..runtime import seed_everything
-from ..paths import results_case_dir_for_model_dir
 from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
@@ -37,12 +39,9 @@ from .core_dho import (
     train_oscillator_pinn,
     u_exact,
 )
-from ..run_common import run_series_inference_mode
-from ..layer_pennylane import make_quantum_block, dho_feature_map, BranchPennylane
-from ..layer_classical import DHOBranchPyTorch, LearnedScalarFusion
 
 
-class CQ_PINN(nn.Module):
+class ClassicalQuantumPinn(nn.Module):
     """
     Hybrid Classical–Quantum PINN with linear fusion to scalar output.
     """
@@ -127,7 +126,7 @@ def run(
             try:
                 model = load_model(
                     existing_ckpt,
-                    lambda processor=None: CQ_PINN(
+                    lambda processor=None: ClassicalQuantumPinn(
                         num_hidden_layers=n_layers,
                         hidden_width=n_nodes,
                         n_qubits=n_qubits,
@@ -177,7 +176,7 @@ def run(
                 print()
                 return
 
-        model = CQ_PINN(
+        model = ClassicalQuantumPinn(
             num_hidden_layers=n_layers,
             hidden_width=n_nodes,
             n_qubits=n_qubits,
@@ -241,7 +240,7 @@ def run(
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: CQ_PINN(
+            model_factory=lambda processor=None: ClassicalQuantumPinn(
                 num_hidden_layers=n_layers,
                 hidden_width=n_nodes,
                 n_qubits=n_qubits,
@@ -262,7 +261,7 @@ def run(
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: CQ_PINN(
+            model_factory=lambda processor=None: ClassicalQuantumPinn(
                 num_hidden_layers=n_layers,
                 hidden_width=n_nodes,
                 n_qubits=n_qubits,

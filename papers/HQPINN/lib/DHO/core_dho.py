@@ -1,17 +1,16 @@
 # core_dho.py
 
-import os
 import csv
-from datetime import datetime
+import os
 import sys
-from typing import Tuple, Callable
+from datetime import datetime
+from typing import Callable
 
+import matplotlib
 import numpy as np
 import torch
 import torch.nn as nn
 from torch.autograd import grad
-
-import matplotlib
 
 # Keep batch exports headless, but do not disable inline notebook rendering.
 if "ipykernel" not in sys.modules:
@@ -19,13 +18,13 @@ if "ipykernel" not in sys.modules:
 import matplotlib.pyplot as plt
 
 from ..config import (
-    M,
-    MU,
-    K,
+    DEVICE,
+    DTYPE,
     LAMBDA1,
     LAMBDA2,
-    DTYPE,
-    DEVICE,
+    MU,
+    K,
+    M,
 )
 from ..utils import (
     append_or_replace_training_row,
@@ -96,7 +95,7 @@ def oscillator_loss(
     m: float = M,
     mu: float = MU,
     k: float = K,
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
     """
     Compute the three components of the PINN loss:
 
@@ -155,7 +154,7 @@ def train_oscillator_pinn(
     checkpoint_every: int | None = None,
     resume_state: dict | None = None,
     loss_fn: Callable[
-        [nn.Module, torch.Tensor], Tuple[torch.Tensor, torch.Tensor, torch.Tensor]
+        [nn.Module, torch.Tensor], tuple[torch.Tensor, torch.Tensor, torch.Tensor]
     ] = oscillator_loss,
 ) -> None:
 

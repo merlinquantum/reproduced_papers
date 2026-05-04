@@ -2,8 +2,8 @@
 # Interferometer-Interferometer PINN for the damped oscillator using oscillator_core + merlin_quantum
 
 import os
-from datetime import datetime
 import sys
+from datetime import datetime
 
 import matplotlib
 
@@ -11,22 +11,24 @@ import matplotlib
 if "ipykernel" not in sys.modules:
     matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-
 import torch
 import torch.nn as nn
 
-from ..config import DHO_N_EPOCHS, DHO_PLOT_EVERY, DHO_LR, DTYPE
+from ..config import DHO_LR, DHO_N_EPOCHS, DHO_PLOT_EVERY
+from ..layer_classical import LearnedScalarFusion
+from ..layer_merlin import BranchMerlin, make_interf_qlayer
+from ..paths import results_case_dir_for_model_dir
+from ..run_common import run_series_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
     get_latest_checkpoint,
     load_model,
-    make_time_grid,
     make_optimizer,
+    make_time_grid,
     prepare_training_session,
 )
-from ..runtime import seed_everything
-from ..paths import results_case_dir_for_model_dir
 from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
@@ -35,17 +37,13 @@ from .core_dho import (
     train_oscillator_pinn,
     u_exact,
 )
-from ..run_common import run_series_inference_mode
-from ..layer_merlin import make_interf_qlayer, BranchMerlin
-from ..layer_classical import LearnedScalarFusion
-
 
 # ============================================================
-#  MM_PINN model: two MerLin quantum branches
+#  MerlinMerlinPinn model: two MerLin quantum branches
 # ============================================================
 
 
-class MM_PINN(nn.Module):
+class MerlinMerlinPinn(nn.Module):
     """
     Interferometer-Interferometer PINN with linear fusion to scalar output.
     """
@@ -129,14 +127,18 @@ def run(
     # ======================
     if mode == "train":
         print("=== TRAINING MODE ===")
-        existing_ckpt = None if force_retrain else get_latest_checkpoint(ckpt_dir, case_prefix)
+        existing_ckpt = (
+            None if force_retrain else get_latest_checkpoint(ckpt_dir, case_prefix)
+        )
         if force_retrain:
-            print(f"Forcing retraining for {case_prefix}; existing checkpoints will be ignored.")
+            print(
+                f"Forcing retraining for {case_prefix}; existing checkpoints will be ignored."
+            )
         if existing_ckpt is not None:
             try:
                 model = load_model(
                     existing_ckpt,
-                    lambda processor=None: MM_PINN(
+                    lambda processor=None: MerlinMerlinPinn(
                         processor=processor,
                         n_photons=n_photons,
                     ),
@@ -185,7 +187,7 @@ def run(
                 print()
                 return
 
-        model = MM_PINN(n_photons=n_photons)
+        model = MerlinMerlinPinn(n_photons=n_photons)
         optimizer = make_optimizer(model, lr=DHO_LR)
         run_id, resume_state, resume_ckpt_path = prepare_training_session(
             model=model,
@@ -252,7 +254,7 @@ def run(
             backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: MM_PINN(
+            model_factory=lambda processor=None: MerlinMerlinPinn(
                 processor=processor,
                 n_photons=n_photons,
             ),
@@ -272,7 +274,7 @@ def run(
             backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: MM_PINN(
+            model_factory=lambda processor=None: MerlinMerlinPinn(
                 processor=processor,
                 n_photons=n_photons,
             ),

@@ -20,6 +20,7 @@ try:
     from IPython import get_ipython
     from IPython.display import Markdown, display
 except ImportError:
+
     def get_ipython():
         return None
 
@@ -29,9 +30,11 @@ except ImportError:
     class Markdown(str):
         pass
 
+
 try:
     from lib.config import (
         DEFAULT_N_OUTPUTS,
+        DEVICE,
         DHO_HIDDEN_WIDTH,
         DHO_LR,
         DHO_N_EPOCHS,
@@ -39,18 +42,19 @@ try:
         DHO_NUM_HIDDEN_LAYERS,
         DHO_PLOT_EVERY,
         DTYPE,
-        K,
         LAMBDA1,
         LAMBDA2,
-        M,
         MU,
+        K,
+        M,
     )
-    from lib.DHO.core_dho import oscillator_loss, u_exact
+    from lib.DHO.core_dho import derivative, oscillator_loss, second_derivative, u_exact
     from lib.runtime import seed_everything
     from lib.utils import count_trainable_params, make_optimizer, make_time_grid
 except ImportError:
     from lib.config import (
         DEFAULT_N_OUTPUTS,
+        DEVICE,
         DHO_HIDDEN_WIDTH,
         DHO_LR,
         DHO_N_EPOCHS,
@@ -58,13 +62,13 @@ except ImportError:
         DHO_NUM_HIDDEN_LAYERS,
         DHO_PLOT_EVERY,
         DTYPE,
-        K,
         LAMBDA1,
         LAMBDA2,
-        M,
         MU,
+        K,
+        M,
     )
-    from lib.DHO.core_dho import oscillator_loss, u_exact
+    from lib.DHO.core_dho import derivative, oscillator_loss, second_derivative, u_exact
     from lib.runtime import seed_everything
     from lib.utils import count_trainable_params, make_optimizer, make_time_grid
 
@@ -84,7 +88,7 @@ MODEL_SPECS = [
         "branches": "MLP + MLP",
         "size_hint": "16-2",
         "case_prefix": "dho_cc",
-        "factory_path": "lib.DHO.dho_cc:CC_PINN",
+        "factory_path": "lib.DHO.dho_cc:ClassicalClassicalPinn",
         "factory_kwargs": {
             "num_hidden_layers": DHO_NUM_HIDDEN_LAYERS,
             "hidden_width": DHO_HIDDEN_WIDTH,
@@ -99,7 +103,7 @@ MODEL_SPECS = [
         "branches": "PQC + PQC",
         "size_hint": str(DEFAULT_N_OUTPUTS),
         "case_prefix": "dho_qq_pl",
-        "factory_path": "lib.DHO.dho_qq_pl:PP_PINN",
+        "factory_path": "lib.DHO.dho_qq_pl:PennyLanePennyLanePinn",
         "factory_kwargs": {"n_qubits": DEFAULT_N_OUTPUTS},
         "color": "#72B7B2",
     },
@@ -111,7 +115,7 @@ MODEL_SPECS = [
         "branches": "PQC + MLP",
         "size_hint": f"{DHO_HIDDEN_WIDTH}-{DHO_NUM_HIDDEN_LAYERS}-{DEFAULT_N_OUTPUTS}",
         "case_prefix": "dho_hy_pl",
-        "factory_path": "lib.DHO.dho_hy_pl:CQ_PINN",
+        "factory_path": "lib.DHO.dho_hy_pl:ClassicalQuantumPinn",
         "factory_kwargs": {
             "num_hidden_layers": DHO_NUM_HIDDEN_LAYERS,
             "hidden_width": DHO_HIDDEN_WIDTH,
@@ -127,7 +131,7 @@ MODEL_SPECS = [
         "branches": "interferometer + interferometer",
         "size_hint": "1",
         "case_prefix": "dho_qq_m",
-        "factory_path": "lib.DHO.dho_qq_m:MM_PINN",
+        "factory_path": "lib.DHO.dho_qq_m:MerlinMerlinPinn",
         "factory_kwargs": {"n_photons": 1},
         "color": "#54A24B",
     },
@@ -139,7 +143,7 @@ MODEL_SPECS = [
         "branches": "Perceval + Perceval",
         "size_hint": "default",
         "case_prefix": "dho_qq_mp",
-        "factory_path": "lib.DHO.dho_qq_mp:MM_PINN",
+        "factory_path": "lib.DHO.dho_qq_mp:PercevalPercevalPinn",
         "factory_kwargs": {},
         "color": "#B279A2",
     },
@@ -151,7 +155,7 @@ MODEL_SPECS = [
         "branches": "interferometer + MLP",
         "size_hint": f"{DHO_HIDDEN_WIDTH}-{DHO_NUM_HIDDEN_LAYERS}-1",
         "case_prefix": "dho_hy_m",
-        "factory_path": "lib.DHO.dho_hy_m:CI_PINN",
+        "factory_path": "lib.DHO.dho_hy_m:ClassicalInterferometerPinn",
         "factory_kwargs": {
             "num_hidden_layers": DHO_NUM_HIDDEN_LAYERS,
             "hidden_width": DHO_HIDDEN_WIDTH,
@@ -167,7 +171,7 @@ MODEL_SPECS = [
         "branches": "Perceval + MLP",
         "size_hint": f"{DHO_HIDDEN_WIDTH}-{DHO_NUM_HIDDEN_LAYERS}",
         "case_prefix": "dho_hy_mp",
-        "factory_path": "lib.DHO.dho_hy_mp:CM_PINN",
+        "factory_path": "lib.DHO.dho_hy_mp:ClassicalPercevalPinn",
         "factory_kwargs": {
             "num_hidden_layers": DHO_NUM_HIDDEN_LAYERS,
             "hidden_width": DHO_HIDDEN_WIDTH,
@@ -209,7 +213,9 @@ def display_dho_setup() -> None:
     print(f"epochs                   : {DHO_N_EPOCHS}")
     print(f"loss history             : one entry every {DHO_PLOT_EVERY} epochs")
     print(f"time grid                : {DHO_N_SAMPLES} points on [0, 1]")
-    print(f"interior training points : {int(t_train.shape[0])} (t=0 handled separately)")
+    print(
+        f"interior training points : {int(t_train.shape[0])} (t=0 handled separately)"
+    )
     print(f"loss weights             : lambda1={LAMBDA1}, lambda2={LAMBDA2}")
     print(f"dtype                    : {DTYPE}")
 
@@ -272,7 +278,9 @@ def latest_saved_row(model_name: str) -> dict[str, object]:
         if latest is None or str(row["run_id"]) > str(latest["run_id"]):
             latest = row
     if latest is None:
-        raise FileNotFoundError(f"No summary row found for {model_name} in {SUMMARY_PATH}.")
+        raise FileNotFoundError(
+            f"No summary row found for {model_name} in {SUMMARY_PATH}."
+        )
     return latest
 
 
@@ -411,9 +419,13 @@ def plot_ut_curve(result: dict[str, object]) -> None:
         plt.show()
         return
     except Exception as exc:
-        png_path = prediction_png_path(str(result["name"]), str(result.get("run_id", "")))
+        png_path = prediction_png_path(
+            str(result["name"]), str(result.get("run_id", ""))
+        )
         if png_path.exists():
-            print(f"u(t) curve reloaded from the saved figure because checkpoint reload failed: {exc}")
+            print(
+                f"u(t) curve reloaded from the saved figure because checkpoint reload failed: {exc}"
+            )
             image = plt.imread(png_path)
             fig, ax = plt.subplots(figsize=(7.5, 4.5))
             ax.imshow(image)
@@ -531,6 +543,7 @@ __all__ = [
     "DHO_N_EPOCHS",
     "DHO_N_SAMPLES",
     "DHO_PLOT_EVERY",
+    "DEVICE",
     "DTYPE",
     "K",
     "LAMBDA1",
@@ -539,6 +552,8 @@ __all__ = [
     "MU",
     "oscillator_loss",
     "u_exact",
+    "derivative",
+    "second_derivative",
     "seed_everything",
     "count_trainable_params",
     "make_optimizer",

@@ -37,9 +37,13 @@ class SharedRunnerTests(unittest.TestCase):
                 models_root / "DHO" / "archive" / "dho_cc_20260402-163346.pt",
                 mirrored,
             )
-            self.assertTrue((models_root / "DHO" / "dho_cc_20260403-175734.pt").is_file())
             self.assertTrue(
-                (models_root / "DHO" / "archive" / "dho_cc_20260402-163346.pt").is_file()
+                (models_root / "DHO" / "dho_cc_20260403-175734.pt").is_file()
+            )
+            self.assertTrue(
+                (
+                    models_root / "DHO" / "archive" / "dho_cc_20260402-163346.pt"
+                ).is_file()
             )
             self.assertFalse((models_root / "DHO" / "notes.txt").exists())
 
@@ -78,7 +82,9 @@ class SharedRunnerTests(unittest.TestCase):
                 ).is_file()
             )
             self.assertTrue(
-                (results_root / "DHO" / "dho_cc" / "dho-cc_20260403-175734.png").is_file()
+                (
+                    results_root / "DHO" / "dho_cc" / "dho-cc_20260403-175734.png"
+                ).is_file()
             )
             self.assertFalse((results_root / "DHO" / ".DS_Store").exists())
 

@@ -1,13 +1,19 @@
 # see_qq_pl.py
 # PennyLane–PennyLane PINN
 
-import os
 from datetime import datetime
 
 import torch
 import torch.nn as nn
 
-from ..config import SEE_N_EPOCHS, SEE_PLOT_EVERY, N_LAYERS, SEE_LR, DTYPE
+from ..config import DTYPE, N_LAYERS, SEE_LR, SEE_N_EPOCHS, SEE_PLOT_EVERY
+from ..layer_pennylane import (
+    BranchPennylane,
+    make_quantum_block_multiout,
+    see_feature_map,
+)
+from ..run_common import run_density_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
@@ -16,7 +22,6 @@ from ..utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ..runtime import seed_everything
 from .core_see import (
     append_summary_row,
     evaluate_see_errors,
@@ -26,15 +31,9 @@ from .core_see import (
     save_density_plot,
     train_see,
 )
-from ..run_common import run_density_inference_mode
-from ..layer_pennylane import (
-    make_quantum_block_multiout,
-    see_feature_map,
-    BranchPennylane,
-)
 
 
-class PP_PINN(nn.Module):
+class PennyLanePennyLanePinn(nn.Module):
     """
     PennyLane–PennyLane PINN with two parallel quantum branches.
 
@@ -136,7 +135,9 @@ def run(
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None: PP_PINN(q_layers=q_layers),
+                            lambda processor=None, q_layers=q_layers: (
+                                PennyLanePennyLanePinn(q_layers=q_layers)
+                            ),
                         )
                         err_rho, err_p = evaluate_see_errors(model)
                     except Exception as exc:
@@ -197,7 +198,7 @@ def run(
                     f"retraining model."
                 )
 
-            model = PP_PINN(q_layers=q_layers)
+            model = PennyLanePennyLanePinn(q_layers=q_layers)
             optimizer = make_optimizer(model, lr=SEE_LR)
             case_run_id, resume_state, resume_ckpt_path = prepare_training_session(
                 model=model,
@@ -271,7 +272,9 @@ def run(
             case_prefix=case_prefix,
             plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: PP_PINN(q_layers=q_layers),
+            model_factory=lambda processor=None: PennyLanePennyLanePinn(
+                q_layers=q_layers
+            ),
             save_plot_fn=save_density_plot,
         )
 
@@ -291,7 +294,9 @@ def run(
             case_prefix=case_prefix,
             plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: PP_PINN(q_layers=q_layers),
+            model_factory=lambda processor=None: PennyLanePennyLanePinn(
+                q_layers=q_layers
+            ),
             save_plot_fn=save_density_plot,
         )
 

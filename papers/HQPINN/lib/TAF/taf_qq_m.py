@@ -1,7 +1,6 @@
 # taf_qq_m.py
 # Interferometer–Interferometer PINN for TAF (Sec. 3.3)
 
-import os
 from datetime import datetime
 
 import torch
@@ -19,6 +18,7 @@ from ..config import (
 )
 from ..layer_merlin import BranchMerlin, make_interf_qlayer
 from ..run_common import run_density_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
@@ -26,19 +26,18 @@ from ..utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ..runtime import seed_everything
 from .core_taf import (
     append_summary_row,
     get_run_id_from_checkpoint,
+    load_training_metrics_for_checkpoint,
     load_training_row_for_run_id,
     load_training_sets,
-    load_training_metrics_for_checkpoint,
     save_density_plot,
     train_taf,
 )
 
 
-class II_PINN(nn.Module):
+class InterferometerInterferometerPinn(nn.Module):
     """Interferometer-Interferometer TAF PINN with two independent quantum branches."""
 
     def __init__(self, n_photons: int, processor=None) -> None:
@@ -82,7 +81,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
     data = load_training_sets()
 
     # Sec. 3.3 inlet values (SI)
-    U_in = torch.tensor([1.225, 272.15, 0.0, 288.15], dtype=DTYPE, device=DEVICE)
+    inlet_state = torch.tensor([1.225, 272.15, 0.0, 288.15], dtype=DTYPE, device=DEVICE)
 
     ckpt_dir = "models/TAF"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -116,7 +115,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
                             f"Skipping training for {case_prefix}: existing checkpoint found at {existing_ckpt}."
                         )
                         n_params = count_trainable_params(
-                            II_PINN(n_photons=n_photons_sel)
+                            InterferometerInterferometerPinn(n_photons=n_photons_sel)
                         )
                         case_run_id = get_run_id_from_checkpoint(
                             existing_ckpt, case_prefix
@@ -168,7 +167,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
                         f"retraining model."
                     )
 
-            model = II_PINN(n_photons=n_photons_sel).to(DEVICE)
+            model = InterferometerInterferometerPinn(n_photons=n_photons_sel).to(DEVICE)
             optimizer = make_optimizer(model, lr=TAF_LR)
             case_run_id, resume_state, resume_ckpt_path = prepare_training_session(
                 model=model,
@@ -187,7 +186,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
                 model_label=f"qq-m_{label}",
                 run_id=case_run_id,
                 data=data,
-                U_in=U_in,
+                inlet_state=inlet_state,
                 checkpoint_path=resume_ckpt_path,
                 resume_state=resume_state,
                 lbfgs_steps=TAF_LBFGS_STEPS,
@@ -242,7 +241,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
             case_prefix=case_prefix,
             plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: II_PINN(
+            model_factory=lambda processor=None: InterferometerInterferometerPinn(
                 n_photons=n_photons, processor=processor
             ),
             save_plot_fn=save_density_plot,
@@ -257,7 +256,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2) -> None:
             case_prefix=case_prefix,
             plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: II_PINN(
+            model_factory=lambda processor=None: InterferometerInterferometerPinn(
                 n_photons=n_photons, processor=processor
             ),
             save_plot_fn=save_density_plot,

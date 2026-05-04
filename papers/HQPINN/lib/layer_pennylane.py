@@ -9,17 +9,15 @@ observable readout. It is used both as:
 - a component in hybrid models alongside classical branches.
 """
 
+import warnings
 from typing import Callable
 
 import numpy as np
+import pennylane as qml
 import torch
 import torch.nn as nn
-import pennylane as qml
 
-from .config import DEFAULT_N_OUTPUTS, N_LAYERS, DTYPE, DEE_X0, DEE_U
-
-
-import warnings
+from .config import DEE_U, DEE_X0, DEFAULT_N_OUTPUTS, DTYPE, N_LAYERS
 
 warnings.filterwarnings(
     "ignore",

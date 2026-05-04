@@ -40,7 +40,9 @@ def sync_selected_models(
             continue
 
         destination_dir = resolved_models_root / group_name
-        for source in sorted(path for path in source_dir.rglob("*.pt") if _should_sync(path)):
+        for source in sorted(
+            path for path in source_dir.rglob("*.pt") if _should_sync(path)
+        ):
             destination = destination_dir / source.relative_to(source_dir)
             destination.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, destination)

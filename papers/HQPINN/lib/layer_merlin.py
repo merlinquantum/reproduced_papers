@@ -8,20 +8,17 @@ encode inputs, run a trainable quantum transformation, and return features that
 are fused at model level in DHO/SEE/DEE experiments.
 """
 
-import numpy as np
-import torch
-import torch.nn as nn
-
-import merlin as ML
-from merlin import LexGrouping, QuantumLayer
-
-import perceval as pcvl
-from perceval import PS, BS
-
 from math import comb
 
-from .config import DEFAULT_N_OUTPUTS, N_LAYERS, DTYPE, DEE_X0, DEE_U
+import merlin as merlin_backend
+import numpy as np
+import perceval as pcvl
+import torch
+import torch.nn as nn
+from merlin import LexGrouping, QuantumLayer
+from perceval import BS, PS
 
+from .config import DEE_U, DEE_X0, DEFAULT_N_OUTPUTS, DTYPE, N_LAYERS
 
 # ============================================================
 #  Perceval building blocks
@@ -105,13 +102,13 @@ def build_merlin_circuit() -> pcvl.Circuit:
     """
     circ = pcvl.Circuit(2 * DEFAULT_N_OUTPUTS)
 
-    for l in range(N_LAYERS):
+    for layer_idx in range(N_LAYERS):
         # Ansatz layer with even prefix: layer0, layer2, ...
-        circ = circ // ansatz_layer(f"layer{2 * l}")
+        circ = circ // ansatz_layer(f"layer{2 * layer_idx}")
 
         # Feature layer between ansatz layers, except after the last ansatz
-        if l < N_LAYERS - 1:
-            circ = circ // feature_layer(f"layer{2 * l + 1}")
+        if layer_idx < N_LAYERS - 1:
+            circ = circ // feature_layer(f"layer{2 * layer_idx + 1}")
 
     return circ
 
@@ -150,8 +147,8 @@ def make_perceval_qlayer() -> QuantumLayer:
         input_state=input_state,
         trainable_parameters=["theta"],
         input_parameters=["phi"],
-        measurement_strategy=ML.MeasurementStrategy.probs(
-            computation_space=ML.ComputationSpace.FOCK, grouping=grouping
+        measurement_strategy=merlin_backend.MeasurementStrategy.probs(
+            computation_space=merlin_backend.ComputationSpace.FOCK, grouping=grouping
         ),
         dtype=DTYPE,
     )
@@ -188,20 +185,23 @@ def make_interf_qlayer(n_photons: int) -> QuantumLayer:
     if N_LAYERS < 1:
         raise ValueError(f"N_LAYERS must be >= 1, got {N_LAYERS}")
 
-    builder = ML.CircuitBuilder(n_modes=n_modes)
+    builder = merlin_backend.CircuitBuilder(n_modes=n_modes)
     encoding_modes = list(range(0, n_modes, 2))
-    for l in range(N_LAYERS):
+    for layer_idx in range(N_LAYERS):
         # Keep ansatz naming aligned with the Perceval branch: layer0, layer2, ...
-        builder.add_entangling_layer(trainable=True, name=f"layer{2 * l}")
+        builder.add_entangling_layer(trainable=True, name=f"layer{2 * layer_idx}")
         # One feature layer between consecutive ansatz layers.
-        if l < N_LAYERS - 1:
-            builder.add_angle_encoding(modes=encoding_modes, name=f"phi{2 * l + 1}_")
+        if layer_idx < N_LAYERS - 1:
+            builder.add_angle_encoding(
+                modes=encoding_modes,
+                name=f"phi{2 * layer_idx + 1}_",
+            )
 
     qlayer = QuantumLayer(
         builder=builder,
         input_state=input_state,
-        measurement_strategy=ML.MeasurementStrategy.probs(
-            computation_space=ML.ComputationSpace.FOCK,
+        measurement_strategy=merlin_backend.MeasurementStrategy.probs(
+            computation_space=merlin_backend.ComputationSpace.FOCK,
             grouping=grouping,
         ),
         dtype=DTYPE,
@@ -228,14 +228,14 @@ class BranchMerlin(nn.Module):
         self,
         qlayer: QuantumLayer,
         n_outputs: int = 1,
-        processor: ML.MerlinProcessor | None = None,
+        processor: merlin_backend.MerlinProcessor | None = None,
         feature_map_kind: str = "auto",
     ) -> None:
         super().__init__()
         self.qlayer = qlayer
         self.group_dim = 2 * DEFAULT_N_OUTPUTS
         self.n_outputs = n_outputs
-        self.processor: ML.MerlinProcessor | None = processor
+        self.processor: merlin_backend.MerlinProcessor | None = processor
         self.feature_map_kind = feature_map_kind.lower()
         valid_kinds = {"auto", "dho", "see", "dee", "taf"}
         if self.feature_map_kind not in valid_kinds:
@@ -326,20 +326,20 @@ class BranchMerlin(nn.Module):
 
         if n_feature_layers > 0:
             # Repeat phi_single for each feature layer, giving [N, 3 * n_feature_layers].
-            X = torch.cat([phi_single] * n_feature_layers, dim=1)
+            features = torch.cat([phi_single] * n_feature_layers, dim=1)
         else:
             # No feature layers, so X is empty with shape [N, 0].
-            X = torch.empty(x_in.shape[0], 0, dtype=DTYPE, device=x_in.device)
+            features = torch.empty(x_in.shape[0], 0, dtype=DTYPE, device=x_in.device)
 
         if self.processor is None:
             # Local Execution, differentiable (SLOS)
-            q_out = self.qlayer(X).to(DTYPE)  # (N, output_size)
+            q_out = self.qlayer(features).to(DTYPE)  # (N, output_size)
         else:
             # Remote Execution via MerlinProcessor → shots / simulator / QPU
             # No gradient here since we only use the processor for inference, not training.
             self.qlayer.eval()
             with torch.no_grad():
-                q_out = self.processor.forward(self.qlayer, X).to(DTYPE)
+                q_out = self.processor.forward(self.qlayer, features).to(DTYPE)
 
         # QuantumLayer output is already grouped: (N, 2 * n_qubits).
         u = self.readout(q_out)  # (N, 1)
@@ -347,7 +347,7 @@ class BranchMerlin(nn.Module):
         return u
 
 
-def make_merlin_processor(processor="sim:ascella") -> ML.MerlinProcessor:
+def make_merlin_processor(processor="sim:ascella") -> merlin_backend.MerlinProcessor:
     """
     Build a MerlinProcessor for remote simulation/QPU execution.
 
@@ -370,7 +370,7 @@ def make_merlin_processor(processor="sim:ascella") -> ML.MerlinProcessor:
 
     rp = pcvl.RemoteProcessor(backend)
 
-    processor = ML.MerlinProcessor(
+    processor = merlin_backend.MerlinProcessor(
         rp,
         microbatch_size=32,
         timeout=3600.0,

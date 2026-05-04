@@ -6,7 +6,6 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
-
 from lib.utils import (
     finalize_training_session,
     get_resume_checkpoint_path,
@@ -79,4 +78,3 @@ class TrainingCheckpointTests(unittest.TestCase):
             final_state = torch.load(final_ckpt_path, map_location="cpu")
             self.assertIn("weight", final_state)
             self.assertIn("bias", final_state)
-

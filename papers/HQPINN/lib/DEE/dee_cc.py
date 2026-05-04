@@ -1,19 +1,21 @@
 # dee_cc.py
 # Classical–Classical PINN
 
-import os
 from datetime import datetime
 
 import torch
 import torch.nn as nn
 
 from ..config import (
-    DEE_CC_NUM_HIDDEN_LAYERS,
     DEE_CC_HIDDEN_WIDTH,
+    DEE_CC_NUM_HIDDEN_LAYERS,
     DEE_N_EPOCHS,
     DEE_PLOT_EVERY,
     DTYPE,
 )
+from ..layer_classical import BranchPyTorch
+from ..run_common import run_density_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
@@ -22,7 +24,6 @@ from ..utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ..runtime import seed_everything
 from .core_dee import (
     append_summary_row,
     evaluate_dee_errors,
@@ -32,11 +33,9 @@ from .core_dee import (
     save_density_plot,
     train_dee,
 )
-from ..run_common import run_density_inference_mode
-from ..layer_classical import BranchPyTorch
 
 
-class CC_PINN(nn.Module):
+class ClassicalClassicalPinn(nn.Module):
     """
     Classical-classical PINN with two parallel branches (cc-N-L).
     """
@@ -141,8 +140,10 @@ def run(
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None: CC_PINN(
-                                hidden_width=width, num_hidden_layers=layers
+                            lambda processor=None, width=width, layers=layers: (
+                                ClassicalClassicalPinn(
+                                    hidden_width=width, num_hidden_layers=layers
+                                )
                             ),
                         )
                         err_rho, err_p = evaluate_dee_errors(model)
@@ -204,7 +205,7 @@ def run(
                     f"retraining model."
                 )
 
-            model = CC_PINN(hidden_width=width, num_hidden_layers=layers)
+            model = ClassicalClassicalPinn(hidden_width=width, num_hidden_layers=layers)
             optimizer = make_optimizer(model, lr=5e-4)
             case_run_id, resume_state, resume_ckpt_path = prepare_training_session(
                 model=model,
@@ -279,7 +280,7 @@ def run(
             case_prefix=case_prefix,
             plot_label=None,
             run_id=run_id,
-            model_factory=lambda processor=None: CC_PINN(
+            model_factory=lambda processor=None: ClassicalClassicalPinn(
                 hidden_width=width, num_hidden_layers=layers
             ),
             save_plot_fn=save_density_plot,
@@ -302,7 +303,7 @@ def run(
             case_prefix=case_prefix,
             plot_label=None,
             run_id=run_id,
-            model_factory=lambda processor=None: CC_PINN(
+            model_factory=lambda processor=None: ClassicalClassicalPinn(
                 hidden_width=width, num_hidden_layers=layers
             ),
             save_plot_fn=save_density_plot,

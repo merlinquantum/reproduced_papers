@@ -1,18 +1,20 @@
 # dee_qq_m.py
 # Interferometer-Interferometer PINN
 
-import os
 from datetime import datetime
 
 import torch
 import torch.nn as nn
 
 from ..config import (
-    DEE_N_EPOCHS,
     DEE_LR,
+    DEE_N_EPOCHS,
     DEE_PLOT_EVERY,
     DTYPE,
 )
+from ..layer_merlin import BranchMerlin, make_interf_qlayer
+from ..run_common import run_density_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
@@ -21,7 +23,6 @@ from ..utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ..runtime import seed_everything
 from .core_dee import (
     append_summary_row,
     evaluate_dee_errors,
@@ -31,11 +32,9 @@ from .core_dee import (
     save_density_plot,
     train_dee,
 )
-from ..run_common import run_density_inference_mode
-from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
-class II_PINN(nn.Module):
+class InterferometerInterferometerPinn(nn.Module):
     """
     Interferometer-Interferometer PINN:
 
@@ -115,8 +114,10 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None: II_PINN(
-                                n_photons=nb_photons, processor=processor
+                            lambda processor=None, nb_photons=nb_photons: (
+                                InterferometerInterferometerPinn(
+                                    n_photons=nb_photons, processor=processor
+                                )
                             ),
                         )
                         err_rho, err_p = evaluate_dee_errors(model)
@@ -178,7 +179,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
                     f"retraining model."
                 )
 
-            model = II_PINN(n_photons=nb_photons)
+            model = InterferometerInterferometerPinn(n_photons=nb_photons)
             optimizer = make_optimizer(model, lr=DEE_LR)
             case_run_id, resume_state, resume_ckpt_path = prepare_training_session(
                 model=model,
@@ -252,7 +253,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
             case_prefix=case_prefix,
             plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: II_PINN(
+            model_factory=lambda processor=None: InterferometerInterferometerPinn(
                 n_photons=n_photons, processor=processor
             ),
             save_plot_fn=save_density_plot,
@@ -271,7 +272,7 @@ def run(mode="train", backend="sim:ascella", n_photons=2):
             case_prefix=case_prefix,
             plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: II_PINN(
+            model_factory=lambda processor=None: InterferometerInterferometerPinn(
                 n_photons=n_photons, processor=processor
             ),
             save_plot_fn=save_density_plot,

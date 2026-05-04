@@ -1,20 +1,23 @@
 # see_hy_m.py
 # Classical–Interferometer PINN
 
-import os
 from datetime import datetime
 
 import torch
 import torch.nn as nn
 
 from ..config import (
-    SEE_CC_NUM_HIDDEN_LAYERS,
+    DTYPE,
     SEE_CC_HIDDEN_WIDTH,
+    SEE_CC_NUM_HIDDEN_LAYERS,
+    SEE_LR,
     SEE_N_EPOCHS,
     SEE_PLOT_EVERY,
-    SEE_LR,
-    DTYPE,
 )
+from ..layer_classical import BranchPyTorch
+from ..layer_merlin import BranchMerlin, make_interf_qlayer
+from ..run_common import run_density_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
@@ -23,7 +26,6 @@ from ..utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ..runtime import seed_everything
 from .core_see import (
     append_summary_row,
     evaluate_see_errors,
@@ -33,12 +35,9 @@ from .core_see import (
     save_density_plot,
     train_see,
 )
-from ..run_common import run_density_inference_mode
-from ..layer_classical import BranchPyTorch
-from ..layer_merlin import make_interf_qlayer, BranchMerlin
 
 
-class CI_PINN(nn.Module):
+class ClassicalInterferometerPinn(nn.Module):
     """
     Classical-Interferometer PINN with one classical branch and one quantum branch.
     The quantum branch is a MerLin interferometer with independent parameters.
@@ -149,7 +148,7 @@ def run(
             if existing_ckpt is not None:
                 final_loss = load_training_loss_for_checkpoint(
                     out_dir=f"results/SEE/{case_prefix}",
-                        model_label=f"hy-m_{label}",
+                    model_label=f"hy-m_{label}",
                     ckpt_path=existing_ckpt,
                     case_prefix=case_prefix,
                 )
@@ -157,11 +156,13 @@ def run(
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None: CI_PINN(
-                                n_photons=n_photons,
-                                hidden_width=width,
-                                num_hidden_layers=layers,
-                                processor=processor,
+                            lambda processor=None, n_photons=n_photons, width=width, layers=layers: (
+                                ClassicalInterferometerPinn(
+                                    n_photons=n_photons,
+                                    hidden_width=width,
+                                    num_hidden_layers=layers,
+                                    processor=processor,
+                                )
                             ),
                         )
                         err_rho, err_p = evaluate_see_errors(model)
@@ -223,7 +224,7 @@ def run(
                     f"retraining model."
                 )
 
-            model = CI_PINN(
+            model = ClassicalInterferometerPinn(
                 n_photons=n_photons, hidden_width=width, num_hidden_layers=layers
             )
             optimizer = make_optimizer(model, lr=SEE_LR)
@@ -305,7 +306,7 @@ def run(
             case_prefix=case_prefix,
             plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: CI_PINN(
+            model_factory=lambda processor=None: ClassicalInterferometerPinn(
                 n_photons=n_photons,
                 hidden_width=width,
                 num_hidden_layers=layers,
@@ -333,7 +334,7 @@ def run(
             case_prefix=case_prefix,
             plot_label=f"{n_photons} photons",
             run_id=run_id,
-            model_factory=lambda processor=None: CI_PINN(
+            model_factory=lambda processor=None: ClassicalInterferometerPinn(
                 n_photons=n_photons,
                 hidden_width=width,
                 num_hidden_layers=layers,

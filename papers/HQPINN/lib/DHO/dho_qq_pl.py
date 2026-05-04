@@ -10,23 +10,25 @@ import torch.nn as nn
 
 from ..config import (
     DEFAULT_N_OUTPUTS,
+    DHO_LR,
     DHO_N_EPOCHS,
     DHO_PLOT_EVERY,
-    DHO_LR,
     N_LAYERS,
-    DTYPE,
 )
+from ..layer_classical import LearnedScalarFusion
+from ..layer_pennylane import BranchPennylane, dho_feature_map, make_quantum_block
+from ..paths import results_case_dir_for_model_dir
+from ..run_common import run_series_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
     get_latest_checkpoint,
     load_model,
-    make_time_grid,
     make_optimizer,
+    make_time_grid,
     prepare_training_session,
 )
-from ..runtime import seed_everything
-from ..paths import results_case_dir_for_model_dir
 from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
@@ -35,12 +37,9 @@ from .core_dho import (
     train_oscillator_pinn,
     u_exact,
 )
-from ..run_common import run_series_inference_mode
-from ..layer_pennylane import make_quantum_block, dho_feature_map, BranchPennylane
-from ..layer_classical import LearnedScalarFusion
 
 
-class PP_PINN(nn.Module):
+class PennyLanePennyLanePinn(nn.Module):
     """
     Physics-Informed model with two independent quantum branches
     and a linear fusion to scalar output.
@@ -120,7 +119,7 @@ def run(
             try:
                 model = load_model(
                     existing_ckpt,
-                    lambda processor=None: PP_PINN(n_qubits=n_qubits),
+                    lambda processor=None: PennyLanePennyLanePinn(n_qubits=n_qubits),
                 )
             except Exception as exc:
                 print(
@@ -166,7 +165,7 @@ def run(
                 print()
                 return
 
-        model = PP_PINN(n_qubits=n_qubits)
+        model = PennyLanePennyLanePinn(n_qubits=n_qubits)
         optimizer = make_optimizer(model, lr=DHO_LR)
         run_id, resume_state, resume_ckpt_path = prepare_training_session(
             model=model,
@@ -226,7 +225,9 @@ def run(
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: PP_PINN(n_qubits=n_qubits),
+            model_factory=lambda processor=None: PennyLanePennyLanePinn(
+                n_qubits=n_qubits
+            ),
             make_time_grid=make_time_grid,
             exact_fn=u_exact,
             plot_fn=lambda u_pred, u_ex, t: plot_model_prediction(
@@ -243,7 +244,9 @@ def run(
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: PP_PINN(n_qubits=n_qubits),
+            model_factory=lambda processor=None: PennyLanePennyLanePinn(
+                n_qubits=n_qubits
+            ),
             make_time_grid=make_time_grid,
             exact_fn=u_exact,
             plot_fn=lambda u_pred, u_ex, t: plot_model_prediction(

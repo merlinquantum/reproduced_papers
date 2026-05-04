@@ -12,7 +12,7 @@ class InferenceModelSelectionTests(unittest.TestCase):
         for mode in ("run", "remote"):
             captured: dict[str, object] = {}
 
-            def _capture(**kwargs) -> None:
+            def _capture(captured=captured, **kwargs) -> None:
                 captured.update(kwargs)
 
             with self.subTest(mode=mode):
@@ -28,7 +28,7 @@ class InferenceModelSelectionTests(unittest.TestCase):
         for mode in ("run", "remote"):
             captured: dict[str, object] = {}
 
-            def _capture(**kwargs) -> None:
+            def _capture(captured=captured, **kwargs) -> None:
                 captured.update(kwargs)
 
             with self.subTest(mode=mode):

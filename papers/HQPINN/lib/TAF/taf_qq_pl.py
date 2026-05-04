@@ -1,7 +1,6 @@
 # taf_qq_pl.py
 # PennyLane–PennyLane PINN for TAF (Sec. 3.3)
 
-import os
 from datetime import datetime
 
 import torch
@@ -24,6 +23,7 @@ from ..layer_pennylane import (
     taf_feature_map,
 )
 from ..run_common import run_density_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
@@ -31,19 +31,18 @@ from ..utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ..runtime import seed_everything
 from .core_taf import (
     append_summary_row,
     get_run_id_from_checkpoint,
+    load_training_metrics_for_checkpoint,
     load_training_row_for_run_id,
     load_training_sets,
-    load_training_metrics_for_checkpoint,
     save_density_plot,
     train_taf,
 )
 
 
-class PP_PINN(nn.Module):
+class PennyLanePennyLanePinn(nn.Module):
     """PennyLane-PennyLane TAF PINN with two independent quantum branches."""
 
     def __init__(
@@ -111,7 +110,7 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
     data = load_training_sets()
 
     # Sec. 3.3 inlet values (SI)
-    U_in = torch.tensor([1.225, 272.15, 0.0, 288.15], dtype=DTYPE, device=DEVICE)
+    inlet_state = torch.tensor([1.225, 272.15, 0.0, 288.15], dtype=DTYPE, device=DEVICE)
 
     ckpt_dir = "models/TAF"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -144,7 +143,9 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                         print(
                             f"Skipping training for {case_prefix}: existing checkpoint found at {existing_ckpt}."
                         )
-                        n_params = count_trainable_params(PP_PINN(q_layers=q_layers))
+                        n_params = count_trainable_params(
+                            PennyLanePennyLanePinn(q_layers=q_layers)
+                        )
                         case_run_id = get_run_id_from_checkpoint(
                             existing_ckpt, case_prefix
                         )
@@ -195,7 +196,7 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                         f"retraining model."
                     )
 
-            model = PP_PINN(q_layers=q_layers).to(DEVICE)
+            model = PennyLanePennyLanePinn(q_layers=q_layers).to(DEVICE)
             optimizer = make_optimizer(model, lr=TAF_LR)
             case_run_id, resume_state, resume_ckpt_path = prepare_training_session(
                 model=model,
@@ -214,7 +215,7 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
                 model_label=f"qq-pl_{label}",
                 run_id=case_run_id,
                 data=data,
-                U_in=U_in,
+                inlet_state=inlet_state,
                 checkpoint_path=resume_ckpt_path,
                 resume_state=resume_state,
                 lbfgs_steps=TAF_LBFGS_STEPS,
@@ -270,7 +271,9 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
             case_prefix=case_prefix,
             plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: PP_PINN(q_layers=q_layers),
+            model_factory=lambda processor=None: PennyLanePennyLanePinn(
+                q_layers=q_layers
+            ),
             save_plot_fn=save_density_plot,
         )
 
@@ -287,7 +290,9 @@ def run(mode="train", backend="sim:ascella", model_size="2") -> None:
             case_prefix=case_prefix,
             plot_label=f"q_layers={q_layers}",
             run_id=run_id,
-            model_factory=lambda processor=None: PP_PINN(q_layers=q_layers),
+            model_factory=lambda processor=None: PennyLanePennyLanePinn(
+                q_layers=q_layers
+            ),
             save_plot_fn=save_density_plot,
         )
 

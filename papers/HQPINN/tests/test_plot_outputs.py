@@ -6,7 +6,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 import torch
-
 from lib.DEE import core_dee
 from lib.DHO import dho_cc
 from lib.SEE import core_see
@@ -65,7 +64,9 @@ class PlotOutputTests(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp_dir:
             with (
-                patch.object(core_taf, "loss_boundary_terms", side_effect=_fake_boundary_terms),
+                patch.object(
+                    core_taf, "loss_boundary_terms", side_effect=_fake_boundary_terms
+                ),
                 patch.object(core_taf, "loss_pde", side_effect=_fake_loss_pde),
                 patch.object(
                     core_taf,
@@ -83,7 +84,9 @@ class PlotOutputTests(unittest.TestCase):
                     model_label="cc_40-4",
                     run_id="run123",
                     data={},
-                    U_in=torch.tensor([1.225, 272.15, 0.0, 288.15], dtype=core_taf.DTYPE),
+                    U_in=torch.tensor(
+                        [1.225, 272.15, 0.0, 288.15], dtype=core_taf.DTYPE
+                    ),
                     lbfgs_steps=0,
                 )
 
@@ -159,10 +162,18 @@ class PlotOutputTests(unittest.TestCase):
                     loss_fn=_fake_loss_fn,
                 )
 
-            self.assertTrue((Path(tmp_dir) / "dee-cc_10-4_run123_rho_pred.png").is_file())
-            self.assertTrue((Path(tmp_dir) / "dee-cc_10-4_run123_rho_exact.png").is_file())
-            self.assertTrue((Path(tmp_dir) / "dee-cc_10-4_run123_rho_error.png").is_file())
-            self.assertTrue((Path(tmp_dir) / "dee-cc_10-4_run123_rho_x_t_2p0.png").is_file())
+            self.assertTrue(
+                (Path(tmp_dir) / "dee-cc_10-4_run123_rho_pred.png").is_file()
+            )
+            self.assertTrue(
+                (Path(tmp_dir) / "dee-cc_10-4_run123_rho_exact.png").is_file()
+            )
+            self.assertTrue(
+                (Path(tmp_dir) / "dee-cc_10-4_run123_rho_error.png").is_file()
+            )
+            self.assertTrue(
+                (Path(tmp_dir) / "dee-cc_10-4_run123_rho_x_t_2p0.png").is_file()
+            )
 
     def test_dee_save_density_plot_writes_main_and_slice_into_case_dir(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -241,9 +252,15 @@ class PlotOutputTests(unittest.TestCase):
                     loss_fn=_fake_loss_fn,
                 )
 
-            self.assertTrue((Path(tmp_dir) / "see-cc_10-4_run123_rho_pred.png").is_file())
-            self.assertTrue((Path(tmp_dir) / "see-cc_10-4_run123_rho_exact.png").is_file())
-            self.assertTrue((Path(tmp_dir) / "see-cc_10-4_run123_rho_error.png").is_file())
+            self.assertTrue(
+                (Path(tmp_dir) / "see-cc_10-4_run123_rho_pred.png").is_file()
+            )
+            self.assertTrue(
+                (Path(tmp_dir) / "see-cc_10-4_run123_rho_exact.png").is_file()
+            )
+            self.assertTrue(
+                (Path(tmp_dir) / "see-cc_10-4_run123_rho_error.png").is_file()
+            )
 
     def test_dho_cc_run_mode_uses_case_specific_results_dir(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:

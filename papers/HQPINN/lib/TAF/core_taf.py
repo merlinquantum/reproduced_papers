@@ -4,10 +4,10 @@ Core training utilities for TAF (2D transonic aerofoil flow, Sec. 3.3).
 
 import csv
 import os
+import sys
 from datetime import datetime
 from pathlib import Path
-import sys
-from typing import Optional, Tuple
+from typing import Optional
 
 import matplotlib
 import numpy as np
@@ -26,10 +26,10 @@ from ..config import (
     TAF_X_DATA_INT_FILE,
     TAF_X_F_FILE,
     TAF_X_IN_FILE,
-    TAF_X_OUT_FILE,
-    TAF_X_TOP_FILE,
     TAF_X_MAX,
     TAF_X_MIN,
+    TAF_X_OUT_FILE,
+    TAF_X_TOP_FILE,
     TAF_X_WALL_FILE,
     TAF_X_WALL_NORMALS_FILE,
     TAF_Y_MAX,
@@ -43,12 +43,12 @@ from ..utils import (
     write_metrics_csv,
 )
 
-
-DATA_DIR = data_dir_for_benchmark("NACA0012")
 # Keep batch exports headless, but do not disable inline notebook rendering.
 if "ipykernel" not in sys.modules:
     matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+
+DATA_DIR = data_dir_for_benchmark("NACA0012")
 
 TAF_FIELD_LABELS = (
     ("rho", "density"),
@@ -118,8 +118,8 @@ def load_training_sets() -> dict[str, torch.Tensor]:
     #
     # This keeps the airfoil geometry in the training set, but it also makes
     # TAF much less constrained than the original supervised-plus-PINN setup.
-    X_data_int = load_points(TAF_X_DATA_INT_FILE)
-    X_f = load_points(TAF_X_F_FILE)
+    interior_data_points = load_points(TAF_X_DATA_INT_FILE)
+    collocation_points = load_points(TAF_X_F_FILE)
 
     return {
         "X_in": load_points(TAF_X_IN_FILE),
@@ -127,15 +127,15 @@ def load_training_sets() -> dict[str, torch.Tensor]:
         "X_top": load_points(TAF_X_TOP_FILE),
         "X_bot": load_points(TAF_X_BOT_FILE),
         "X_wall": load_points(TAF_X_WALL_FILE),
-        "X_data_int": X_data_int,
-        "X_f": torch.cat([X_data_int, X_f], dim=0),
+        "X_data_int": interior_data_points,
+        "X_f": torch.cat([interior_data_points, collocation_points], dim=0),
         "X_wall_normals": load_points(TAF_X_WALL_NORMALS_FILE),
     }
 
 
 def load_training_metrics_for_checkpoint(
     out_dir: str, model_label: str, ckpt_path: str, case_prefix: str
-) -> Optional[Tuple[float, float, float]]:
+) -> Optional[tuple[float, float, float]]:
     """Return (Loss, BC, F) from the CSV that matches the checkpoint run_id."""
     ckpt_name = os.path.basename(ckpt_path)
     ckpt_prefix = f"{case_prefix}_"
@@ -231,7 +231,7 @@ def append_summary_row(summary_path: str, row: dict[str, object]) -> bool:
 
 def unpack_primitives(
     raw: torch.Tensor,
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
     """Map network output to (rho, u, v, T)."""
     # TAF networks always output 4 channels in this order:
     # density, x-velocity, y-velocity, temperature.
@@ -268,7 +268,7 @@ def divergence_uv(u: torch.Tensor, v: torch.Tensor, xy: torch.Tensor) -> torch.T
 
 def euler_residual(
     model: nn.Module, xy_in: torch.Tensor
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
     """
     Steady 2D Euler residual for the TAF case (paper Sec. 3.3),
     written in conservative form on (x, y):
@@ -284,30 +284,30 @@ def euler_residual(
     # Primitive -> thermodynamic quantities used in Euler fluxes.
     # p = rho * R * T (ideal gas), E = e + kinetic energy.
     p = rho * TAF_R_GAS * temp
-    E = p / ((GAMMA - 1.0) * rho) + 0.5 * (u**2 + v**2)
+    specific_total_energy = p / ((GAMMA - 1.0) * rho) + 0.5 * (u**2 + v**2)
 
     rho_u = rho * u
     rho_v = rho * v
 
     # Conservative flux in x-direction:
     # G1 = [rho*u, rho*u^2 + p, rho*u*v, u*(rho*E + p)].
-    G1 = torch.cat(
+    x_flux = torch.cat(
         [
             rho_u,
             p + rho * u**2,
             rho * u * v,
-            u * (rho * E + p),
+            u * (rho * specific_total_energy + p),
         ],
         dim=1,
     )
     # Conservative flux in y-direction:
     # G2 = [rho*v, rho*u*v, rho*v^2 + p, v*(rho*E + p)].
-    G2 = torch.cat(
+    y_flux = torch.cat(
         [
             rho_v,
             rho * u * v,
             p + rho * v**2,
-            v * (rho * E + p),
+            v * (rho * specific_total_energy + p),
         ],
         dim=1,
     )
@@ -316,13 +316,13 @@ def euler_residual(
     for i in range(4):
         # For each conservation law i, compute:
         # Ri = dG1_i/dx + dG2_i/dy.
-        dG1 = grad_scalar(G1[:, i : i + 1], xy)
-        dG2 = grad_scalar(G2[:, i : i + 1], xy)
-        residuals.append(dG1[:, 0:1] + dG2[:, 1:2])
+        x_flux_grad = grad_scalar(x_flux[:, i : i + 1], xy)
+        y_flux_grad = grad_scalar(y_flux[:, i : i + 1], xy)
+        residuals.append(x_flux_grad[:, 0:1] + y_flux_grad[:, 1:2])
 
     # R has 4 columns: mass, x-momentum, y-momentum, total-energy residuals.
-    R = torch.cat(residuals, dim=1)
-    return R, rho, u, v, temp
+    residual = torch.cat(residuals, dim=1)
+    return residual, rho, u, v, temp
 
 
 def compute_lambda(
@@ -385,12 +385,12 @@ def _sample_pair_rows(
 def loss_boundary_terms(
     model: nn.Module,
     data: dict[str, torch.Tensor],
-    U_in: torch.Tensor,
+    inlet_state: torch.Tensor,
     n_in_batch: Optional[int] = None,
     n_out_batch: Optional[int] = None,
     n_wall_batch: Optional[int] = None,
     n_per_batch: Optional[int] = None,
-) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
     """
     Boundary terms for the TAF setup of paper Sec. 3.3, using the
     boundary point sets generated in `generate_aerofoil_training_sets.py`:
@@ -407,45 +407,54 @@ def loss_boundary_terms(
     L_wall : wall slip loss
     L_per : periodic side loss
     """
-    X_in = data["X_in"]
-    X_out = data["X_out"]
-    X_top = data["X_top"]
-    X_bot = data["X_bot"]
-    X_wall = data["X_wall"]
-    X_wall_normals = data["X_wall_normals"]
+    inlet_points = data["X_in"]
+    outlet_points = data["X_out"]
+    top_points = data["X_top"]
+    bottom_points = data["X_bot"]
+    wall_points = data["X_wall"]
+    wall_normals = data["X_wall_normals"]
 
-    X_in = _sample_rows(X_in, n_in_batch)
-    X_out = _sample_rows(X_out, n_out_batch)
-    X_wall, X_wall_normals = _sample_pair_rows(X_wall, X_wall_normals, n_wall_batch)
-    X_top, X_bot = _sample_pair_rows(X_top, X_bot, n_per_batch)
+    inlet_points = _sample_rows(inlet_points, n_in_batch)
+    outlet_points = _sample_rows(outlet_points, n_out_batch)
+    wall_points, wall_normals = _sample_pair_rows(
+        wall_points,
+        wall_normals,
+        n_wall_batch,
+    )
+    top_points, bottom_points = _sample_pair_rows(
+        top_points,
+        bottom_points,
+        n_per_batch,
+    )
 
     # Reference scales from the paper inlet state
-    rho_ref = U_in[0]
-    u_ref = U_in[1]
-    T_ref = U_in[3]
+    rho_ref = inlet_state[0]
+    u_ref = inlet_state[1]
+    temperature_ref = inlet_state[3]
 
     # v_in = 0 in the paper, so use u_ref as the velocity scale for v
     v_ref = u_ref
 
     # Sec. 3.3 inlet BC, applied on `X_in` (left boundary of the box domain):
-    # enforce the prescribed primitive vector U_in = [rho, u, v, T].
-    pred_in = model(X_in)
-    rho_i, u_i, v_i, T_i = unpack_primitives(pred_in)
-    U_pred_in_norm = torch.cat(
-        [rho_i / rho_ref, u_i / u_ref, v_i / v_ref, T_i / T_ref], dim=1
+    # enforce the prescribed primitive vector inlet_state = [rho, u, v, T].
+    pred_in = model(inlet_points)
+    rho_i, u_i, v_i, temperature_i = unpack_primitives(pred_in)
+    inlet_prediction_norm = torch.cat(
+        [rho_i / rho_ref, u_i / u_ref, v_i / v_ref, temperature_i / temperature_ref],
+        dim=1,
     )
 
-    U_in_norm = (
+    inlet_state_norm = (
         torch.tensor(
             [1.0, 1.0, 0.0, 1.0],
-            dtype=U_in.dtype,
-            device=U_in.device,
+            dtype=inlet_state.dtype,
+            device=inlet_state.device,
         )
         .view(1, 4)
-        .expand_as(U_pred_in_norm)
+        .expand_as(inlet_prediction_norm)
     )
 
-    L_in = mse(U_pred_in_norm, U_in_norm)
+    loss_inlet = mse(inlet_prediction_norm, inlet_state_norm)
 
     # Sec. 3.3 outlet BC, applied on `X_out` (right boundary):
     # Keep outputs as (rho,u,v,T), but interpret P_out = 0 as zero gauge pressure.
@@ -462,69 +471,71 @@ def loss_boundary_terms(
     #   p_rel = (p_abs - p_ref) / p_ref
     #
     # Paper says P_out = 0, interpreted as p_rel = 0.
-    pred_out = model(X_out)
-    rho_o, _, _, T_o = unpack_primitives(pred_out)
+    pred_out = model(outlet_points)
+    rho_o, _, _, temperature_o = unpack_primitives(pred_out)
 
     # Reference absolute pressure from inlet state
     # Uin = (ρin, uin, vin, Tin) = (1.225, 272.15, 0.0, 288.15),
     # p_ref = 101306
-    p_ref = rho_ref * TAF_R_GAS * T_ref
+    p_ref = rho_ref * TAF_R_GAS * temperature_ref
 
     # Relative / gauge-like pressure normalized by reference pressure
-    p_abs_pred = rho_o * TAF_R_GAS * T_o
+    p_abs_pred = rho_o * TAF_R_GAS * temperature_o
     p_rel_pred = (p_abs_pred - p_ref) / p_ref
 
     # Paper says P_out = 0; interpreted as zero gauge pressure
     p_rel_target = torch.zeros_like(p_rel_pred)
 
-    L_out = mse(p_rel_pred, p_rel_target)
+    loss_outlet = mse(p_rel_pred, p_rel_target)
 
     # Sec. 3.3 wall BC on NACA0012 surface points `X_wall`:
     # impermeability (slip wall), i.e. normal velocity is zero: (u, v) dot n = 0.
     # Wall normals come from `X_wall_normals` generated with the geometry set.
-    pred_wall = model(X_wall)
+    pred_wall = model(wall_points)
     _, u_w, v_w, _ = unpack_primitives(pred_wall)
-    normals = X_wall_normals[:, 2:4]
+    normals = wall_normals[:, 2:4]
     u_dot_n = u_w * normals[:, 0:1] + v_w * normals[:, 1:2]
     u_dot_n_norm = u_dot_n / u_ref
-    L_wall = mse(u_dot_n_norm, torch.zeros_like(u_dot_n_norm))
+    loss_wall = mse(u_dot_n_norm, torch.zeros_like(u_dot_n_norm))
 
     # Sec. 3.3 far-field closure in this repo: periodic pairing of
     # top and bottom boundaries (`X_top`, `X_bot`) for all primitives.
-    pred_top = model(X_top)
-    pred_bot = model(X_bot)
-    rho_t, u_t, v_t, T_t = unpack_primitives(pred_top)
-    rho_b, u_b, v_b, T_b = unpack_primitives(pred_bot)
-    U_top_norm = torch.cat(
-        [rho_t / rho_ref, u_t / u_ref, v_t / v_ref, T_t / T_ref], dim=1
+    pred_top = model(top_points)
+    pred_bot = model(bottom_points)
+    rho_t, u_t, v_t, temperature_t = unpack_primitives(pred_top)
+    rho_b, u_b, v_b, temperature_b = unpack_primitives(pred_bot)
+    top_prediction_norm = torch.cat(
+        [rho_t / rho_ref, u_t / u_ref, v_t / v_ref, temperature_t / temperature_ref],
+        dim=1,
     )
-    U_bot_norm = torch.cat(
-        [rho_b / rho_ref, u_b / u_ref, v_b / v_ref, T_b / T_ref], dim=1
+    bottom_prediction_norm = torch.cat(
+        [rho_b / rho_ref, u_b / u_ref, v_b / v_ref, temperature_b / temperature_ref],
+        dim=1,
     )
-    L_per = mse(U_top_norm, U_bot_norm)
+    loss_periodic = mse(top_prediction_norm, bottom_prediction_norm)
 
-    return L_in, L_out, L_wall, L_per
+    return loss_inlet, loss_outlet, loss_wall, loss_periodic
 
 
 def loss_boundary(
     model: nn.Module,
     data: dict[str, torch.Tensor],
-    U_in: torch.Tensor,
+    inlet_state: torch.Tensor,
     n_in_batch: Optional[int] = None,
     n_out_batch: Optional[int] = None,
     n_wall_batch: Optional[int] = None,
     n_per_batch: Optional[int] = None,
 ) -> torch.Tensor:
-    L_in, L_out, L_wall, L_per = loss_boundary_terms(
+    loss_inlet, loss_outlet, loss_wall, loss_periodic = loss_boundary_terms(
         model,
         data,
-        U_in,
+        inlet_state,
         n_in_batch=n_in_batch,
         n_out_batch=n_out_batch,
         n_wall_batch=n_wall_batch,
         n_per_batch=n_per_batch,
     )
-    return L_in + L_out + L_wall + L_per
+    return loss_inlet + loss_outlet + loss_wall + loss_periodic
 
 
 def loss_pde(
@@ -542,14 +553,14 @@ def loss_pde(
     averages, but they did not yield a clear improvement and are therefore not
     part of this baseline branch.
     """
-    X_f = _sample_rows(data["X_f"], n_f_batch)
-    R, _, _, _, _ = euler_residual(model, X_f)
+    collocation_points = _sample_rows(data["X_f"], n_f_batch)
+    residual, _, _, _, _ = euler_residual(model, collocation_points)
     # Same collocation points, different role:
     # - R: Euler residuals to minimize
     # - lam: shock-aware per-point weight
-    lam = compute_lambda(model, X_f, eps=eps_lambda)
-    R2 = torch.sum(R**2, dim=1, keepdim=True)
-    return torch.mean(lam * R2)
+    lam = compute_lambda(model, collocation_points, eps=eps_lambda)
+    residual_squared = torch.sum(residual**2, dim=1, keepdim=True)
+    return torch.mean(lam * residual_squared)
 
 
 def log_training_info(
@@ -601,7 +612,7 @@ def train_taf(
     model_label: str,
     run_id: str,
     data: dict[str, torch.Tensor],
-    U_in: torch.Tensor,
+    inlet_state: torch.Tensor,
     checkpoint_path: str | None = None,
     checkpoint_every: int | None = None,
     resume_state: dict | None = None,
@@ -612,7 +623,7 @@ def train_taf(
     n_out_batch: Optional[int] = None,
     n_wall_batch: Optional[int] = 128,
     n_per_batch: Optional[int] = None,
-) -> Tuple[float, float, float, int]:
+) -> tuple[float, float, float, int]:
     """Train TAF model and return summary metrics."""
     os.makedirs(out_dir, exist_ok=True)
 
@@ -647,19 +658,26 @@ def train_taf(
 
                 # Paper objective:
                 #   L = L_bc + L_f
-                L_in, L_out, L_wall, L_per = loss_boundary_terms(
+                loss_inlet, loss_outlet, loss_wall, loss_periodic = loss_boundary_terms(
                     model,
                     data,
-                    U_in,
+                    inlet_state,
                     n_in_batch=n_in_batch,
                     n_out_batch=n_out_batch,
                     n_wall_batch=n_wall_batch,
                     n_per_batch=n_per_batch,
                 )
-                L_bc = L_in + L_out + L_wall + L_per
-                L_f = loss_pde(model, data, eps_lambda=eps_lambda, n_f_batch=n_f_batch)
-                L_total = L_bc + L_f
-                L_total.backward()
+                loss_boundary_value = (
+                    loss_inlet + loss_outlet + loss_wall + loss_periodic
+                )
+                loss_residual = loss_pde(
+                    model,
+                    data,
+                    eps_lambda=eps_lambda,
+                    n_f_batch=n_f_batch,
+                )
+                loss_total = loss_boundary_value + loss_residual
+                loss_total.backward()
                 optimizer.step()
                 elapsed = elapsed_offset + (datetime.now() - start).total_seconds()
                 last_completed_epoch = epoch
@@ -669,13 +687,13 @@ def train_taf(
                     log_training_info(
                         epoch,
                         elapsed,
-                        L_total,
-                        L_bc,
-                        L_f,
-                        L_in,
-                        L_out,
-                        L_wall,
-                        L_per,
+                        loss_total,
+                        loss_boundary_value,
+                        loss_residual,
+                        loss_inlet,
+                        loss_outlet,
+                        loss_wall,
+                        loss_periodic,
                         rows,
                     )
 
@@ -734,32 +752,41 @@ def train_taf(
         def closure():
             optimizer_lbfgs.zero_grad()
             # Use full-batch in L-BFGS closure for deterministic updates.
-            L_bc_c = loss_boundary(model, data, U_in)
-            L_f_c = loss_pde(model, data, eps_lambda=eps_lambda, n_f_batch=None)
-            L_total_c = L_bc_c + L_f_c
-            L_total_c.backward()
-            return L_total_c
+            loss_boundary_closure = loss_boundary(model, data, inlet_state)
+            loss_residual_closure = loss_pde(
+                model,
+                data,
+                eps_lambda=eps_lambda,
+                n_f_batch=None,
+            )
+            loss_total_closure = loss_boundary_closure + loss_residual_closure
+            loss_total_closure.backward()
+            return loss_total_closure
 
         optimizer_lbfgs.step(closure)
 
     # Do not use torch.no_grad() here: PDE loss relies on autograd
     # to evaluate spatial derivatives in euler_residual().
-    L_in, L_out, L_wall, L_per = loss_boundary_terms(model, data, U_in)
-    L_bc = L_in + L_out + L_wall + L_per
-    L_f = loss_pde(model, data, eps_lambda=eps_lambda, n_f_batch=None)
-    L_total = L_bc + L_f
+    loss_inlet, loss_outlet, loss_wall, loss_periodic = loss_boundary_terms(
+        model,
+        data,
+        inlet_state,
+    )
+    loss_boundary_value = loss_inlet + loss_outlet + loss_wall + loss_periodic
+    loss_residual = loss_pde(model, data, eps_lambda=eps_lambda, n_f_batch=None)
+    loss_total = loss_boundary_value + loss_residual
 
     elapsed = elapsed_offset + (datetime.now() - start).total_seconds()
     log_training_info(
         n_epochs,
         elapsed,
-        L_total,
-        L_bc,
-        L_f,
-        L_in,
-        L_out,
-        L_wall,
-        L_per,
+        loss_total,
+        loss_boundary_value,
+        loss_residual,
+        loss_inlet,
+        loss_outlet,
+        loss_wall,
+        loss_periodic,
         rows,
     )
     write_metrics_csv(csv_path, csv_header, rows)
@@ -788,9 +815,9 @@ def train_taf(
         print(f"PNG saved to: {path}")
 
     return (
-        float(L_total.item()),
-        float(L_bc.item()),
-        float(L_f.item()),
+        float(loss_total.item()),
+        float(loss_boundary_value.item()),
+        float(loss_residual.item()),
         n_params,
     )
 
@@ -822,8 +849,8 @@ def _save_primitive_field_plots(
 
     x_axis = np.linspace(TAF_X_MIN, TAF_X_MAX, grid_nx)
     y_axis = np.linspace(TAF_Y_MIN, TAF_Y_MAX, grid_ny)
-    X_grid, Y_grid = np.meshgrid(x_axis, y_axis)
-    xy_grid = np.column_stack([X_grid.ravel(), Y_grid.ravel()])
+    x_grid, y_grid = np.meshgrid(x_axis, y_axis)
+    xy_grid = np.column_stack([x_grid.ravel(), y_grid.ravel()])
 
     with torch.no_grad():
         xy_t = torch.tensor(xy_grid, dtype=DTYPE, device=DEVICE)
@@ -847,16 +874,16 @@ def _save_primitive_field_plots(
         field = np.ma.array(pred_grid[:, :, field_idx], mask=airfoil_mask)
         levels = np.linspace(spec["vmin"], spec["vmax"], 13)
         cf = ax.contourf(
-            X_grid,
-            Y_grid,
+            x_grid,
+            y_grid,
             field,
             levels=levels,
             cmap="jet",
             extend="both",
         )
         ax.contour(
-            X_grid,
-            Y_grid,
+            x_grid,
+            y_grid,
             field,
             levels=levels,
             colors="k",

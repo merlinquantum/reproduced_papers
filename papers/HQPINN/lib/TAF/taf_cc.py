@@ -1,7 +1,6 @@
 # taf_cc.py
 # Classical–Classical PINN for TAF (Sec. 3.3)
 
-import os
 from datetime import datetime
 
 import torch
@@ -20,6 +19,8 @@ from ..config import (
     TAF_PLOT_EVERY,
 )
 from ..layer_classical import BranchPyTorch
+from ..run_common import run_density_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
@@ -27,20 +28,18 @@ from ..utils import (
     make_optimizer,
     prepare_training_session,
 )
-from ..runtime import seed_everything
-from ..run_common import run_density_inference_mode
 from .core_taf import (
     append_summary_row,
     get_run_id_from_checkpoint,
+    load_training_metrics_for_checkpoint,
     load_training_row_for_run_id,
     load_training_sets,
-    load_training_metrics_for_checkpoint,
     save_density_plot,
     train_taf,
 )
 
 
-class CC_PINN(nn.Module):
+class ClassicalClassicalPinn(nn.Module):
     """Classical-classical TAF PINN with two parallel branches."""
 
     def __init__(
@@ -116,7 +115,7 @@ def run(
     data = load_training_sets()
 
     # Sec. 3.3 inlet values (SI)
-    U_in = torch.tensor([1.225, 272.15, 0.0, 288.15], dtype=DTYPE, device=DEVICE)
+    inlet_state = torch.tensor([1.225, 272.15, 0.0, 288.15], dtype=DTYPE, device=DEVICE)
 
     ckpt_dir = "models/TAF"
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -154,7 +153,9 @@ def run(
                             f"Skipping training for {case_prefix}: existing checkpoint found at {existing_ckpt}."
                         )
                         n_params = count_trainable_params(
-                            CC_PINN(hidden_width=width, num_hidden_layers=layers)
+                            ClassicalClassicalPinn(
+                                hidden_width=width, num_hidden_layers=layers
+                            )
                         )
                         case_run_id = get_run_id_from_checkpoint(
                             existing_ckpt, case_prefix
@@ -206,7 +207,9 @@ def run(
                         f"retraining model."
                     )
 
-            model = CC_PINN(hidden_width=width, num_hidden_layers=layers).to(DEVICE)
+            model = ClassicalClassicalPinn(
+                hidden_width=width, num_hidden_layers=layers
+            ).to(DEVICE)
             optimizer = make_optimizer(model, lr=TAF_LR)
             case_run_id, resume_state, resume_ckpt_path = prepare_training_session(
                 model=model,
@@ -225,7 +228,7 @@ def run(
                 model_label=f"cc_{label}",
                 run_id=case_run_id,
                 data=data,
-                U_in=U_in,
+                inlet_state=inlet_state,
                 checkpoint_path=resume_ckpt_path,
                 resume_state=resume_state,
                 lbfgs_steps=TAF_LBFGS_STEPS,
@@ -285,7 +288,7 @@ def run(
             case_prefix=case_prefix,
             plot_label=None,
             run_id=run_id,
-            model_factory=lambda processor=None: CC_PINN(
+            model_factory=lambda processor=None: ClassicalClassicalPinn(
                 hidden_width=width, num_hidden_layers=layers
             ),
             save_plot_fn=save_density_plot,
@@ -308,7 +311,7 @@ def run(
             case_prefix=case_prefix,
             plot_label=None,
             run_id=run_id,
-            model_factory=lambda processor=None: CC_PINN(
+            model_factory=lambda processor=None: ClassicalClassicalPinn(
                 hidden_width=width, num_hidden_layers=layers
             ),
             save_plot_fn=save_density_plot,

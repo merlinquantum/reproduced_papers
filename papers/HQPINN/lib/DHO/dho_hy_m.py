@@ -10,22 +10,24 @@ import torch.nn as nn
 from ..config import (
     DHO_HIDDEN_WIDTH,
     DHO_LR,
-    DHO_NUM_HIDDEN_LAYERS,
     DHO_N_EPOCHS,
+    DHO_NUM_HIDDEN_LAYERS,
     DHO_PLOT_EVERY,
-    DTYPE,
 )
+from ..layer_classical import DHOBranchPyTorch, LearnedScalarFusion
+from ..layer_merlin import BranchMerlin, make_interf_qlayer
+from ..paths import results_case_dir_for_model_dir
+from ..run_common import run_series_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
     get_latest_checkpoint,
     load_model,
-    make_time_grid,
     make_optimizer,
+    make_time_grid,
     prepare_training_session,
 )
-from ..runtime import seed_everything
-from ..paths import results_case_dir_for_model_dir
 from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
@@ -34,17 +36,13 @@ from .core_dho import (
     train_oscillator_pinn,
     u_exact,
 )
-from ..run_common import run_series_inference_mode
-from ..layer_merlin import make_interf_qlayer, BranchMerlin
-from ..layer_classical import DHOBranchPyTorch, LearnedScalarFusion
-
 
 # ============================================================
-#  CI_PINN model: MerLin quantum + classical branch
+#  ClassicalInterferometerPinn model: MerLin quantum + classical branch
 # ============================================================
 
 
-class CI_PINN(nn.Module):
+class ClassicalInterferometerPinn(nn.Module):
     """
     Classical–Interferometer PINN with linear fusion to scalar output.
     """
@@ -124,14 +122,18 @@ def run(
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
 
     if mode == "train":
-        existing_ckpt = None if force_retrain else get_latest_checkpoint(ckpt_dir, case_prefix)
+        existing_ckpt = (
+            None if force_retrain else get_latest_checkpoint(ckpt_dir, case_prefix)
+        )
         if force_retrain:
-            print(f"Forcing retraining for {case_prefix}; existing checkpoints will be ignored.")
+            print(
+                f"Forcing retraining for {case_prefix}; existing checkpoints will be ignored."
+            )
         if existing_ckpt is not None:
             try:
                 model = load_model(
                     existing_ckpt,
-                    lambda processor=None: CI_PINN(
+                    lambda processor=None: ClassicalInterferometerPinn(
                         processor=processor,
                         num_hidden_layers=n_layers,
                         hidden_width=n_nodes,
@@ -182,7 +184,7 @@ def run(
                 print()
                 return
 
-        model = CI_PINN(
+        model = ClassicalInterferometerPinn(
             num_hidden_layers=n_layers,
             hidden_width=n_nodes,
             n_photons=n_photons,
@@ -247,7 +249,7 @@ def run(
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: CI_PINN(
+            model_factory=lambda processor=None: ClassicalInterferometerPinn(
                 processor=processor,
                 num_hidden_layers=n_layers,
                 hidden_width=n_nodes,
@@ -266,7 +268,7 @@ def run(
             backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: CI_PINN(
+            model_factory=lambda processor=None: ClassicalInterferometerPinn(
                 processor=processor,
                 num_hidden_layers=n_layers,
                 hidden_width=n_nodes,

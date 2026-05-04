@@ -8,18 +8,21 @@ import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
 
-from ..config import DHO_N_EPOCHS, DHO_PLOT_EVERY, DHO_LR, DTYPE
+from ..config import DHO_LR, DHO_N_EPOCHS, DHO_PLOT_EVERY
+from ..layer_classical import LearnedScalarFusion
+from ..layer_merlin import BranchMerlin, make_perceval_qlayer
+from ..paths import results_case_dir_for_model_dir
+from ..run_common import run_series_inference_mode
+from ..runtime import seed_everything
 from ..utils import (
     count_trainable_params,
     finalize_training_session,
     get_latest_checkpoint,
     load_model,
-    make_time_grid,
     make_optimizer,
+    make_time_grid,
     prepare_training_session,
 )
-from ..runtime import seed_everything
-from ..paths import results_case_dir_for_model_dir
 from .core_dho import (
     append_summary_row,
     evaluate_dho_error,
@@ -28,17 +31,13 @@ from .core_dho import (
     train_oscillator_pinn,
     u_exact,
 )
-from ..run_common import run_series_inference_mode
-from ..layer_merlin import make_perceval_qlayer, BranchMerlin
-from ..layer_classical import LearnedScalarFusion
-
 
 # ============================================================
-#  MM_PINN model: two Perceval quantum branches
+#  PercevalPercevalPinn model: two Perceval quantum branches
 # ============================================================
 
 
-class MM_PINN(nn.Module):
+class PercevalPercevalPinn(nn.Module):
     """
     Perceval–Perceval PINN with linear fusion to scalar output.
     """
@@ -65,9 +64,7 @@ class MM_PINN(nn.Module):
         return self.fusion(out1, out2)
 
 
-def plot_model_prediction(
-    u_pred, u_ex, t, save_path="results/DHO/dho_qq_mp/"
-):
+def plot_model_prediction(u_pred, u_ex, t, save_path="results/DHO/dho_qq_mp/"):
     plt.figure(figsize=(10, 6))
     plt.plot(t.cpu().numpy(), u_pred, label="Prediction PINN", lw=2)
     plt.plot(t.cpu().numpy(), u_ex, "--", label="Exact solution", lw=2)
@@ -98,7 +95,7 @@ def run(mode="train", backend="sim:ascella") -> None:
         existing_ckpt = get_latest_checkpoint(ckpt_dir, case_prefix)
         if existing_ckpt is not None:
             try:
-                model = load_model(existing_ckpt, MM_PINN)
+                model = load_model(existing_ckpt, PercevalPercevalPinn)
             except Exception as exc:
                 print(
                     f"Checkpoint validation failed for {case_prefix} at "
@@ -143,7 +140,7 @@ def run(mode="train", backend="sim:ascella") -> None:
                 print()
                 return
 
-        model = MM_PINN()
+        model = PercevalPercevalPinn()
         optimizer = make_optimizer(model, lr=DHO_LR)
         run_id, resume_state, resume_ckpt_path = prepare_training_session(
             model=model,
@@ -203,7 +200,9 @@ def run(mode="train", backend="sim:ascella") -> None:
             backend="local",
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: MM_PINN(processor=processor),
+            model_factory=lambda processor=None: PercevalPercevalPinn(
+                processor=processor
+            ),
             make_time_grid=make_time_grid,
             exact_fn=u_exact,
             plot_fn=lambda u_pred, u_ex, t: plot_model_prediction(
@@ -217,7 +216,9 @@ def run(mode="train", backend="sim:ascella") -> None:
             backend=backend,
             ckpt_dir=ckpt_dir,
             case_prefix=case_prefix,
-            model_factory=lambda processor=None: MM_PINN(processor=processor),
+            model_factory=lambda processor=None: PercevalPercevalPinn(
+                processor=processor
+            ),
             make_time_grid=make_time_grid,
             exact_fn=u_exact,
             plot_fn=lambda u_pred, u_ex, t: plot_model_prediction(
