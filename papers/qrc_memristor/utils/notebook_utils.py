@@ -5,13 +5,12 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from utils.datasets import generate_narma
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 paper_root = os.path.abspath(os.path.join(current_dir, ".."))
 if paper_root not in sys.path:
     sys.path.append(paper_root)
-
-from utils.datasets import generate_narma
 
 
 class NotebookArgs:
