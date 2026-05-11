@@ -1,0 +1,121 @@
+"""
+Classical branch used in HQPINN models.
+
+In the paper's hybrid architecture, each model is built from one or more
+parallel branches whose outputs are combined downstream. This module provides
+the pure-MLP branch used in:
+- fully classical baselines (CC),
+- hybrid classical+quantum variants (e.g., HY-M/HY-PL),
+- shared readout setups for DHO/SEE/DEE experiments.
+"""
+
+import torch
+import torch.nn as nn
+
+from .config import DHO_HIDDEN_WIDTH, DHO_NUM_HIDDEN_LAYERS, DTYPE
+
+
+class BranchPyTorch(nn.Module):
+    """
+    High-level classical encoder from input coordinates to physical outputs.
+
+    This branch is the "classical path" counterpart to quantum branches
+    (PennyLane/Merlin) in the paper's comparative experiments.
+    """
+
+    def __init__(
+        self,
+        in_features: int = 1,
+        out_features: int = 3,
+        num_hidden_layers: int = DHO_NUM_HIDDEN_LAYERS,
+        hidden_width: int = DHO_HIDDEN_WIDTH,
+    ) -> None:
+        super().__init__()
+
+        if num_hidden_layers < 1:
+            raise ValueError("num_hidden_layers must be >= 1")
+        layers = [
+            nn.Linear(in_features, out_features, dtype=DTYPE),
+            nn.Tanh(),
+            nn.Linear(out_features, hidden_width, dtype=DTYPE),
+            nn.Tanh(),
+        ]
+        for _ in range(num_hidden_layers - 1):
+            layers.extend(
+                [
+                    nn.Linear(hidden_width, hidden_width, dtype=DTYPE),
+                    nn.Tanh(),
+                ]
+            )
+        layers.append(
+            nn.Linear(hidden_width, out_features, dtype=DTYPE)
+        )  # output layer
+        self.net = nn.Sequential(*layers)
+
+    def forward(self, xt: torch.Tensor) -> torch.Tensor:
+        return self.net(xt)
+
+    #     layers = []
+
+    #     layers.append(nn.Linear(in_features, hidden_width, dtype=DTYPE))
+    #     layers.append(nn.Tanh())
+
+    #     for _ in range(num_hidden_layers - 1):
+    #         layers.append(nn.Linear(hidden_width, hidden_width, dtype=DTYPE))
+    #         layers.append(nn.Tanh())
+
+    #     layers.append(nn.Linear(hidden_width, out_features, dtype=DTYPE))
+
+    #     self.net = nn.Sequential(*layers)
+
+    # def forward(self, x: torch.Tensor) -> torch.Tensor:
+    #     return self.net(x)
+
+
+class DHOBranchPyTorch(nn.Module):
+    """
+    DHO-specific classical branch kept aligned with the source setup.
+    """
+
+    def __init__(
+        self,
+        in_features: int = 1,
+        out_features: int = 1,
+        num_hidden_layers: int = DHO_NUM_HIDDEN_LAYERS,
+        hidden_width: int = DHO_HIDDEN_WIDTH,
+    ) -> None:
+        super().__init__()
+
+        if num_hidden_layers < 1:
+            raise ValueError("num_hidden_layers must be >= 1")
+        layers = [
+            nn.Linear(in_features, 1, dtype=DTYPE),
+            nn.Tanh(),
+            nn.Linear(1, hidden_width, dtype=DTYPE),
+            nn.Tanh(),
+        ]
+        for _ in range(num_hidden_layers - 1):
+            layers.extend(
+                [
+                    nn.Linear(hidden_width, hidden_width, dtype=DTYPE),
+                    nn.Tanh(),
+                ]
+            )
+        layers.append(nn.Linear(hidden_width, out_features, dtype=DTYPE))
+        self.net = nn.Sequential(*layers)
+
+    def forward(self, xt: torch.Tensor) -> torch.Tensor:
+        return self.net(xt)
+
+
+class LearnedScalarFusion(nn.Module):
+    """
+    Learned linear fusion over two scalar branch outputs.
+    """
+
+    def __init__(self) -> None:
+        super().__init__()
+        self.linear = nn.Linear(2, 1, dtype=DTYPE)
+
+    def forward(self, out1: torch.Tensor, out2: torch.Tensor) -> torch.Tensor:
+        return self.linear(torch.cat([out1, out2], dim=1))

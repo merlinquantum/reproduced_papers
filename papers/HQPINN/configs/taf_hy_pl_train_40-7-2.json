@@ -1,0 +1,11 @@
+{
+  "experiment": "taf-hy-pl",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_layers": 7,
+    "n_nodes": 40,
+    "q_layers": 2
+  },
+  "description": "HQPINN taf hy pl train 40-7-2 configuration."
+}

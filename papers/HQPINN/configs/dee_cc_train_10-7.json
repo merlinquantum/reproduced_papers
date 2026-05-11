@@ -1,0 +1,10 @@
+{
+  "experiment": "dee-cc",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_layers": 7,
+    "n_nodes": 10
+  },
+  "description": "HQPINN dee cc train 10-7 configuration."
+}

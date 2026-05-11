@@ -1,0 +1,1038 @@
+"""
+Core training utilities for TAF (2D transonic aerofoil flow, Sec. 3.3).
+"""
+
+import csv
+import os
+import sys
+from datetime import datetime
+from pathlib import Path
+from typing import Optional
+
+import matplotlib
+import numpy as np
+import torch
+import torch.nn as nn
+from matplotlib.path import Path as MplPath
+
+from ..config import (
+    DEVICE,
+    DTYPE,
+    GAMMA,
+    TAF_EPSILON_LAMBDA,
+    TAF_LBFGS_STEPS,
+    TAF_R_GAS,
+    TAF_X_BOT_FILE,
+    TAF_X_DATA_INT_FILE,
+    TAF_X_F_FILE,
+    TAF_X_IN_FILE,
+    TAF_X_MAX,
+    TAF_X_MIN,
+    TAF_X_OUT_FILE,
+    TAF_X_TOP_FILE,
+    TAF_X_WALL_FILE,
+    TAF_X_WALL_NORMALS_FILE,
+    TAF_Y_MAX,
+    TAF_Y_MIN,
+)
+from ..paths import data_dir_for_benchmark, results_case_dir_for_model_dir
+from ..utils import (
+    append_or_replace_training_row,
+    count_trainable_params,
+    save_training_checkpoint,
+    write_metrics_csv,
+)
+
+# Keep batch exports headless, but do not disable inline notebook rendering.
+if "ipykernel" not in sys.modules:
+    matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+
+DATA_DIR = data_dir_for_benchmark("NACA0012")
+
+TAF_FIELD_LABELS = (
+    ("rho", "density"),
+    ("u", "x-velocity"),
+    ("v", "y-velocity"),
+    ("T", "temperature"),
+)
+
+TAF_PAPER_FIELD_SPECS = {
+    "rho": {
+        "title": r"$\rho$",
+        "vmin": 0.5,
+        "vmax": 2.0,
+        "ticks": [0.5, 0.875, 1.25, 1.625, 2.0],
+    },
+    "u": {
+        "title": r"$u$",
+        "vmin": 100.0,
+        "vmax": 500.0,
+        "ticks": [100.0, 200.0, 300.0, 400.0, 500.0],
+    },
+    "v": {
+        "title": r"$v$",
+        "vmin": -75.0,
+        "vmax": 75.0,
+        "ticks": [-75.0, -37.5, 0.0, 37.5, 75.0],
+    },
+    "T": {
+        "title": r"$T$",
+        "vmin": 200.0,
+        "vmax": 350.0,
+        "ticks": [200.0, 237.5, 275.0, 312.5, 350.0],
+    },
+}
+
+TAF_SUMMARY_COLUMNS = [
+    "run_id",
+    "Model",
+    "Size",
+    "step",
+    "elapsed (s)",
+    "Trainable parameters",
+    "Loss",
+    "BC",
+    "F",
+    "L_in",
+    "L_out",
+    "L_wall",
+    "L_per",
+]
+
+
+def load_points(path: str) -> torch.Tensor:
+    """Load .npy points on configured dtype/device."""
+    candidate = Path(path)
+    if not candidate.is_absolute():
+        candidate = DATA_DIR / candidate
+    arr = np.load(candidate)
+    return torch.tensor(arr, dtype=DTYPE, device=DEVICE)
+
+
+def load_training_sets() -> dict[str, torch.Tensor]:
+    # No CFD field targets are available in-repo for TAF. The geometry-aware
+    # interior coordinates `X_data_int` exist, but their supervised primitive
+    # targets are missing, so this reproduction falls back to reusing them as
+    # additional collocation points for the PDE residual.
+    #
+    # This keeps the airfoil geometry in the training set, but it also makes
+    # TAF much less constrained than the original supervised-plus-PINN setup.
+    interior_data_points = load_points(TAF_X_DATA_INT_FILE)
+    collocation_points = load_points(TAF_X_F_FILE)
+
+    return {
+        "X_in": load_points(TAF_X_IN_FILE),
+        "X_out": load_points(TAF_X_OUT_FILE),
+        "X_top": load_points(TAF_X_TOP_FILE),
+        "X_bot": load_points(TAF_X_BOT_FILE),
+        "X_wall": load_points(TAF_X_WALL_FILE),
+        "X_data_int": interior_data_points,
+        "X_f": torch.cat([interior_data_points, collocation_points], dim=0),
+        "X_wall_normals": load_points(TAF_X_WALL_NORMALS_FILE),
+    }
+
+
+def load_training_metrics_for_checkpoint(
+    out_dir: str, model_label: str, ckpt_path: str, case_prefix: str
+) -> Optional[tuple[float, float, float]]:
+    """Return (Loss, BC, F) from the CSV that matches the checkpoint run_id."""
+    ckpt_name = os.path.basename(ckpt_path)
+    ckpt_prefix = f"{case_prefix}_"
+    ckpt_suffix = ".pt"
+    if not (ckpt_name.startswith(ckpt_prefix) and ckpt_name.endswith(ckpt_suffix)):
+        return None
+
+    run_id = ckpt_name[len(ckpt_prefix) : -len(ckpt_suffix)]
+    if not run_id:
+        return None
+
+    csv_path = os.path.join(out_dir, f"taf-{model_label}_{run_id}.csv")
+    if not os.path.isfile(csv_path):
+        return None
+
+    with open(csv_path, newline="") as f:
+        rows = list(csv.DictReader(f))
+    if not rows:
+        return None
+
+    last = rows[-1]
+    return float(last["Loss"]), float(last["BC"]), float(last["F"])
+
+
+def get_run_id_from_checkpoint(ckpt_path: str, case_prefix: str) -> Optional[str]:
+    """Extract the run_id encoded in a checkpoint filename."""
+    ckpt_name = os.path.basename(ckpt_path)
+    ckpt_prefix = f"{case_prefix}_"
+    ckpt_suffix = ".pt"
+    if not (ckpt_name.startswith(ckpt_prefix) and ckpt_name.endswith(ckpt_suffix)):
+        return None
+
+    run_id = ckpt_name[len(ckpt_prefix) : -len(ckpt_suffix)]
+    return run_id or None
+
+
+def load_training_row_for_run_id(
+    out_dir: str,
+    model_label: str,
+    run_id: str,
+) -> Optional[dict[str, str]]:
+    """Return the last row from the detailed CSV for a given model/run_id pair."""
+    csv_path = os.path.join(out_dir, f"taf-{model_label}_{run_id}.csv")
+    if not os.path.isfile(csv_path):
+        return None
+
+    with open(csv_path, newline="") as f:
+        rows = list(csv.DictReader(f))
+    if not rows:
+        return None
+
+    return rows[-1]
+
+
+def append_summary_row(summary_path: str, row: dict[str, object]) -> bool:
+    """
+    Append one normalized TAF summary row, writing the header on first use.
+
+    Returns True when the same `(run_id, Model, Size)` triplet was already
+    present before the append, and False otherwise.
+    """
+    os.makedirs(os.path.dirname(summary_path), exist_ok=True)
+    write_header = (
+        not os.path.exists(summary_path) or os.path.getsize(summary_path) == 0
+    )
+
+    is_duplicate = False
+    if not write_header:
+        with open(summary_path, newline="") as f:
+            existing_rows = list(csv.DictReader(f))
+        row_key = (
+            str(row.get("run_id", "")),
+            str(row.get("Model", "")),
+            str(row.get("Size", "")),
+        )
+        for existing in existing_rows:
+            existing_key = (
+                existing.get("run_id", ""),
+                existing.get("Model", ""),
+                existing.get("Size", ""),
+            )
+            if existing_key == row_key:
+                is_duplicate = True
+                break
+
+    with open(summary_path, "a", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=TAF_SUMMARY_COLUMNS)
+        if write_header:
+            writer.writeheader()
+        writer.writerow({column: row.get(column, "") for column in TAF_SUMMARY_COLUMNS})
+    return is_duplicate
+
+
+def unpack_primitives(
+    raw: torch.Tensor,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+    """Map network output to (rho, u, v, T)."""
+    # TAF networks always output 4 channels in this order:
+    # density, x-velocity, y-velocity, temperature.
+    # Keeping this helper centralizes the convention in one place.
+    rho = raw[:, 0:1]
+    u = raw[:, 1:2]
+    v = raw[:, 2:3]
+    temp = raw[:, 3:4]
+    return rho, u, v, temp
+
+
+def grad_scalar(y: torch.Tensor, x: torch.Tensor) -> torch.Tensor:
+    """Return gradient of scalar field y(N,1) wrt x(N,2) -> (N,2)."""
+    assert y.ndim == 2 and y.shape[1] == 1
+    grads = torch.autograd.grad(
+        outputs=y,
+        inputs=x,
+        grad_outputs=torch.ones_like(y),
+        create_graph=True,
+        retain_graph=True,
+        only_inputs=True,
+    )[0]
+    return grads
+
+
+def divergence_uv(u: torch.Tensor, v: torch.Tensor, xy: torch.Tensor) -> torch.Tensor:
+    """Compute div(u,v) = u_x + v_y."""
+    # Velocity divergence is a local compression/expansion indicator.
+    # In compressive zones (negative divergence), shocks are likely.
+    du = grad_scalar(u, xy)
+    dv = grad_scalar(v, xy)
+    return du[:, 0:1] + dv[:, 1:2]
+
+
+def euler_residual(
+    model: nn.Module, xy_in: torch.Tensor
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+    """
+    Steady 2D Euler residual for the TAF case (paper Sec. 3.3),
+    written in conservative form on (x, y):
+        dG1/dx + dG2/dy = 0.
+    Here G1 is the x-flux vector and G2 is the y-flux vector.
+    """
+    xy = xy_in.clone().detach().to(DTYPE).to(DEVICE)
+    xy.requires_grad_(True)
+
+    raw = model(xy)
+    rho, u, v, temp = unpack_primitives(raw)
+
+    # Primitive -> thermodynamic quantities used in Euler fluxes.
+    # p = rho * R * T (ideal gas), E = e + kinetic energy.
+    p = rho * TAF_R_GAS * temp
+    specific_total_energy = p / ((GAMMA - 1.0) * rho) + 0.5 * (u**2 + v**2)
+
+    rho_u = rho * u
+    rho_v = rho * v
+
+    # Conservative flux in x-direction:
+    # G1 = [rho*u, rho*u^2 + p, rho*u*v, u*(rho*E + p)].
+    x_flux = torch.cat(
+        [
+            rho_u,
+            p + rho * u**2,
+            rho * u * v,
+            u * (rho * specific_total_energy + p),
+        ],
+        dim=1,
+    )
+    # Conservative flux in y-direction:
+    # G2 = [rho*v, rho*u*v, rho*v^2 + p, v*(rho*E + p)].
+    y_flux = torch.cat(
+        [
+            rho_v,
+            rho * u * v,
+            p + rho * v**2,
+            v * (rho * specific_total_energy + p),
+        ],
+        dim=1,
+    )
+
+    residuals = []
+    for i in range(4):
+        # For each conservation law i, compute:
+        # Ri = dG1_i/dx + dG2_i/dy.
+        x_flux_grad = grad_scalar(x_flux[:, i : i + 1], xy)
+        y_flux_grad = grad_scalar(y_flux[:, i : i + 1], xy)
+        residuals.append(x_flux_grad[:, 0:1] + y_flux_grad[:, 1:2])
+
+    # R has 4 columns: mass, x-momentum, y-momentum, total-energy residuals.
+    residual = torch.cat(residuals, dim=1)
+    return residual, rho, u, v, temp
+
+
+def compute_lambda(
+    model: nn.Module,
+    xy_in: torch.Tensor,
+    eps: float = TAF_EPSILON_LAMBDA,
+) -> torch.Tensor:
+    """
+    Shock-adaptive weight used in the TAF PDE loss (paper Sec. 3.3):
+        lambda = 1 / (1 + eps * (|div(u)| - div(u))).
+
+    Here div(u) = du/dx + dv/dy.
+    Equivalent piecewise form:
+      - if div(u) >= 0:  |div|-div = 0      -> lambda = 1
+      - if div(u) < 0:   |div|-div = -2*div -> lambda < 1
+
+    So the weight is unchanged in expansion/smooth zones and reduced in
+    compression zones, which is the shock-sensitive behavior used by the
+    weighted residual formulation.
+    """
+    xy = xy_in.clone().detach().to(DTYPE).to(DEVICE)
+    xy.requires_grad_(True)
+
+    raw = model(xy)
+    _, u, v, _ = unpack_primitives(raw)
+
+    # div(u) is computed from model-predicted velocity components (u, v).
+    div = divergence_uv(u, v, xy)
+    # Direct implementation of lambda from the paper-style weighted loss.
+    lam = 1.0 / (eps * (torch.abs(div) - div) + 1.0)
+    # Numerical safeguard: keep lambda in (0, 1] and avoid zero weights.
+    return torch.clamp(lam, min=1e-4, max=1.0)
+
+
+mse = nn.MSELoss()
+
+
+def _sample_rows(x: torch.Tensor, batch_size: Optional[int]) -> torch.Tensor:
+    """Randomly sample rows from x. If batch_size is None, keep full tensor."""
+    if batch_size is None or batch_size >= x.shape[0]:
+        return x
+    idx = torch.randperm(x.shape[0], device=x.device)[:batch_size]
+    return x[idx]
+
+
+def _sample_pair_rows(
+    x1: torch.Tensor, x2: torch.Tensor, batch_size: Optional[int]
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Sample aligned rows from two tensors with same first dimension."""
+    if x1.shape[0] != x2.shape[0]:
+        raise ValueError(
+            f"Paired tensors must have same size on dim 0, got {x1.shape[0]} and {x2.shape[0]}"
+        )
+    if batch_size is None or batch_size >= x1.shape[0]:
+        return x1, x2
+    idx = torch.randperm(x1.shape[0], device=x1.device)[:batch_size]
+    return x1[idx], x2[idx]
+
+
+def loss_boundary_terms(
+    model: nn.Module,
+    data: dict[str, torch.Tensor],
+    inlet_state: torch.Tensor,
+    n_in_batch: Optional[int] = None,
+    n_out_batch: Optional[int] = None,
+    n_wall_batch: Optional[int] = None,
+    n_per_batch: Optional[int] = None,
+) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+    """
+    Boundary terms for the TAF setup of paper Sec. 3.3, using the
+    boundary point sets generated in `generate_aerofoil_training_sets.py`:
+    - inlet Dirichlet on (rho,u,v,T)
+    - outlet pressure on p = Pout
+    - wall no-penetration u.n = 0
+    - top/bottom periodicity
+
+    Returns
+    -------
+    L_bc : total boundary loss
+    L_in : inlet loss
+    L_out : outlet loss
+    L_wall : wall slip loss
+    L_per : periodic side loss
+    """
+    inlet_points = data["X_in"]
+    outlet_points = data["X_out"]
+    top_points = data["X_top"]
+    bottom_points = data["X_bot"]
+    wall_points = data["X_wall"]
+    wall_normals = data["X_wall_normals"]
+
+    inlet_points = _sample_rows(inlet_points, n_in_batch)
+    outlet_points = _sample_rows(outlet_points, n_out_batch)
+    wall_points, wall_normals = _sample_pair_rows(
+        wall_points,
+        wall_normals,
+        n_wall_batch,
+    )
+    top_points, bottom_points = _sample_pair_rows(
+        top_points,
+        bottom_points,
+        n_per_batch,
+    )
+
+    # Reference scales from the paper inlet state
+    rho_ref = inlet_state[0]
+    u_ref = inlet_state[1]
+    temperature_ref = inlet_state[3]
+
+    # v_in = 0 in the paper, so use u_ref as the velocity scale for v
+    v_ref = u_ref
+
+    # Sec. 3.3 inlet BC, applied on `X_in` (left boundary of the box domain):
+    # enforce the prescribed primitive vector inlet_state = [rho, u, v, T].
+    pred_in = model(inlet_points)
+    rho_i, u_i, v_i, temperature_i = unpack_primitives(pred_in)
+    inlet_prediction_norm = torch.cat(
+        [rho_i / rho_ref, u_i / u_ref, v_i / v_ref, temperature_i / temperature_ref],
+        dim=1,
+    )
+
+    inlet_state_norm = (
+        torch.tensor(
+            [1.0, 1.0, 0.0, 1.0],
+            dtype=inlet_state.dtype,
+            device=inlet_state.device,
+        )
+        .view(1, 4)
+        .expand_as(inlet_prediction_norm)
+    )
+
+    loss_inlet = mse(inlet_prediction_norm, inlet_state_norm)
+
+    # Sec. 3.3 outlet BC, applied on `X_out` (right boundary):
+    # Keep outputs as (rho,u,v,T), but interpret P_out = 0 as zero gauge pressure.
+    # Reference absolute pressure from inlet:
+    #
+    #   p_ref = rho_in * R * T_in
+    #
+    # Predicted absolute pressure:
+    #
+    #   p_abs = rho * R * T
+    #
+    # Relative/gauge-like pressure:
+    #
+    #   p_rel = (p_abs - p_ref) / p_ref
+    #
+    # Paper says P_out = 0, interpreted as p_rel = 0.
+    pred_out = model(outlet_points)
+    rho_o, _, _, temperature_o = unpack_primitives(pred_out)
+
+    # Reference absolute pressure from inlet state
+    # Uin = (ρin, uin, vin, Tin) = (1.225, 272.15, 0.0, 288.15),
+    # p_ref = 101306
+    p_ref = rho_ref * TAF_R_GAS * temperature_ref
+
+    # Relative / gauge-like pressure normalized by reference pressure
+    p_abs_pred = rho_o * TAF_R_GAS * temperature_o
+    p_rel_pred = (p_abs_pred - p_ref) / p_ref
+
+    # Paper says P_out = 0; interpreted as zero gauge pressure
+    p_rel_target = torch.zeros_like(p_rel_pred)
+
+    loss_outlet = mse(p_rel_pred, p_rel_target)
+
+    # Sec. 3.3 wall BC on NACA0012 surface points `X_wall`:
+    # impermeability (slip wall), i.e. normal velocity is zero: (u, v) dot n = 0.
+    # Wall normals come from `X_wall_normals` generated with the geometry set.
+    pred_wall = model(wall_points)
+    _, u_w, v_w, _ = unpack_primitives(pred_wall)
+    normals = wall_normals[:, 2:4]
+    u_dot_n = u_w * normals[:, 0:1] + v_w * normals[:, 1:2]
+    u_dot_n_norm = u_dot_n / u_ref
+    loss_wall = mse(u_dot_n_norm, torch.zeros_like(u_dot_n_norm))
+
+    # Sec. 3.3 far-field closure in this repo: periodic pairing of
+    # top and bottom boundaries (`X_top`, `X_bot`) for all primitives.
+    pred_top = model(top_points)
+    pred_bot = model(bottom_points)
+    rho_t, u_t, v_t, temperature_t = unpack_primitives(pred_top)
+    rho_b, u_b, v_b, temperature_b = unpack_primitives(pred_bot)
+    top_prediction_norm = torch.cat(
+        [rho_t / rho_ref, u_t / u_ref, v_t / v_ref, temperature_t / temperature_ref],
+        dim=1,
+    )
+    bottom_prediction_norm = torch.cat(
+        [rho_b / rho_ref, u_b / u_ref, v_b / v_ref, temperature_b / temperature_ref],
+        dim=1,
+    )
+    loss_periodic = mse(top_prediction_norm, bottom_prediction_norm)
+
+    return loss_inlet, loss_outlet, loss_wall, loss_periodic
+
+
+def loss_boundary(
+    model: nn.Module,
+    data: dict[str, torch.Tensor],
+    inlet_state: torch.Tensor,
+    n_in_batch: Optional[int] = None,
+    n_out_batch: Optional[int] = None,
+    n_wall_batch: Optional[int] = None,
+    n_per_batch: Optional[int] = None,
+) -> torch.Tensor:
+    loss_inlet, loss_outlet, loss_wall, loss_periodic = loss_boundary_terms(
+        model,
+        data,
+        inlet_state,
+        n_in_batch=n_in_batch,
+        n_out_batch=n_out_batch,
+        n_wall_batch=n_wall_batch,
+        n_per_batch=n_per_batch,
+    )
+    return loss_inlet + loss_outlet + loss_wall + loss_periodic
+
+
+def loss_pde(
+    model: nn.Module,
+    data: dict[str, torch.Tensor],
+    eps_lambda: float = TAF_EPSILON_LAMBDA,
+    n_f_batch: Optional[int] = 1024,
+) -> torch.Tensor:
+    """
+    Weighted PDE residual term.
+
+    In the current repo this is the only interior objective for TAF because no
+    CFD targets are provided for `X_data_int`. We experimented with stronger
+    no-CFD heuristics such as near-airfoil oversampling and stratified near/far
+    averages, but they did not yield a clear improvement and are therefore not
+    part of this baseline branch.
+    """
+    collocation_points = _sample_rows(data["X_f"], n_f_batch)
+    residual, _, _, _, _ = euler_residual(model, collocation_points)
+    # Same collocation points, different role:
+    # - R: Euler residuals to minimize
+    # - lam: shock-aware per-point weight
+    lam = compute_lambda(model, collocation_points, eps=eps_lambda)
+    residual_squared = torch.sum(residual**2, dim=1, keepdim=True)
+    return torch.mean(lam * residual_squared)
+
+
+def log_training_info(
+    epoch: int,
+    elapsed: float,
+    loss: torch.Tensor,
+    loss_bc: torch.Tensor,
+    loss_f: torch.Tensor,
+    loss_in: torch.Tensor,
+    loss_out: torch.Tensor,
+    loss_wall: torch.Tensor,
+    loss_per: torch.Tensor,
+    rows: list[list[str]],
+) -> None:
+    """Console log + in-memory CSV row append."""
+    print(
+        f"Step {epoch:6d} | elapsed={elapsed:.2f}s | "
+        f"L={loss.item():.3e} | "
+        f"BC={loss_bc.item():.3e} | "
+        f"F={loss_f.item():.3e} | "
+        f"L_in={loss_in.item():.3e} | "
+        f"L_out={loss_out.item():.3e} | "
+        f"L_wall={loss_wall.item():.3e} | "
+        f"L_per={loss_per.item():.3e}"
+    )
+
+    append_or_replace_training_row(
+        rows,
+        [
+            str(epoch),
+            f"{elapsed:.2f}",
+            f"{loss.item():.3e}",
+            f"{loss_bc.item():.3e}",
+            f"{loss_f.item():.3e}",
+            f"{loss_in.item():.3e}",
+            f"{loss_out.item():.3e}",
+            f"{loss_wall.item():.3e}",
+            f"{loss_per.item():.3e}",
+        ],
+    )
+
+
+def train_taf(
+    model: nn.Module,
+    optimizer: torch.optim.Optimizer,
+    n_epochs: int,
+    plot_every: int,
+    out_dir: str,
+    model_label: str,
+    run_id: str,
+    data: dict[str, torch.Tensor],
+    inlet_state: torch.Tensor,
+    checkpoint_path: str | None = None,
+    checkpoint_every: int | None = None,
+    resume_state: dict | None = None,
+    lbfgs_steps: int = TAF_LBFGS_STEPS,
+    eps_lambda: float = TAF_EPSILON_LAMBDA,
+    n_f_batch: Optional[int] = 256,
+    n_in_batch: Optional[int] = None,
+    n_out_batch: Optional[int] = None,
+    n_wall_batch: Optional[int] = 128,
+    n_per_batch: Optional[int] = None,
+) -> tuple[float, float, float, int]:
+    """Train TAF model and return summary metrics."""
+    os.makedirs(out_dir, exist_ok=True)
+
+    csv_path = os.path.join(out_dir, f"taf-{model_label}_{run_id}.csv")
+    csv_header = [
+        "step",
+        "elapsed (s)",
+        "Loss",
+        "BC",
+        "F",
+        "L_in",
+        "L_out",
+        "L_wall",
+        "L_per",
+    ]
+
+    rows: list[list[str]] = [list(row) for row in (resume_state or {}).get("rows", [])]
+    start = datetime.now()
+    extra_state = dict((resume_state or {}).get("extra_state", {}))
+    adam_complete = bool(extra_state.get("adam_complete", False))
+    start_epoch = int((resume_state or {}).get("epoch", 0)) + 1
+    elapsed_offset = float((resume_state or {}).get("elapsed_s", 0.0))
+    checkpoint_every = checkpoint_every or plot_every
+    last_completed_epoch = start_epoch - 1
+    last_elapsed = elapsed_offset
+
+    model.train()
+    try:
+        if not adam_complete:
+            for epoch in range(start_epoch, n_epochs + 1):
+                optimizer.zero_grad()
+
+                # Paper objective:
+                #   L = L_bc + L_f
+                loss_inlet, loss_outlet, loss_wall, loss_periodic = loss_boundary_terms(
+                    model,
+                    data,
+                    inlet_state,
+                    n_in_batch=n_in_batch,
+                    n_out_batch=n_out_batch,
+                    n_wall_batch=n_wall_batch,
+                    n_per_batch=n_per_batch,
+                )
+                loss_boundary_value = (
+                    loss_inlet + loss_outlet + loss_wall + loss_periodic
+                )
+                loss_residual = loss_pde(
+                    model,
+                    data,
+                    eps_lambda=eps_lambda,
+                    n_f_batch=n_f_batch,
+                )
+                loss_total = loss_boundary_value + loss_residual
+                loss_total.backward()
+                optimizer.step()
+                elapsed = elapsed_offset + (datetime.now() - start).total_seconds()
+                last_completed_epoch = epoch
+                last_elapsed = elapsed
+
+                if epoch % plot_every == 0:
+                    log_training_info(
+                        epoch,
+                        elapsed,
+                        loss_total,
+                        loss_boundary_value,
+                        loss_residual,
+                        loss_inlet,
+                        loss_outlet,
+                        loss_wall,
+                        loss_periodic,
+                        rows,
+                    )
+
+                if checkpoint_path is not None and epoch % checkpoint_every == 0:
+                    save_training_checkpoint(
+                        checkpoint_path,
+                        model=model,
+                        optimizer=optimizer,
+                        run_id=run_id,
+                        epoch=epoch,
+                        elapsed_s=elapsed,
+                        rows=rows,
+                        extra_state={"adam_complete": False},
+                    )
+                    write_metrics_csv(csv_path, csv_header, rows)
+
+            adam_complete = True
+            if checkpoint_path is not None:
+                save_training_checkpoint(
+                    checkpoint_path,
+                    model=model,
+                    optimizer=optimizer,
+                    run_id=run_id,
+                    epoch=n_epochs,
+                    elapsed_s=last_elapsed,
+                    rows=rows,
+                    extra_state={"adam_complete": True},
+                )
+                write_metrics_csv(csv_path, csv_header, rows)
+    except KeyboardInterrupt:
+        if checkpoint_path is not None:
+            save_training_checkpoint(
+                checkpoint_path,
+                model=model,
+                optimizer=optimizer,
+                run_id=run_id,
+                epoch=last_completed_epoch,
+                elapsed_s=last_elapsed,
+                rows=rows,
+                extra_state={"adam_complete": adam_complete},
+            )
+            write_metrics_csv(csv_path, csv_header, rows)
+        raise
+
+    if lbfgs_steps > 0:
+        print("Switching to L-BFGS...")
+        optimizer_lbfgs = torch.optim.LBFGS(
+            model.parameters(),
+            lr=1.0,
+            max_iter=lbfgs_steps,
+            tolerance_grad=1e-7,
+            tolerance_change=1e-12,
+            line_search_fn="strong_wolfe",
+        )
+
+        def closure():
+            optimizer_lbfgs.zero_grad()
+            # Use full-batch in L-BFGS closure for deterministic updates.
+            loss_boundary_closure = loss_boundary(model, data, inlet_state)
+            loss_residual_closure = loss_pde(
+                model,
+                data,
+                eps_lambda=eps_lambda,
+                n_f_batch=None,
+            )
+            loss_total_closure = loss_boundary_closure + loss_residual_closure
+            loss_total_closure.backward()
+            return loss_total_closure
+
+        optimizer_lbfgs.step(closure)
+
+    # Do not use torch.no_grad() here: PDE loss relies on autograd
+    # to evaluate spatial derivatives in euler_residual().
+    loss_inlet, loss_outlet, loss_wall, loss_periodic = loss_boundary_terms(
+        model,
+        data,
+        inlet_state,
+    )
+    loss_boundary_value = loss_inlet + loss_outlet + loss_wall + loss_periodic
+    loss_residual = loss_pde(model, data, eps_lambda=eps_lambda, n_f_batch=None)
+    loss_total = loss_boundary_value + loss_residual
+
+    elapsed = elapsed_offset + (datetime.now() - start).total_seconds()
+    log_training_info(
+        n_epochs,
+        elapsed,
+        loss_total,
+        loss_boundary_value,
+        loss_residual,
+        loss_inlet,
+        loss_outlet,
+        loss_wall,
+        loss_periodic,
+        rows,
+    )
+    write_metrics_csv(csv_path, csv_header, rows)
+    if checkpoint_path is not None:
+        save_training_checkpoint(
+            checkpoint_path,
+            model=model,
+            optimizer=optimizer,
+            run_id=run_id,
+            epoch=n_epochs,
+            elapsed_s=elapsed,
+            rows=rows,
+            extra_state={"adam_complete": True},
+        )
+
+    saved_plot_paths = _save_primitive_field_plots(
+        model=model,
+        data=data,
+        output_dir=out_dir,
+        filename_prefix=f"taf-{model_label}_{run_id}",
+    )
+
+    n_params = count_trainable_params(model)
+    print(f"CSV saved to: {csv_path}")
+    for path in saved_plot_paths:
+        print(f"PNG saved to: {path}")
+
+    return (
+        float(loss_total.item()),
+        float(loss_boundary_value.item()),
+        float(loss_residual.item()),
+        n_params,
+    )
+
+
+def _save_primitive_field_plots(
+    *,
+    model: nn.Module,
+    data: dict[str, torch.Tensor],
+    output_dir: str,
+    filename_prefix: str,
+    backend: str = "local",
+) -> list[str]:
+    """
+    Save Figure-7-style TAF prediction plots.
+
+    The repository does not bundle CFD reference fields, so this helper renders
+    the prediction row of Figure 7: contour maps for (rho, u, v, T) with the
+    airfoil outline and training-point overlays.
+    """
+    os.makedirs(output_dir, exist_ok=True)
+    grid_nx = 240
+    grid_ny = 180
+    if backend.lower() != "local":
+        grid_nx = 120
+        grid_ny = 90
+
+    wall = data["X_wall"].detach().cpu().numpy()
+    wall_closed = np.vstack([wall, wall[:1]])
+
+    x_axis = np.linspace(TAF_X_MIN, TAF_X_MAX, grid_nx)
+    y_axis = np.linspace(TAF_Y_MIN, TAF_Y_MAX, grid_ny)
+    x_grid, y_grid = np.meshgrid(x_axis, y_axis)
+    xy_grid = np.column_stack([x_grid.ravel(), y_grid.ravel()])
+
+    with torch.no_grad():
+        xy_t = torch.tensor(xy_grid, dtype=DTYPE, device=DEVICE)
+        pred_grid = model(xy_t).detach().cpu().numpy().reshape(grid_ny, grid_nx, -1)
+
+    airfoil_mask = MplPath(wall).contains_points(xy_grid).reshape(grid_ny, grid_nx)
+
+    interior_points = data["X_data_int"].detach().cpu().numpy()
+    boundary_points = np.vstack(
+        [
+            data["X_in"].detach().cpu().numpy(),
+            data["X_out"].detach().cpu().numpy(),
+            data["X_top"].detach().cpu().numpy(),
+            data["X_bot"].detach().cpu().numpy(),
+            wall[::4],
+        ]
+    )
+
+    def _draw_field(ax: plt.Axes, field_idx: int, field_key: str):
+        spec = TAF_PAPER_FIELD_SPECS[field_key]
+        field = np.ma.array(pred_grid[:, :, field_idx], mask=airfoil_mask)
+        levels = np.linspace(spec["vmin"], spec["vmax"], 13)
+        cf = ax.contourf(
+            x_grid,
+            y_grid,
+            field,
+            levels=levels,
+            cmap="jet",
+            extend="both",
+        )
+        ax.contour(
+            x_grid,
+            y_grid,
+            field,
+            levels=levels,
+            colors="k",
+            linewidths=0.45,
+            alpha=0.7,
+        )
+        ax.plot(wall_closed[:, 0], wall_closed[:, 1], color="k", lw=1.0, zorder=4)
+        ax.scatter(
+            interior_points[:, 0],
+            interior_points[:, 1],
+            s=10,
+            facecolors="none",
+            edgecolors="k",
+            linewidths=0.45,
+            alpha=0.85,
+            zorder=5,
+        )
+        ax.scatter(
+            boundary_points[:, 0],
+            boundary_points[:, 1],
+            s=11,
+            marker="s",
+            facecolors="none",
+            edgecolors="k",
+            linewidths=0.45,
+            alpha=0.85,
+            zorder=5,
+        )
+        ax.set_xlim(TAF_X_MIN, TAF_X_MAX)
+        ax.set_ylim(TAF_Y_MIN, TAF_Y_MAX)
+        ax.set_aspect("equal", adjustable="box")
+        ax.set_title(spec["title"], fontsize=18)
+        ax.set_xlabel("x")
+        ax.set_ylabel("y")
+        return cf
+
+    saved_paths: list[str] = []
+
+    montage_path = os.path.join(output_dir, f"{filename_prefix}_figure7_pred.png")
+    fig, axes = plt.subplots(1, 4, figsize=(16, 5.2))
+    for idx, (field_key, _) in enumerate(TAF_FIELD_LABELS):
+        cf = _draw_field(axes[idx], idx, field_key)
+        fig.colorbar(
+            cf,
+            ax=axes[idx],
+            orientation="horizontal",
+            pad=0.12,
+            fraction=0.06,
+            ticks=TAF_PAPER_FIELD_SPECS[field_key]["ticks"],
+        )
+    fig.tight_layout()
+    fig.savefig(montage_path, dpi=300)
+    plt.close(fig)
+    saved_paths.append(montage_path)
+
+    for idx, (field_key, _) in enumerate(TAF_FIELD_LABELS):
+        png_path = os.path.join(output_dir, f"{filename_prefix}_{field_key}_pred.png")
+        fig, ax = plt.subplots(figsize=(5.0, 5.6))
+        cf = _draw_field(ax, idx, field_key)
+        fig.colorbar(
+            cf,
+            ax=ax,
+            orientation="horizontal",
+            pad=0.12,
+            fraction=0.08,
+            ticks=TAF_PAPER_FIELD_SPECS[field_key]["ticks"],
+        )
+        fig.tight_layout()
+        fig.savefig(png_path, dpi=300)
+        plt.close(fig)
+        saved_paths.append(png_path)
+
+    return saved_paths
+
+
+def save_density_plot(
+    model: nn.Module,
+    ckpt_dir: str,
+    case_prefix: str,
+    plot_label: str | None,
+    run_id: str,
+    backend: str,
+) -> str:
+    """
+    Save TAF Figure-7-style prediction plots for inference.
+
+    The repo only contains the geometry/training-point clouds, not the CFD
+    reference fields from the paper's bottom row.
+    """
+    del plot_label  # TAF plots do not currently display a model-variant label.
+    model.eval()
+
+    data = load_training_sets()
+    results_dir = results_case_dir_for_model_dir(ckpt_dir, case_prefix)
+    os.makedirs(results_dir, exist_ok=True)
+    saved_paths = _save_primitive_field_plots(
+        model=model,
+        data=data,
+        output_dir=results_dir,
+        filename_prefix=f"{case_prefix}_{backend}_{run_id}",
+        backend=backend,
+    )
+
+    for path in saved_paths[1:]:
+        print(f"Additional figure saved to: {path}")
+
+    return saved_paths[0]
+
+
+def save_rho_slice_plot(
+    model: nn.Module,
+    ckpt_dir: str,
+    case_prefix: str,
+    run_id: str,
+    backend: str,
+    second_coord: float = 2.0,
+) -> str:
+    """Save rho(x, second_coord) NN prediction curve."""
+    model.eval()
+    y_slice = float(np.clip(second_coord, TAF_Y_MIN, TAF_Y_MAX))
+
+    n_points = 300
+    if backend.lower() != "local":
+        n_points = 80
+
+    with torch.no_grad():
+        x = np.linspace(TAF_X_MIN, TAF_X_MAX, n_points)
+        y = np.full_like(x, y_slice)
+        xy = np.stack([x, y], axis=1)
+        xy_t = torch.tensor(xy, dtype=DTYPE, device=DEVICE)
+        rho_pred = model(xy_t)[:, 0].detach().cpu().numpy()
+
+    results_dir = results_case_dir_for_model_dir(ckpt_dir, case_prefix)
+    os.makedirs(results_dir, exist_ok=True)
+    y_tag = str(y_slice).replace(".", "p")
+    png_path = os.path.join(
+        results_dir,
+        f"{case_prefix}_{backend}_{run_id}_rho_x_{y_tag}.png",
+    )
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.plot(x, rho_pred, lw=2, label="NN")
+    ax.set_xlabel("x")
+    ax.set_ylabel("rho")
+    ax.set_title(f"rho(x, {y_slice:.2f})")
+    ax.grid(True)
+    ax.legend()
+    fig.tight_layout()
+    fig.savefig(png_path, dpi=300)
+    plt.close(fig)
+
+    return png_path

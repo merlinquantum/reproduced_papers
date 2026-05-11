@@ -1,0 +1,10 @@
+{
+  "experiment": "see-cc",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_layers": 4,
+    "n_nodes": 10
+  },
+  "description": "HQPINN see cc train 10-4 configuration."
+}

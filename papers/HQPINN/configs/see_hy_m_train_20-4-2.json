@@ -1,0 +1,11 @@
+{
+  "experiment": "see-hy-m",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_layers": 4,
+    "n_nodes": 20,
+    "n_photons": 2
+  },
+  "description": "HQPINN see hy m train 20-4-2 configuration."
+}

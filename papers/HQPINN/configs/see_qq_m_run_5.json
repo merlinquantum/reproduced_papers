@@ -1,0 +1,9 @@
+{
+  "experiment": "see-qq-m",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "n_photons": 5
+  },
+  "description": "HQPINN see qq m run 5 configuration."
+}

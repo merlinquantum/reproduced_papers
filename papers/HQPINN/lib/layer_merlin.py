@@ -1,0 +1,380 @@
+# layer_merlin.py
+"""
+Merlin/Perceval photonic branch for HQPINN.
+
+This module provides the interferometer-based quantum branch used in the paper
+for hybrid PINNs. Conceptually, it mirrors the same role as other branches:
+encode inputs, run a trainable quantum transformation, and return features that
+are fused at model level in DHO/SEE/DEE experiments.
+"""
+
+from math import comb
+
+import merlin as merlin_backend
+import numpy as np
+import perceval as pcvl
+import torch
+import torch.nn as nn
+from merlin import LexGrouping, QuantumLayer
+from perceval import BS, PS
+
+from .config import DEE_U, DEE_X0, DEFAULT_N_OUTPUTS, DTYPE, N_LAYERS
+
+# ============================================================
+#  Perceval building blocks
+# ============================================================
+
+
+def entangling_chain_all_modes() -> pcvl.Circuit:
+    """
+    Linear (non-circular) entangling chain across all 2 * n_qubits modes.
+
+    Structure
+    ---------
+    - n_modes = 2 * n_qubits (dual-rail encoding)
+    - Apply BS.H between (m, m+1) for m = 0 .. n_modes - 2
+    """
+    n_modes = 2 * DEFAULT_N_OUTPUTS
+    circ = pcvl.Circuit(n_modes)
+    for m_idx in range(n_modes - 1):
+        circ // (m_idx, BS.H())  # type: ignore
+    return circ
+
+
+def ansatz_layer(prefix: str) -> pcvl.Circuit:
+    """
+    Perceval implementation of an ansatz layer in dual-rail encoding.
+
+    Dual-rail encoding
+    ------------------
+    - Logical qubit i ↦ spatial modes (2*i, 2*i+1).
+
+    Parameters (symbolic)
+    ---------------------
+    For each logical qubit i we introduce 3 parameters:
+      theta_{prefix}_{i}_0 : "RZ-like" rotation
+      theta_{prefix}_{i}_1 : "RX-like" rotation
+      theta_{prefix}_{i}_2 : "RZ-like" rotation
+    """
+    circ = pcvl.Circuit(2 * DEFAULT_N_OUTPUTS)
+    for i in range(DEFAULT_N_OUTPUTS):
+        m0 = 2 * i
+        m1 = 2 * i + 1
+
+        theta_z1 = pcvl.P(f"theta_{prefix}_{i}_0")
+        theta_x = pcvl.P(f"theta_{prefix}_{i}_1")
+        theta_z2 = pcvl.P(f"theta_{prefix}_{i}_2")
+
+        circ // (m1, PS(theta_z1))  # type: ignore
+        circ // (m0, BS.Rx(theta_x))  # type: ignore
+        circ // (m1, PS(theta_z2))  # type: ignore
+
+    return circ // entangling_chain_all_modes()
+
+
+def feature_layer(prefix: str) -> pcvl.Circuit:
+    """
+    Feature map layer implemented as BS.Ry rotations.
+
+    Parameters (symbolic)
+    ---------------------
+    For each logical qubit i, we introduce:
+      phi_{prefix}_{i}
+    """
+    circ = pcvl.Circuit(2 * DEFAULT_N_OUTPUTS)
+    for i in range(DEFAULT_N_OUTPUTS):
+        phi = pcvl.P(f"phi_{prefix}_{i}")
+        circ // (2 * i, BS.Ry(phi))  # type: ignore
+    return circ
+
+
+def build_merlin_circuit() -> pcvl.Circuit:
+    """
+    Reference photonic circuit template used by the Perceval branch.
+
+    Pattern:
+        ansatz("layer0")
+        feature("layer1")
+        ansatz("layer2")
+        feature("layer3")
+        ...
+        ansatz("layer{2*(N_LAYERS-1)}")
+    """
+    circ = pcvl.Circuit(2 * DEFAULT_N_OUTPUTS)
+
+    for layer_idx in range(N_LAYERS):
+        # Ansatz layer with even prefix: layer0, layer2, ...
+        circ = circ // ansatz_layer(f"layer{2 * layer_idx}")
+
+        # Feature layer between ansatz layers, except after the last ansatz
+        if layer_idx < N_LAYERS - 1:
+            circ = circ // feature_layer(f"layer{2 * layer_idx + 1}")
+
+    return circ
+
+
+# ============================================================
+#  QuantumLayers factory
+# ============================================================
+
+# Dual-rail: 2 modes per logical qubit, 1 photon per qubit.
+n_modes = 2 * DEFAULT_N_OUTPUTS
+input_state = [1, 0] * DEFAULT_N_OUTPUTS
+n_photons = sum(input_state)
+
+# Fock space dimension for n_photons over n_modes modes.
+fock_dim = comb(n_modes + n_photons - 1, n_photons)
+
+# Number of logical output features used by the classical readout.
+group_dim = 2 * DEFAULT_N_OUTPUTS
+
+# Grouping from Fock basis to logical features.
+grouping = LexGrouping(fock_dim, group_dim)
+
+
+def make_perceval_qlayer() -> QuantumLayer:
+    """
+    Build one QuantumLayer for the given MerLin circuit.
+
+    Grouping is handled inside MerLin via the MeasurementStrategy.
+    Call this function twice if you need two independent branches.
+    """
+    circuit = build_merlin_circuit()
+
+    qlayer = QuantumLayer(
+        input_size=n_modes,
+        circuit=circuit,
+        input_state=input_state,
+        trainable_parameters=["theta"],
+        input_parameters=["phi"],
+        measurement_strategy=merlin_backend.MeasurementStrategy.probs(
+            computation_space=merlin_backend.ComputationSpace.FOCK, grouping=grouping
+        ),
+        dtype=DTYPE,
+    )
+    return qlayer
+
+
+def make_interf_qlayer(n_photons: int) -> QuantumLayer:
+    """
+    Build one QuantumLayer for the given MerLin circuit.
+
+    Simulator/QPU constraint: at most one photon per mode (unbunched input state).
+    We encode this as |1, 1, ..., 1, 0, ..., 0> with n_photons ones.
+
+    Grouping is handled inside MerLin via the MeasurementStrategy.
+    Call this function twice if you need two independent branches.
+    """
+    # Sanity check: impossible to have more photons than modes in unbunched config
+    assert n_photons <= n_modes, (
+        f"Unbunched encoding requires n_photons <= n_modes, "
+        f"got n_photons={n_photons}, n_modes={n_modes}"
+    )
+
+    # Input state: unbunched, at most one photon per mode
+    # Example: n_photons=3, n_modes=5 -> [1, 1, 1, 0, 0]
+    input_state = [1] * n_photons + [0] * (n_modes - n_photons)
+
+    # Fock-space dimension expected by ComputationSpace.FOCK (includes bunching states),
+    # regardless of the chosen unbunched input state.
+    fock_dim = comb(n_modes + n_photons - 1, n_photons)
+
+    grouping = LexGrouping(fock_dim, group_dim)
+
+    # Build photonic circuit and lock it to the configured N_LAYERS.
+    if N_LAYERS < 1:
+        raise ValueError(f"N_LAYERS must be >= 1, got {N_LAYERS}")
+
+    builder = merlin_backend.CircuitBuilder(n_modes=n_modes)
+    encoding_modes = list(range(0, n_modes, 2))
+    for layer_idx in range(N_LAYERS):
+        # Keep ansatz naming aligned with the Perceval branch: layer0, layer2, ...
+        builder.add_entangling_layer(trainable=True, name=f"layer{2 * layer_idx}")
+        # One feature layer between consecutive ansatz layers.
+        if layer_idx < N_LAYERS - 1:
+            builder.add_angle_encoding(
+                modes=encoding_modes,
+                name=f"phi{2 * layer_idx + 1}_",
+            )
+
+    qlayer = QuantumLayer(
+        builder=builder,
+        input_state=input_state,
+        measurement_strategy=merlin_backend.MeasurementStrategy.probs(
+            computation_space=merlin_backend.ComputationSpace.FOCK,
+            grouping=grouping,
+        ),
+        dtype=DTYPE,
+    )
+
+    return qlayer
+
+
+# ============================================================
+#  MerLin quantum branch
+# ============================================================
+
+
+class BranchMerlin(nn.Module):
+    """
+    High-level Merlin quantum branch wrapper.
+
+    In the paper's architecture, this branch is one interchangeable quantum path
+    (alongside PennyLane/classical ones) whose output is combined in hybrid or
+    quantum-only model variants.
+    """
+
+    def __init__(
+        self,
+        qlayer: QuantumLayer,
+        n_outputs: int = 1,
+        processor: merlin_backend.MerlinProcessor | None = None,
+        feature_map_kind: str = "auto",
+    ) -> None:
+        super().__init__()
+        self.qlayer = qlayer
+        self.group_dim = 2 * DEFAULT_N_OUTPUTS
+        self.n_outputs = n_outputs
+        self.processor: merlin_backend.MerlinProcessor | None = processor
+        self.feature_map_kind = feature_map_kind.lower()
+        valid_kinds = {"auto", "dho", "see", "dee", "taf"}
+        if self.feature_map_kind not in valid_kinds:
+            raise ValueError(
+                f"Unknown feature_map_kind='{feature_map_kind}'. "
+                f"Valid values: {', '.join(sorted(valid_kinds))}."
+            )
+
+        self.readout = nn.Linear(self.group_dim, n_outputs, dtype=DTYPE)
+
+    def _feature_map_dho(self, x_in: torch.Tensor) -> torch.Tensor:
+        if x_in.ndim == 2:
+            t = x_in[:, 0]
+        else:
+            t = x_in
+
+        scale = np.pi
+        phi0 = scale * t
+        phi1 = 2.0 * scale * t
+        phi2 = 3.0 * scale * t
+        return torch.stack([phi0, phi1, phi2], dim=1).to(DTYPE)
+
+    def _feature_map_see(self, x_in: torch.Tensor) -> torch.Tensor:
+        if x_in.ndim != 2 or x_in.shape[1] != 2:
+            raise ValueError(
+                f"SEE feature_map_kind expects input shape [N, 2], got {tuple(x_in.shape)}"
+            )
+        x = x_in[:, 0]
+        t = x_in[:, 1]
+        phi0 = np.pi * x
+        phi1 = np.pi * t
+        phi2 = np.pi * (x - t)
+        return torch.stack([phi0, phi1, phi2], dim=1).to(DTYPE)
+
+    def _feature_map_dee(self, x_in: torch.Tensor) -> torch.Tensor:
+        if x_in.ndim != 2 or x_in.shape[1] != 2:
+            raise ValueError(
+                f"DEE feature_map_kind expects input shape [N, 2], got {tuple(x_in.shape)}"
+            )
+        x = x_in[:, 0]
+        t = x_in[:, 1]
+        phi0 = np.pi * x
+        phi1 = np.pi * t
+        # Paper alignment: Sec. 3.2 (Discontinuous Euler Equation), Eq. (13),
+        # defines the front as x_f(t)=x0+u*t. Use shock-relative coordinate
+        # x-x_f(t)=x-(x0+u*t) for the DEE feature map.
+        phi2 = np.pi * (x - (DEE_X0 + DEE_U * t))
+        return torch.stack([phi0, phi1, phi2], dim=1).to(DTYPE)
+
+    def _feature_map_taf(self, x_in: torch.Tensor) -> torch.Tensor:
+        if x_in.ndim != 2 or x_in.shape[1] != 2:
+            raise ValueError(
+                f"TAF feature_map_kind expects input shape [N, 2], got {tuple(x_in.shape)}"
+            )
+        x = x_in[:, 0]
+        y = x_in[:, 1]
+        phi0 = np.pi * x
+        phi1 = np.pi * y
+        phi2 = np.pi * (x - y)
+        return torch.stack([phi0, phi1, phi2], dim=1).to(DTYPE)
+
+    def _feature_map(self, x_in: torch.Tensor) -> torch.Tensor:
+        if self.feature_map_kind == "dho":
+            return self._feature_map_dho(x_in)
+        if self.feature_map_kind == "see":
+            return self._feature_map_see(x_in)
+        if self.feature_map_kind == "dee":
+            return self._feature_map_dee(x_in)
+        if self.feature_map_kind == "taf":
+            return self._feature_map_taf(x_in)
+        # auto: keep backward-compatible behavior
+        if x_in.ndim == 2 and x_in.shape[1] == 2:
+            return self._feature_map_see(x_in)
+        return self._feature_map_dho(x_in)
+
+    def forward(self, x_in: torch.Tensor) -> torch.Tensor:
+        """
+        x_in:
+            - DHO style: [N] or [N,1] with t values → 1D encoding
+            - Euler style: [N,2] with (x,t) pairs → 2D encoding
+        """
+
+        # phi_single: [N, 3] with features for one layer of the MerLin circuit.
+        phi_single = self._feature_map(x_in)
+
+        # Number of angle encoding layers = N_LAYERS - 1 (one encoding layer between each pair of ansatz layers).
+        n_feature_layers = max(N_LAYERS - 1, 0)
+
+        if n_feature_layers > 0:
+            # Repeat phi_single for each feature layer, giving [N, 3 * n_feature_layers].
+            features = torch.cat([phi_single] * n_feature_layers, dim=1)
+        else:
+            # No feature layers, so X is empty with shape [N, 0].
+            features = torch.empty(x_in.shape[0], 0, dtype=DTYPE, device=x_in.device)
+
+        if self.processor is None:
+            # Local Execution, differentiable (SLOS)
+            q_out = self.qlayer(features).to(DTYPE)  # (N, output_size)
+        else:
+            # Remote Execution via MerlinProcessor → shots / simulator / QPU
+            # No gradient here since we only use the processor for inference, not training.
+            self.qlayer.eval()
+            with torch.no_grad():
+                q_out = self.processor.forward(self.qlayer, features).to(DTYPE)
+
+        # QuantumLayer output is already grouped: (N, 2 * n_qubits).
+        u = self.readout(q_out)  # (N, 1)
+
+        return u
+
+
+def make_merlin_processor(processor="sim:ascella") -> merlin_backend.MerlinProcessor:
+    """
+    Build a MerlinProcessor for remote simulation/QPU execution.
+
+    This is the execution backend used when running the interferometer branch
+    against cloud simulators or hardware-like targets.
+    """
+    raw_backend = str(processor).strip().lower()
+    backend_aliases = {
+        "sim:ascella": "sim:ascella",
+        "sim:acella": "sim:ascella",  # common typo
+        "ascella": "sim:ascella",
+        "acella": "sim:ascella",
+    }
+    if raw_backend not in backend_aliases:
+        raise ValueError(f"Unknown backend '{processor}'. Valid values: sim:ascella.")
+
+    backend = backend_aliases[raw_backend]
+    if backend != raw_backend:
+        print(f"Backend '{processor}' corrigé en '{backend}'.")
+
+    rp = pcvl.RemoteProcessor(backend)
+
+    processor = merlin_backend.MerlinProcessor(
+        rp,
+        microbatch_size=32,
+        timeout=3600.0,
+        max_shots_per_call=None,
+        chunk_concurrency=1,
+    )
+    return processor

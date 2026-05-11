@@ -1,0 +1,12 @@
+{
+  "experiment": "dho-hy-mp",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "n_layers": 2,
+    "n_nodes": 16,
+    "n_qubits": null,
+    "n_photons": null
+  },
+  "description": "HQPINN dho hy mp run configuration."
+}

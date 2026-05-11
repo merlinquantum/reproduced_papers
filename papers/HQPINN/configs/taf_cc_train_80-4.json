@@ -1,0 +1,10 @@
+{
+  "experiment": "taf-cc",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_layers": 4,
+    "n_nodes": 80
+  },
+  "description": "HQPINN taf cc train 80-4 configuration."
+}

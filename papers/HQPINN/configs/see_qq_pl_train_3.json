@@ -1,0 +1,9 @@
+{
+  "experiment": "see-qq-pl",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "q_layers": 3
+  },
+  "description": "HQPINN see qq pl train 3 configuration."
+}
