@@ -21,7 +21,6 @@ from .runtime import (
     require_file,
 )
 
-
 EXPERIMENT_ALIASES: dict[str, str] = {
     "dho-cc": "dho-cc",
     "dho-hy-pl": "dho-hy-pl",
@@ -515,7 +514,9 @@ def _run_interactive() -> None:
     print("  taf-qq-pl       -> TAF, Quantum-Quantum PennyLane")
 
     print()
-    choice = _canonical_experiment_name(input("Which experiment do you want to run? ").strip())
+    choice = _canonical_experiment_name(
+        input("Which experiment do you want to run? ").strip()
+    )
 
     # DHO experiments
     if choice == "dho-qq-pl":

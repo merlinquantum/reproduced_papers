@@ -36,8 +36,7 @@ class QuantumReservoirFeedback(torch.nn.Module):
             trainable_parameters=["theta"],
             input_parameters=["px"],
             input_state=[0, 1, 0],
-            measurement_strategy=ml.MeasurementStrategy.PROBABILITIES,
-            no_bunching=True,
+            measurement_strategy=ml.MeasurementStrategy.probs(computation_space=ml.ComputationSpace.UNBUNCHED),
         )
 
         self.feedback = FeedbackLayer(memory_size=memory)
@@ -158,8 +157,7 @@ class QuantumReservoirFeedbackTimeSeries(torch.nn.Module):
             trainable_parameters=[],  # Fixed reservoir
             input_parameters=["px_0", "px_1"],
             input_state=[0, 1, 0],
-            measurement_strategy=ml.MeasurementStrategy.PROBABILITIES,
-            no_bunching=True,
+            measurement_strategy=ml.MeasurementStrategy.probs(computation_space=ml.ComputationSpace.UNBUNCHED),
         )
 
         self.feedback = FeedbackLayerNARMA(memory_size=memory)
@@ -279,8 +277,7 @@ class QuantumReservoirNoMem(torch.nn.Module):
             trainable_parameters=["theta"],
             input_parameters=["px"],
             input_state=[0, 1, 0],
-            measurement_strategy=ml.MeasurementStrategy.PROBABILITIES,
-            no_bunching=True,
+            measurement_strategy=ml.MeasurementStrategy.probs(computation_space=ml.ComputationSpace.UNBUNCHED),
         )
 
     def gen_circuit(self, n_modes: int) -> pcvl.Circuit:
