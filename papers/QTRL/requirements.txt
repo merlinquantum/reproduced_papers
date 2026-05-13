@@ -1,0 +1,5 @@
+merlinquantum==0.2.3
+torch
+numpy
+gymnasium[classic_control]
+minigrid
