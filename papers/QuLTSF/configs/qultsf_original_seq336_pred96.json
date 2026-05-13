@@ -1,0 +1,26 @@
+{
+  "description": "Original QuLTSF hybrid model port with upstream Weather-style settings",
+  "dataset": {
+    "path": "weather.csv",
+    "time_column": "date",
+    "features_mode": "M",
+    "target": "OT",
+    "sequence_length": 336,
+    "prediction_horizon": 96,
+    "batch_size": 16
+  },
+  "model": {
+    "name": "qultsf_original",
+    "params": {
+      "num_qubits": 10,
+      "qml_device": "default.qubit",
+      "num_layers": 3
+    }
+  },
+  "training": {
+    "epochs": 100,
+    "optimizer": "adam",
+    "lr": 0.0001,
+    "weight_decay": 0.0
+  }
+}
