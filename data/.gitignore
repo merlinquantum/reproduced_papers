@@ -1,0 +1,23 @@
+# Ignore local dataset payloads by default.
+*
+
+# Keep data policy files and explicit paper scaffolds tracked.
+!.gitignore
+!.gitkeep
+!qml_passive_sonar/
+
+# QML passive-sonar tracks only its README and top-level dataset folders.
+qml_passive_sonar/*
+!qml_passive_sonar/README.md
+!qml_passive_sonar/deepship/
+!qml_passive_sonar/shipear/
+!qml_passive_sonar/deepship/.gitkeep
+!qml_passive_sonar/shipear/.gitkeep
+qml_passive_sonar/**/*.wav
+qml_passive_sonar/**/*.tmp
+
+# Existing committed dataset payloads.
+!photonic_QCNN/
+!photonic_QCNN/**
+!QLSTM/
+!QLSTM/**

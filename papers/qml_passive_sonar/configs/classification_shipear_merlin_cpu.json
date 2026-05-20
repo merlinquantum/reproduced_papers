@@ -1,0 +1,32 @@
+{
+  "description": "E5 photonic-MerLin HQ-CNN on synthetic ShipsEar (CPU-feasible).",
+  "seed": 42,
+  "device": "cpu",
+  "outdir": "outdir",
+  "task": "merlin_classification",
+  "dataset": {
+    "name": "shipear",
+    "spectrogram_method": "sav",
+    "frame_duration_s": 8.0,
+    "frame_overlap": 0.5,
+    "target_sr": 4000,
+    "image_size": 64,
+    "samples_per_class_synthetic": 12,
+    "duration_synthetic_s": 30.0,
+    "test_fraction": 0.3
+  },
+  "model": {
+    "name": "hqcnn_merlin",
+    "fc_dim": 128,
+    "n_modes": 6,
+    "n_photons": 2,
+    "no_bunching": true
+  },
+  "training": {
+    "epochs": 20,
+    "lr": 5e-4,
+    "batch_size": 8,
+    "save_checkpoint": false
+  },
+  "logging": {"level": "info"}
+}
