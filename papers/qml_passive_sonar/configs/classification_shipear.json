@@ -1,0 +1,23 @@
+{
+  "description": "E5/E6: paper-aligned HQ-CNN training on ShipsEar (needs GPU and real .wav data).",
+  "dataset": {
+    "name": "shipear",
+    "spectrogram_method": "sav",
+    "frame_duration_s": 60.0,
+    "frame_overlap": 0.25,
+    "target_sr": 8000,
+    "image_size": 224
+  },
+  "model": {
+    "name": "hqcnn",
+    "fc_dim": 4096,
+    "n_qubits": 10,
+    "n_layers": 4
+  },
+  "training": {
+    "epochs": 100,
+    "lr": 1e-4,
+    "batch_size": 16,
+    "save_checkpoint": true
+  }
+}

@@ -1,0 +1,9 @@
+torch>=2.0
+numpy>=1.23
+scipy>=1.10
+scikit-learn>=1.3
+librosa>=0.10
+matplotlib>=3.8
+pytest
+# Required only for the photonic variant (lib/models_merlin.py).
+merlinquantum>=0.3

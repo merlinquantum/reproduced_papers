@@ -6,6 +6,8 @@
 # Data artifacts (keep shared caches ignored, but track specific packaged datasets)
 data/*
 !data/.gitkeep
+!data/.gitignore
+!data/*/
 # Keep committed datasets for reproducibility
 !data/photonic_QCNN/
 !data/photonic_QCNN/**

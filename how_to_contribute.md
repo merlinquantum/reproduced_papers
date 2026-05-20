@@ -21,6 +21,13 @@ papers/NAME/            # Non-ambiguous acronym or fullname of the reproduced pa
 ```
 
 `data/` is shared at repository root (not inside each paper): write datasets/artifacts under `data/<NAME>/`.
+When a paper needs external data, commit only a lightweight scaffold such as
+`data/<NAME>/README.md` and first-level `.gitkeep` placeholders. Do not commit
+licensed, manually requested, or bulky dataset payloads. Put dataset URLs,
+author contacts, class mappings, expected local layout, and automatic download
+behavior in the data README. Keep ignore rules for local payloads close to
+`data/` when possible, so future contributors can see the data policy without
+reading paper code.
 
 ## Reproduction template (starter kit)
 
@@ -78,6 +85,11 @@ Then edit the placeholders in:
 - Do not duplicate shared startup logs or seed wrappers in each project; shared runtime handles run banner/config logging and seeding.
 - If you use `dtype` in configs, rely on runtime normalization (`dtype` keys arrive in project code as validated `(label, torch.dtype)` pairs).
 - Use the shared data root convention: default is repo-level `data/` and each paper should store data under `data/<NAME>/` (override with `--data-root` or `DATA_DIR` when needed).
+- For datasets that cannot be committed, add a `data/<NAME>/README.md` with
+  acquisition instructions and track only minimal placeholders. Any small
+  public sample download should be opt-in or clearly documented as an
+  automatic fallback, and full-paper results should state whether they used
+  the full dataset or a sample.
 
 ### Shared code under `papers/shared/`
 
