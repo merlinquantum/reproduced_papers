@@ -1,0 +1,49 @@
+{
+  "description": "Distributed QML via classical communication (arXiv:2408.16327)",
+  "arguments": [
+    {
+      "flags": ["--pipeline"],
+      "help": "Which pipeline to run: quantum, classical, or merlin",
+      "type": "str",
+      "choices": ["quantum", "classical", "merlin", "merlin_distributed"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "pipeline"}
+    },
+    {
+      "flags": ["--scheme"],
+      "help": "DQML scheme: non, nc, cc, qc",
+      "type": "str",
+      "choices": ["non", "nc", "cc", "qc"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.params.scheme"}
+    },
+    {
+      "flags": ["--n-layers"],
+      "help": "Number of convolutional sub-layers L",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.params.n_layers"}
+    },
+    {
+      "flags": ["--iterations"],
+      "help": "Number of training iterations",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.n_iterations"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Adam learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lr"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Training batch size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.batch_size"}
+    }
+  ]
+}
