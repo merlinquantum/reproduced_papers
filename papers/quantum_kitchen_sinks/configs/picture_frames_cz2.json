@@ -1,0 +1,30 @@
+{
+    "description": "Picture frames + 2-qubit CZ QKS ansatz (negative control from Fig. 2b).",
+    "experiment": "picture_frames",
+    "seeds": [42, 43, 44],
+    "dataset": {
+        "name": "picture_frames",
+        "n_train": 1600,
+        "n_test": 400,
+        "inner_radius": 0.4,
+        "outer_radius": 0.7,
+        "noise": 0.02
+    },
+    "qks": {
+        "backend": "gate",
+        "circuit": "cz2",
+        "n_qubits": 2,
+        "encoding": "split",
+        "n_episodes": 5000,
+        "sigma": 1.0,
+        "shots_per_episode": 1,
+        "n_layers": 1
+    },
+    "sigma_sweep": [0.5, 1.0, 2.0],
+    "episodes_sweep": [500, 1000, 5000],
+    "classifier": {
+        "kind": "logistic_regression",
+        "C": 1.0,
+        "max_iter": 4000
+    }
+}

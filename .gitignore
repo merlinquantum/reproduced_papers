@@ -39,3 +39,9 @@ __pycache__/
 HQPINN/**/results/**/
 HQPINN/doc/
 HQPINN_*
+
+PLAN.md
+LOG.md
+FEEDBACK.md
+CONFLUENCE.md
+VISITED_URLS.md
