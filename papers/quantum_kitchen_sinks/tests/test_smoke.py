@@ -38,6 +38,27 @@ def test_qks_featurizer_shape():
     assert set(np.unique(features.astype(int))) <= {0, 1}
 
 
+def test_photonic_dual_rail_input_state_and_shape():
+    from lib.photonic_qks import PhotonicQKSFeaturizer
+
+    feat = PhotonicQKSFeaturizer(
+        n_modes=6,
+        n_photons=3,
+        n_episodes=4,
+        sigma=0.05,
+        encoding="tile",
+        input_modes=[0, 2, 4],
+        computation_space="DUAL_RAIL",
+    )
+    assert feat.input_state == [1, 0, 1, 0, 1, 0]
+    feat.fit_episodes(input_dim=6, seed=0)
+    rng = np.random.default_rng(0)
+    X = rng.normal(size=(3, 6))
+    features = feat.transform(X, seed=0)
+    assert features.shape == (3, 4 * 6)
+    assert features.dtype == np.float32
+
+
 def test_train_and_evaluate_writes_artifact(tmp_path):
     from lib.runner import train_and_evaluate
 
