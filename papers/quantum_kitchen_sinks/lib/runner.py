@@ -63,6 +63,7 @@ def _featurize(cfg: Dict[str, Any], X_train: np.ndarray, X_test: np.ndarray, see
             shots_per_episode=int(qks_cfg.get("shots_per_episode", 1)),
             input_modes=qks_cfg.get("input_modes"),
             angle_scale=float(qks_cfg.get("angle_scale", 1.0)),
+            computation_space=qks_cfg.get("computation_space", "UNBUNCHED"),
         )
         feat.fit_episodes(input_dim=X_train.shape[1], seed=seed)
         t0 = time.perf_counter()
@@ -76,7 +77,7 @@ def _featurize(cfg: Dict[str, Any], X_train: np.ndarray, X_test: np.ndarray, see
             "n_modes": feat.n_modes,
             "n_photons": feat.n_photons,
             "input_state": list(feat.input_state),
-            "computation_space": "UNBUNCHED",
+            "computation_space": feat.computation_space.name,
             "detector_model": "threshold",
             "measurement_strategy": "PROBABILITIES",
             "postselection": "none",
@@ -84,7 +85,6 @@ def _featurize(cfg: Dict[str, Any], X_train: np.ndarray, X_test: np.ndarray, see
         }
         return Xf_train, Xf_test, meta
     if backend == "none":
-        # Raw features: classifier baseline only.
         return X_train, X_test, {"backend": "none", "n_features": int(X_train.shape[1])}
     raise ValueError(f"Unknown qks.backend: {backend}")
 
