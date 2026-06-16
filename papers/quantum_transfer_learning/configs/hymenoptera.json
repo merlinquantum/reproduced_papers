@@ -1,0 +1,45 @@
+{
+  "experiment": "hymenoptera",
+  "description": "Example 2: CQ transfer learning for Ants vs Bees classification (Fig. 3, Table 2)",
+
+  "dataset": {
+    "name": "hymenoptera",
+    "root": "data",
+    "download": true,
+    "image_size": 224
+  },
+
+  "feature_extractor": {
+    "model": "resnet18",
+    "pretrained": true,
+    "freeze": true,
+    "n_features": 512
+  },
+
+  "model": {
+    "type": "cq_transfer",
+    "n_qubits": 4,
+    "q_depth": 6,
+    "n_inputs": 512,
+    "n_outputs": 2,
+    "n_photons": 2,
+    "computation_space": "unbunched"
+  },
+
+  "training": {
+    "epochs": 30,
+    "batch_size": 4,
+    "learning_rate": 0.0004,
+    "optimizer": "adam",
+    "loss": "cross_entropy",
+    "scheduler": "step",
+    "step_size": 10,
+    "gamma": 0.1
+  },
+
+  "options": {
+    "use_merlin": true,
+    "save_model": true,
+    "generate_figures": true
+  }
+}

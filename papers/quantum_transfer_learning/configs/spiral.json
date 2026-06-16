@@ -1,0 +1,46 @@
+{
+  "experiment": "spiral",
+  "description": "Example 1: 2D spiral classification with dressed quantum circuit (Fig. 2)",
+
+  "dataset": {
+    "name": "spiral",
+    "n_samples": 2200,
+    "n_train": 2000,
+    "n_test": 200,
+    "noise": 0.0
+  },
+
+  "model": {
+    "type": "dressed_quantum",
+    "n_qubits": 4,
+    "q_depth": 5,
+    "n_inputs": 2,
+    "n_outputs": 2,
+    "n_photons": 2,
+    "computation_space": "unbunched",
+    "merlin_depth": 1,
+    "scale_type": "learned"
+  },
+
+  "training": {
+    "epochs": 20,
+    "batch_size": 10,
+    "learning_rate": 0.01,
+    "optimizer": "adam",
+    "loss": "cross_entropy",
+    "lr_schedule": null
+  },
+
+  "options": {
+    "use_merlin": true,
+    "compare_classical": true,
+    "save_model": true,
+    "generate_figures": true
+  },
+
+  "classical_baseline": {
+    "type": "mlp",
+    "hidden_sizes": [4, 4],
+    "activation": "tanh"
+  }
+}
