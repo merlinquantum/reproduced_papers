@@ -1,0 +1,8 @@
+# On the similarity of bandwidth-tuned quantum kernels and classical kernels
+# Paper : Roberto Flórez-Ablan, Marco Roth, and Jan Schnabel (2025) arXiv:2503.05602
+
+scikit-learn>=1.9.0
+torch>=2.12.2
+matplotlib>=3.8.0
+merlinquantum>=0.4.0
+perceval-quandela>=1.2.3
