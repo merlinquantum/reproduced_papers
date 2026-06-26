@@ -5,10 +5,10 @@ Wasserstein-geometry diagnostic, with a MerLin photonic counterpart.
 
 ## Reference and Attribution
 - **Paper:** J. Heo and D. K. Park, *Generative Quantum Data Embeddings for Supervised Learning*,
-  arXiv:2605.30866v1 (29 May 2026), quant-ph / cs.LG. Yonsei University.
+  [arXiv:2605.30866v1](https://arxiv.org/abs/2605.30866v1) (29 May 2026), quant-ph / cs.LG. Yonsei University.
 - No official code repository was found; this is an independent reimplementation from the paper
-  text (the GPT logit-matching scheme follows the cited GQE work, ref [40]).
-- Datasets: public UCI ML Repository sets fetched via `ucimlrepo` (see Data).
+  text (the GPT logit-matching scheme follows the cited GQE work, ref [[40](https://arxiv.org/abs/2401.09253)]).
+- Datasets: public UCI ML Repository sets fetched via [ucimlrepo](https://github.com/uci-ml-repo/ucimlrepo) (see Data).
 
 ## Original Paper
 Supervised QML on classical data needs a data embedding that maps inputs to quantum states with
@@ -17,8 +17,10 @@ data-agnostic. **EGAS** treats the embedding *structure* as the optimisation var
 circuit is a length-`D` sequence of depth-one subcircuit tokens; an autoregressive **GPT**
 samples candidate sequences, each scored by a **pairwise-fidelity surrogate energy**
 `E(s)=mean|δ_{y_i,y_j} − F_Φ(x_i,x_j)|` (same-class overlaps high, cross-class low). The GPT is
-updated by a logit-matching loss (Eq. 10) toward a Boltzmann distribution over evaluated
-energies. A second **continuous bias-refinement** stage adds a learnable MLP offset to gate
+updated by a logit-matching loss toward a Boltzmann distribution over evaluated
+energies.
+$$\mathcal{L}_{LM}(\theta)=\frac{1}{M}\sum_{m=1}^M\bigg(e^{-\gamma w_{sum}(s_m;\theta)}-e^{-\gamma E(s_m)}\bigg)^2$$
+ A second **continuous bias-refinement** stage adds a learnable MLP offset to gate
 angles. Embeddings are scored by a **quantum-kernel SVM** (`K=F_Φ`), against ZZ, NQE (ZZ +
 trainable neural preprocessing), and classical SVM baselines. Theory: a **Wasserstein bound**
 `D_tr(ρ+,ρ−) ≤ κ_F·W1(P̂+,P̂−)` (Eq. 7) shows that the class separation attainable by an
