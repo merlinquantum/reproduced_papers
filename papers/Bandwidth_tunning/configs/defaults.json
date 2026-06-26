@@ -1,0 +1,35 @@
+{
+    "description": "This is the default configuration file for Bandwidth Tunning.",
+    "seed": 42,
+    "outdir": "results",
+    "device": "cpu",
+    "dataset": {
+        "name":"fashion_mnist",
+        "root": "data"
+    },
+    "number_of_modes": 4,
+    "logging": {
+        "level": "INFO",
+        "save_config_snapshot": true
+    },
+    "experiments":[
+        {"graphs" : {
+            "min" : -3,
+            "max" : 3,
+            "number_of_points" : 1
+        },
+        "train_sample":80,
+        "test_sample":20,
+        "figs" : [
+            "Variances",
+            "Geometric_distance",
+            "Frobenius_distance",
+            "Eta_max",
+            "ROC_AUC"
+        ],
+        "description":"Paper Fig 3.1"
+        }
+    ]
+    
+    
+}
