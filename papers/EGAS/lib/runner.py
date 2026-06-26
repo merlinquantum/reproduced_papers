@@ -6,6 +6,8 @@ Dispatches on ``cfg["task"]``:
   * ``egas_eval``   — full pipeline on one dataset: EGAS search, bias refinement of the
                       G/B groups, QKSVM evaluation over splits, and ZZ / NQE / classical
                       baselines (Figs. 3-7).
+  * ``photonic_eval`` — photonic EGAS search, encoder-parameter refinement, photonic QKSVM
+                        evaluation over splits, and classical / gate baselines.
 All runs write ``metrics.json`` (+ task-specific NPZ) into ``run_dir``.
 """
 from __future__ import annotations
@@ -34,71 +36,250 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         _run_fig1(cfg, run_dir, logger)
     elif task == "egas_eval":
         _run_egas_eval(cfg, run_dir, logger)
-    elif task == "photonic_eval":
+    elif task in {"photonic_eval", "photonic_egas_eval"}:
         _run_photonic_eval(cfg, run_dir, logger)
     else:
         raise ValueError(f"unknown task {task}")
 
 
 def _run_photonic_eval(cfg, run_dir, logger):
-    """MerLin photonic fidelity-kernel QKSVM (fixed + trained) vs ZZ and classical baselines."""
+    """Photonic EGAS search/refinement + photonic QKSVM evaluation."""
     from .data import load_dataset, make_slices
-    from .photonic import make_kernel, train_photonic_embedding, photonic_qksvm_accuracy
-    from .kernel_svm import zz_accuracy, classical_svm_accuracy
+    from .kernel_svm import nqe_accuracy, zz_accuracy
+    from .photonic_circuits import create_quantum_module
+    from .photonic_egas import (
+        build_token_pool,
+        refine_candidates,
+        run_egas,
+        unique_sorted_candidates,
+    )
+    from .photonic_kernel_svm import (
+        classical_svm_accuracy,
+        qksvm_accuracy as photonic_qksvm_accuracy,
+    )
     from .wasserstein import dataset_wasserstein
 
     seed = int(cfg.get("seed", 0))
-    dcfg, pcfg, vcfg = cfg["dataset"], cfg["photonic"], cfg["eval"]
+    device = cfg.get("device", "cpu")
+    dcfg = cfg["dataset"]
+    pcfg = cfg.get("photonic", {})
+    ecfg = cfg.get("egas", {})
+    bcfg = cfg.get("bias", {})
+    vcfg = cfg["eval"]
     name = dcfg["name"]
     n_modes = int(dcfg.get("n_qubits", 8))
-    n_photons = int(pcfg.get("n_photons", 3))
+    n_photons = int(pcfg.get("n_photons", 2))
     X, y = load_dataset(name, data_root=dcfg["root"], n_components=n_modes, seed=seed)
     w1 = dataset_wasserstein(X, y, seed=seed)
     slices = make_slices(X, y, n_train=vcfg["n_train"], n_test=vcfg["n_test"],
                          n_repeats=vcfg["n_repeats"], seed=seed)
 
-    fixed, trained, zz, lin, rbf = [], [], [], [], []
-    for j, sl in enumerate(slices):
-        kf, state = make_kernel(n_modes, n_photons, n_layers=pcfg.get("n_layers", 2),
-                                scale=pcfg.get("scale", 1.0))
-        fixed.append(photonic_qksvm_accuracy(kf, sl["X_train"], sl["y_train"],
-                                             sl["X_test"], sl["y_test"]))
-        kt, _ = make_kernel(n_modes, n_photons, n_layers=pcfg.get("n_layers", 2),
-                            scale=pcfg.get("scale", 1.0))
-        kt = train_photonic_embedding(kt, sl["X_train"], sl["y_train"],
-                                      epochs=pcfg.get("epochs", 120),
-                                      batch=pcfg.get("batch", 36), lr=pcfg.get("lr", 0.05),
-                                      seed=seed)
-        trained.append(photonic_qksvm_accuracy(kt, sl["X_train"], sl["y_train"],
-                                               sl["X_test"], sl["y_test"]))
-        zz.append(zz_accuracy(sl["X_train"], sl["y_train"], sl["X_test"], sl["y_test"], n_modes))
-        lin.append(classical_svm_accuracy(sl["X_train"], sl["y_train"], sl["X_test"],
-                                          sl["y_test"], "linear"))
-        rbf.append(classical_svm_accuracy(sl["X_train"], sl["y_train"], sl["X_test"],
-                                          sl["y_test"], "rbf"))
-        logger.info("[photonic %s] split %d: fixed=%.3f trained=%.3f ZZ=%.3f lin=%.3f",
-                    name, j, fixed[-1], trained[-1], zz[-1], lin[-1])
+    pool = build_token_pool(n_modes)
+
+    # Photonic EGAS search on a fixed sample batch drawn from the first split's train set.
+    rng = np.random.default_rng(seed)
+    Xtr0 = slices[0]["X_train"]
+    search_samples = int(ecfg.get("search_samples", pcfg.get("search_samples", 24)))
+    s = min(search_samples, len(Xtr0))
+    idx = rng.choice(len(Xtr0), s, replace=False)
+    Xe, ye = Xtr0[idx], slices[0]["y_train"][idx]
+
+    t0 = time.time()
+    gpt, hist, buf = run_egas(
+        pool,
+        Xe,
+        ye,
+        n_modes,
+        seq_len=int(ecfg.get("seq_len", pcfg.get("seq_len", 28))),
+        num_photons=n_photons,
+        n_iters=int(ecfg.get("n_iters", pcfg.get("n_iters", 20))),
+        n_candidates=int(ecfg.get("n_candidates", pcfg.get("n_candidates", 8))),
+        select_k=int(ecfg.get("select_k", pcfg.get("select_k", 4))),
+        gamma=float(ecfg.get("gamma", pcfg.get("gamma", 0.1))),
+        lr=float(ecfg.get("lr", pcfg.get("egas_lr", 5e-5))),
+        temp_max=float(ecfg.get("temp_max", pcfg.get("temp_max", 100.0))),
+        temp_min=float(ecfg.get("temp_min", pcfg.get("temp_min", 0.04))),
+        d_model=int(ecfg.get("d_model", pcfg.get("d_model", 32))),
+        n_layers=int(ecfg.get("n_layers", pcfg.get("gpt_layers", 1))),
+        n_heads=int(ecfg.get("n_heads", pcfg.get("n_heads", 2))),
+        seed=seed,
+        device=device,
+        logger=logger,
+    )
+    search_time = time.time() - t0
+    top = int(vcfg.get("top", 4))
+    G_ids, B_ids = unique_sorted_candidates(buf, top=top, bottom=top)
+
+    def build_unrefined(ids_list):
+        group = []
+        for sid in ids_list:
+            seq = [pool[int(i)] for i in sid]
+            encoder = create_quantum_module(
+                seq,
+                n_modes=n_modes,
+                num_photons=n_photons,
+            )
+            group.append({"seq": seq, "encoder": encoder})
+        return group
+
+    G = build_unrefined(G_ids)
+    B = build_unrefined(B_ids)
+    refine_common = {
+        "epochs": int(bcfg.get("epochs", pcfg.get("epochs", 25))),
+        "batch_samples": int(bcfg.get("batch_samples", pcfg.get("batch", 24))),
+        "lr": float(bcfg.get("lr", pcfg.get("lr", 5e-4))),
+        "seed": seed,
+    }
+    G_refined = refine_candidates(
+        G_ids,
+        pool,
+        Xe,
+        ye,
+        n_modes,
+        num_photons=n_photons,
+        device=device,
+        **refine_common,
+    )
+    B_refined = refine_candidates(
+        B_ids,
+        pool,
+        Xe,
+        ye,
+        n_modes,
+        num_photons=n_photons,
+        device=device,
+        **refine_common,
+    )
+
+    def eval_group(group):
+        accs = np.zeros((len(group), len(slices)))
+        for k, item in enumerate(group):
+            for j, sl in enumerate(slices):
+                accs[k, j] = photonic_qksvm_accuracy(
+                    item["encoder"],
+                    sl["X_train"],
+                    sl["y_train"],
+                    sl["X_test"],
+                    sl["y_test"],
+                    device=device,
+                )
+        return accs
+
+    accG = eval_group(G)
+    accGb = eval_group(G_refined)
+    accB = eval_group(B)
+    accBb = eval_group(B_refined)
+
+    n_sp = len(slices)
+    zz = np.array([zz_accuracy(sl["X_train"], sl["y_train"], sl["X_test"], sl["y_test"], n_modes)
+                   for sl in slices])
+    lin = np.array([classical_svm_accuracy(sl["X_train"], sl["y_train"], sl["X_test"],
+                                           sl["y_test"], "linear") for sl in slices])
+    rbf = np.array([classical_svm_accuracy(sl["X_train"], sl["y_train"], sl["X_test"],
+                                           sl["y_test"], "rbf") for sl in slices])
+    nqe_epochs = cfg.get("nqe", {}).get("epochs")
+    if nqe_epochs is None:
+        nqe = np.full(n_sp, np.nan)
+    else:
+        nqe = np.array([nqe_accuracy(sl["X_train"], sl["y_train"], sl["X_test"],
+                                     sl["y_test"], n_modes, epochs=nqe_epochs,
+                                     seed=seed, device=device)
+                        for sl in slices])
+
+    for j in range(n_sp):
+        logger.info(
+            "[photonic-egas %s] split %d: G=%.3f G_refined=%.3f B=%.3f B_refined=%.3f ZZ=%.3f lin=%.3f",
+            name,
+            j,
+            float(accG[:, j].max()) if len(G) else float("nan"),
+            float(accGb[:, j].max()) if len(G_refined) else float("nan"),
+            float(accB[:, j].max()) if len(B) else float("nan"),
+            float(accBb[:, j].max()) if len(B_refined) else float("nan"),
+            zz[j],
+            lin[j],
+        )
 
     def stat(a):
         a = np.array(a)
-        return {"mean_acc": float(a.mean()), "std_acc": float(a.std())}
+        return {"mean_acc": float(np.nanmean(a)), "std_acc": float(np.nanstd(a))}
+
+    def wtl(acc_row):
+        w = int((acc_row > lin).sum())
+        l = int((acc_row < lin).sum())
+        return {"win": w, "tie": n_sp - w - l, "lose": l}
+
+    def best_rep(accs):
+        if len(accs) == 0:
+            return None
+        wins = (accs > lin[None, :]).sum(axis=1)
+        return int(np.argmax(wins))
+
+    def summarize(accs, group):
+        return [
+            {
+                "E_before": group[k].get("E_before"),
+                "E_after": group[k].get("E_after"),
+                "mean_acc": float(accs[k].mean()),
+                "std_acc": float(accs[k].std()),
+                "wtl_vs_linear": wtl(accs[k]),
+            }
+            for k in range(len(group))
+        ]
+
+    mean_acc_parts = [accG.mean(1), accGb.mean(1), accB.mean(1), accBb.mean(1), [zz.mean()]]
+    if not np.isnan(nqe).all():
+        mean_acc_parts.append([np.nanmean(nqe)])
+    mean_accs = np.concatenate(mean_acc_parts)
+    iqr = float(np.percentile(mean_accs, 75) - np.percentile(mean_accs, 25))
 
     metrics = {
-        "task": "photonic_eval", "dataset": name, "w1": w1,
+        "task": "photonic_eval",
+        "dataset": name,
+        "w1": w1,
         "hardware": {"computation_space": "UNBUNCHED", "detector": "threshold",
-                     "n_photons": n_photons, "n_modes": n_modes, "input_state": state,
-                     "encoding": "angle (CircuitBuilder.add_angle_encoding)",
-                     "measurement": "FidelityKernel (SLOS transition probability)",
+                     "n_photons": n_photons, "n_modes": n_modes,
+                     "encoding": "EGAS photonic token circuit (PS/BS)",
+                     "measurement": "QuantumLayer amplitudes + fidelity kernel",
                      "postselection": "none", "simulator": "MerLin SLOS analytic (shots=None)",
-                     "n_layers": pcfg.get("n_layers", 2)},
-        "n_splits": len(slices),
-        "photonic_fixed": stat(fixed), "photonic_trained": stat(trained),
-        "ZZ": stat(zz), "classical_linear": stat(lin), "classical_rbf": stat(rbf),
+                     "n_layers": None},
+        "n_modes": n_modes,
+        "search_time_sec": search_time,
+        "n_splits": n_sp,
+        "egas_min_energy": float(min(b[1] for b in buf)),
+        "buffer_size": len(buf),
+        "baselines": {
+            "classical_linear": stat(lin),
+            "classical_rbf": stat(rbf),
+            "ZZ": {**stat(zz), "wtl_vs_linear": wtl(zz)},
+            "NQE": {**stat(nqe), "wtl_vs_linear": wtl(nqe)} if not np.isnan(nqe).all() else None,
+        },
+        "G": summarize(accG, G),
+        "G_bias": summarize(accGb, G_refined),
+        "B": summarize(accB, B),
+        "B_bias": summarize(accBb, B_refined),
+        "G_star_idx": best_rep(accG),
+        "G_bias_star_idx": best_rep(accGb),
+        "B_star_idx": best_rep(accB),
+        "B_bias_star_idx": best_rep(accBb),
+        "embedding_sensitivity_IQR": iqr,
+        "delta_E": {
+            "G": [g["E_before"] - g["E_after"] for g in G_refined],
+            "B": [b["E_before"] - b["E_after"] for b in B_refined],
+        },
     }
     _save_json(run_dir / "metrics.json", metrics)
-    np.savez(run_dir / "photonic_acc.npz", fixed=fixed, trained=trained, zz=zz, lin=lin, rbf=rbf)
-    logger.info("[photonic %s] W1=%.3f fixed=%.3f trained=%.3f ZZ=%.3f lin=%.3f rbf=%.3f",
-                name, w1, np.mean(fixed), np.mean(trained), np.mean(zz), np.mean(lin), np.mean(rbf))
+    np.savez(run_dir / "photonic_acc.npz", accG=accG, accGb=accGb, accB=accB, accBb=accBb,
+             zz=zz, lin=lin, rbf=rbf, nqe=nqe)
+    best_gb = max((g["mean_acc"] for g in metrics["G_bias"]), default=float("nan"))
+    logger.info(
+        "[photonic-egas %s] W1=%.3f | best G(refined) mean acc=%.3f | ZZ=%.3f Lin=%.3f | IQR=%.3f",
+        name,
+        w1,
+        best_gb,
+        float(zz.mean()),
+        float(lin.mean()),
+        iqr,
+    )
 
 
 def _run_wasserstein(cfg, run_dir, logger):

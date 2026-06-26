@@ -1,7 +1,7 @@
 {
   "description": "EGAS (generative quantum data embeddings) reproduction runner",
   "arguments": [
-    {"flags": ["--task"], "help": "wasserstein | fig1 | egas_eval", "type": "str", "default": null,
+    {"flags": ["--task"], "help": "wasserstein | fig1 | egas_eval | photonic_eval", "type": "str", "default": null,
      "apply": {"kind": "config_path", "path": "task"}},
     {"flags": ["--dataset-name"], "help": "Dataset key (PW,WDGV1,DB,WQ,WC,MGT,EGSSD)", "type": "str", "default": null,
      "apply": {"kind": "config_path", "path": "dataset.name"}},
