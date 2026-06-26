@@ -1,0 +1,9 @@
+{
+  "description": "MerLin photonic fidelity-kernel QKSVM on PW (2 photons, reduced training)",
+  "seed": 0, "dtype": "float32", "outdir": "outdir", "device": "cpu",
+  "task": "photonic_eval",
+  "dataset": {"name": "PW", "root": "data", "n_qubits": 8, "n_components": 8},
+  "photonic": {"n_photons": 2, "n_layers": 2, "scale": 1.0, "epochs": 25, "batch": 30, "lr": 0.05},
+  "eval": {"n_train": 300, "n_test": 50, "n_repeats": 5, "top": 4},
+  "logging": {"level": "info", "save_config_snapshot": true}
+}

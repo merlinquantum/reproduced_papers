@@ -1,0 +1,11 @@
+# EGAS reproduction dependencies (in addition to the repo base env).
+pennylane>=0.45
+pennylane-lightning>=0.45
+ucimlrepo>=0.0.7
+pot>=0.9
+scikit-learn>=1.3
+torch>=2.0
+numpy
+pandas
+scipy
+matplotlib

@@ -1,0 +1,8 @@
+{
+  "description": "Table I: input-space 1-Wasserstein distance per dataset",
+  "seed": 0, "dtype": "float64", "outdir": "outdir", "device": "cpu",
+  "task": "wasserstein",
+  "dataset": {"name": "all", "root": "data", "n_qubits": 8},
+  "datasets": ["PW", "WDGV1", "DB", "WQ", "WC", "MGT", "EGSSD"],
+  "logging": {"level": "info", "save_config_snapshot": true}
+}
