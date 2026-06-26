@@ -1,0 +1,89 @@
+{
+  "description": "QCNN-ID: hybrid quantum-classical CNN for IoT intrusion detection on the ICU Healthcare Security Dataset (Attack.csv + environmentMonitoring.csv + patientMonitoring.csv).",
+  "arguments": [
+    {
+      "flags": ["--data_dir"],
+      "help": "Directory under data_root containing the three ICU CSVs (default: QCNN_ID)",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "data_dir"}
+    },
+    {
+      "flags": ["--data_csv"],
+      "help": "Legacy single-CSV path (overrides data_dir when set; e.g. a pre-merged file)",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "data_csv"}
+    },
+    {
+      "flags": ["--subset_size"],
+      "help": "Number of rows to sample from the concatenated dataset (0 = use all)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "subset_size"}
+    },
+    {
+      "flags": ["--test_size"],
+      "help": "Test split fraction",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "test_size"}
+    },
+    {
+      "flags": ["--n_components"],
+      "help": "Number of PCA components (also = number of qubits)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "n_components"}
+    },
+    {
+      "flags": ["--batch_size"],
+      "help": "Mini-batch size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "batch_size"}
+    },
+    {
+      "flags": ["--epochs"],
+      "help": "Training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "epochs"}
+    },
+    {
+      "flags": ["--lr_cnn"],
+      "help": "Learning rate for classical CNN baselines",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "lr_cnn"}
+    },
+    {
+      "flags": ["--lr_qcnn"],
+      "help": "Learning rate for QCNN/MerLin models",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "lr_qcnn"}
+    },
+    {
+      "flags": ["--lr_photonic"],
+      "help": "Learning rate for the MerLin photonic classifier; falls back to lr_qcnn when omitted",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "lr_photonic"}
+    },
+    {
+      "flags": ["--n_qubits"],
+      "help": "Number of qubits for the variational quantum circuit",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "n_qubits"}
+    },
+    {
+      "flags": ["--ansatz_reps"],
+      "help": "Number of repetitions of the variational ansatz",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "ansatz_reps"}
+    }
+  ]
+}
