@@ -51,14 +51,20 @@ def train(X_train, y_train_1D, X_test, y_test_1D, bandwidth = 1.0, n_modes = -1)
         n_modes = X_train.shape[1] + 1
     if n_modes < X_train.shape[1] + 1:
         raise ValueError(f"n_modes must be at least {X_train.shape[1] + 1} for the given input size.")
+    if (n_modes - 1) % X_train.shape[1] != 0:
+         raise ValueError(f"the number of coding modes must be a multiple of {X_train.shape[1]}, you give {n_modes - 1}")
+    
+    n = int((n_modes - 1) / X_train.shape[1])
 
+    X_train_mod = torch.cat([X_train * i for i in range(1,n+1)],axis=1)
+    X_test_mod = torch.cat([X_test * i for i in range(1,n+1)],axis=1)
 
     builder = merlin.CircuitBuilder(n_modes=n_modes)
     builder.add_entangling_layer(trainable=True, model="mzi", name="left")
     builder.add_angle_encoding(modes=[i for i in range(X_train.shape[1])], name="phi")
     builder.add_entangling_layer(trainable=True, model="mzi", name="right")
     
-    feature_map = merlin.FeatureMap(builder=builder, input_size=4, input_parameters="phi")
+    feature_map = merlin.FeatureMap(builder=builder, input_size=n_modes-1, input_parameters="phi")
 
     fidelity_kernel = merlin.FidelityKernel(
         feature_map=feature_map,
@@ -68,8 +74,8 @@ def train(X_train, y_train_1D, X_test, y_test_1D, bandwidth = 1.0, n_modes = -1)
     
     svc = sklearn.svm.SVC(kernel="precomputed")
 
-    K_train = fidelity_kernel(X_train)
-    K_test = fidelity_kernel(X_test, X_train)
+    K_train = fidelity_kernel(X_train_mod)
+    K_test = fidelity_kernel(X_test_mod, X_train_mod)
 
 
     svc.fit(K_train.detach().numpy(), y_train_1D.detach().numpy())
@@ -110,8 +116,8 @@ def _run_experiment(cfg: dict[str, Any]):
         x,y_g,y_FQK,y_RBF,y_RBF_order_2,y_F,y_eta_max,y_ROC_AUC = np.logspace(MIN, MAX, NB_Points),np.zeros(NB_Points),np.zeros(NB_Points),np.zeros(NB_Points),np.zeros(NB_Points),np.zeros(NB_Points),np.zeros(NB_Points),np.zeros(NB_Points)
 
         # Size of the training and testing datasets
-        NB_TRAIN = 80
-        NB_TEST = 20
+        NB_TRAIN = exp['train_sample']
+        NB_TEST = exp['test_sample']
 
         SEEDS = np.random.default_rng(seed).integers(low=0,high=100,size=5)
 
@@ -121,9 +127,10 @@ def _run_experiment(cfg: dict[str, Any]):
         X_train, y_train, X_test, y_test = data(cfg['dataset']['name'])
 
         for seed in SEEDS:
+            print(f"------ SEED : {seed} ------")
             X_train, y_train, X_test, y_test = subset_PCA(X_train, y_train, X_test, y_test, nb_train=NB_TRAIN, nb_test=NB_TEST, dim = 4, seed = seed)
             for i in range(NB_Points):
-                res = train(X_train, y_train, X_test, y_test, bandwidth=x[i])
+                res = train(X_train, y_train, X_test, y_test, bandwidth=x[i], n_modes=exp['coding_modes']+1)
                 y_g[i] += res.g
                 y_FQK[i] += res.var_FQK
                 y_RBF[i] += res.var_RBF
@@ -141,3 +148,4 @@ def _run_experiment(cfg: dict[str, Any]):
         y_ROC_AUC_avg = y_ROC_AUC / len(SEEDS)
 
         plot(x,y_g_avg,y_FQK_avg,y_RBF_avg,y_RBF_order_2_avg,y_F_avg,y_eta_max_avg,y_ROC_AUC_avg,new_folder,exp['figs'],exp['description'])
+        print("done")

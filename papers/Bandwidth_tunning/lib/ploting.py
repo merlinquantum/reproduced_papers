@@ -103,8 +103,8 @@ def plot(x, y_g_avg, y_FQK_avg, y_RBF_avg, y_RBF_order_2_avg, y_F_avg, y_eta_max
         ax = axes[i] # On sélectionne l'emplacement i sur la ligne
         
         if plot_name == "Variances":
-            ax.loglog(x, y_FQK_avg, label="FQK", marker='o', linestyle='-')
-            ax.loglog(x, y_RBF_avg, label="RBF", marker='s', linestyle='-')
+            ax.loglog(x, y_FQK_avg, label="FQK", linestyle='-')
+            ax.loglog(x, y_RBF_avg, label="RBF", linestyle='--')
             ax.set_title("Variances des noyaux")
             ax.set_xlabel(r"Bandwidth $c$")
             ax.set_ylabel(r"$Var_D[\mathbf{K}]$")
