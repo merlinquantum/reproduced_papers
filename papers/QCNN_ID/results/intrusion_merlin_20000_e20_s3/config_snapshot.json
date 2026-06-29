@@ -1,0 +1,40 @@
+{
+  "seed": 1337,
+  "dtype": null,
+  "device": "cpu",
+  "logging": {
+    "level": "info"
+  },
+  "description": "MerLin photonic adaptation: 8 modes / 4 photons, UNBUNCHED, threshold detection, angle encoding",
+  "outdir": "outdir",
+  "data_dir": "QCNN_ID",
+  "subset_size": 20000,
+  "test_size": 0.3,
+  "n_components": 8,
+  "batch_size": 256,
+  "epochs": 20,
+  "lr_cnn": 0.001,
+  "lr_qcnn": 0.01,
+  "models": [
+    "cnn_classifier",
+    "photonic_classifier"
+  ],
+  "n_qubits": 8,
+  "ansatz_reps": 2,
+  "seeds": [
+    42,
+    7,
+    123
+  ],
+  "lr_photonic": 0.05,
+  "roc_zoom": {
+    "xlim": [
+      0.0,
+      0.2
+    ],
+    "ylim": [
+      0.8,
+      1.0
+    ]
+  }
+}
