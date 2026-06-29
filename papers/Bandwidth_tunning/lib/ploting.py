@@ -81,7 +81,7 @@ def plot(x, y_g_avg, y_FQK_avg, y_RBF_avg, y_RBF_order_2_avg, y_F_avg, y_eta_max
 
 import matplotlib.pyplot as plt
 
-def overlapping_plot(x, y_g_avg, y_FQK_avg, y_RBF_avg, y_RBF_order_2_avg, y_F_avg, y_eta_max_avg, y_ROC_AUC_avg, folder_name, list_of_plots, legends, title):
+def overlapping_plot(x, y_g_avg, y_FQK_avg, y_RBF_avg, y_RBF_order_2_avg, y_F_avg, y_eta_max_avg, y_ROC_AUC_avg, folder_name, list_of_plots, exp_name, legendes):
     
     n_plots = len(list_of_plots)
     
@@ -108,28 +108,30 @@ def overlapping_plot(x, y_g_avg, y_FQK_avg, y_RBF_avg, y_RBF_order_2_avg, y_F_av
         ax = axes[i] # Sélectionne le sous-graphique
         
         # 4. Boucle secondaire : on trace les courbes pour chaque cas
-        for j, legend in enumerate(legends):
-            c = couleurs[j % len(couleurs)] # Couleur unique par cas
+        for j, legende in enumerate(legendes):
+            c = couleurs[j % len(couleurs)] # Couleur unique par cas (boucle si plus de 4 éléments)
             
             if plot_name == "Variances":
-                # Lignes continues/pointillées, SANS marqueurs (comme demandé précédemment)
-                ax.loglog(x, y_FQK_avg[j], label=f"FQK ({legend})", color=c, linestyle='-')
-                ax.loglog(x, y_RBF_avg[j], label=f"RBF ({legend})", color=c, linestyle='--')
+                ax.loglog(x, y_FQK_avg[j], label=f"FQK ({legende})", color=c, linestyle='-', linewidth=lw)
+                ax.loglog(x, y_RBF_avg[j], label=f"RBF ({legende})", color=c, linestyle='--', linewidth=lw)
 
             elif plot_name == "Geometric_distance":
-                ax.loglog(x, y_g_avg[j], label=legend, color=c, marker='d', linestyle='-')
+                # Ligne dash-dot (-.) pour correspondre au graphe (D1) de l'image
+                ax.loglog(x, y_g_avg[j], label=legende, color=c, linestyle='-.', linewidth=lw)
 
             elif plot_name == "Frobenius_distance":
-                ax.loglog(x, y_F_avg[j], label=legend, color=c, marker='v', linestyle='-')
+                # Ligne dash-dot (-.) pour correspondre au graphe (E1) de l'image
+                ax.loglog(x, y_F_avg[j], label=legende, color=c, linestyle='-.', linewidth=lw)
 
             elif plot_name == "Eta_max":
-                ax.loglog(x, y_eta_max_avg[j], label=legend, color=c, marker='^', linestyle='-')
+                # Ligne continue comme le graphe (B1) de l'image
+                ax.loglog(x, y_eta_max_avg[j], label=legende, color=c, linestyle='-', linewidth=lw)
 
             elif plot_name == "ROC_AUC":
-                ax.semilogx(x, y_ROC_AUC_avg[j], label=legend, color=c, marker='s', linestyle='-')
+                ax.semilogx(x, y_ROC_AUC_avg[j], label=legende, color=c, linestyle='-', linewidth=lw)
 
             elif plot_name == "VAR_RBF_2":
-                ax.loglog(x, y_RBF_order_2_avg[j], label=legend, color=c, marker='x', linestyle='-')
+                ax.loglog(x, y_RBF_order_2_avg[j], label=legende, color=c, linestyle='-', linewidth=lw)
                 
             else:
                 raise NameError(f"'{plot_name}' is not a valid name of plot")
@@ -157,12 +159,10 @@ def overlapping_plot(x, y_g_avg, y_FQK_avg, y_RBF_avg, y_RBF_order_2_avg, y_F_av
     # ==========================================
     # Affichage propre et Sauvegarde
     # ==========================================
-    # On utilise title pour le titre général de la figure
-    fig.suptitle(title)
+    fig.suptitle(exp_name)
     plt.tight_layout()
     
-    # On sauvegarde avec le nom de l'expérience pour retrouver facilement le fichier
-    results_folder = folder_name / f"{title}.png"
+    results_folder = folder_name / f"{exp_name}.png"
     plt.savefig(results_folder)
     
     plt.close()
