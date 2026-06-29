@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -74,3 +75,18 @@ def test_single_csv_compat(tmp_path):
     prepared = load_and_prepare(cfg, seed=2)
     assert prepared.X_train_quantum.shape[1] == 3
     assert prepared.X_train_classical.shape[1] == 3
+
+
+def test_default_config_uses_synthetic_data_without_csv_files():
+    """The default smoke config must run without the ICU CSV files."""
+
+    cfg = json.loads((PAPER_ROOT / "configs" / "defaults.json").read_text())
+
+    prepared = load_and_prepare(cfg, seed=3)
+
+    assert cfg["data_source"] == "synthetic"
+    assert prepared.n_train + prepared.n_test == cfg["subset_size"]
+    assert prepared.n_features_full == 50
+    assert prepared.X_train_quantum.shape[1] == cfg["n_components"]
+    assert prepared.X_train_classical.shape[1] == cfg["n_components"]
+    assert set(prepared.class_balance.keys()) == {0, 1}

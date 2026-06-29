@@ -89,7 +89,7 @@ papers/QCNN_ID/
 ├── requirements.txt
 ├── notebook.ipynb        ← pedagogical walkthrough
 ├── configs/
-│   ├── defaults.json                       ← smoke config (4 k rows, 3 epochs, all families)
+│   ├── defaults.json                       ← synthetic smoke config (no CSV required)
 │   ├── current_short_1000_e10.json         ← legacy quick notebook-sized run
 │   ├── current_notebook_1000_e40.json      ← current notebook-sized run (~3 min QCNN)
 │   ├── intrusion_original.json             ← paper-text PQC vs CNNClassifier (3 seeds)
@@ -115,7 +115,7 @@ pip install -r papers/QCNN_ID/requirements.txt
 Then, from the repository root, use the shared runtime:
 
 ```bash
-# Smoke run (4k rows, 3 epochs, CNNClassifier + PhotonicClassifier + QCNNClassifier)
+# Synthetic smoke run (no ICU CSV files required)
 python implementation.py --paper QCNN_ID
 
 # Curated notebook-sized comparison (1000 rows, 40 epochs, all 3 models)
@@ -158,9 +158,10 @@ See `cli.json` for the full schema. Main keys:
 
 | Key | Meaning | Default |
 |---|---|---|
+| `data_source` | `synthetic` for file-free smoke runs, `csv`/omitted for real ICU files | `synthetic` (smoke) |
 | `data_dir` | Directory under `data_root` containing the three ICU CSVs | `QCNN_ID` |
 | `data_csv` | Legacy single-CSV path (overrides `data_dir` when set) | — |
-| `subset_size` | Rows to sample after concatenation (0 = use all 188 k) | `4000` (smoke) |
+| `subset_size` | Rows to sample/generate (0 = use all real CSV rows; synthetic falls back to 512) | `512` (smoke) |
 | `test_size` | Train/test split fraction | `0.3` |
 | `n_components` | PCA components (= number of qubits/modes) | `8` |
 | `n_qubits` | Qubits in the gate-model ansatz | `8` |
@@ -171,6 +172,11 @@ See `cli.json` for the full schema. Main keys:
 | `seeds` | List of integer seeds to average over | `[42]`–`[42, 7, 123]` |
 
 ## Data
+
+The default `configs/defaults.json` uses a deterministic synthetic ICU-like
+source so that `python implementation.py --paper QCNN_ID` works without the
+~100 MB CSV dataset. Scientific comparison configs (`intrusion_*` and
+`current_*`) use the real files below.
 
 **Source.** The IoT Healthcare Security Dataset
 (<https://github.com/imfaisalmalik/IoT-Healthcare-Security-Dataset>),
@@ -207,7 +213,7 @@ for downstream analysis.
 Curated artifacts:
 
 - [latest_summary.json](results/latest_summary.json)
-- [results/smoke_defaults_4000_e3/](results/smoke_defaults_4000_e3/)
+- [results/smoke_defaults_4000_e3/](results/smoke_defaults_4000_e3/) legacy real-data smoke artifact
 - [results/current_short_1000_e10/](results/current_short_1000_e10/) legacy quick run
 - [results/current_notebook_1000_e40/](results/current_notebook_1000_e40/)
 - [results/intrusion_full_compare_10000_e15/](results/intrusion_full_compare_10000_e15/)
@@ -225,7 +231,7 @@ experiment configs zoom to FPR `[0, 0.2]` and TPR `[0.8, 1.0]`.
 
 | Stable result folder | Source run | Rows | Epochs | Seeds | Models | Role |
 |---|---|---:|---:|---:|---|---|
-| `smoke_defaults_4000_e3` | `outdir/run_20260625-111813` | 4,000 | 3 | 1 | CNN, Photonic, QCNN | compatibility smoke |
+| `smoke_defaults_4000_e3` | `outdir/run_20260625-111813` | 4,000 | 3 | 1 | CNN, Photonic, QCNN | legacy real-data compatibility smoke |
 | `current_short_1000_e10` | `outdir/run_20260625-115855` | 1,000 | 10 | 1 | CNN, QCNN, Photonic | legacy quick demo |
 | `current_notebook_1000_e40` | `outdir/run_20260625-151031` | 1,000 | 40 | 1 | CNN, Photonic, QCNN | current notebook run |
 | `intrusion_full_compare_10000_e15` | `outdir/run_20260625-134908` | 10,000 | 15 | 1 | CNN, Photonic, QCNN | main all-model comparison |
@@ -339,7 +345,7 @@ Confusion matrices:
 Current conclusion: with the local implementation and sampled CPU runs, the
 classical PCA-MLP (`CNNClassifier`) remains the strongest reproduced baseline:
 it is the most accurate model and has the fewest false negatives. The gate-model
-QCNN keeps the paper's low-parameter property but it does not reproduce the paper's
+QCNN keeps the paper's low-parameter property, but it does not reproduce the paper's
 headline accuracy or false-negative claims under these configs.
 
 **MerLin model result.** The MerLin photonic adaptation is exploratory, not a

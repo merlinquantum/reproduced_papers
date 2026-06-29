@@ -32,7 +32,8 @@ This module reads all three from ``data_dir`` (relative to the shared
 ``data/`` root), concatenates them, and follows the released-notebook recipe
 (cell 0): shuffle with ``random_state=seed``, drop ``class``/``label`` from the
 feature matrix, coerce object columns (hex strings, MAC traces) to numeric,
-fill NaN with 0, then PCA.
+fill NaN with 0, then PCA. The default smoke config can instead request a
+small deterministic synthetic ICU-like table via ``data_source="synthetic"``.
 """
 
 from __future__ import annotations
@@ -57,6 +58,10 @@ ICU_CSV_NAMES = (
 )
 LABEL_COLUMN = "label"
 TEXT_CLASS_COLUMN = "class"
+SYNTHETIC_DATA_SOURCE = "synthetic"
+DEFAULT_SYNTHETIC_ROWS = 512
+DEFAULT_SYNTHETIC_FEATURES = 50
+SYNTHETIC_ATTACK_FRACTION = 0.425
 
 
 @dataclass
@@ -150,6 +155,43 @@ def _load_and_concat(csv_paths: list[Path]) -> pd.DataFrame:
     return pd.concat(frames, ignore_index=True)
 
 
+def _uses_synthetic_data(cfg: dict[str, Any]) -> bool:
+    return str(cfg.get("data_source", "csv")).lower() == SYNTHETIC_DATA_SOURCE
+
+
+def _make_synthetic_icu_dataframe(cfg: dict[str, Any], seed: int) -> pd.DataFrame:
+    """Create a deterministic ICU-like table for file-free smoke tests."""
+
+    n_components = int(cfg.get("n_components", 8))
+    requested_rows = int(cfg.get("subset_size", 0) or DEFAULT_SYNTHETIC_ROWS)
+    n_rows = max(requested_rows, max(32, 4 * n_components))
+    n_features = max(
+        int(cfg.get("synthetic_n_features", DEFAULT_SYNTHETIC_FEATURES)), n_components
+    )
+
+    rng = np.random.default_rng(seed)
+    n_attack = int(round(n_rows * SYNTHETIC_ATTACK_FRACTION))
+    n_attack = min(max(n_attack, 2), n_rows - 2)
+    y = np.concatenate(
+        [
+            np.ones(n_attack, dtype=np.int64),
+            np.zeros(n_rows - n_attack, dtype=np.int64),
+        ]
+    )
+    rng.shuffle(y)
+
+    X = rng.normal(loc=0.0, scale=1.0, size=(n_rows, n_features))
+    signal_dims = min(8, n_features)
+    signal = np.linspace(0.35, 1.0, signal_dims)
+    X[:, :signal_dims] += (2 * y[:, None] - 1) * signal
+
+    columns = [f"feature_{idx:02d}" for idx in range(n_features)]
+    df = pd.DataFrame(X, columns=columns)
+    df[TEXT_CLASS_COLUMN] = np.where(y == 1, "Attack", "Benign")
+    df[LABEL_COLUMN] = y
+    return df
+
+
 def _preprocess(df: pd.DataFrame) -> tuple[pd.DataFrame, np.ndarray]:
     """Recipe from the released notebook (cell 0).
 
@@ -199,8 +241,11 @@ def load_and_prepare(cfg: dict[str, Any], seed: int) -> PreparedData:
         statistics only.
     """
 
-    csv_paths = _resolve_dataset_paths(cfg)
-    df = _load_and_concat(csv_paths)
+    if _uses_synthetic_data(cfg):
+        df = _make_synthetic_icu_dataframe(cfg, seed=seed)
+    else:
+        csv_paths = _resolve_dataset_paths(cfg)
+        df = _load_and_concat(csv_paths)
 
     # Deterministic shuffle to remove concatenation-order artefacts while
     # keeping full experimental reproducibility.

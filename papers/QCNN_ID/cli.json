@@ -2,6 +2,13 @@
   "description": "QCNN-ID: hybrid quantum-classical CNN for IoT intrusion detection on the ICU Healthcare Security Dataset (Attack.csv + environmentMonitoring.csv + patientMonitoring.csv).",
   "arguments": [
     {
+      "flags": ["--data_source"],
+      "help": "Data source: 'csv' for real ICU files or 'synthetic' for file-free smoke runs",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "data_source"}
+    },
+    {
       "flags": ["--data_dir"],
       "help": "Directory under data_root containing the three ICU CSVs (default: QCNN_ID)",
       "type": "str",
