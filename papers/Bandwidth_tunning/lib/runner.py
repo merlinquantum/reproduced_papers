@@ -1,3 +1,5 @@
+import logging
+
 import merlin
 import sklearn
 import torch
@@ -10,6 +12,7 @@ from sklearn.decomposition import PCA
 from lib.imports import data
 from datetime import datetime
 
+logger = logging.getLogger(__name__)
 
 class result():
     def __init__(self, g, var_FQK, var_RBF, var_RBF_order_2, F,eta_max, ROC_AUC):
@@ -42,65 +45,46 @@ def subset_PCA(X_train, y_train, X_test, y_test, nb_train, nb_test, dim = -1, se
     
     return torch.from_numpy(X_train).float(), y_train_subset, torch.from_numpy(X_test).float(), y_test_subset
 
-def train(X_train, y_train_1D, X_test, y_test_1D, bandwidth = 1.0, n_modes = -1):
+def train(X_train, y_train_1D, X_test, y_test_1D, bandwidth = 1.0):
 
     X_train = X_train * bandwidth
     X_test = X_test * bandwidth
 
-    if n_modes == -1:
-        n_modes = X_train.shape[1] + 1
-    if n_modes < X_train.shape[1] + 1:
-        raise ValueError(f"n_modes must be at least {X_train.shape[1] + 1} for the given input size.")
-    if (n_modes - 1) % X_train.shape[1] != 0:
-         raise ValueError(f"the number of coding modes must be a multiple of {X_train.shape[1]}, you give {n_modes - 1}")
     
-    n = int((n_modes - 1) / X_train.shape[1])
 
-    X_train_mod = torch.cat([X_train * i for i in range(1,n+1)],axis=1)
-    X_test_mod = torch.cat([X_test * i for i in range(1,n+1)],axis=1)
-
-    builder = merlin.CircuitBuilder(n_modes=n_modes)
+    builder = merlin.CircuitBuilder(n_modes=X_train.shape[1]+1)
     builder.add_entangling_layer(trainable=True, model="mzi", name="left")
     builder.add_angle_encoding(modes=[i for i in range(X_train.shape[1])], name="phi")
     builder.add_entangling_layer(trainable=True, model="mzi", name="right")
     
-    feature_map = merlin.FeatureMap(builder=builder, input_size=n_modes-1, input_parameters="phi")
+    feature_map = merlin.FeatureMap(builder=builder, input_size=X_train.shape[1], input_parameters="phi")
 
     fidelity_kernel = merlin.FidelityKernel(
         feature_map=feature_map,
-        input_state=[1 - (i % 2) for i in range(n_modes)],  # alternating photons for n_modes
+        input_state=[1 - (i % 2) for i in range(X_train.shape[1]+1)],  # alternating photons for n_modes
         computation_space=merlin.ComputationSpace.FOCK,
     )
     
     svc = sklearn.svm.SVC(kernel="precomputed")
 
-    K_train = fidelity_kernel(X_train_mod)
-    K_test = fidelity_kernel(X_test_mod, X_train_mod)
+    K_train = fidelity_kernel(X_train)
+    K_test = fidelity_kernel(X_test, X_train)
 
 
     svc.fit(K_train.detach().numpy(), y_train_1D.detach().numpy())
 
-
+    K_rbf = RBF(X_train)
+    K_rbf_order_2 = RBF_2(X_train)
     F = calculate_kernel_distance_F(K_train, K_rbf)
     eta_max = calculate_eta_max(K_train)
     ROC_AUC = sklearn.metrics.roc_auc_score(y_test_1D.detach().numpy(), svc.decision_function(K_test.detach().numpy()))
-    K_rbf = RBF(X_train_mod)
-    K_rbf_order_2 = RBF_2(X_train_mod)
+   
 
 
     return result(calculate_g(K_train,K_rbf).item(), K_train.var(correction=False).item(), K_rbf.var(correction=False).item(), K_rbf_order_2.var(correction=False).item(), F.item(), eta_max.item(), ROC_AUC)
 
-def _run_experiment(cfg: dict[str, Any]):
+def run_non_overlapping(cfg,new_folder):
     seed = int(cfg['seed'])
-
-    now = datetime.now()
-    result_folder_name = now.strftime("%Y.%m.%d-%H.%M.%S")
-    print(result_folder_name)
-    path = Path(__file__).parents[1]
-    new_folder = Path(path / "results" / result_folder_name)
-    new_folder.mkdir(parents = True)
-
-    # Bandwidths (logarithmically spaced)
     for i in range(len(cfg['experiments'])):
         exp = cfg['experiments'][i]
         MIN,MAX,NB_Points = exp['graphs']["min"],exp['graphs']["max"],exp['graphs']["number_of_points"]
@@ -120,10 +104,9 @@ def _run_experiment(cfg: dict[str, Any]):
         X_train, y_train, X_test, y_test = data(cfg['dataset']['name'])
 
         for seed in SEEDS:
-            print(f"------ SEED : {seed} ------")
-            X_train, y_train, X_test, y_test = subset_PCA(X_train, y_train, X_test, y_test, nb_train=NB_TRAIN, nb_test=NB_TEST, dim = 4, seed = seed)
+            X_train, y_train, X_test, y_test = subset_PCA(X_train, y_train, X_test, y_test, nb_train=NB_TRAIN, nb_test=NB_TEST, dim = cfg["experiments"][i]["dimension"], seed = seed)
             for i in range(NB_Points):
-                res = train(X_train, y_train, X_test, y_test, bandwidth=x[i], n_modes=exp['coding_modes']+1)
+                res = train(X_train, y_train, X_test, y_test, bandwidth=x[i])
                 y_g[i] += res.g
                 y_FQK[i] += res.var_FQK
                 y_RBF[i] += res.var_RBF
@@ -141,4 +124,90 @@ def _run_experiment(cfg: dict[str, Any]):
         y_ROC_AUC_avg = y_ROC_AUC / len(SEEDS)
 
         plot(x,y_g_avg,y_FQK_avg,y_RBF_avg,y_RBF_order_2_avg,y_F_avg,y_eta_max_avg,y_ROC_AUC_avg,new_folder,exp['figs'],exp['description'])
-        print("done")
+
+def run_overlapping(cfg,new_folder):
+    seed = int(cfg['seed'])
+    curves = cfg["experiments"][0]["figs"]
+    scale = cfg["experiments"][0]["graphs"]
+    nb_of_experiments = len(cfg["experiments"])
+
+    y_g_list = []
+    y_FQK_list = []
+    y_RBF_list = []
+    y_RBF_order_2_list = []
+    y_F_list = []
+    y_eta_max_list = []
+    y_ROC_AUC_list = []
+
+
+
+    for i in range(nb_of_experiments):
+        if cfg["experiments"][i]["figs"] != curves :
+            raise ValueError("To display the results of the experiments on the same figure, the experiments must produce the same types of graphs")
+        if cfg["experiments"][i]["graphs"] != scale :
+            raise ValueError("All the graph must have the same x values")
+
+        exp = cfg['experiments'][i]
+        MIN,MAX,NB_Points = exp['graphs']["min"],exp['graphs']["max"],exp['graphs']["number_of_points"]
+
+        # Stockage des résultats pour chaque métrique
+        x,y_g,y_FQK,y_RBF,y_RBF_order_2,y_F,y_eta_max,y_ROC_AUC = np.logspace(MIN, MAX, NB_Points),np.zeros(NB_Points),np.zeros(NB_Points),np.zeros(NB_Points),np.zeros(NB_Points),np.zeros(NB_Points),np.zeros(NB_Points),np.zeros(NB_Points)
+
+        # Size of the training and testing datasets
+        NB_TRAIN = exp['train_sample']
+        NB_TEST = exp['test_sample']
+
+        SEEDS = np.random.default_rng(seed).integers(low=0,high=100,size=5)
+
+    
+
+        print(f"experiment {exp['description']} running")
+        X_train, y_train, X_test, y_test = data(cfg['dataset']['name'])
+
+        for seed in SEEDS:
+            X_train, y_train, X_test, y_test = subset_PCA(X_train, y_train, X_test, y_test, nb_train=NB_TRAIN, nb_test=NB_TEST, dim = cfg["experiments"][i]["dimension"], seed = seed)
+            for i in range(NB_Points):
+                res = train(X_train, y_train, X_test, y_test, bandwidth=x[i])
+                y_g[i] += res.g
+                y_FQK[i] += res.var_FQK
+                y_RBF[i] += res.var_RBF
+                y_RBF_order_2[i] += res.var_RBF_order_2
+                y_F[i] += res.F
+                y_eta_max[i] += res.eta_max
+                y_ROC_AUC[i] += res.ROC_AUC
+
+        y_g_avg = y_g / len(SEEDS)
+        y_FQK_avg = y_FQK / len(SEEDS)
+        y_RBF_avg = y_RBF / len(SEEDS)
+        y_RBF_order_2_avg = y_RBF_order_2 / len(SEEDS)
+        y_F_avg = y_F / len(SEEDS)
+        y_eta_max_avg = y_eta_max / len(SEEDS)
+        y_ROC_AUC_avg = y_ROC_AUC / len(SEEDS)
+
+        y_g_list.append(y_g_avg.copy())
+        y_FQK_list.append(y_FQK_avg.copy())
+        y_RBF_list.append(y_RBF_avg.copy())
+        y_RBF_order_2_list.append(y_RBF_order_2_avg.copy())
+        y_F_list.append(y_F_avg.copy())
+        y_eta_max_list.append(y_eta_max_avg.copy())
+        y_ROC_AUC_list.append(y_ROC_AUC_avg.copy())
+
+
+    plot(x,y_g_list,y_FQK_list,y_RBF_list,y_RBF_order_2_list,y_F_list,y_eta_max_list,y_ROC_AUC_list,new_folder,exp['figs'],exp['description'])
+
+def _run_experiment(cfg: dict[str, Any],run_dir: Path):
+
+    if cfg["overlapping_results"] == True:
+        run_overlapping(cfg,run_dir)
+    else :
+        run_non_overlapping(cfg,run_dir)
+    print("done")
+
+
+def train_and_evaluate(cfg: dict[str, Any], run_dir):
+    run_dir = Path(run_dir)
+    _run_experiment(cfg, run_dir)
+    (run_dir / "done.txt").write_text("Completed")
+    logger.info("Finished. Artifacts in: %s", run_dir)
+
+__all__ = ["train_and_evaluate"]

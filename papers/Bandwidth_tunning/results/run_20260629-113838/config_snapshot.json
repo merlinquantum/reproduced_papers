@@ -1,0 +1,38 @@
+{
+  "seed": 42,
+  "dtype": null,
+  "device": "cpu",
+  "logging": {
+    "level": "INFO",
+    "save_config_snapshot": true
+  },
+  "data_root": "C:\\Users\\TancredeTONINI\\Documents\\GitHub\\reproduced_papers\\papers\\Bandwidth_tunning\\data",
+  "description": "This is the default configuration file for Bandwidth Tunning.",
+  "outdir": "results",
+  "dataset": {
+    "name": "fashion_mnist",
+    "root": "data"
+  },
+  "number_of_modes": 4,
+  "overlapping_results": false,
+  "experiments": [
+    {
+      "graphs": {
+        "min": -3,
+        "max": 3,
+        "number_of_points": 30
+      },
+      "train_sample": 80,
+      "test_sample": 20,
+      "figs": [
+        "Variances",
+        "Geometric_distance",
+        "Frobenius_distance",
+        "Eta_max",
+        "ROC_AUC"
+      ],
+      "description": "Paper Fig 3.1",
+      "coding_modes": 4
+    }
+  ]
+}

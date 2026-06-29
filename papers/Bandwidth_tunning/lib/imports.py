@@ -66,9 +66,6 @@ def load_fashion_mnist_torch():
 
     return X_train_tensor, y_train_tensor, X_test_tensor, y_test_tensor
 
-
-
-
 #==============================================================================
 #
 #                                 kmnist
@@ -186,6 +183,4 @@ def data(dataset):
         return load_hidden_manifold
     if dataset == "plasticc":
         return load_plasticc()
-    raise NameError("Non-existing dataset")
-
-data("hidden_manifold")
+    raise ValueError(f"Unsupported dataset: {dataset}")

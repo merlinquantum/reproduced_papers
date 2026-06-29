@@ -1,0 +1,17 @@
+{
+    "description": "Bandwidth tuning runner",
+    "arguments":[
+        {
+            "flags":[
+            "--overlapping-results"
+            ],
+            "help" : "Whether to allow overlapping results in the output directory. If set to true, the program will overwrite existing results with the same name. If set to false, the program will create a new directory for each run.",
+            "type" : "bool",
+            "default" : false,
+            "apply": {
+                "kind":"config_path",
+                "path":"overlapping_results"
+            }
+        }
+    ]
+}
