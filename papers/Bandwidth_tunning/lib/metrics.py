@@ -47,3 +47,17 @@ def calculate_kernel_distance_F(K_C, K_Q):
    F = numerateur / denominateur
 
    return F
+
+def RBF(X_train):
+    #Calcul du kernel RBF
+    distances = torch.cdist(X_train, X_train, p=2)
+    distances_carré = distances ** 2
+    K_rbf = torch.exp(-distances_carré)
+    return K_rbf
+
+def RBF_2(X_train):
+    #Calcul du kernel RBF ordre 2
+    distances = torch.cdist(X_train, X_train, p=2)
+    z = distances ** 2
+    K_rbf_order_2 = 1.0 - z + 0.5*(z**2)
+    return K_rbf_order_2

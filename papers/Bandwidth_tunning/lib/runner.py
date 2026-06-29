@@ -1,7 +1,7 @@
 import merlin
 import sklearn
 import torch
-from lib.metrics import calculate_kernel_distance_F,calculate_eta_max,calculate_g
+from lib.metrics import calculate_kernel_distance_F,calculate_eta_max,calculate_g,RBF,RBF_2
 from lib.ploting import plot
 from pathlib import Path
 from typing import Any
@@ -80,20 +80,13 @@ def train(X_train, y_train_1D, X_test, y_test_1D, bandwidth = 1.0, n_modes = -1)
 
     svc.fit(K_train.detach().numpy(), y_train_1D.detach().numpy())
 
-    #Calcul du kernel RBF
-    distances = torch.cdist(X_train, X_train, p=2)
-    distances_carré = distances ** 2
-    K_rbf = torch.exp(-distances_carré)
-
-    #Calcul du kernel RBF ordre 2
-    distances = torch.cdist(X_train, X_train, p=2)
-    z = distances ** 2
-    K_rbf_order_2 = 1.0 - z + 0.5*(z**2)
-
 
     F = calculate_kernel_distance_F(K_train, K_rbf)
     eta_max = calculate_eta_max(K_train)
     ROC_AUC = sklearn.metrics.roc_auc_score(y_test_1D.detach().numpy(), svc.decision_function(K_test.detach().numpy()))
+    K_rbf = RBF(X_train_mod)
+    K_rbf_order_2 = RBF_2(X_train_mod)
+
 
     return result(calculate_g(K_train,K_rbf).item(), K_train.var(correction=False).item(), K_rbf.var(correction=False).item(), K_rbf_order_2.var(correction=False).item(), F.item(), eta_max.item(), ROC_AUC)
 

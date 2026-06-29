@@ -12,6 +12,7 @@
         "level": "INFO",
         "save_config_snapshot": true
     },
+    "overlapping_results" : false,
     "experiments":[
         {"graphs" : {
             "min" : -3,
