@@ -79,7 +79,7 @@ def plot(x, y_g_avg, y_FQK_avg, y_RBF_avg, y_RBF_order_2_avg, y_F_avg, y_eta_max
     # Toujours clore la figure pour libérer la mémoire en boucle
     plt.close()
 
-def overlapping_plot(x, y_g_avg, y_FQK_avg, y_RBF_avg, y_RBF_order_2_avg, y_F_avg, y_eta_max_avg, y_ROC_AUC_avg, folder_name, list_of_plots, exp_name, legendes):
+def overlapping_plot(x, y_g_avg, y_FQK_avg, y_RBF_avg, y_RBF_order_2_avg, y_F_avg, y_eta_max_avg, y_ROC_AUC_avg, folder_name, list_of_plots, legends, title):
     
     n_plots = len(list_of_plots)
     
@@ -102,28 +102,28 @@ def overlapping_plot(x, y_g_avg, y_FQK_avg, y_RBF_avg, y_RBF_order_2_avg, y_F_av
         ax = axes[i] # Sélectionne le sous-graphique
         
         # 4. Boucle secondaire : on trace les courbes pour chaque cas
-        for j, legende in enumerate(legendes):
+        for j, legend in enumerate(legends):
             c = couleurs[j % len(couleurs)] # Couleur unique par cas
             
             if plot_name == "Variances":
                 # Lignes continues/pointillées, SANS marqueurs (comme demandé précédemment)
-                ax.loglog(x, y_FQK_avg[j], label=f"FQK ({legende})", color=c, linestyle='-')
-                ax.loglog(x, y_RBF_avg[j], label=f"RBF ({legende})", color=c, linestyle='--')
+                ax.loglog(x, y_FQK_avg[j], label=f"FQK ({legend})", color=c, linestyle='-')
+                ax.loglog(x, y_RBF_avg[j], label=f"RBF ({legend})", color=c, linestyle='--')
 
             elif plot_name == "Geometric_distance":
-                ax.loglog(x, y_g_avg[j], label=legende, color=c, marker='d', linestyle='-')
+                ax.loglog(x, y_g_avg[j], label=legend, color=c, marker='d', linestyle='-')
 
             elif plot_name == "Frobenius_distance":
-                ax.loglog(x, y_F_avg[j], label=legende, color=c, marker='v', linestyle='-')
+                ax.loglog(x, y_F_avg[j], label=legend, color=c, marker='v', linestyle='-')
 
             elif plot_name == "Eta_max":
-                ax.loglog(x, y_eta_max_avg[j], label=legende, color=c, marker='^', linestyle='-')
+                ax.loglog(x, y_eta_max_avg[j], label=legend, color=c, marker='^', linestyle='-')
 
             elif plot_name == "ROC_AUC":
-                ax.semilogx(x, y_ROC_AUC_avg[j], label=legende, color=c, marker='s', linestyle='-')
+                ax.semilogx(x, y_ROC_AUC_avg[j], label=legend, color=c, marker='s', linestyle='-')
 
             elif plot_name == "VAR_RBF_2":
-                ax.loglog(x, y_RBF_order_2_avg[j], label=legende, color=c, marker='x', linestyle='-')
+                ax.loglog(x, y_RBF_order_2_avg[j], label=legend, color=c, marker='x', linestyle='-')
                 
             else:
                 raise NameError(f"'{plot_name}' is not a valid name of plot")
@@ -151,12 +151,12 @@ def overlapping_plot(x, y_g_avg, y_FQK_avg, y_RBF_avg, y_RBF_order_2_avg, y_F_av
     # ==========================================
     # Affichage propre et Sauvegarde
     # ==========================================
-    # On utilise exp_name pour le titre général de la figure
-    fig.suptitle(exp_name)
+    # On utilise title pour le titre général de la figure
+    fig.suptitle(title)
     plt.tight_layout()
     
     # On sauvegarde avec le nom de l'expérience pour retrouver facilement le fichier
-    results_folder = folder_name / f"{exp_name}.png"
+    results_folder = folder_name / f"{title}.png"
     plt.savefig(results_folder)
     
     plt.close()

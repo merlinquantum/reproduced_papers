@@ -4,7 +4,7 @@ import merlin
 import sklearn
 import torch
 from lib.metrics import calculate_kernel_distance_F,calculate_eta_max,calculate_g,RBF,RBF_2
-from lib.ploting import plot
+from lib.ploting import plot,overlapping_plot
 from pathlib import Path
 from typing import Any
 import numpy as np
@@ -98,9 +98,6 @@ def run_non_overlapping(cfg,new_folder):
 
         SEEDS = np.random.default_rng(seed).integers(low=0,high=100,size=5)
 
-    
-
-        print(f"experiment {exp['description']} running")
         X_train, y_train, X_test, y_test = data(cfg['dataset']['name'])
 
         for seed in SEEDS:
@@ -165,7 +162,7 @@ def run_overlapping(cfg,new_folder):
         X_train, y_train, X_test, y_test = data(cfg['dataset']['name'])
 
         for seed in SEEDS:
-            X_train, y_train, X_test, y_test = subset_PCA(X_train, y_train, X_test, y_test, nb_train=NB_TRAIN, nb_test=NB_TEST, dim = cfg["experiments"][i]["dimension"], seed = seed)
+            X_train, y_train, X_test, y_test = subset_PCA(X_train, y_train, X_test, y_test, nb_train=NB_TRAIN, nb_test=NB_TEST, dim = exp["dimension"], seed = seed)
             for i in range(NB_Points):
                 res = train(X_train, y_train, X_test, y_test, bandwidth=x[i])
                 y_g[i] += res.g
@@ -192,8 +189,9 @@ def run_overlapping(cfg,new_folder):
         y_eta_max_list.append(y_eta_max_avg.copy())
         y_ROC_AUC_list.append(y_ROC_AUC_avg.copy())
 
+        legends = [exp['description'] for exp in cfg['experiments']]
 
-    plot(x,y_g_list,y_FQK_list,y_RBF_list,y_RBF_order_2_list,y_F_list,y_eta_max_list,y_ROC_AUC_list,new_folder,exp['figs'],exp['description'])
+    overlapping_plot(x,y_g_list,y_FQK_list,y_RBF_list,y_RBF_order_2_list,y_F_list,y_eta_max_list,y_ROC_AUC_list,new_folder,exp['figs'],legends,cfg["graph_name"])
 
 def _run_experiment(cfg: dict[str, Any],run_dir: Path):
 

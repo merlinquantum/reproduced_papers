@@ -3,11 +3,11 @@
     "arguments":[
         {
             "flags":[
-            "--overlapping-results"
+            "--overlapping_results"
             ],
-            "help" : "Whether to allow overlapping results in the output directory. If set to true, the program will overwrite existing results with the same name. If set to false, the program will create a new directory for each run.",
+            "help" : "Whether to allow overlapping results in the output directory.",
             "type" : "bool",
-            "default" : false,
+            "default" : null,
             "apply": {
                 "kind":"config_path",
                 "path":"overlapping_results"

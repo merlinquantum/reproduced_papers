@@ -28,7 +28,7 @@
             "Eta_max",
             "ROC_AUC"
         ],
-        "description":"Paper Fig 3.1",
+        "description":"Test configuration",
         "dimension" : 4
         }
     ]
