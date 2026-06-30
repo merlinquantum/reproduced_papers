@@ -1,5 +1,4 @@
-merlinquantum==0.2.3
-torch
-numpy
+merlinquantum
 gymnasium[classic_control]
 minigrid
+-e ./torchquantum

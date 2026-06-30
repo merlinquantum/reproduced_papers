@@ -18,8 +18,6 @@ papers/QTRL/
 ├── lib/
 │   ├── runner.py           # Main entry point (train_and_evaluate)
 │   ├── util.py             # Quantum circuits and RL training logic
-│   ├── CartPole_photonic.py # Specific logic for CartPole
-│   └── miniGrid_photonic.py # Specific logic for MiniGrid
 └── README.md
 
 ```
@@ -32,14 +30,22 @@ papers/QTRL/
 
 ## ## Parameters
 
-| Parameter | Default | Description |
-| --- | --- | --- |
-| `env_name` | `CartPole` | Target environment (`CartPole` or `MiniGrid`) |
-| `nb_photons` | `2` | Number of photons in the circuit |
-| `nb_modes` | `3` | Number of spatial modes |
-| `lr` | `0.01` | Learning rate for the Adam optimizer |
-| `num_episodes` | `500` | Total training episodes |
-| `hidden_sizes` | `[8, 8]` | Architecture of the classical mapping model |
+| Parameter          | Default       | Description |
+|--------------------|---------------|-----------|
+| `env_name`         | `CartPole`    | Target Gym environment (`CartPole` or `MiniGrid`) |
+| `backend`          | `merlin_mlp`  | Hybrid backend (`merlin_mlp`, `merlin_mps`, `torchquantum`, `classic`) |
+| `nb_photons`       | `2`           | Number of photons in the photonic circuit (≤ `nb_modes`) |
+| `nb_modes`         | `3`           | Number of spatial modes |
+| `q_output_size`    | -             | Output size of the quantum circuit (before mapping) |
+| `hidden_sizes`     | `[8, 8]`      | Hidden layers of the classical mapping MLP |
+| `layer_dim`        | -             | Layer architecture for the pure classical model |
+| `bond_dim`         | `2`           | Bond dimension for MPS model |
+| `n_qubit`          | `4`           | Number of qubits (TorchQuantum backend) |
+| `q_depth`          | `2`           | Circuit depth / number of layers (TorchQuantum) |
+| `lr`               | `0.01`        | Learning rate for Adam optimizer |
+| `num_episodes`     | `500`         | Number of training episodes |
+| `final_output_size`| -             | Total number of weights to generate (`state_dim × action_dim`) |
+| `run_mode`         | `train`       | Script execution mode (`train` or `gridsearch`) |
 
 ## ## Installation & Usage
 
