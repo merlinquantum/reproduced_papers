@@ -1,0 +1,32 @@
+{
+  "description": "Single-seed side-by-side binary-logit comparison of all three model families, faster QCNN LR",
+  "data_dir": "QCNN_ID",
+  "subset_size": 10000,
+  "test_size": 0.3,
+  "n_components": 8,
+  "batch_size": 256,
+  "epochs": 15,
+  "lr_cnn": 0.001,
+  "lr_qcnn": 0.02,
+  "lr_photonic": 0.05,
+  "models": [
+    "cnn_classifier",
+    "photonic_classifier",
+    "qcnn_classifier"
+  ],
+  "n_qubits": 8,
+  "ansatz_reps": 2,
+  "seeds": [
+    42
+  ],
+  "roc_zoom": {
+    "xlim": [
+      0.0,
+      0.2
+    ],
+    "ylim": [
+      0.8,
+      1.0
+    ]
+  }
+}
