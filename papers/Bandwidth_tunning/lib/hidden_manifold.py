@@ -21,10 +21,10 @@ def fourier_series(t, coeffs, degree=5, noise=0.00):
     return res + np.random.normal(loc=0, scale=noise)
 
 
-def generate_two_curves(n_samples, n_features, degree = 5, offset = 0.1, noise = 0.1, seed = 1):
+def generate_two_curves(n_samples, n_features, degree=5, offset=0.1, noise=0.1, seed=1):
     """Data generation procedure for 'two curves'.
 
-    
+
     Args:
         n_samples (int): number of samples to generate
         n_features (int): dimension of the data samples
@@ -62,6 +62,7 @@ def generate_two_curves(n_samples, n_features, degree = 5, offset = 0.1, noise =
 
     return X, y
 
+
 def neural_net(x, W, v):
     """Transforms inputs via a single-layer neural network.
     Args:
@@ -82,7 +83,9 @@ def nonlinearity(X, biases):
     return np.tanh(X - biases)
 
 
-def generate_hidden_manifold_model(n_samples, n_features=10, manifold_dimension = 6, seed = 1):
+def generate_hidden_manifold_model(
+    n_samples, n_features=10, manifold_dimension=6, seed=1
+):
     """Data generation procedure for the 'hidden manifold model'.
 
     Args:
