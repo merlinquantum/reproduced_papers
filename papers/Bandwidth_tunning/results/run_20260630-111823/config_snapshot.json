@@ -7,10 +7,10 @@
     "save_config_snapshot": true
   },
   "data_root": "C:\\Users\\TancredeTONINI\\Documents\\GitHub\\reproduced_papers\\papers\\Bandwidth_tunning\\data",
-  "description": "This configuration generates the results for Fig. 3 of the paper.",
+  "description": "This configuration generates the results for Fig. 3 of the paper for the fashion_mnist dataset.",
   "outdir": "results",
   "dataset": {
-    "name": "kmnist28",
+    "name": "fashion_mnist",
     "root": "data"
   },
   "number_of_modes": 4,
@@ -20,10 +20,10 @@
       "graphs": {
         "min": -3,
         "max": 3,
-        "number_of_points": 1
+        "number_of_points": 30
       },
-      "train_sample": 80,
-      "test_sample": 20,
+      "train_sample": 320,
+      "test_sample": 80,
       "figs": [
         "Variances",
         "Geometric_distance",
@@ -38,10 +38,10 @@
       "graphs": {
         "min": -3,
         "max": 3,
-        "number_of_points": 1
+        "number_of_points": 30
       },
-      "train_sample": 80,
-      "test_sample": 20,
+      "train_sample": 320,
+      "test_sample": 80,
       "figs": [
         "Variances",
         "Geometric_distance",
@@ -53,5 +53,5 @@
       "dimension": 8
     }
   ],
-  "graph_name": "Fig 3"
+  "graph_name": "Fig 3 - fashion_mnist"
 }

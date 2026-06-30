@@ -28,7 +28,7 @@
             "Eta_max",
             "ROC_AUC"
         ],
-        "description":"Test configuration",
+        "description":"Configuration tet on kmnist28 dataset with 4 modes and 4 dimensions.",
         "dimension" : 4
         }
     ]

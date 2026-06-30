@@ -85,7 +85,9 @@ def train(X_train, y_train_1D, X_test, y_test_1D, bandwidth = 1.0):
 
 def run_non_overlapping(cfg,new_folder):
     seed = int(cfg['seed'])
+    #running the experiments one by one
     for i in range(len(cfg['experiments'])):
+        #importing the experiment parameters
         exp = cfg['experiments'][i]
         MIN,MAX,NB_Points = exp['graphs']["min"],exp['graphs']["max"],exp['graphs']["number_of_points"]
 
@@ -96,8 +98,9 @@ def run_non_overlapping(cfg,new_folder):
         NB_TRAIN = exp['train_sample']
         NB_TEST = exp['test_sample']
 
-        SEEDS = np.random.default_rng(seed).integers(low=0,high=100,size=5)
+        SEEDS = np.random.default_rng(seed).integers(low=0,high=100,size=1)
 
+        #importing the dataset
         X_train, y_train, X_test, y_test = data(cfg['dataset']['name'])
 
         for seed in SEEDS:
@@ -112,6 +115,7 @@ def run_non_overlapping(cfg,new_folder):
                 y_eta_max[i] += res.eta_max
                 y_ROC_AUC[i] += res.ROC_AUC
 
+        #averaging the results over the different seeds
         y_g_avg = y_g / len(SEEDS)
         y_FQK_avg = y_FQK / len(SEEDS)
         y_RBF_avg = y_RBF / len(SEEDS)
@@ -120,9 +124,11 @@ def run_non_overlapping(cfg,new_folder):
         y_eta_max_avg = y_eta_max / len(SEEDS)
         y_ROC_AUC_avg = y_ROC_AUC / len(SEEDS)
 
+        #plotting the results
         plot(x,y_g_avg,y_FQK_avg,y_RBF_avg,y_RBF_order_2_avg,y_F_avg,y_eta_max_avg,y_ROC_AUC_avg,new_folder,exp['figs'],exp['description'])
 
 def run_overlapping(cfg,new_folder):
+    #importing the parameters of the experiments
     seed = int(cfg['seed'])
     curves = cfg["experiments"][0]["figs"]
     scale = cfg["experiments"][0]["graphs"]
@@ -139,6 +145,7 @@ def run_overlapping(cfg,new_folder):
 
 
     for i in range(nb_of_experiments):
+        #running the experiments one by one
         if cfg["experiments"][i]["figs"] != curves :
             raise ValueError("To display the results of the experiments on the same figure, the experiments must produce the same types of graphs")
         if cfg["experiments"][i]["graphs"] != scale :
@@ -154,7 +161,7 @@ def run_overlapping(cfg,new_folder):
         NB_TRAIN = exp['train_sample']
         NB_TEST = exp['test_sample']
 
-        SEEDS = np.random.default_rng(seed).integers(low=0,high=100,size=5)
+        SEEDS = np.random.default_rng(seed).integers(low=0,high=100,size=1)
 
     
 
@@ -172,7 +179,9 @@ def run_overlapping(cfg,new_folder):
                 y_F[i] += res.F
                 y_eta_max[i] += res.eta_max
                 y_ROC_AUC[i] += res.ROC_AUC
+                print(f"experiment {exp['description']} running, bandwidth {x[i]} done ({(i+1)/NB_Points*100:.2f}%)")
 
+        #averaging the results over the different seeds
         y_g_avg = y_g / len(SEEDS)
         y_FQK_avg = y_FQK / len(SEEDS)
         y_RBF_avg = y_RBF / len(SEEDS)
@@ -181,6 +190,7 @@ def run_overlapping(cfg,new_folder):
         y_eta_max_avg = y_eta_max / len(SEEDS)
         y_ROC_AUC_avg = y_ROC_AUC / len(SEEDS)
 
+        # Storing the results for overlapping plots
         y_g_list.append(y_g_avg.copy())
         y_FQK_list.append(y_FQK_avg.copy())
         y_RBF_list.append(y_RBF_avg.copy())
@@ -191,6 +201,7 @@ def run_overlapping(cfg,new_folder):
 
         legends = [exp['description'] for exp in cfg['experiments']]
 
+    # Calling the overlapping_plot function to generate the plots
     overlapping_plot(x,y_g_list,y_FQK_list,y_RBF_list,y_RBF_order_2_list,y_F_list,y_eta_max_list,y_ROC_AUC_list,new_folder,exp['figs'],legends,cfg["graph_name"])
 
 def _run_experiment(cfg: dict[str, Any],run_dir: Path):

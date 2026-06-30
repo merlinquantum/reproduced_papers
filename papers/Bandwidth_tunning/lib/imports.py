@@ -136,9 +136,11 @@ def load_kmnist28():
 
 
 def load_hidden_manifold():
-    from hidden_manifold import generate_hidden_manifold_model
-    X,y = generate_hidden_manifold_model(400,10)
-    return X[:320],y[:320],X[320:],y[320:]
+    from lib.hidden_manifold import generate_hidden_manifold_model
+    X,y = generate_hidden_manifold_model(10000,100,50)
+    X = torch.from_numpy(X).float()
+    y = torch.from_numpy(y).long()
+    return X[:5000],y[:5000],X[5000:],y[5000:]
 
 
 #==============================================================================
@@ -180,7 +182,7 @@ def data(dataset):
     if dataset == "kmnist28":
         return load_kmnist28()
     if dataset == "hidden_manifold":
-        return load_hidden_manifold
+        return load_hidden_manifold()
     if dataset == "plasticc":
         return load_plasticc()
     raise ValueError(f"Unsupported dataset: {dataset}")
