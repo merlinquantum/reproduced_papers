@@ -1,0 +1,31 @@
+{
+  "description": "Photonic-only convergence diagnostic on the 10k all-model split scale, 40 epochs",
+  "data_dir": "QCNN_ID",
+  "subset_size": 10000,
+  "test_size": 0.3,
+  "n_components": 8,
+  "batch_size": 256,
+  "epochs": 40,
+  "lr_cnn": 0.001,
+  "lr_qcnn": 0.01,
+  "lr_photonic": 0.05,
+  "models": [
+    "photonic_classifier"
+  ],
+  "n_qubits": 8,
+  "ansatz_reps": 2,
+  "seeds": [
+    42
+  ],
+  "device": "cpu",
+  "roc_zoom": {
+    "xlim": [
+      0.0,
+      0.2
+    ],
+    "ylim": [
+      0.8,
+      1.0
+    ]
+  }
+}

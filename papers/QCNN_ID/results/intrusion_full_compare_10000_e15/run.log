@@ -1,0 +1,104 @@
+2026-06-25 13:49:08 | INFO | runtime | Starting QCNN_ID run
+2026-06-25 13:49:09,301 INFO Using device: cpu
+2026-06-25 13:49:09 | INFO | QCNN_ID | Using device: cpu
+2026-06-25 13:49:09,301 INFO === seed 42 ===
+2026-06-25 13:49:09 | INFO | QCNN_ID | === seed 42 ===
+2026-06-25 13:49:10,223 INFO Loaded data: train=7000 test=3000 full_dim=50 pca_dim=8 balance={0: 0.579, 1: 0.421}
+2026-06-25 13:49:10 | INFO | QCNN_ID | Loaded data: train=7000 test=3000 full_dim=50 pca_dim=8 balance={0: 0.579, 1: 0.421}
+2026-06-25 13:49:10,857 INFO [cnn_classifier] epoch 1/15 | train_loss=0.5390 | test_loss=0.3049 | acc=0.9937 | prec=0.9945 | rec=0.9926 | t=0.07s
+2026-06-25 13:49:10 | INFO | QCNN_ID | [cnn_classifier] epoch 1/15 | train_loss=0.5390 | test_loss=0.3049 | acc=0.9937 | prec=0.9945 | rec=0.9926 | t=0.07s
+2026-06-25 13:49:10,932 INFO [cnn_classifier] epoch 2/15 | train_loss=0.1828 | test_loss=0.0631 | acc=0.9957 | prec=0.9962 | rec=0.9950 | t=0.06s
+2026-06-25 13:49:10 | INFO | QCNN_ID | [cnn_classifier] epoch 2/15 | train_loss=0.1828 | test_loss=0.0631 | acc=0.9957 | prec=0.9962 | rec=0.9950 | t=0.06s
+2026-06-25 13:49:11,008 INFO [cnn_classifier] epoch 3/15 | train_loss=0.0500 | test_loss=0.0237 | acc=0.9957 | prec=0.9962 | rec=0.9950 | t=0.06s
+2026-06-25 13:49:11 | INFO | QCNN_ID | [cnn_classifier] epoch 3/15 | train_loss=0.0500 | test_loss=0.0237 | acc=0.9957 | prec=0.9962 | rec=0.9950 | t=0.06s
+2026-06-25 13:49:11,088 INFO [cnn_classifier] epoch 4/15 | train_loss=0.0289 | test_loss=0.0160 | acc=0.9957 | prec=0.9962 | rec=0.9950 | t=0.06s
+2026-06-25 13:49:11 | INFO | QCNN_ID | [cnn_classifier] epoch 4/15 | train_loss=0.0289 | test_loss=0.0160 | acc=0.9957 | prec=0.9962 | rec=0.9950 | t=0.06s
+2026-06-25 13:49:11,164 INFO [cnn_classifier] epoch 5/15 | train_loss=0.0217 | test_loss=0.0130 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11 | INFO | QCNN_ID | [cnn_classifier] epoch 5/15 | train_loss=0.0217 | test_loss=0.0130 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11,239 INFO [cnn_classifier] epoch 6/15 | train_loss=0.0177 | test_loss=0.0113 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11 | INFO | QCNN_ID | [cnn_classifier] epoch 6/15 | train_loss=0.0177 | test_loss=0.0113 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11,313 INFO [cnn_classifier] epoch 7/15 | train_loss=0.0165 | test_loss=0.0103 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11 | INFO | QCNN_ID | [cnn_classifier] epoch 7/15 | train_loss=0.0165 | test_loss=0.0103 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11,390 INFO [cnn_classifier] epoch 8/15 | train_loss=0.0159 | test_loss=0.0099 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11 | INFO | QCNN_ID | [cnn_classifier] epoch 8/15 | train_loss=0.0159 | test_loss=0.0099 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11,471 INFO [cnn_classifier] epoch 9/15 | train_loss=0.0142 | test_loss=0.0092 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.07s
+2026-06-25 13:49:11 | INFO | QCNN_ID | [cnn_classifier] epoch 9/15 | train_loss=0.0142 | test_loss=0.0092 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.07s
+2026-06-25 13:49:11,547 INFO [cnn_classifier] epoch 10/15 | train_loss=0.0128 | test_loss=0.0089 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.07s
+2026-06-25 13:49:11 | INFO | QCNN_ID | [cnn_classifier] epoch 10/15 | train_loss=0.0128 | test_loss=0.0089 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.07s
+2026-06-25 13:49:11,623 INFO [cnn_classifier] epoch 11/15 | train_loss=0.0119 | test_loss=0.0084 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11 | INFO | QCNN_ID | [cnn_classifier] epoch 11/15 | train_loss=0.0119 | test_loss=0.0084 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11,703 INFO [cnn_classifier] epoch 12/15 | train_loss=0.0123 | test_loss=0.0079 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11 | INFO | QCNN_ID | [cnn_classifier] epoch 12/15 | train_loss=0.0123 | test_loss=0.0079 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11,783 INFO [cnn_classifier] epoch 13/15 | train_loss=0.0109 | test_loss=0.0076 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11 | INFO | QCNN_ID | [cnn_classifier] epoch 13/15 | train_loss=0.0109 | test_loss=0.0076 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11,864 INFO [cnn_classifier] epoch 14/15 | train_loss=0.0107 | test_loss=0.0073 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11 | INFO | QCNN_ID | [cnn_classifier] epoch 14/15 | train_loss=0.0107 | test_loss=0.0073 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.06s
+2026-06-25 13:49:11,979 INFO [cnn_classifier] epoch 15/15 | train_loss=0.0107 | test_loss=0.0068 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.09s
+2026-06-25 13:49:11 | INFO | QCNN_ID | [cnn_classifier] epoch 15/15 | train_loss=0.0107 | test_loss=0.0068 | acc=0.9983 | prec=0.9985 | rec=0.9981 | t=0.09s
+2026-06-25 13:49:12,663 INFO [photonic_classifier] epoch 1/15 | train_loss=0.6284 | test_loss=0.5697 | acc=0.7913 | prec=0.8675 | rec=0.7522 | t=0.15s
+2026-06-25 13:49:12 | INFO | QCNN_ID | [photonic_classifier] epoch 1/15 | train_loss=0.6284 | test_loss=0.5697 | acc=0.7913 | prec=0.8675 | rec=0.7522 | t=0.15s
+2026-06-25 13:49:12,880 INFO [photonic_classifier] epoch 2/15 | train_loss=0.5269 | test_loss=0.4853 | acc=0.8687 | prec=0.9076 | rec=0.8440 | t=0.16s
+2026-06-25 13:49:12 | INFO | QCNN_ID | [photonic_classifier] epoch 2/15 | train_loss=0.5269 | test_loss=0.4853 | acc=0.8687 | prec=0.9076 | rec=0.8440 | t=0.16s
+2026-06-25 13:49:13,098 INFO [photonic_classifier] epoch 3/15 | train_loss=0.4512 | test_loss=0.4212 | acc=0.8710 | prec=0.9089 | rec=0.8468 | t=0.16s
+2026-06-25 13:49:13 | INFO | QCNN_ID | [photonic_classifier] epoch 3/15 | train_loss=0.4512 | test_loss=0.4212 | acc=0.8710 | prec=0.9089 | rec=0.8468 | t=0.16s
+2026-06-25 13:49:13,314 INFO [photonic_classifier] epoch 4/15 | train_loss=0.3946 | test_loss=0.3727 | acc=0.8710 | prec=0.9089 | rec=0.8468 | t=0.16s
+2026-06-25 13:49:13 | INFO | QCNN_ID | [photonic_classifier] epoch 4/15 | train_loss=0.3946 | test_loss=0.3727 | acc=0.8710 | prec=0.9089 | rec=0.8468 | t=0.16s
+2026-06-25 13:49:13,531 INFO [photonic_classifier] epoch 5/15 | train_loss=0.3504 | test_loss=0.3328 | acc=0.8810 | prec=0.9148 | rec=0.8587 | t=0.16s
+2026-06-25 13:49:13 | INFO | QCNN_ID | [photonic_classifier] epoch 5/15 | train_loss=0.3504 | test_loss=0.3328 | acc=0.8810 | prec=0.9148 | rec=0.8587 | t=0.16s
+2026-06-25 13:49:13,749 INFO [photonic_classifier] epoch 6/15 | train_loss=0.3149 | test_loss=0.3008 | acc=0.9680 | prec=0.9738 | rec=0.9620 | t=0.16s
+2026-06-25 13:49:13 | INFO | QCNN_ID | [photonic_classifier] epoch 6/15 | train_loss=0.3149 | test_loss=0.3008 | acc=0.9680 | prec=0.9738 | rec=0.9620 | t=0.16s
+2026-06-25 13:49:13,966 INFO [photonic_classifier] epoch 7/15 | train_loss=0.2856 | test_loss=0.2738 | acc=0.9703 | prec=0.9756 | rec=0.9648 | t=0.16s
+2026-06-25 13:49:13 | INFO | QCNN_ID | [photonic_classifier] epoch 7/15 | train_loss=0.2856 | test_loss=0.2738 | acc=0.9703 | prec=0.9756 | rec=0.9648 | t=0.16s
+2026-06-25 13:49:14,183 INFO [photonic_classifier] epoch 8/15 | train_loss=0.2608 | test_loss=0.2511 | acc=0.9730 | prec=0.9777 | rec=0.9679 | t=0.16s
+2026-06-25 13:49:14 | INFO | QCNN_ID | [photonic_classifier] epoch 8/15 | train_loss=0.2608 | test_loss=0.2511 | acc=0.9730 | prec=0.9777 | rec=0.9679 | t=0.16s
+2026-06-25 13:49:14,400 INFO [photonic_classifier] epoch 9/15 | train_loss=0.2398 | test_loss=0.2312 | acc=0.9730 | prec=0.9777 | rec=0.9679 | t=0.16s
+2026-06-25 13:49:14 | INFO | QCNN_ID | [photonic_classifier] epoch 9/15 | train_loss=0.2398 | test_loss=0.2312 | acc=0.9730 | prec=0.9777 | rec=0.9679 | t=0.16s
+2026-06-25 13:49:14,617 INFO [photonic_classifier] epoch 10/15 | train_loss=0.2215 | test_loss=0.2140 | acc=0.9730 | prec=0.9777 | rec=0.9679 | t=0.16s
+2026-06-25 13:49:14 | INFO | QCNN_ID | [photonic_classifier] epoch 10/15 | train_loss=0.2215 | test_loss=0.2140 | acc=0.9730 | prec=0.9777 | rec=0.9679 | t=0.16s
+2026-06-25 13:49:14,834 INFO [photonic_classifier] epoch 11/15 | train_loss=0.2056 | test_loss=0.1988 | acc=0.9730 | prec=0.9777 | rec=0.9679 | t=0.16s
+2026-06-25 13:49:14 | INFO | QCNN_ID | [photonic_classifier] epoch 11/15 | train_loss=0.2056 | test_loss=0.1988 | acc=0.9730 | prec=0.9777 | rec=0.9679 | t=0.16s
+2026-06-25 13:49:15,051 INFO [photonic_classifier] epoch 12/15 | train_loss=0.1915 | test_loss=0.1854 | acc=0.9730 | prec=0.9777 | rec=0.9679 | t=0.15s
+2026-06-25 13:49:15 | INFO | QCNN_ID | [photonic_classifier] epoch 12/15 | train_loss=0.1915 | test_loss=0.1854 | acc=0.9730 | prec=0.9777 | rec=0.9679 | t=0.15s
+2026-06-25 13:49:15,268 INFO [photonic_classifier] epoch 13/15 | train_loss=0.1793 | test_loss=0.1740 | acc=0.9853 | prec=0.9876 | rec=0.9826 | t=0.16s
+2026-06-25 13:49:15 | INFO | QCNN_ID | [photonic_classifier] epoch 13/15 | train_loss=0.1793 | test_loss=0.1740 | acc=0.9853 | prec=0.9876 | rec=0.9826 | t=0.16s
+2026-06-25 13:49:15,485 INFO [photonic_classifier] epoch 14/15 | train_loss=0.1682 | test_loss=0.1630 | acc=0.9853 | prec=0.9876 | rec=0.9826 | t=0.16s
+2026-06-25 13:49:15 | INFO | QCNN_ID | [photonic_classifier] epoch 14/15 | train_loss=0.1682 | test_loss=0.1630 | acc=0.9853 | prec=0.9876 | rec=0.9826 | t=0.16s
+2026-06-25 13:49:15,702 INFO [photonic_classifier] epoch 15/15 | train_loss=0.1581 | test_loss=0.1537 | acc=0.9853 | prec=0.9876 | rec=0.9826 | t=0.16s
+2026-06-25 13:49:15 | INFO | QCNN_ID | [photonic_classifier] epoch 15/15 | train_loss=0.1581 | test_loss=0.1537 | acc=0.9853 | prec=0.9876 | rec=0.9826 | t=0.16s
+2026-06-25 13:50:39,606 INFO [qcnn_classifier] epoch 1/15 | train_loss=0.6711 | test_loss=0.6106 | acc=0.6417 | prec=0.8089 | rec=0.5744 | t=59.25s
+2026-06-25 13:50:39 | INFO | QCNN_ID | [qcnn_classifier] epoch 1/15 | train_loss=0.6711 | test_loss=0.6106 | acc=0.6417 | prec=0.8089 | rec=0.5744 | t=59.25s
+2026-06-25 13:52:06,742 INFO [qcnn_classifier] epoch 2/15 | train_loss=0.5723 | test_loss=0.5313 | acc=0.7817 | prec=0.8631 | rec=0.7407 | t=57.96s
+2026-06-25 13:52:06 | INFO | QCNN_ID | [qcnn_classifier] epoch 2/15 | train_loss=0.5723 | test_loss=0.5313 | acc=0.7817 | prec=0.8631 | rec=0.7407 | t=57.96s
+2026-06-25 13:53:35,279 INFO [qcnn_classifier] epoch 3/15 | train_loss=0.4935 | test_loss=0.4461 | acc=0.9190 | prec=0.9355 | rec=0.9050 | t=58.17s
+2026-06-25 13:53:35 | INFO | QCNN_ID | [qcnn_classifier] epoch 3/15 | train_loss=0.4935 | test_loss=0.4461 | acc=0.9190 | prec=0.9355 | rec=0.9050 | t=58.17s
+2026-06-25 13:55:06,241 INFO [qcnn_classifier] epoch 4/15 | train_loss=0.4148 | test_loss=0.3794 | acc=0.9423 | prec=0.9522 | rec=0.9327 | t=66.97s
+2026-06-25 13:55:06 | INFO | QCNN_ID | [qcnn_classifier] epoch 4/15 | train_loss=0.4148 | test_loss=0.3794 | acc=0.9423 | prec=0.9522 | rec=0.9327 | t=66.97s
+2026-06-25 13:56:28,729 INFO [qcnn_classifier] epoch 5/15 | train_loss=0.3561 | test_loss=0.3258 | acc=0.9607 | prec=0.9652 | rec=0.9550 | t=57.82s
+2026-06-25 13:56:28 | INFO | QCNN_ID | [qcnn_classifier] epoch 5/15 | train_loss=0.3561 | test_loss=0.3258 | acc=0.9607 | prec=0.9652 | rec=0.9550 | t=57.82s
+2026-06-25 13:58:06,622 INFO [qcnn_classifier] epoch 6/15 | train_loss=0.3123 | test_loss=0.2904 | acc=0.9597 | prec=0.9621 | rec=0.9554 | t=71.11s
+2026-06-25 13:58:06 | INFO | QCNN_ID | [qcnn_classifier] epoch 6/15 | train_loss=0.3123 | test_loss=0.2904 | acc=0.9597 | prec=0.9621 | rec=0.9554 | t=71.11s
+2026-06-25 13:59:45,704 INFO [qcnn_classifier] epoch 7/15 | train_loss=0.2814 | test_loss=0.2630 | acc=0.9643 | prec=0.9656 | rec=0.9613 | t=73.76s
+2026-06-25 13:59:45 | INFO | QCNN_ID | [qcnn_classifier] epoch 7/15 | train_loss=0.2814 | test_loss=0.2630 | acc=0.9643 | prec=0.9656 | rec=0.9613 | t=73.76s
+2026-06-25 14:01:14,532 INFO [qcnn_classifier] epoch 8/15 | train_loss=0.2579 | test_loss=0.2420 | acc=0.9663 | prec=0.9667 | rec=0.9642 | t=59.50s
+2026-06-25 14:01:14 | INFO | QCNN_ID | [qcnn_classifier] epoch 8/15 | train_loss=0.2579 | test_loss=0.2420 | acc=0.9663 | prec=0.9667 | rec=0.9642 | t=59.50s
+2026-06-25 14:02:45,746 INFO [qcnn_classifier] epoch 9/15 | train_loss=0.2387 | test_loss=0.2249 | acc=0.9667 | prec=0.9667 | rec=0.9648 | t=66.52s
+2026-06-25 14:02:45 | INFO | QCNN_ID | [qcnn_classifier] epoch 9/15 | train_loss=0.2387 | test_loss=0.2249 | acc=0.9667 | prec=0.9667 | rec=0.9648 | t=66.52s
+2026-06-25 14:04:16,451 INFO [qcnn_classifier] epoch 10/15 | train_loss=0.2226 | test_loss=0.2102 | acc=0.9673 | prec=0.9668 | rec=0.9662 | t=66.64s
+2026-06-25 14:04:16 | INFO | QCNN_ID | [qcnn_classifier] epoch 10/15 | train_loss=0.2226 | test_loss=0.2102 | acc=0.9673 | prec=0.9668 | rec=0.9662 | t=66.64s
+2026-06-25 14:05:38,627 INFO [qcnn_classifier] epoch 11/15 | train_loss=0.2092 | test_loss=0.1971 | acc=0.9720 | prec=0.9713 | rec=0.9713 | t=57.99s
+2026-06-25 14:05:38 | INFO | QCNN_ID | [qcnn_classifier] epoch 11/15 | train_loss=0.2092 | test_loss=0.1971 | acc=0.9720 | prec=0.9713 | rec=0.9713 | t=57.99s
+2026-06-25 14:07:00,672 INFO [qcnn_classifier] epoch 12/15 | train_loss=0.1972 | test_loss=0.1864 | acc=0.9717 | prec=0.9705 | rec=0.9714 | t=58.18s
+2026-06-25 14:07:00 | INFO | QCNN_ID | [qcnn_classifier] epoch 12/15 | train_loss=0.1972 | test_loss=0.1864 | acc=0.9717 | prec=0.9705 | rec=0.9714 | t=58.18s
+2026-06-25 14:08:28,323 INFO [qcnn_classifier] epoch 13/15 | train_loss=0.1871 | test_loss=0.1770 | acc=0.9720 | prec=0.9707 | rec=0.9719 | t=59.72s
+2026-06-25 14:08:28 | INFO | QCNN_ID | [qcnn_classifier] epoch 13/15 | train_loss=0.1871 | test_loss=0.1770 | acc=0.9720 | prec=0.9707 | rec=0.9719 | t=59.72s
+2026-06-25 14:10:02,640 INFO [qcnn_classifier] epoch 14/15 | train_loss=0.1780 | test_loss=0.1687 | acc=0.9730 | prec=0.9719 | rec=0.9728 | t=64.76s
+2026-06-25 14:10:02 | INFO | QCNN_ID | [qcnn_classifier] epoch 14/15 | train_loss=0.1780 | test_loss=0.1687 | acc=0.9730 | prec=0.9719 | rec=0.9728 | t=64.76s
+2026-06-25 14:11:29,992 INFO [qcnn_classifier] epoch 15/15 | train_loss=0.1701 | test_loss=0.1609 | acc=0.9733 | prec=0.9722 | rec=0.9732 | t=63.24s
+2026-06-25 14:11:29 | INFO | QCNN_ID | [qcnn_classifier] epoch 15/15 | train_loss=0.1701 | test_loss=0.1609 | acc=0.9733 | prec=0.9722 | rec=0.9732 | t=63.24s
+2026-06-25 14:13:04,668 INFO Wrote train predictions to outdir/run_20260625-134908/train_predictions.csv
+2026-06-25 14:13:04 | INFO | QCNN_ID | Wrote train predictions to outdir/run_20260625-134908/train_predictions.csv
+2026-06-25 14:13:04,692 INFO Wrote test predictions to outdir/run_20260625-134908/test_predictions.csv
+2026-06-25 14:13:04 | INFO | QCNN_ID | Wrote test predictions to outdir/run_20260625-134908/test_predictions.csv
+2026-06-25 14:13:04,693 INFO Wrote metrics to outdir/run_20260625-134908/metrics.json
+2026-06-25 14:13:04 | INFO | QCNN_ID | Wrote metrics to outdir/run_20260625-134908/metrics.json
+2026-06-25 14:13:04 | INFO | root | Finished. Artifacts in: outdir/run_20260625-134908
