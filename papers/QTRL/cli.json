@@ -76,14 +76,6 @@
       "apply": {"kind": "config_path", "path": "backend"}
     },
     {
-      "flags": ["--run_mode"],
-      "help": "Le mode d'exécution du script",
-      "type": "str",
-      "choices": ["train", "gridsearch"],
-      "default": null,
-      "apply": {"kind": "config_path", "path": "run_mode"}
-    },
-    {
       "flags": ["--bond_dim"],
       "help": "Expressivité pour le modèle MPS",
       "type": "int",

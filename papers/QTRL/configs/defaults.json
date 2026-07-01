@@ -2,7 +2,6 @@
   "description" : "default configuration for QTRL training",
   "env_name": "CartPole",
   "backend": "merlin_mlp",
-  "run_mode": "train",
   "bond_dim": 4,
   "q_output_size": 4,
   "nb_photons": 2,
