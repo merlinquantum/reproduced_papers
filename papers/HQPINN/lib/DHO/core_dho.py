@@ -157,7 +157,6 @@ def train_oscillator_pinn(
         [nn.Module, torch.Tensor], tuple[torch.Tensor, torch.Tensor, torch.Tensor]
     ] = oscillator_loss,
 ) -> None:
-
     os.makedirs(out_dir, exist_ok=True)
 
     png_path = os.path.join(out_dir, f"dho-{model_label}_{run_id}.png")

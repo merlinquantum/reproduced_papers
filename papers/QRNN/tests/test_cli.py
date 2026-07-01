@@ -44,6 +44,6 @@ def test_train_and_evaluate_writes_artifact(tmp_path):
 
     assert (run_dir / "done.txt").exists(), "Expected completion marker to be created"
     assert (run_dir / "metrics.json").exists(), "Expected metrics to be saved"
-    assert (run_dir / "predictions.csv").exists(), (
-        "Expected predictions CSV to be saved"
-    )
+    assert (
+        run_dir / "predictions.csv"
+    ).exists(), "Expected predictions CSV to be saved"
