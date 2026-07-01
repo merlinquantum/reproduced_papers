@@ -7,10 +7,10 @@
     "save_config_snapshot": true
   },
   "data_root": "C:\\Users\\TancredeTONINI\\Documents\\GitHub\\reproduced_papers\\papers\\Bandwidth_tunning\\data",
-  "description": "This configuration generates the results for Fig. 3 of the paper for the fashion_mnist dataset.",
+  "description": "This configuration generates the results for Fig. 3 of the paper for the plasticc dataset.",
   "outdir": "results",
   "dataset": {
-    "name": "fashion_mnist",
+    "name": "plasticc",
     "root": "data"
   },
   "number_of_modes": 4,
@@ -53,5 +53,5 @@
       "dimension": 8
     }
   ],
-  "graph_name": "Fig 3 - fashion_mnist"
+  "graph_name": "Fig 3 - plasticc"
 }
