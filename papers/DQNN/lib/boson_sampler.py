@@ -42,9 +42,9 @@ class BosonSampler:
         """
         self.m = m
         self.n = n
-        assert n <= m, (
-            "Got more modes than photons, can only input 0 or 1 photon per mode"
-        )
+        assert (
+            n <= m
+        ), "Got more modes than photons, can only input 0 or 1 photon per mode"
         self.quantum_layer = self.create_quantum_layer(qnn_layers=qnn_layers)
 
     @property

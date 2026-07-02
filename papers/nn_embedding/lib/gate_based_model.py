@@ -677,11 +677,13 @@ class NeuralEmbeddingGateBasedKernel(nn.Module):
 ########################################################################################################
 
 
-def create_paper_models() -> tuple[
-    NeuralEmbeddingGateBasedModel,
-    NeuralEmbeddingGateBasedModel,
-    NeuralEmbeddingGateBasedModel,
-]:
+def create_paper_models() -> (
+    tuple[
+        NeuralEmbeddingGateBasedModel,
+        NeuralEmbeddingGateBasedModel,
+        NeuralEmbeddingGateBasedModel,
+    ]
+):
     """Create the three gate-based model variants described in the paper.
 
     The returned models correspond to the architectures used across the gate-

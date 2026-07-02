@@ -55,7 +55,6 @@ def test_qcnn_classifier_forward_and_grad():
 
 @pytest.mark.parametrize("n_modes,n_photons", [(4, 2), (6, 3)])
 def test_merlin_classifier_forward(n_modes, n_photons):
-
     model = PhotonicClassifier(
         n_modes=n_modes,
         n_photons=n_photons,
