@@ -1,0 +1,100 @@
+{
+  "description": "Hybrid QTRL training, on Gym environments.",
+  "arguments": [
+    {
+      "flags": ["--env_name"],
+      "help": "Environment where we can train the agents are: CartPole and MiniGrid",
+      "type": "str",
+      "choices": ["CartPole", "MiniGrid"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "env_name"}
+    },
+    {
+      "flags": ["--q_output_size"],
+      "help": "Output size of the photonic quantum circuit",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "q_output_size"}
+    },
+    {
+      "flags": ["--nb_photons"],
+      "help": "Number of photons to add to the circuit (lesser or equal to nb_modes)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "nb_photons"}
+    },
+    {
+      "flags": ["--nb_modes"],
+      "help": "Number of spatial modes that you want to have",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "nb_modes"}
+    },
+    {
+      "flags": ["--hidden_sizes"],
+      "help": "Architecture of the mapping model (ex: 8 8)",
+      "type": "int",
+      "nargs": "+",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "hidden_sizes"}
+    },
+    {
+      "flags": ["--layer_dim"],
+      "help": "Architecture of the mapping model (ex: 8 16 16 8 )",
+      "type": "int",
+      "nargs": "+",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "layer_dim"}
+    },
+    {
+      "flags": ["--final_output_size"],
+      "help": "Total number of generated weights (state_dim * action_dim)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "final_output_size"}
+    },
+    {
+      "flags": ["--num_episodes"],
+      "help": "Episode number for agent training.",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_episodes"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Taux d'apprentissage (Learning Rate) de l'optimiseur Adam.",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "lr"}
+    },
+    {
+      "flags": ["--backend"],
+      "help": "Le type de modèle hybride à utiliser",
+      "type": "str",
+      "choices": ["merlin_mlp", "merlin_mps", "torchquantum", "classic"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "backend"}
+    },
+    {
+      "flags": ["--bond_dim"],
+      "help": "Expressivité pour le modèle MPS",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "bond_dim"}
+    },
+    {
+      "flags": ["--n_qubit"],
+      "help": "Number of qubit of the gate-based model",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "n_qubit"}
+    },
+    {
+      "flags": ["--q_depth"],
+      "help": "Depth of the gate-based model",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "q_depth"}
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+merlinquantum
+gymnasium[classic_control]
+minigrid
+-e ./torchquantum

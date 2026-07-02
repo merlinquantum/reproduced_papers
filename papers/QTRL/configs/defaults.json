@@ -1,0 +1,15 @@
+{
+  "description" : "default configuration for QTRL training",
+  "env_name": "CartPole",
+  "backend": "merlin_mlp",
+  "bond_dim": 4,
+  "q_output_size": 4,
+  "nb_photons": 2,
+  "nb_modes": 3,
+  "hidden_sizes": [8, 8],
+  "final_output_size": 8,
+  "num_episodes": 500,
+  "lr": 0.01,
+  "n_qubit" : 9,
+  "q_depth" : 3 
+}
