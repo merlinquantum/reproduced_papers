@@ -10,6 +10,7 @@ Dispatches on ``cfg["task"]``:
                         evaluation over splits, and classical / gate baselines.
 All runs write ``metrics.json`` (+ task-specific NPZ) into ``run_dir``.
 """
+
 from __future__ import annotations
 
 import json
@@ -55,6 +56,8 @@ def _run_photonic_eval(cfg, run_dir, logger):
     )
     from .photonic_kernel_svm import (
         classical_svm_accuracy,
+    )
+    from .photonic_kernel_svm import (
         qksvm_accuracy as photonic_qksvm_accuracy,
     )
     from .wasserstein import dataset_wasserstein
@@ -74,8 +77,14 @@ def _run_photonic_eval(cfg, run_dir, logger):
         computation_space = computation_space.upper()
     X, y = load_dataset(name, data_root=dcfg["root"], n_components=n_modes, seed=seed)
     w1 = dataset_wasserstein(X, y, seed=seed)
-    slices = make_slices(X, y, n_train=vcfg["n_train"], n_test=vcfg["n_test"],
-                         n_repeats=vcfg["n_repeats"], seed=seed)
+    slices = make_slices(
+        X,
+        y,
+        n_train=vcfg["n_train"],
+        n_test=vcfg["n_test"],
+        n_repeats=vcfg["n_repeats"],
+        seed=seed,
+    )
 
     pool = build_token_pool(n_modes)
 
@@ -177,20 +186,49 @@ def _run_photonic_eval(cfg, run_dir, logger):
     accBb = eval_group(B_refined)
 
     n_sp = len(slices)
-    zz = np.array([zz_accuracy(sl["X_train"], sl["y_train"], sl["X_test"], sl["y_test"], n_modes)
-                   for sl in slices])
-    lin = np.array([classical_svm_accuracy(sl["X_train"], sl["y_train"], sl["X_test"],
-                                           sl["y_test"], "linear") for sl in slices])
-    rbf = np.array([classical_svm_accuracy(sl["X_train"], sl["y_train"], sl["X_test"],
-                                           sl["y_test"], "rbf") for sl in slices])
+    zz = np.array(
+        [
+            zz_accuracy(
+                sl["X_train"], sl["y_train"], sl["X_test"], sl["y_test"], n_modes
+            )
+            for sl in slices
+        ]
+    )
+    lin = np.array(
+        [
+            classical_svm_accuracy(
+                sl["X_train"], sl["y_train"], sl["X_test"], sl["y_test"], "linear"
+            )
+            for sl in slices
+        ]
+    )
+    rbf = np.array(
+        [
+            classical_svm_accuracy(
+                sl["X_train"], sl["y_train"], sl["X_test"], sl["y_test"], "rbf"
+            )
+            for sl in slices
+        ]
+    )
     nqe_epochs = cfg.get("nqe", {}).get("epochs")
     if nqe_epochs is None:
         nqe = np.full(n_sp, np.nan)
     else:
-        nqe = np.array([nqe_accuracy(sl["X_train"], sl["y_train"], sl["X_test"],
-                                     sl["y_test"], n_modes, epochs=nqe_epochs,
-                                     seed=seed, device=device)
-                        for sl in slices])
+        nqe = np.array(
+            [
+                nqe_accuracy(
+                    sl["X_train"],
+                    sl["y_train"],
+                    sl["X_test"],
+                    sl["y_test"],
+                    n_modes,
+                    epochs=nqe_epochs,
+                    seed=seed,
+                    device=device,
+                )
+                for sl in slices
+            ]
+        )
 
     for j in range(n_sp):
         logger.info(
@@ -211,8 +249,8 @@ def _run_photonic_eval(cfg, run_dir, logger):
 
     def wtl(acc_row):
         w = int((acc_row > lin).sum())
-        l = int((acc_row < lin).sum())
-        return {"win": w, "tie": n_sp - w - l, "lose": l}
+        num_losses = int((acc_row < lin).sum())
+        return {"win": w, "tie": n_sp - w - num_losses, "lose": num_losses}
 
     def best_rep(accs):
         if len(accs) == 0:
@@ -232,7 +270,13 @@ def _run_photonic_eval(cfg, run_dir, logger):
             for k in range(len(group))
         ]
 
-    mean_acc_parts = [accG.mean(1), accGb.mean(1), accB.mean(1), accBb.mean(1), [zz.mean()]]
+    mean_acc_parts = [
+        accG.mean(1),
+        accGb.mean(1),
+        accB.mean(1),
+        accBb.mean(1),
+        [zz.mean()],
+    ]
     if not np.isnan(nqe).all():
         mean_acc_parts.append([np.nanmean(nqe)])
     mean_accs = np.concatenate(mean_acc_parts)
@@ -242,12 +286,17 @@ def _run_photonic_eval(cfg, run_dir, logger):
         "task": "photonic_eval",
         "dataset": name,
         "w1": w1,
-        "hardware": {"computation_space": computation_space, "detector": "threshold",
-                     "n_photons": n_photons, "n_modes": n_modes,
-                     "encoding": "EGAS photonic token circuit (PS/BS)",
-                     "measurement": "QuantumLayer amplitudes + fidelity kernel",
-                     "postselection": "none", "simulator": "MerLin SLOS analytic (shots=None)",
-                     "n_layers": None},
+        "hardware": {
+            "computation_space": computation_space,
+            "detector": "threshold",
+            "n_photons": n_photons,
+            "n_modes": n_modes,
+            "encoding": "EGAS photonic token circuit (PS/BS)",
+            "measurement": "QuantumLayer amplitudes + fidelity kernel",
+            "postselection": "none",
+            "simulator": "MerLin SLOS analytic (shots=None)",
+            "n_layers": None,
+        },
         "n_modes": n_modes,
         "search_time_sec": search_time,
         "n_splits": n_sp,
@@ -257,7 +306,9 @@ def _run_photonic_eval(cfg, run_dir, logger):
             "classical_linear": stat(lin),
             "classical_rbf": stat(rbf),
             "ZZ": {**stat(zz), "wtl_vs_linear": wtl(zz)},
-            "NQE": {**stat(nqe), "wtl_vs_linear": wtl(nqe)} if not np.isnan(nqe).all() else None,
+            "NQE": {**stat(nqe), "wtl_vs_linear": wtl(nqe)}
+            if not np.isnan(nqe).all()
+            else None,
         },
         "G": summarize(accG, G),
         "G_bias": summarize(accGb, G_refined),
@@ -274,8 +325,17 @@ def _run_photonic_eval(cfg, run_dir, logger):
         },
     }
     _save_json(run_dir / "metrics.json", metrics)
-    np.savez(run_dir / "photonic_acc.npz", accG=accG, accGb=accGb, accB=accB, accBb=accBb,
-             zz=zz, lin=lin, rbf=rbf, nqe=nqe)
+    np.savez(
+        run_dir / "photonic_acc.npz",
+        accG=accG,
+        accGb=accGb,
+        accB=accB,
+        accBb=accBb,
+        zz=zz,
+        lin=lin,
+        rbf=rbf,
+        nqe=nqe,
+    )
     best_gb = max((g["mean_acc"] for g in metrics["G_bias"]), default=float("nan"))
     logger.info(
         "[photonic-egas %s] W1=%.3f | best G(refined) mean acc=%.3f | ZZ=%.3f Lin=%.3f | IQR=%.3f",
@@ -289,8 +349,9 @@ def _run_photonic_eval(cfg, run_dir, logger):
 
 
 def _run_wasserstein(cfg, run_dir, logger):
-    from .data import load_dataset, DATASETS
+    from .data import DATASETS, load_dataset
     from .wasserstein import dataset_wasserstein
+
     data_root = cfg["dataset"]["root"]
     names = cfg.get("datasets") or list(DATASETS.keys())
     seed = int(cfg.get("seed", 0))
@@ -299,8 +360,12 @@ def _run_wasserstein(cfg, run_dir, logger):
         try:
             X, y = load_dataset(name, data_root=data_root, seed=seed)
             w1 = dataset_wasserstein(X, y, seed=seed)
-            out[name] = {"w1": w1, "n": int(len(X)),
-                         "n_pos": int((y == 1).sum()), "n_neg": int((y == -1).sum())}
+            out[name] = {
+                "w1": w1,
+                "n": int(len(X)),
+                "n_pos": int((y == 1).sum()),
+                "n_neg": int((y == -1).sum()),
+            }
             logger.info("W1 %s = %.4f (n=%d)", name, w1, len(X))
         except Exception as e:  # noqa: BLE001
             out[name] = {"error": f"{type(e).__name__}: {e}"}
@@ -310,24 +375,39 @@ def _run_wasserstein(cfg, run_dir, logger):
 
 def _run_fig1(cfg, run_dir, logger):
     from .wasserstein import fig1_curve
+
     fc = cfg.get("fig1", {})
     out = {}
     for L in fc.get("layers", [1, 2]):
-        w1s, tds = fig1_curve(n_qubits=fc.get("n_qubits", 4), n_layers=L,
-                              n_per_class=fc.get("n_per_class", 60), seed=int(cfg.get("seed", 0)))
+        w1s, tds = fig1_curve(
+            n_qubits=fc.get("n_qubits", 4),
+            n_layers=L,
+            n_per_class=fc.get("n_per_class", 60),
+            seed=int(cfg.get("seed", 0)),
+        )
         out[f"L{L}"] = {"w1": w1s.tolist(), "trace_dist": tds.tolist()}
-        logger.info("Fig1 L=%d: W1 %.2f-%.2f, trace_dist %.3f-%.3f",
-                    L, w1s.min(), w1s.max(), tds.min(), tds.max())
+        logger.info(
+            "Fig1 L=%d: W1 %.2f-%.2f, trace_dist %.3f-%.3f",
+            L,
+            w1s.min(),
+            w1s.max(),
+            tds.min(),
+            tds.max(),
+        )
     _save_json(run_dir / "metrics.json", {"task": "fig1", "results": out})
 
 
 def _run_egas_eval(cfg, run_dir, logger):
-    from .data import load_dataset, make_slices
-    from .circuits import build_token_pool
-    from .egas import run_egas, unique_sorted_candidates
     from .bias import refine_bias
-    from .kernel_svm import (qksvm_accuracy, zz_accuracy, classical_svm_accuracy,
-                             nqe_accuracy)
+    from .circuits import build_token_pool
+    from .data import load_dataset, make_slices
+    from .egas import run_egas, unique_sorted_candidates
+    from .kernel_svm import (
+        classical_svm_accuracy,
+        nqe_accuracy,
+        qksvm_accuracy,
+        zz_accuracy,
+    )
     from .wasserstein import dataset_wasserstein
 
     seed = int(cfg.get("seed", 0))
@@ -337,8 +417,14 @@ def _run_egas_eval(cfg, run_dir, logger):
     pool = build_token_pool(n_qubits)
     X, y = load_dataset(name, data_root=dcfg["root"], n_components=n_qubits, seed=seed)
     w1 = dataset_wasserstein(X, y, seed=seed)
-    slices = make_slices(X, y, n_train=vcfg["n_train"], n_test=vcfg["n_test"],
-                         n_repeats=vcfg["n_repeats"], seed=seed)
+    slices = make_slices(
+        X,
+        y,
+        n_train=vcfg["n_train"],
+        n_test=vcfg["n_test"],
+        n_repeats=vcfg["n_repeats"],
+        seed=seed,
+    )
 
     # EGAS search on a fixed sample batch drawn from the first split's train set.
     rng = np.random.default_rng(seed)
@@ -348,13 +434,24 @@ def _run_egas_eval(cfg, run_dir, logger):
     Xe, ye = Xtr0[idx], slices[0]["y_train"][idx]
     t0 = time.time()
     gpt, hist, buf = run_egas(
-        pool, Xe, ye, n_qubits, seq_len=ecfg["seq_len"],
-        n_iters=ecfg["n_iters"], n_candidates=ecfg["n_candidates"],
-        select_k=ecfg["select_k"], gamma=ecfg["gamma"],
-        lr=ecfg.get("lr", 5e-5), temp_max=ecfg.get("temp_max", 100.0),
-        temp_min=ecfg.get("temp_min", 0.04), d_model=ecfg.get("d_model", 64),
-        n_layers=ecfg.get("n_layers", 2), n_heads=ecfg.get("n_heads", 4),
-        seed=seed, logger=logger)
+        pool,
+        Xe,
+        ye,
+        n_qubits,
+        seq_len=ecfg["seq_len"],
+        n_iters=ecfg["n_iters"],
+        n_candidates=ecfg["n_candidates"],
+        select_k=ecfg["select_k"],
+        gamma=ecfg["gamma"],
+        lr=ecfg.get("lr", 5e-5),
+        temp_max=ecfg.get("temp_max", 100.0),
+        temp_min=ecfg.get("temp_min", 0.04),
+        d_model=ecfg.get("d_model", 64),
+        n_layers=ecfg.get("n_layers", 2),
+        n_heads=ecfg.get("n_heads", 4),
+        seed=seed,
+        logger=logger,
+    )
     search_time = time.time() - t0
     top = vcfg.get("top", 5)
     G_ids, B_ids = unique_sorted_candidates(buf, top=top, bottom=top)
@@ -364,11 +461,19 @@ def _run_egas_eval(cfg, run_dir, logger):
         out = []
         for sid in ids_list:
             seq = [pool[i] for i in sid]
-            bias, Eb, Ea = refine_bias(seq, Xe, ye, n_qubits, epochs=bcfg["epochs"],
-                                       batch_samples=bcfg.get("batch_samples", 25),
-                                       lr=bcfg.get("lr", 5e-4), seed=seed)
+            bias, Eb, Ea = refine_bias(
+                seq,
+                Xe,
+                ye,
+                n_qubits,
+                epochs=bcfg["epochs"],
+                batch_samples=bcfg.get("batch_samples", 25),
+                lr=bcfg.get("lr", 5e-4),
+                seed=seed,
+            )
             out.append({"seq": seq, "bias": bias, "E_before": Eb, "E_after": Ea})
         return out
+
     G = refine_all(G_ids)
     B = refine_all(B_ids)
 
@@ -376,9 +481,15 @@ def _run_egas_eval(cfg, run_dir, logger):
         accs = np.zeros((len(group), len(slices)))
         for k, item in enumerate(group):
             for j, sl in enumerate(slices):
-                accs[k, j] = qksvm_accuracy(item["seq"], sl["X_train"], sl["y_train"],
-                                            sl["X_test"], sl["y_test"], n_qubits,
-                                            bias=item["bias"] if use_bias else None)
+                accs[k, j] = qksvm_accuracy(
+                    item["seq"],
+                    sl["X_train"],
+                    sl["y_train"],
+                    sl["X_test"],
+                    sl["y_test"],
+                    n_qubits,
+                    bias=item["bias"] if use_bias else None,
+                )
         return accs
 
     accG = eval_group(G, False)
@@ -387,57 +498,140 @@ def _run_egas_eval(cfg, run_dir, logger):
     accBb = eval_group(B, True)
 
     n_sp = len(slices)
-    zz = np.array([zz_accuracy(sl["X_train"], sl["y_train"], sl["X_test"], sl["y_test"], n_qubits)
-                   for sl in slices])
-    lin = np.array([classical_svm_accuracy(sl["X_train"], sl["y_train"], sl["X_test"],
-                                           sl["y_test"], "linear") for sl in slices])
-    rbf = np.array([classical_svm_accuracy(sl["X_train"], sl["y_train"], sl["X_test"],
-                                           sl["y_test"], "rbf") for sl in slices])
-    nqe = np.array([nqe_accuracy(sl["X_train"], sl["y_train"], sl["X_test"], sl["y_test"],
-                                 n_qubits, epochs=cfg.get("nqe", {}).get("epochs", 80), seed=seed)
-                    for sl in slices])
+    zz = np.array(
+        [
+            zz_accuracy(
+                sl["X_train"], sl["y_train"], sl["X_test"], sl["y_test"], n_qubits
+            )
+            for sl in slices
+        ]
+    )
+    lin = np.array(
+        [
+            classical_svm_accuracy(
+                sl["X_train"], sl["y_train"], sl["X_test"], sl["y_test"], "linear"
+            )
+            for sl in slices
+        ]
+    )
+    rbf = np.array(
+        [
+            classical_svm_accuracy(
+                sl["X_train"], sl["y_train"], sl["X_test"], sl["y_test"], "rbf"
+            )
+            for sl in slices
+        ]
+    )
+    nqe = np.array(
+        [
+            nqe_accuracy(
+                sl["X_train"],
+                sl["y_train"],
+                sl["X_test"],
+                sl["y_test"],
+                n_qubits,
+                epochs=cfg.get("nqe", {}).get("epochs", 80),
+                seed=seed,
+            )
+            for sl in slices
+        ]
+    )
 
     def wtl(acc_row):  # win/tie/loss vs linear baseline across splits
-        w = int((acc_row > lin).sum()); l = int((acc_row < lin).sum())
-        return {"win": w, "tie": n_sp - w - l, "lose": l}
+        w = int((acc_row > lin).sum())
+        num_losses = int((acc_row < lin).sum())
+        return {"win": w, "tie": n_sp - w - num_losses, "lose": num_losses}
 
     def best_rep(accs):  # representative = embedding with most wins vs linear baseline
         wins = (accs > lin[None, :]).sum(axis=1)
         return int(np.argmax(wins))
 
     def summarize(accs, group):
-        return [{"E_before": group[k]["E_before"], "E_after": group[k]["E_after"],
-                 "mean_acc": float(accs[k].mean()), "std_acc": float(accs[k].std()),
-                 "wtl_vs_linear": wtl(accs[k])} for k in range(len(group))]
+        return [
+            {
+                "E_before": group[k]["E_before"],
+                "E_after": group[k]["E_after"],
+                "mean_acc": float(accs[k].mean()),
+                "std_acc": float(accs[k].std()),
+                "wtl_vs_linear": wtl(accs[k]),
+            }
+            for k in range(len(group))
+        ]
 
     # embedding-sensitivity IQR (Fig 6): IQR of mean test acc over quantum embeddings.
-    mean_accs = np.concatenate([
-        accG.mean(1), accGb.mean(1), accB.mean(1), accBb.mean(1), [zz.mean(), nqe.mean()]])
+    mean_accs = np.concatenate(
+        [
+            accG.mean(1),
+            accGb.mean(1),
+            accB.mean(1),
+            accBb.mean(1),
+            [zz.mean(), nqe.mean()],
+        ]
+    )
     iqr = float(np.percentile(mean_accs, 75) - np.percentile(mean_accs, 25))
 
     metrics = {
-        "task": "egas_eval", "dataset": name, "w1": w1, "n_qubits": n_qubits,
-        "search_time_sec": search_time, "n_splits": n_sp,
-        "egas_min_energy": float(min(b[1] for b in buf)), "buffer_size": len(buf),
+        "task": "egas_eval",
+        "dataset": name,
+        "w1": w1,
+        "n_qubits": n_qubits,
+        "search_time_sec": search_time,
+        "n_splits": n_sp,
+        "egas_min_energy": float(min(b[1] for b in buf)),
+        "buffer_size": len(buf),
         "baselines": {
-            "classical_linear": {"mean_acc": float(lin.mean()), "std_acc": float(lin.std())},
-            "classical_rbf": {"mean_acc": float(rbf.mean()), "std_acc": float(rbf.std())},
-            "ZZ": {"mean_acc": float(zz.mean()), "std_acc": float(zz.std()),
-                   "wtl_vs_linear": wtl(zz)},
-            "NQE": {"mean_acc": float(nqe.mean()), "std_acc": float(nqe.std()),
-                    "wtl_vs_linear": wtl(nqe)},
+            "classical_linear": {
+                "mean_acc": float(lin.mean()),
+                "std_acc": float(lin.std()),
+            },
+            "classical_rbf": {
+                "mean_acc": float(rbf.mean()),
+                "std_acc": float(rbf.std()),
+            },
+            "ZZ": {
+                "mean_acc": float(zz.mean()),
+                "std_acc": float(zz.std()),
+                "wtl_vs_linear": wtl(zz),
+            },
+            "NQE": {
+                "mean_acc": float(nqe.mean()),
+                "std_acc": float(nqe.std()),
+                "wtl_vs_linear": wtl(nqe),
+            },
         },
-        "G": summarize(accG, G), "G_bias": summarize(accGb, G),
-        "B": summarize(accB, B), "B_bias": summarize(accBb, B),
-        "G_star_idx": best_rep(accG), "G_bias_star_idx": best_rep(accGb),
-        "B_star_idx": best_rep(accB), "B_bias_star_idx": best_rep(accBb),
+        "G": summarize(accG, G),
+        "G_bias": summarize(accGb, G),
+        "B": summarize(accB, B),
+        "B_bias": summarize(accBb, B),
+        "G_star_idx": best_rep(accG),
+        "G_bias_star_idx": best_rep(accGb),
+        "B_star_idx": best_rep(accB),
+        "B_bias_star_idx": best_rep(accBb),
         "embedding_sensitivity_IQR": iqr,
-        "delta_E": {"G": [g["E_before"] - g["E_after"] for g in G],
-                    "B": [b["E_before"] - b["E_after"] for b in B]},
+        "delta_E": {
+            "G": [g["E_before"] - g["E_after"] for g in G],
+            "B": [b["E_before"] - b["E_after"] for b in B],
+        },
     }
     _save_json(run_dir / "metrics.json", metrics)
-    np.savez(run_dir / "accuracies.npz", accG=accG, accGb=accGb, accB=accB, accBb=accBb,
-             zz=zz, lin=lin, rbf=rbf, nqe=nqe)
-    logger.info("[%s] W1=%.3f | best G(bias) mean acc=%.3f | ZZ=%.3f NQE=%.3f Lin=%.3f | IQR=%.3f",
-                name, w1, max(g["mean_acc"] for g in metrics["G_bias"]),
-                zz.mean(), nqe.mean(), lin.mean(), iqr)
+    np.savez(
+        run_dir / "accuracies.npz",
+        accG=accG,
+        accGb=accGb,
+        accB=accB,
+        accBb=accBb,
+        zz=zz,
+        lin=lin,
+        rbf=rbf,
+        nqe=nqe,
+    )
+    logger.info(
+        "[%s] W1=%.3f | best G(bias) mean acc=%.3f | ZZ=%.3f NQE=%.3f Lin=%.3f | IQR=%.3f",
+        name,
+        w1,
+        max(g["mean_acc"] for g in metrics["G_bias"]),
+        zz.mean(),
+        nqe.mean(),
+        lin.mean(),
+        iqr,
+    )

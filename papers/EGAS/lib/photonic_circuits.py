@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from math import pi
+
 import merlin as ml
 import perceval as pcvl
 import torch
 import torch.nn as nn
-from math import pi
 
 COEFFS = (0.1, 0.3, 0.5, 0.7, 1.0)
 FIXED_PS_PHASES = {

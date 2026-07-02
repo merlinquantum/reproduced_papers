@@ -13,6 +13,7 @@ ASSUMPTIONS (documented in LOG.md; paper only says "two classes with sufficient 
 * per-feature min-max rescaling of the PCA components to [0, 2*pi].
 * PCA + scaler are fit on the full available pool (paper says "fixed PCA pipeline").
 """
+
 from __future__ import annotations
 
 import math
@@ -25,13 +26,16 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 # UCI repository ids and the rule for choosing the two classes.
 DATASETS = {
-    "PW":    {"uci_id": 327, "classes": "binary"},      # Phishing Websites (-1/1)
-    "WDGV1": {"uci_id": 107, "classes": "top2"},         # Waveform DB Generator v1 (3 classes)
-    "DB":    {"uci_id": 602, "classes": "top2"},         # Dry Bean (7 classes)
-    "WQ":    {"uci_id": 186, "classes": "top2"},         # Wine Quality (quality score)
-    "WC":    {"uci_id": 186, "classes": "wine_color"},   # Wine Color (red vs white)
-    "MGT":   {"uci_id": 159, "classes": "binary"},       # MAGIC Gamma Telescope (g/h)
-    "EGSSD": {"uci_id": 471, "classes": "binary"},       # Electrical Grid Stability (stable/unstable)
+    "PW": {"uci_id": 327, "classes": "binary"},  # Phishing Websites (-1/1)
+    "WDGV1": {"uci_id": 107, "classes": "top2"},  # Waveform DB Generator v1 (3 classes)
+    "DB": {"uci_id": 602, "classes": "top2"},  # Dry Bean (7 classes)
+    "WQ": {"uci_id": 186, "classes": "top2"},  # Wine Quality (quality score)
+    "WC": {"uci_id": 186, "classes": "wine_color"},  # Wine Color (red vs white)
+    "MGT": {"uci_id": 159, "classes": "binary"},  # MAGIC Gamma Telescope (g/h)
+    "EGSSD": {
+        "uci_id": 471,
+        "classes": "binary",
+    },  # Electrical Grid Stability (stable/unstable)
 }
 
 TWO_PI = 2 * math.pi
@@ -53,6 +57,7 @@ def _fetch_raw(name: str, data_root: str):
         return pd.read_csv(fx), pd.read_csv(fy).iloc[:, 0]
 
     from ucimlrepo import fetch_ucirepo
+
     repo = fetch_ucirepo(id=spec["uci_id"])
     X = repo.data.features.reset_index(drop=True)
     targets = repo.data.targets.reset_index(drop=True)
@@ -65,7 +70,11 @@ def _fetch_raw(name: str, data_root: str):
         # Multiple target columns (e.g. EGSSD has continuous 'stab' + categorical 'stabf'):
         # pick the categorical label column (object dtype, else fewest unique values).
         obj_cols = [c for c in targets.columns if targets[c].dtype == object]
-        col = obj_cols[0] if obj_cols else min(targets.columns, key=lambda c: targets[c].nunique())
+        col = (
+            obj_cols[0]
+            if obj_cols
+            else min(targets.columns, key=lambda c: targets[c].nunique())
+        )
         y = targets[col]
     else:
         y = targets.iloc[:, 0]
@@ -104,8 +113,13 @@ def _select_binary(X: pd.DataFrame, y: pd.Series, rule: str):
     return X_np, y_pm1
 
 
-def load_dataset(name: str, data_root: str = "data", n_components: int = 8,
-                 seed: int = 0, max_pool: int = 6000):
+def load_dataset(
+    name: str,
+    data_root: str = "data",
+    n_components: int = 8,
+    seed: int = 0,
+    max_pool: int = 6000,
+):
     """Load a dataset, reduce to `n_components` via PCA, rescale to [0, 2*pi].
 
     Returns (X (M, n_components) in [0,2pi], y (M,) in {-1,+1}).
@@ -118,8 +132,12 @@ def load_dataset(name: str, data_root: str = "data", n_components: int = 8,
     idx_pos = np.where(y == 1)[0]
     idx_neg = np.where(y == -1)[0]
     per = min(len(idx_pos), len(idx_neg), max_pool // 2)
-    sel = np.concatenate([rng.choice(idx_pos, per, replace=False),
-                          rng.choice(idx_neg, per, replace=False)])
+    sel = np.concatenate(
+        [
+            rng.choice(idx_pos, per, replace=False),
+            rng.choice(idx_neg, per, replace=False),
+        ]
+    )
     rng.shuffle(sel)
     X_np, y = X_np[sel], y[sel]
 
@@ -133,7 +151,9 @@ def load_dataset(name: str, data_root: str = "data", n_components: int = 8,
     return X_scaled.astype(np.float64), y.astype(int)
 
 
-def make_slices(X, y, n_train: int = 400, n_test: int = 50, n_repeats: int = 10, seed: int = 0):
+def make_slices(
+    X, y, n_train: int = 400, n_test: int = 50, n_repeats: int = 10, seed: int = 0
+):
     """Non-overlapping (train, test) slices; slice start shifted across repeats.
 
     Yields dicts with X_train, y_train, X_test, y_test.
@@ -147,11 +167,15 @@ def make_slices(X, y, n_train: int = 400, n_test: int = 50, n_repeats: int = 10,
         start = r * block
         if start + block > len(Xs):
             # wrap around if dataset is small
-            start = (start % max(1, len(Xs) - block))
+            start = start % max(1, len(Xs) - block)
         tr = slice(start, start + n_train)
         te = slice(start + n_train, start + block)
-        slices.append({
-            "X_train": Xs[tr], "y_train": ys[tr],
-            "X_test": Xs[te], "y_test": ys[te],
-        })
+        slices.append(
+            {
+                "X_train": Xs[tr],
+                "y_train": ys[tr],
+                "X_test": Xs[te],
+                "y_test": ys[te],
+            }
+        )
     return slices

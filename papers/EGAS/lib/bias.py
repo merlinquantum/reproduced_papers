@@ -6,6 +6,7 @@ pairwise binary-cross-entropy fidelity loss (Eq. 12); the structure stays fixed 
 isolates the gain from continuous refinement.  ``delta_E = E_before - E_after`` (Fig. 3/4)
 reports the surrogate-energy reduction.
 """
+
 from __future__ import annotations
 
 import numpy as np
@@ -19,12 +20,16 @@ from .statevec import fidelity_matrix
 
 class BiasMLP(nn.Module):
     """Small MLP with a zero-initialised output head; output scaled by a fixed gain (=10)."""
+
     def __init__(self, n_in: int, hidden: int = 32, gain: float = 10.0):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(n_in, hidden), nn.Tanh(),
-            nn.Linear(hidden, hidden), nn.Tanh(),
-            nn.Linear(hidden, 1))
+            nn.Linear(n_in, hidden),
+            nn.Tanh(),
+            nn.Linear(hidden, hidden),
+            nn.Tanh(),
+            nn.Linear(hidden, 1),
+        )
         nn.init.zeros_(self.net[-1].weight)
         nn.init.zeros_(self.net[-1].bias)
         self.gain = gain
@@ -43,9 +48,23 @@ def _bce_pair_loss(states, labels, eps=1e-3):
     return bce[off].mean()
 
 
-def refine_bias(seq, X, y, n_qubits, *, epochs=100, batch_samples=25, lr=5e-4,
-                grad_clip=2.0, l2_bias=1e-6, hidden=32, gain=10.0, seed=0,
-                device="cpu", avg_last=10):
+def refine_bias(
+    seq,
+    X,
+    y,
+    n_qubits,
+    *,
+    epochs=100,
+    batch_samples=25,
+    lr=5e-4,
+    grad_clip=2.0,
+    l2_bias=1e-6,
+    hidden=32,
+    gain=10.0,
+    seed=0,
+    device="cpu",
+    avg_last=10,
+):
     """Train a bias MLP for a fixed circuit `seq`. Returns (bias_mlp, E_before, E_after)."""
     torch.manual_seed(seed)
     Xt = torch.as_tensor(X, dtype=torch.float64, device=device)
@@ -71,6 +90,10 @@ def refine_bias(seq, X, y, n_qubits, *, epochs=100, batch_samples=25, lr=5e-4,
         opt.step()
         if ep >= epochs - avg_last:
             with torch.no_grad():
-                recent.append(pairwise_energy(embed_states(seq, Xt, n_qubits, bias=bias), yt).item())
+                recent.append(
+                    pairwise_energy(
+                        embed_states(seq, Xt, n_qubits, bias=bias), yt
+                    ).item()
+                )
     E_after = float(np.mean(recent)) if recent else E_before
     return bias, E_before, E_after

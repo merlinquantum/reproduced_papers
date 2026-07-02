@@ -7,7 +7,6 @@ input features to output amplitudes/states.
 
 from __future__ import annotations
 
-import numpy as np
 import torch
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC

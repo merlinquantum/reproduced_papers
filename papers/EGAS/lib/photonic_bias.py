@@ -16,8 +16,8 @@ import numpy as np
 import torch
 
 from .egas import pairwise_energy
-from .statevec import fidelity_matrix
 from .photonic_circuits import create_quantum_module
+from .statevec import fidelity_matrix
 
 
 def _bce_pair_loss(states, labels, eps=1e-3):

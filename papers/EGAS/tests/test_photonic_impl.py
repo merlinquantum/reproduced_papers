@@ -1,9 +1,7 @@
-import importlib
 import sys
 
 import pytest
 import torch
-
 from common import PROJECT_DIR
 
 if str(PROJECT_DIR) not in sys.path:

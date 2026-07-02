@@ -23,11 +23,10 @@ baseline and is not used), UNBUNCHED computation space (threshold detectors), an
 
 from __future__ import annotations
 
+import merlin as ml
 import numpy as np
 import torch
 from sklearn.svm import SVC
-
-import merlin as ml
 
 C_SVM = 0.05
 

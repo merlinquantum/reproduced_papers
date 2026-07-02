@@ -4,6 +4,7 @@ Eq. (7): D_tr(rho+, rho-) <= kappa_F * W1(P+, P-).  Datasets whose class-conditi
 distributions are close in 1-Wasserstein distance admit little class separation from any
 embedding in the family, so embedding search saturates.
 """
+
 from __future__ import annotations
 
 import numpy as np
@@ -11,18 +12,18 @@ import ot
 import torch
 
 from .circuits import zz_feature_states
-from .statevec import fidelity_matrix
 
 
-def wasserstein1_l1(X_pos: np.ndarray, X_neg: np.ndarray, max_per_class: int = 500,
-                    seed: int = 0) -> float:
+def wasserstein1_l1(
+    X_pos: np.ndarray, X_neg: np.ndarray, max_per_class: int = 500, seed: int = 0
+) -> float:
     """Empirical 1-Wasserstein distance with L1 ground metric between two point clouds."""
     rng = np.random.default_rng(seed)
     if len(X_pos) > max_per_class:
         X_pos = X_pos[rng.choice(len(X_pos), max_per_class, replace=False)]
     if len(X_neg) > max_per_class:
         X_neg = X_neg[rng.choice(len(X_neg), max_per_class, replace=False)]
-    M = ot.dist(X_pos, X_neg, metric="cityblock")          # L1 cost matrix
+    M = ot.dist(X_pos, X_neg, metric="cityblock")  # L1 cost matrix
     a = np.ones(len(X_pos)) / len(X_pos)
     b = np.ones(len(X_neg)) / len(X_neg)
     return float(ot.emd2(a, b, M))
@@ -44,8 +45,14 @@ def trace_distance_states(states_pos: torch.Tensor, states_neg: torch.Tensor) ->
     return 0.5 * eig.abs().sum().item()
 
 
-def fig1_curve(n_qubits: int = 4, n_layers: int = 1, n_per_class: int = 60,
-               shifts=None, sigma: float = 0.3, seed: int = 0):
+def fig1_curve(
+    n_qubits: int = 4,
+    n_layers: int = 1,
+    n_per_class: int = 60,
+    shifts=None,
+    sigma: float = 0.3,
+    seed: int = 0,
+):
     """Fig 1: trace distance vs input W1 for a ZZ feature map.
 
     Two Gaussian clouds in input space; one is fixed, the other translated to sweep W1.

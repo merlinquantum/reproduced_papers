@@ -17,7 +17,7 @@ import torch
 
 from .gpt import TokenGPT
 from .photonic_bias import refine_bias
-from .photonic_circuits import build_token_pool, create_quantum_module
+from .photonic_circuits import create_quantum_module
 from .photonic_kernel_svm import (
     qksvm_accuracy as photonic_qksvm_accuracy,
 )

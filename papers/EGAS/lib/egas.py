@@ -9,6 +9,7 @@ The GPT is updated by the logit-matching loss (Eq. 10) toward a Boltzmann distri
 the evaluated energies, with EMA energy normalisation and a top/middle/bottom selection of the
 replay buffer (Appendix A.1).
 """
+
 from __future__ import annotations
 
 import numpy as np
@@ -21,7 +22,7 @@ from .statevec import fidelity_matrix
 
 def pairwise_energy(states: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
     """E = mean_{i!=j} |delta_{y_i,y_j} - F(x_i,x_j)| for one embedding."""
-    F = fidelity_matrix(states)                                  # (S, S)
+    F = fidelity_matrix(states)  # (S, S)
     same = (labels.unsqueeze(0) == labels.unsqueeze(1)).double()  # delta
     loss = (same - F).abs()
     S = states.shape[0]
@@ -41,6 +42,7 @@ def evaluate_sequences(sequences, pool, X, y, n_qubits):
 
 class EMA:
     """Exponential moving estimate of mean/std for energy normalisation."""
+
     def __init__(self, beta=0.9):
         self.beta = beta
         self.mean = None
@@ -59,28 +61,51 @@ class EMA:
         return (x - self.mean) / (np.sqrt(self.var) + 1e-8)
 
 
-def run_egas(pool, X, y, n_qubits, seq_len, *, n_iters=500, n_candidates=24,
-             select_k=6, gamma=0.1, lr=5e-5, weight_decay=1e-2,
-             temp_max=100.0, temp_min=0.04, d_model=64, n_layers=2, n_heads=4,
-             grad_clip=1.0, seed=0, device="cpu", log_every=50, logger=None):
+def run_egas(
+    pool,
+    X,
+    y,
+    n_qubits,
+    seq_len,
+    *,
+    n_iters=500,
+    n_candidates=24,
+    select_k=6,
+    gamma=0.1,
+    lr=5e-5,
+    weight_decay=1e-2,
+    temp_max=100.0,
+    temp_min=0.04,
+    d_model=64,
+    n_layers=2,
+    n_heads=4,
+    grad_clip=1.0,
+    seed=0,
+    device="cpu",
+    log_every=50,
+    logger=None,
+):
     """Run EGAS; return (gpt, history, buffer) where buffer is list of (seq_ids, energy)."""
     torch.manual_seed(seed)
     np.random.seed(seed)
     vocab = len(pool) + 1
-    gpt = TokenGPT(vocab, seq_len, d_model=d_model, n_layers=n_layers, n_heads=n_heads).to(device)
-    opt = torch.optim.Adam(gpt.parameters(), lr=lr, weight_decay=weight_decay,
-                           betas=(0.9, 0.999))
+    gpt = TokenGPT(
+        vocab, seq_len, d_model=d_model, n_layers=n_layers, n_heads=n_heads
+    ).to(device)
+    opt = torch.optim.Adam(
+        gpt.parameters(), lr=lr, weight_decay=weight_decay, betas=(0.9, 0.999)
+    )
     ema = EMA()
     X = torch.as_tensor(X, dtype=torch.float64, device=device)
     y = torch.as_tensor(y, dtype=torch.long, device=device)
 
-    buffer = []                                   # list of (tuple seq_ids, energy)
+    buffer = []  # list of (tuple seq_ids, energy)
     seen = {}
     history = {"iter": [], "min_energy": [], "mean_energy": [], "loss": []}
 
     for it in range(n_iters):
         T = temp_max + (temp_min - temp_max) * (it / max(1, n_iters - 1))
-        seqs = gpt.sample(n_candidates, T, device=device)         # (M, D)
+        seqs = gpt.sample(n_candidates, T, device=device)  # (M, D)
         energies = evaluate_sequences(seqs.cpu().numpy(), pool, X, y, n_qubits)
         ema.update(energies)
         for s_ids, e in zip(seqs.cpu().numpy(), energies):
@@ -97,9 +122,11 @@ def run_egas(pool, X, y, n_qubits, seq_len, *, n_iters=500, n_candidates=24,
         high = buf_sorted[-k:]
         mid_n = max(1, k // 2)
         mid_start = max(0, nb // 2 - mid_n // 2)
-        mid = buf_sorted[mid_start:mid_start + mid_n]
+        mid = buf_sorted[mid_start : mid_start + mid_n]
         sel = low + mid + high
-        sel_ids = torch.tensor([list(s) for s, _ in sel], dtype=torch.long, device=device)
+        sel_ids = torch.tensor(
+            [list(s) for s, _ in sel], dtype=torch.long, device=device
+        )
         sel_e = np.array([e for _, e in sel])
         sel_e_n = ema.normalize(sel_e)
         perm = torch.randperm(len(sel))
@@ -122,8 +149,15 @@ def run_egas(pool, X, y, n_qubits, seq_len, *, n_iters=500, n_candidates=24,
         history["mean_energy"].append(float(energies.mean()))
         history["loss"].append(float(loss.item()))
         if logger and (it % log_every == 0 or it == n_iters - 1):
-            logger.info("EGAS it=%d T=%.3f mean_E=%.4f min_E=%.4f loss=%.4e buf=%d",
-                        it, T, energies.mean(), history["min_energy"][-1], loss.item(), len(buffer))
+            logger.info(
+                "EGAS it=%d T=%.3f mean_E=%.4f min_E=%.4f loss=%.4e buf=%d",
+                it,
+                T,
+                energies.mean(),
+                history["min_energy"][-1],
+                loss.item(),
+                len(buffer),
+            )
     return gpt, history, buffer
 
 

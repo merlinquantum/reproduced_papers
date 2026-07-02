@@ -5,6 +5,7 @@ C = 0.05.  Baselines: classical linear SVM and RBF SVM (C=0.05, gamma=0.125) on 
 input features, the vanilla ZZ feature-map kernel, and NQE (ZZ map preceded by a trainable
 neural preprocessing network trained with a fidelity loss).
 """
+
 from __future__ import annotations
 
 import numpy as np
@@ -23,8 +24,9 @@ def _kernel(states_a, states_b):
     return fidelity_matrix(states_a, states_b).cpu().numpy()
 
 
-def qksvm_accuracy(seq_or_fn, X_train, y_train, X_test, y_test, n_qubits,
-                   bias=None, device="cpu"):
+def qksvm_accuracy(
+    seq_or_fn, X_train, y_train, X_test, y_test, n_qubits, bias=None, device="cpu"
+):
     """Train QKSVM on a token sequence (or a callable X->states) and return test accuracy."""
     Xtr = torch.as_tensor(X_train, dtype=torch.float64, device=device)
     Xte = torch.as_tensor(X_test, dtype=torch.float64, device=device)
@@ -42,7 +44,9 @@ def qksvm_accuracy(seq_or_fn, X_train, y_train, X_test, y_test, n_qubits,
 
 
 def zz_accuracy(X_train, y_train, X_test, y_test, n_qubits, n_layers=1, device="cpu"):
-    fn = lambda X: zz_feature_states(X, n_qubits, n_layers=n_layers)
+    def fn(X):
+        return zz_feature_states(X, n_qubits, n_layers=n_layers)
+
     return qksvm_accuracy(fn, X_train, y_train, X_test, y_test, n_qubits, device=device)
 
 
@@ -64,17 +68,29 @@ class NQENet(nn.Module):
     def __init__(self, n_in, n_qubits, hidden=32):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(n_in, hidden), nn.ReLU(),
-            nn.Linear(hidden, hidden), nn.ReLU(),
-            nn.Linear(hidden, n_qubits))
+            nn.Linear(n_in, hidden),
+            nn.ReLU(),
+            nn.Linear(hidden, hidden),
+            nn.ReLU(),
+            nn.Linear(hidden, n_qubits),
+        )
         self.n_qubits = n_qubits
 
     def forward(self, X):
         return self.net(X.to(torch.float64))
 
 
-def train_nqe(X_train, y_train, n_qubits, *, epochs=80, batch_samples=25, lr=1e-3,
-              seed=0, device="cpu"):
+def train_nqe(
+    X_train,
+    y_train,
+    n_qubits,
+    *,
+    epochs=80,
+    batch_samples=25,
+    lr=1e-3,
+    seed=0,
+    device="cpu",
+):
     """Train NQE preprocessing with a pairwise fidelity (BCE) loss, then return the embedding fn."""
     torch.manual_seed(seed)
     Xt = torch.as_tensor(X_train, dtype=torch.float64, device=device)
@@ -92,13 +108,18 @@ def train_nqe(X_train, y_train, n_qubits, *, epochs=80, batch_samples=25, lr=1e-
         same = (yb.unsqueeze(0) == yb.unsqueeze(1)).double()
         off = ~torch.eye(len(idx), dtype=torch.bool, device=device)
         loss = -(same * torch.log(F) + (1 - same) * torch.log(1 - F))[off].mean()
-        opt.zero_grad(); loss.backward(); opt.step()
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
 
     def embed_fn(X):
         return zz_feature_states(net(X), n_qubits, n_layers=1)
+
     return embed_fn
 
 
-def nqe_accuracy(X_train, y_train, X_test, y_test, n_qubits, *, seed=0, device="cpu", **kw):
+def nqe_accuracy(
+    X_train, y_train, X_test, y_test, n_qubits, *, seed=0, device="cpu", **kw
+):
     fn = train_nqe(X_train, y_train, n_qubits, seed=seed, device=device, **kw)
     return qksvm_accuracy(fn, X_train, y_train, X_test, y_test, n_qubits, device=device)

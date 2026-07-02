@@ -1,11 +1,11 @@
 """Fast, network-free tests for the quantum-statevector engine and EGAS energy."""
+
 from __future__ import annotations
 
 import math
 
 import numpy as np
 import torch
-
 from lib.circuits import build_token_pool, embed_states, zz_feature_states
 from lib.egas import pairwise_energy
 from lib.statevec import fidelity_matrix
@@ -21,7 +21,12 @@ def test_states_are_normalised():
 
 def test_fidelity_is_one_on_identical_inputs():
     n = 4
-    seq = [("RY", 0, 1, 0.5), ("CNOT", 1, 0, 0.0), ("MultiRZ", 2, 3, 0.7), ("H", 3, 0, 0.0)]
+    seq = [
+        ("RY", 0, 1, 0.5),
+        ("CNOT", 1, 0, 0.0),
+        ("MultiRZ", 2, 3, 0.7),
+        ("H", 3, 0, 0.0),
+    ]
     x = torch.tensor(np.random.default_rng(1).uniform(0, 2 * math.pi, size=(1, n)))
     X = x.repeat(3, 1)
     F = fidelity_matrix(embed_states(seq, X, n))
