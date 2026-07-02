@@ -1,0 +1,21 @@
+{
+  "description": "EGAS (generative quantum data embeddings) reproduction runner",
+  "arguments": [
+    {"flags": ["--task"], "help": "wasserstein | fig1 | egas_eval | photonic_eval", "type": "str", "default": null,
+     "apply": {"kind": "config_path", "path": "task"}},
+    {"flags": ["--dataset-name"], "help": "Dataset key (PW,WDGV1,DB,WQ,WC,MGT,EGSSD)", "type": "str", "default": null,
+     "apply": {"kind": "config_path", "path": "dataset.name"}},
+    {"flags": ["--egas-iters"], "help": "EGAS search iterations", "type": "int", "default": null,
+     "apply": {"kind": "config_path", "path": "egas.n_iters"}},
+    {"flags": ["--n-candidates"], "help": "Candidate sequences per EGAS iteration", "type": "int", "default": null,
+     "apply": {"kind": "config_path", "path": "egas.n_candidates"}},
+    {"flags": ["--n-photons"], "help": "Number of photons for the photonic model", "type": "int", "default": null,
+     "apply": {"kind": "config_path", "path": "photonic.n_photons"}},
+    {"flags": ["--computation-space"], "help": "MerLin photonic computation space (UNBUNCHED | BUNCHED)", "type": "str", "default": null,
+     "apply": {"kind": "config_path", "path": "photonic.computation_space"}},
+    {"flags": ["--n-repeats"], "help": "Number of train/test split repeats", "type": "int", "default": null,
+     "apply": {"kind": "config_path", "path": "eval.n_repeats"}},
+    {"flags": ["--top"], "help": "Number of G/B candidate embeddings to keep", "type": "int", "default": null,
+     "apply": {"kind": "config_path", "path": "eval.top"}}
+  ]
+}
