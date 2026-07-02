@@ -1,0 +1,30 @@
+{
+    "description": "Bandwidth tuning runner",
+    "arguments":[
+        {
+            "flags":[
+            "--overlapping_results"
+            ],
+            "help" : "Whether to allow overlapping results in the output directory.",
+            "type" : "bool",
+            "default" : null,
+            "apply": {
+                "kind":"config_path",
+                "path":"overlapping_results"
+            }
+        },
+        {
+            "flags":[
+            "--graph_name"
+            ],
+            "help" : "Name of the graph to be generated.",
+            "type" : "str",
+            "default" : null,
+            "apply": {
+                "kind":"config_path",
+                "path":"graph_name"
+            }
+        }
+        
+    ]
+}

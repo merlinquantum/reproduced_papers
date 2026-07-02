@@ -11,6 +11,8 @@ data/*
 !data/photonic_QCNN/**
 !data/QLSTM/
 !data/QLSTM/**
+!data/Bandwidth_tunning/
+!data/Bandwidth_tunning/**
 models/
 !models/.gitkeep
 outdir/
