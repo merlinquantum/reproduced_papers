@@ -30,7 +30,26 @@ def wasserstein1_l1(
 
 
 def dataset_wasserstein(X: np.ndarray, y: np.ndarray, **kw) -> float:
-    return wasserstein1_l1(X[y == 1], X[y == -1], **kw)
+    """Compute average pairwise 1-Wasserstein distance between all class pairs.
+
+    For binary: returns W1(pos, neg).
+    For multiclass: returns mean W1 over all (class_i, class_j) pairs.
+    """
+    classes = np.unique(y)
+
+    # Binary case (backward compatible)
+    if len(classes) == 2:
+        y_pos, y_neg = classes[0], classes[1]
+        return wasserstein1_l1(X[y == y_pos], X[y == y_neg], **kw)
+
+    # Multiclass: average pairwise distances
+    w1_distances = []
+    for i, c1 in enumerate(classes):
+        for c2 in classes[i + 1 :]:
+            w1 = wasserstein1_l1(X[y == c1], X[y == c2], **kw)
+            w1_distances.append(w1)
+
+    return float(np.mean(w1_distances))
 
 
 def trace_distance_states(states_pos: torch.Tensor, states_neg: torch.Tensor) -> float:

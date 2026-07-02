@@ -9,7 +9,7 @@ This directory contains scripts to easily run all EGAS reproduction experiments 
 # Run from the EGAS directory
 cd papers/EGAS
 
-# Run all experiments (tests + Wasserstein + Fig 1 + EGAS on 3 datasets + photonic)
+# Run all experiments (tests + Wasserstein + Fig 1 + EGAS on 4 datasets + 2 photonic)
 python run_all_experiments.py
 
 # Run only quick smoke test (~80s)
@@ -47,11 +47,13 @@ chmod +x run_all_experiments.sh
 | Wasserstein | `configs/wasserstein.json` | Table I (input-space W1 distances) | ~5min |
 | Fig 1 | `configs/fig1.json` | Trace distance vs W1 saturation curve | ~5min |
 | EGAS (PW) | `configs/egas_PW.json` | Phishing dataset results (Figs 3–7) | ~15min |
+| EGAS (WDGV1) | `configs/egas_WDGV1.json` | Waveform DB (multiclass) results | ~12min |
 | EGAS (WQ) | `configs/egas_WQ.json` | Wine Quality dataset results | ~10min |
 | EGAS (MGT) | `configs/egas_MGT.json` | MAGIC Gamma Telescope dataset results | ~10min |
-| Photonic | `configs/photonic_MGT.json` | MerLin photonic QKSVM results | ~20min |
+| Photonic (MGT) | `configs/photonic_MGT.json` | MerLin photonic QKSVM on MGT | ~20min |
+| Photonic (WDGV1) | `configs/photonic_WDGV1.json` | MerLin photonic QKSVM on WDGV1 (multiclass) | ~18min |
 
-**Total time (all experiments):** ~65 minutes (CPU-only, 10 cores)
+**Total time (all experiments):** ~85 minutes (CPU-only, 10 cores)
 
 ## Output Locations
 
@@ -59,12 +61,14 @@ After running, results are saved to:
 ```
 papers/EGAS/
 ├── outdir/
-│   ├── wasserstein/         # Table I results
+│   ├── wasserstein/         # Table I results (all datasets)
 │   ├── fig1/                # Fig 1 results
 │   ├── PW/                  # EGAS on Phishing
+│   ├── WDGV1/               # EGAS on Waveform DB (multiclass)
 │   ├── WQ/                  # EGAS on Wine Quality
 │   ├── MGT/                 # EGAS on MAGIC Gamma Telescope
-│   └── photonic_MGT/        # Photonic results
+│   ├── photonic_MGT/        # Photonic QKSVM on MGT
+│   └── photonic_WDGV1/      # Photonic QKSVM on WDGV1 (multiclass)
 └── results/                 # Generated plots (when available)
 ```
 

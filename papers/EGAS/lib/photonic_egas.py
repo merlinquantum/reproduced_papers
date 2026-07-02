@@ -25,9 +25,12 @@ from .statevec import fidelity_matrix
 
 
 def pairwise_energy(states: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
-    """E = mean_{i!=j} |delta_{y_i,y_j} - F(x_i,x_j)| for one embedding."""
+    """E = mean_{i!=j} |delta_{y_i,y_j} - F(x_i,x_j)| for one embedding.
+
+    Supports binary and multiclass labels (any integer or categorical format).
+    """
     F = fidelity_matrix(states)  # (S, S)
-    same = (labels.unsqueeze(0) == labels.unsqueeze(1)).double()  # delta
+    same = (labels.unsqueeze(0) == labels.unsqueeze(1)).float()  # delta (multiclass OK)
     loss = (same - F).abs()
     S = states.shape[0]
     off = ~torch.eye(S, dtype=torch.bool, device=states.device)

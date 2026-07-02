@@ -47,7 +47,7 @@ echo -e "${GREEN}✓ Wasserstein results saved${NC}"
 echo ""
 
 # Fig 1
-echo -e "${YELLOW}[3/8]${NC} Running Fig 1 experiments (trace distance vs W1)..."
+echo -e "${YELLOW}[3/10]${NC} Running Fig 1 experiments (trace distance vs W1)..."
 cd "$REPO_ROOT"
 $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/fig1.json" --outdir "$SCRIPT_DIR/outdir/fig1"
 echo -e "${GREEN}✓ Fig 1 results saved${NC}"
@@ -55,21 +55,28 @@ echo ""
 
 if [ "$RUN_GATE_EGAS" = "yes" ]; then
     # EGAS on PW dataset
-    echo -e "${YELLOW}[4/8]${NC} Running EGAS search on Phishing (PW) dataset..."
+    echo -e "${YELLOW}[4/10]${NC} Running EGAS search on Phishing (PW) dataset..."
     cd "$REPO_ROOT"
     $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_PW.json" --outdir "$SCRIPT_DIR/outdir/PW"
     echo -e "${GREEN}✓ PW results saved${NC}"
     echo ""
 
+    # EGAS on WDGV1 dataset (multiclass)
+    echo -e "${YELLOW}[5/10]${NC} Running EGAS search on Waveform DB (WDGV1) dataset (multiclass)..."
+    cd "$REPO_ROOT"
+    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_WDGV1.json" --outdir "$SCRIPT_DIR/outdir/WDGV1"
+    echo -e "${GREEN}✓ WDGV1 results saved${NC}"
+    echo ""
+
     # EGAS on WQ dataset
-    echo -e "${YELLOW}[5/8]${NC} Running EGAS search on Wine Quality (WQ) dataset..."
+    echo -e "${YELLOW}[6/10]${NC} Running EGAS search on Wine Quality (WQ) dataset..."
     cd "$REPO_ROOT"
     $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_WQ.json" --outdir "$SCRIPT_DIR/outdir/WQ"
     echo -e "${GREEN}✓ WQ results saved${NC}"
     echo ""
 
     # EGAS on MGT dataset
-    echo -e "${YELLOW}[6/8]${NC} Running EGAS search on MAGIC Gamma Telescope (MGT) dataset..."
+    echo -e "${YELLOW}[7/10]${NC} Running EGAS search on MAGIC Gamma Telescope (MGT) dataset..."
     cd "$REPO_ROOT"
     $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_MGT.json" --outdir "$SCRIPT_DIR/outdir/MGT"
     echo -e "${GREEN}✓ MGT results saved${NC}"
@@ -77,16 +84,23 @@ if [ "$RUN_GATE_EGAS" = "yes" ]; then
 fi
 
 if [ "$RUN_PHOTONIC" = "yes" ]; then
-    # Photonic implementation
-    echo -e "${YELLOW}[7/8]${NC} Running photonic QKSVM on MAGIC Gamma Telescope (MGT)..."
+    # Photonic implementation on MGT
+    echo -e "${YELLOW}[8/10]${NC} Running photonic QKSVM on MAGIC Gamma Telescope (MGT)..."
     cd "$REPO_ROOT"
     $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/photonic_MGT.json" --outdir "$SCRIPT_DIR/outdir/photonic_MGT"
-    echo -e "${GREEN}✓ Photonic results saved${NC}"
+    echo -e "${GREEN}✓ MGT photonic results saved${NC}"
+    echo ""
+
+    # Photonic implementation on WDGV1 (multiclass)
+    echo -e "${YELLOW}[9/10]${NC} Running photonic QKSVM on Waveform DB (WDGV1) (multiclass)..."
+    cd "$REPO_ROOT"
+    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/photonic_WDGV1.json" --outdir "$SCRIPT_DIR/outdir/photonic_WDGV1"
+    echo -e "${GREEN}✓ WDGV1 photonic results saved${NC}"
     echo ""
 fi
 
 # Generate plots
-echo -e "${YELLOW}[8/8]${NC} Generating summary plots..."
+echo -e "${YELLOW}[10/10]${NC} Generating summary plots..."
 cd "$REPO_ROOT"
 if [ -f "$SCRIPT_DIR/utils/plot_results.py" ]; then
     # Create combined results directory

@@ -2,12 +2,14 @@
 
 Dispatches on ``cfg["task"]``:
   * ``wasserstein`` — input-space 1-Wasserstein distances per dataset (Table I).
+                      Supports binary and multiclass (returns mean pairwise W1).
   * ``fig1``        — trace distance vs W1 for a ZZ feature map (Fig. 1).
   * ``egas_eval``   — full pipeline on one dataset: EGAS search, bias refinement of the
                       G/B groups, QKSVM evaluation over splits, and ZZ / NQE / classical
-                      baselines (Figs. 3-7).
+                      baselines (Figs. 3-7). Supports binary and multiclass labels.
   * ``photonic_eval`` — photonic EGAS search, encoder-parameter refinement, photonic QKSVM
                         evaluation over splits, and classical / gate baselines.
+                        Supports binary and multiclass labels.
 All runs write ``metrics.json`` (+ task-specific NPZ) into ``run_dir``.
 """
 
@@ -44,7 +46,11 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
 
 
 def _run_photonic_eval(cfg, run_dir, logger):
-    """Photonic EGAS search/refinement + photonic QKSVM evaluation."""
+    """Photonic EGAS search/refinement + photonic QKSVM evaluation.
+    
+    Supports binary and multiclass labels. For multiclass, pairwise energy uses
+    same-class matching and classical baselines use one-vs-rest (OvR) strategy.
+    """
     from .data import load_dataset, make_slices
     from .kernel_svm import nqe_accuracy, zz_accuracy
     from .photonic_circuits import build_token_pool, create_quantum_module
@@ -305,9 +311,11 @@ def _run_photonic_eval(cfg, run_dir, logger):
             "classical_linear": stat(lin),
             "classical_rbf": stat(rbf),
             "ZZ": {**stat(zz), "wtl_vs_linear": wtl(zz)},
-            "NQE": {**stat(nqe), "wtl_vs_linear": wtl(nqe)}
-            if not np.isnan(nqe).all()
-            else None,
+            "NQE": (
+                {**stat(nqe), "wtl_vs_linear": wtl(nqe)}
+                if not np.isnan(nqe).all()
+                else None
+            ),
         },
         "G": summarize(accG, G),
         "G_bias": summarize(accGb, G_refined),
@@ -397,6 +405,11 @@ def _run_fig1(cfg, run_dir, logger):
 
 
 def _run_egas_eval(cfg, run_dir, logger):
+    """Gate-based EGAS search/refinement + gate QKSVM evaluation.
+    
+    Supports binary and multiclass labels. For multiclass, pairwise energy uses
+    same-class matching and classical baselines use one-vs-rest (OvR) strategy.
+    """
     from .bias import refine_bias
     from .circuits import build_token_pool
     from .data import load_dataset, make_slices
