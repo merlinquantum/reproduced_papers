@@ -47,9 +47,8 @@ def _run_photonic_eval(cfg, run_dir, logger):
     """Photonic EGAS search/refinement + photonic QKSVM evaluation."""
     from .data import load_dataset, make_slices
     from .kernel_svm import nqe_accuracy, zz_accuracy
-    from .photonic_circuits import create_quantum_module
+    from .photonic_circuits import build_token_pool, create_quantum_module
     from .photonic_egas import (
-        build_token_pool,
         refine_candidates,
         run_egas,
         unique_sorted_candidates,
