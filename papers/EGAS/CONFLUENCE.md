@@ -92,9 +92,23 @@
 - **Fallback used:** None (pure MerLin).
 
 ### 7.2. Photonic implementation and results
-- **What was implemented:** fixed + trained photonic fidelity-kernel QKSVM (`lib/photonic.py`).
+- **What was implemented:** fixed + trained photonic fidelity-kernel QKSVM (`lib/photonic.py`,
+  `lib/photonic_circuits.py`, `lib/photonic_bias.py`, `lib/photonic_kernel_svm.py`).
+- **Test coverage:** comprehensive test suite (`tests/test_photonic_impl.py`) validates:
+  - FeatureMap parameter assignments (input prefix "px", trainable prefixes ["el"])
+  - Perceval circuit parameter creation with correct prefixes for QuantumLayer
+  - QuantumModule input scaling by r-factors from sequence
+  - Trainable parameter initialization to 0
+  - Bias refinement with and without input parameters
+  - Kernel SVM accuracy computation
+  - All tests use real MerLin and Perceval libraries
 - **Backend:** MerLin SLOS analytic (shots=None). **Modes/photons/layers:** 8 / 2 / 2.
 - **Training settings:** Adam lr=0.05, 25 epochs, batch 30, 5 splits (reduced).
+- **Implementation notes:** 
+  - Input parameters scaled by r-factors in QuantumModule forward pass
+  - QuantumLayer receives parameter prefixes (not numbered names) for proper circuit matching
+  - Modules with no input parameters handled correctly (empty input tensors, state replication)
+  - All parameters initialized to zero for consistent optimization baseline
 
 | Metric / Figure | Original (gate EGAS) | Classical (linear) | Photonic (fixed / trained) | Comment |
 | --- | --- | --- | --- | --- |
@@ -129,6 +143,7 @@
 - [x] Photonic version defined
 - [x] Implemented in MerLin
 - [x] MerLin limitation documented
+- [x] Comprehensive photonic tests created (test_photonic_impl.py, 7 test functions)
 - [~] Photonic version run (reduced scope; see table)
 - [x] Figure reproduced / adapted (Table I, Fig 1, Figs 3/4/6/7-style)
 - [ ] PR to reproduced_papers prepared

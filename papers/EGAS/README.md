@@ -173,6 +173,19 @@ Full per-run fields in `metrics.json["hardware"]`.
 `cd papers/generative_quantum_embeddings && pytest -q` — statevector-engine correctness (vs
 analytic), fidelity properties, energy range, token-pool size, CLI, config integrity.
 
+### Photonic Implementation Tests
+Comprehensive test suite (`tests/test_photonic_impl.py`) validates the MerLin photonic 
+implementation:
+- Default input state alternates photon distribution across modes
+- FeatureMap correctly assigns input and trainable parameter prefixes
+- Kernel passes parameter assignments to FidelityKernel
+- Perceval circuit builds expected parameters with numeric suffixes
+- QuantumModule uses PS data indices and applies r-factor scaling to inputs
+- Trainable parameters initialized to 0 for consistent starting state
+- Bias refinement handles circuits with no trainable parameters
+- Photonic kernel SVM computes accuracy correctly
+- All tests use real MerLin and Perceval libraries (no mocks)
+
 ## Citation and License
 Cite the original paper (arXiv:2605.30866). Reproduction code follows the repository license.
 Datasets © their UCI providers (CC BY 4.0 where applicable).
