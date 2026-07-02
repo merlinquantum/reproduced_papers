@@ -128,9 +128,9 @@ def create_quantum_layer_for_ascella(n_photons, logger):
     logger.info("MerLin QuantumLayer creation:")
     qorc_output_size = math.comb(n_photons + n_modes - 1, n_photons)
 
-    assert n_photons <= n_modes, (
-        "Error with photons_input_mode: Bunching not possible for input state."
-    )
+    assert (
+        n_photons <= n_modes
+    ), "Error with photons_input_mode: Bunching not possible for input state."
     step = (n_modes - 1) / (n_photons - 1) if n_photons > 1 else 0
     qorc_input_state = [0] * n_modes
     for k in range(n_photons):
@@ -188,9 +188,9 @@ def create_qorc_quantum_layer(
 
     qorc_circuit = interferometer_1 // c_var // interferometer_2
 
-    assert n_photons <= n_modes, (
-        "Error with photons_input_mode: Bunching not possible for input state."
-    )
+    assert (
+        n_photons <= n_modes
+    ), "Error with photons_input_mode: Bunching not possible for input state."
     step = (n_modes - 1) / (n_photons - 1) if n_photons > 1 else 0
     qorc_input_state = [0] * n_modes
     for k in range(n_photons):
