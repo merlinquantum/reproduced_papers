@@ -3,7 +3,7 @@
   "seed": 0, "dtype": "float32", "outdir": "outdir", "device": "cpu",
   "task": "photonic_eval",
   "dataset": {"name": "WQ", "root": "data", "n_qubits": 8, "n_components": 8},
-  "photonic": {"n_photons": 3, "n_layers": 2, "scale": 1.0, "epochs": 80, "batch": 36, "lr": 0.05},
+  "photonic": {"n_photons": 3, "computation_space": "UNBUNCHED", "n_layers": 2, "scale": 1.0, "epochs": 80, "batch": 36, "lr": 0.05},
   "eval": {"n_train": 400, "n_test": 50, "n_repeats": 8, "top": 4},
   "logging": {"level": "info", "save_config_snapshot": true}
 }

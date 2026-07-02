@@ -69,6 +69,9 @@ def _run_photonic_eval(cfg, run_dir, logger):
     name = dcfg["name"]
     n_modes = int(dcfg.get("n_qubits", 8))
     n_photons = int(pcfg.get("n_photons", 2))
+    computation_space = pcfg.get("computation_space", "UNBUNCHED")
+    if isinstance(computation_space, str):
+        computation_space = computation_space.upper()
     X, y = load_dataset(name, data_root=dcfg["root"], n_components=n_modes, seed=seed)
     w1 = dataset_wasserstein(X, y, seed=seed)
     slices = make_slices(X, y, n_train=vcfg["n_train"], n_test=vcfg["n_test"],
@@ -92,6 +95,7 @@ def _run_photonic_eval(cfg, run_dir, logger):
         n_modes,
         seq_len=int(ecfg.get("seq_len", pcfg.get("seq_len", 28))),
         num_photons=n_photons,
+        computation_space=computation_space,
         n_iters=int(ecfg.get("n_iters", pcfg.get("n_iters", 20))),
         n_candidates=int(ecfg.get("n_candidates", pcfg.get("n_candidates", 8))),
         select_k=int(ecfg.get("select_k", pcfg.get("select_k", 4))),
@@ -118,6 +122,7 @@ def _run_photonic_eval(cfg, run_dir, logger):
                 seq,
                 n_modes=n_modes,
                 num_photons=n_photons,
+                computation_space=computation_space,
             )
             group.append({"seq": seq, "encoder": encoder})
         return group
@@ -129,6 +134,7 @@ def _run_photonic_eval(cfg, run_dir, logger):
         "batch_samples": int(bcfg.get("batch_samples", pcfg.get("batch", 24))),
         "lr": float(bcfg.get("lr", pcfg.get("lr", 5e-4))),
         "seed": seed,
+        "computation_space": computation_space,
     }
     G_refined = refine_candidates(
         G_ids,
@@ -236,7 +242,7 @@ def _run_photonic_eval(cfg, run_dir, logger):
         "task": "photonic_eval",
         "dataset": name,
         "w1": w1,
-        "hardware": {"computation_space": "UNBUNCHED", "detector": "threshold",
+        "hardware": {"computation_space": computation_space, "detector": "threshold",
                      "n_photons": n_photons, "n_modes": n_modes,
                      "encoding": "EGAS photonic token circuit (PS/BS)",
                      "measurement": "QuantumLayer amplitudes + fidelity kernel",
