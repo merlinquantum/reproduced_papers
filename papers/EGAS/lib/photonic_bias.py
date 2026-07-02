@@ -74,15 +74,33 @@ def refine_bias(
         computation_space=computation_space,
     ).to(device)
     trainable_parameters = [p for p in encoder.parameters() if p.requires_grad]
-    if not trainable_parameters:
+    if len(trainable_parameters) == 0:
         with torch.no_grad():
-            E_before = pairwise_energy(encoder(Xt), yt).item()
+            # Evaluate with a single sample and replicate if no input indices
+            dummy_input = (
+                torch.zeros(1, 0, dtype=torch.float32, device=device)
+                if len(encoder.ps_data_indices) == 0
+                else Xt[:1]
+            )
+            states = encoder(dummy_input)
+            if len(encoder.ps_data_indices) == 0:
+                states = states.repeat(len(Xt), 1)
+            E_before = pairwise_energy(states, yt).item()
         return encoder, E_before, E_before
 
     opt = torch.optim.RMSprop(trainable_parameters, lr=lr)
 
     with torch.no_grad():
-        E_before = pairwise_energy(encoder(Xt), yt).item()
+        # Evaluate with a single sample and replicate if no input indices
+        dummy_input = (
+            torch.zeros(1, 0, dtype=torch.float32, device=device)
+            if len(encoder.ps_data_indices) == 0
+            else Xt[:1]
+        )
+        states = encoder(dummy_input)
+        if len(encoder.ps_data_indices) == 0:
+            states = states.repeat(len(Xt), 1)
+        E_before = pairwise_energy(states, yt).item()
 
     rng = np.random.default_rng(seed)
     n = len(X)
@@ -90,7 +108,15 @@ def refine_bias(
     for ep in range(epochs):
         idx = rng.choice(n, size=min(batch_samples, n), replace=False)
         Xb, yb = Xt[idx], yt[idx]
-        states = encoder(Xb)
+        # Evaluate with a single sample and replicate if no input indices
+        Xb_input = (
+            torch.zeros(1, 0, dtype=torch.float32, device=device)
+            if len(encoder.ps_data_indices) == 0
+            else Xb
+        )
+        states = encoder(Xb_input)
+        if len(encoder.ps_data_indices) == 0:
+            states = states.repeat(len(Xb), 1)
         loss = _bce_pair_loss(states, yb)
         reg = l2_bias * _parameter_l2(trainable_parameters)
         opt.zero_grad()
@@ -99,6 +125,14 @@ def refine_bias(
         opt.step()
         if ep >= epochs - avg_last:
             with torch.no_grad():
-                recent.append(pairwise_energy(encoder(Xt), yt).item())
+                dummy_input = (
+                    torch.zeros(1, 0, dtype=torch.float32, device=device)
+                    if len(encoder.ps_data_indices) == 0
+                    else Xt[:1]
+                )
+                states = encoder(dummy_input)
+                if len(encoder.ps_data_indices) == 0:
+                    states = states.repeat(len(Xt), 1)
+                recent.append(pairwise_energy(states, yt).item())
     E_after = float(np.mean(recent)) if recent else E_before
     return encoder, E_before, E_after

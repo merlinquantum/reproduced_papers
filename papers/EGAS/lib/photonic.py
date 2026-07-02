@@ -20,6 +20,7 @@ Hardware-aware settings: >=2 photons (single-photon linear optics is a trivial c
 baseline and is not used), UNBUNCHED computation space (threshold detectors), analytic SLOS
 (shots=None).
 """
+
 from __future__ import annotations
 
 import numpy as np
@@ -42,8 +43,9 @@ def build_feature_map(n_modes: int, n_layers: int = 2, scale: float = 1.0):
     tp = b.trainable_parameter_prefixes
     ip = ip() if callable(ip) else ip
     tp = tp() if callable(tp) else tp
-    return ml.FeatureMap(builder=b, input_size=n_modes,
-                         input_parameters=ip, trainable_parameters=tp)
+    return ml.FeatureMap(
+        builder=b, input_size=n_modes, input_parameters=ip, trainable_parameters=tp
+    )
 
 
 def default_input_state(n_modes: int, n_photons: int):
@@ -55,7 +57,7 @@ def default_input_state(n_modes: int, n_photons: int):
     while placed < n_photons and i < n_modes:
         state[i] = 1
         placed += 1
-        i += 2 if (i + 2) < n_modes else 1
+        i += 2
     # if not enough room with stride 2, fill remaining low modes
     j = 0
     while placed < n_photons:
@@ -69,8 +71,13 @@ def default_input_state(n_modes: int, n_photons: int):
 def make_kernel(n_modes, n_photons, n_layers=2, scale=1.0, device="cpu"):
     fm = build_feature_map(n_modes, n_layers=n_layers, scale=scale)
     state = default_input_state(n_modes, n_photons)
-    kern = ml.FidelityKernel(fm, input_state=state, n_photons=n_photons,
-                             computation_space="unbunched", device=device)
+    kern = ml.FidelityKernel(
+        fm,
+        input_state=state,
+        n_photons=n_photons,
+        computation_space="unbunched",
+        device=device,
+    )
     return kern, state
 
 
@@ -80,8 +87,9 @@ def _pair_fidelity_loss(K, y, eps=1e-4):
     return (same - K.double()).abs()[off].mean()
 
 
-def train_photonic_embedding(kern, X_train, y_train, *, epochs=120, batch=36,
-                             lr=0.05, seed=0):
+def train_photonic_embedding(
+    kern, X_train, y_train, *, epochs=120, batch=36, lr=0.05, seed=0
+):
     """Optimise the photonic mesh parameters with the EGAS pairwise-fidelity surrogate."""
     torch.manual_seed(seed)
     params = [p for p in kern.parameters() if p.requires_grad]
@@ -96,7 +104,9 @@ def train_photonic_embedding(kern, X_train, y_train, *, epochs=120, batch=36,
         idx = rng.choice(n, size=min(batch, n), replace=False)
         K = kern.forward(Xt[idx])
         loss = _pair_fidelity_loss(K, yt[idx])
-        opt.zero_grad(); loss.backward(); opt.step()
+        opt.zero_grad()
+        loss.backward()
+        opt.step()
     return kern
 
 

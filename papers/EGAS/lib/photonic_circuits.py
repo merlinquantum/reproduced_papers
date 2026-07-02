@@ -36,19 +36,19 @@ def create_perceval_circuit(
     input_parameters = []
     trainable_parameters = []
 
-    for gate, q, _, r in sequence:
+    for gate, q, _, _ in sequence:
         if gate == "PS":
             input_param = pcvl.Parameter(f"theta{len(input_parameters)}")
-            trainable_param = pcvl.Parameter(
-                f"phi{len(trainable_parameters)}", value=0.0
-            )
+            trainable_param = pcvl.Parameter(f"phi{len(trainable_parameters)}")
             input_parameters.append(input_param)
-            circuit.add(q, pcvl.PS(input_param * r + trainable_param))
+            trainable_parameters.append(trainable_param)
+            circuit.add(q, pcvl.PS(input_param))
+            circuit.add(q, pcvl.PS(trainable_param))
             # D, the data index will be handled in the QuantumLayer
         elif gate in FIXED_PS_PHASES:
             circuit.add(q, pcvl.PS(FIXED_PS_PHASES[gate]))
         elif gate == "BS":
-            circuit([q, q + 1], pcvl.BS())
+            circuit.add([q, q + 1], pcvl.BS())
         else:
             raise ValueError(f"Unsupported photonic gate token: {gate}")
     return circuit, input_parameters, trainable_parameters
@@ -65,30 +65,41 @@ def create_quantum_module(
     )
 
     ps_data_indices = [data_idx for gate, _, data_idx, _ in sequence if gate == "PS"]
+    ps_r_factors = [r for gate, _, _, r in sequence if gate == "PS"]
 
     class QuantumModule(nn.Module):
         def __init__(self):
             super().__init__()
             self.ps_data_indices = ps_data_indices
+            self.ps_r_factors = torch.tensor(ps_r_factors, dtype=torch.float32)
             self.layer = ml.QuantumLayer(
                 input_size=len(input_parameters),
                 circuit=circuit,
                 n_photons=num_photons,
-                trainable_parameters=trainable_parameters,
-                input_parameters=input_parameters,
+                trainable_parameters=["phi"] if len(trainable_parameters) > 0 else [],
+                input_parameters=["theta"] if len(input_parameters) > 0 else [],
                 measurement_strategy=ml.MeasurementStrategy.amplitudes(
                     computation_space=computation_space
                 ),
             )
+            # Initialize all trainable parameters to 0
+            for param in self.layer.parameters():
+                param.data.fill_(0.0)
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
-            if x.shape[-1] <= max(self.ps_data_indices, default=-1):
-                raise ValueError(
-                    "Input feature width is too small for the PS data indices in "
-                    "the sequence."
-                )
-
-            layer_input = x[..., self.ps_data_indices]
-            return self.layer(layer_input)
+            if len(self.ps_data_indices) > 0:
+                if x.shape[-1] <= max(self.ps_data_indices, default=-1):
+                    raise ValueError(
+                        "Input feature width is too small for the PS data indices in "
+                        "the sequence."
+                    )
+                layer_input = x[..., self.ps_data_indices]
+                # Multiply each input by the corresponding r factor
+                layer_input = layer_input * self.ps_r_factors
+                return self.layer(layer_input)
+            else:
+                # No input parameters needed, create empty input with batch size
+                layer_input = torch.zeros(x.shape[0], 0, dtype=x.dtype, device=x.device)
+                return self.layer()
 
     return QuantumModule()

@@ -21,7 +21,8 @@ def test_default_input_state_alternates_modes():
 
     assert default_input_state(4, 2) == [1, 0, 1, 0]
     assert default_input_state(4, 3) == [1, 1, 1, 0]
-    assert default_input_state(5, 4) == [1, 0, 1, 0, 1]
+    assert default_input_state(5, 3) == [1, 0, 1, 0, 1]
+    assert default_input_state(5, 4) == [1, 1, 1, 0, 1]
 
 
 def test_build_feature_map_assigns_input_and_trainable_parameters():
@@ -30,8 +31,8 @@ def test_build_feature_map_assigns_input_and_trainable_parameters():
     fm = build_feature_map(n_modes=3, n_layers=2, scale=0.5)
 
     assert fm.input_size == 3
-    assert list(fm.input_parameters) == ["x0", "x1", "x2"]
-    assert list(fm.trainable_parameters) == ["phi0", "phi1", "phi2"]
+    assert fm.input_parameters == "px"
+    assert fm.trainable_parameters == ["el"]
 
 
 def test_make_kernel_passes_parameter_assignments_to_fidelity_kernel():
@@ -43,14 +44,14 @@ def test_make_kernel_passes_parameter_assignments_to_fidelity_kernel():
 
     assert state == [1, 1, 1, 0]
     assert kern.input_state == state
-    assert kern.n_photons == 3
+    assert sum(kern.input_state) == 3
     assert getattr(kern, "computation_space", None) == ml.ComputationSpace.UNBUNCHED
 
     feature_map = getattr(kern, "feature_map", None)
     assert feature_map is not None
     assert feature_map.input_size == 4
-    assert list(feature_map.input_parameters) == ["x0", "x1", "x2", "x3"]
-    assert list(feature_map.trainable_parameters) == ["phi0", "phi1", "phi2", "phi3"]
+    assert feature_map.input_parameters == "px"
+    assert feature_map.trainable_parameters == ["el"]
 
 
 def test_create_perceval_circuit_builds_expected_parameters():
@@ -75,8 +76,10 @@ def test_create_quantum_module_uses_ps_data_indices_and_trainable_parameters():
     encoder = create_quantum_module(sequence, n_modes=2)
 
     assert encoder.ps_data_indices == [1, 0]
-    assert len(encoder.layer.input_parameters) == 2
-    assert len(encoder.layer.trainable_parameters) == 2
+    assert encoder.layer.input_size == 2
+
+    trainable_params = [p for p in encoder.layer.parameters() if p.requires_grad][0]
+    assert trainable_params.numel() == 2
 
     x = torch.randn(3, 2, dtype=torch.float32)
     states = encoder(x)
@@ -116,7 +119,7 @@ def test_refine_bias_returns_same_energy_when_no_trainable_parameters():
         sequence,
         X,
         y,
-        n_modes=1,
+        n_modes=3,
         num_photons=2,
         computation_space=ml.ComputationSpace.UNBUNCHED,
         epochs=1,
