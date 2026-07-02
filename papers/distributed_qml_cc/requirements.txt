@@ -1,0 +1,5 @@
+torch>=2.3
+numpy>=1.26
+matplotlib>=3.8
+merlinquantum>=0.3
+pytest>=8.0

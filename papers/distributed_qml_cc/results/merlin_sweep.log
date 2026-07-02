@@ -1,0 +1,21 @@
+=== baseline (m=8, n=3, angle scale=1) ===
+2026-05-21 10:02:28 | INFO | lib.merlin_model |   MerLin n_modes=8 n_photons=3 seed=42 val_acc=0.9316 best=0.9316 params=120 time=27.6s
+2026-05-21 10:02:57 | INFO | lib.merlin_model |   MerLin n_modes=8 n_photons=3 seed=1 val_acc=0.8984 best=0.9062 params=120 time=29.0s
+2026-05-21 10:03:25 | INFO | lib.merlin_model |   MerLin n_modes=8 n_photons=3 seed=2 val_acc=0.8516 best=0.8672 params=120 time=27.5s
+2026-05-21 10:03:25 | INFO | root | Finished. Artifacts in: outdir/run_20260521-100159
+=== nc (2x m=8/n=3, 4 features each) ===
+2026-05-21 10:04:27 | INFO | lib.merlin_distributed |   MerLin-Dist scheme=nc seed=42 val_acc=0.9141 best=0.9141 params=472 time=59.0s
+2026-05-21 10:05:24 | INFO | lib.merlin_distributed |   MerLin-Dist scheme=nc seed=1 val_acc=0.8438 best=0.8438 params=472 time=57.1s
+2026-05-21 10:06:24 | INFO | lib.merlin_distributed |   MerLin-Dist scheme=nc seed=2 val_acc=0.8887 best=0.9062 params=472 time=59.8s
+2026-05-21 10:06:24 | INFO | root | Finished. Artifacts in: outdir/run_20260521-100326
+=== cc (nc + classical feedforward) ===
+2026-05-21 10:08:32 | INFO | lib.merlin_distributed |   MerLin-Dist scheme=cc seed=42 val_acc=0.9219 best=0.9258 params=563 time=124.7s
+2026-05-21 10:10:32 | INFO | lib.merlin_distributed |   MerLin-Dist scheme=cc seed=1 val_acc=0.9824 best=0.9844 params=563 time=120.3s
+2026-05-21 10:12:31 | INFO | lib.merlin_distributed |   MerLin-Dist scheme=cc seed=2 val_acc=0.9512 best=0.9785 params=563 time=118.6s
+2026-05-21 10:12:31 | INFO | root | Finished. Artifacts in: outdir/run_20260521-100626
+=== qc (1x m=16/n=6) ===
+2026-05-21 10:19:47 | INFO | lib.merlin_distributed |   MerLin-Dist scheme=qc seed=42 val_acc=0.9883 best=0.9922 params=16514 time=433.2s
+2026-05-21 10:26:57 | INFO | lib.merlin_distributed |   MerLin-Dist scheme=qc seed=1 val_acc=0.9863 best=0.9902 params=16514 time=428.8s
+2026-05-21 10:33:32 | INFO | lib.merlin_distributed |   MerLin-Dist scheme=qc seed=2 val_acc=0.9805 best=0.9883 params=16514 time=394.1s
+2026-05-21 10:33:32 | INFO | root | Finished. Artifacts in: outdir/run_20260521-101233
+=== ALL DONE ===
