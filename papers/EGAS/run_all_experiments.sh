@@ -47,95 +47,152 @@ echo -e "${GREEN}✓ Wasserstein results saved${NC}"
 echo ""
 
 # Fig 1
-echo -e "${YELLOW}[3/10]${NC} Running Fig 1 experiments (trace distance vs W1)..."
+echo -e "${YELLOW}[3/16]${NC} Running Fig 1 experiments (trace distance vs W1)..."
 cd "$REPO_ROOT"
 $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/fig1.json" --outdir "$SCRIPT_DIR/outdir/fig1"
 echo -e "${GREEN}✓ Fig 1 results saved${NC}"
 echo ""
 
-if [ "$RUN_GATE_EGAS" = "yes" ]; then
-    # EGAS on PW dataset
-    echo -e "${YELLOW}[4/10]${NC} Running EGAS search on Phishing (PW) dataset..."
-    cd "$REPO_ROOT"
-    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_PW.json" --outdir "$SCRIPT_DIR/outdir/PW"
-    echo -e "${GREEN}✓ PW results saved${NC}"
-    echo ""
-
-    # EGAS on WDGV1 dataset (multiclass)
-    echo -e "${YELLOW}[5/10]${NC} Running EGAS search on Waveform DB (WDGV1) dataset (multiclass)..."
-    cd "$REPO_ROOT"
-    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_WDGV1.json" --outdir "$SCRIPT_DIR/outdir/WDGV1"
-    echo -e "${GREEN}✓ WDGV1 results saved${NC}"
-    echo ""
-
-    # EGAS on WQ dataset
-    echo -e "${YELLOW}[6/10]${NC} Running EGAS search on Wine Quality (WQ) dataset..."
-    cd "$REPO_ROOT"
-    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_WQ.json" --outdir "$SCRIPT_DIR/outdir/WQ"
-    echo -e "${GREEN}✓ WQ results saved${NC}"
-    echo ""
-
-    # EGAS on MGT dataset
-    echo -e "${YELLOW}[7/10]${NC} Running EGAS search on MAGIC Gamma Telescope (MGT) dataset..."
-    cd "$REPO_ROOT"
-    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_MGT.json" --outdir "$SCRIPT_DIR/outdir/MGT"
-    echo -e "${GREEN}✓ MGT results saved${NC}"
-    echo ""
-fi
+# ============ PW Dataset (Phishing) ============
+echo -e "${YELLOW}[4/12]${NC} Running EGAS search on Phishing (PW) dataset..."
+cd "$REPO_ROOT"
+$PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_PW.json" --outdir "$SCRIPT_DIR/outdir/PW"
+echo -e "${GREEN}✓ PW results saved${NC}"
 
 if [ "$RUN_PHOTONIC" = "yes" ]; then
-    # Photonic implementation on MGT
-    echo -e "${YELLOW}[8/10]${NC} Running photonic QKSVM on MAGIC Gamma Telescope (MGT)..."
+    echo -e "${YELLOW}[5/12]${NC} Running photonic QKSVM on Phishing (PW) dataset..."
+    cd "$REPO_ROOT"
+    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/photonic_PW.json" --outdir "$SCRIPT_DIR/outdir/photonic_PW"
+    echo -e "${GREEN}✓ PW photonic results saved${NC}"
+fi
+echo ""
+
+# ============ WQ Dataset (Wine Quality) ============
+echo -e "${YELLOW}[6/12]${NC} Running EGAS search on Wine Quality (WQ) dataset..."
+cd "$REPO_ROOT"
+$PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_WQ.json" --outdir "$SCRIPT_DIR/outdir/WQ"
+echo -e "${GREEN}✓ WQ results saved${NC}"
+
+if [ "$RUN_PHOTONIC" = "yes" ]; then
+    echo -e "${YELLOW}[7/12]${NC} Running photonic QKSVM on Wine Quality (WQ) dataset..."
+    cd "$REPO_ROOT"
+    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/photonic_WQ.json" --outdir "$SCRIPT_DIR/outdir/photonic_WQ"
+    echo -e "${GREEN}✓ WQ photonic results saved${NC}"
+fi
+echo ""
+
+# ============ MGT Dataset (MAGIC Gamma Telescope) ============
+echo -e "${YELLOW}[8/12]${NC} Running EGAS search on MAGIC Gamma Telescope (MGT) dataset..."
+cd "$REPO_ROOT"
+$PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_MGT.json" --outdir "$SCRIPT_DIR/outdir/MGT"
+echo -e "${GREEN}✓ MGT results saved${NC}"
+
+if [ "$RUN_PHOTONIC" = "yes" ]; then
+    echo -e "${YELLOW}[9/12]${NC} Running photonic QKSVM on MAGIC Gamma Telescope (MGT)..."
     cd "$REPO_ROOT"
     $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/photonic_MGT.json" --outdir "$SCRIPT_DIR/outdir/photonic_MGT"
     echo -e "${GREEN}✓ MGT photonic results saved${NC}"
-    echo ""
+fi
+echo ""
 
-    # Photonic implementation on WDGV1 (multiclass)
-    echo -e "${YELLOW}[9/10]${NC} Running photonic QKSVM on Waveform DB (WDGV1) (multiclass)..."
+# ============ WDGV1 Dataset (Waveform, multiclass) ============
+echo -e "${YELLOW}[10/12]${NC} Running EGAS search on Waveform DB (WDGV1) dataset (multiclass)..."
+cd "$REPO_ROOT"
+$PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_WDGV1.json" --outdir "$SCRIPT_DIR/outdir/WDGV1"
+echo -e "${GREEN}✓ WDGV1 results saved${NC}"
+
+if [ "$RUN_PHOTONIC" = "yes" ]; then
+    echo -e "${YELLOW}[11/12]${NC} Running photonic QKSVM on Waveform DB (WDGV1) (multiclass)..."
     cd "$REPO_ROOT"
     $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/photonic_WDGV1.json" --outdir "$SCRIPT_DIR/outdir/photonic_WDGV1"
     echo -e "${GREEN}✓ WDGV1 photonic results saved${NC}"
-    echo ""
+fi
+echo ""
+
+# Generate all plots
+echo -e "${YELLOW}[12/12]${NC} Generating all figures..."
+cd "$SCRIPT_DIR"
+
+# Find latest metrics for each dataset
+PW_GATE=$(find outdir/PW -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+WQ_GATE=$(find outdir/WQ -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+MGT_GATE=$(find outdir/MGT -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+WDGV1_GATE=$(find outdir/WDGV1 -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+
+# Fig 3 (PW only)
+if [ -n "$PW_GATE" ]; then
+    echo "  Generating Fig 3 (gate)..."
+    $PYTHON utils/plot_results.py --fig3-gate "$PW_GATE"
+fi
+if [ "$RUN_PHOTONIC" = "yes" ]; then
+    PW_PHOTONIC=$(find outdir/photonic_PW -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+    if [ -n "$PW_PHOTONIC" ]; then
+        echo "  Generating Fig 3 (photonic)..."
+        $PYTHON utils/plot_results.py --fig3-photonic "$PW_PHOTONIC"
+    fi
 fi
 
-# Generate plots
-echo -e "${YELLOW}[10/10]${NC} Generating summary plots..."
-cd "$REPO_ROOT"
-if [ -f "$SCRIPT_DIR/utils/plot_results.py" ]; then
-    # Create combined results directory
-    mkdir -p "$SCRIPT_DIR/results"
-    
-    # Note: Uncomment and adjust plot generation commands when plot_results.py is available
-    # $PYTHON "$SCRIPT_DIR/utils/plot_results.py" \
-    #     --wasserstein "$SCRIPT_DIR/outdir/wasserstein/metrics.json" \
-    #     --egas "$SCRIPT_DIR/outdir/PW/run_*/metrics.json" \
-    #             "$SCRIPT_DIR/outdir/WQ/run_*/metrics.json" \
-    #             "$SCRIPT_DIR/outdir/MGT/run_*/metrics.json" \
-    #     --output "$SCRIPT_DIR/results/"
-    
-    echo -e "${YELLOW}Note: Plot generation requires plot_results.py configuration${NC}"
-else
-    echo -e "${YELLOW}Note: plot_results.py not found, skipping plot generation${NC}"
+# Fig 4 & 5 (all datasets)
+if [ -n "$PW_GATE" ] && [ -n "$WQ_GATE" ] && [ -n "$MGT_GATE" ] && [ -n "$WDGV1_GATE" ]; then
+    echo "  Generating Fig 4 & 5 (gate, all datasets)..."
+    $PYTHON utils/plot_results.py --fig4-gate "$PW_GATE" "$WQ_GATE" "$MGT_GATE" "$WDGV1_GATE"
+    $PYTHON utils/plot_results.py --fig5-gate "$PW_GATE" "$WQ_GATE" "$MGT_GATE" "$WDGV1_GATE"
 fi
-echo -e "${GREEN}✓ Done${NC}"
+
+if [ "$RUN_PHOTONIC" = "yes" ]; then
+    PW_PHOTONIC=$(find outdir/photonic_PW -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+    WQ_PHOTONIC=$(find outdir/photonic_WQ -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+    MGT_PHOTONIC=$(find outdir/photonic_MGT -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+    WDGV1_PHOTONIC=$(find outdir/photonic_WDGV1 -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+    if [ -n "$PW_PHOTONIC" ] && [ -n "$WQ_PHOTONIC" ] && [ -n "$MGT_PHOTONIC" ] && [ -n "$WDGV1_PHOTONIC" ]; then
+        echo "  Generating Fig 4 & 5 (photonic, all datasets)..."
+        $PYTHON utils/plot_results.py --fig4-photonic "$PW_PHOTONIC" "$WQ_PHOTONIC" "$MGT_PHOTONIC" "$WDGV1_PHOTONIC"
+        $PYTHON utils/plot_results.py --fig5-photonic "$PW_PHOTONIC" "$WQ_PHOTONIC" "$MGT_PHOTONIC" "$WDGV1_PHOTONIC"
+    fi
+fi
+
+# Diagnostic plots (Wasserstein and Fig 1)
+WASSERSTEIN_METRICS=$(find outdir/wasserstein -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+FIG1_METRICS=$(find outdir/fig1 -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+if [ -n "$WASSERSTEIN_METRICS" ]; then
+    echo "  Generating diagnostic plot (Table I)..."
+    $PYTHON utils/plot_results.py --wasserstein "$WASSERSTEIN_METRICS"
+fi
+if [ -n "$FIG1_METRICS" ]; then
+    echo "  Generating Fig 1..."
+    $PYTHON utils/plot_results.py --fig1 "$FIG1_METRICS"
+fi
+
+echo -e "${GREEN}✓ All plots generated${NC}"
 echo ""
 
 echo -e "${BLUE}========================================${NC}"
 echo -e "${GREEN}All experiments completed successfully!${NC}"
 echo -e "${BLUE}========================================${NC}"
 echo ""
-echo "Results saved to:"
-echo "  • Wasserstein:  $SCRIPT_DIR/outdir/wasserstein/"
-echo "  • Fig 1:        $SCRIPT_DIR/outdir/fig1/"
-if [ "$RUN_GATE_EGAS" = "yes" ]; then
-    echo "  • EGAS (PW):    $SCRIPT_DIR/outdir/PW/"
-    echo "  • EGAS (WQ):    $SCRIPT_DIR/outdir/WQ/"
-    echo "  • EGAS (MGT):   $SCRIPT_DIR/outdir/MGT/"
-fi
+echo "Results and plots saved to:"
+echo "  • $SCRIPT_DIR/results/ - All generated figures"
+echo ""
+echo "Per-dataset results:"
+echo "  • Gate-based EGAS:"
+echo "    - PW:    $SCRIPT_DIR/outdir/PW/"
+echo "    - WQ:    $SCRIPT_DIR/outdir/WQ/"
+echo "    - MGT:   $SCRIPT_DIR/outdir/MGT/"
+echo "    - WDGV1: $SCRIPT_DIR/outdir/WDGV1/"
 if [ "$RUN_PHOTONIC" = "yes" ]; then
-    echo "  • Photonic:     $SCRIPT_DIR/outdir/photonic_MGT/"
+    echo "  • Photonic QKSVM:"
+    echo "    - PW:    $SCRIPT_DIR/outdir/photonic_PW/"
+    echo "    - WQ:    $SCRIPT_DIR/outdir/photonic_WQ/"
+    echo "    - MGT:   $SCRIPT_DIR/outdir/photonic_MGT/"
+    echo "    - WDGV1: $SCRIPT_DIR/outdir/photonic_WDGV1/"
 fi
+echo ""
+echo "Generated figures:"
+echo "  • Table 1: table1_wasserstein.png (Wasserstein diagnostic)"
+echo "  • Fig 1: fig1_tracedist_vs_w1.png (trace distance vs W1)"
+echo "  • Fig 3: fig3_deltaE_per_candidate.png (gate), fig3_deltaE_per_candidate_photonic.png (photonic)"
+echo "  • Fig 4: fig4_deltaE_groups.png (gate), fig4_deltaE_groups_photonic.png (photonic) - Per dataset"
+echo "  • Fig 5: fig5_win_tie_loss.png (gate), fig5_win_tie_loss_photonic.png (photonic) - Per dataset"
 echo ""
 echo "Usage:"
 echo "  ./run_all_experiments.sh               # Run all (default)"

@@ -22,6 +22,10 @@ from .statevec import fidelity_matrix
 
 def pairwise_energy(states: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
     """E = mean_{i!=j} |delta_{y_i,y_j} - F(x_i,x_j)| for one embedding."""
+    # Ensure states and labels have matching first dimension
+    if states.shape[0] == 1 and labels.shape[0] > 1:
+        states = states.expand(labels.shape[0], -1)
+    
     F = fidelity_matrix(states)  # (S, S)
     same = (labels.unsqueeze(0) == labels.unsqueeze(1)).double()  # delta
     loss = (same - F).abs()

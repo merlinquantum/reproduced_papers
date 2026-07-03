@@ -47,7 +47,7 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
 
 def _run_photonic_eval(cfg, run_dir, logger):
     """Photonic EGAS search/refinement + photonic QKSVM evaluation.
-    
+
     Supports binary and multiclass labels. For multiclass, pairwise energy uses
     same-class matching and classical baselines use one-vs-rest (OvR) strategy.
     """
@@ -61,8 +61,6 @@ def _run_photonic_eval(cfg, run_dir, logger):
     )
     from .photonic_kernel_svm import (
         classical_svm_accuracy,
-    )
-    from .photonic_kernel_svm import (
         qksvm_accuracy as photonic_qksvm_accuracy,
     )
     from .wasserstein import dataset_wasserstein
@@ -406,7 +404,7 @@ def _run_fig1(cfg, run_dir, logger):
 
 def _run_egas_eval(cfg, run_dir, logger):
     """Gate-based EGAS search/refinement + gate QKSVM evaluation.
-    
+
     Supports binary and multiclass labels. For multiclass, pairwise energy uses
     same-class matching and classical baselines use one-vs-rest (OvR) strategy.
     """

@@ -3,13 +3,15 @@
 Eq. (7): D_tr(rho+, rho-) <= kappa_F * W1(P+, P-).  Datasets whose class-conditional input
 distributions are close in 1-Wasserstein distance admit little class separation from any
 embedding in the family, so embedding search saturates.
+
+Uses scipy's linear_sum_assignment for exact EMD without threading issues.
 """
 
 from __future__ import annotations
 
 import numpy as np
-import ot
 import torch
+from scipy.optimize import linear_sum_assignment
 
 from .circuits import zz_feature_states
 
@@ -17,16 +19,30 @@ from .circuits import zz_feature_states
 def wasserstein1_l1(
     X_pos: np.ndarray, X_neg: np.ndarray, max_per_class: int = 500, seed: int = 0
 ) -> float:
-    """Empirical 1-Wasserstein distance with L1 ground metric between two point clouds."""
+    """Empirical 1-Wasserstein distance with L1 ground metric between two point clouds.
+
+    Uses scipy's linear_sum_assignment for exact EMD (Hungarian algorithm). This is
+    a polynomial algorithm. It is ok since all the points have the same points but different distances.
+    The problem becomes an assignement problem.
+    No threading issues, pure Python implementation.
+    """
     rng = np.random.default_rng(seed)
     if len(X_pos) > max_per_class:
         X_pos = X_pos[rng.choice(len(X_pos), max_per_class, replace=False)]
     if len(X_neg) > max_per_class:
         X_neg = X_neg[rng.choice(len(X_neg), max_per_class, replace=False)]
-    M = ot.dist(X_pos, X_neg, metric="cityblock")  # L1 cost matrix
-    a = np.ones(len(X_pos)) / len(X_pos)
-    b = np.ones(len(X_neg)) / len(X_neg)
-    return float(ot.emd2(a, b, M))
+
+    # Compute L1 cost matrix
+    M = np.abs(X_pos[:, np.newaxis, :] - X_neg[np.newaxis, :, :]).sum(axis=2)
+
+    # Solve assignment problem (Hungarian algorithm)
+    row_ind, col_ind = linear_sum_assignment(M)
+
+    # Compute transport cost
+    transport_cost = M[row_ind, col_ind].sum()
+
+    # Normalize by number of samples (average cost per sample)
+    return float(transport_cost / max(len(X_pos), len(X_neg)))
 
 
 def dataset_wasserstein(X: np.ndarray, y: np.ndarray, **kw) -> float:
