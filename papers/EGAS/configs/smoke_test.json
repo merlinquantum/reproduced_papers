@@ -1,5 +1,5 @@
 {
-  "description": "Fast smoke test: gate EGAS on WC dataset (30-50s runtime target)",
+  "description": "Fast smoke test: gate EGAS on WC dataset (30s runtime target)",
   "seed": 0,
   "dtype": "float64",
   "outdir": "outdir",
