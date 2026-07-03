@@ -455,23 +455,30 @@ if __name__ == "__main__":
     )
     a = ap.parse_args()
 
-    if a.wasserstein:
-        plot_wasserstein(a.wasserstein)
-    if a.fig1:
-        plot_fig1(a.fig1)
-    if a.fig3_gate:
-        plot_fig3_deltaE_per_candidate(a.fig3_gate)
-    if a.fig3_photonic:
-        plot_fig3_deltaE_per_candidate_photonic(a.fig3_photonic)
-    if a.fig4_gate:
-        plot_fig4_deltaE_groups(a.fig4_gate)
-    if a.fig4_photonic:
-        plot_fig4_deltaE_groups_photonic(a.fig4_photonic)
-    if a.fig5_gate:
-        plot_fig5_win_tie_loss(a.fig5_gate)
-    if a.fig5_photonic:
-        plot_fig5_win_tie_loss_photonic(a.fig5_photonic)
-    if a.fig6_gate:
-        plot_fig6_iqr(a.fig6_gate)
-    if a.fig6_photonic:
-        plot_fig6_iqr_photonic(a.fig6_photonic)
+    try:
+        if a.wasserstein:
+            plot_wasserstein(a.wasserstein)
+        if a.fig1:
+            plot_fig1(a.fig1)
+        if a.fig3_gate:
+            plot_fig3_deltaE_per_candidate(a.fig3_gate)
+        if a.fig3_photonic:
+            plot_fig3_deltaE_per_candidate_photonic(a.fig3_photonic)
+        if a.fig4_gate:
+            plot_fig4_deltaE_groups(a.fig4_gate)
+        if a.fig4_photonic:
+            plot_fig4_deltaE_groups_photonic(a.fig4_photonic)
+        if a.fig5_gate:
+            plot_fig5_win_tie_loss(a.fig5_gate)
+        if a.fig5_photonic:
+            plot_fig5_win_tie_loss_photonic(a.fig5_photonic)
+        if a.fig6_gate:
+            plot_fig6_iqr(a.fig6_gate)
+        if a.fig6_photonic:
+            plot_fig6_iqr_photonic(a.fig6_photonic)
+    except Exception as e:
+        import traceback
+
+        print(f"Error generating plots: {e}", file=__import__("sys").stderr)
+        traceback.print_exc(file=__import__("sys").stderr)
+        raise

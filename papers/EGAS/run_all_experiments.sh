@@ -113,57 +113,96 @@ echo ""
 echo -e "${YELLOW}[12/12]${NC} Generating all figures..."
 cd "$SCRIPT_DIR"
 
+# Temporarily disable set -e for plot generation (plots are optional)
+set +e
+
+# Helper function to find latest metrics by run directory timestamp (YYYYMMDD-HHMMSS)
+find_latest_metrics() {
+    local dataset_dir="$1"
+    if [ ! -d "$dataset_dir" ]; then
+        echo ""
+        return
+    fi
+    # Find all run_* directories, sort by name (timestamp) in reverse, get first, extract metrics path
+    local latest_run=$(find "$dataset_dir" -maxdepth 1 -type d -name "run_*" | sort -r | head -1)
+    if [ -n "$latest_run" ] && [ -f "$latest_run/metrics.json" ]; then
+        echo "$latest_run/metrics.json"
+    else
+        echo ""
+    fi
+}
+
 # Find latest metrics for each dataset
-PW_GATE=$(find outdir/PW -name metrics.json -type f 2>/dev/null | sort -r | head -1)
-WQ_GATE=$(find outdir/WQ -name metrics.json -type f 2>/dev/null | sort -r | head -1)
-MGT_GATE=$(find outdir/MGT -name metrics.json -type f 2>/dev/null | sort -r | head -1)
-WDGV1_GATE=$(find outdir/WDGV1 -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+PW_GATE=$(find_latest_metrics "outdir/PW")
+WQ_GATE=$(find_latest_metrics "outdir/WQ")
+MGT_GATE=$(find_latest_metrics "outdir/MGT")
+WDGV1_GATE=$(find_latest_metrics "outdir/WDGV1")
+
+# Diagnostic plots first (Wasserstein and Fig 1)
+WASSERSTEIN_METRICS=$(find_latest_metrics "outdir/wasserstein")
+FIG1_METRICS=$(find_latest_metrics "outdir/fig1")
+
+if [ -n "$WASSERSTEIN_METRICS" ]; then
+    echo "  Generating Table I (Wasserstein)..."
+    $PYTHON utils/plot_results.py --wasserstein "$WASSERSTEIN_METRICS"
+else
+    echo "  ⚠ Wasserstein metrics not found in outdir/wasserstein"
+fi
+
+if [ -n "$FIG1_METRICS" ]; then
+    echo "  Generating Fig 1 (trace distance)..."
+    $PYTHON utils/plot_results.py --fig1 "$FIG1_METRICS"
+else
+    echo "  ⚠ Fig 1 metrics not found in outdir/fig1"
+fi
 
 # Fig 3 (PW only)
 if [ -n "$PW_GATE" ]; then
     echo "  Generating Fig 3 (gate)..."
     $PYTHON utils/plot_results.py --fig3-gate "$PW_GATE"
+else
+    echo "  ⚠ PW gate metrics not found in outdir/PW"
 fi
+
 if [ "$RUN_PHOTONIC" = "yes" ]; then
-    PW_PHOTONIC=$(find outdir/photonic_PW -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+    PW_PHOTONIC=$(find_latest_metrics "outdir/photonic_PW")
     if [ -n "$PW_PHOTONIC" ]; then
         echo "  Generating Fig 3 (photonic)..."
         $PYTHON utils/plot_results.py --fig3-photonic "$PW_PHOTONIC"
+    else
+        echo "  ⚠ PW photonic metrics not found in outdir/photonic_PW"
     fi
 fi
 
 # Fig 4 & 5 (all datasets)
 if [ -n "$PW_GATE" ] && [ -n "$WQ_GATE" ] && [ -n "$MGT_GATE" ] && [ -n "$WDGV1_GATE" ]; then
-    echo "  Generating Fig 4 & 5 (gate, all datasets)..."
+    echo "  Generating Fig 4 (gate, all datasets)..."
     $PYTHON utils/plot_results.py --fig4-gate "$PW_GATE" "$WQ_GATE" "$MGT_GATE" "$WDGV1_GATE"
+    echo "  Generating Fig 5 (gate, all datasets)..."
     $PYTHON utils/plot_results.py --fig5-gate "$PW_GATE" "$WQ_GATE" "$MGT_GATE" "$WDGV1_GATE"
+else
+    echo "  ⚠ Some gate metrics missing: PW=$PW_GATE WQ=$WQ_GATE MGT=$MGT_GATE WDGV1=$WDGV1_GATE"
 fi
 
 if [ "$RUN_PHOTONIC" = "yes" ]; then
-    PW_PHOTONIC=$(find outdir/photonic_PW -name metrics.json -type f 2>/dev/null | sort -r | head -1)
-    WQ_PHOTONIC=$(find outdir/photonic_WQ -name metrics.json -type f 2>/dev/null | sort -r | head -1)
-    MGT_PHOTONIC=$(find outdir/photonic_MGT -name metrics.json -type f 2>/dev/null | sort -r | head -1)
-    WDGV1_PHOTONIC=$(find outdir/photonic_WDGV1 -name metrics.json -type f 2>/dev/null | sort -r | head -1)
+    PW_PHOTONIC=$(find_latest_metrics "outdir/photonic_PW")
+    WQ_PHOTONIC=$(find_latest_metrics "outdir/photonic_WQ")
+    MGT_PHOTONIC=$(find_latest_metrics "outdir/photonic_MGT")
+    WDGV1_PHOTONIC=$(find_latest_metrics "outdir/photonic_WDGV1")
     if [ -n "$PW_PHOTONIC" ] && [ -n "$WQ_PHOTONIC" ] && [ -n "$MGT_PHOTONIC" ] && [ -n "$WDGV1_PHOTONIC" ]; then
-        echo "  Generating Fig 4 & 5 (photonic, all datasets)..."
+        echo "  Generating Fig 4 (photonic, all datasets)..."
         $PYTHON utils/plot_results.py --fig4-photonic "$PW_PHOTONIC" "$WQ_PHOTONIC" "$MGT_PHOTONIC" "$WDGV1_PHOTONIC"
+        echo "  Generating Fig 5 (photonic, all datasets)..."
         $PYTHON utils/plot_results.py --fig5-photonic "$PW_PHOTONIC" "$WQ_PHOTONIC" "$MGT_PHOTONIC" "$WDGV1_PHOTONIC"
+    else
+        echo "  ⚠ Some photonic metrics missing: PW=$PW_PHOTONIC WQ=$WQ_PHOTONIC MGT=$MGT_PHOTONIC WDGV1=$WDGV1_PHOTONIC"
     fi
 fi
 
-# Diagnostic plots (Wasserstein and Fig 1)
-WASSERSTEIN_METRICS=$(find outdir/wasserstein -name metrics.json -type f 2>/dev/null | sort -r | head -1)
-FIG1_METRICS=$(find outdir/fig1 -name metrics.json -type f 2>/dev/null | sort -r | head -1)
-if [ -n "$WASSERSTEIN_METRICS" ]; then
-    echo "  Generating diagnostic plot (Table I)..."
-    $PYTHON utils/plot_results.py --wasserstein "$WASSERSTEIN_METRICS"
-fi
-if [ -n "$FIG1_METRICS" ]; then
-    echo "  Generating Fig 1..."
-    $PYTHON utils/plot_results.py --fig1 "$FIG1_METRICS"
-fi
+# Re-enable set -e
+set -e
 
-echo -e "${GREEN}✓ All plots generated${NC}"
+echo -e "${GREEN}✓ Plot generation complete${NC}"
 echo ""
 
 echo -e "${BLUE}========================================${NC}"
