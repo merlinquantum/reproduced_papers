@@ -48,7 +48,7 @@
 | Item | Paper | Reimplementation | Notes |
 | --- | --- | --- | --- |
 | Architecture | GPT over D=28 gate tokens; pool {RX,RY,RZ,H,I,CNOT,MultiRZ}, n=8 qubits | same pool/D; small GPT (d_model=32, 1 layer) | GPT size unspecified in paper |
-| Training setup | 4000 iters, temp 100→0.04, EMA-norm, top/mid/bottom select, Adam 5e-5 | 120 iters (reduced), same schedule/select/optimizer | reduced compute |
+| Training setup | 4000 iters, temp 100→0.04, EMA-norm, top/mid/bottom select, Adam 5e-5 | 4000 iters, same schedule/select/optimizer | reduced compute (4 datasets, single seed) |
 | Hyperparameters | γ unspecified; bias RMSprop 5e-4, 400 ep; QKSVM C=0.05; RBF γ=0.125 | γ=0.1; bias 120 ep; C=0.05; RBF γ=0.125 | γ default + loss stabilisation |
 | Missing details / assumptions | class defns, PCA/scaling, 2-qubit wiring | two largest classes; StandardScaler→PCA8→MinMax[0,2π]; NN-ring | documented in LOG.md |
 
@@ -82,7 +82,7 @@
 - **New formulation (EGAS-based):** **photonic now uses the same EGAS architecture search as gate-based**
   — GPT + pairwise-fidelity surrogate energy + continuous bias refinement + QKSVM. Photonic embedding
   = angle encoding (PS gates) + beamsplitter entanglement; fidelity kernel `|⟨s|U†(x₂)U(x₁)|s⟩|²`
-  via SLOS; QKSVM downstream (C=0.05). Same GPT-based search (120 iters, 12 candidates, d_model=32,
+  via SLOS; QKSVM downstream (C=0.05). Same GPT-based search (4000 iters, 12 candidates, d_model=32,
   1 layer) as gate-based.
 - **Encoding:** PS gate angles driven by data; BS entanglers for expressivity.
 - **Circuit / model:** MerLin `QuantumModule` + `FidelityKernel`, **4 photons, 8 modes, Fock
@@ -102,7 +102,7 @@
   and gate-based pipelines under same GPT+surrogate framework.
 - **Test coverage:** comprehensive test suite (`tests/test_photonic_impl.py`) validates:
   - Photonic EGAS energy computation (pairwise-fidelity surrogate from 4-photon MerLin circuits)
-  - GPT-based architecture search in photonic setting (120 iters, 12 candidates, EMA normalization)
+  - GPT-based architecture search in photonic setting (4000 iters, 12 candidates, EMA normalization)
   - Bias refinement via PS phase offset training
   - Photonic QKSVM evaluation with fidelity kernel
   - Numerical stability in Fock space (no NaN/inf)
@@ -124,18 +124,21 @@
 
 | Metric / Figure | Gate EGAS | Classical (linear) | Photonic EGAS (4ph, Fock) | Gap | Comment |
 | --- | ---: | ---: | ---: | ---: | --- |
-| PW | 0.902 | 0.900 | 0.848 | −0.054 | High W1; photonic expects improvement with full search |
-| WQ | 0.583 | 0.647 | 0.595 | +0.012 | Gate slightly behind; photonic ahead (neutral gap) |
-| MGT | 0.738 | 0.732 | 0.667 | −0.071 | Moderate W1; trainable photonic beats fixed (+0.046 prev.) |
-| WDGV1 | 0.888 | 0.902 | 0.716 | −0.172 | Multiclass, low W1; largest gap; full EGAS expected to close |
+| PW | 0.8944 | 0.9000 | 0.8925 | −0.0019 | High W1; photonic is nearly tied with gate |
+| WQ | 0.5600 | 0.6475 | 0.5231 | −0.0369 | Low W1; photonic trails gate and linear baseline |
+| MGT | 0.7206 | 0.7325 | 0.7088 | −0.0118 | Moderate W1; photonic is close, but behind |
+| WDGV1 | 0.8831 | 0.9025 | 0.8844 | +0.0013 | Multiclass, low W1; photonic slightly ahead |
 
 - **Photonic assessment:** The new EGAS-based photonic implementation (4 photons, Fock space, full
-  architecture search) **unifies gate and photonic under the same algorithm**, addressing the previous
-  limit of single-mesh refinement. Baseline results show gaps on PW, MGT, WDGV1 (largest −0.172 on
-  WDGV1); expected to narrow significantly with active EGAS search (vs. previous fixed embedding).
-  Advantages of new approach: (1) **larger Hilbert space** (4 photons ~2× vs 2), (2) **active search**
-  (vs. passive refinement), (3) **stable learning rate** (1e-3 vs 0.05–0.08), (4) **more training
-  data** (400 vs 300 samples). Fock space ensures numerical stability without NaN.
+  architecture search) now produces concrete results. Photonic is competitive with gate EGAS on
+  PW/MGT and slightly ahead on WDGV1, but it still trails on WQ.
+- **Bias status:** the current photonic bias-refinement stage is effectively inactive. For every
+  photonic dataset, `G_bias` equals `G`, and the observed energy change is on the order of 1e-7.
+  This indicates the photonic bias path needs debugging before the photonic pipeline can fully
+  mirror the gate-based bias behaviour.
+  Advantages of the current approach remain: (1) **larger Hilbert space** (4 photons vs 2),
+  (2) **active EGAS search** rather than fixed mesh, (3) **stable Fock-space simulation**.
+  The bias refinement step is the main outstanding issue.
 
 ## 8. Conclusions
 - **What has been done:** faithful reduced reproduction of EGAS + Wasserstein diagnostic + fair
@@ -159,7 +162,7 @@
 - [x] Implemented in MerLin (EGAS + bias + QKSVM pipeline)
 - [x] MerLin capability documented (Fock space stability, FidelityKernel for architecture search)
 - [x] Comprehensive photonic tests created (test_photonic_impl.py, covering EGAS energy, search, bias, SVM)
-- [~] Photonic version run (baseline configs in place; 4-photon EGAS pending full experimental runs)
+- [x] Photonic version run (4-photon EGAS complete on PW, WQ, MGT, WDGV1)
 - [x] Figure reproduced / adapted (Table I, Fig 1, Figs 3/4/6/7-style)
 - [x] Photonic EGAS configs prepared (photonic_PW.json, photonic_WQ.json, photonic_MGT.json, photonic_WDGV1.json with EGAS + bias sections)
 - [x] Notebook updated with photonic EGAS demonstration
