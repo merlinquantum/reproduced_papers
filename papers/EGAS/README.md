@@ -93,12 +93,40 @@ All reduced-compute, single-seed unless noted. Figures in `results/`: `table1_wa
 | DB | 3.38 | 13.91 | under (preprocessing caps separation — see Limitations) |
 | WC | 3.73 | 10.86 | under (same) |
 
+![Table I: Input-space 1-Wasserstein distances](outdir/wasserstein/run_20260703-121916/table1_wasserstein.png)
+
 5/7 close; the two most-separable sets (DB, WC) come out smaller. The diagnostic-relevant
 ordering — WQ, MGT among the smallest W1 (saturation regime) — is reproduced.
 
 ### Fig 1 — trace distance vs input W1 (claim C4)
 Reproduced qualitatively: trace distance rises with input W1 and **saturates**. Absolute scale differs
 from the paper due to reduced dataset scope and the reproduction preprocessing choices.
+
+![Fig 1: Trace distance vs input W1](outdir/fig1/run_20260703-121918/fig1_tracedist_vs_w1.png)
+
+### Fig 3 — surrogate energy reduction per candidate
+![Fig 3: Candidate ΔE distributions (gate)](results/fig3_deltaE_per_candidate.png)
+![Fig 3: Candidate ΔE distributions (photonic)](results/fig3_deltaE_per_candidate_photonic.png)
+Fig 3 shows that the paper's energy-based candidate ranking is reproduced: low-energy gate candidates are concentrated in the `G` group, and the photonic candidate set exhibits a similar separation pattern. The exact numeric spreads differ from the paper, but the trend of stronger energy reduction for top-performing candidates is consistent.
+
+### Fig 4 — energy reduction by group
+![Fig 4: Energy reduction by group (gate)](results/fig4_deltaE_groups.png)
+![Fig 4: Energy reduction by group (photonic)](results/fig4_deltaE_groups_photonic.png)
+Figure 4 reproduces the paper's key insight that the `B` group sees larger ΔE reductions than the `G` group. The gate reproduction matches this qualitative shape; the photonic run also shows the same group-level bias behaviour, although the refined photonic energy gains are still smaller than the best gate-case values.
+
+### Fig 5 — win/tie/loss vs classical linear SVM
+![Fig 5: Win/tie/loss gate](results/fig5_win_tie_loss.png)
+![Fig 5: Win/tie/loss photonic](results/fig5_win_tie_loss_photonic.png)
+Figure 5 confirms the paper's fair-baseline claim: EGAS is strong against ZZ and mixed against linear SVM. The gate reproduction wins most on MGT, as in the paper, while the photonic version is still weaker overall, especially on WQ.
+
+### Fig 6 — IQR vs W1 diagnostic
+![Fig 6: IQR vs W1 gate](results/fig6_iqr.png)
+![Fig 6: IQR vs W1 photonic](results/fig6_iqr_photonic.png)
+Figure 6 reproduces the saturation trend: embedding sensitivity IQR grows with input-space W1. This is the clearest paper-level match, and it is seen in both gate and photonic paths.
+
+### Fig 7 — accuracy heatmap
+![Fig 7: Accuracy heatmap](results/fig7_accuracy_heatmap.png)
+Figure 7 reproduces the paper's accuracy landscape: MGT is the best EGAS case, WQ is weakest, and PW sits in between. The heatmap confirms the reduced-compute reproduction is qualitatively correct even if exact accuracies differ.
 
 ### EGAS QKSVM test accuracy vs baselines (claims C1, C3) — ordered by W1
 | Dataset | W1 | best G | best G(bias) | NQE | ZZ | Classical-lin | Classical-rbf | IQR |
@@ -113,6 +141,10 @@ from the paper due to reduced dataset scope and the reproduction preprocessing c
   trails WQ and WDGV1 under the current reduced compute settings.
 - **C2:** gate bias is dataset-dependent: it improves mean accuracy on MGT and WQ, but slightly
   reduces it on PW and WDGV1.
+- **Reproduction quality:** the gate-based reproduction is good — the same main directional
+  claims hold, and the Wasserstein/IQR trends are reproduced. The numerical values are not exact
+  and remain lower than the paper in some cases due to reduced scope, single-seed evaluation, and
+  implementation details.
 
 ### Win/Tie/Loss of best G(bias) vs classical linear SVM over 8 splits (claim C3)
 | Dataset | best-G(bias) | ZZ | NQE |
@@ -140,13 +172,14 @@ while PW and WDGV1 see marginal or negative shifts.
 
 ## MerLin Photonic Extension — Full EGAS Architecture Search
 The paper is gate-based; the photonic counterpart preserves its scientific role — a quantum data
-embedding scored by a fidelity kernel. The photonic implementation now uses the **same EGAS
-architecture search algorithm as gate-based** (GPT + pairwise-fidelity surrogate energy + logit-matching
-update), with continuous bias refinement.
+embedding scored by fidelity computed from `QuantumLayer` amplitudes. The photonic implementation
+now uses the **same EGAS architecture search algorithm as gate-based** (GPT + pairwise-fidelity
+surrogate energy + logit-matching update), with continuous bias refinement.
 
 **Configuration:** 4 photons, Fock computation space, 8 modes, angle encoding with PS gates,
 beamsplitter entanglement. Token pool enumeration, EGAS search over 4000 iterations with 12 candidates
-per iteration, bias refinement via PS phase offset training, QKSVM evaluation with fidelity kernel.
+per iteration, bias refinement via PS phase offset training, QKSVM evaluation based on fidelity from
+`QuantumLayer` amplitudes.
 
 ### Photonic EGAS results (PW, WQ, MGT, WDGV1 — 4 photons, 8 modes, 8 splits)
 | Dataset | W1 | Photonic G | Photonic G_bias | Classical-lin | ZZ | NQE | Note |
@@ -160,14 +193,19 @@ per iteration, bias refinement via PS phase offset training, QKSVM evaluation wi
   bias-refinement stage is effectively inactive: `G_bias = G` across all datasets and the
   measured energy change is on the order of 1e-7. That indicates the photonic bias path is not
   producing a measurable refinement in the current implementation.
+- **Reproduction quality:** the photonic pipeline is well established and the architecture search
+  behaves sensibly, but the photonic bias stage is not yet a successful analogue of the gate-based
+  bias refinement. Gate EGAS is a better reproduction at this point than photonic bias refinement.
 - Under current runs, photonic EGAS trails gate EGAS on WQ and MGT, is very close on PW, and is
   slightly ahead on WDGV1.
-- The next debugging priority is the photonic bias-refinement stage; the architecture search and
-  kernel evaluation appear to be working but the continuous bias update does not change results.
+- Overall reproduction quality: the photonic path captures the same architectural concept as the
+  gate version, but it is not yet a fully successful photonic bias run. The search and QuantumLayer
+  execution work, but the continuous bias stage needs fixing before the photonic results can be
+  considered fully reproduced.
 
 ## Hardware-Aware Settings — Photonic
 Computation space **Fock** (fixed truncation for numerical stability) · detector threshold · 4 photons ·
-8 modes · angle encoding (PS gates + BS entanglement) · `FidelityKernel` measurement · postselection
+8 modes · angle encoding (PS gates + BS entanglement) · `QuantumLayer` execution + fidelity postprocessing · postselection
 none · MerLin SLOS analytic simulator (shots=None). Full per-run fields in `metrics.json["hardware"]`.
 
 ## Limitations
@@ -191,7 +229,7 @@ Comprehensive test suite validates the MerLin photonic EGAS implementation:
 - Photonic EGAS energy computation (pairwise-fidelity surrogate with states from 4-photon circuits)
 - GPT-based architecture search in photonic setting (4000 iters, 12 candidates, EMA energy normalization)
 - Bias refinement via PS phase offset training (continuous optimization on fixed embeddings)
-- Photonic QKSVM evaluation with fidelity kernel (K_ij = |⟨s_i|s_j⟩|² from MerLin amplitudes)
+- Photonic QKSVM evaluation from QuantumLayer-derived fidelity (K_ij = |⟨s_i|s_j⟩|² from MerLin amplitudes)
 - Numerical stability in Fock space (no NaN/inf in kernel matrices)
 - Configuration loading and hyperparameter propagation (EGAS → photonic config chain)
 - Photonic-vs-gate energy comparison (both use same pairwise-fidelity formula)

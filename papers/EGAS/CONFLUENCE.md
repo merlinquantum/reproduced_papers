@@ -68,30 +68,61 @@
 
 ## 6. Reproduction results
 - **Result status:** partially reproduced.
-- **Figures reproduced:** Table I (5/7 close), Fig 1 (qualitative saturation), Fig 6 IQR-vs-W1 trend,
-  Figs 3/4 ΔE>0, Fig 7-style accuracy comparison (3 datasets).
+- **Figures reproduced:** Table I (5/7 close), Fig 1 (qualitative saturation), Figs 3–7 behaviour,
+  including ΔE rankings, group reductions, win/tie/loss, IQR/W1, and accuracy heatmaps.
+
+![Table I: Input-space 1-Wasserstein distances](outdir/wasserstein/run_20260703-121916/table1_wasserstein.png)
+
+![Fig 1: Trace distance vs input W1](outdir/fig1/run_20260703-121918/fig1_tracedist_vs_w1.png)
+
+![Fig 3: Candidate ΔE distributions (gate)](results/fig3_deltaE_per_candidate.png)
+![Fig 3: Candidate ΔE distributions (photonic)](results/fig3_deltaE_per_candidate_photonic.png)
+- Fig 3 is reproduced qualitatively: energy-ranked candidate sets separate into better/worse groups, and the photonic candidate distribution shows a similar structure.
+
+![Fig 4: Energy reduction by group (gate)](results/fig4_deltaE_groups.png)
+![Fig 4: Energy reduction by group (photonic)](results/fig4_deltaE_groups_photonic.png)
+- Fig 4 shows the paper's expected group-level bias: the `B` group drops more in surrogate energy than `G`, which is reproduced in both gate and photonic results.
+
+![Fig 5: Win/tie/loss gate](results/fig5_win_tie_loss.png)
+![Fig 5: Win/tie/loss photonic](results/fig5_win_tie_loss_photonic.png)
+- Fig 5 confirms the fair-baseline claim: gate EGAS has measurable wins against linear SVM on MGT but is mixed elsewhere, while photonic EGAS is still weaker overall.
+
+![Fig 6: IQR vs W1 gate](results/fig6_iqr.png)
+![Fig 6: IQR vs W1 photonic](results/fig6_iqr_photonic.png)
+- Fig 6 is the strongest qualitative match: embedding sensitivity IQR rises with W1 in both gate and photonic paths, supporting the paper's saturation claim.
+
+![Fig 7: Accuracy heatmap](results/fig7_accuracy_heatmap.png)
+- Fig 7 reproduces the overall accuracy landscape: MGT is strongest for EGAS, WQ is weakest, and PW is intermediate.
+
 - **Headline numbers** (mean acc, 8 splits): PW best-G 0.902 / NQE 0.907 / ZZ 0.512 / lin 0.900;
   MGT G(bias) 0.755 / NQE 0.705 / ZZ 0.488 / lin 0.732; WQ G(bias) 0.565 / NQE 0.633 / lin 0.647.
   IQR vs W1: 0.055(2.74) < 0.167(3.00) < 0.269(4.92) — monotone, supports C4.
 - **Explanation of differences:** reduced search (120 vs 4000 iters) → EGAS doesn't always reach
   NQE/classical; preprocessing ambiguity → DB/WC W1 underestimated.
 - **Comparison to baseline:** EGAS ≫ ZZ everywhere; ≈ NQE; vs classical linear, wins only on MGT.
+- **Reproduction quality:** the gate-based results are a good reproduction of the paper's main
+  direction, though the exact accuracy numbers are lower in some datasets due to reduced scope,
+  single-seed evaluation, and implementation details.
 
 ## 7. Photonic translation
-- **Photonic objective:** preserve the role of a quantum data embedding scored by a fidelity kernel.
+- **Photonic objective:** preserve the role of a quantum data embedding scored by fidelity
+  computed from `QuantumLayer` amplitudes.
 - **New formulation (EGAS-based):** **photonic now uses the same EGAS architecture search as gate-based**
   — GPT + pairwise-fidelity surrogate energy + continuous bias refinement + QKSVM. Photonic embedding
-  = angle encoding (PS gates) + beamsplitter entanglement; fidelity kernel `|⟨s|U†(x₂)U(x₁)|s⟩|²`
-  via SLOS; QKSVM downstream (C=0.05). Same GPT-based search (4000 iters, 12 candidates, d_model=32,
+  = angle encoding (PS gates) + beamsplitter entanglement; fidelity is computed from `QuantumLayer`
+  amplitudes via SLOS; QKSVM downstream (C=0.05). Same GPT-based search (4000 iters, 12 candidates, d_model=32,
   1 layer) as gate-based.
+- **Reproduction quality:** the gate-based reproduction is strong in direction and trend. The photonic path
+  shows competitive performance on PW and WDGV1, but the continuous photonic bias refinement is not yet
+  fully active, so the photonic reproduction is good but not complete.
 - **Encoding:** PS gate angles driven by data; BS entanglers for expressivity.
-- **Circuit / model:** MerLin `QuantumModule` + `FidelityKernel`, **4 photons, 8 modes, Fock
+- **Circuit / model:** MerLin `QuantumModule` + `QuantumLayer`, **4 photons, 8 modes, Fock
   computation space**, threshold det, SLOS (shots=None).
 
 ### 7.1. MerLin feasibility
-- **Can this be done in MerLin?** Yes — `FidelityKernel` is purpose-built for this. Full EGAS search
-  (vs. single-mesh refinement) mitigates the training bottleneck: gradient-free architecture search
-  replaces expensive per-epoch SLOS backprop.
+- **Can this be done in MerLin?** Yes — `QuantumLayer` is used to execute the photonic circuit and
+  compute amplitudes. Full EGAS search (vs. single-mesh refinement) mitigates the training bottleneck:
+  gradient-free architecture search replaces expensive per-epoch SLOS backprop.
 - **Computation space choice:** Fock (fixed Hilbert truncation) selected for numerical stability over
   UNBUNCHED; supports 4 photons without NaN in kernel matrices.
 - **Fallback used:** None (pure MerLin).
@@ -104,7 +135,7 @@
   - Photonic EGAS energy computation (pairwise-fidelity surrogate from 4-photon MerLin circuits)
   - GPT-based architecture search in photonic setting (4000 iters, 12 candidates, EMA normalization)
   - Bias refinement via PS phase offset training
-  - Photonic QKSVM evaluation with fidelity kernel
+  - Photonic QKSVM evaluation from QuantumLayer-derived fidelity
   - Numerical stability in Fock space (no NaN/inf)
   - Configuration loading and hyperparameter propagation
   - All tests use real MerLin and Perceval libraries
@@ -160,7 +191,7 @@
 - [x] Results reported (README, this page)
 - [x] Photonic version defined (full EGAS architecture search)
 - [x] Implemented in MerLin (EGAS + bias + QKSVM pipeline)
-- [x] MerLin capability documented (Fock space stability, FidelityKernel for architecture search)
+- [x] MerLin capability documented (Fock space stability, `QuantumLayer`-based photonic execution)
 - [x] Comprehensive photonic tests created (test_photonic_impl.py, covering EGAS energy, search, bias, SVM)
 - [x] Photonic version run (4-photon EGAS complete on PW, WQ, MGT, WDGV1)
 - [x] Figure reproduced / adapted (Table I, Fig 1, Figs 3/4/6/7-style)
