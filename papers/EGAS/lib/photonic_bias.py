@@ -118,6 +118,7 @@ def refine_bias(
         if len(encoder.ps_data_indices) == 0:
             states = states.repeat(len(Xb), 1)
         loss = _bce_pair_loss(states, yb)
+        trainable_parameters = [p for p in encoder.parameters() if p.requires_grad]
         reg = l2_bias * _parameter_l2(trainable_parameters)
         opt.zero_grad()
         (loss + reg).backward()
