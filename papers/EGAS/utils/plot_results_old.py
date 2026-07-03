@@ -77,39 +77,44 @@ def plot_fig1(path):
 
 def plot_fig4_energy_reduction(gate_paths, photonic_paths=None):
     """Fig 4: Energy reduction from EGAS search (E_before vs E_after).
-    
+
     Shows effectiveness of EGAS in finding low-energy circuits.
     """
     fig, axes = plt.subplots(1, 2 if photonic_paths else 1, figsize=(12, 4))
     if not isinstance(axes, np.ndarray):
         axes = [axes]
-    
+
     for idx, (paths, title_suffix) in enumerate(
-        [(gate_paths, "Gate-based EGAS"), 
-         (photonic_paths or [], "Photonic EGAS")]
+        [(gate_paths, "Gate-based EGAS"), (photonic_paths or [], "Photonic EGAS")]
     ):
         if not paths:
             continue
-            
+
         ax = axes[idx]
         data = [_load(p) for p in paths]
         names = [d["dataset"] for d in data]
-        
+
         # Energy reduction from bias refinement
-        e_before = [np.mean([g["E_before"] for g in d["G_bias"] if g["E_before"] is not None]) for d in data]
-        e_after = [np.mean([g["E_after"] for g in d["G_bias"] if g["E_after"] is not None]) for d in data]
-        
+        e_before = [
+            np.mean([g["E_before"] for g in d["G_bias"] if g["E_before"] is not None])
+            for d in data
+        ]
+        e_after = [
+            np.mean([g["E_after"] for g in d["G_bias"] if g["E_after"] is not None])
+            for d in data
+        ]
+
         x = np.arange(len(names))
         w = 0.35
-        ax.bar(x - w/2, e_before, w, label="before bias refinement", alpha=0.8)
-        ax.bar(x + w/2, e_after, w, label="after bias refinement", alpha=0.8)
+        ax.bar(x - w / 2, e_before, w, label="before bias refinement", alpha=0.8)
+        ax.bar(x + w / 2, e_after, w, label="after bias refinement", alpha=0.8)
         ax.set_xticks(x)
         ax.set_xticklabels(names)
         ax.set_ylabel("mean pairwise energy")
         ax.set_title(f"Fig 4: {title_suffix} Energy Reduction")
         ax.legend()
-        ax.grid(axis='y', alpha=0.3)
-    
+        ax.grid(axis="y", alpha=0.3)
+
     plt.tight_layout()
     for d in (RESULTS,):
         plt.savefig(d / "fig4_energy_reduction.png", dpi=120)
@@ -119,40 +124,39 @@ def plot_fig4_energy_reduction(gate_paths, photonic_paths=None):
 
 def plot_fig5_circuit_distributions(gate_paths, photonic_paths=None):
     """Fig 5: Distribution of circuit accuracies (G vs G_bias).
-    
+
     Shows improvement from bias refinement across searched circuits.
     """
     fig, axes = plt.subplots(1, 2 if photonic_paths else 1, figsize=(12, 4))
     if not isinstance(axes, np.ndarray):
         axes = [axes]
-    
+
     for idx, (paths, title_suffix) in enumerate(
-        [(gate_paths, "Gate-based"), 
-         (photonic_paths or [], "Photonic")]
+        [(gate_paths, "Gate-based"), (photonic_paths or [], "Photonic")]
     ):
         if not paths:
             continue
-            
+
         ax = axes[idx]
         data = [_load(p) for p in paths]
         names = [d["dataset"] for d in data]
-        
+
         # Accuracy distributions
         g_accs = [np.mean([g["mean_acc"] for g in d["G"]]) for d in data]
         gb_accs = [np.mean([g["mean_acc"] for g in d["G_bias"]]) for d in data]
-        
+
         x = np.arange(len(names))
         w = 0.35
-        ax.bar(x - w/2, g_accs, w, label="G (no bias)", alpha=0.8)
-        ax.bar(x + w/2, gb_accs, w, label="G_bias (refined)", alpha=0.8)
+        ax.bar(x - w / 2, g_accs, w, label="G (no bias)", alpha=0.8)
+        ax.bar(x + w / 2, gb_accs, w, label="G_bias (refined)", alpha=0.8)
         ax.set_xticks(x)
         ax.set_xticklabels(names)
         ax.set_ylabel("mean accuracy")
         ax.set_ylim(0.4, 1.0)
         ax.set_title(f"Fig 5: {title_suffix} Circuit Accuracies")
         ax.legend()
-        ax.grid(axis='y', alpha=0.3)
-    
+        ax.grid(axis="y", alpha=0.3)
+
     plt.tight_layout()
     for d in (RESULTS,):
         plt.savefig(d / "fig5_circuit_distributions.png", dpi=120)
@@ -250,19 +254,25 @@ def plot_fig4_gate_only(paths):
     names = [d["dataset"] for d in data]
 
     fig, ax = plt.subplots(figsize=(8, 4))
-    e_before = [np.mean([g["E_before"] for g in d["G_bias"] if g["E_before"] is not None]) for d in data]
-    e_after = [np.mean([g["E_after"] for g in d["G_bias"] if g["E_after"] is not None]) for d in data]
+    e_before = [
+        np.mean([g["E_before"] for g in d["G_bias"] if g["E_before"] is not None])
+        for d in data
+    ]
+    e_after = [
+        np.mean([g["E_after"] for g in d["G_bias"] if g["E_after"] is not None])
+        for d in data
+    ]
 
     x = np.arange(len(names))
     w = 0.35
-    ax.bar(x - w/2, e_before, w, label="before bias refinement", alpha=0.8)
-    ax.bar(x + w/2, e_after, w, label="after bias refinement", alpha=0.8)
+    ax.bar(x - w / 2, e_before, w, label="before bias refinement", alpha=0.8)
+    ax.bar(x + w / 2, e_after, w, label="after bias refinement", alpha=0.8)
     ax.set_xticks(x)
     ax.set_xticklabels(names)
     ax.set_ylabel("mean pairwise energy")
     ax.set_title("Fig 4: Gate-based EGAS Energy Reduction")
     ax.legend()
-    ax.grid(axis='y', alpha=0.3)
+    ax.grid(axis="y", alpha=0.3)
 
     plt.tight_layout()
     for d in (RESULTS,):
@@ -277,19 +287,39 @@ def plot_fig4_photonic_only(paths):
     names = [d["dataset"] for d in data]
 
     fig, ax = plt.subplots(figsize=(8, 4))
-    e_before = [np.mean([g["E_before"] for g in d["G_bias"] if g["E_before"] is not None]) for d in data]
-    e_after = [np.mean([g["E_after"] for g in d["G_bias"] if g["E_after"] is not None]) for d in data]
+    e_before = [
+        np.mean([g["E_before"] for g in d["G_bias"] if g["E_before"] is not None])
+        for d in data
+    ]
+    e_after = [
+        np.mean([g["E_after"] for g in d["G_bias"] if g["E_after"] is not None])
+        for d in data
+    ]
 
     x = np.arange(len(names))
     w = 0.35
-    ax.bar(x - w/2, e_before, w, label="before bias refinement", alpha=0.8, color="orange")
-    ax.bar(x + w/2, e_after, w, label="after bias refinement", alpha=0.8, color="darkorange")
+    ax.bar(
+        x - w / 2,
+        e_before,
+        w,
+        label="before bias refinement",
+        alpha=0.8,
+        color="orange",
+    )
+    ax.bar(
+        x + w / 2,
+        e_after,
+        w,
+        label="after bias refinement",
+        alpha=0.8,
+        color="darkorange",
+    )
     ax.set_xticks(x)
     ax.set_xticklabels(names)
     ax.set_ylabel("mean pairwise energy")
     ax.set_title("Fig 4: Photonic EGAS Energy Reduction")
     ax.legend()
-    ax.grid(axis='y', alpha=0.3)
+    ax.grid(axis="y", alpha=0.3)
 
     plt.tight_layout()
     for d in (RESULTS,):
@@ -309,15 +339,15 @@ def plot_fig5_gate_only(paths):
 
     x = np.arange(len(names))
     w = 0.35
-    ax.bar(x - w/2, g_accs, w, label="G (no bias)", alpha=0.8)
-    ax.bar(x + w/2, gb_accs, w, label="G_bias (refined)", alpha=0.8)
+    ax.bar(x - w / 2, g_accs, w, label="G (no bias)", alpha=0.8)
+    ax.bar(x + w / 2, gb_accs, w, label="G_bias (refined)", alpha=0.8)
     ax.set_xticks(x)
     ax.set_xticklabels(names)
     ax.set_ylabel("mean accuracy")
     ax.set_ylim(0.4, 1.0)
     ax.set_title("Fig 5: Gate-based Circuit Accuracies")
     ax.legend()
-    ax.grid(axis='y', alpha=0.3)
+    ax.grid(axis="y", alpha=0.3)
 
     plt.tight_layout()
     for d in (RESULTS,):
@@ -337,15 +367,17 @@ def plot_fig5_photonic_only(paths):
 
     x = np.arange(len(names))
     w = 0.35
-    ax.bar(x - w/2, g_accs, w, label="G (no bias)", alpha=0.8, color="orange")
-    ax.bar(x + w/2, gb_accs, w, label="G_bias (refined)", alpha=0.8, color="darkorange")
+    ax.bar(x - w / 2, g_accs, w, label="G (no bias)", alpha=0.8, color="orange")
+    ax.bar(
+        x + w / 2, gb_accs, w, label="G_bias (refined)", alpha=0.8, color="darkorange"
+    )
     ax.set_xticks(x)
     ax.set_xticklabels(names)
     ax.set_ylabel("mean accuracy")
     ax.set_ylim(0.4, 1.0)
     ax.set_title("Fig 5: Photonic Circuit Accuracies")
     ax.legend()
-    ax.grid(axis='y', alpha=0.3)
+    ax.grid(axis="y", alpha=0.3)
 
     plt.tight_layout()
     for d in (RESULTS,):
@@ -413,17 +445,17 @@ def plot_fig7_gate_only(paths):
 
     x = np.arange(len(names))
     w = 0.2
-    ax.bar(x - 1.5*w, best_g, w, label="best G*(bias)", alpha=0.8)
-    ax.bar(x - 0.5*w, nqe, w, label="NQE", alpha=0.8)
-    ax.bar(x + 0.5*w, zz, w, label="ZZ", alpha=0.8)
-    ax.bar(x + 1.5*w, lin, w, label="classical linear", alpha=0.8)
+    ax.bar(x - 1.5 * w, best_g, w, label="best G*(bias)", alpha=0.8)
+    ax.bar(x - 0.5 * w, nqe, w, label="NQE", alpha=0.8)
+    ax.bar(x + 0.5 * w, zz, w, label="ZZ", alpha=0.8)
+    ax.bar(x + 1.5 * w, lin, w, label="classical linear", alpha=0.8)
     ax.set_xticks(x)
     ax.set_xticklabels(names)
     ax.set_ylabel("mean test accuracy")
     ax.set_ylim(0.4, 1.0)
     ax.set_title("Fig 7: Gate-based QKSVM Accuracy")
     ax.legend()
-    ax.grid(axis='y', alpha=0.3)
+    ax.grid(axis="y", alpha=0.3)
 
     plt.tight_layout()
     for d in (RESULTS,):
@@ -445,17 +477,19 @@ def plot_fig7_photonic_only(paths):
 
     x = np.arange(len(names))
     w = 0.2
-    ax.bar(x - 1.5*w, best_g_phot, w, label="best G*(bias)", alpha=0.8, color="orange")
-    ax.bar(x - 0.5*w, nqe_phot, w, label="NQE", alpha=0.8, color="darkorange")
-    ax.bar(x + 0.5*w, zz_phot, w, label="ZZ", alpha=0.8, color="gold")
-    ax.bar(x + 1.5*w, lin_phot, w, label="classical linear", alpha=0.8, color="coral")
+    ax.bar(
+        x - 1.5 * w, best_g_phot, w, label="best G*(bias)", alpha=0.8, color="orange"
+    )
+    ax.bar(x - 0.5 * w, nqe_phot, w, label="NQE", alpha=0.8, color="darkorange")
+    ax.bar(x + 0.5 * w, zz_phot, w, label="ZZ", alpha=0.8, color="gold")
+    ax.bar(x + 1.5 * w, lin_phot, w, label="classical linear", alpha=0.8, color="coral")
     ax.set_xticks(x)
     ax.set_xticklabels(names)
     ax.set_ylabel("mean test accuracy")
     ax.set_ylim(0.4, 1.0)
     ax.set_title("Fig 7: Photonic QKSVM Accuracy")
     ax.legend()
-    ax.grid(axis='y', alpha=0.3)
+    ax.grid(axis="y", alpha=0.3)
 
     plt.tight_layout()
     for d in (RESULTS,):
@@ -466,17 +500,17 @@ def plot_fig7_photonic_only(paths):
 
 def plot_fig4_deltaE_groups(paths):
     """Fig 4: Group-wise mean surrogate-energy reduction across datasets.
-    
+
     Plots mean ΔE for G and B groups with error bars.
     """
     data = [_load(p) for p in paths]
     names = [d["dataset"] for d in data]
-    
+
     gm = [np.mean(d["delta_E"]["G"]) for d in data]
     gs = [np.std(d["delta_E"]["G"]) for d in data]
     bm = [np.mean(d["delta_E"]["B"]) for d in data]
     bs = [np.std(d["delta_E"]["B"]) for d in data]
-    
+
     x = np.arange(len(names))
     fig, ax = plt.subplots(figsize=(7, 4))
     ax.errorbar(
@@ -502,12 +536,12 @@ def plot_fig4_deltaE_groups_photonic(paths):
     """Fig 4 Photonic: Group-wise mean surrogate-energy reduction across datasets."""
     data = [_load(p) for p in paths]
     names = [d["dataset"] for d in data]
-    
+
     gm = [np.mean(d["delta_E"]["G"]) for d in data]
     gs = [np.std(d["delta_E"]["G"]) for d in data]
     bm = [np.mean(d["delta_E"]["B"]) for d in data]
     bs = [np.std(d["delta_E"]["B"]) for d in data]
-    
+
     x = np.arange(len(names))
     fig, ax = plt.subplots(figsize=(7, 4))
     ax.errorbar(
@@ -520,7 +554,9 @@ def plot_fig4_deltaE_groups_photonic(paths):
     ax.set_xticks(x)
     ax.set_xticklabels(names)
     ax.set_ylabel("mean ΔE")
-    ax.set_title("Fig 4 (Photonic) — group-wise mean surrogate-energy reduction across datasets")
+    ax.set_title(
+        "Fig 4 (Photonic) — group-wise mean surrogate-energy reduction across datasets"
+    )
     ax.legend()
     plt.tight_layout()
     for d in (RESULTS,):
@@ -534,11 +570,11 @@ def plot_fig5_win_tie_loss(paths):
     data = [_load(p) for p in paths]
     names = [d["dataset"] for d in data]
     n = len(names)
-    
+
     fig, axes = plt.subplots(1, n, figsize=(4 * n, 3.6), sharey=True)
     if n == 1:
         axes = [axes]
-    
+
     for ax, name in zip(axes, names):
         m = data[names.index(name)]
         models = [
@@ -566,7 +602,7 @@ def plot_fig5_win_tie_loss(paths):
         ax.set_xticks(x)
         ax.set_xticklabels(labels, rotation=45, fontsize=8)
         ax.set_title(f"{name} (W1={m['w1']:.2f})")
-    
+
     axes[0].set_ylabel("# splits (of {})".format(data[0]["n_splits"]))
     axes[-1].legend(loc="upper right", fontsize=8)
     fig.suptitle("Fig 5 — Win/Tie/Loss vs classical linear SVM")
@@ -582,11 +618,11 @@ def plot_fig5_win_tie_loss_photonic(paths):
     data = [_load(p) for p in paths]
     names = [d["dataset"] for d in data]
     n = len(names)
-    
+
     fig, axes = plt.subplots(1, n, figsize=(4 * n, 3.6), sharey=True)
     if n == 1:
         axes = [axes]
-    
+
     for ax, name in zip(axes, names):
         m = data[names.index(name)]
         models = [
@@ -614,7 +650,7 @@ def plot_fig5_win_tie_loss_photonic(paths):
         ax.set_xticks(x)
         ax.set_xticklabels(labels, rotation=45, fontsize=8)
         ax.set_title(f"{name} (W1={m['w1']:.2f})")
-    
+
     axes[0].set_ylabel("# splits (of {})".format(data[0]["n_splits"]))
     axes[-1].legend(loc="upper right", fontsize=8)
     fig.suptitle("Fig 5 (Photonic) — Win/Tie/Loss vs classical linear SVM")
@@ -629,10 +665,10 @@ def plot_fig6_iqr(paths):
     """Fig 6: Embedding-sensitivity IQR per dataset."""
     data = [_load(p) for p in paths]
     names = [d["dataset"] for d in data]
-    
+
     iqr = [d["embedding_sensitivity_IQR"] for d in data]
     w1 = [d["w1"] for d in data]
-    
+
     fig, ax = plt.subplots(figsize=(7, 4))
     bars = ax.bar(np.arange(len(names)), iqr, color="#7fbf7b")
     for b, w in zip(bars, w1):
@@ -658,10 +694,10 @@ def plot_fig6_iqr_photonic(paths):
     """Fig 6 Photonic: Embedding-sensitivity IQR per dataset."""
     data = [_load(p) for p in paths]
     names = [d["dataset"] for d in data]
-    
+
     iqr = [d["embedding_sensitivity_IQR"] for d in data]
     w1 = [d["w1"] for d in data]
-    
+
     fig, ax = plt.subplots(figsize=(7, 4))
     bars = ax.bar(np.arange(len(names)), iqr, color="#7fbf7b")
     for b, w in zip(bars, w1):
@@ -675,7 +711,9 @@ def plot_fig6_iqr_photonic(paths):
     ax.set_xticks(np.arange(len(names)))
     ax.set_xticklabels(names)
     ax.set_ylabel("IQR of mean test accuracy")
-    ax.set_title("Fig 6 (Photonic) — embedding-sensitivity IQR per dataset (grows with W1)")
+    ax.set_title(
+        "Fig 6 (Photonic) — embedding-sensitivity IQR per dataset (grows with W1)"
+    )
     plt.tight_layout()
     for d in (RESULTS,):
         plt.savefig(d / "fig6_iqr_photonic.png", dpi=130, bbox_inches="tight")
@@ -683,19 +721,19 @@ def plot_fig6_iqr_photonic(paths):
     print("wrote fig6_iqr_photonic.png")
 
 
-
+def plot_fig6_diagnostic_photonic(gate_paths, photonic_paths):
     """Fig 6: IQR vs W1 comparison (gate vs photonic).
-    
+
     Diagnostic showing relationship between input W1 and embedding sensitivity.
     """
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 4))
-    
+
     # Gate-based
     gate_data = [_load(p) for p in gate_paths]
     gate_names = [d["dataset"] for d in gate_data]
     gate_w1 = [d["w1"] for d in gate_data]
     gate_iqr = [d.get("embedding_sensitivity_IQR", 0) for d in gate_data]
-    
+
     ax1.scatter(gate_w1, gate_iqr, s=100, alpha=0.7, label="gate-based")
     for xi, yi, ni in zip(gate_w1, gate_iqr, gate_names):
         ax1.annotate(ni, (xi, yi), fontsize=9)
@@ -703,21 +741,23 @@ def plot_fig6_iqr_photonic(paths):
     ax1.set_ylabel("embedding-sensitivity IQR")
     ax1.set_title("Fig 6a: Gate-based EGAS (IQR vs W1)")
     ax1.grid(alpha=0.3)
-    
+
     # Photonic
     photonic_data = [_load(p) for p in photonic_paths]
     photonic_names = [d["dataset"] for d in photonic_data]
     photonic_w1 = [d["w1"] for d in photonic_data]
     photonic_iqr = [d.get("embedding_sensitivity_IQR", 0) for d in photonic_data]
-    
-    ax2.scatter(photonic_w1, photonic_iqr, s=100, alpha=0.7, color="orange", label="photonic")
+
+    ax2.scatter(
+        photonic_w1, photonic_iqr, s=100, alpha=0.7, color="orange", label="photonic"
+    )
     for xi, yi, ni in zip(photonic_w1, photonic_iqr, photonic_names):
         ax2.annotate(ni, (xi, yi), fontsize=9)
     ax2.set_xlabel("input W1 distance")
     ax2.set_ylabel("embedding-sensitivity IQR")
     ax2.set_title("Fig 6b: Photonic EGAS (IQR vs W1)")
     ax2.grid(alpha=0.3)
-    
+
     plt.tight_layout()
     for d in (RESULTS,):
         plt.savefig(d / "fig6_diagnostic_comparison.png", dpi=120)
@@ -727,63 +767,61 @@ def plot_fig6_iqr_photonic(paths):
 
 def plot_fig7_accuracy_photonic(gate_paths, photonic_paths):
     """Fig 7: Accuracy comparison (gate vs photonic implementations).
-    
+
     Shows performance of EGAS-optimized embeddings vs baselines for both platforms.
     """
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 5))
-    
+
     # Gate-based
     gate_data = [_load(p) for p in gate_paths]
     gate_names = [d["dataset"] for d in gate_data]
-    
+
     best_g = [max(g["mean_acc"] for g in d["G_bias"]) for d in gate_data]
     nqe = [d["baselines"]["NQE"]["mean_acc"] for d in gate_data]
     zz = [d["baselines"]["ZZ"]["mean_acc"] for d in gate_data]
     lin = [d["baselines"]["classical_linear"]["mean_acc"] for d in gate_data]
-    
+
     x = np.arange(len(gate_names))
     w = 0.2
-    ax1.bar(x - 1.5*w, best_g, w, label="best G*(bias)", alpha=0.8)
-    ax1.bar(x - 0.5*w, nqe, w, label="NQE", alpha=0.8)
-    ax1.bar(x + 0.5*w, zz, w, label="ZZ", alpha=0.8)
-    ax1.bar(x + 1.5*w, lin, w, label="classical linear", alpha=0.8)
+    ax1.bar(x - 1.5 * w, best_g, w, label="best G*(bias)", alpha=0.8)
+    ax1.bar(x - 0.5 * w, nqe, w, label="NQE", alpha=0.8)
+    ax1.bar(x + 0.5 * w, zz, w, label="ZZ", alpha=0.8)
+    ax1.bar(x + 1.5 * w, lin, w, label="classical linear", alpha=0.8)
     ax1.set_xticks(x)
     ax1.set_xticklabels(gate_names)
     ax1.set_ylabel("mean test accuracy")
     ax1.set_ylim(0.4, 1.0)
     ax1.set_title("Fig 7a: Gate-based QKSVM")
     ax1.legend(fontsize=9)
-    ax1.grid(axis='y', alpha=0.3)
-    
+    ax1.grid(axis="y", alpha=0.3)
+
     # Photonic
     photonic_data = [_load(p) for p in photonic_paths]
     photonic_names = [d["dataset"] for d in photonic_data]
-    
+
     best_g_phot = [max(g["mean_acc"] for g in d["G_bias"]) for d in photonic_data]
     nqe_phot = [d["baselines"]["NQE"]["mean_acc"] for d in photonic_data]
     zz_phot = [d["baselines"]["ZZ"]["mean_acc"] for d in photonic_data]
     lin_phot = [d["baselines"]["classical_linear"]["mean_acc"] for d in photonic_data]
-    
+
     x = np.arange(len(photonic_names))
-    ax2.bar(x - 1.5*w, best_g_phot, w, label="best G*(bias)", alpha=0.8)
-    ax2.bar(x - 0.5*w, nqe_phot, w, label="NQE", alpha=0.8)
-    ax2.bar(x + 0.5*w, zz_phot, w, label="ZZ", alpha=0.8)
-    ax2.bar(x + 1.5*w, lin_phot, w, label="classical linear", alpha=0.8)
+    ax2.bar(x - 1.5 * w, best_g_phot, w, label="best G*(bias)", alpha=0.8)
+    ax2.bar(x - 0.5 * w, nqe_phot, w, label="NQE", alpha=0.8)
+    ax2.bar(x + 0.5 * w, zz_phot, w, label="ZZ", alpha=0.8)
+    ax2.bar(x + 1.5 * w, lin_phot, w, label="classical linear", alpha=0.8)
     ax2.set_xticks(x)
     ax2.set_xticklabels(photonic_names)
     ax2.set_ylabel("mean test accuracy")
     ax2.set_ylim(0.4, 1.0)
     ax2.set_title("Fig 7b: Photonic QKSVM")
     ax2.legend(fontsize=9)
-    ax2.grid(axis='y', alpha=0.3)
-    
+    ax2.grid(axis="y", alpha=0.3)
+
     plt.tight_layout()
     for d in (RESULTS,):
         plt.savefig(d / "fig7_accuracy_comparison.png", dpi=120)
     plt.close()
     print("wrote fig7_accuracy_comparison.png")
-
-
 
 
 if __name__ == "__main__":
@@ -810,7 +848,7 @@ if __name__ == "__main__":
     ap.add_argument("--fig6", nargs="+", help="gate-based EGAS for Fig 6 comparison")
     ap.add_argument("--fig7", nargs="+", help="gate-based EGAS for Fig 7 comparison")
     a = ap.parse_args()
-    
+
     if a.wasserstein:
         plot_wasserstein(a.wasserstein)
     if a.fig1:

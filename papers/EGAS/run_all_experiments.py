@@ -11,9 +11,8 @@ Usage:
 
 import subprocess
 import sys
-import os
-from pathlib import Path
 from argparse import ArgumentParser
+from pathlib import Path
 from typing import Optional
 
 # ANSI colors
@@ -31,16 +30,16 @@ def run_command(cmd: list, description: str = "", cwd: Optional[str] = None) -> 
     try:
         result = subprocess.run(cmd, check=True, cwd=cwd)
         return result.returncode == 0
-    except subprocess.CalledProcessError as e:
+    except subprocess.CalledProcessError:
         print(f"{RED}✗ Failed{NC}: {' '.join(cmd)}")
         return False
 
 
 def print_header(text: str) -> None:
     """Print a formatted header."""
-    print(f"\n{BLUE}{'='*60}{NC}")
+    print(f"\n{BLUE}{'=' * 60}{NC}")
     print(f"{BLUE}{text.center(60)}{NC}")
-    print(f"{BLUE}{'='*60}{NC}\n")
+    print(f"{BLUE}{'=' * 60}{NC}\n")
 
 
 def print_step(step_num: int, total: int, text: str) -> None:

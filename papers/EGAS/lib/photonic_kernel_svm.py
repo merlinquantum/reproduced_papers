@@ -42,7 +42,7 @@ def qksvm_accuracy(photonic_model, X_train, y_train, X_test, y_test, device="cpu
 
 def classical_svm_accuracy(X_train, y_train, X_test, y_test, kind="linear"):
     """Compute SVM accuracy on test set. Supports binary and multiclass.
-    
+
     For multiclass, uses one-vs-rest (OvR) strategy automatically.
     """
     scaler = StandardScaler().fit(X_train)
@@ -51,7 +51,9 @@ def classical_svm_accuracy(X_train, y_train, X_test, y_test, kind="linear"):
     # Use OvR for multiclass, auto for binary
     decision_function_shape = "ovr" if n_classes > 2 else "ovr"
     if kind == "linear":
-        svc = SVC(kernel="linear", C=C_SVM, decision_function_shape=decision_function_shape)
+        svc = SVC(
+            kernel="linear", C=C_SVM, decision_function_shape=decision_function_shape
+        )
     else:
         svc = SVC(
             kernel="rbf",
