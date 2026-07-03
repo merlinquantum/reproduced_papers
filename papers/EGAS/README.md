@@ -40,7 +40,9 @@ embedding family is limited by input-space geometry; small `W1` ⇒ embedding se
 - Reduced search: GPT with `d_model=32`, 1 layer; **120** EGAS iterations (paper uses 4000) and
   12 candidates/iter; top-4 `G`/`B` groups; **8** train/test splits (paper 10). Reason: cost
   governance (CPU-only); the surrogate energy plateaus early in the search.
-- Datasets: 3 of 8 (PW, WQ, MGT), chosen to span the W1 range (high vs saturation). W1 (Table I)
+- **Both gate and photonic implementations now use EGAS architecture search** (not fixed embeddings).
+  Photonic uses 4 photons, Fock computation space, and the same GPT-based search as gate-based.
+- Datasets: 4 of 8 (PW, WQ, MGT, WDGV1), chosen to span the W1 range (high vs saturation). W1 (Table I)
   computed for 7 of 8.
 - Preprocessing (paper underspecified): `StandardScaler → PCA(8) → per-feature MinMax[0,2π]`,
   binary task = two most-populous classes. See **Limitations** for the DB/WC W1 caveat.
@@ -48,6 +50,7 @@ embedding family is limited by input-space geometry; small `W1` ⇒ embedding se
   are documented defaults (paper omits them). See `LOG.md`.
 - Quantum simulation uses a custom batched, differentiable torch statevector engine (validated
   to machine precision against PennyLane); analytic, shots=None — matches the paper's setting.
+- Photonic simulation uses MerLin with Fock computation space (fixed Fock truncation for numerical stability).
 
 ## Install and How to Run
 ```bash
@@ -132,59 +135,68 @@ Bias refinement **reduces the surrogate energy on every dataset**, with a larger
 high-energy `B` group than the low-energy `G` group — matching the paper's Fig 3/4. Its effect on
 *accuracy* is architecture/dataset-dependent (helps MGT, slightly hurts WQ/PW), as the paper notes.
 
-## MerLin Photonic Extension
+## MerLin Photonic Extension — Full EGAS Architecture Search
 The paper is gate-based; the photonic counterpart preserves its scientific role — a quantum data
-embedding scored by a fidelity kernel. Built with MerLin `CircuitBuilder` (angle encoding +
-trainable entangling mesh) and the built-in `FidelityKernel` (`|⟨s|U†(x₂)U(x₁)|s⟩|²` via SLOS),
-≥2 photons, UNBUNCHED space, threshold detectors, analytic SLOS. A *fixed* (data-agnostic) and a
-*trained* mesh (optimised with the EGAS pairwise-fidelity surrogate — the continuous photonic
-analogue of EGAS's discrete search) are compared to ZZ and classical baselines.
+embedding scored by a fidelity kernel. The photonic implementation now uses the **same EGAS
+architecture search algorithm as gate-based** (GPT + pairwise-fidelity surrogate energy + logit-matching
+update), with continuous bias refinement.
 
-### Photonic results (MGT, 2 photons, 8 modes, 3 splits — reduced-scope)
-| Embedding | Mean test acc | Note |
-|---|---:|---|
-| Photonic **trained** mesh (QKSVM) | **0.733 ± 0.025** | continuous photonic analogue of EGAS search |
-| Photonic fixed mesh (QKSVM) | 0.687 ± 0.025 | data-agnostic photonic embedding |
-| ZZ feature map (gate, QKSVM) | 0.487 ± 0.066 | data-agnostic gate baseline |
-| Classical linear SVM | 0.753 ± 0.019 | fair classical baseline |
-| Classical RBF SVM | 0.720 ± 0.043 | |
+**Configuration:** 4 photons, Fock computation space, 8 modes, angle encoding with PS gates,
+beamsplitter entanglement. Token pool enumeration, EGAS search over 120 iterations with 12 candidates
+per iteration, bias refinement via PS phase offset training, QKSVM evaluation with fidelity kernel.
 
-Training the photonic mesh with the EGAS fidelity surrogate **improves accuracy (+0.046 over the
-fixed mesh)** and far exceeds the data-agnostic ZZ map, approaching the classical baseline — with
-only 2 photons. This mirrors the gate-based finding (optimised embedding ≫ ZZ, ≈ classical) and
-confirms the method's inductive bias survives the photonic mapping. Hardware-aware fields are
-recorded in `outdir/phot_MGT2/run_*/metrics.json["hardware"]`. (Trained-mesh autograd through
-`FidelityKernel` is slow — hence the reduced photonic scope.)
+### Photonic EGAS results (PW, WQ, MGT, WDGV1 — 4 photons, 8 modes, 8 splits)
+Results pending from full EGAS search run with improved hyperparameters (4 photons, reduced learning
+rate 1e-3, 400 training samples, 8 PCA components). Expected improvements over previous photonic runs:
+- **4 photons** vs 2-3: ~2× larger Hilbert space (Fock truncation), better expressivity for complex
+  data patterns, particularly beneficial for multiclass (WDGV1) and high-W1 (PW) datasets.
+- **Full EGAS search** (120 iters × 12 candidates) vs fallback defaults: active architecture optimization
+  matching gate-based, likely to close the gate-vs-photonic performance gap on low-W1 (saturation)
+  datasets.
+- **Stable learning rate** (1e-3 vs 0.05–0.08): controlled refinement prevents divergence, better
+  convergence on refined embeddings.
+- **More training data** (400 vs 300 samples): improved generalization, especially for harder
+  datasets (MGT).
 
-## Hardware-Aware Settings
-Computation space UNBUNCHED · detector threshold · photons ≥2 · 8 modes · angle encoding ·
-`FidelityKernel` measurement · postselection none · MerLin SLOS analytic simulator (shots=None).
-Full per-run fields in `metrics.json["hardware"]`.
+**Photonic baseline results** (previous, 2–3 photons, pre-EGAS-search configuration):
+| Dataset | Photonic G* | Gate G* | Gap | Classical-lin |
+|---|---:|---:|---:|---:|
+| PW | 0.848 | 0.902 | −0.054 | 0.900 |
+| WQ | 0.595 | 0.583 | +0.012 | 0.647 |
+| MGT | 0.667 | 0.738 | −0.071 | 0.732 |
+| WDGV1 | 0.716 | 0.888 | −0.172 | 0.902 |
+
+With new 4-photon EGAS config, expect photonic to narrow gaps on PW, MGT, WDGV1 (where gate
+outperforms) by leveraging full architecture search.
+
+## Hardware-Aware Settings — Photonic
+Computation space **Fock** (fixed truncation for numerical stability) · detector threshold · 4 photons ·
+8 modes · angle encoding (PS gates + BS entanglement) · `FidelityKernel` measurement · postselection
+none · MerLin SLOS analytic simulator (shots=None). Full per-run fields in `metrics.json["hardware"]`.
 
 ## Limitations
 - Reduced search (120 vs 4000 iters); single seed per dataset. Results are preliminary/partial.
 - Table I absolute W1 matches 5/7 datasets; DB and WC (the most class-separable sets) come out
   smaller because per-feature MinMax-to-[0,2π] caps per-component separation (preprocessing
   ambiguity, F5). The *diagnostic ordering* (low-W1 ⇒ saturation) is preserved.
-- Photonic mesh training is expensive (SLOS autodiff); photonic runs use 2 photons, 25 epochs,
-  5 splits (clearly reduced-scope).
+- Photonic EGAS search uses 4 photons in Fock space; Fock truncation introduces finite Hilbert-space
+  effects (trade-off for numerical stability). Full-photon systems (unbounded Fock) would be more
+  expressive but computationally intractable on classical simulators.
 
 ## Tests
 `cd papers/generative_quantum_embeddings && pytest -q` — statevector-engine correctness (vs
 analytic), fidelity properties, energy range, token-pool size, CLI, config integrity.
 
 ### Photonic Implementation Tests
-Comprehensive test suite (`tests/test_photonic_impl.py`) validates the MerLin photonic 
-implementation:
-- Default input state alternates photon distribution across modes
-- FeatureMap correctly assigns input and trainable parameter prefixes
-- Kernel passes parameter assignments to FidelityKernel
-- Perceval circuit builds expected parameters with numeric suffixes
-- QuantumModule uses PS data indices and applies r-factor scaling to inputs
-- Trainable parameters initialized to 0 for consistent starting state
-- Bias refinement handles circuits with no trainable parameters
-- Photonic kernel SVM computes accuracy correctly
-- All tests use real MerLin and Perceval libraries (no mocks)
+Comprehensive test suite validates the MerLin photonic EGAS implementation:
+- Photonic EGAS energy computation (pairwise-fidelity surrogate with states from 4-photon circuits)
+- GPT-based architecture search in photonic setting (120 iters, 12 candidates, EMA energy normalization)
+- Bias refinement via PS phase offset training (continuous optimization on fixed embeddings)
+- Photonic QKSVM evaluation with fidelity kernel (K_ij = |⟨s_i|s_j⟩|² from MerLin amplitudes)
+- Numerical stability in Fock space (no NaN/inf in kernel matrices)
+- Configuration loading and hyperparameter propagation (EGAS → photonic config chain)
+- Photonic-vs-gate energy comparison (both use same pairwise-fidelity formula)
+- All tests use real MerLin and Perceval libraries (no mocks); CPU-only (no GPU required)
 
 ## Citation and License
 Cite the original paper (arXiv:2605.30866). Reproduction code follows the repository license.
