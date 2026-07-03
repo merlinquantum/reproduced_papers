@@ -4,9 +4,9 @@ Usage:
     python utils/plot_results.py --wasserstein outdir/run_*/metrics.json
     python utils/plot_results.py --fig1 outdir/run_*/metrics.json
     python utils/plot_results.py --egas outdir/run_WC/metrics.json outdir/run_WQ/metrics.json
-    python utils/plot_results.py --fig4-gate paths... --fig4-photonic paths...
 
-Reads structured metrics.json and writes PNGs to both the run dir and ``results/``.
+Reads structured metrics.json (never hardcodes run dirs) and writes PNGs to both the run dir
+and ``results/``.
 """
 
 from __future__ import annotations
@@ -20,8 +20,6 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-
-# ======================================================================= Constants
 
 RESULTS = Path(__file__).resolve().parents[1] / "results"
 RESULTS.mkdir(exist_ok=True)
@@ -37,57 +35,44 @@ PAPER_W1 = {
 }
 
 
-# ======================================================================= Helpers
-
-
 def _load(p):
-    """Load metrics.json file."""
     return json.loads(Path(p).read_text())
 
 
-# ======================================================================= Diagnostic Plots
-
-
 def plot_wasserstein(path):
-    """Plot Wasserstein distances (Table I) - diagnostic."""
     m = _load(path)["results"]
     names = [n for n in m if "w1" in m[n]]
     repro = [m[n]["w1"] for n in names]
     paper = [PAPER_W1.get(n, np.nan) for n in names]
     x = np.arange(len(names))
-    fig, ax = plt.subplots(figsize=(8, 4))
-    ax.bar(x - 0.2, repro, 0.4, label="reproduced")
-    ax.bar(x + 0.2, paper, 0.4, label="paper (Table I)")
-    ax.set_xticks(x)
-    ax.set_xticklabels(names)
-    ax.set_ylabel("1-Wasserstein distance")
-    ax.set_title("Table I — input-space class-conditional W1")
-    ax.legend()
+    plt.figure(figsize=(8, 4))
+    plt.bar(x - 0.2, repro, 0.4, label="reproduced")
+    plt.bar(x + 0.2, paper, 0.4, label="paper (Table I)")
+    plt.xticks(x, names)
+    plt.ylabel("1-Wasserstein distance")
+    plt.legend()
+    plt.title("Table I: input-space class-conditional W1")
     plt.tight_layout()
-    for d in (RESULTS,):
+    for d in (Path(path).parent, RESULTS):
         plt.savefig(d / "table1_wasserstein.png", dpi=130, bbox_inches="tight")
     plt.close()
     print("wrote table1_wasserstein.png")
 
 
 def plot_fig1(path):
-    """Plot trace distance vs W1 (Fig 1) - diagnostic."""
     res = _load(path)["results"]
-    fig, ax = plt.subplots(figsize=(6, 4))
+    plt.figure(figsize=(6, 4))
     for key, d in res.items():
-        ax.plot(d["w1"], d["trace_dist"], "o-", label=f"ZZ {key}")
-    ax.set_xlabel("input W1 distance")
-    ax.set_ylabel("trace distance")
-    ax.set_title("Fig 1 — trace distance vs input W1 (saturating)")
-    ax.legend()
+        plt.plot(d["w1"], d["trace_dist"], "o-", label=f"ZZ {key}")
+    plt.xlabel("input W1 distance")
+    plt.ylabel("trace distance")
+    plt.title("Fig 1: trace distance vs input W1 (saturating)")
+    plt.legend()
     plt.tight_layout()
-    for d in (RESULTS,):
+    for d in (Path(path).parent, RESULTS):
         plt.savefig(d / "fig1_tracedist_vs_w1.png", dpi=130, bbox_inches="tight")
     plt.close()
     print("wrote fig1_tracedist_vs_w1.png")
-
-
-# ======================================================================= Fig 3: Bias-Refinement Energy Reduction
 
 
 def plot_fig3_deltaE_per_candidate(path):
@@ -100,63 +85,45 @@ def plot_fig3_deltaE_per_candidate(path):
     b = m["delta_E"]["B"]
     labels = [f"G{i + 1}" for i in range(len(g))] + [f"B{i + 1}" for i in range(len(b))]
     means = g + b
-
     fig, ax = plt.subplots(figsize=(9, 4))
-    ax.bar(
-        range(len(means)),
-        means,
-        color=["#1f77b4"] * len(g) + ["#d62728"] * len(b),
-    )
+    ax.bar(range(len(means)), means, color=["#1f77b4"] * len(g) + ["#d62728"] * len(b))
     ax.axhline(0, color="k", lw=0.6)
     ax.set_xticks(range(len(labels)))
     ax.set_xticklabels(labels, rotation=45, fontsize=8)
     ax.set_ylabel("ΔE  (E_before − E_after)")
-    ax.set_title(
-        "Fig 3 — bias-refinement surrogate-energy reduction\n(gate-based; single refinement run)"
-    )
+    ax.set_title("Fig 3 — bias-refinement surrogate-energy reduction (gate)")
     plt.tight_layout()
-    plt.savefig(RESULTS / "fig3_deltaE_per_candidate.png", dpi=130, bbox_inches="tight")
+    for d in (RESULTS,):
+        plt.savefig(d / "fig3_deltaE_per_candidate.png", dpi=130, bbox_inches="tight")
     plt.close()
     print("wrote fig3_deltaE_per_candidate.png")
 
 
 def plot_fig3_deltaE_per_candidate_photonic(path):
-    """Fig 3 (Photonic): Bias-refinement surrogate-energy reduction per candidate.
-
-    Shows ΔE per candidate for G and B groups (PW dataset only).
-    """
+    """Fig 3 (Photonic): Bias-refinement surrogate-energy reduction per candidate."""
     m = _load(path)
     g = m["delta_E"]["G"]
     b = m["delta_E"]["B"]
     labels = [f"G{i + 1}" for i in range(len(g))] + [f"B{i + 1}" for i in range(len(b))]
     means = g + b
-
     fig, ax = plt.subplots(figsize=(9, 4))
-    ax.bar(
-        range(len(means)),
-        means,
-        color=["#1f77b4"] * len(g) + ["#d62728"] * len(b),
-    )
+    ax.bar(range(len(means)), means, color=["orange"] * len(g) + ["red"] * len(b))
     ax.axhline(0, color="k", lw=0.6)
     ax.set_xticks(range(len(labels)))
     ax.set_xticklabels(labels, rotation=45, fontsize=8)
     ax.set_ylabel("ΔE  (E_before − E_after)")
-    ax.set_title(
-        "Fig 3 (Photonic) — bias-refinement surrogate-energy reduction\n(photonic; single refinement run)"
-    )
+    ax.set_title("Fig 3 — bias-refinement surrogate-energy reduction (photonic)")
     plt.tight_layout()
-    plt.savefig(
-        RESULTS / "fig3_deltaE_per_candidate_photonic.png", dpi=130, bbox_inches="tight"
-    )
+    for d in (RESULTS,):
+        plt.savefig(
+            d / "fig3_deltaE_per_candidate_photonic.png", dpi=130, bbox_inches="tight"
+        )
     plt.close()
     print("wrote fig3_deltaE_per_candidate_photonic.png")
 
 
-# ======================================================================= Fig 4: Group-wise Energy Reduction
-
-
 def plot_fig4_deltaE_groups(paths):
-    """Fig 4 (Gate): Group-wise mean surrogate-energy reduction across datasets.
+    """Fig 4: Group-wise mean surrogate-energy reduction across datasets.
 
     Plots mean ΔE for G and B groups with error bars.
     """
@@ -183,16 +150,14 @@ def plot_fig4_deltaE_groups(paths):
     ax.set_title("Fig 4 — group-wise mean surrogate-energy reduction across datasets")
     ax.legend()
     plt.tight_layout()
-    plt.savefig(RESULTS / "fig4_deltaE_groups.png", dpi=130, bbox_inches="tight")
+    for d in (RESULTS,):
+        plt.savefig(d / "fig4_deltaE_groups.png", dpi=130, bbox_inches="tight")
     plt.close()
     print("wrote fig4_deltaE_groups.png")
 
 
 def plot_fig4_deltaE_groups_photonic(paths):
-    """Fig 4 (Photonic): Group-wise mean surrogate-energy reduction across datasets.
-
-    Plots mean ΔE for G and B groups with error bars.
-    """
+    """Fig 4 (photonic): Group-wise mean surrogate-energy reduction across datasets."""
     data = [_load(p) for p in paths]
     names = [d["dataset"] for d in data]
 
@@ -204,11 +169,9 @@ def plot_fig4_deltaE_groups_photonic(paths):
     x = np.arange(len(names))
     fig, ax = plt.subplots(figsize=(7, 4))
     ax.errorbar(
-        x - 0.05, gm, yerr=gs, fmt="o", capsize=4, label="G group", color="#1f77b4"
+        x - 0.05, gm, yerr=gs, fmt="o", capsize=4, label="G group", color="orange"
     )
-    ax.errorbar(
-        x + 0.05, bm, yerr=bs, fmt="s", capsize=4, label="B group", color="#d62728"
-    )
+    ax.errorbar(x + 0.05, bm, yerr=bs, fmt="s", capsize=4, label="B group", color="red")
     ax.axhline(0, ls="--", color="gray", lw=0.8)
     ax.set_xticks(x)
     ax.set_xticklabels(names)
@@ -218,31 +181,22 @@ def plot_fig4_deltaE_groups_photonic(paths):
     )
     ax.legend()
     plt.tight_layout()
-    plt.savefig(
-        RESULTS / "fig4_deltaE_groups_photonic.png", dpi=130, bbox_inches="tight"
-    )
+    for d in (RESULTS,):
+        plt.savefig(d / "fig4_deltaE_groups_photonic.png", dpi=130, bbox_inches="tight")
     plt.close()
     print("wrote fig4_deltaE_groups_photonic.png")
 
 
-# ======================================================================= Fig 5: Win/Tie/Loss Comparison
-
-
 def plot_fig5_win_tie_loss(paths):
-    """Fig 5 (Gate): Win/Tie/Loss vs classical linear SVM per dataset.
-
-    Compares quantum kernels against classical baseline across splits.
-    """
+    """Fig 5: Win/Tie/Loss comparison vs classical linear across datasets."""
     data = [_load(p) for p in paths]
     names = [d["dataset"] for d in data]
     n = len(names)
-
     fig, axes = plt.subplots(1, n, figsize=(4 * n, 3.6), sharey=True)
     if n == 1:
         axes = [axes]
 
-    for ax, name in zip(axes, names):
-        m = data[names.index(name)]
+    for ax, name, m in zip(axes, names, data):
         models = [
             ("G*", m["G"][m["G_star_idx"]]["wtl_vs_linear"]),
             ("G*(Bias)", m["G_bias"][m["G_bias_star_idx"]]["wtl_vs_linear"]),
@@ -269,30 +223,26 @@ def plot_fig5_win_tie_loss(paths):
         ax.set_xticklabels(labels, rotation=45, fontsize=8)
         ax.set_title(f"{name} (W1={m['w1']:.2f})")
 
-    axes[0].set_ylabel("# splits (of {})".format(data[0]["n_splits"]))
+    axes[0].set_ylabel(f"# splits (of {data[0]['n_splits']})")
     axes[-1].legend(loc="upper right", fontsize=8)
     fig.suptitle("Fig 5 — Win/Tie/Loss vs classical linear SVM")
     plt.tight_layout()
-    plt.savefig(RESULTS / "fig5_win_tie_loss.png", dpi=130, bbox_inches="tight")
+    for d in (RESULTS,):
+        plt.savefig(d / "fig5_win_tie_loss.png", dpi=130, bbox_inches="tight")
     plt.close()
     print("wrote fig5_win_tie_loss.png")
 
 
 def plot_fig5_win_tie_loss_photonic(paths):
-    """Fig 5 (Photonic): Win/Tie/Loss vs classical linear SVM per dataset.
-
-    Compares photonic quantum kernels against classical baseline across splits.
-    """
+    """Fig 5 (photonic): Win/Tie/Loss comparison vs classical linear across datasets."""
     data = [_load(p) for p in paths]
     names = [d["dataset"] for d in data]
     n = len(names)
-
     fig, axes = plt.subplots(1, n, figsize=(4 * n, 3.6), sharey=True)
     if n == 1:
         axes = [axes]
 
-    for ax, name in zip(axes, names):
-        m = data[names.index(name)]
+    for ax, name, m in zip(axes, names, data):
         models = [
             ("G*", m["G"][m["G_star_idx"]]["wtl_vs_linear"]),
             ("G*(Bias)", m["G_bias"][m["G_bias_star_idx"]]["wtl_vs_linear"]),
@@ -306,42 +256,35 @@ def plot_fig5_win_tie_loss_photonic(paths):
         ties = [w["tie"] for _, w in models]
         loss = [w["lose"] for _, w in models]
         x = np.arange(len(labels))
-        ax.bar(x, wins, color="#2c7fb8", label="win")
-        ax.bar(x, ties, bottom=wins, color="#f4d03f", label="tie")
+        ax.bar(x, wins, color="orange", label="win", alpha=0.8)
+        ax.bar(x, ties, bottom=wins, color="gold", label="tie", alpha=0.8)
         ax.bar(
             x,
             loss,
             bottom=np.array(wins) + np.array(ties),
-            color="#d62728",
+            color="red",
             label="lose",
+            alpha=0.8,
         )
         ax.set_xticks(x)
         ax.set_xticklabels(labels, rotation=45, fontsize=8)
         ax.set_title(f"{name} (W1={m['w1']:.2f})")
 
-    axes[0].set_ylabel("# splits (of {})".format(data[0]["n_splits"]))
+    axes[0].set_ylabel(f"# splits (of {data[0]['n_splits']})")
     axes[-1].legend(loc="upper right", fontsize=8)
     fig.suptitle("Fig 5 (Photonic) — Win/Tie/Loss vs classical linear SVM")
     plt.tight_layout()
-    plt.savefig(
-        RESULTS / "fig5_win_tie_loss_photonic.png", dpi=130, bbox_inches="tight"
-    )
+    for d in (RESULTS,):
+        plt.savefig(d / "fig5_win_tie_loss_photonic.png", dpi=130, bbox_inches="tight")
     plt.close()
     print("wrote fig5_win_tie_loss_photonic.png")
 
 
-# ======================================================================= Fig 6: Embedding-Sensitivity IQR
-
-
 def plot_fig6_iqr(paths):
-    """Fig 6 (Gate): Embedding-sensitivity IQR per dataset.
-
-    Shows inter-quartile range of accuracy across embeddings.
-    """
+    """Fig 6 (gate): Embedding-sensitivity IQR per dataset."""
     data = [_load(p) for p in paths]
     names = [d["dataset"] for d in data]
-
-    iqr = [d["embedding_sensitivity_IQR"] for d in data]
+    iqr = [d.get("embedding_sensitivity_IQR", 0) for d in data]
     w1 = [d["w1"] for d in data]
 
     fig, ax = plt.subplots(figsize=(7, 4))
@@ -357,7 +300,7 @@ def plot_fig6_iqr(paths):
     ax.set_xticks(np.arange(len(names)))
     ax.set_xticklabels(names)
     ax.set_ylabel("IQR of mean test accuracy")
-    ax.set_title("Fig 6 — embedding-sensitivity IQR per dataset (grows with W1)")
+    ax.set_title("Fig 6 (Gate) — embedding-sensitivity IQR per dataset (grows with W1)")
     plt.tight_layout()
     plt.savefig(RESULTS / "fig6_iqr.png", dpi=130, bbox_inches="tight")
     plt.close()
@@ -365,18 +308,14 @@ def plot_fig6_iqr(paths):
 
 
 def plot_fig6_iqr_photonic(paths):
-    """Fig 6 (Photonic): Embedding-sensitivity IQR per dataset.
-
-    Shows inter-quartile range of accuracy across embeddings (photonic).
-    """
+    """Fig 6 (photonic): Embedding-sensitivity IQR per dataset."""
     data = [_load(p) for p in paths]
     names = [d["dataset"] for d in data]
-
-    iqr = [d["embedding_sensitivity_IQR"] for d in data]
+    iqr = [d.get("embedding_sensitivity_IQR", 0) for d in data]
     w1 = [d["w1"] for d in data]
 
     fig, ax = plt.subplots(figsize=(7, 4))
-    bars = ax.bar(np.arange(len(names)), iqr, color="#7fbf7b")
+    bars = ax.bar(np.arange(len(names)), iqr, color="darkorange")
     for b, w in zip(bars, w1):
         ax.text(
             b.get_x() + b.get_width() / 2,
@@ -396,8 +335,6 @@ def plot_fig6_iqr_photonic(paths):
     plt.close()
     print("wrote fig6_iqr_photonic.png")
 
-
-# ======================================================================= Main
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(
