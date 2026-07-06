@@ -3,5 +3,5 @@
 
 scikit-learn>=1.9.0
 matplotlib>=3.8.0
-merlinquantum>=0.4.0
+git+https://github.com/Tancredoss/merlin
 perceval-quandela>=1.2.3
