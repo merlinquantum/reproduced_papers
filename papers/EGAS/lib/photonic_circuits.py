@@ -57,6 +57,7 @@ def create_perceval_circuit(
 
 def create_quantum_module(
     sequence,
+    num_features: int,
     n_modes: int,
     num_photons: int = 2,
     computation_space: ml.ComputationSpace = ml.ComputationSpace.UNBUNCHED,
@@ -68,24 +69,53 @@ def create_quantum_module(
     ps_data_indices = [data_idx for gate, _, data_idx, _ in sequence if gate == "PS"]
     ps_r_factors = [r for gate, _, _, r in sequence if gate == "PS"]
 
+    class BiasMLP(nn.Module):
+        """MLP whose initial output is identically zero."""
+
+        def __init__(
+            self,
+            n_in: int,
+            n_biases: int,
+            hidden: int = 32,
+            gain: float = 10.0,
+        ):
+            super().__init__()
+
+            self.net = nn.Sequential(
+                nn.Linear(n_in, hidden),
+                nn.Tanh(),
+                nn.Linear(hidden, hidden),
+                nn.Tanh(),
+                nn.Linear(hidden, n_biases),
+            )
+
+            # Zero-initialize the output layer
+            nn.init.zeros_(self.net[-1].weight)
+            nn.init.zeros_(self.net[-1].bias)
+
+            self.gain = gain
+
+        def forward(self, X: torch.Tensor) -> torch.Tensor:
+            return self.gain * self.net(X.to(torch.float32))
+
     class QuantumModule(nn.Module):
         def __init__(self):
             super().__init__()
             self.ps_data_indices = ps_data_indices
             self.ps_r_factors = torch.tensor(ps_r_factors, dtype=torch.float32)
             self.layer = ml.QuantumLayer(
-                input_size=len(input_parameters),
+                input_size=2 * len(input_parameters),
                 circuit=circuit,
                 n_photons=num_photons,
-                trainable_parameters=["phi"] if len(trainable_parameters) > 0 else [],
-                input_parameters=["theta"] if len(input_parameters) > 0 else [],
+                input_parameters=["theta", "phi"] if len(input_parameters) > 0 else [],
                 measurement_strategy=ml.MeasurementStrategy.amplitudes(
                     computation_space=computation_space
                 ),
             )
-            # Initialize all trainable parameters to 0
-            for param in self.layer.parameters():
-                param.data.fill_(0.0)
+            self.bias = BiasMLP(
+                n_in=num_features,
+                n_biases=len(input_parameters),
+            )
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
             if len(self.ps_data_indices) > 0:
@@ -94,9 +124,9 @@ def create_quantum_module(
                         "Input feature width is too small for the PS data indices in "
                         "the sequence."
                     )
-                layer_input = x[..., self.ps_data_indices]
-                # Multiply each input by the corresponding r factor
-                layer_input = layer_input * self.ps_r_factors
+                theta = x[..., self.ps_data_indices] * self.ps_r_factors
+                phi = self.bias(x)
+                layer_input = torch.cat([theta, phi], dim=-1)
                 return self.layer(layer_input)
             else:
                 # No input parameters needed, create empty input with batch size

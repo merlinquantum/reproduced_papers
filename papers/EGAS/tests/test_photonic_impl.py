@@ -71,13 +71,10 @@ def test_create_quantum_module_uses_ps_data_indices_and_trainable_parameters():
     from lib.photonic_circuits import create_quantum_module
 
     sequence = [("PS", 0, 1, 0.3), ("PS", 1, 0, 0.5), ("PS_PI", 1, 0, 0.0)]
-    encoder = create_quantum_module(sequence, n_modes=2)
+    encoder = create_quantum_module(sequence, num_features=2, n_modes=2)
 
     assert encoder.ps_data_indices == [1, 0]
-    assert encoder.layer.input_size == 2
-
-    trainable_params = [p for p in encoder.layer.parameters() if p.requires_grad][0]
-    assert trainable_params.numel() == 2
+    assert encoder.layer.input_size == 4
 
     x = torch.randn(3, 2, dtype=torch.float32)
     states = encoder(x)
@@ -117,6 +114,7 @@ def test_refine_bias_returns_same_energy_when_no_trainable_parameters():
         sequence,
         X,
         y,
+        num_features=4,
         n_modes=3,
         num_photons=2,
         computation_space=ml.ComputationSpace.UNBUNCHED,

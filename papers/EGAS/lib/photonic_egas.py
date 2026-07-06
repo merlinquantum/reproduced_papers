@@ -37,8 +37,9 @@ def pairwise_energy(states: torch.Tensor, labels: torch.Tensor) -> torch.Tensor:
     return loss[off].mean()
 
 
-def _create_encoder(seq, n_modes, num_photons=2, computation_space=None):
+def _create_encoder(seq, num_features, n_modes, num_photons=2, computation_space=None):
     kwargs = {
+        "num_features": num_features,
         "n_modes": n_modes,
         "num_photons": num_photons,
     }
@@ -63,6 +64,7 @@ def evaluate_sequences(
         seq = [pool[int(t)] for t in seq_ids]
         encoder = _create_encoder(
             seq,
+            X.shape[-1],
             n_modes,
             num_photons=num_photons,
             computation_space=computation_space,
@@ -233,6 +235,7 @@ def refine_candidates(
     for sid in candidate_ids:
         seq = [pool[int(i)] for i in sid]
         kwargs = {
+            "num_features": X.shape[-1],
             "num_photons": num_photons,
             "device": device,
             **refine_kwargs,

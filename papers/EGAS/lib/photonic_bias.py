@@ -14,10 +14,32 @@ from __future__ import annotations
 import merlin as ml
 import numpy as np
 import torch
+import torch.nn as nn
 
 from .egas import pairwise_energy
 from .photonic_circuits import create_quantum_module
 from .statevec import fidelity_matrix
+
+
+class GlobalBiasMLP(nn.Module):
+    def __init__(self, n_biases, hidden=32):
+        super().__init__()
+
+        self.latent = nn.Parameter(torch.zeros(1))
+
+        self.net = nn.Sequential(
+            nn.Linear(1, hidden),
+            nn.Tanh(),
+            nn.Linear(hidden, hidden),
+            nn.Tanh(),
+            nn.Linear(hidden, n_biases),
+        )
+
+        nn.init.zeros_(self.net[-1].weight)
+        nn.init.zeros_(self.net[-1].bias)
+
+    def forward(self):
+        return self.net(self.latent.unsqueeze(0)).squeeze(0)
 
 
 def _bce_pair_loss(states, labels, eps=1e-3):
@@ -43,6 +65,7 @@ def refine_bias(
     X,
     y,
     n_modes,
+    num_features,
     *,
     num_photons=2,
     computation_space=ml.ComputationSpace.UNBUNCHED,
@@ -69,11 +92,12 @@ def refine_bias(
 
     encoder = create_quantum_module(
         seq,
+        num_features=num_features,
         n_modes=n_modes,
         num_photons=num_photons,
         computation_space=computation_space,
     ).to(device)
-    trainable_parameters = [p for p in encoder.parameters() if p.requires_grad]
+    trainable_parameters = [p for p in encoder.bias.parameters() if p.requires_grad]
     if len(trainable_parameters) == 0:
         with torch.no_grad():
             # Evaluate with a single sample and replicate if no input indices
@@ -88,7 +112,7 @@ def refine_bias(
             E_before = pairwise_energy(states, yt).item()
         return encoder, E_before, E_before
 
-    opt = torch.optim.RMSprop(encoder.parameters(), lr=lr)
+    opt = torch.optim.RMSprop(encoder.bias.parameters(), lr=lr)
 
     with torch.no_grad():
         # Evaluate with a single sample and replicate if no input indices

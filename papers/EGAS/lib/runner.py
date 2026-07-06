@@ -134,6 +134,7 @@ def _run_photonic_eval(cfg, run_dir, logger):
             seq = [pool[int(i)] for i in sid]
             encoder = create_quantum_module(
                 seq,
+                num_features=X.shape[1],
                 n_modes=n_modes,
                 num_photons=n_photons,
                 computation_space=computation_space,
