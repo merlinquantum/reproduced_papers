@@ -31,11 +31,11 @@ def _bce_pair_loss(states, labels, eps=1e-3):
 
 
 def _parameter_l2(parameters):
-    reg = None
-    for param in parameters:
-        term = (param.double() ** 2).mean()
-        reg = term if reg is None else reg + term
-    return reg if reg is not None else torch.tensor(0.0)
+    if not parameters:
+        return torch.tensor(0.0)
+
+    all_params = torch.cat([p.double().flatten() for p in parameters])
+    return (all_params**2).mean()
 
 
 def refine_bias(
