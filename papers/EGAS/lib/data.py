@@ -151,6 +151,83 @@ def load_dataset(
     return X_scaled.astype(np.float64), y.astype(int)
 
 
+def load_dataset_minimal_for_wasserstein(
+    name: str,
+    data_root: str = "data",
+    seed: int = 0,
+    max_pool: int = 6000,
+):
+    """Load a dataset with MINIMAL preprocessing (raw W1 baseline).
+
+    Uses only binary task selection + MinMaxScaler([0, 2π]), no StandardScaler, no PCA.
+    This is the "before processing" W1 for diagnostic comparison.
+
+    Returns (X (M, n_features) in [0,2π], y (M,) in {-1,+1}).
+    """
+    X_raw, y_raw = _fetch_raw(name, data_root)
+    X_np, y = _select_binary(X_raw, y_raw, DATASETS[name]["classes"])
+
+    # subsample a balanced pool for tractability and class balance
+    rng = np.random.default_rng(seed)
+    idx_pos = np.where(y == 1)[0]
+    idx_neg = np.where(y == -1)[0]
+    per = min(len(idx_pos), len(idx_neg), max_pool // 2)
+    sel = np.concatenate(
+        [
+            rng.choice(idx_pos, per, replace=False),
+            rng.choice(idx_neg, per, replace=False),
+        ]
+    )
+    rng.shuffle(sel)
+    X_np, y = X_np[sel], y[sel]
+
+    # MINIMAL: only MinMaxScale to [0, 2π] (no StandardScaler, no PCA)
+    X_scaled = MinMaxScaler(feature_range=(0.0, TWO_PI)).fit_transform(X_np)
+    return X_scaled.astype(np.float64), y.astype(int)
+
+
+def load_dataset_raw_for_wasserstein(
+    name: str,
+    data_root: str = "data",
+    seed: int = 0,
+    max_pool: int = 6000,
+):
+    """Load a dataset with minimal preprocessing for W1 computation (Wasserstein diagnostic).
+
+    Unlike load_dataset(), this skips StandardScaler to preserve the original
+    input-space geometry. Uses only PCA(8) + MinMaxScaler([0, 2π]).
+
+    Returns (X (M, n_features) in [0,2π], y (M,) in {-1,+1}).
+    """
+    X_raw, y_raw = _fetch_raw(name, data_root)
+    X_np, y = _select_binary(X_raw, y_raw, DATASETS[name]["classes"])
+
+    # subsample a balanced pool for tractability and class balance
+    rng = np.random.default_rng(seed)
+    idx_pos = np.where(y == 1)[0]
+    idx_neg = np.where(y == -1)[0]
+    per = min(len(idx_pos), len(idx_neg), max_pool // 2)
+    sel = np.concatenate(
+        [
+            rng.choice(idx_pos, per, replace=False),
+            rng.choice(idx_neg, per, replace=False),
+        ]
+    )
+    rng.shuffle(sel)
+    X_np, y = X_np[sel], y[sel]
+
+    # Minimal preprocessing: PCA (without StandardScaler to preserve geometry) + MinMaxScaler
+    # Skipping StandardScaler is key: it normalizes all dims to unit variance, destroying
+    # the original class-separation signal in high-variance directions.
+    n_comp = min(8, X_np.shape[1])
+    X_pca = PCA(n_components=n_comp, random_state=seed).fit_transform(X_np)
+    X_scaled = MinMaxScaler(feature_range=(0.0, TWO_PI)).fit_transform(X_pca)
+    if n_comp < 8:  # pad if a dataset has < 8 features
+        pad = np.zeros((X_scaled.shape[0], 8 - n_comp))
+        X_scaled = np.concatenate([X_scaled, pad], axis=1)
+    return X_scaled.astype(np.float64), y.astype(int)
+
+
 def make_slices(
     X, y, n_train: int = 400, n_test: int = 50, n_repeats: int = 10, seed: int = 0
 ):

@@ -88,7 +88,7 @@ def refine_bias(
             E_before = pairwise_energy(states, yt).item()
         return encoder, E_before, E_before
 
-    opt = torch.optim.RMSprop(trainable_parameters, lr=lr)
+    opt = torch.optim.RMSprop(encoder.parameters(), lr=lr)
 
     with torch.no_grad():
         # Evaluate with a single sample and replicate if no input indices

@@ -42,16 +42,23 @@ def _load(p):
 def plot_wasserstein(path):
     m = _load(path)["results"]
     names = [n for n in m if "w1" in m[n]]
-    repro = [m[n]["w1"] for n in names]
+
+    # Extract values with fallback for backward compatibility
+    before_pca = [m[n].get("w1_before_pca", np.nan) for n in names]
+    after_pca = [m[n].get("w1_after_pca", np.nan) for n in names]
     paper = [PAPER_W1.get(n, np.nan) for n in names]
+
     x = np.arange(len(names))
-    plt.figure(figsize=(8, 4))
-    plt.bar(x - 0.2, repro, 0.4, label="reproduced")
-    plt.bar(x + 0.2, paper, 0.4, label="paper (Table I)")
+    width = 0.25
+
+    plt.figure(figsize=(12, 5))
+    plt.bar(x - width, before_pca, width, label="before PCA (raw)")
+    plt.bar(x, after_pca, width, label="after PCA (reproduced)")
+    plt.bar(x + width, paper, width, label="paper (Table I)")
     plt.xticks(x, names)
     plt.ylabel("1-Wasserstein distance")
     plt.legend()
-    plt.title("Table I: input-space class-conditional W1")
+    plt.title("Table I: input-space class-conditional W1 — preprocessing effect")
     plt.tight_layout()
     for d in (Path(path).parent, RESULTS):
         plt.savefig(d / "table1_wasserstein.png", dpi=130, bbox_inches="tight")

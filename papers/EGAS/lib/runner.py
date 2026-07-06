@@ -356,7 +356,11 @@ def _run_photonic_eval(cfg, run_dir, logger):
 
 
 def _run_wasserstein(cfg, run_dir, logger):
-    from .data import DATASETS, load_dataset
+    from .data import (
+        DATASETS,
+        load_dataset_minimal_for_wasserstein,
+        load_dataset_raw_for_wasserstein,
+    )
     from .wasserstein import dataset_wasserstein
 
     data_root = cfg["dataset"]["root"]
@@ -365,15 +369,33 @@ def _run_wasserstein(cfg, run_dir, logger):
     out = {}
     for name in names:
         try:
-            X, y = load_dataset(name, data_root=data_root, seed=seed)
-            w1 = dataset_wasserstein(X, y, seed=seed)
+            # Compute W1 on minimal preprocessing (just MinMaxScaler)
+            X_min, y = load_dataset_minimal_for_wasserstein(
+                name, data_root=data_root, seed=seed
+            )
+            w1_minimal = dataset_wasserstein(X_min, y, seed=seed)
+
+            # Compute W1 on processed data (PCA without StandardScaler)
+            X_proc, y = load_dataset_raw_for_wasserstein(
+                name, data_root=data_root, seed=seed
+            )
+            w1_processed = dataset_wasserstein(X_proc, y, seed=seed)
+
             out[name] = {
-                "w1": w1,
-                "n": int(len(X)),
+                "w1_before_pca": w1_minimal,
+                "w1_after_pca": w1_processed,
+                "w1": w1_processed,  # keep for backward compatibility
+                "n": int(len(X_proc)),
                 "n_pos": int((y == 1).sum()),
                 "n_neg": int((y == -1).sum()),
             }
-            logger.info("W1 %s = %.4f (n=%d)", name, w1, len(X))
+            logger.info(
+                "W1 %s: before_PCA=%.4f, after_PCA=%.4f (n=%d)",
+                name,
+                w1_minimal,
+                w1_processed,
+                len(X_proc),
+            )
         except Exception as e:  # noqa: BLE001
             out[name] = {"error": f"{type(e).__name__}: {e}"}
             logger.warning("W1 %s failed: %s", name, e)
