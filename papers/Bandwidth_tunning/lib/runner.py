@@ -65,7 +65,7 @@ def subset_PCA(X_train, y_train, X_test, y_test, nb_train, nb_test, dim=-1, seed
 def train(feature_map, X_train, y_train_1D, X_test, y_test_1D, bandwidth=1.0,projected=False):
     X_train = X_train * bandwidth
     X_test = X_test * bandwidth
-    
+
     #Kernel calculation
     if not projected:
         K_train = fidelity_kernel(feature_map, X_train)
@@ -82,7 +82,7 @@ def train(feature_map, X_train, y_train_1D, X_test, y_test_1D, bandwidth=1.0,pro
     g = calculate_g(K_rbf, K_train)
 
     F = calculate_kernel_distance_F(K_rbf, K_train)
-    
+
     eta_max_Q = calculate_eta_max(K_train)
     eta_max_C = calculate_eta_max(K_rbf)
 
@@ -123,7 +123,7 @@ def run_overlapping(cfg, new_folder):
     for i in range(nb_of_experiments):
         # running the experiments one by one
         exp = cfg["experiments"][i]
-        
+
 
         # Stockage des résultats pour chaque métrique
         x, y_g, y_FQK, y_RBF, y_F, y_eta_max_Q, y_eta_max_C, y_ROC_AUC = (

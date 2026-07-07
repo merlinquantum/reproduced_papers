@@ -1,5 +1,5 @@
-import torch
 import merlin
+import torch
 
 
 def matrix_sqrt(A):
@@ -77,12 +77,12 @@ def fidelity_kernel(feature_map, X_train, X_test = None):
         ],  # alternating photons for n_modes
         computation_space=merlin.ComputationSpace.FOCK,
     )
-    
-    if X_test == None:
+
+    if X_test is None:
         return _fidelity_kernel(X_train)
     else:
         return _fidelity_kernel(X_test, X_train)
-    
+
 def projected_fidelity_kernel(feature_map, X_train, X_test = None):
     _projected_fidelity_kernel = merlin.ProjectedFidelityKernel(
         feature_map=feature_map,
@@ -91,8 +91,8 @@ def projected_fidelity_kernel(feature_map, X_train, X_test = None):
         ],  # alternating photons for n_modes
         computation_space=merlin.ComputationSpace.FOCK,
     )
-    
-    if X_test == None:
+
+    if X_test is None:
         return _projected_fidelity_kernel(X_train)
     else:
         return _projected_fidelity_kernel(X_test, X_train)
