@@ -65,6 +65,9 @@ python implementation.py --paper generative_quantum_embeddings --config configs/
 python implementation.py --paper generative_quantum_embeddings --config configs/photonic_MGT.json   # MerLin photonic
 # quick smoke (~80s):
 python implementation.py --paper generative_quantum_embeddings --config configs/defaults.json
+
+# To run the full EGAS reproduction pipeline and regenerate latest plots:
+cd papers/EGAS && ./run_all_experiments.sh
 ```
 Plots: `python utils/plot_results.py --wasserstein <run>/metrics.json --egas outdir/PW/run_*/metrics.json ...`
 

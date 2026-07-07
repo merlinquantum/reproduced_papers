@@ -123,8 +123,20 @@ find_latest_metrics() {
         echo ""
         return
     fi
-    # Find all run_* directories, sort by name (timestamp) in reverse, get first, extract metrics path
-    local latest_run=$(find "$dataset_dir" -maxdepth 1 -type d -name "run_*" | sort -r | head -1)
+
+    local latest_run=""
+    local latest_mtime=0
+    for run_dir in "$dataset_dir"/run_*; do
+        if [ -d "$run_dir" ]; then
+            local mtime
+            mtime=$(stat -f "%m" "$run_dir" 2>/dev/null || echo 0)
+            if [ "$mtime" -gt "$latest_mtime" ]; then
+                latest_mtime="$mtime"
+                latest_run="$run_dir"
+            fi
+        fi
+    done
+
     if [ -n "$latest_run" ] && [ -f "$latest_run/metrics.json" ]; then
         echo "$latest_run/metrics.json"
     else

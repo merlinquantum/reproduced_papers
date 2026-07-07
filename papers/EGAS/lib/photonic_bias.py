@@ -14,32 +14,10 @@ from __future__ import annotations
 import merlin as ml
 import numpy as np
 import torch
-import torch.nn as nn
 
 from .egas import pairwise_energy
 from .photonic_circuits import create_quantum_module
 from .statevec import fidelity_matrix
-
-
-class GlobalBiasMLP(nn.Module):
-    def __init__(self, n_biases, hidden=32):
-        super().__init__()
-
-        self.latent = nn.Parameter(torch.zeros(1))
-
-        self.net = nn.Sequential(
-            nn.Linear(1, hidden),
-            nn.Tanh(),
-            nn.Linear(hidden, hidden),
-            nn.Tanh(),
-            nn.Linear(hidden, n_biases),
-        )
-
-        nn.init.zeros_(self.net[-1].weight)
-        nn.init.zeros_(self.net[-1].bias)
-
-    def forward(self):
-        return self.net(self.latent.unsqueeze(0)).squeeze(0)
 
 
 def _bce_pair_loss(states, labels, eps=1e-3):
@@ -142,7 +120,7 @@ def refine_bias(
         if len(encoder.ps_data_indices) == 0:
             states = states.repeat(len(Xb), 1)
         loss = _bce_pair_loss(states, yb)
-        trainable_parameters = [p for p in encoder.parameters() if p.requires_grad]
+        trainable_parameters = [p for p in encoder.bias.parameters() if p.requires_grad]
         reg = l2_bias * _parameter_l2(trainable_parameters)
         opt.zero_grad()
         (loss + reg).backward()
