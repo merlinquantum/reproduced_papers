@@ -4,17 +4,17 @@
     "outdir": "results",
     "device": "cpu",
     "dataset": {
-        "name":"hidden_manifold",
+        "name":"plasticc",
         "root": "data"
     },
     "logging": {
         "level": "INFO",
         "save_config_snapshot": true
     },
-    "graph_name":"Fig 3 - hidden_manifold",
+    "graph_name":"Fig 3 - plasticc",
     "graphs" : {
-            "min" : -3,
-            "max" : 3,
+            "min" : -2.3,
+            "max" : 0.6,
             "number_of_points" : 30
     },
     "figs" : [
@@ -26,18 +26,18 @@
     ],
     "experiments":[
         {
-        "projected":false,
+        "projected":true,
         "train_sample":320,
         "test_sample":80,
-        "description":"4 hidden_manifold 320-80",
+        "description":"4 plasticc 320-80",
         "dimension" : 4,
         "nb_seeds": 5
         },
         {
-        "projected":false,
+        "projected":true,
         "train_sample":320,
         "test_sample":80,
-        "description":"8 hidden_manifold 320-80",
+        "description":"8 plasticc 320-80",
         "dimension" : 8,
         "nb_seeds": 5
         }

@@ -1,4 +1,5 @@
 import torch
+import merlin
 
 
 def matrix_sqrt(A):
@@ -67,3 +68,31 @@ def RBF_2(X_train):
     z = distances**2
     K_rbf_order_2 = 1.0 - z + 0.5 * (z**2)
     return K_rbf_order_2
+
+def fidelity_kernel(feature_map, X_train, X_test = None):
+    _fidelity_kernel = merlin.FidelityKernel(
+        feature_map=feature_map,
+        input_state=[
+            1 - (i % 2) for i in range(X_train.shape[1] + 1)
+        ],  # alternating photons for n_modes
+        computation_space=merlin.ComputationSpace.FOCK,
+    )
+    
+    if X_test == None:
+        return _fidelity_kernel(X_train)
+    else:
+        return _fidelity_kernel(X_test, X_train)
+    
+def projected_fidelity_kernel(feature_map, X_train, X_test = None):
+    _projected_fidelity_kernel = merlin.ProjectedFidelityKernel(
+        feature_map=feature_map,
+        input_state=[
+            1 - (i % 2) for i in range(X_train.shape[1] + 1)
+        ],  # alternating photons for n_modes
+        computation_space=merlin.ComputationSpace.FOCK,
+    )
+    
+    if X_test == None:
+        return _projected_fidelity_kernel(X_train)
+    else:
+        return _projected_fidelity_kernel(X_test, X_train)

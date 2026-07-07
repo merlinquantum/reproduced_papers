@@ -11,42 +11,35 @@
         "level": "INFO",
         "save_config_snapshot": true
     },
-    "overlapping_results" : true,
     "graph_name":"Fig 3 - fashion_mnist",
+    "graphs" : {
+            "min" : -3,
+            "max" : 3,
+            "number_of_points" : 30
+    },
+    "figs" : [
+            "Variances",
+            "Geometric_distance",
+            "Frobenius_distance",
+            "Eta_max",
+            "ROC_AUC"
+    ],
     "experiments":[
-        {"graphs" : {
-            "min" : -3,
-            "max" : 3,
-            "number_of_points" : 30
-        },
+        {
+        "projected":false,
         "train_sample":320,
         "test_sample":80,
-        "figs" : [
-            "Variances",
-            "Geometric_distance",
-            "Frobenius_distance",
-            "Eta_max",
-            "ROC_AUC"
-        ],
-        "description":"4",
-        "dimension" : 4
+        "description":"4 fashion_mnist 320-80",
+        "dimension" : 4,
+        "nb_seeds": 5
         },
-        {"graphs" : {
-            "min" : -3,
-            "max" : 3,
-            "number_of_points" : 30
-        },
+        {
+        "projected":false,
         "train_sample":320,
         "test_sample":80,
-        "figs" : [
-            "Variances",
-            "Geometric_distance",
-            "Frobenius_distance",
-            "Eta_max",
-            "ROC_AUC"
-        ],
-        "description":"8",
-        "dimension" : 8
+        "description":"8 fashion_mnist 320-80",
+        "dimension" : 8,
+        "nb_seeds": 5
         }
     ]
     

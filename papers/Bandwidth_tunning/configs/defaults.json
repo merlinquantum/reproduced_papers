@@ -12,24 +12,27 @@
         "level": "INFO",
         "save_config_snapshot": true
     },
-    "overlapping_results" : false,
-    "experiments":[
-        {"graphs" : {
+    "graph_name":"Fig 3 - Test configuration",
+    "graphs" : {
             "min" : -3,
             "max" : 3,
             "number_of_points" : 30
-        },
-        "train_sample":80,
-        "test_sample":20,
-        "figs" : [
+    },
+    "figs" : [
             "Variances",
             "Geometric_distance",
             "Frobenius_distance",
             "Eta_max",
             "ROC_AUC"
         ],
-        "description":"Configuration tet on kmnist28 dataset with 4 modes and 4 dimensions.",
-        "dimension" : 4
+    "experiments":[
+        {
+        "projected":false,
+        "train_sample":80,
+        "test_sample":20,
+        "description":"4 kmnist28 80-20",
+        "dimension" : 4,
+        "nb_seeds": 5
         }
     ]
     

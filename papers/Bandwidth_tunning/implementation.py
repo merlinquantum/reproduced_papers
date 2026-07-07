@@ -12,6 +12,7 @@ Or via the parent MerLin runner:
 from __future__ import annotations
 
 import argparse
+from datetime import datetime
 import json
 from pathlib import Path
 from typing import Any
@@ -72,8 +73,14 @@ def main(argv: list[str] | None = None) -> int:
     if args.seed is not None:
         cfg["seed"] = args.seed
 
+    results_dir = project_root / "results"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    run_dir = results_dir / f"run_{datetime.now().strftime('%Y%m%d-%H%M%S')}"
+    run_dir.mkdir(parents=False, exist_ok=False)
+    cfg["run_dir"] = str(run_dir)
+
     # Delegate to the MerLin-style runner
-    _run_experiment(cfg)
+    _run_experiment(cfg, run_dir)
 
     return 0
 
