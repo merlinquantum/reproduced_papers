@@ -75,7 +75,6 @@ def create_quantum_module(
         def __init__(
             self,
             n_in: int,
-            n_biases: int,
             hidden: int = 32,
             gain: float = 10.0,
         ):
@@ -86,7 +85,7 @@ def create_quantum_module(
                 nn.Tanh(),
                 nn.Linear(hidden, hidden),
                 nn.Tanh(),
-                nn.Linear(hidden, n_biases),
+                nn.Linear(hidden, 1),
             )
 
             # Zero-initialize the output layer
@@ -114,7 +113,6 @@ def create_quantum_module(
             )
             self.bias = BiasMLP(
                 n_in=num_features,
-                n_biases=len(input_parameters),
             )
 
         def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -125,7 +123,12 @@ def create_quantum_module(
                         "the sequence."
                     )
                 theta = x[..., self.ps_data_indices] * self.ps_r_factors
+                # Single bias per sample
                 phi = self.bias(x)
+
+                # Repeat the same bias for every phase shifter
+                phi = phi.expand(-1, theta.shape[-1])
+
                 layer_input = torch.cat([theta, phi], dim=-1)
                 return self.layer(layer_input)
             else:
