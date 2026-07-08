@@ -1,4 +1,5 @@
 import logging
+import re
 from pathlib import Path
 from typing import Any
 
@@ -31,6 +32,38 @@ class result:
         self.eta_max_Q = eta_max_Q
         self.eta_max_C = eta_max_C
         self.ROC_AUC = ROC_AUC
+
+
+def _safe_name(name: str) -> str:
+    """Build a filesystem-safe name while keeping it human-readable."""
+    cleaned = re.sub(r"[\\/:*?\"<>|]", "_", name).strip()
+    cleaned = re.sub(r"\s+", " ", cleaned)
+    return cleaned or "unnamed_experiment"
+
+
+def _save_seed_metrics_csv(
+    experiment_dir: Path,
+    seed_value: int,
+    x: np.ndarray,
+    y_g: np.ndarray,
+    y_FQK: np.ndarray,
+    y_RBF: np.ndarray,
+    y_F: np.ndarray,
+    y_eta_max_Q: np.ndarray,
+    y_eta_max_C: np.ndarray,
+    y_ROC_AUC: np.ndarray,
+) -> None:
+    seed_file = experiment_dir / f"seed_{seed_value}.csv"
+    data_matrix = np.column_stack(
+        (x, y_g, y_FQK, y_RBF, y_F, y_eta_max_Q, y_eta_max_C, y_ROC_AUC)
+    )
+    np.savetxt(
+        seed_file,
+        data_matrix,
+        delimiter=",",
+        header="x,y_g,y_FQK,y_RBF,y_F,y_eta_max_Q,y_eta_max_C,y_ROC_AUC",
+        comments="",
+    )
 
 
 def subset_PCA(X_train, y_train, X_test, y_test, nb_train, nb_test, dim=-1, seed=42):
@@ -114,6 +147,9 @@ def run_overlapping(cfg, new_folder):
     y_eta_max_C_list = []
     y_ROC_AUC_list = []
 
+    raw_data_dir = Path(new_folder) / "raw data"
+    raw_data_dir.mkdir(parents=True, exist_ok=True)
+
     MIN, MAX, NB_Points = (
             scale["min"],
             scale["max"],
@@ -123,6 +159,8 @@ def run_overlapping(cfg, new_folder):
     for i in range(nb_of_experiments):
         # running the experiments one by one
         exp = cfg["experiments"][i]
+        experiment_dir = raw_data_dir / _safe_name(exp["description"])
+        experiment_dir.mkdir(parents=True, exist_ok=True)
 
 
         # Stockage des résultats pour chaque métrique
@@ -141,7 +179,7 @@ def run_overlapping(cfg, new_folder):
         NB_TRAIN = exp["train_sample"]
         NB_TEST = exp["test_sample"]
 
-        SEEDS = np.random.default_rng(seed).integers(low=0, high=100, size=exp["nb_seeds"])
+        SEEDS = np.random.default_rng(seed).integers(low=0, high=10000, size=exp["nb_seeds"])
 
         print(f"experiment {exp['description']} running")
         X_train, y_train, X_test, y_test = data(cfg["dataset"]["name"])
@@ -168,8 +206,25 @@ def run_overlapping(cfg, new_folder):
                 builder=builder, input_size=X_train.shape[1], input_parameters="phi"
             )
 
+            # Raw metrics for this seed across all bandwidth values.
+            seed_y_g = np.zeros(NB_Points)
+            seed_y_FQK = np.zeros(NB_Points)
+            seed_y_RBF = np.zeros(NB_Points)
+            seed_y_F = np.zeros(NB_Points)
+            seed_y_eta_max_Q = np.zeros(NB_Points)
+            seed_y_eta_max_C = np.zeros(NB_Points)
+            seed_y_ROC_AUC = np.zeros(NB_Points)
+
             for i in range(NB_Points):
                 res = train(feature_map, X_train, y_train, X_test, y_test, bandwidth=x[i], projected=exp["projected"])
+                seed_y_g[i] = res.g
+                seed_y_FQK[i] = res.var_FQK
+                seed_y_RBF[i] = res.var_RBF
+                seed_y_F[i] = res.F
+                seed_y_eta_max_Q[i] = res.eta_max_Q
+                seed_y_eta_max_C[i] = res.eta_max_C
+                seed_y_ROC_AUC[i] = res.ROC_AUC
+
                 y_g[i] += res.g
                 y_FQK[i] += res.var_FQK
                 y_RBF[i] += res.var_RBF
@@ -180,6 +235,19 @@ def run_overlapping(cfg, new_folder):
                 print(
                     f"experiment {exp['description']} running, seed {SEEDS[seed]}, bandwidth {x[i]} done ({(i+1+NB_Points*seed)/(NB_Points*len(SEEDS))*100:.2f}%)"
                 )
+
+            _save_seed_metrics_csv(
+                experiment_dir=experiment_dir,
+                seed_value=int(SEEDS[seed]),
+                x=x,
+                y_g=seed_y_g,
+                y_FQK=seed_y_FQK,
+                y_RBF=seed_y_RBF,
+                y_F=seed_y_F,
+                y_eta_max_Q=seed_y_eta_max_Q,
+                y_eta_max_C=seed_y_eta_max_C,
+                y_ROC_AUC=seed_y_ROC_AUC,
+            )
 
         # averaging the results over the different seeds
         y_g_avg = y_g / len(SEEDS)

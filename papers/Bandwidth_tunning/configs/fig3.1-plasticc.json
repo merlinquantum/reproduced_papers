@@ -1,18 +1,17 @@
 {
-    "description": "This is the default configuration file for Bandwidth Tunning.",
+    "description": "This configuration generates the results for Fig. 3 of the paper for the fashion_mnist dataset.",
     "seed": 42,
     "outdir": "results",
     "device": "cpu",
     "dataset": {
-        "name":"kmnist28",
+        "name":"plasticc",
         "root": "data"
     },
-    "number_of_modes": 4,
     "logging": {
         "level": "INFO",
         "save_config_snapshot": true
     },
-    "graph_name":"Fig 3 - Test configuration",
+    "graph_name":"Fig 3 - plasticc",
     "graphs" : {
             "min" : -2.3,
             "max" : 0.6,
@@ -24,14 +23,22 @@
             "Frobenius_distance",
             "Eta_max",
             "ROC_AUC"
-        ],
+    ],
     "experiments":[
         {
         "projected":false,
-        "train_sample":80,
-        "test_sample":20,
-        "description":"4 kmnist28 80-20",
+        "train_sample":320,
+        "test_sample":80,
+        "description":"4 plasticc 320-80",
         "dimension" : 4,
+        "nb_seeds": 5
+        },
+        {
+        "projected":false,
+        "train_sample":320,
+        "test_sample":80,
+        "description":"8 plasticc 320-80",
+        "dimension" : 8,
         "nb_seeds": 5
         }
     ]

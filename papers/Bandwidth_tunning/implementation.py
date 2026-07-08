@@ -17,6 +17,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 
+from lib.runner import train_and_evaluate
+
 
 def _here() -> Path:
     """Return the project directory (folder containing this file)."""
@@ -54,8 +56,6 @@ def load_config(path: Path) -> dict[str, Any]:
 
 
 def main(argv: list[str] | None = None) -> int:
-    # Import here to avoid circular imports when used as a module
-    from lib.runner import _run_experiment
 
     parser = build_arg_parser()
     args = parser.parse_args(argv)
@@ -80,7 +80,7 @@ def main(argv: list[str] | None = None) -> int:
     cfg["run_dir"] = str(run_dir)
 
     # Delegate to the MerLin-style runner
-    _run_experiment(cfg, run_dir)
+    train_and_evaluate(cfg, run_dir)
 
     return 0
 
