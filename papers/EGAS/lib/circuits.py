@@ -60,16 +60,19 @@ def embed_states(sequence, X: torch.Tensor, n_qubits: int, bias=None) -> torch.T
     device = X.device
     state = init_state(batch, n_qubits, device=device)
     b_off = bias(X) if bias is not None else None  # (B,) shared additive offset
+    bias_index = 0
     for gate, q, d, r in sequence:
         if gate in PARAM_1Q:
             angle = r * X[:, d]
             if b_off is not None:
-                angle = angle + b_off
+                angle = angle + b_off[:, bias_index]
+                bias_index += 1
             state = apply_gate(state, n_qubits, gate, (q,), angle)
         elif gate == "MultiRZ":
             angle = r * X[:, d]
             if b_off is not None:
-                angle = angle + b_off
+                angle = angle + b_off[:, bias_index]
+                bias_index += 1
             qn = (q + 1) % n_qubits
             state = apply_gate(state, n_qubits, gate, (q, qn), angle)
         elif gate == "CNOT":

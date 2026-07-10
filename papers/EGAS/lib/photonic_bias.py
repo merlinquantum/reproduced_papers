@@ -52,8 +52,8 @@ def refine_bias(
     lr=5e-4,
     grad_clip=2.0,
     l2_bias=1e-6,
-    hidden=None,
-    gain=None,
+    hidden=32,
+    gain=10.0,
     seed=0,
     device="cpu",
     avg_last=10,
@@ -74,7 +74,9 @@ def refine_bias(
         n_modes=n_modes,
         num_photons=num_photons,
         computation_space=computation_space,
-    ).to(device)
+    )
+    encoder.reset_bias(hidden=hidden, gain=gain)
+    encoder = encoder.to(device)
     trainable_parameters = [p for p in encoder.bias.parameters() if p.requires_grad]
     if len(trainable_parameters) == 0:
         with torch.no_grad():

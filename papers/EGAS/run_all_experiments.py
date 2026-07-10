@@ -87,21 +87,32 @@ def main():
     print_header("EGAS Reproduction - All Experiments")
 
     step = 1
-    total_steps = (
-        10 if not args.quick else 1
-    )  # +1 for WDGV1 gate EGAS, +1 for WDGV1 photonic
+    gate_datasets = [
+        ("PW", "Phishing"),
+        ("WDGV1", "Waveform DB (multiclass)"),
+        ("WQ", "Wine Quality"),
+        ("MGT", "MAGIC Gamma Telescope"),
+    ]
+    photonic_datasets = [
+        ("PW", "Phishing"),
+        ("WQ", "Wine Quality"),
+        ("MGT", "MAGIC Gamma Telescope"),
+        ("WDGV1", "Waveform DB (multiclass)"),
+    ]
 
-    # Adjust total based on flags
-    if args.skip_tests:
-        total_steps -= 1
-    if args.only_photonic:
-        total_steps = 3  # tests + 2 photonic (MGT + WDGV1)
-        if args.skip_tests:
-            total_steps = 2
-    if args.only_gate:
-        total_steps = 8  # wasserstein + fig1 + 4 gate + tests (no photonic)
-        if args.skip_tests:
-            total_steps = 7
+    if args.quick:
+        total_steps = 1
+    elif args.only_photonic:
+        total_steps = len(photonic_datasets) + (0 if args.skip_tests else 1)
+    elif args.only_gate:
+        total_steps = len(gate_datasets) + 2 + (0 if args.skip_tests else 1)
+    else:
+        total_steps = (
+            len(gate_datasets)
+            + len(photonic_datasets)
+            + 2
+            + (0 if args.skip_tests else 1)
+        )
 
     # Run tests
     if not args.skip_tests and not args.only_photonic:
@@ -184,13 +195,7 @@ def main():
 
         # EGAS experiments (unless only photonic)
         if not args.only_photonic:
-            datasets = [
-                ("PW", "Phishing"),
-                ("WDGV1", "Waveform DB (multiclass)"),
-                ("WQ", "Wine Quality"),
-                ("MGT", "MAGIC Gamma Telescope"),
-            ]
-            for i, (shortname, fullname) in enumerate(datasets, 1):
+            for i, (shortname, fullname) in enumerate(gate_datasets, 1):
                 current_step = step + i - 1
                 print_step(
                     current_step,
@@ -211,7 +216,7 @@ def main():
                     cwd=str(repo_root),
                 ):
                     print_success(f"{fullname} results saved")
-            step += 4
+            step += len(gate_datasets)
 
     # Photonic experiments
     if not args.only_gate:

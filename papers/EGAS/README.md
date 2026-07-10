@@ -41,6 +41,7 @@ embedding family is limited by input-space geometry; small `W1` ⇒ embedding se
   12 candidates/iter; top-4 `G`/`B` groups; **8** train/test splits. Reason: cost governance
   (CPU-only); we still reduce compute by limiting to 4 datasets, single-seed runs, and lower
   reporting scope.
+- The bias refinement uses a single MLP instead of one per gate to improve trainability and efficiency.
 - **Both gate and photonic implementations use EGAS architecture search** (not fixed embeddings).
   Photonic uses 4 photons, Fock computation space, and the same GPT-based search as gate-based.
 - Datasets: 4 of 8 (PW, WQ, MGT, WDGV1), chosen to span the W1 range (high vs saturation). W1 (Table I)

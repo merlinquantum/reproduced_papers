@@ -100,9 +100,19 @@ def main(paths):
         )
         print("|---|---:|---:|---:|---:|---:|")
         for m in sorted(phot, key=lambda z: z["w1"]):
+            fixed = m.get("photonic_fixed")
+            trained = m.get("photonic_trained")
+            if fixed is None:
+                fixed_mean = _best(m["G"])
+            else:
+                fixed_mean = fixed["mean_acc"]
+            if trained is None:
+                trained_mean = _best(m["G_bias"])
+            else:
+                trained_mean = trained["mean_acc"]
             print(
-                f"| {m['dataset']} | {m['w1']:.2f} | {m['photonic_fixed']['mean_acc']:.3f} | "
-                f"{m['photonic_trained']['mean_acc']:.3f} | {m['ZZ']['mean_acc']:.3f} | "
+                f"| {m['dataset']} | {m['w1']:.2f} | {fixed_mean:.3f} | "
+                f"{trained_mean:.3f} | {m['ZZ']['mean_acc']:.3f} | "
                 f"{m['classical_linear']['mean_acc']:.3f} |"
             )
         print()

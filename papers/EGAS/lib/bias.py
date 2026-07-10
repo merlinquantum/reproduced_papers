@@ -21,21 +21,23 @@ from .statevec import fidelity_matrix
 class BiasMLP(nn.Module):
     """Small MLP with a zero-initialised output head; output scaled by a fixed gain (=10)."""
 
-    def __init__(self, n_in: int, hidden: int = 32, gain: float = 10.0):
+    def __init__(
+        self, n_in: int, output_size: int = 1, hidden: int = 32, gain: float = 10.0
+    ):
         super().__init__()
         self.net = nn.Sequential(
             nn.Linear(n_in, hidden),
             nn.Tanh(),
             nn.Linear(hidden, hidden),
             nn.Tanh(),
-            nn.Linear(hidden, 1),
+            nn.Linear(hidden, output_size),
         )
         nn.init.zeros_(self.net[-1].weight)
         nn.init.zeros_(self.net[-1].bias)
         self.gain = gain
 
     def forward(self, X: torch.Tensor) -> torch.Tensor:
-        return self.gain * self.net(X.to(torch.float64)).squeeze(-1)
+        return self.gain * self.net(X.to(torch.float64))
 
 
 def _bce_pair_loss(states, labels, eps=1e-3):
@@ -67,9 +69,19 @@ def refine_bias(
 ):
     """Train a bias MLP for a fixed circuit `seq`. Returns (bias_mlp, E_before, E_after)."""
     torch.manual_seed(seed)
+
+    output_size = 0
+    for gate, _, _, _ in seq:
+        if gate not in ["H", "I", "CNOT"]:
+            output_size += 1
+
     Xt = torch.as_tensor(X, dtype=torch.float64, device=device)
     yt = torch.as_tensor(y, dtype=torch.long, device=device)
-    bias = BiasMLP(n_qubits, hidden=hidden, gain=gain).double().to(device)
+    bias = (
+        BiasMLP(n_qubits, output_size=output_size, hidden=hidden, gain=gain)
+        .double()
+        .to(device)
+    )
     opt = torch.optim.RMSprop(bias.parameters(), lr=lr)
 
     with torch.no_grad():

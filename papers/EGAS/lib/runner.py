@@ -332,6 +332,78 @@ def _run_photonic_eval(cfg, run_dir, logger):
             "B": [b["E_before"] - b["E_after"] for b in B_refined],
         },
     }
+    # Save summary metrics for the best fixed and trained photonic candidates so downstream
+    # analysis can use the correct model and results.
+    photonic_fixed = None
+    photonic_trained = None
+    if len(G) + len(B) > 0:
+        raw_accs = np.vstack([accG, accB]) if len(accB) else accG
+        raw_idx = best_rep(raw_accs)
+        if raw_idx < len(G):
+            raw_group = "G"
+            raw_local_idx = raw_idx
+            raw_model = G[raw_idx]
+        else:
+            raw_group = "B"
+            raw_local_idx = raw_idx - len(G)
+            raw_model = B[raw_local_idx]
+        photonic_fixed = {
+            "group": raw_group,
+            "group_idx": raw_local_idx,
+            "mean_acc": float(raw_accs[raw_idx].mean()),
+            "std_acc": float(raw_accs[raw_idx].std()),
+            "wtl_vs_linear": wtl(raw_accs[raw_idx]),
+            "seq": raw_model["seq"],
+        }
+        torch.save(
+            {
+                "state_dict": raw_model["encoder"].state_dict(),
+                "seq": raw_model["seq"],
+                "num_features": X.shape[-1],
+                "n_modes": n_modes,
+                "num_photons": n_photons,
+                "computation_space": str(computation_space),
+            },
+            run_dir / "photonic_best_fixed.pth",
+        )
+        metrics["photonic_fixed"] = photonic_fixed
+        metrics["photonic_fixed_model_path"] = str(run_dir / "photonic_best_fixed.pth")
+
+    if len(G_refined) + len(B_refined) > 0:
+        refined_accs = np.vstack([accGb, accBb]) if len(accBb) else accGb
+        refined_idx = best_rep(refined_accs)
+        if refined_idx < len(G_refined):
+            refined_group = "G_bias"
+            refined_local_idx = refined_idx
+            refined_model = G_refined[refined_idx]
+        else:
+            refined_group = "B_bias"
+            refined_local_idx = refined_idx - len(G_refined)
+            refined_model = B_refined[refined_local_idx]
+        photonic_trained = {
+            "group": refined_group,
+            "group_idx": refined_local_idx,
+            "mean_acc": float(refined_accs[refined_idx].mean()),
+            "std_acc": float(refined_accs[refined_idx].std()),
+            "wtl_vs_linear": wtl(refined_accs[refined_idx]),
+            "seq": refined_model["seq"],
+        }
+        torch.save(
+            {
+                "state_dict": refined_model["encoder"].state_dict(),
+                "seq": refined_model["seq"],
+                "num_features": X.shape[-1],
+                "n_modes": n_modes,
+                "num_photons": n_photons,
+                "computation_space": str(computation_space),
+            },
+            run_dir / "photonic_best_trained.pth",
+        )
+        metrics["photonic_trained"] = photonic_trained
+        metrics["photonic_trained_model_path"] = str(
+            run_dir / "photonic_best_trained.pth"
+        )
+
     _save_json(run_dir / "metrics.json", metrics)
     np.savez(
         run_dir / "photonic_acc.npz",
