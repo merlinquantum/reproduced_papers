@@ -61,6 +61,8 @@ def _run_photonic_eval(cfg, run_dir, logger):
     )
     from .photonic_kernel_svm import (
         classical_svm_accuracy,
+    )
+    from .photonic_kernel_svm import (
         qksvm_accuracy as photonic_qksvm_accuracy,
     )
     from .wasserstein import dataset_wasserstein
