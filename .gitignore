@@ -38,13 +38,6 @@ __pycache__/
 .venv
 .home/
 
-# Quantum Vision Transformers local artifacts
-papers/quantum_vision_transformers/data/
-papers/quantum_vision_transformers/outdir/
-papers/quantum_vision_transformers/2209.08167v2.pdf
-papers/quantum_vision_transformers/2209.08167v2.paper_extract.txt
-papers/quantum_vision_transformers/PRB-Quantum Vision Transformers.md
-papers/quantum_vision_transformers/PRB-TEMPLATE _ title of paper-220426-091240.pdf
-
-# Keep vendored third-party history separate
-third_party/
+HQPINN/**/results/**/
+HQPINN/doc/
+HQPINN_*
