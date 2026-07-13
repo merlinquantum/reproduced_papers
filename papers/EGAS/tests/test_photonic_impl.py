@@ -12,8 +12,8 @@ if str(PROJECT_DIR) not in sys.path:
 pytest.importorskip("merlin")
 pytest.importorskip("perceval")
 
-import merlin as ml
-import perceval as pcvl
+import merlin as ml  # noqa: E402
+import perceval as pcvl  # noqa: E402
 
 
 def test_default_input_state_alternates_modes():
