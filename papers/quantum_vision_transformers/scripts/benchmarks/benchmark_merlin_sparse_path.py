@@ -7,12 +7,10 @@ import math
 import random
 import resource
 import time
-from typing import Iterable
-
-import perceval as pcvl
-import torch
 
 import merlin as ML
+import perceval as pcvl
+import torch
 from merlin.core.computation_space import ComputationSpace
 from merlin.core.probability_distribution import ProbabilityDistribution
 from merlin.core.state_vector import StateVector
@@ -157,7 +155,9 @@ def main() -> None:
         "measurement": args.measurement,
         "dtype": args.dtype,
         "input_basis_size": sv.basis_size,
-        "input_nnz": int(sv.tensor.coalesce()._nnz()) if sv.is_sparse else int(torch.count_nonzero(sv.tensor).item()),
+        "input_nnz": int(sv.tensor.coalesce()._nnz())
+        if sv.is_sparse
+        else int(torch.count_nonzero(sv.tensor).item()),
         "input_memory_bytes": _memory_bytes(sv),
         "output_type": type(output).__name__,
         "output_shape": list(dense_output.shape),

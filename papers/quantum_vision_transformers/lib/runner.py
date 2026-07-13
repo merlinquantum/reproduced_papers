@@ -61,8 +61,13 @@ def _list_models() -> None:
         print(f"  {key}  {value}")
 
 
-def _build_model(cfg: dict, sample: torch.Tensor, nc: int, runtime_dtype: torch.dtype,
-                 device: torch.device) -> QVTModel:
+def _build_model(
+    cfg: dict,
+    sample: torch.Tensor,
+    nc: int,
+    runtime_dtype: torch.dtype,
+    device: torch.device,
+) -> QVTModel:
     return QVTModel(
         model_type=cfg.get("model_type", "B"),
         img_size=sample.shape[2],
@@ -103,7 +108,10 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
 
     device_cfg = str(cfg.get("device", "cpu"))
     if device_cfg.startswith("cuda") and not torch.cuda.is_available():
-        log.warning("Config requests %s but CUDA is not available; falling back to CPU", device_cfg)
+        log.warning(
+            "Config requests %s but CUDA is not available; falling back to CPU",
+            device_cfg,
+        )
         device_cfg = "cpu"
     device = torch.device(device_cfg)
 
@@ -141,7 +149,9 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         resume_checkpoint = None
     else:
         resume_checkpoint = checkpoint_path
-        log.info("Found checkpoint at %s; training will resume from it", checkpoint_path)
+        log.info(
+            "Found checkpoint at %s; training will resume from it", checkpoint_path
+        )
 
     train(
         model,

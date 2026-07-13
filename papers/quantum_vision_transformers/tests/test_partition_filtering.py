@@ -11,14 +11,15 @@ from __future__ import annotations
 import math
 
 import torch
-
 from lib.models import (
     CompoundTransformerLayer,
     HierarchicalCompoundLayer,
 )
 
 
-def _block_signature(state: tuple[int, ...], blocks: tuple[int, ...]) -> tuple[int, ...]:
+def _block_signature(
+    state: tuple[int, ...], blocks: tuple[int, ...]
+) -> tuple[int, ...]:
     signature = []
     start = 0
     for size in blocks:

@@ -14,9 +14,7 @@ import os
 from collections import defaultdict
 
 import numpy as np
-
 from generate_figures import (
-    MODEL_LABELS,
     base_model_key,
     collect_results,
     deduplicate_results,
@@ -77,8 +75,12 @@ def summarize_runs(results):
                 "mean_time_s": float(np.nanmean(times)),
                 "total_params": int(np.nanmax(params)) if params else "",
                 "attn_params": int(np.nanmax(attn_params)) if attn_params else "",
-                "auc_per_1k_params": float(np.nanmean(aucs) / max((np.nanmax(params) / 1000.0), 1e-9)),
-                "auc_per_hour": float(np.nanmean(aucs) / max((np.nanmean(times) / 3600.0), 1e-9)),
+                "auc_per_1k_params": float(
+                    np.nanmean(aucs) / max((np.nanmax(params) / 1000.0), 1e-9)
+                ),
+                "auc_per_hour": float(
+                    np.nanmean(aucs) / max((np.nanmean(times) / 3600.0), 1e-9)
+                ),
             }
         )
     return rows
@@ -146,18 +148,32 @@ def main():
     lite_rows = [r for r in rows if r["profile"] == "lite"]
     robust_rows = [r for r in full_rows if r["n_runs"] >= 2]
     exploratory_rows = [r for r in full_rows if r["n_runs"] == 1]
-    paper_rows = [r for r in full_rows if r["base_model"] in {"VisionTransformer", "OrthoFNN", "A", "B", "D"}]
+    paper_rows = [
+        r
+        for r in full_rows
+        if r["base_model"] in {"VisionTransformer", "OrthoFNN", "A", "B", "D"}
+    ]
     butterfly_rows = [r for r in rows if r["family"] == "butterfly"]
 
-    auc_rank = sorted(robust_rows, key=lambda r: (-r["mean_test_auc"], r["mean_time_s"]))
-    acc_rank = sorted(robust_rows, key=lambda r: (-r["mean_test_acc"], r["mean_time_s"]))
-    pareto = sorted(pareto_front(robust_rows), key=lambda r: (r["mean_time_s"], -r["mean_test_auc"]))
-    exploratory_auc = sorted(exploratory_rows, key=lambda r: (-r["mean_test_auc"], r["mean_time_s"]))
+    auc_rank = sorted(
+        robust_rows, key=lambda r: (-r["mean_test_auc"], r["mean_time_s"])
+    )
+    acc_rank = sorted(
+        robust_rows, key=lambda r: (-r["mean_test_acc"], r["mean_time_s"])
+    )
+    pareto = sorted(
+        pareto_front(robust_rows), key=lambda r: (r["mean_time_s"], -r["mean_test_auc"])
+    )
+    exploratory_auc = sorted(
+        exploratory_rows, key=lambda r: (-r["mean_test_auc"], r["mean_time_s"])
+    )
 
     write_csv(os.path.join(out_dir, "all_retina_cpu_summary.csv"), rows)
     write_csv(os.path.join(out_dir, "full_rank_by_auc.csv"), auc_rank)
     write_csv(os.path.join(out_dir, "full_rank_by_acc.csv"), acc_rank)
-    write_csv(os.path.join(out_dir, "exploratory_single_seed_full.csv"), exploratory_auc)
+    write_csv(
+        os.path.join(out_dir, "exploratory_single_seed_full.csv"), exploratory_auc
+    )
     write_csv(os.path.join(out_dir, "paper_family_summary.csv"), paper_rows)
     write_csv(os.path.join(out_dir, "butterfly_summary.csv"), butterfly_rows)
     write_csv(os.path.join(out_dir, "lite_summary.csv"), lite_rows)

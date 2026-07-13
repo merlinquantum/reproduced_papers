@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 
-def test_variant_key_distinguishes_family_and_profile(load_generate_figures_module) -> None:
+def test_variant_key_distinguishes_family_and_profile(
+    load_generate_figures_module,
+) -> None:
     gf = load_generate_figures_module
 
     generic_full = gf.make_variant_key("A", "generic", "full")
@@ -24,10 +26,15 @@ def test_variant_key_distinguishes_data_regimes(load_generate_figures_module) ->
     retina_sized = gf.make_variant_key("B", "butterfly", "lite", "retina_sized_train")
 
     assert standard != retina_sized
-    assert gf.pretty_model_label(retina_sized) == "B: OrthoTransformer [butterfly, lite, retina_sized_train]"
+    assert (
+        gf.pretty_model_label(retina_sized)
+        == "B: OrthoTransformer [butterfly, lite, retina_sized_train]"
+    )
 
 
-def test_group_by_separates_generic_butterfly_and_full_sector(load_generate_figures_module) -> None:
+def test_group_by_separates_generic_butterfly_and_full_sector(
+    load_generate_figures_module,
+) -> None:
     gf = load_generate_figures_module
     results = [
         {

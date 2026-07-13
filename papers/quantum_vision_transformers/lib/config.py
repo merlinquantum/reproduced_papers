@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-
 VALID_MODEL_TYPES = {"A", "B", "C", "D", "E", "F", "VisionTransformer", "OrthoFNN"}
 VALID_PROFILES = {"full", "lite"}
 VALID_CIRCUIT_FAMILIES = {"generic", "butterfly"}
@@ -52,14 +51,18 @@ def validate_run_config(cfg: dict) -> dict:
 
     image_embed_grayscale = bool(normalized.get("image_embed_grayscale", False))
     if image_embed_grayscale and model_type != "OrthoFNN":
-        raise ValueError("image_embed_grayscale is only valid for model_type='OrthoFNN'.")
+        raise ValueError(
+            "image_embed_grayscale is only valid for model_type='OrthoFNN'."
+        )
     normalized["image_embed_grayscale"] = image_embed_grayscale
 
     train_subset_size = normalized.get("train_subset_size")
     if train_subset_size in ("", None):
         train_subset_size = None
     elif int(train_subset_size) <= 0:
-        raise ValueError(f"train_subset_size must be positive, got {train_subset_size}.")
+        raise ValueError(
+            f"train_subset_size must be positive, got {train_subset_size}."
+        )
     else:
         train_subset_size = int(train_subset_size)
     normalized["train_subset_size"] = train_subset_size
@@ -72,7 +75,10 @@ def validate_run_config(cfg: dict) -> dict:
         )
     normalized["train_subset_mode"] = train_subset_mode
 
-    if "train_subset_seed" in normalized and normalized["train_subset_seed"] is not None:
+    if (
+        "train_subset_seed" in normalized
+        and normalized["train_subset_seed"] is not None
+    ):
         normalized["train_subset_seed"] = int(normalized["train_subset_seed"])
 
     data_regime = normalized.get("data_regime")
@@ -87,7 +93,9 @@ def validate_run_config(cfg: dict) -> dict:
 
     compound_readout = normalized.get("compound_readout", "cross_only")
     if compound_readout == "full_sector" and model_type != "D":
-        raise ValueError("compound_readout='full_sector' is only valid for model_type='D'.")
+        raise ValueError(
+            "compound_readout='full_sector' is only valid for model_type='D'."
+        )
 
     img_size = _positive_int(normalized, "img_size", 28)
     patch_size = _positive_int(normalized, "patch_size", 7)
@@ -97,10 +105,14 @@ def validate_run_config(cfg: dict) -> dict:
     _positive_int(normalized, "batch_size", 32)
 
     if img_size % patch_size != 0:
-        raise ValueError(f"img_size={img_size} must be divisible by patch_size={patch_size}.")
+        raise ValueError(
+            f"img_size={img_size} must be divisible by patch_size={patch_size}."
+        )
 
     if circuit_family == "butterfly":
-        if model_type in {"A", "B", "C", "OrthoFNN"} and not _is_power_of_two(embed_dim):
+        if model_type in {"A", "B", "C", "OrthoFNN"} and not _is_power_of_two(
+            embed_dim
+        ):
             raise ValueError(
                 f"Butterfly circuit_family requires embed_dim to be a power of two for model {model_type}; got {embed_dim}."
             )
@@ -117,7 +129,9 @@ def validate_run_config(cfg: dict) -> dict:
 
         if model_type == "F":
             n_regions = _positive_int(normalized, "n_regions_per_side", 2) ** 2
-            n_patches_per_region = _positive_int(normalized, "n_patches_per_side", 2) ** 2
+            n_patches_per_region = (
+                _positive_int(normalized, "n_patches_per_side", 2) ** 2
+            )
             total_modes = n_regions + n_patches_per_region + embed_dim
             if not _is_power_of_two(total_modes):
                 raise ValueError(

@@ -6,7 +6,6 @@ from pathlib import Path
 
 import pytest
 
-
 THIS_DIR = Path(__file__).resolve().parent
 QVT_DIR = THIS_DIR.parent
 

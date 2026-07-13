@@ -17,7 +17,6 @@ import argparse
 import csv
 import json
 import multiprocessing as mp
-import os
 import pathlib
 import queue
 import random
@@ -43,11 +42,11 @@ if str(REPO_ROOT) not in sys.path:
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from lib.config import validate_run_config
-from lib.data import get_medmnist_loaders
-from lib.models import QVTModel
-from lib.runner import resolve_runtime_dtype
-from lib.training import train
+from lib.config import validate_run_config  # noqa: E402
+from lib.data import get_medmnist_loaders  # noqa: E402
+from lib.models import QVTModel  # noqa: E402
+from lib.runner import resolve_runtime_dtype  # noqa: E402
+from lib.training import train  # noqa: E402
 
 try:
     import resource
@@ -104,7 +103,9 @@ def _build_config(
     return validate_run_config(cfg)
 
 
-def _prepare_model(cfg: dict, device: torch.device) -> tuple[QVTModel, tuple[int, int, int, int]]:
+def _prepare_model(
+    cfg: dict, device: torch.device
+) -> tuple[QVTModel, tuple[int, int, int, int]]:
     trn, val, tst, nc = get_medmnist_loaders(
         cfg.get("dataset", "retinamnist"),
         cfg.get("batch_size", 32),
@@ -164,13 +165,18 @@ def _run_single_benchmark(
     torch.set_default_dtype(dtype)
 
     if device_name.startswith("cuda") and not torch.cuda.is_available():
-        raise RuntimeError(f"CUDA device '{device_name}' requested but CUDA is not available.")
+        raise RuntimeError(
+            f"CUDA device '{device_name}' requested but CUDA is not available."
+        )
 
     device = torch.device(device_name)
     model_obj, loaders = _prepare_model(cfg, device)
     trn, val, tst, nc = loaders
 
-    run_dir = pathlib.Path(out_root) / f"{model}_{circuit_family}_{precision_mode}_{device_name.replace(':', '_')}"
+    run_dir = (
+        pathlib.Path(out_root)
+        / f"{model}_{circuit_family}_{precision_mode}_{device_name.replace(':', '_')}"
+    )
     if run_dir.exists():
         shutil.rmtree(run_dir)
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -181,7 +187,9 @@ def _run_single_benchmark(
         torch.cuda.synchronize(device)
 
     wall_start = time.perf_counter()
-    results = train(model_obj, trn, val, tst, nc, cfg, str(run_dir), device, resume_checkpoint=None)
+    results = train(
+        model_obj, trn, val, tst, nc, cfg, str(run_dir), device, resume_checkpoint=None
+    )
     if device.type == "cuda":
         torch.cuda.synchronize(device)
         max_cuda_memory_bytes = int(torch.cuda.max_memory_allocated(device))
@@ -216,7 +224,9 @@ def _run_single_benchmark(
 def _launch_benchmark(**kwargs) -> dict:
     ctx = mp.get_context("spawn")
     result_queue = ctx.Queue()
-    proc = ctx.Process(target=_run_single_benchmark, kwargs={**kwargs, "result_queue": result_queue})
+    proc = ctx.Process(
+        target=_run_single_benchmark, kwargs={**kwargs, "result_queue": result_queue}
+    )
     proc.start()
     proc.join()
     if proc.exitcode != 0:
@@ -227,7 +237,9 @@ def _launch_benchmark(**kwargs) -> dict:
     try:
         return result_queue.get_nowait()
     except queue.Empty as exc:  # pragma: no cover - defensive
-        raise RuntimeError("Benchmark process exited without producing results.") from exc
+        raise RuntimeError(
+            "Benchmark process exited without producing results."
+        ) from exc
 
 
 def _write_reports(rows: list[dict], out_dir: pathlib.Path) -> None:
@@ -272,7 +284,9 @@ def _print_summary(rows: list[dict]) -> None:
                     continue
                 speedup = None
                 if row["reported_total_time_s"] and cpu_row["reported_total_time_s"]:
-                    speedup = cpu_row["reported_total_time_s"] / row["reported_total_time_s"]
+                    speedup = (
+                        cpu_row["reported_total_time_s"] / row["reported_total_time_s"]
+                    )
                 comparisons.append((model, device, speedup))
 
     if comparisons:
@@ -285,12 +299,20 @@ def _print_summary(rows: list[dict]) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Benchmark QVT full Retina configs across devices.")
-    parser.add_argument("--models", nargs="+", default=["A", "B", "C", "D", "D_full", "E", "F"])
+    parser = argparse.ArgumentParser(
+        description="Benchmark QVT full Retina configs across devices."
+    )
+    parser.add_argument(
+        "--models", nargs="+", default=["A", "B", "C", "D", "D_full", "E", "F"]
+    )
     parser.add_argument("--devices", nargs="+", default=["cpu"])
-    parser.add_argument("--precision-mode", default="baseline", choices=["baseline", "gpu_friendly"])
+    parser.add_argument(
+        "--precision-mode", default="baseline", choices=["baseline", "gpu_friendly"]
+    )
     parser.add_argument("--epochs", type=int, default=1)
-    parser.add_argument("--circuit-family", default="generic", choices=["generic", "butterfly"])
+    parser.add_argument(
+        "--circuit-family", default="generic", choices=["generic", "butterfly"]
+    )
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--data-root", default="data/QVT")
     parser.add_argument("--num-workers", type=int, default=2)
@@ -309,8 +331,8 @@ def main() -> None:
                 device_name=device_name,
                 precision_mode=args.precision_mode,
                 epochs=args.epochs,
-                out_root=str(ROOT / args.outdir),
-                data_root=str(ROOT / args.data_root),
+                out_root=str(PROJECT_ROOT / args.outdir),
+                data_root=str(PROJECT_ROOT / args.data_root),
                 num_workers=args.num_workers,
                 circuit_family=args.circuit_family,
                 seed=args.seed,
@@ -318,7 +340,7 @@ def main() -> None:
             rows.append(row)
 
     rows.sort(key=lambda row: (row["model"], row["device"]))
-    _write_reports(rows, ROOT / args.outdir)
+    _write_reports(rows, PROJECT_ROOT / args.outdir)
     _print_summary(rows)
 
 

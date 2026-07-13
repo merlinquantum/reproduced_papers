@@ -1,10 +1,9 @@
 from __future__ import annotations
 
+import lib.models as models
 import pytest
 import torch
 import torch.nn as nn
-
-import lib.models as models
 
 
 class DummyTensorLayer(nn.Module):
@@ -43,7 +42,9 @@ def _patch_lightweight_attention_layers(monkeypatch) -> None:
     monkeypatch.setattr(
         models,
         "HierarchicalCompoundLayer",
-        lambda n_regions, n_patches_per_region, d, *args, **kwargs: DummyTupleLayer(d, "triple_cross"),
+        lambda n_regions, n_patches_per_region, d, *args, **kwargs: DummyTupleLayer(
+            d, "triple_cross"
+        ),
     )
 
 

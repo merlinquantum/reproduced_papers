@@ -3,11 +3,11 @@ from __future__ import annotations
 from contextlib import contextmanager
 
 import torch
-
-from implementation import resolve_runtime_dtype
 from lib.config import validate_run_config
 from lib.models import CompoundTransformerLayer, ModelA
 from lib.photonic_primitives import complex_dtype_for
+
+from implementation import resolve_runtime_dtype
 
 
 @contextmanager

@@ -4,9 +4,8 @@ from pathlib import Path
 
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader, TensorDataset
-
 from lib.training import train
+from torch.utils.data import DataLoader, TensorDataset
 
 
 class TinyNet(nn.Module):

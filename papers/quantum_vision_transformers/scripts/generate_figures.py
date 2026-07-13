@@ -13,7 +13,9 @@ from pathlib import Path
 
 def _load_analysis_module():
     script_path = Path(__file__).resolve().parent / "analysis" / "generate_figures.py"
-    spec = importlib.util.spec_from_file_location("qvt_generate_figures_analysis", script_path)
+    spec = importlib.util.spec_from_file_location(
+        "qvt_generate_figures_analysis", script_path
+    )
     if spec is None or spec.loader is None:  # pragma: no cover
         raise ImportError(f"Could not load generate_figures module from {script_path}")
     module = importlib.util.module_from_spec(spec)
@@ -28,4 +30,3 @@ pretty_model_label = _analysis.pretty_model_label
 group_by = _analysis.group_by
 
 __all__ = ["make_variant_key", "pretty_model_label", "group_by"]
-

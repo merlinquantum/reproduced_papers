@@ -6,8 +6,11 @@ from types import ModuleType
 import numpy as np
 import pytest
 import torch
-
-from lib.data import get_medmnist_loaders, make_data_loader_generator, select_train_subset
+from lib.data import (
+    get_medmnist_loaders,
+    make_data_loader_generator,
+    select_train_subset,
+)
 
 
 def test_make_data_loader_generator_is_deterministic() -> None:
@@ -20,7 +23,9 @@ def test_make_data_loader_generator_is_deterministic() -> None:
 
 def test_get_medmnist_loaders_uses_seeded_train_shuffle(monkeypatch) -> None:
     medmnist = ModuleType("medmnist")
-    medmnist.INFO = {"fake": {"label": {"0": "zero", "1": "one"}, "python_class": "FakeDataset"}}
+    medmnist.INFO = {
+        "fake": {"label": {"0": "zero", "1": "one"}, "python_class": "FakeDataset"}
+    }
 
     class FakeDataset(torch.utils.data.Dataset):
         def __init__(self, split, transform=None, download=True, root=None):
@@ -96,7 +101,9 @@ def test_select_train_subset_is_stratified_and_deterministic() -> None:
             return len(self.labels)
 
         def __getitem__(self, idx):
-            return torch.tensor(float(idx)), torch.tensor(self.labels[idx, 0], dtype=torch.long)
+            return torch.tensor(float(idx)), torch.tensor(
+                self.labels[idx, 0], dtype=torch.long
+            )
 
     ds = ToyDataset()
     subset_a = select_train_subset(ds, 6, 11, "stratified")
@@ -104,7 +111,10 @@ def test_select_train_subset_is_stratified_and_deterministic() -> None:
 
     assert subset_a.indices == subset_b.indices
     picked = ds.labels[subset_a.indices, 0]
-    counts = {int(k): int(v) for k, v in zip(*np.unique(picked, return_counts=True), strict=True)}
+    counts = {
+        int(k): int(v)
+        for k, v in zip(*np.unique(picked, return_counts=True), strict=True)
+    }
     assert counts == {0: 3, 1: 2, 2: 1}
 
 
@@ -117,7 +127,9 @@ def test_select_train_subset_rejects_multi_label_stratification() -> None:
             return len(self.labels)
 
         def __getitem__(self, idx):
-            return torch.tensor(float(idx)), torch.tensor(self.labels[idx], dtype=torch.long)
+            return torch.tensor(float(idx)), torch.tensor(
+                self.labels[idx], dtype=torch.long
+            )
 
     with pytest.raises(ValueError, match="single-label datasets"):
         select_train_subset(MultiLabelDataset(), 2, 0, "stratified")

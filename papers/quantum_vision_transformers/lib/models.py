@@ -18,32 +18,29 @@ Paper baselines:
 """
 
 from __future__ import annotations
-from typing import Optional
 
+import merlin as ML
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-
-import merlin as ML
 from merlin.builder import CircuitBuilder
-from merlin.measurement import MeasurementStrategy
 from merlin.core.computation_space import ComputationSpace
 from merlin.core.state_vector import StateVector
+from merlin.measurement import MeasurementStrategy
 
+from .data import ClassicalPatchEmbed, HierarchicalPatchEmbed, ImageLinearEmbed
 from .photonic_primitives import (
-    TrainableInterferometer,
-    OverlapEstimator,
     CompoundSectorReadout,
     FullSectorReadout,
+    OverlapEstimator,
+    TrainableInterferometer,
     TripleSectorReadout,
     complex_dtype_for,
     normalize_for_encoding,
-    _fock_basis_size,
 )
-from .data import ClassicalPatchEmbed, HierarchicalPatchEmbed, ImageLinearEmbed
-
 
 # ── helpers ─────────────────────────────────────────────────────────────
+
 
 def _classify_output_keys(output_keys, n_block1, n_block2=0):
     """
@@ -78,9 +75,11 @@ def _build_encoding_indices(output_keys, n_patches, d, n_photons=2):
             basis_idx.append(idx)
             row_idx.append(pi)
             col_idx.append(fi)
-    return (torch.tensor(basis_idx, dtype=torch.long),
-            torch.tensor(row_idx, dtype=torch.long),
-            torch.tensor(col_idx, dtype=torch.long))
+    return (
+        torch.tensor(basis_idx, dtype=torch.long),
+        torch.tensor(row_idx, dtype=torch.long),
+        torch.tensor(col_idx, dtype=torch.long),
+    )
 
 
 def _build_triple_encoding_indices(output_keys, r, p, d):
@@ -101,10 +100,12 @@ def _build_triple_encoding_indices(output_keys, r, p, d):
             ri_list.append(ri)
             pi_list.append(pi)
             fi_list.append(fi)
-    return (torch.tensor(basis_idx, dtype=torch.long),
-            torch.tensor(ri_list, dtype=torch.long),
-            torch.tensor(pi_list, dtype=torch.long),
-            torch.tensor(fi_list, dtype=torch.long))
+    return (
+        torch.tensor(basis_idx, dtype=torch.long),
+        torch.tensor(ri_list, dtype=torch.long),
+        torch.tensor(pi_list, dtype=torch.long),
+        torch.tensor(fi_list, dtype=torch.long),
+    )
 
 
 def _forward_single_photon_probs(layer, x: torch.Tensor) -> torch.Tensor:
@@ -152,11 +153,14 @@ def _forward_single_photon_amplitudes(layer, x: torch.Tensor) -> torch.Tensor:
 def _overlap_scores(layer, x_i: torch.Tensor, x_j: torch.Tensor) -> torch.Tensor:
     """Compute |<x_i | W | x_j>|^2 for [..., n, d] inputs under either generic or butterfly layers."""
     Wx_j = _forward_single_photon_amplitudes(layer, x_j)
-    overlap = torch.einsum("...id,...jd->...ij", normalize_for_encoding(x_i).to(Wx_j.dtype), Wx_j)
+    overlap = torch.einsum(
+        "...id,...jd->...ij", normalize_for_encoding(x_i).to(Wx_j.dtype), Wx_j
+    )
     return overlap.abs().pow(2).to(x_i.dtype)
 
 
 # ── classical head ──────────────────────────────────────────────────────
+
 
 class ClassicalHead(nn.Module):
     def __init__(self, d: int, n_classes: int, use_cls_token: bool = True):
@@ -189,18 +193,22 @@ class ClassicalVisionAttention(nn.Module):
 # Paper models
 # ═══════════════════════════════════════════════════════════════════════
 
+
 class ModelA(nn.Module):
     """Orthogonal Patch-wise: y_i = V x_i.  1 photon, d modes."""
+
     def __init__(self, d: int, circuit_family: str = "generic", device=None):
         super().__init__()
         if circuit_family == "butterfly":
             from .structured_circuits import make_butterfly_mzi_circuit
+
             circuit = make_butterfly_mzi_circuit(d, prefix="V")
             self.V = ML.QuantumLayer(
-                circuit=circuit, n_photons=1,
+                circuit=circuit,
+                n_photons=1,
                 trainable_parameters=["V"],
                 measurement_strategy=MeasurementStrategy.probs(ComputationSpace.FOCK),
-                device=device
+                device=device,
             )
         else:
             self.V = TrainableInterferometer(d, n_photons=1, name="V", device=device)
@@ -211,22 +219,28 @@ class ModelA(nn.Module):
 
 class ModelB(nn.Module):
     """Quantum Orthogonal Transformer.  V (features) + W (attention)."""
+
     def __init__(self, d: int, circuit_family: str = "generic", device=None):
         super().__init__()
         if circuit_family == "butterfly":
             from .structured_circuits import make_butterfly_mzi_circuit
+
             self.V = ML.QuantumLayer(
                 circuit=make_butterfly_mzi_circuit(d, prefix="V"),
-                n_photons=1, trainable_parameters=["V"],
+                n_photons=1,
+                trainable_parameters=["V"],
                 measurement_strategy=MeasurementStrategy.probs(ComputationSpace.FOCK),
-                device=device
+                device=device,
             )
             self.W = ML.QuantumLayer(
                 circuit=make_butterfly_mzi_circuit(d, prefix="W"),
-                n_photons=1, trainable_parameters=["W"],
-                measurement_strategy=MeasurementStrategy.amplitudes(ComputationSpace.FOCK),
+                n_photons=1,
+                trainable_parameters=["W"],
+                measurement_strategy=MeasurementStrategy.amplitudes(
+                    ComputationSpace.FOCK
+                ),
                 return_object=True,
-                device=device
+                device=device,
             )
         else:
             self.V = TrainableInterferometer(d, n_photons=1, name="V", device=device)
@@ -236,49 +250,62 @@ class ModelB(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x_enc = normalize_for_encoding(x)
         z = _forward_single_photon_probs(self.V, x_enc)
-        A_scores = self.overlap(x_enc, x_enc) if hasattr(self.W, "forward_complex") else _overlap_scores(self.W, x_enc, x_enc)
+        A_scores = (
+            self.overlap(x_enc, x_enc)
+            if hasattr(self.W, "forward_complex")
+            else _overlap_scores(self.W, x_enc, x_enc)
+        )
         A = F.softmax(A_scores, dim=-1)
         return torch.einsum("...ij,...jd->...id", A, z)
 
 
 class ModelC(nn.Module):
     """Direct Quantum Attention (pragmatic hybrid C2)."""
+
     def __init__(self, d: int, circuit_family: str = "generic", device=None):
         super().__init__()
         if circuit_family == "butterfly":
             from .structured_circuits import make_butterfly_mzi_circuit
+
             self.V = ML.QuantumLayer(
                 circuit=make_butterfly_mzi_circuit(d, prefix="V"),
-                n_photons=1, trainable_parameters=["V"],
+                n_photons=1,
+                trainable_parameters=["V"],
                 measurement_strategy=MeasurementStrategy.probs(ComputationSpace.FOCK),
-                device=device
+                device=device,
             )
             self.W = ML.QuantumLayer(
                 circuit=make_butterfly_mzi_circuit(d, prefix="W"),
-                n_photons=1, trainable_parameters=["W"],
-                measurement_strategy=MeasurementStrategy.amplitudes(ComputationSpace.FOCK),
+                n_photons=1,
+                trainable_parameters=["W"],
+                measurement_strategy=MeasurementStrategy.amplitudes(
+                    ComputationSpace.FOCK
+                ),
                 return_object=True,
-                device=device
+                device=device,
             )
         else:
             self.V = TrainableInterferometer(d, n_photons=1, name="V", device=device)
             self.W = TrainableInterferometer(d, n_photons=1, name="W", device=device)
         self.overlap = OverlapEstimator(self.W)
 
-    def forward(self, x: torch.Tensor, A: Optional[torch.Tensor] = None):
+    def forward(self, x: torch.Tensor, A: torch.Tensor | None = None):
         x_enc = normalize_for_encoding(x)
         if A is None:
-            A_scores = self.overlap(x_enc, x_enc) if hasattr(self.W, "forward_complex") else _overlap_scores(self.W, x_enc, x_enc)
+            A_scores = (
+                self.overlap(x_enc, x_enc)
+                if hasattr(self.W, "forward_complex")
+                else _overlap_scores(self.W, x_enc, x_enc)
+            )
             A = F.softmax(A_scores, dim=-1)
-        weighted = normalize_for_encoding(
-            torch.einsum("...ij,...jd->...id", A, x_enc)
-        )
+        weighted = normalize_for_encoding(torch.einsum("...ij,...jd->...id", A, x_enc))
         return _forward_single_photon_probs(self.V, weighted)
 
 
 # ═══════════════════════════════════════════════════════════════════════
 # Model D — Compound Transformer (2 photons)
 # ═══════════════════════════════════════════════════════════════════════
+
 
 class CompoundTransformerLayer(nn.Module):
     """
@@ -289,9 +316,14 @@ class CompoundTransformerLayer(nn.Module):
       "full_sector" — extension (cross + patch-patch + feat-feat)
     """
 
-    def __init__(self, n_patches: int, d: int,
-                 compound_readout: str = "cross_only",
-                 circuit_family: str = "generic", device=None):
+    def __init__(
+        self,
+        n_patches: int,
+        d: int,
+        compound_readout: str = "cross_only",
+        circuit_family: str = "generic",
+        device=None,
+    ):
         super().__init__()
         self.n = n_patches
         self.d = d
@@ -306,18 +338,21 @@ class CompoundTransformerLayer(nn.Module):
         measurement_strategy = MeasurementStrategy.probs(ComputationSpace.FOCK)
         if circuit_family == "butterfly":
             from .structured_circuits import make_butterfly_mzi_circuit
+
             circuit = make_butterfly_mzi_circuit(self.total_modes, prefix="Vc")
             self.layer = ML.QuantumLayer(
-                circuit=circuit, n_photons=2,
+                circuit=circuit,
+                n_photons=2,
                 trainable_parameters=["Vc"],
                 measurement_strategy=measurement_strategy,
-                device=device
+                device=device,
             )
         else:
             builder = CircuitBuilder(n_modes=self.total_modes)
             builder.add_entangling_layer(trainable=True, model="mzi", name="Vc")
             self.layer = ML.QuantumLayer(
-                builder=builder, n_photons=2,
+                builder=builder,
+                n_photons=2,
                 measurement_strategy=measurement_strategy,
                 device=device,
             )
@@ -364,15 +399,29 @@ class CompoundTransformerLayer(nn.Module):
 
 class ModelD(nn.Module):
     """Stack of CompoundTransformerLayers."""
-    def __init__(self, n_patches: int, d: int, n_layers: int = 1,
-                 compound_readout: str = "cross_only",
-                 circuit_family: str = "generic", device=None):
+
+    def __init__(
+        self,
+        n_patches: int,
+        d: int,
+        n_layers: int = 1,
+        compound_readout: str = "cross_only",
+        circuit_family: str = "generic",
+        device=None,
+    ):
         super().__init__()
-        self.layers = nn.ModuleList([
-            CompoundTransformerLayer(n_patches, d, compound_readout,
-                                     circuit_family=circuit_family, device=device)
-            for _ in range(n_layers)
-        ])
+        self.layers = nn.ModuleList(
+            [
+                CompoundTransformerLayer(
+                    n_patches,
+                    d,
+                    compound_readout,
+                    circuit_family=circuit_family,
+                    device=device,
+                )
+                for _ in range(n_layers)
+            ]
+        )
 
     def forward(self, x):
         sector_masses = []
@@ -385,6 +434,7 @@ class ModelD(nn.Module):
 # ═══════════════════════════════════════════════════════════════════════
 # Model E — Multi-sector attention (shared circuit, 1ph + 2ph)
 # ═══════════════════════════════════════════════════════════════════════
+
 
 class MultiSectorLayer(nn.Module):
     """
@@ -400,8 +450,9 @@ class MultiSectorLayer(nn.Module):
     parameters after init.
     """
 
-    def __init__(self, n_patches: int, d: int,
-                 circuit_family: str = "generic", device=None):
+    def __init__(
+        self, n_patches: int, d: int, circuit_family: str = "generic", device=None
+    ):
         super().__init__()
         self.n = n_patches
         self.d = d
@@ -410,6 +461,7 @@ class MultiSectorLayer(nn.Module):
 
         if circuit_family == "butterfly":
             from .structured_circuits import make_butterfly_mzi_circuit
+
             pcvl_circuit = make_butterfly_mzi_circuit(m, prefix="shared")
             tp = ["shared"]
         else:
@@ -419,12 +471,16 @@ class MultiSectorLayer(nn.Module):
             tp = builder.trainable_parameter_prefixes
 
         self.layer_1ph = ML.QuantumLayer(
-            circuit=pcvl_circuit, n_photons=1, trainable_parameters=tp,
+            circuit=pcvl_circuit,
+            n_photons=1,
+            trainable_parameters=tp,
             measurement_strategy=MeasurementStrategy.probs(ComputationSpace.FOCK),
             device=device,
         )
         self.layer_2ph = ML.QuantumLayer(
-            circuit=pcvl_circuit, n_photons=2, trainable_parameters=tp,
+            circuit=pcvl_circuit,
+            n_photons=2,
+            trainable_parameters=tp,
             measurement_strategy=MeasurementStrategy.probs(ComputationSpace.FOCK),
             device=device,
         )
@@ -445,9 +501,13 @@ class MultiSectorLayer(nn.Module):
             if pc == 2 and fc == 0:
                 modes = [i for i in range(n_patches) if occ[i] >= 1]
                 if len(modes) == 2:
-                    pp_idx.append(idx); pp_i.append(modes[0]); pp_j.append(modes[1])
+                    pp_idx.append(idx)
+                    pp_i.append(modes[0])
+                    pp_j.append(modes[1])
                 elif len(modes) == 1 and occ[modes[0]] == 2:
-                    pp_idx.append(idx); pp_i.append(modes[0]); pp_j.append(modes[0])
+                    pp_idx.append(idx)
+                    pp_i.append(modes[0])
+                    pp_j.append(modes[0])
         self.register_buffer("pp_idx", torch.tensor(pp_idx, dtype=torch.long))
         self.register_buffer("pp_i", torch.tensor(pp_i, dtype=torch.long))
         self.register_buffer("pp_j", torch.tensor(pp_j, dtype=torch.long))
@@ -465,15 +525,15 @@ class MultiSectorLayer(nn.Module):
         B, n, d = x.shape
         m = self.total_modes
         padded = torch.zeros(B * n, m, dtype=x.dtype, device=x.device)
-        padded[:, self.n:] = x.reshape(B * n, d)
+        padded[:, self.n :] = x.reshape(B * n, d)
         padded = normalize_for_encoding(padded)
         sv = StateVector.from_tensor(
             padded.to(complex_dtype_for(x.dtype)),
             n_modes=m,
             n_photons=1,
         )
-        probs = self.layer_1ph(sv).to(x.dtype)              # [B*n, m]
-        return probs[:, self.n:].reshape(B, n, d)            # feature modes only
+        probs = self.layer_1ph(sv).to(x.dtype)  # [B*n, m]
+        return probs[:, self.n :].reshape(B, n, d)  # feature modes only
 
     def _encode_2ph(self, X: torch.Tensor) -> StateVector:
         """[B, n, d] → 2-photon StateVector (vectorised)."""
@@ -482,7 +542,9 @@ class MultiSectorLayer(nn.Module):
         amps = torch.zeros(B, self.basis_size_2ph, dtype=complex_dtype, device=X.device)
         amps[:, self._enc_basis] = X[:, self._enc_row, self._enc_col].to(complex_dtype)
         norm = amps.abs().pow(2).sum(dim=-1, keepdim=True).sqrt().clamp(min=1e-12)
-        return StateVector.from_tensor(amps / norm, n_modes=self.total_modes, n_photons=2)
+        return StateVector.from_tensor(
+            amps / norm, n_modes=self.total_modes, n_photons=2
+        )
 
     def forward(self, X: torch.Tensor):
         z = self._feature_transform(X)
@@ -497,14 +559,17 @@ class MultiSectorLayer(nn.Module):
         A = F.softmax(A_pp, dim=-1)
         Y = torch.einsum("...ij,...jd->...id", A, z)
         total = probs.sum(dim=-1).clamp(min=1e-12)
-        info = {"sector_masses": {"pp": (pv.sum(dim=-1) / total).mean().item()},
-                "A_pp": A_pp.detach()}
+        info = {
+            "sector_masses": {"pp": (pv.sum(dim=-1) / total).mean().item()},
+            "A_pp": A_pp.detach(),
+        }
         return Y, info
 
 
 # ═══════════════════════════════════════════════════════════════════════
 # Model F — Hierarchical 3-photon compound
 # ═══════════════════════════════════════════════════════════════════════
+
 
 class HierarchicalCompoundLayer(nn.Module):
     """
@@ -514,9 +579,15 @@ class HierarchicalCompoundLayer(nn.Module):
     patch sector (1r, 2p) provides per-region hierarchical attention.
     """
 
-    def __init__(self, n_regions: int, n_patches_per_region: int, d: int,
-                 use_rpp_attention: bool = True,
-                 circuit_family: str = "generic", device=None):
+    def __init__(
+        self,
+        n_regions: int,
+        n_patches_per_region: int,
+        d: int,
+        use_rpp_attention: bool = True,
+        circuit_family: str = "generic",
+        device=None,
+    ):
         super().__init__()
         self.r = n_regions
         self.p = n_patches_per_region
@@ -530,18 +601,21 @@ class HierarchicalCompoundLayer(nn.Module):
         measurement_strategy = MeasurementStrategy.probs(ComputationSpace.FOCK)
         if circuit_family == "butterfly":
             from .structured_circuits import make_butterfly_mzi_circuit
+
             circuit = make_butterfly_mzi_circuit(self.total_modes, prefix="Vh")
             self.layer = ML.QuantumLayer(
-                circuit=circuit, n_photons=3,
+                circuit=circuit,
+                n_photons=3,
                 trainable_parameters=["Vh"],
                 measurement_strategy=measurement_strategy,
-                device=device
+                device=device,
             )
         else:
             builder = CircuitBuilder(n_modes=self.total_modes)
             builder.add_entangling_layer(trainable=True, model="mzi", name="Vh")
             self.layer = ML.QuantumLayer(
-                builder=builder, n_photons=3,
+                builder=builder,
+                n_photons=3,
                 measurement_strategy=measurement_strategy,
                 device=device,
             )
@@ -549,7 +623,10 @@ class HierarchicalCompoundLayer(nn.Module):
         output_keys = list(self.layer.output_keys)
         self.basis_size = len(output_keys)
         self.readout = TripleSectorReadout(
-            n_regions, n_patches_per_region, d, output_keys,
+            n_regions,
+            n_patches_per_region,
+            d,
+            output_keys,
             extract_rpp=use_rpp_attention,
         )
 
@@ -567,7 +644,9 @@ class HierarchicalCompoundLayer(nn.Module):
         B = T.shape[0]
         complex_dtype = complex_dtype_for(T.dtype)
         amps = torch.zeros(B, self.basis_size, dtype=complex_dtype, device=T.device)
-        amps[:, self._enc_basis] = T[:, self._enc_ri, self._enc_pi, self._enc_fi].to(complex_dtype)
+        amps[:, self._enc_basis] = T[:, self._enc_ri, self._enc_pi, self._enc_fi].to(
+            complex_dtype
+        )
         norm = amps.abs().pow(2).sum(dim=-1, keepdim=True).sqrt().clamp(min=1e-12)
         return amps / norm
 
@@ -594,10 +673,15 @@ class HierarchicalCompoundLayer(nn.Module):
 class OrthoFNNModel(nn.Module):
     """Quantum orthogonal fully connected baseline: one global image embedding, no attention."""
 
-    def __init__(self, d: int, n_layers: int = 4, circuit_family: str = "generic", device=None):
+    def __init__(
+        self, d: int, n_layers: int = 4, circuit_family: str = "generic", device=None
+    ):
         super().__init__()
         self.layers = nn.ModuleList(
-            [ModelA(d, circuit_family=circuit_family, device=device) for _ in range(n_layers)]
+            [
+                ModelA(d, circuit_family=circuit_family, device=device)
+                for _ in range(n_layers)
+            ]
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -609,6 +693,7 @@ class OrthoFNNModel(nn.Module):
 # ═══════════════════════════════════════════════════════════════════════
 # Full QVT Model
 # ═══════════════════════════════════════════════════════════════════════
+
 
 class QVTModel(nn.Module):
     """
@@ -643,10 +728,13 @@ class QVTModel(nn.Module):
         # ── power-of-two check for butterfly ──
         if circuit_family == "butterfly":
             from .structured_circuits import _is_power_of_two
+
             # For A/B/C, d must be power of 2
             if model_type in ("A", "B", "C", "OrthoFNN"):
                 if not _is_power_of_two(embed_dim):
-                    raise ValueError(f"Butterfly path for Model {model_type} requires embed_dim={embed_dim} to be power of 2.")
+                    raise ValueError(
+                        f"Butterfly path for Model {model_type} requires embed_dim={embed_dim} to be power of 2."
+                    )
             # For D, E, (n+d) must be power of 2
             # For D, E, we recommended disabling CLS for 32 modes if d=16, n=16.
             # But here we just check the final total sequence length + d.
@@ -655,7 +743,8 @@ class QVTModel(nn.Module):
         # ── patch embedding ──
         if model_type == "F":
             self.patch_embed = HierarchicalPatchEmbed(
-                img_size=img_size, in_channels=in_channels,
+                img_size=img_size,
+                in_channels=in_channels,
                 n_regions_per_side=n_regions_per_side,
                 n_patches_per_side=n_patches_per_side,
                 embed_dim=embed_dim,
@@ -676,8 +765,10 @@ class QVTModel(nn.Module):
             use_pos_embed = False
         else:
             self.patch_embed = ClassicalPatchEmbed(
-                img_size=img_size, in_channels=in_channels,
-                patch_size=patch_size, embed_dim=embed_dim,
+                img_size=img_size,
+                in_channels=in_channels,
+                patch_size=patch_size,
+                embed_dim=embed_dim,
             )
             n_patches = self.patch_embed.n_patches
 
@@ -696,6 +787,7 @@ class QVTModel(nn.Module):
         # ── power-of-two check (continued) ──
         if circuit_family == "butterfly":
             from .structured_circuits import _is_power_of_two
+
             if model_type in ("D", "E"):
                 total_modes = total_seq + embed_dim
                 if not _is_power_of_two(total_modes):
@@ -708,53 +800,90 @@ class QVTModel(nn.Module):
             if model_type == "F":
                 total_modes = n_regions + n_pp_region + embed_dim
                 if not _is_power_of_two(total_modes):
-                    raise ValueError(f"Butterfly path for Model F requires total_modes={total_modes} to be power of 2.")
+                    raise ValueError(
+                        f"Butterfly path for Model F requires total_modes={total_modes} to be power of 2."
+                    )
 
         # ── attention layers (device passed to QuantumLayer constructors) ──
         self.attn_layers = nn.ModuleList()
         if model_type == "OrthoFNN":
             # Match the dedicated baseline semantics: global image embedding, then
             # repeated orthogonal patch-wise layers, without transformer residual/MLP blocks.
-            self.attn_layers = nn.ModuleList([
-                ModelA(embed_dim, circuit_family=circuit_family, device=device)
-                for _ in range(n_layers)
-            ])
+            self.attn_layers = nn.ModuleList(
+                [
+                    ModelA(embed_dim, circuit_family=circuit_family, device=device)
+                    for _ in range(n_layers)
+                ]
+            )
             self.pre_norms = nn.ModuleList()
             self.post_norms = nn.ModuleList()
             self.mlps = nn.ModuleList()
         else:
             for _ in range(n_layers):
                 if model_type == "A":
-                    self.attn_layers.append(ModelA(embed_dim, circuit_family=circuit_family, device=device))
+                    self.attn_layers.append(
+                        ModelA(embed_dim, circuit_family=circuit_family, device=device)
+                    )
                 elif model_type == "B":
-                    self.attn_layers.append(ModelB(embed_dim, circuit_family=circuit_family, device=device))
+                    self.attn_layers.append(
+                        ModelB(embed_dim, circuit_family=circuit_family, device=device)
+                    )
                 elif model_type == "C":
-                    self.attn_layers.append(ModelC(embed_dim, circuit_family=circuit_family, device=device))
+                    self.attn_layers.append(
+                        ModelC(embed_dim, circuit_family=circuit_family, device=device)
+                    )
                 elif model_type == "VisionTransformer":
                     self.attn_layers.append(ClassicalVisionAttention(embed_dim))
                 elif model_type == "D":
                     self.attn_layers.append(
-                        CompoundTransformerLayer(total_seq, embed_dim, compound_readout,
-                                                circuit_family=circuit_family, device=device))
+                        CompoundTransformerLayer(
+                            total_seq,
+                            embed_dim,
+                            compound_readout,
+                            circuit_family=circuit_family,
+                            device=device,
+                        )
+                    )
                 elif model_type == "E":
-                    self.attn_layers.append(MultiSectorLayer(total_seq, embed_dim,
-                                                             circuit_family=circuit_family, device=device))
+                    self.attn_layers.append(
+                        MultiSectorLayer(
+                            total_seq,
+                            embed_dim,
+                            circuit_family=circuit_family,
+                            device=device,
+                        )
+                    )
                 elif model_type == "F":
                     self.attn_layers.append(
-                        HierarchicalCompoundLayer(n_regions, n_pp_region, embed_dim,
-                                                  use_rpp_attention, circuit_family=circuit_family, device=device))
+                        HierarchicalCompoundLayer(
+                            n_regions,
+                            n_pp_region,
+                            embed_dim,
+                            use_rpp_attention,
+                            circuit_family=circuit_family,
+                            device=device,
+                        )
+                    )
                 else:
                     raise ValueError(f"Unknown model_type: {model_type}")
 
             # ── per-layer norms and MLPs ──
-            self.pre_norms = nn.ModuleList([nn.LayerNorm(embed_dim) for _ in range(n_layers)])
-            self.post_norms = nn.ModuleList([nn.LayerNorm(embed_dim) for _ in range(n_layers)])
-            self.mlps = nn.ModuleList([
-                nn.Sequential(
-                    nn.Linear(embed_dim, embed_dim * 2), nn.GELU(),
-                    nn.Linear(embed_dim * 2, embed_dim),
-                ) for _ in range(n_layers)
-            ])
+            self.pre_norms = nn.ModuleList(
+                [nn.LayerNorm(embed_dim) for _ in range(n_layers)]
+            )
+            self.post_norms = nn.ModuleList(
+                [nn.LayerNorm(embed_dim) for _ in range(n_layers)]
+            )
+            self.mlps = nn.ModuleList(
+                [
+                    nn.Sequential(
+                        nn.Linear(embed_dim, embed_dim * 2),
+                        nn.GELU(),
+                        nn.Linear(embed_dim * 2, embed_dim),
+                    )
+                    for _ in range(n_layers)
+                ]
+            )
         self.head = ClassicalHead(embed_dim, n_classes, use_cls_token)
         self.sector_masses: list = []
 
@@ -798,11 +927,19 @@ class QVTModel(nn.Module):
 
     def count_trainable_params(self) -> dict:
         c = {}
-        c["patch_embed"] = sum(p.numel() for p in self.patch_embed.parameters() if p.requires_grad)
-        c["attention"] = sum(p.numel() for n, p in self.named_parameters()
-                             if p.requires_grad and "attn_layers." in n)
-        c["mlp"] = sum(p.numel() for n, p in self.named_parameters()
-                       if p.requires_grad and "mlps." in n)
+        c["patch_embed"] = sum(
+            p.numel() for p in self.patch_embed.parameters() if p.requires_grad
+        )
+        c["attention"] = sum(
+            p.numel()
+            for n, p in self.named_parameters()
+            if p.requires_grad and "attn_layers." in n
+        )
+        c["mlp"] = sum(
+            p.numel()
+            for n, p in self.named_parameters()
+            if p.requires_grad and "mlps." in n
+        )
         c["head"] = sum(p.numel() for p in self.head.parameters() if p.requires_grad)
         c["total"] = sum(p.numel() for p in self.parameters() if p.requires_grad)
         return c

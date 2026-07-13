@@ -124,6 +124,7 @@ def make_butterfly_mzi_circuit(
 
     return circuit
 
+
 def butterfly_param_count(
     n_modes: int,
     *,

@@ -7,8 +7,8 @@ Data utilities for the QVT reproduction.
 """
 
 from __future__ import annotations
+
 import random
-from typing import Tuple
 
 import numpy as np
 import torch
@@ -69,7 +69,9 @@ def _random_subset_indices(length: int, subset_size: int, seed: int) -> np.ndarr
     return np.sort(indices[:subset_size])
 
 
-def _stratified_subset_indices(labels: np.ndarray, subset_size: int, seed: int) -> np.ndarray:
+def _stratified_subset_indices(
+    labels: np.ndarray, subset_size: int, seed: int
+) -> np.ndarray:
     if labels.ndim != 1:
         raise ValueError(
             "Stratified train subsetting only supports single-label datasets; "
@@ -112,8 +114,12 @@ def _stratified_subset_indices(labels: np.ndarray, subset_size: int, seed: int) 
     return np.sort(picked)
 
 
-def select_train_subset(dataset, subset_size: int | None, subset_seed: int | None,
-                        subset_mode: str = "stratified"):
+def select_train_subset(
+    dataset,
+    subset_size: int | None,
+    subset_seed: int | None,
+    subset_mode: str = "stratified",
+):
     if subset_size is None:
         return dataset
 
@@ -140,14 +146,19 @@ def select_train_subset(dataset, subset_size: int | None, subset_seed: int | Non
 class ClassicalPatchEmbed(nn.Module):
     """image [B,C,H,W] → [B, n, d] normalised.  Paper: 28×28, patch=7, n=16, d=16."""
 
-    def __init__(self, img_size: int = 28, in_channels: int = 3,
-                 patch_size: int = 7, embed_dim: int = 16):
+    def __init__(
+        self,
+        img_size: int = 28,
+        in_channels: int = 3,
+        patch_size: int = 7,
+        embed_dim: int = 16,
+    ):
         super().__init__()
         assert img_size % patch_size == 0, f"{img_size} not divisible by {patch_size}"
         self.patch_size = patch_size
         self.embed_dim = embed_dim
         self.n_per_side = img_size // patch_size
-        self.n_patches = self.n_per_side ** 2
+        self.n_patches = self.n_per_side**2
         self.patch_dim = in_channels * patch_size * patch_size
         self.linear = nn.Linear(self.patch_dim, embed_dim)
 
@@ -206,24 +217,31 @@ class HierarchicalPatchEmbed(nn.Module):
     region, one for patch-within-region, one for feature.
     """
 
-    def __init__(self, img_size: int = 28, in_channels: int = 3,
-                 n_regions_per_side: int = 2, n_patches_per_side: int = 2,
-                 embed_dim: int = 16):
+    def __init__(
+        self,
+        img_size: int = 28,
+        in_channels: int = 3,
+        n_regions_per_side: int = 2,
+        n_patches_per_side: int = 2,
+        embed_dim: int = 16,
+    ):
         super().__init__()
         region_size = img_size // n_regions_per_side
         patch_size = region_size // n_patches_per_side
-        assert img_size % n_regions_per_side == 0, \
-            f"img_size {img_size} not divisible by n_regions_per_side {n_regions_per_side}"
-        assert region_size % n_patches_per_side == 0, \
-            f"region_size {region_size} not divisible by n_patches_per_side {n_patches_per_side}"
+        assert (
+            img_size % n_regions_per_side == 0
+        ), f"img_size {img_size} not divisible by n_regions_per_side {n_regions_per_side}"
+        assert (
+            region_size % n_patches_per_side == 0
+        ), f"region_size {region_size} not divisible by n_patches_per_side {n_patches_per_side}"
 
         self.img_size = img_size
         self.in_channels = in_channels
         self.embed_dim = embed_dim
         self.n_regions_per_side = n_regions_per_side
         self.n_patches_per_side = n_patches_per_side
-        self.n_regions = n_regions_per_side ** 2
-        self.n_patches_per_region = n_patches_per_side ** 2
+        self.n_regions = n_regions_per_side**2
+        self.n_patches_per_region = n_patches_per_side**2
         self.n_patches = self.n_regions * self.n_patches_per_region
         self.region_size = region_size
         self.patch_size = patch_size
@@ -262,9 +280,10 @@ def get_medmnist_loaders(
     train_subset_size: int | None = None,
     train_subset_seed: int | None = None,
     train_subset_mode: str = "stratified",
-) -> Tuple[DataLoader, DataLoader, DataLoader, int]:
+) -> tuple[DataLoader, DataLoader, DataLoader, int]:
     """Return (train, val, test) loaders and n_classes."""
     import os
+
     import medmnist
     from medmnist import INFO
     from torchvision import transforms
@@ -280,13 +299,20 @@ def get_medmnist_loaders(
     for split in ("train", "val", "test"):
         ds = DataClass(split=split, transform=tfm, download=download, root=data_root)
         if split == "train":
-            ds = select_train_subset(ds, train_subset_size, train_subset_seed, train_subset_mode)
+            ds = select_train_subset(
+                ds, train_subset_size, train_subset_seed, train_subset_mode
+            )
         split_seed = None if seed is None else int(seed) + split_offsets[split]
-        loaders.append(DataLoader(
-            ds, batch_size=batch_size,
-            shuffle=(split == "train"), num_workers=num_workers,
-            pin_memory=True, drop_last=(split == "train"),
-            generator=make_data_loader_generator(split_seed),
-            worker_init_fn=make_worker_init_fn(split_seed),
-        ))
+        loaders.append(
+            DataLoader(
+                ds,
+                batch_size=batch_size,
+                shuffle=(split == "train"),
+                num_workers=num_workers,
+                pin_memory=True,
+                drop_last=(split == "train"),
+                generator=make_data_loader_generator(split_seed),
+                worker_init_fn=make_worker_init_fn(split_seed),
+            )
+        )
     return (*loaders, n_classes)

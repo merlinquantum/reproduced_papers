@@ -96,7 +96,10 @@ def result_data_regime(r: dict) -> str:
     cfg = r.get("config", {})
     return r.get("data_regime") or cfg.get("data_regime") or "standard"
 
-def make_variant_key(model: str, family: str, profile: str, data_regime: str = "standard") -> str:
+
+def make_variant_key(
+    model: str, family: str, profile: str, data_regime: str = "standard"
+) -> str:
     return VARIANT_SEP.join((model, family, profile, data_regime))
 
 
@@ -224,7 +227,9 @@ def deduplicate_results(results):
     return list(chosen.values())
 
 
-def include_for_bundle(r: dict, family: str | None = None, profile: str | None = None) -> bool:
+def include_for_bundle(
+    r: dict, family: str | None = None, profile: str | None = None
+) -> bool:
     base_model = base_model_key(r)
     result_prof = result_profile(r)
     result_fam = result_family(r)
@@ -304,7 +309,9 @@ def plot_comparison(groups, dataset, out_dir):
 
     fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
 
-    for ax_idx, (metric, title) in enumerate((("test_auc", "Test AUC"), ("test_acc", "Test ACC"))):
+    for ax_idx, (metric, title) in enumerate(
+        (("test_auc", "Test AUC"), ("test_acc", "Test ACC"))
+    ):
         ax = axes[ax_idx]
         x_pos = np.arange(len(models))
         means, stds = [], []
@@ -316,7 +323,9 @@ def plot_comparison(groups, dataset, out_dir):
         colors = [model_color(model) for model in models]
         bars = ax.bar(x_pos, means, yerr=stds, color=colors, capsize=4, alpha=0.85)
         ax.set_xticks(x_pos)
-        ax.set_xticklabels([pretty_model_label(m) for m in models], fontsize=8, rotation=15)
+        ax.set_xticklabels(
+            [pretty_model_label(m) for m in models], fontsize=8, rotation=15
+        )
         ax.set_ylabel(title)
         ax.set_title(title)
         ax.grid(True, axis="y", alpha=0.3)
@@ -375,9 +384,7 @@ def plot_sector_mass(groups, dataset, out_dir):
     import matplotlib.pyplot as plt
 
     variants = {
-        key: groups[key].get(dataset, [])
-        for key in groups
-        if groups[key].get(dataset)
+        key: groups[key].get(dataset, []) for key in groups if groups[key].get(dataset)
     }
     sector_keys_any = (
         "sector_mass_cross",
@@ -389,14 +396,21 @@ def plot_sector_mass(groups, dataset, out_dir):
     variants = {
         key: runs
         for key, runs in variants.items()
-        if any(any(sk in e for sk in sector_keys_any for e in r.get("history", [])) for r in runs)
+        if any(
+            any(sk in e for sk in sector_keys_any for e in r.get("history", []))
+            for r in runs
+        )
     }
     if not variants:
         return
 
-    fig, axes = plt.subplots(1, len(variants), figsize=(7 * len(variants), 4), squeeze=False)
+    fig, axes = plt.subplots(
+        1, len(variants), figsize=(7 * len(variants), 4), squeeze=False
+    )
 
-    for col, (variant, runs) in enumerate(sorted(variants.items(), key=lambda item: variant_sort_key(item[0]))):
+    for col, (variant, runs) in enumerate(
+        sorted(variants.items(), key=lambda item: variant_sort_key(item[0]))
+    ):
         ax = axes[0, col]
         label = pretty_model_label(variant)
         color = model_color(variant)
@@ -480,7 +494,13 @@ def plot_param_comparison(groups, out_dir):
         edgecolor="gray",
     )
 
-    ax.axhline(2048, color="black", linestyle="--", linewidth=1, label="Classical ViT attn (2d^2x4)")
+    ax.axhline(
+        2048,
+        color="black",
+        linestyle="--",
+        linewidth=1,
+        label="Classical ViT attn (2d^2x4)",
+    )
     ax.set_xticks(x)
     ax.set_xticklabels([pretty_model_label(m) for m in models], fontsize=9, rotation=15)
     ax.set_ylabel("Trainable Parameters")
@@ -489,7 +509,13 @@ def plot_param_comparison(groups, out_dir):
     ax.grid(True, axis="y", alpha=0.3)
 
     for bar, val in zip(bars1, attn):
-        ax.text(bar.get_x() + bar.get_width() / 2, val + 20, str(val), ha="center", fontsize=7)
+        ax.text(
+            bar.get_x() + bar.get_width() / 2,
+            val + 20,
+            str(val),
+            ha="center",
+            fontsize=7,
+        )
 
     fig.tight_layout()
     path = os.path.join(out_dir, "param_comparison.pdf")
@@ -525,14 +551,16 @@ def write_summary(results, out_dir):
             }
         )
 
-    rows.sort(key=lambda x: (
-        x["dataset"],
-        family_rank(x["family"]),
-        profile_rank(x["profile"]),
-        x["data_regime"],
-        x["base_model"],
-        str(x["seed"]),
-    ))
+    rows.sort(
+        key=lambda x: (
+            x["dataset"],
+            family_rank(x["family"]),
+            profile_rank(x["profile"]),
+            x["data_regime"],
+            x["base_model"],
+            str(x["seed"]),
+        )
+    )
 
     print("\n" + "=" * 150)
     print(
@@ -559,11 +587,19 @@ def write_summary(results, out_dir):
 
     agg = defaultdict(lambda: defaultdict(list))
     for row in rows:
-        key = (row["model"], row["family"], row["profile"], row["data_regime"], row["dataset"])
+        key = (
+            row["model"],
+            row["family"],
+            row["profile"],
+            row["data_regime"],
+            row["dataset"],
+        )
         agg[key]["acc"].append(row["test_acc"])
         agg[key]["auc"].append(row["test_auc"])
 
-    print(f"\n{'Variant':<38} {'Fam':<9} {'Profile':<8} {'Regime':<18} {'Dataset':<15} {'ACC (mean+-std)':>18} {'AUC (mean+-std)':>18}")
+    print(
+        f"\n{'Variant':<38} {'Fam':<9} {'Profile':<8} {'Regime':<18} {'Dataset':<15} {'ACC (mean+-std)':>18} {'AUC (mean+-std)':>18}"
+    )
     print("-" * 123)
     for (model, family, profile, data_regime, dataset), metrics in sorted(agg.items()):
         acc_mean = np.mean(metrics["acc"])
@@ -590,6 +626,7 @@ def render_bundle(results, out_dir, dataset_filter=None):
 
     try:
         import matplotlib  # noqa: F401
+
         for dataset in sorted(datasets):
             print(f"\n-- {dataset} --")
             plot_training_curves(groups, dataset, out_dir)
@@ -602,8 +639,10 @@ def render_bundle(results, out_dir, dataset_filter=None):
     summary_results = results
     if dataset_filter is not None:
         summary_results = [
-            r for r in results
-            if r.get("dataset", r.get("config", {}).get("dataset", "?")) == dataset_filter
+            r
+            for r in results
+            if r.get("dataset", r.get("config", {}).get("dataset", "?"))
+            == dataset_filter
         ]
     write_summary(summary_results, out_dir)
 
@@ -611,14 +650,23 @@ def render_bundle(results, out_dir, dataset_filter=None):
 def main():
     parser = argparse.ArgumentParser(description="Generate QVT figures from results")
     parser.add_argument("root", help="Directory containing outdir/**/results.json")
-    parser.add_argument("--dataset", default=None, help="Filter to one dataset (default: all found)")
+    parser.add_argument(
+        "--dataset", default=None, help="Filter to one dataset (default: all found)"
+    )
     parser.add_argument("--out", default=None, help="Output directory for figures")
-    parser.add_argument("--profile", default=None, help="Filter by profile, e.g. full or lite")
-    parser.add_argument("--circuit-family", default=None, help="Filter by circuit family, e.g. generic or butterfly")
+    parser.add_argument(
+        "--profile", default=None, help="Filter by profile, e.g. full or lite"
+    )
+    parser.add_argument(
+        "--circuit-family",
+        default=None,
+        help="Filter by circuit family, e.g. generic or butterfly",
+    )
     args = parser.parse_args()
 
     try:
         import matplotlib
+
         matplotlib.use("Agg")
     except ImportError:
         print("matplotlib not installed - will print summary table only.")
@@ -626,7 +674,8 @@ def main():
     results = collect_results(args.root)
     if args.profile is not None or args.circuit_family is not None:
         results = [
-            r for r in results
+            r
+            for r in results
             if include_for_bundle(r, family=args.circuit_family, profile=args.profile)
         ]
     results = deduplicate_results(results)
@@ -652,23 +701,32 @@ def main():
             combos = sorted({(result_family(r), result_profile(r)) for r in results})
             for family, profile in combos:
                 subset = [
-                    r for r in results
+                    r
+                    for r in results
                     if include_for_bundle(r, family=family, profile=profile)
                 ]
-                targets.append(
-                    (os.path.join(figure_root, family, profile), subset)
-                )
+                targets.append((os.path.join(figure_root, family, profile), subset))
         elif args.circuit_family is None and args.profile is not None:
             families = sorted({result_family(r) for r in results})
             for family in families:
-                subset = [r for r in results if include_for_bundle(r, family=family, profile=args.profile)]
+                subset = [
+                    r
+                    for r in results
+                    if include_for_bundle(r, family=family, profile=args.profile)
+                ]
                 targets.append(
                     (os.path.join(figure_root, family, args.profile), subset)
                 )
         elif args.circuit_family is not None and args.profile is None:
             profiles = sorted({result_profile(r) for r in results})
             for profile in profiles:
-                subset = [r for r in results if include_for_bundle(r, family=args.circuit_family, profile=profile)]
+                subset = [
+                    r
+                    for r in results
+                    if include_for_bundle(
+                        r, family=args.circuit_family, profile=profile
+                    )
+                ]
                 targets.append(
                     (os.path.join(figure_root, args.circuit_family, profile), subset)
                 )

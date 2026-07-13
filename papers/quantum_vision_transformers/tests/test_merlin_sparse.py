@@ -2,10 +2,9 @@ from __future__ import annotations
 
 from types import MethodType
 
+import merlin as ML
 import perceval as pcvl
 import torch
-
-import merlin as ML
 from merlin.core.computation_space import ComputationSpace
 from merlin.core.probability_distribution import ProbabilityDistribution
 from merlin.core.state_vector import StateVector
