@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import argparse
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -44,62 +43,44 @@ def show_grid(
     plt.show()
 
 
-def parse_args() -> argparse.Namespace:
+def main() -> None:
+    import argparse
+
     parser = argparse.ArgumentParser(
-        description="Visualize samples from fake_progress.csv."
+        description="Visualize generated samples from fake_progress.csv."
     )
-    parser.add_argument(
-        "csv_path",
-        type=Path,
-        help="Path to fake_progress.csv.",
-    )
+    parser.add_argument("csv_path", type=Path, help="Path to fake_progress.csv")
     parser.add_argument(
         "--index",
         type=int,
         default=-1,
-        help="Index of the sample to display (default: -1).",
-    )
-    parser.add_argument(
-        "--image-size",
-        type=int,
-        default=8,
-        help="Image side length (default: 8).",
+        help="Sample index for show_sample (default: -1)",
     )
     parser.add_argument(
         "--count",
         type=int,
         default=16,
-        help="Number of samples to show in grid (default: 16).",
+        help="Number of samples for show_grid (default: 16)",
     )
     parser.add_argument(
-        "--cols",
-        type=int,
-        default=4,
-        help="Number of columns in grid (default: 4).",
+        "--image-size", type=int, default=8, help="Image size in pixels (default: 8)"
     )
     parser.add_argument(
-        "--no-grid",
-        action="store_true",
-        help="Only show the single sample, skip the grid.",
+        "--cols", type=int, default=4, help="Columns in the grid (default: 4)"
     )
     parser.add_argument(
-        "--no-sample",
-        action="store_true",
-        help="Only show the grid, skip the single sample.",
+        "--mode",
+        choices=["sample", "grid", "both"],
+        default="both",
+        help="What to display (default: both)",
     )
-    return parser.parse_args()
+    args = parser.parse_args()
 
-
-def main() -> None:
-    args = parse_args()
-    if not args.no_sample:
+    if args.mode in ("sample", "both"):
         show_sample(args.csv_path, index=args.index, image_size=args.image_size)
-    if not args.no_grid:
+    if args.mode in ("grid", "both"):
         show_grid(
-            args.csv_path,
-            count=args.count,
-            image_size=args.image_size,
-            cols=args.cols,
+            args.csv_path, count=args.count, image_size=args.image_size, cols=args.cols
         )
 
 

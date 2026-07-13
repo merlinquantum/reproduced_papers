@@ -1,0 +1,39 @@
+2026-07-05 23:05:42 | INFO | runtime | Starting qSVM_qKNN run
+2026-07-05 23:05:44 | INFO | qSVM_qKNN | Starting qSVM_qKNN run
+2026-07-05 23:05:44 | INFO | qSVM_qKNN | === seed 42 ===
+2026-07-05 23:05:44 | INFO | qSVM_qKNN | Loaded url2016 from data/qSVM_qKNN/ISCX-URL-2016/Defacement_Infogain.csv: rows raw=15711 clean=176 train=122 test=52; classes=[0, 1]; features raw=15 used=8; photonic_modes=8
+2026-07-05 23:05:44 | INFO | qSVM_qKNN | Class distribution clean/subset={0: 87 (0.494), 1: 89 (0.506)}; train={0: 61 (0.500), 1: 61 (0.500)}; test={0: 26 (0.500), 1: 26 (0.500)}
+2026-07-05 23:05:44 | INFO | qSVM_qKNN | Running qsvm_angle: train=122 test=52 features=8 qubits=8
+2026-07-05 23:05:46 | INFO | qSVM_qKNN | qsvm_angle accuracy=0.8846 precision=0.9167 recall=0.8462 f1=0.8800
+2026-07-05 23:05:46 | INFO | qSVM_qKNN | Running state_svm_angle: train=122 test=52 features=8 qubits=8
+2026-07-05 23:05:47 | INFO | qSVM_qKNN | state_svm_angle accuracy=0.8846 precision=0.9167 recall=0.8462 f1=0.8800
+2026-07-05 23:05:47 | INFO | qSVM_qKNN | Running qsvm_amplitude: train=122 test=52 features=8 qubits=3
+2026-07-05 23:05:50 | INFO | qSVM_qKNN | qsvm_amplitude accuracy=0.8077 precision=0.8636 recall=0.7308 f1=0.7917
+2026-07-05 23:05:50 | INFO | qSVM_qKNN | Running state_svm_amplitude: train=122 test=52 features=8 qubits=3
+2026-07-05 23:05:50 | INFO | qSVM_qKNN | state_svm_amplitude accuracy=0.8077 precision=0.8636 recall=0.7308 f1=0.7917
+2026-07-05 23:05:50 | INFO | qSVM_qKNN | Running qsvm_zz: train=122 test=52 features=8 qubits=8
+2026-07-05 23:06:20 | INFO | qSVM_qKNN | qsvm_zz accuracy=0.9038 precision=0.8387 recall=1.0000 f1=0.9123
+2026-07-05 23:06:20 | INFO | qSVM_qKNN | Running state_svm_zz: train=122 test=52 features=8 qubits=8
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | state_svm_zz accuracy=0.9038 precision=0.8387 recall=1.0000 f1=0.9123
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | Running qknn_angle: train=122 test=52 features=8 qubits=8
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | qknn_angle accuracy=0.9038 precision=0.9200 recall=0.8846 f1=0.9020
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | Running state_knn_angle: train=122 test=52 features=8 qubits=8
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | state_knn_angle accuracy=0.9038 precision=0.9200 recall=0.8846 f1=0.9020
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | Running qknn_amplitude: train=122 test=52 features=8 qubits=3
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | qknn_amplitude accuracy=0.9423 precision=0.9600 recall=0.9231 f1=0.9412
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | Running state_knn_amplitude: train=122 test=52 features=8 qubits=3
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | state_knn_amplitude accuracy=0.9423 precision=0.9600 recall=0.9231 f1=0.9412
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | Running qknn_zz: train=122 test=52 features=8 qubits=8
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | qknn_zz accuracy=0.9231 precision=0.9231 recall=0.9231 f1=0.9231
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | Running state_knn_zz: train=122 test=52 features=8 qubits=8
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | state_knn_zz accuracy=0.9231 precision=0.9231 recall=0.9231 f1=0.9231
+2026-07-05 23:06:21 | INFO | qSVM_qKNN | Running photonic_fidelity_svm_angle: train=122 test=52 features=8 qubits=None
+2026-07-05 23:06:22 | INFO | qSVM_qKNN | photonic_fidelity_svm_angle accuracy=0.9038 precision=0.9200 recall=0.8846 f1=0.9020
+2026-07-05 23:06:22 | INFO | qSVM_qKNN | Running photonic_state_svm_angle: train=122 test=52 features=8 qubits=None
+2026-07-05 23:06:22 | INFO | qSVM_qKNN | photonic_state_svm_angle accuracy=0.9038 precision=0.9565 recall=0.8462 f1=0.8980
+2026-07-05 23:06:22 | INFO | qSVM_qKNN | Running photonic_fidelity_knn_angle: train=122 test=52 features=8 qubits=None
+2026-07-05 23:06:22 | INFO | qSVM_qKNN | photonic_fidelity_knn_angle accuracy=0.9615 precision=0.9286 recall=1.0000 f1=0.9630
+2026-07-05 23:06:22 | INFO | qSVM_qKNN | Running photonic_state_knn_angle: train=122 test=52 features=8 qubits=None
+2026-07-05 23:06:22 | INFO | qSVM_qKNN | photonic_state_knn_angle accuracy=0.9423 precision=0.9600 recall=0.9231 f1=0.9412
+2026-07-05 23:06:23 | INFO | qSVM_qKNN | Wrote qSVM_qKNN artifacts to outdir/run_20260705-230542
+2026-07-05 23:06:23 | INFO | root | Finished. Artifacts in: outdir/run_20260705-230542

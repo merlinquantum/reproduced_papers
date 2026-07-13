@@ -100,7 +100,7 @@ def get_parameter_shift_circuits(qnn, parameter_list, r):
 
 
 def get_finite_difference_circuits(qnn, parameter_list, eps):
-    if type(eps) is float:
+    if isinstance(eps, float):
         qc_plus_list, qc_minus_list = [], []
         for i in range(len(parameter_list)):
             shifted_params_plus = np.copy(parameter_list)

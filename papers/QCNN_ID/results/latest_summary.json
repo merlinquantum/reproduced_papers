@@ -1,0 +1,375 @@
+{
+  "generated_at": "2026-06-25",
+  "classification_head": "single binary logit W\u00b7E(x)+B, optimized with BCEWithLogitsLoss; predictions use sigmoid(logit) >= 0.5",
+  "figure_policy": "smoke ROC panels use the full [0, 1] view; curated experiment ROC panels are zoomed to FPR [0, 0.2] and TPR [0.8, 1.0]",
+  "source_runs": {
+    "current_notebook_1000_e40": "run_20260625-151031",
+    "current_short_1000_e10": "run_20260625-115855",
+    "intrusion_full_compare_10000_e15": "run_20260625-134908",
+    "intrusion_merlin_20000_e20_s3": "run_20260625-112007",
+    "intrusion_photonic_convergence_10000_e40": "run_20260625-151010",
+    "smoke_defaults_4000_e3": "run_20260625-111813"
+  },
+  "runs": {
+    "current_notebook_1000_e40": {
+      "source_run": "run_20260625-151031",
+      "data": {
+        "subset_size": 1000,
+        "n_components": 8,
+        "test_size": 0.3
+      },
+      "summary": {
+        "cnn_classifier": {
+          "seeds": 1,
+          "param_count": 9473,
+          "accuracy_mean": 0.9966666666666667,
+          "accuracy_std": 0.0,
+          "precision_mean": 0.9971751412429379,
+          "recall_mean": 0.9959677419354839,
+          "train_time_mean_s": 0.8932750225067139,
+          "confusion_matrix": [
+            [
+              176,
+              0
+            ],
+            [
+              1,
+              123
+            ]
+          ],
+          "roc_auc_mean": 0.999816715542522
+        },
+        "photonic_classifier": {
+          "seeds": 1,
+          "param_count": 71,
+          "accuracy_mean": 0.98,
+          "accuracy_std": 0.0,
+          "precision_mean": 0.9835164835164836,
+          "recall_mean": 0.9758064516129032,
+          "train_time_mean_s": 0.6624362468719482,
+          "confusion_matrix": [
+            [
+              176,
+              0
+            ],
+            [
+              6,
+              118
+            ]
+          ],
+          "roc_auc_mean": 0.9962426686217009
+        },
+        "qcnn_classifier": {
+          "seeds": 1,
+          "param_count": 25,
+          "accuracy_mean": 0.9366666666666666,
+          "accuracy_std": 0.0,
+          "precision_mean": 0.9421939330840945,
+          "recall_mean": 0.9281524926686218,
+          "train_time_mean_s": 198.09640502929688,
+          "confusion_matrix": [
+            [
+              172,
+              4
+            ],
+            [
+              15,
+              109
+            ]
+          ],
+          "roc_auc_mean": 0.9813049853372433
+        }
+      }
+    },
+    "current_short_1000_e10": {
+      "source_run": "run_20260625-115855",
+      "data": {
+        "subset_size": 1000,
+        "n_components": 8,
+        "test_size": 0.3
+      },
+      "summary": {
+        "cnn_classifier": {
+          "seeds": 1,
+          "param_count": 9473,
+          "accuracy_mean": 0.9833333333333333,
+          "accuracy_std": 0.0,
+          "precision_mean": 0.9861878453038674,
+          "recall_mean": 0.9798387096774194,
+          "train_time_mean_s": 0.15156960487365723,
+          "confusion_matrix": [
+            [
+              176,
+              0
+            ],
+            [
+              5,
+              119
+            ]
+          ],
+          "roc_auc_mean": 0.999908357771261
+        },
+        "qcnn_classifier": {
+          "seeds": 1,
+          "param_count": 25,
+          "accuracy_mean": 0.6533333333333333,
+          "accuracy_std": 0.0,
+          "precision_mean": 0.8142857142857143,
+          "recall_mean": 0.5806451612903226,
+          "train_time_mean_s": 51.4006929397583,
+          "confusion_matrix": [
+            [
+              176,
+              0
+            ],
+            [
+              104,
+              20
+            ]
+          ],
+          "roc_auc_mean": 0.9752107771260996
+        },
+        "photonic_classifier": {
+          "seeds": 1,
+          "param_count": 71,
+          "accuracy_mean": 0.88,
+          "accuracy_std": 0.0,
+          "precision_mean": 0.9150943396226415,
+          "recall_mean": 0.8548387096774194,
+          "train_time_mean_s": 0.36394834518432617,
+          "confusion_matrix": [
+            [
+              176,
+              0
+            ],
+            [
+              36,
+              88
+            ]
+          ],
+          "roc_auc_mean": 0.9928977272727273
+        }
+      }
+    },
+    "intrusion_full_compare_10000_e15": {
+      "source_run": "run_20260625-134908",
+      "data": {
+        "subset_size": 10000,
+        "n_components": 8,
+        "test_size": 0.3
+      },
+      "summary": {
+        "cnn_classifier": {
+          "seeds": 1,
+          "param_count": 9473,
+          "accuracy_mean": 0.9983333333333333,
+          "accuracy_std": 0.0,
+          "precision_mean": 0.9984537493158183,
+          "recall_mean": 0.9981286161057985,
+          "train_time_mean_s": 1.3009543418884277,
+          "confusion_matrix": [
+            [
+              1736,
+              1
+            ],
+            [
+              4,
+              1259
+            ]
+          ],
+          "roc_auc_mean": 0.9999794879368556
+        },
+        "photonic_classifier": {
+          "seeds": 1,
+          "param_count": 71,
+          "accuracy_mean": 0.9853333333333333,
+          "accuracy_std": 0.0,
+          "precision_mean": 0.9876473891072431,
+          "recall_mean": 0.9825811559778306,
+          "train_time_mean_s": 3.4590659141540527,
+          "confusion_matrix": [
+            [
+              1737,
+              0
+            ],
+            [
+              44,
+              1219
+            ]
+          ],
+          "roc_auc_mean": 0.9992643006685565
+        },
+        "qcnn_classifier": {
+          "seeds": 1,
+          "param_count": 33,
+          "accuracy_mean": 0.9733333333333334,
+          "accuracy_std": 0.0,
+          "precision_mean": 0.9721920371021496,
+          "recall_mean": 0.9731907334703539,
+          "train_time_mean_s": 1427.6056444644928,
+          "confusion_matrix": [
+            [
+              1692,
+              45
+            ],
+            [
+              35,
+              1228
+            ]
+          ],
+          "roc_auc_mean": 0.9972493323323447
+        }
+      }
+    },
+    "intrusion_merlin_20000_e20_s3": {
+      "source_run": "run_20260625-112007",
+      "data": {
+        "subset_size": 20000,
+        "n_components": 8,
+        "test_size": 0.3
+      },
+      "summary": {
+        "cnn_classifier": {
+          "seeds": 3,
+          "param_count": 9473,
+          "accuracy_mean": 0.9988333333333332,
+          "accuracy_std": 0.00040824829046386336,
+          "precision_mean": 0.99883123906436,
+          "recall_mean": 0.9987786862109775,
+          "train_time_mean_s": 4.79601526260376,
+          "confusion_matrix": [
+            [
+              10377,
+              9
+            ],
+            [
+              12,
+              7602
+            ]
+          ],
+          "roc_auc_mean": 0.9998630580985561
+        },
+        "photonic_classifier": {
+          "seeds": 3,
+          "param_count": 71,
+          "accuracy_mean": 0.9886666666666667,
+          "accuracy_std": 0.0033527213932476882,
+          "precision_mean": 0.9903160136532648,
+          "recall_mean": 0.9866706556052959,
+          "train_time_mean_s": 6.924456040064494,
+          "confusion_matrix": [
+            [
+              10383,
+              3
+            ],
+            [
+              201,
+              7413
+            ]
+          ],
+          "roc_auc_mean": 0.9995645280613226
+        }
+      }
+    },
+    "intrusion_photonic_convergence_10000_e40": {
+      "source_run": "run_20260625-151010",
+      "data": {
+        "subset_size": 10000,
+        "n_components": 8,
+        "test_size": 0.3
+      },
+      "summary": {
+        "photonic_classifier": {
+          "seeds": 1,
+          "param_count": 71,
+          "accuracy_mean": 0.9856666666666667,
+          "accuracy_std": 0.0,
+          "precision_mean": 0.9879213483146068,
+          "recall_mean": 0.9829770387965162,
+          "train_time_mean_s": 8.971893548965454,
+          "confusion_matrix": [
+            [
+              1737,
+              0
+            ],
+            [
+              43,
+              1220
+            ]
+          ],
+          "roc_auc_mean": 0.9997214917648625
+        }
+      }
+    },
+    "smoke_defaults_4000_e3": {
+      "source_run": "run_20260625-111813",
+      "data": {
+        "subset_size": 4000,
+        "n_components": 8,
+        "test_size": 0.3
+      },
+      "summary": {
+        "cnn_classifier": {
+          "seeds": 1,
+          "param_count": 9473,
+          "accuracy_mean": 0.9916666666666667,
+          "accuracy_std": 0.0,
+          "precision_mean": 0.9928366762177651,
+          "recall_mean": 0.990234375,
+          "train_time_mean_s": 0.28983163833618164,
+          "confusion_matrix": [
+            [
+              688,
+              0
+            ],
+            [
+              10,
+              502
+            ]
+          ],
+          "roc_auc_mean": 1.0
+        },
+        "photonic_classifier": {
+          "seeds": 1,
+          "param_count": 71,
+          "accuracy_mean": 0.935,
+          "accuracy_std": 0.0,
+          "precision_mean": 0.9490861618798956,
+          "recall_mean": 0.923828125,
+          "train_time_mean_s": 0.20451641082763672,
+          "confusion_matrix": [
+            [
+              688,
+              0
+            ],
+            [
+              78,
+              434
+            ]
+          ],
+          "roc_auc_mean": 0.9990319540334301
+        },
+        "qcnn_classifier": {
+          "seeds": 1,
+          "param_count": 25,
+          "accuracy_mean": 0.5858333333333333,
+          "accuracy_std": 0.0,
+          "precision_mean": 0.790295358649789,
+          "recall_mean": 0.5146484375,
+          "train_time_mean_s": 84.74606156349182,
+          "confusion_matrix": [
+            [
+              688,
+              0
+            ],
+            [
+              497,
+              15
+            ]
+          ],
+          "roc_auc_mean": 0.9368442269258721
+        }
+      }
+    }
+  }
+}

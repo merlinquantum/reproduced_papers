@@ -1,0 +1,9 @@
+{
+  "experiment": "dee-qq-pl",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "q_layers": 4
+  },
+  "description": "HQPINN dee qq pl train 4 configuration."
+}

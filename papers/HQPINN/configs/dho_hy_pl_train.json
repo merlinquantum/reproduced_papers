@@ -1,0 +1,12 @@
+{
+  "experiment": "dho-hy-pl",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_layers": 2,
+    "n_nodes": 16,
+    "n_qubits": 3,
+    "n_photons": null
+  },
+  "description": "HQPINN dho hy pl train configuration."
+}
