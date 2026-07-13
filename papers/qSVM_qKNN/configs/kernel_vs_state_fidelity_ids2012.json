@@ -1,0 +1,40 @@
+{
+  "description": "IDS2012 validation run comparing fidelity-kernel models against explicit state-amplitude fidelity models on the all_models truncation.",
+  "data_source": "csv",
+  "dataset": "ids2012",
+  "ids_archive": "ISCX-IDS-2012/iscxids2012-master.tar.gz",
+  "ids_csv_files": [
+    "TestbedMonJun14Flows.csv",
+    "TestbedSatJun12Flows.csv",
+    "TestbedSunJun13Flows.csv",
+    "TestbedThuJun17Flows.csv",
+    "TestbedTueJun15Flows.csv",
+    "TestbedWedJun16Flows.csv"
+  ],
+  "label_column": "Label",
+  "subset_size": 2000,
+  "feature_limit": 8,
+  "photonic_n_modes": null,
+  "photonic_n_photons": 3,
+  "models": [
+    "qsvm_angle",
+    "state_svm_angle",
+    "qsvm_amplitude",
+    "state_svm_amplitude",
+    "qsvm_zz",
+    "state_svm_zz",
+    "qknn_angle",
+    "state_knn_angle",
+    "qknn_amplitude",
+    "state_knn_amplitude",
+    "qknn_zz",
+    "state_knn_zz",
+    "photonic_fidelity_svm_angle",
+    "photonic_state_svm_angle",
+    "photonic_fidelity_knn_angle",
+    "photonic_state_knn_angle"
+  ],
+  "seeds": [
+    42
+  ]
+}

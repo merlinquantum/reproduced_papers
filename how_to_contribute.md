@@ -12,12 +12,15 @@ papers/NAME/            # Non-ambiguous acronym or fullname of the reproduced pa
 ├── requirements.txt      # additional requirements for the scripts
 ├── configs/              # defaults + experiment configs consumed by the repo root runner
 ├── cli.json              # CLI schema for the shared runner
-├── lib/                  # code used by the shared runner and notebooks - as an integrated library (import shared data helpers from papers/shared/<paper>/)
+├── lib/                  # code used by the shared runner and notebooks
+│   └── runner.py         # required entrypoint: lib.runner.train_and_evaluate(cfg, run_dir)
 ├── models/               # Trained models
 ├── results/              # Selected generated figures, tables, or outputs from trained models
 ├── tests/                # Validation tests
 └── utils/                # additional commandline utilities for visualization, launch of multiple trainings, etc...
 ```
+
+`data/` is shared at repository root (not inside each paper): write datasets/artifacts under `data/<NAME>/`.
 
 ## Reproduction template (starter kit)
 
@@ -67,6 +70,21 @@ Then edit the placeholders in:
 
 > **Note:** Every reproduction has its own `requirements.txt`. Install the relevant file before running `implementation.py --paper ...` to ensure dependencies are available.
 
+## Required conventions
+
+- Keep the runnable entrypoint in `lib/runner.py` and expose `train_and_evaluate(cfg, run_dir)`.
+- Do not add `runtime.json` or `runtime_entry.py`; the shared runtime now assumes `configs/defaults.json`, `cli.json`, and `lib/runner.py`.
+- Keep `cli.json` project-specific only. Global flags like `--config` and `--outdir` are injected by `runtime_lib/global_cli.json`.
+- Do not duplicate shared startup logs or seed wrappers in each project; shared runtime handles run banner/config logging and seeding.
+- If you use `dtype` in configs, rely on runtime normalization (`dtype` keys arrive in project code as validated `(label, torch.dtype)` pairs).
+- Use the shared data root convention: default is repo-level `data/` and each paper should store data under `data/<NAME>/` (override with `--data-root` or `DATA_DIR` when needed).
+
+### Shared code under `papers/shared/`
+
+- Put reusable, cross-paper logic in `papers/shared/<topic_or_paper>/` (especially dataset preparation/loading utilities reused by multiple reproductions).
+- Keep each paper runnable on its own: paper-local modules in `papers/<NAME>/lib/` should import from `papers/shared/...` through thin wrappers (for example a paper-local `lib/data.py` forwarding to shared helpers).
+- Avoid duplicating the same data/helper implementation across multiple papers when a shared module is a better fit.
+
 Notes:
 - Configs are JSON-only in the template.
 - Each run creates a timestamped folder under the base `outdir` (default `outdir/`): `run_YYYYMMDD-HHMMSS/` with `config_snapshot.json` and your artifacts.
@@ -74,12 +92,15 @@ Notes:
 
 ## Submission process
 
-1. **Propose** the paper in our [GitHub Discussions](https://github.com/merlinquantum/merlin/discussions)
-2. **Implement** using the repository tools, following the structure above
-3. **Validate** results against the original paper
-4. **Document** in Jupyter notebook format
-5. **Submit** a pull request with the complete reproduction folder
-6. **Summarize** in a couple of lines the results of the reproduced paper in the table in the main README.
+1. **Create a branch with an allowed prefix** (`release-`, `paper-`, `PAPER-`, `pml-`, or `PML-`) before opening a PR to `main`;
+2. **Propose** the paper in our [GitHub Discussions](https://github.com/merlinquantum/merlin/discussions);
+3. **Implement** using the repository tools, following the structure above;
+4. **Reproduce with paper settings**: validate results in the original paper setup (datasets/splits/metrics/hyperparameters as closely as possible);
+5. **Reproduce with MerLin settings**: run and validate the same study through the MerLin runtime and project conventions;
+6. **Document** in Jupyter notebook format;
+7. **Format and lint** before opening the PR: run `ruff format .` and `ruff check .` with latest stable ruff (fix reported issues);
+8. **Submit** a pull request with the complete reproduction folder;
+9. **Summarize** in a couple of lines the results of the reproduced paper in the table in the main README.
 
 ## Contribution requirements
 

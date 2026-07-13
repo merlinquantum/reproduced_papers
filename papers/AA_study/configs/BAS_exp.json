@@ -1,0 +1,10 @@
+{
+    "description": "Run the BAS experiment",
+    "outdir": "results",
+    "exp_to_run": "BAS",
+    "batch_size":50,
+    "num_epochs":20,
+    "classical_epochs":20,
+    "lr":0.01,
+    "dont_generate_graph":"False"
+}

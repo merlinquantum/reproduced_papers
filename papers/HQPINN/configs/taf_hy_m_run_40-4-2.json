@@ -1,0 +1,11 @@
+{
+  "experiment": "taf-hy-m",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "n_layers": 4,
+    "n_nodes": 40,
+    "n_photons": 2
+  },
+  "description": "HQPINN taf hy m run 40-4-2 configuration."
+}

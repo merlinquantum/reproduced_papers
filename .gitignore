@@ -35,3 +35,7 @@ __pycache__/
 # Local env & sandbox helpers
 .venv
 .home/
+
+HQPINN/**/results/**/
+HQPINN/doc/
+HQPINN_*

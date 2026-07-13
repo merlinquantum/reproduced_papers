@@ -1,0 +1,9 @@
+{
+  "experiment": "taf-qq-pl",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "q_layers": 4
+  },
+  "description": "HQPINN taf qq pl run 4 configuration."
+}

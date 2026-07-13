@@ -1,0 +1,495 @@
+import random
+
+import medmnist
+import numpy as np
+import pennylane as qml
+import torch
+from medmnist import INFO
+from torch.utils.data import DataLoader, Dataset, TensorDataset
+from torchvision import datasets
+from torchvision.transforms import Compose, Resize, ToTensor
+
+
+def generate_fig_1_dataset(
+    num_samples_per_class: int = 2000,
+    shuffle: bool = True,
+    seed: int | None = None,
+) -> TensorDataset:
+    """
+    Generate a 2D synthetic dataset for Fig. 1 (two separable clusters).
+
+    Parameters
+    ----------
+    num_samples_per_class : int, optional
+        Number of samples per class.
+    shuffle : bool, optional
+        Whether to shuffle the samples.
+    seed : int | None, optional
+        RNG seed used when shuffling.
+
+    Returns
+    -------
+    torch.utils.data.TensorDataset
+        Features tensor of shape (2 * num_samples_per_class, 2) and labels tensor.
+    """
+    class_1 = np.random.uniform(4, 5, num_samples_per_class * 2).reshape(
+        num_samples_per_class, 2
+    )
+    class_2 = np.random.uniform(5.5, 6.5, num_samples_per_class * 2).reshape(
+        num_samples_per_class, 2
+    )
+
+    features = np.vstack([class_1, class_2])
+    labels = np.concatenate(
+        [np.zeros(num_samples_per_class), np.ones(num_samples_per_class)]
+    )
+
+    if shuffle:
+        rng = np.random.default_rng(seed)
+        indices = rng.permutation(len(features))
+        features = features[indices]
+        labels = labels[indices]
+
+    features_tensor = torch.tensor(features, dtype=torch.float32)
+    labels_tensor = torch.tensor(labels, dtype=torch.float32)
+    return TensorDataset(features_tensor, labels_tensor)
+
+
+def generate_fig_2_dataset(
+    num_samples_per_class: int = 2000,
+    shuffle: bool = True,
+    seed: int | None = None,
+) -> TensorDataset:
+    """
+    Generate a 2D synthetic dataset for Fig. 2 (mixed sign distribution).
+
+    Parameters
+    ----------
+    num_samples_per_class : int, optional
+        Number of samples per class.
+    shuffle : bool, optional
+        Whether to shuffle the samples.
+    seed : int | None, optional
+        RNG seed used when shuffling.
+
+    Returns
+    -------
+    torch.utils.data.TensorDataset
+        Features tensor of shape (2 * num_samples_per_class, 2) and labels tensor.
+    """
+    class_1 = np.random.uniform(-1, 1, num_samples_per_class * 2).reshape(
+        num_samples_per_class, 2
+    )
+    class_2 = np.random.uniform(3, 5, num_samples_per_class * 2)
+    sign_generator = [
+        -1 if i < 0.5 else 1 for i in np.random.random(num_samples_per_class * 2)
+    ]
+    class_2 *= sign_generator
+    class_2 = class_2.reshape(num_samples_per_class, 2)
+
+    features = np.vstack([class_1, class_2])
+    labels = np.concatenate(
+        [np.zeros(num_samples_per_class), np.ones(num_samples_per_class)]
+    )
+
+    if shuffle:
+        rng = np.random.default_rng(seed)
+        indices = rng.permutation(len(features))
+        features = features[indices]
+        labels = labels[indices]
+
+    features_tensor = torch.tensor(features, dtype=torch.float32)
+    labels_tensor = torch.tensor(labels, dtype=torch.float32)
+    return TensorDataset(features_tensor, labels_tensor)
+
+
+def generate_fig_3_dataset(
+    num_samples_per_class: int = 2000,
+    shuffle: bool = True,
+    seed: int | None = None,
+) -> TensorDataset:
+    """
+    Generate a 2D synthetic dataset for Fig. 3 (two Gaussians with offsets).
+
+    Parameters
+    ----------
+    num_samples_per_class : int, optional
+        Number of samples per class.
+    shuffle : bool, optional
+        Whether to shuffle the samples.
+    seed : int | None, optional
+        RNG seed used when shuffling.
+
+    Returns
+    -------
+    torch.utils.data.TensorDataset
+        Features tensor of shape (2 * num_samples_per_class, 2) and labels tensor.
+    """
+    class_1_x_1 = np.random.uniform(-3, -1, num_samples_per_class)
+    class_1_x_2 = np.random.normal(-2, 1, num_samples_per_class)
+    class_1 = [[i, j] for i, j in zip(class_1_x_1, class_1_x_2)]
+
+    class_2_x_1 = np.random.uniform(1, 3, num_samples_per_class)
+    class_2_x_2 = np.random.normal(2, 1, num_samples_per_class)
+    class_2 = [[i, j] for i, j in zip(class_2_x_1, class_2_x_2)]
+
+    features = np.vstack([class_1, class_2])
+    labels = np.concatenate(
+        [np.zeros(num_samples_per_class), np.ones(num_samples_per_class)]
+    )
+
+    if shuffle:
+        rng = np.random.default_rng(seed)
+        indices = rng.permutation(len(features))
+        features = features[indices]
+        labels = labels[indices]
+
+    features_tensor = torch.tensor(features, dtype=torch.float32)
+    labels_tensor = torch.tensor(labels, dtype=torch.float32)
+    return TensorDataset(features_tensor, labels_tensor)
+
+
+def get_bas():
+    """
+    Load the PennyLane Bars-and-Stripes dataset and return train/test tensors.
+
+    Returns
+    -------
+    tuple[torch.utils.data.TensorDataset, torch.utils.data.TensorDataset]
+        Train and test TensorDatasets with images shaped (1, 4, 4) and labels.
+    """
+    try:
+        [ds] = qml.data.load(
+            "other", name="bars-and-stripes", folder_path="../../data/AA_study/"
+        )
+        x_train = np.array(ds.train["4"]["inputs"])
+        y_train = np.array(ds.train["4"]["labels"])
+        x_test = np.array(ds.test["4"]["inputs"])
+        y_test = np.array(ds.test["4"]["labels"])
+
+        x_train, x_test = (
+            x_train[:400].reshape(400, 4, 4),
+            x_test[:200].reshape(200, 4, 4),
+        )
+        y_train, y_test = y_train[:400], y_test[:200]
+
+        y_train[y_train == -1] = 0
+        y_test[y_test == -1] = 0
+
+        return TensorDataset(
+            torch.tensor(x_train).unsqueeze(dim=1),
+            torch.tensor(y_train),
+        ), TensorDataset(torch.tensor(x_test).unsqueeze(dim=1), torch.tensor(y_test))
+
+    except Exception as exc:
+        print(f"Error loading PennyLane BAS dataset: {exc}")
+        raise
+
+
+def get_data_loader(
+    dataset: TensorDataset, batch_size: int = None, shuffle: bool = True
+) -> DataLoader:
+    """
+    Wrap a TensorDataset in a DataLoader with optional batch size.
+
+    Parameters
+    ----------
+    dataset : torch.utils.data.TensorDataset
+        Dataset to wrap.
+    batch_size : int | None, optional
+        Batch size. If None, the DataLoader will use the default batch size.
+    shuffle : bool, optional
+        Whether to shuffle the dataset each epoch.
+
+    Returns
+    -------
+    torch.utils.data.DataLoader
+        Configured DataLoader.
+    """
+    if batch_size is None:
+        return DataLoader(dataset, shuffle=shuffle)
+    return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
+
+
+def _to_int_label(y):
+    """
+    Convert a dataset label to a Python int.
+
+    Parameters
+    ----------
+    y : Any
+        Label value from a dataset.
+
+    Returns
+    -------
+    int
+        Integer label.
+    """
+    if torch.is_tensor(y):
+        y = y.reshape(-1)[0].item()
+    try:
+        y = y.item()
+    except Exception:
+        pass
+    return int(y)
+
+
+class BinaryBalancedSubset(Dataset):
+    """
+    Keep exactly n_per_class samples for two labels,
+    remap them to {0,1}, and optionally shuffle order.
+    """
+
+    def __init__(self, base_dataset, keep_labels, n_per_class, seed=0, shuffle=True):
+        """
+        Build a balanced subset with exactly two classes.
+
+        Parameters
+        ----------
+        base_dataset : torch.utils.data.Dataset
+            Source dataset.
+        keep_labels : list
+            Two labels to keep.
+        n_per_class : int
+            Number of samples per class.
+        seed : int, optional
+            RNG seed for shuffling.
+        shuffle : bool, optional
+            Whether to shuffle the selected indices.
+        """
+        assert len(keep_labels) == 2, "keep_labels must have exactly 2 labels"
+
+        self.ds = base_dataset
+        self.keep = list(keep_labels)
+        self.map = {self.keep[0]: 0, self.keep[1]: 1}
+
+        per = {self.keep[0]: [], self.keep[1]: []}
+
+        # collect indices per class
+        for i in range(len(self.ds)):
+            _, y = self.ds[i]
+            y = _to_int_label(y)
+            if y in per:
+                per[y].append(i)
+
+        a, b = self.keep
+        if len(per[a]) < n_per_class or len(per[b]) < n_per_class:
+            raise ValueError(
+                f"Not enough samples for requested n_per_class={n_per_class}. "
+                f"Available: {a}->{len(per[a])}, {b}->{len(per[b])}."
+            )
+
+        rng = random.Random(seed)
+        rng.shuffle(per[a])
+        rng.shuffle(per[b])
+
+        # pick exactly n_per_class from each
+        chosen_a = per[a][:n_per_class]
+        chosen_b = per[b][:n_per_class]
+
+        # ordering depends on shuffle flag
+        if shuffle:
+            chosen = chosen_a + chosen_b
+            rng.shuffle(chosen)
+        else:
+            # first all class0, then all class1
+            chosen = chosen_a + chosen_b
+
+        self.indices = chosen
+
+    def __len__(self):
+        """
+        Return the number of selected samples.
+
+        Returns
+        -------
+        int
+            Dataset length.
+        """
+        return len(self.indices)
+
+    def __getitem__(self, idx):
+        """
+        Return (image, remapped_label) at the given index.
+
+        Parameters
+        ----------
+        idx : int
+            Sample index.
+
+        Returns
+        -------
+        tuple
+            Image tensor and remapped label.
+        """
+        x, y = self.ds[self.indices[idx]]
+        y = _to_int_label(y)
+        return x, self.map[y]
+
+
+def dataset_to_tensordataset(dataset):
+    """
+    Convert an arbitrary Dataset into a TensorDataset.
+
+    Parameters
+    ----------
+    dataset : torch.utils.data.Dataset
+        Dataset to convert.
+
+    Returns
+    -------
+    torch.utils.data.TensorDataset
+        TensorDataset with stacked tensors.
+    """
+    X_list, Y_list = [], []
+    for x, y in dataset:
+        X_list.append(x)
+        Y_list.append(int(y))
+
+    X = torch.stack(X_list)
+    Y = torch.tensor(Y_list).long()
+    return TensorDataset(X, Y)
+
+
+def _merge_rgb_batch_to_2d(tensor_ds: TensorDataset) -> TensorDataset:
+    """
+    Merge RGB channels into a single 2D square image per sample.
+
+    Input shape must be (N, 3, H, W). Output shape is (N, H, W).
+    """
+    x, y = tensor_ds.tensors
+    if x.ndim == 4 and x.shape[1] == 3:
+        # Standard luminance conversion keeps the image square.
+        weights = x.new_tensor([0.2989, 0.5870, 0.1140]).view(1, 3, 1, 1)
+        x = (x * weights).sum(dim=1)
+    return TensorDataset(x, y)
+
+
+def get_binary_dataset(
+    name: str = "MNIST",
+    num_samples_per_class: int = 2000,
+    eval_samples_per_class: int = 50,
+    root: str = "../../data/AA_study/",
+    seed: int = 0,
+    shuffle: bool = True,
+    merge_rgb_to_2d: bool = False,
+):
+    """
+    Returns (train_tensor_ds, eval_tensor_ds) as TensorDataset objects.
+
+    shuffle:
+      - True  -> mixed order of both classes
+      - False -> first all class0 samples, then all class1 samples
+
+    Notes:
+      - num_samples_per_class controls train size only.
+      - eval_samples_per_class controls eval/test size only.
+      - if merge_rgb_to_2d is True, RGB tensors (N,3,H,W) are converted to (N,H,W).
+    """
+
+    name_l = name.strip().lower()
+    transform_32 = Compose([Resize((32, 32)), ToTensor()])
+
+    # ---- MNIST ----
+    if name_l == "mnist":
+        train_base = datasets.MNIST(
+            root=root, train=True, download=True, transform=transform_32
+        )
+        eval_base = datasets.MNIST(
+            root=root, train=False, download=True, transform=transform_32
+        )
+        keep = [0, 1]
+
+        train_bin = BinaryBalancedSubset(
+            train_base, keep, num_samples_per_class, seed=seed, shuffle=shuffle
+        )
+        eval_bin = BinaryBalancedSubset(
+            eval_base, keep, eval_samples_per_class, seed=seed + 1, shuffle=shuffle
+        )
+
+        train_ds = dataset_to_tensordataset(train_bin)
+        eval_ds = dataset_to_tensordataset(eval_bin)
+        return train_ds, eval_ds
+
+    # ---- CIFAR-10 ----
+    if name_l in ["cifar10", "cifar-10"]:
+        train_base = datasets.CIFAR10(
+            root=root, train=True, download=True, transform=transform_32
+        )
+        eval_base = datasets.CIFAR10(
+            root=root, train=False, download=True, transform=transform_32
+        )
+        keep = [0, 2]  # airplane vs bird
+
+        train_bin = BinaryBalancedSubset(
+            train_base, keep, num_samples_per_class, seed=seed, shuffle=shuffle
+        )
+        eval_bin = BinaryBalancedSubset(
+            eval_base, keep, eval_samples_per_class, seed=seed + 1, shuffle=shuffle
+        )
+
+        train_ds = dataset_to_tensordataset(train_bin)
+        eval_ds = dataset_to_tensordataset(eval_bin)
+        if merge_rgb_to_2d:
+            train_ds = _merge_rgb_batch_to_2d(train_ds)
+            eval_ds = _merge_rgb_batch_to_2d(eval_ds)
+        return train_ds, eval_ds
+
+    # ---- EuroSAT ----
+    if name_l in ["eurosat", "euro_sat", "euro-sat"]:
+        base = datasets.EuroSAT(root=root, download=True, transform=transform_32)
+
+        forest_idx = base.class_to_idx["Forest"]
+        sealake_idx = base.class_to_idx["SeaLake"]
+        keep = [forest_idx, sealake_idx]
+
+        train_bin = BinaryBalancedSubset(
+            base, keep, num_samples_per_class, seed=seed, shuffle=shuffle
+        )
+        eval_bin = BinaryBalancedSubset(
+            base, keep, eval_samples_per_class, seed=seed + 1, shuffle=shuffle
+        )
+
+        train_ds = dataset_to_tensordataset(train_bin)
+        eval_ds = dataset_to_tensordataset(eval_bin)
+        if merge_rgb_to_2d:
+            train_ds = _merge_rgb_batch_to_2d(train_ds)
+            eval_ds = _merge_rgb_batch_to_2d(eval_ds)
+        return train_ds, eval_ds
+
+    # ---- PathMNIST ----
+    if name_l in ["pathmnist", "path_mnist", "path-mnist"]:
+        info = INFO["pathmnist"]
+        DataClass = getattr(medmnist, info["python_class"])
+
+        train_base = DataClass(
+            split="train", download=True, root=root, transform=transform_32
+        )
+        eval_base = DataClass(
+            split="test", download=True, root=root, transform=transform_32
+        )
+
+        # find adipose/background indices
+        label_map = info["label"]
+        inv = {str(v).lower(): int(k) for k, v in label_map.items()}
+
+        adipose_idx = inv["adipose"]
+        background_idx = inv["background"]
+
+        keep = [adipose_idx, background_idx]
+
+        train_bin = BinaryBalancedSubset(
+            train_base, keep, num_samples_per_class, seed=seed, shuffle=shuffle
+        )
+        eval_bin = BinaryBalancedSubset(
+            eval_base, keep, eval_samples_per_class, seed=seed + 1, shuffle=shuffle
+        )
+
+        train_ds = dataset_to_tensordataset(train_bin)
+        eval_ds = dataset_to_tensordataset(eval_bin)
+        if merge_rgb_to_2d:
+            train_ds = _merge_rgb_batch_to_2d(train_ds)
+            eval_ds = _merge_rgb_batch_to_2d(eval_ds)
+        return train_ds, eval_ds
+
+    raise ValueError("Unknown dataset name. Use MNIST, CIFAR10, EuroSAT, or PathMNIST.")
