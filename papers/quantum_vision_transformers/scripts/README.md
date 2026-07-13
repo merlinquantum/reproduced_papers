@@ -8,10 +8,10 @@ The `scripts/` tree is grouped by purpose rather than kept as one flat directory
   Run validation before long benchmarks.
 - `scripts/reproduction/run_paper_retina_benchmark.sh`
   Paper Retina benchmark family.
-- `scripts/suites/run_retina_cpu_suite.sh`
-  CPU-friendly Retina reproduction workflow.
-- `scripts/suites/run_medmnist_cpu_suite.sh`
-  CPU-friendly MedMNIST workflow.
+- `scripts/suites/run_retina_suite.sh`
+  Retina benchmark campaign (`CPU_FRIENDLY=1` for the reduced CPU workflow).
+- `scripts/suites/run_medmnist_suite.sh`
+  MedMNIST campaign (`CPU_FRIENDLY=1` for the reduced CPU workflow).
 - `scripts/analysis/generate_figures.py`
   Regenerate figures from `outdir/`.
 
@@ -32,11 +32,12 @@ The shell wrappers in this directory already invoke that root runner internally.
 - `benchmarks/`
   Profiling and backend benchmark utilities.
 - `experiments/`
-  Exploratory runners, subset studies, and extension comparisons.
+  Grid runners (`run_all_retina.sh`, `run_all_medmnist.sh` — parameterized by
+  `CIRCUIT_FAMILY`/`PROFILE`/`MODELS`/`SEEDS`), the capped-subset study, and the LR sweep.
 - `reproduction/`
   Paper-facing benchmark runners.
 - `suites/`
-  Higher-level wrappers that chain multiple benchmark families.
+  Campaign wrappers that chain the paper benchmark with the grid runners.
 - `validation/`
   Pre-benchmark checks and smoke tests.
 
@@ -45,7 +46,8 @@ The shell wrappers in this directory already invoke that root runner internally.
 ```bash
 bash scripts/validation/validate.sh
 bash scripts/reproduction/run_paper_retina_benchmark.sh --device cpu
-bash scripts/suites/run_retina_cpu_suite.sh --device cpu
+CPU_FRIENDLY=1 bash scripts/suites/run_retina_suite.sh --device cpu
+CIRCUIT_FAMILY=butterfly PROFILE=lite bash scripts/experiments/run_all_retina.sh --device cpu
 python scripts/analysis/generate_figures.py outdir/
 python scripts/benchmarks/benchmark_device_profile.py --devices cpu cuda:0 --precision-mode gpu_friendly
 ```

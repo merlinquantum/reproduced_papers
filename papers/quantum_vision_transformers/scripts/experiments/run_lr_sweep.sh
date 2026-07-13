@@ -85,4 +85,4 @@ done
 
 echo ""
 echo "Update configs/ with the best (lr, lr_quantum) pair, then run:"
-echo "  bash scripts/experiments/run_full_benchmark.sh"
+echo "  bash scripts/experiments/run_all_retina.sh && python scripts/analysis/generate_figures.py outdir/"

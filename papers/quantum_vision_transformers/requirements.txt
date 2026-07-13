@@ -1,6 +1,5 @@
 # Core
-# Use the vendored MerLin checkout so the repo's local performance fixes are installed.
--e third_party/merlinquantum
+merlinquantum>=0.4.0
 torch>=2.0
 numpy>=1.24
 scikit-learn>=1.3

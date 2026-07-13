@@ -9,8 +9,14 @@
 #   TRAIN_SUBSET_SIZE=5000 SEEDS="42" DATASETS="pathmnist octmnist bloodmnist" \
 #       bash scripts/experiments/run_all_medmnist_butterfly_lite_subset.sh
 #
+# Retina-sized preset (replaces the former run_all_medmnist_butterfly_lite_retina_sized.sh —
+# trains on a stratified 1080-example subset matching the RetinaMNIST train size):
+#   TRAIN_SUBSET_SIZE=1080 DATA_REGIME=retina_sized_train TAG_SUFFIX=retina_sized \
+#       bash scripts/experiments/run_all_medmnist_butterfly_lite_subset.sh
+#
 # Results:
-#   outdir/{model}_{dataset}_butterfly_lite_subset{size}_s{seed}/results.json
+#   outdir/{model}_{dataset}_butterfly_lite_{TAG_SUFFIX}_s{seed}/results.json
+#   (TAG_SUFFIX defaults to subset{size})
 #
 # Notes:
 #   - Trains on a stratified subset of the training split.
@@ -31,6 +37,7 @@ read -r -a SEEDS <<< "$SEEDS_STRING"
 TRAIN_SUBSET_SIZE="${TRAIN_SUBSET_SIZE:-5000}"
 TRAIN_SUBSET_SEED="${TRAIN_SUBSET_SEED:-0}"
 DATA_REGIME="${DATA_REGIME:-train_subset_${TRAIN_SUBSET_SIZE}}"
+TAG_SUFFIX="${TAG_SUFFIX:-subset${TRAIN_SUBSET_SIZE}}"
 
 DATASETS_STRING="${DATASETS:-pathmnist dermamnist octmnist pneumoniamnist retinamnist breastmnist bloodmnist tissuemnist organamnist organcmnist organsmnist}"
 read -r -a DATASETS <<< "$DATASETS_STRING"
@@ -45,7 +52,7 @@ for ds in "${DATASETS[@]}"; do
         [ -f "$cfg" ] || { echo "SKIP $cfg"; continue; }
 
         for s in "${SEEDS[@]}"; do
-            tag="${m}_${ds}_butterfly_lite_subset${TRAIN_SUBSET_SIZE}_s${s}"
+            tag="${m}_${ds}_butterfly_lite_${TAG_SUFFIX}_s${s}"
             out="outdir/${tag}"
             [ "$FORCE_RERUN" != "1" ] && [ -d "$out" ] && { echo "SKIP ${tag} (folder exists; set FORCE_RERUN=1 to rerun)"; continue; }
 

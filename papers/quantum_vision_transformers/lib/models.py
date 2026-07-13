@@ -298,16 +298,15 @@ class CompoundTransformerLayer(nn.Module):
         self.total_modes = n_patches + d
         self.compound_readout = compound_readout
 
+        # Probability readout — native photonic measurement (photon counting).
+        # merlin 0.4 removed partition_blocks/allowed_counts from
+        # MeasurementStrategy.probs; the layer now returns the full Fock
+        # distribution and sector selection happens classically in the
+        # readout modules (CompoundSectorReadout / FullSectorReadout).
+        measurement_strategy = MeasurementStrategy.probs(ComputationSpace.FOCK)
         if circuit_family == "butterfly":
             from .structured_circuits import make_butterfly_mzi_circuit
             circuit = make_butterfly_mzi_circuit(self.total_modes, prefix="Vc")
-            measurement_strategy = MeasurementStrategy.probs(
-                ComputationSpace.FOCK,
-                partition_blocks=[n_patches, d],
-                allowed_counts=[(1, 1)],
-            ) if compound_readout != "full_sector" else MeasurementStrategy.probs(
-                ComputationSpace.FOCK
-            )
             self.layer = ML.QuantumLayer(
                 circuit=circuit, n_photons=2,
                 trainable_parameters=["Vc"],
@@ -317,15 +316,6 @@ class CompoundTransformerLayer(nn.Module):
         else:
             builder = CircuitBuilder(n_modes=self.total_modes)
             builder.add_entangling_layer(trainable=True, model="mzi", name="Vc")
-
-            # Probability readout — native photonic measurement (photon counting).
-            measurement_strategy = MeasurementStrategy.probs(
-                ComputationSpace.FOCK,
-                partition_blocks=[n_patches, d],
-                allowed_counts=[(1, 1)],
-            ) if compound_readout != "full_sector" else MeasurementStrategy.probs(
-                ComputationSpace.FOCK
-            )
             self.layer = ML.QuantumLayer(
                 builder=builder, n_photons=2,
                 measurement_strategy=measurement_strategy,
@@ -534,31 +524,25 @@ class HierarchicalCompoundLayer(nn.Module):
         self.total_modes = n_regions + n_patches_per_region + d
         self.use_rpp_attention = use_rpp_attention
 
+        # merlin 0.4 removed partition_blocks/allowed_counts; the layer returns
+        # the full 3-photon Fock distribution and TripleSectorReadout selects
+        # the (1,1,1) / (1,2,0) sectors classically.
+        measurement_strategy = MeasurementStrategy.probs(ComputationSpace.FOCK)
         if circuit_family == "butterfly":
             from .structured_circuits import make_butterfly_mzi_circuit
             circuit = make_butterfly_mzi_circuit(self.total_modes, prefix="Vh")
-            allowed_counts = [(1, 1, 1), (1, 2, 0)] if use_rpp_attention else [(1, 1, 1)]
             self.layer = ML.QuantumLayer(
                 circuit=circuit, n_photons=3,
                 trainable_parameters=["Vh"],
-                measurement_strategy=MeasurementStrategy.probs(
-                    ComputationSpace.FOCK,
-                    partition_blocks=[n_regions, n_patches_per_region, d],
-                    allowed_counts=allowed_counts,
-                ),
+                measurement_strategy=measurement_strategy,
                 device=device
             )
         else:
             builder = CircuitBuilder(n_modes=self.total_modes)
             builder.add_entangling_layer(trainable=True, model="mzi", name="Vh")
-            allowed_counts = [(1, 1, 1), (1, 2, 0)] if use_rpp_attention else [(1, 1, 1)]
             self.layer = ML.QuantumLayer(
                 builder=builder, n_photons=3,
-                measurement_strategy=MeasurementStrategy.probs(
-                    ComputationSpace.FOCK,
-                    partition_blocks=[n_regions, n_patches_per_region, d],
-                    allowed_counts=allowed_counts,
-                ),
+                measurement_strategy=measurement_strategy,
                 device=device,
             )
 

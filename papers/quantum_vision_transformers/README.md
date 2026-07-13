@@ -102,13 +102,13 @@ pip install -r papers/quantum_vision_transformers/requirements.txt
 cd papers/quantum_vision_transformers
 python ../../implementation.py --paper quantum_vision_transformers --config configs/paper/model_a_retina.json
 bash scripts/validation/validate.sh                            # check all models build and grad-flow
-bash scripts/suites/run_retina_cpu_suite.sh --device cpu       # paper + butterfly CPU workflow
-bash scripts/suites/run_medmnist_cpu_suite.sh --device cpu     # MedMNIST CPU workflow
+CPU_FRIENDLY=1 bash scripts/suites/run_retina_suite.sh --device cpu     # paper + butterfly CPU workflow
+CPU_FRIENDLY=1 bash scripts/suites/run_medmnist_suite.sh --device cpu   # MedMNIST CPU workflow
 python scripts/analysis/generate_figures.py outdir/            # figures (all) -> results/figures/
 python scripts/analysis/generate_figures.py outdir/ --profile lite  # lite figures only
 ```
 
-`requirements.txt` installs the vendored `third_party/merlinquantum` checkout in editable mode, so it must be installed from the repo root (as shown above) and a full repo clone is required.
+`requirements.txt` installs the released `merlinquantum>=0.4.0` package. The previously vendored `third_party/merlinquantum` 0.3 branch is no longer used: its sparse/EBS performance fixes and the amplitude-input `StateVector` path landed upstream, and the removed `partition_blocks`/`allowed_counts` measurement filters are now applied classically in the readout modules (`lib/photonic_primitives.py`).
 
 ## Shared runner usage
 
@@ -128,10 +128,10 @@ To reproduce the current behavior on a remote server:
 git clone <your repo>
 cd reproduced_papers/papers/quantum_vision_transformers
 pip install -r requirements.txt
-python -c "import merlin; print(merlin.__file__)"
+python -c "import merlin; print(merlin.__version__)"
 ```
 
-The last command should resolve inside `third_party/merlinquantum`, not a site-packages wheel.
+The last command should report `0.4.0` or newer.
 
 ## CPU vs GPU profiling
 
@@ -145,10 +145,11 @@ python scripts/benchmarks/benchmark_device_profile.py --devices cpu cuda:0 --pre
 
 For a data-efficiency study on MedMNIST, the repo now supports training on a
 RetinaMNIST-sized subset while keeping the official validation and test splits
-intact. The current runner is:
+intact. The current runner is the retina-sized preset of the subset script:
 
 ```bash
-bash scripts/experiments/run_all_medmnist_butterfly_lite_retina_sized.sh --device cpu
+TRAIN_SUBSET_SIZE=1080 DATA_REGIME=retina_sized_train TAG_SUFFIX=retina_sized \
+    bash scripts/experiments/run_all_medmnist_butterfly_lite_subset.sh --device cpu
 ```
 
 This uses:
