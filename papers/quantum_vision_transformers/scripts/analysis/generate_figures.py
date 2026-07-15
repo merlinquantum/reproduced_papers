@@ -128,6 +128,11 @@ def pretty_model_label(model: str) -> str:
     return f"{label} [{family}, {profile}{regime_suffix}]"
 
 
+def wrap_variant_label(variant: str) -> str:
+    """Two-line tick label: model name on top, [family, profile, regime] below."""
+    return pretty_model_label(variant).replace(" [", "\n[")
+
+
 def model_color(model: str) -> str:
     base, family, profile, _ = split_variant_key(model)
     color = MODEL_COLORS.get(base, "gray")
@@ -289,7 +294,19 @@ def plot_training_curves(groups, dataset, out_dir):
             ax.set_ylabel(ylabel)
             ax.grid(True, alpha=0.3)
 
-    axes[0].legend(fontsize=8)
+    # Figure-level legend below the panels — an in-axes legend covers the
+    # curves once more than a handful of variants are plotted together.
+    handles, labels = axes[0].get_legend_handles_labels()
+    if handles:
+        fig.legend(
+            handles,
+            labels,
+            loc="upper center",
+            bbox_to_anchor=(0.5, 0.02),
+            ncol=min(4, max(1, int(np.ceil(len(labels) / 4)))),
+            fontsize=8,
+            frameon=False,
+        )
     fig.suptitle(f"Training Curves — {dataset}", fontsize=13)
     fig.tight_layout()
     path = os.path.join(out_dir, f"training_curves_{dataset}.pdf")
@@ -307,7 +324,9 @@ def plot_comparison(groups, dataset, out_dir):
     if not models:
         return
 
-    fig, axes = plt.subplots(1, 2, figsize=(10, 4.5))
+    # Scale width with the number of bars so dense variant sets stay readable.
+    fig_width = max(10.0, 0.9 * len(models))
+    fig, axes = plt.subplots(1, 2, figsize=(fig_width, 5.0))
 
     for ax_idx, (metric, title) in enumerate(
         (("test_auc", "Test AUC"), ("test_acc", "Test ACC"))
@@ -324,7 +343,11 @@ def plot_comparison(groups, dataset, out_dir):
         bars = ax.bar(x_pos, means, yerr=stds, color=colors, capsize=4, alpha=0.85)
         ax.set_xticks(x_pos)
         ax.set_xticklabels(
-            [pretty_model_label(m) for m in models], fontsize=8, rotation=15
+            [wrap_variant_label(m) for m in models],
+            fontsize=7,
+            rotation=45,
+            ha="right",
+            rotation_mode="anchor",
         )
         ax.set_ylabel(title)
         ax.set_title(title)
@@ -360,15 +383,19 @@ def plot_comparison(groups, dataset, out_dir):
             ax.plot([], [], "k--", label="Paper reference")
             ax.legend(fontsize=8)
 
+        # Vertical value labels stay legible even when bars are tightly packed;
+        # extend the y-limit so they don't collide with the panel title.
         for bar, mean in zip(bars, means):
             ax.text(
                 bar.get_x() + bar.get_width() / 2,
-                bar.get_height() + 0.005,
+                bar.get_height() + 0.01,
                 f"{mean:.3f}",
                 ha="center",
                 va="bottom",
                 fontsize=7,
+                rotation=90,
             )
+        ax.set_ylim(0, ax.get_ylim()[1] * 1.18)
 
     fig.suptitle(f"Model Comparison — {dataset}", fontsize=13)
     fig.tight_layout()
@@ -393,13 +420,25 @@ def plot_sector_mass(groups, dataset, out_dir):
         "sector_mass_triple_cross",
         "sector_mass_rpp",
     )
-    variants = {
-        key: runs
-        for key, runs in variants.items()
-        if any(
-            any(sk in e for sk in sector_keys_any for e in r.get("history", []))
-            for r in runs
+
+    def _sector_history_len(runs):
+        """Longest per-run count of history entries that carry a sector key."""
+        return max(
+            (
+                sum(
+                    1
+                    for e in r.get("history", [])
+                    if any(sk in e for sk in sector_keys_any)
+                )
+                for r in runs
+            ),
+            default=0,
         )
+
+    # A single logged epoch draws an invisible one-point line — require a real
+    # trajectory so the figure only contains informative panels.
+    variants = {
+        key: runs for key, runs in variants.items() if _sector_history_len(runs) >= 2
     }
     if not variants:
         return
@@ -470,7 +509,7 @@ def plot_param_comparison(groups, out_dir):
         return
 
     models = sorted(model_params.keys(), key=variant_sort_key)
-    fig, ax = plt.subplots(figsize=(10, 4.5))
+    fig, ax = plt.subplots(figsize=(max(10.0, 1.2 * len(models)), 5.0))
 
     attn = [model_params[m].get("attention", 0) for m in models]
     total = [model_params[m].get("total", 0) for m in models]
@@ -502,7 +541,13 @@ def plot_param_comparison(groups, out_dir):
         label="Classical ViT attn (2d^2x4)",
     )
     ax.set_xticks(x)
-    ax.set_xticklabels([pretty_model_label(m) for m in models], fontsize=9, rotation=15)
+    ax.set_xticklabels(
+        [wrap_variant_label(m) for m in models],
+        fontsize=8,
+        rotation=45,
+        ha="right",
+        rotation_mode="anchor",
+    )
     ax.set_ylabel("Trainable Parameters")
     ax.set_title("Parameter Count Comparison")
     ax.legend(fontsize=8)
@@ -515,6 +560,7 @@ def plot_param_comparison(groups, out_dir):
             str(val),
             ha="center",
             fontsize=7,
+            rotation=90,
         )
 
     fig.tight_layout()
@@ -689,47 +735,23 @@ def main():
     if args.out:
         targets = [(args.out, results)]
     else:
-        targets = []
+        # Emit only per-family/profile bundles: a combined "all" view is
+        # redundant with them and unreadable once many variants are plotted
+        # together. Pass --out explicitly to force a single combined bundle.
         figure_root = default_figure_root(args.root)
-        fam_dir = args.circuit_family if args.circuit_family else "all"
-        prof_dir = args.profile if args.profile else "all"
-        targets.append((os.path.join(figure_root, fam_dir, prof_dir), results))
-
-        # When no explicit output directory is provided, also emit per-family/profile
-        # bundles so comparisons are organized without extra CLI calls.
-        if args.circuit_family is None and args.profile is None:
-            combos = sorted({(result_family(r), result_profile(r)) for r in results})
-            for family, profile in combos:
-                subset = [
-                    r
-                    for r in results
-                    if include_for_bundle(r, family=family, profile=profile)
-                ]
-                targets.append((os.path.join(figure_root, family, profile), subset))
-        elif args.circuit_family is None and args.profile is not None:
-            families = sorted({result_family(r) for r in results})
-            for family in families:
-                subset = [
-                    r
-                    for r in results
-                    if include_for_bundle(r, family=family, profile=args.profile)
-                ]
-                targets.append(
-                    (os.path.join(figure_root, family, args.profile), subset)
-                )
-        elif args.circuit_family is not None and args.profile is None:
-            profiles = sorted({result_profile(r) for r in results})
-            for profile in profiles:
-                subset = [
-                    r
-                    for r in results
-                    if include_for_bundle(
-                        r, family=args.circuit_family, profile=profile
-                    )
-                ]
-                targets.append(
-                    (os.path.join(figure_root, args.circuit_family, profile), subset)
-                )
+        combos = sorted({(result_family(r), result_profile(r)) for r in results})
+        if args.circuit_family is not None:
+            combos = [(f, p) for f, p in combos if f == args.circuit_family]
+        if args.profile is not None:
+            combos = [(f, p) for f, p in combos if p == args.profile]
+        targets = []
+        for family, profile in combos:
+            subset = [
+                r
+                for r in results
+                if include_for_bundle(r, family=family, profile=profile)
+            ]
+            targets.append((os.path.join(figure_root, family, profile), subset))
 
     seen_out_dirs = set()
     for out_dir, bundle_results in targets:
