@@ -81,7 +81,14 @@ def _run_photonic_eval(cfg, run_dir, logger):
     if isinstance(computation_space, str):
         computation_space = computation_space.upper()
     X, y = load_dataset(name, data_root=dcfg["root"], n_components=n_modes, seed=seed)
-    w1 = dataset_wasserstein(X, y, seed=seed)
+    from .data import (
+        load_dataset_raw_for_wasserstein,
+    )
+
+    X_wasser, y_wasser = load_dataset_raw_for_wasserstein(
+        name, data_root=dcfg["root"], seed=seed
+    )
+    w1 = dataset_wasserstein(X_wasser, y_wasser, seed=seed)
     slices = make_slices(
         X,
         y,
@@ -525,7 +532,14 @@ def _run_egas_eval(cfg, run_dir, logger):
     n_qubits = int(dcfg.get("n_qubits", 8))
     pool = build_token_pool(n_qubits)
     X, y = load_dataset(name, data_root=dcfg["root"], n_components=n_qubits, seed=seed)
-    w1 = dataset_wasserstein(X, y, seed=seed)
+    from .data import (
+        load_dataset_raw_for_wasserstein,
+    )
+
+    X_wasser, y_wasser = load_dataset_raw_for_wasserstein(
+        name, data_root=dcfg["root"], seed=seed
+    )
+    w1 = dataset_wasserstein(X_wasser, y_wasser, seed=seed)
     slices = make_slices(
         X,
         y,

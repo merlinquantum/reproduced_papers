@@ -10,7 +10,7 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 # Configuration
-PYTHON="/Users/lfvigneux/miniconda3/envs/reproduce/bin/python"
+PYTHON="${PYTHON:-$(command -v python3 || command -v python)}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
@@ -129,7 +129,11 @@ find_latest_metrics() {
     for run_dir in "$dataset_dir"/run_*; do
         if [ -d "$run_dir" ]; then
             local mtime
-            mtime=$(stat -f "%m" "$run_dir" 2>/dev/null || echo 0)
+            if stat --version >/dev/null 2>&1; then
+                mtime=$(stat -c "%Y" "$run_dir" 2>/dev/null || echo 0)
+            else
+                mtime=$(stat -f "%m" "$run_dir" 2>/dev/null || echo 0)
+            fi
             if [ "$mtime" -gt "$latest_mtime" ]; then
                 latest_mtime="$mtime"
                 latest_run="$run_dir"

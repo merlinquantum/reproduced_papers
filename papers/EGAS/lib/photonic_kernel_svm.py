@@ -47,9 +47,8 @@ def classical_svm_accuracy(X_train, y_train, X_test, y_test, kind="linear"):
     """
     scaler = StandardScaler().fit(X_train)
     Xtr, Xte = scaler.transform(X_train), scaler.transform(X_test)
-    n_classes = len(np.unique(y_train))
     # Use OvR for multiclass, auto for binary
-    decision_function_shape = "ovr" if n_classes > 2 else "ovr"
+    decision_function_shape = "ovr"
     if kind == "linear":
         svc = SVC(
             kernel="linear", C=C_SVM, decision_function_shape=decision_function_shape

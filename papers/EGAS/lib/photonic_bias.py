@@ -1,12 +1,12 @@
 """Photonic continuous parameter refinement.
 
-The photonic encoder already gives every data-driven PS gate a trainable phase offset:
+The current photonic encoder represents each data-driven PS gate phase as:
 
-    PS(theta_k * r + phi_k)
+PS(theta_k * r + phi_k(x)
 
-where ``theta_k`` is fed from ``x[..., data_idx]`` and ``phi_k`` is registered as a MerLin
-trainable parameter.  Refinement therefore trains the encoder's ``phi_k`` parameters directly
-instead of adding a separate bias MLP.
+where ``theta_k`` is fed from ``x[..., data_idx]`` and ``phi_k(x)`` is produced by the encoder's
+small bias MLP (``encoder.bias``). Refinement trains this bias network for a fixed circuit
+structure.
 """
 
 from __future__ import annotations
@@ -58,11 +58,11 @@ def refine_bias(
     device="cpu",
     avg_last=10,
 ):
-    """Train encoder phase offsets for a fixed circuit `seq`.
+    """Train the encoder's bias MLP for a fixed circuit `seq`
 
-    Returns ``(encoder, E_before, E_after)``.  The returned encoder has its MerLin
-    trainable PS offsets refined in place.  ``hidden`` and ``gain`` are accepted for
-    compatibility with the MLP-bias path and are intentionally unused here.
+    Returns ``(encoder, E_before, E_after)``. The returned encoder is updated in place by
+    optimising ``encoder.bias`` (which produces the per-PS phase offsets ``phi``).
+    ``hidden`` and ``gain`` configure the bias MLP via ``encoder.reset_bias``.e.
     """
     torch.manual_seed(seed)
     Xt = torch.as_tensor(X, dtype=torch.float32, device=device)

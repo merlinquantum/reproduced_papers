@@ -80,18 +80,16 @@ def main():
     Bm, Bs = deltas(B_ids, "B")
     out = ROOT / "outdir" / "fig3_PW"
     out.mkdir(parents=True, exist_ok=True)
-    json.dump(
-        {
-            "dataset": DATASET,
-            "repeats": REPEATS,
-            "G_mean": Gm,
-            "G_std": Gs,
-            "B_mean": Bm,
-            "B_std": Bs,
-        },
-        open(out / "fig3_data.json", "w"),
-        indent=2,
-    )
+    payload = {
+        "dataset": DATASET,
+        "repeats": REPEATS,
+        "G_mean": Gm,
+        "G_std": Gs,
+        "B_mean": Bm,
+        "B_std": Bs,
+    }
+    with open(out / "fig3_data.json", "w", encoding="utf-8") as f:
+        json.dump(payload, f, indent=2)
     print("[fig3] wrote", out / "fig3_data.json")
 
 

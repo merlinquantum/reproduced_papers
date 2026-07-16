@@ -220,10 +220,6 @@ def main():
 
     # Photonic experiments
     if not args.only_gate:
-        photonic_datasets = [
-            ("MGT", "MAGIC Gamma Telescope"),
-            ("WDGV1", "Waveform DB (multiclass)"),
-        ]
         for i, (shortname, fullname) in enumerate(photonic_datasets, 1):
             current_step = step + i - 1
             print_step(
