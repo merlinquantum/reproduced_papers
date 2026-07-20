@@ -18,33 +18,33 @@ def overlapping_plot(
 ):
     n_plots = len(list_of_plots)
 
-    # Si la liste est vide, on arrête l'exécution
+    # If the list is empty, raise an error
     if n_plots == 0:
         raise ValueError("There must be at least 1 plot to generate")
 
-    # 1. Création de la figure sur 1 seule ligne
+    # 1. Create the figure on a single row
     fig, axes = plt.subplots(1, n_plots, figsize=(5 * n_plots, 5))
 
-    # 2. Gestion de l'exception Matplotlib si n_plots == 1
+    # 2. Handle Matplotlib edge case when n_plots == 1
     if n_plots == 1:
         axes = [axes]
 
-    # Palette de couleurs personnalisée calquée sur ta capture d'écran
-    # (du beige/pêche clair au violet/noir très foncé)
+    # Custom color palette based on the reference screenshot
+    # (from light beige/peach to very dark purple/black)
     couleurs = ["#f0b593", "#d65f49", "#a33f5f", "#662248", "#4a2a5f", "#2b1b36"]
 
-    # Épaisseur des traits pour correspondre à l'esthétique du screenshot
+    # Line width to match the screenshot aesthetics
     lw = 3
 
-    # 3. Boucle principale sur les graphiques demandés
+    # 3. Main loop over requested plots
     for i, plot_name in enumerate(list_of_plots):
-        ax = axes[i]  # Sélectionne le sous-graphique
+        ax = axes[i]  # Select the subplot
 
-        # 4. Boucle secondaire : on trace les courbes pour chaque cas
+        # 4. Inner loop: draw curves for each case
         for j, legende in enumerate(legendes):
             c = couleurs[
                 j % len(couleurs)
-            ]  # Couleur unique par cas (boucle si plus de 6 éléments)
+            ]  # Unique color per case (cycles if more than 6 elements)
 
             if plot_name == "Variances":
                 if isinstance(projected, (list, tuple)):
@@ -73,13 +73,13 @@ def overlapping_plot(
                 )
 
             elif plot_name == "Geometric_distance":
-                # Ligne dash-dot (-.) pour correspondre au graphe (D1) de l'image
+                # Dash-dot line (-.) to match graph (D1) in the figure
                 ax.loglog(
                     x, y_g_avg[j], label=legende, color=c, linestyle="-", linewidth=lw
                 )
 
             elif plot_name == "Frobenius_distance":
-                # Ligne dash-dot (-.) pour correspondre au graphe (E1) de l'image
+                # Dash-dot line (-.) to match graph (E1) in the figure
                 ax.loglog(
                     x, y_F_avg[j], label=legende, color=c, linestyle="-", linewidth=lw
                 )
@@ -123,9 +123,9 @@ def overlapping_plot(
             else:
                 raise NameError(f"'{plot_name}' is not a valid name of plot")
 
-        # 5. Configuration du sous-graphique
+        # 5. Configure the subplot
         if plot_name == "Variances":
-            ax.set_title("Variances des noyaux")
+            ax.set_title("Kernel variances")
             ax.set_ylabel(r"$Var_D[\mathbf{K}]$")
             ax.set_ylim(bottom=1e-10, top=1e4)
         elif plot_name == "Geometric_distance":
@@ -140,13 +140,13 @@ def overlapping_plot(
         elif plot_name == "ROC_AUC":
             ax.set_ylabel("roc auc score")
 
-        # Ces éléments sont communs à tous les graphiques
+        # These settings are common to all plots
         ax.set_xlabel(r"Bandwidth $c$")
         ax.legend()
         ax.grid(True, which="both", ls="--", alpha=0.5)
 
     # ==========================================
-    # Affichage propre et Sauvegarde
+    # Clean display and save
     # ==========================================
     fig.suptitle(exp_name)
     plt.tight_layout()

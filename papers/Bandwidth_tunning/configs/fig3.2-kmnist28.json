@@ -1,7 +1,7 @@
 {
     "description": "This configuration generates the results for Fig. 3 of the paper for the fashion_mnist dataset.",
     "seed": 42,
-    "outdir": "results",
+    "outdir": "outdir",
     "device": "cpu",
     "dataset": {
         "name":"kmnist28",

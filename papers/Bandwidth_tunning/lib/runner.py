@@ -67,22 +67,22 @@ def _save_seed_metrics_csv(
 
 
 def subset_PCA(X_train, y_train, X_test, y_test, nb_train, nb_test, dim=-1, seed=42):
-    """Extrait un sous-ensemble des données et applique PCA pour réduire la dimensionnalité."""
+    """Extract a data subset and apply PCA to reduce dimensionality."""
 
-    torch.manual_seed(seed)  # Pour la reproductibilité
+    torch.manual_seed(seed)  # For reproducibility
 
     indices_train = torch.randperm(X_train.size(0))[:nb_train]
     indices_test = torch.randperm(X_test.size(0))[:nb_test]
 
     X_train_subset = (
         X_train[indices_train].view(nb_train, -1).numpy()
-    )  # Aplatir les images
+    )  # Flatten images
     y_train_subset = y_train[indices_train]
-    X_test_subset = X_test[indices_test].view(nb_test, -1).numpy()  # Aplatir les images
+    X_test_subset = X_test[indices_test].view(nb_test, -1).numpy()  # Flatten images
     y_test_subset = y_test[indices_test]
 
     if dim != -1:
-        # Appliquer PCA pour réduire à 'dim' dimensions
+        # Apply PCA to reduce to 'dim' dimensions
         pca = PCA(n_components=dim)
         X_train = pca.fit_transform(X_train_subset)
         X_test = pca.transform(X_test_subset)
@@ -163,7 +163,7 @@ def run_overlapping(cfg, new_folder):
         experiment_dir.mkdir(parents=True, exist_ok=True)
 
 
-        # Stockage des résultats pour chaque métrique
+        # Storage arrays for each metric
         x, y_g, y_FQK, y_RBF, y_F, y_eta_max_Q, y_eta_max_C, y_ROC_AUC = (
             np.logspace(MIN, MAX, NB_Points),
             np.zeros(NB_Points),
@@ -182,14 +182,14 @@ def run_overlapping(cfg, new_folder):
         SEEDS = np.random.default_rng(seed).integers(low=0, high=10000, size=exp["nb_seeds"])
 
         print(f"experiment {exp['description']} running")
-        X_train, y_train, X_test, y_test = data(cfg["dataset"]["name"])
+        X_train_full, y_train_full, X_test_full, y_test_full = data(cfg["dataset"]["name"])
 
         for seed in range(exp["nb_seeds"]):
             X_train, y_train, X_test, y_test = subset_PCA(
-                X_train,
-                y_train,
-                X_test,
-                y_test,
+                X_train_full,
+                y_train_full,
+                X_test_full,
+                y_test_full,
                 nb_train=NB_TRAIN,
                 nb_test=NB_TEST,
                 dim=exp["dimension"],
@@ -295,7 +295,6 @@ def _run_experiment(cfg: dict[str, Any], run_dir: Path):
 def train_and_evaluate(cfg: dict[str, Any], run_dir):
     run_dir = Path(run_dir)
     _run_experiment(cfg, run_dir)
-    (run_dir / "done.txt").write_text("Completed")
     logger.info("Finished. Artifacts in: %s", run_dir)
 
 

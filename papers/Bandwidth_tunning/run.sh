@@ -1,9 +1,9 @@
 #!/bin/bash
-# Reproduce all experiments from Johri et al. (2020)
-# "Nearest Centroid Classification on a Trapped Ion Quantum Computer"
+# Reproduce all experiments from Bandwidth Tuning paper
+# "On the similarity of bandwidth-tuned quantum kernels and classical kernels"
 #
 # Usage: From repo root, run:
-#   bash papers/nearest_centroids_merlin/run.sh
+#   bash papers/Bandwidth_tunning/run.sh
 #
 # Run outputs go to outdir/ (gitignored). Final reproduced artifacts
 # (figures, tables, summary results) are copied to results/ (tracked).

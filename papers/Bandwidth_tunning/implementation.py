@@ -73,7 +73,7 @@ def main(argv: list[str] | None = None) -> int:
     if args.seed is not None:
         cfg["seed"] = args.seed
 
-    results_dir = project_root / "results"
+    results_dir = project_root / cfg["outdir"]
     results_dir.mkdir(parents=True, exist_ok=True)
     run_dir = results_dir / f"run_{datetime.now().strftime('%Y%m%d-%H%M%S')}"
     run_dir.mkdir(parents=False, exist_ok=False)

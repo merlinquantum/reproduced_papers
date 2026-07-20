@@ -1,7 +1,7 @@
 {
     "description": "This is the default configuration file for Bandwidth Tunning.",
     "seed": 42,
-    "outdir": "results",
+    "outdir": "outdir",
     "device": "cpu",
     "dataset": {
         "name":"kmnist28",
