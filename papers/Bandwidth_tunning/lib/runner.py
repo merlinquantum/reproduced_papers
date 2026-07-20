@@ -19,6 +19,7 @@ from lib.metrics import (
 )
 from lib.ploting import overlapping_plot
 from sklearn.decomposition import PCA
+from sklearn.model_selection import train_test_split
 
 logger = logging.getLogger(__name__)
 
@@ -69,28 +70,39 @@ def _save_seed_metrics_csv(
 def subset_PCA(X_train, y_train, X_test, y_test, nb_train, nb_test, dim=-1, seed=42):
     """Extract a data subset and apply PCA to reduce dimensionality."""
 
-    torch.manual_seed(seed)  # For reproducibility
+    train_indices, _ = train_test_split(
+        np.arange(X_train.size(0)),
+        train_size=nb_train,
+        random_state=seed,
+        shuffle=True,
+        stratify=y_train.detach().cpu().numpy(),
+    )
+    test_indices, _ = train_test_split(
+        np.arange(X_test.size(0)),
+        train_size=nb_test,
+        random_state=seed,
+        shuffle=True,
+        stratify=y_test.detach().cpu().numpy(),
+    )
 
-    indices_train = torch.randperm(X_train.size(0))[:nb_train]
-    indices_test = torch.randperm(X_test.size(0))[:nb_test]
+    train_indices = torch.from_numpy(train_indices).long()
+    test_indices = torch.from_numpy(test_indices).long()
 
-    X_train_subset = (
-        X_train[indices_train].view(nb_train, -1).numpy()
-    )  # Flatten images
-    y_train_subset = y_train[indices_train]
-    X_test_subset = X_test[indices_test].view(nb_test, -1).numpy()  # Flatten images
-    y_test_subset = y_test[indices_test]
+    X_train_subset = X_train[train_indices].view(nb_train, -1).numpy()
+    y_train_subset = y_train[train_indices]
+    X_test_subset = X_test[test_indices].view(nb_test, -1).numpy()
+    y_test_subset = y_test[test_indices]
 
     if dim != -1:
         # Apply PCA to reduce to 'dim' dimensions
         pca = PCA(n_components=dim)
-        X_train = pca.fit_transform(X_train_subset)
-        X_test = pca.transform(X_test_subset)
+        X_train_subset = pca.fit_transform(X_train_subset)
+        X_test_subset = pca.transform(X_test_subset)
 
     return (
-        torch.from_numpy(X_train).float(),
+        torch.from_numpy(X_train_subset).float(),
         y_train_subset,
-        torch.from_numpy(X_test).float(),
+        torch.from_numpy(X_test_subset).float(),
         y_test_subset,
     )
 
@@ -119,9 +131,13 @@ def train(feature_map, X_train, y_train_1D, X_test, y_test_1D, bandwidth=1.0,pro
     eta_max_Q = calculate_eta_max(K_train)
     eta_max_C = calculate_eta_max(K_rbf)
 
-    ROC_AUC = sklearn.metrics.roc_auc_score(
-        y_test_1D.detach().numpy(), svc.decision_function(K_test.detach().numpy())
-    )
+    y_test_np = y_test_1D.detach().numpy()
+    decision_scores = svc.decision_function(K_test.detach().numpy())
+    if np.unique(y_test_np).size < 2:
+        logger.warning("Skipping ROC AUC computation because the test subset has only one class.")
+        ROC_AUC = np.nan
+    else:
+        ROC_AUC = sklearn.metrics.roc_auc_score(y_test_np, decision_scores)
 
     return result(
         g.item(),
