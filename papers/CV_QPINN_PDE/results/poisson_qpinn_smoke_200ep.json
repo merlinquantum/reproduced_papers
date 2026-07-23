@@ -1,5 +1,8 @@
 {
+  "label": "poisson_qpinn_smoke_200ep",
   "experiment": "poisson_qpinn",
+  "source_run": "run_20260528-120233",
+  "seed": 42,
   "n_params": 48,
   "metrics": {
     "rmse": 0.004640787955801748,
@@ -13,40 +16,23 @@
     "loss": 0.00035737609334294304
   },
   "wall_time_sec": 168.256281375885,
-  "cfg": {
-    "seed": 42,
-    "dtype": [
-      "float64",
-      "torch.float64"
-    ],
-    "device": "cpu",
-    "logging": {
-      "level": "info",
-      "save_config_snapshot": true
-    },
-    "data_root": "/reproduced_papers/papers/CV_QPINN_PDE/data",
-    "description": "Smoke config (CPU-friendly): Poisson 1D QPINN, 2+2 layers, cutoff 8.",
-    "experiment": "poisson_qpinn",
-    "outdir": "outdir",
-    "model": {
-      "n_qumodes": 2,
-      "n_multi_layers": 2,
-      "n_single_layers": 2,
-      "cutoff": 8,
-      "active_sd": 0.001,
-      "passive_sd": 0.1
-    },
-    "training": {
-      "epochs": 200,
-      "lr": 0.05,
-      "collocation_points": 64,
-      "lambdas": {
-        "pde": 0.25,
-        "bc": 0.25,
-        "consistency": 0.25,
-        "trace": 0.25
-      },
-      "log_every": 25
+  "model": {
+    "n_qumodes": 2,
+    "n_multi_layers": 2,
+    "n_single_layers": 2,
+    "cutoff": 8,
+    "active_sd": 0.001,
+    "passive_sd": 0.1
+  },
+  "training": {
+    "epochs": 200,
+    "lr": 0.05,
+    "collocation_points": 64,
+    "lambdas": {
+      "pde": 0.25,
+      "bc": 0.25,
+      "consistency": 0.25,
+      "trace": 0.25
     }
   }
 }

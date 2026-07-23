@@ -127,6 +127,21 @@ All runs write a timestamped directory under `outdir/run_YYYYMMDD-HHMMSS/`
 containing `config_snapshot.json`, `summary.json`, `predictions.json`,
 `history.json`, `model.pt`, and `run.log`.
 
+### Results workflow
+
+`outdir/` (gitignored) is the raw store: every run keeps its full
+artefacts there. `results/` (tracked) holds only curated, compact
+records — per-run metrics JSONs, figures, findings write-ups. Promote a
+run with:
+
+```bash
+python utils/curate_results.py outdir/run_<STAMP> --label <label> [--plot]
+python utils/aggregate_seeds.py   # refresh results/seed_aggregate.json
+```
+
+See `results/README.md` for the findings index and the exact provenance
+of every curated artefact.
+
 CLI flags (see `cli.json` for the schema): `--seed`, `--dtype`, `--device`,
 `--log-level`, `--epochs`, `--lr`, `--cutoff`, `--collocation-points`.
 
