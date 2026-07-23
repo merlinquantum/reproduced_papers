@@ -8,9 +8,13 @@ import pytest
 
 THIS_DIR = Path(__file__).resolve().parent
 QVT_DIR = THIS_DIR.parent
+REPO_ROOT = QVT_DIR.parent.parent
 
+# Paper dir first (lib, paper-local modules), then repo root (runtime_lib).
 if str(QVT_DIR) not in sys.path:
     sys.path.insert(0, str(QVT_DIR))
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(1, str(REPO_ROOT))
 
 
 @pytest.fixture

@@ -73,11 +73,20 @@ for m in $MODELS; do
         for lrq in $LR_QUANTUM; do
             out="outdir/sweep_${m}_lrc${lrc}_lrq${lrq}"
             if [ -f "${out}/results.json" ]; then
-                python3 -c "
+                # Shell values are passed as argv; the quoted heredoc delimiter
+                # keeps the Python source free of any shell expansion.
+                python3 - "$lrc" "$lrq" "${out}/results.json" <<'PY'
 import json
-with open('${out}/results.json') as f: r = json.load(f)
-print(f'  {${lrc}:<10}  {${lrq}:<10}  {r[\"best_val_auc\"]:<10.4f}  {r[\"test_auc\"]:<10.4f}  {r[\"test_acc\"]:<10.4f}  {r[\"best_epoch\"]}')
-"
+import sys
+
+lrc, lrq, path = sys.argv[1], sys.argv[2], sys.argv[3]
+with open(path) as f:
+    r = json.load(f)
+print(
+    f'  {lrc:<10} {lrq:<10} {r["best_val_auc"]:<10.4f} '
+    f'{r["test_auc"]:<10.4f} {r["test_acc"]:<10.4f} {r["best_epoch"]}'
+)
+PY
             fi
         done
     done
