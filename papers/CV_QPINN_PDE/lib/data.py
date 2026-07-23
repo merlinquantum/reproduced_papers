@@ -66,12 +66,19 @@ class HeatProblem:
 
         def rhs(_t: float, T: np.ndarray) -> np.ndarray:
             d2 = np.zeros_like(T)
-            d2[1:-1] = (T[2:] - 2 * T[1:-1] + T[:-2]) / dx ** 2
+            d2[1:-1] = (T[2:] - 2 * T[1:-1] + T[:-2]) / dx**2
             return self.alpha * d2
 
         t_eval = np.linspace(self.t_min, self.t_max, nt)
-        sol = solve_ivp(rhs, (self.t_min, self.t_max), T0, method="RK45",
-                        t_eval=t_eval, rtol=1e-8, atol=1e-10)
+        sol = solve_ivp(
+            rhs,
+            (self.t_min, self.t_max),
+            T0,
+            method="RK45",
+            t_eval=t_eval,
+            rtol=1e-8,
+            atol=1e-10,
+        )
         return {"x": x, "t": t_eval, "T": sol.y.T}
 
 
@@ -81,8 +88,9 @@ def sobol_1d(n: int, x_min: float, x_max: float, *, seed: int = 0) -> torch.Tens
     return torch.tensor(x_min + (x_max - x_min) * pts, dtype=torch.float64)
 
 
-def sobol_2d(n: int, x_min: float, x_max: float, t_min: float, t_max: float,
-             *, seed: int = 0) -> torch.Tensor:
+def sobol_2d(
+    n: int, x_min: float, x_max: float, t_min: float, t_max: float, *, seed: int = 0
+) -> torch.Tensor:
     sampler = qmc.Sobol(d=2, scramble=True, seed=seed)
     pts = sampler.random(n=n)
     x = x_min + (x_max - x_min) * pts[:, 0]
@@ -90,8 +98,9 @@ def sobol_2d(n: int, x_min: float, x_max: float, t_min: float, t_max: float,
     return torch.tensor(np.stack([x, t], axis=1), dtype=torch.float64)
 
 
-def regular_grid_2d(nx: int, nt: int, x_min: float, x_max: float,
-                    t_min: float, t_max: float) -> torch.Tensor:
+def regular_grid_2d(
+    nx: int, nt: int, x_min: float, x_max: float, t_min: float, t_max: float
+) -> torch.Tensor:
     x = torch.linspace(x_min, x_max, nx, dtype=torch.float64)
     t = torch.linspace(t_min, t_max, nt, dtype=torch.float64)
     xx, tt = torch.meshgrid(x, t, indexing="xy")

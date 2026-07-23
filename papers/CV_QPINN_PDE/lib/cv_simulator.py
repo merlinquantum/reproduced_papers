@@ -50,7 +50,9 @@ class CVOperators:
         self.a = annihilation(self.d, self.dtype).to(self.device).contiguous()
         self.adag = self.a.conj().T.contiguous()
         self.n = number_operator(self.d, self.dtype).to(self.device)
-        self.x = ((self.a + self.adag) / torch.sqrt(torch.tensor(2.0, dtype=self.dtype))).contiguous()
+        self.x = (
+            (self.a + self.adag) / torch.sqrt(torch.tensor(2.0, dtype=self.dtype))
+        ).contiguous()
         self.I = torch.eye(self.d, dtype=self.dtype, device=self.device)
 
 
@@ -92,7 +94,9 @@ def kerr(kappa: torch.Tensor, ops: CVOperators) -> torch.Tensor:
     return torch.diag(torch.exp(1j * kappa.to(ops.dtype) * n_diag * n_diag))
 
 
-def beamsplitter(theta: torch.Tensor, phi: torch.Tensor, ops: CVOperators) -> torch.Tensor:
+def beamsplitter(
+    theta: torch.Tensor, phi: torch.Tensor, ops: CVOperators
+) -> torch.Tensor:
     """Two-mode beam splitter BS(theta, phi) in the d^2 product basis.
 
     Hamiltonian: H = theta (e^{i phi} a1† a2 - e^{-i phi} a1 a2†).
@@ -109,7 +113,9 @@ def beamsplitter(theta: torch.Tensor, phi: torch.Tensor, ops: CVOperators) -> to
     return torch.matrix_exp(h)
 
 
-def apply_single_mode(state: torch.Tensor, gate: torch.Tensor, mode: int, n_modes: int) -> torch.Tensor:
+def apply_single_mode(
+    state: torch.Tensor, gate: torch.Tensor, mode: int, n_modes: int
+) -> torch.Tensor:
     """Apply a single-mode gate to mode `mode` of an `n_modes`-mode state.
 
     `state` is a (..., d, d, ..., d) tensor with one Fock axis per mode (the
@@ -124,7 +130,9 @@ def apply_single_mode(state: torch.Tensor, gate: torch.Tensor, mode: int, n_mode
     return state
 
 
-def apply_two_mode(state: torch.Tensor, gate: torch.Tensor, modes: tuple[int, int], n_modes: int) -> torch.Tensor:
+def apply_two_mode(
+    state: torch.Tensor, gate: torch.Tensor, modes: tuple[int, int], n_modes: int
+) -> torch.Tensor:
     """Apply a two-mode gate to `modes` of an `n_modes`-mode state.
 
     The gate is shaped as (d^2, d^2) following the convention of
@@ -135,7 +143,7 @@ def apply_two_mode(state: torch.Tensor, gate: torch.Tensor, modes: tuple[int, in
     assert m1 < m2, "Pass modes in ascending order"
     batch_dims = state.dim() - n_modes
     d = gate.shape[0]
-    d0 = int(round(d ** 0.5))
+    d0 = int(round(d**0.5))
     g = gate.reshape(d0, d0, d0, d0)
     # Move mode axes to the end
     state = torch.moveaxis(state, batch_dims + m1, -2)
@@ -146,19 +154,24 @@ def apply_two_mode(state: torch.Tensor, gate: torch.Tensor, modes: tuple[int, in
     # Contract: state[..., i, j] * g[k, l, i, j] -> state[..., k, l]
     state = torch.einsum("klij,...ij->...kl", g, state)
     state = torch.moveaxis(state, -1, batch_dims + m2)
-    state = torch.moveaxis(state, -2 if (batch_dims + m1) < state.dim() - 1 else -1,
-                           batch_dims + m1)
+    state = torch.moveaxis(
+        state, -2 if (batch_dims + m1) < state.dim() - 1 else -1, batch_dims + m1
+    )
     return state
 
 
-def vacuum_state(n_modes: int, d: int, dtype: torch.dtype, device: torch.device) -> torch.Tensor:
+def vacuum_state(
+    n_modes: int, d: int, dtype: torch.dtype, device: torch.device
+) -> torch.Tensor:
     shape = (d,) * n_modes
     s = torch.zeros(shape, dtype=dtype, device=device)
     s[(0,) * n_modes] = 1.0
     return s
 
 
-def expectation_x(state: torch.Tensor, mode: int, n_modes: int, ops: CVOperators) -> torch.Tensor:
+def expectation_x(
+    state: torch.Tensor, mode: int, n_modes: int, ops: CVOperators
+) -> torch.Tensor:
     """<state|X_mode|state> for a possibly-batched state tensor.
 
     Returns a real tensor whose leading axes match the batch axes of `state`.
@@ -178,8 +191,9 @@ def state_norm_sq(state: torch.Tensor, n_modes: int) -> torch.Tensor:
     return torch.einsum("...i,...i->...", flat.conj(), flat).real
 
 
-def loss_channel(state: torch.Tensor, T: torch.Tensor, mode: int, n_modes: int,
-                 ops: CVOperators) -> torch.Tensor:
+def loss_channel(
+    state: torch.Tensor, T: torch.Tensor, mode: int, n_modes: int, ops: CVOperators
+) -> torch.Tensor:
     """Apply the photon-loss channel L̂(T) to a single mode (paper Eq. 27/28).
 
     The pure-state CV simulator cannot represent loss channels exactly
@@ -198,8 +212,9 @@ def loss_channel(state: torch.Tensor, T: torch.Tensor, mode: int, n_modes: int,
     return state
 
 
-def expectation_x_with_loss(state: torch.Tensor, T: torch.Tensor, mode: int,
-                            n_modes: int, ops: CVOperators) -> torch.Tensor:
+def expectation_x_with_loss(
+    state: torch.Tensor, T: torch.Tensor, mode: int, n_modes: int, ops: CVOperators
+) -> torch.Tensor:
     """Pure-state approximation of `<X>` under a loss channel of transmittance T.
 
     The position quadrature transforms as `X -> sqrt(T) X` under the

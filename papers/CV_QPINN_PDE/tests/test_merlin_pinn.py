@@ -20,8 +20,14 @@ from CV_QPINN_PDE.lib.merlin_pinn import MerLinPINN  # noqa: E402
 
 def small_model(seed: int = 42) -> MerLinPINN:
     """4 modes / 2 photons keeps the UNBUNCHED subspace tiny for fast tests."""
-    return MerLinPINN(n_modes=4, input_modes=(0, 1), entangling_layers=1,
-                      n_photons=2, scale=math.pi / 2, seed=seed)
+    return MerLinPINN(
+        n_modes=4,
+        input_modes=(0, 1),
+        entangling_layers=1,
+        n_photons=2,
+        scale=math.pi / 2,
+        seed=seed,
+    )
 
 
 def test_output_size_matches_unbunched_subspace():

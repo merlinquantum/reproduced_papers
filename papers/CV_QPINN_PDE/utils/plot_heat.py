@@ -33,20 +33,35 @@ def main() -> None:
 
     extent = (float(x.min()), float(x.max()), float(t.min()), float(t.max()))
     fig, axes = plt.subplots(1, 3, figsize=(11, 3.5))
-    pcm = axes[0].imshow(u_pred, extent=extent, origin="lower", aspect="auto",
-                          cmap="inferno", vmin=0, vmax=0.5)
+    pcm = axes[0].imshow(
+        u_pred,
+        extent=extent,
+        origin="lower",
+        aspect="auto",
+        cmap="inferno",
+        vmin=0,
+        vmax=0.5,
+    )
     axes[0].set_title(f"Prediction ({summary['experiment']})")
     axes[0].set_xlabel("x")
     axes[0].set_ylabel("t")
     plt.colorbar(pcm, ax=axes[0])
-    pcm = axes[1].imshow(u_ref, extent=extent, origin="lower", aspect="auto",
-                          cmap="inferno", vmin=0, vmax=0.5)
+    pcm = axes[1].imshow(
+        u_ref,
+        extent=extent,
+        origin="lower",
+        aspect="auto",
+        cmap="inferno",
+        vmin=0,
+        vmax=0.5,
+    )
     axes[1].set_title("Reference (RK45)")
     axes[1].set_xlabel("x")
     axes[1].set_ylabel("t")
     plt.colorbar(pcm, ax=axes[1])
-    pcm = axes[2].imshow(err, extent=extent, origin="lower", aspect="auto",
-                          cmap="viridis")
+    pcm = axes[2].imshow(
+        err, extent=extent, origin="lower", aspect="auto", cmap="viridis"
+    )
     axes[2].set_title(f"Abs error (RMSE={summary['metrics']['rmse']:.2e})")
     axes[2].set_xlabel("x")
     axes[2].set_ylabel("t")

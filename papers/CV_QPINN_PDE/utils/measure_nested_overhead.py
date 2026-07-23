@@ -37,8 +37,9 @@ from lib.qpinn_model import QPINN, QPINNConfig  # noqa: E402
 
 
 def _bench(loss_fn, cutoff: int, n_collocation: int, repeats: int = 5) -> dict:
-    cfg = QPINNConfig(n_qumodes=2, n_multi_layers=2, n_single_layers=2,
-                      cutoff=cutoff, seed=42)
+    cfg = QPINNConfig(
+        n_qumodes=2, n_multi_layers=2, n_single_layers=2, cutoff=cutoff, seed=42
+    )
     model = QPINN(cfg)
     optimizer = torch.optim.Adam(model.parameters(), lr=0.05)
     lambdas = {"pde": 0.34, "bc": 0.33, "consistency": 0.33, "trace": 0.33}
@@ -71,16 +72,24 @@ def _bench(loss_fn, cutoff: int, n_collocation: int, repeats: int = 5) -> dict:
 
 def main() -> None:
     n_coll = 64
-    print(f"Benchmark over {n_coll} collocation points, 2+2 layers, 5 repeats per cell.\n")
-    print(f"{'cutoff':>6} | {'loss':>11} | {'step (s)':>9} | {'rss delta (MB)':>14} | "
-          f"{'final loss':>10}")
+    print(
+        f"Benchmark over {n_coll} collocation points, 2+2 layers, 5 repeats per cell.\n"
+    )
+    print(
+        f"{'cutoff':>6} | {'loss':>11} | {'step (s)':>9} | {'rss delta (MB)':>14} | "
+        f"{'final loss':>10}"
+    )
     print("-" * 70)
     for cutoff in (8, 10, 12, 15):
-        for name, fn in [("consistency", poisson_total_loss),
-                          ("nested", poisson_nested_loss)]:
+        for name, fn in [
+            ("consistency", poisson_total_loss),
+            ("nested", poisson_nested_loss),
+        ]:
             r = _bench(fn, cutoff=cutoff, n_collocation=n_coll, repeats=5)
-            print(f"{cutoff:>6} | {name:>11} | {r['time_per_step_sec']:>9.3f} | "
-                  f"{r['max_rss_delta_kb']/1024:>14.1f} | {r['final_loss']:>10.3e}")
+            print(
+                f"{cutoff:>6} | {name:>11} | {r['time_per_step_sec']:>9.3f} | "
+                f"{r['max_rss_delta_kb']/1024:>14.1f} | {r['final_loss']:>10.3e}"
+            )
 
 
 if __name__ == "__main__":

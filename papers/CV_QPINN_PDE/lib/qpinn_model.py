@@ -41,7 +41,9 @@ from .cv_simulator import (
 )
 
 
-def _param(shape: tuple[int, ...] | int, sd: float, generator: torch.Generator) -> nn.Parameter:
+def _param(
+    shape: tuple[int, ...] | int, sd: float, generator: torch.Generator
+) -> nn.Parameter:
     shape_t = (shape,) if isinstance(shape, int) else shape
     t = sd * torch.randn(shape_t, dtype=torch.float64, generator=generator)
     return nn.Parameter(t)
@@ -61,8 +63,13 @@ class QPINNConfig:
 class CVMultiQumodeLayer(nn.Module):
     """One Killoran block for ``n_qumodes`` (>=2) with mode-mixing interferometers."""
 
-    def __init__(self, n_qumodes: int, active_sd: float, passive_sd: float,
-                 generator: torch.Generator) -> None:
+    def __init__(
+        self,
+        n_qumodes: int,
+        active_sd: float,
+        passive_sd: float,
+        generator: torch.Generator,
+    ) -> None:
         super().__init__()
         assert n_qumodes == 2, "Reference implementation supports 2 qumodes"
         self.n_qumodes = n_qumodes
@@ -110,8 +117,13 @@ class CVMultiQumodeLayer(nn.Module):
 class CVSingleQumodeLayer(nn.Module):
     """One Killoran block per qumode, with no inter-mode mixing."""
 
-    def __init__(self, n_qumodes: int, active_sd: float, passive_sd: float,
-                 generator: torch.Generator) -> None:
+    def __init__(
+        self,
+        n_qumodes: int,
+        active_sd: float,
+        passive_sd: float,
+        generator: torch.Generator,
+    ) -> None:
         super().__init__()
         self.n_qumodes = n_qumodes
         self.phi_a = _param(n_qumodes, passive_sd, generator)
@@ -143,20 +155,29 @@ class QPINN(nn.Module):
     `t` on mode 1.
     """
 
-    def __init__(self, cfg: QPINNConfig, dtype: torch.dtype = torch.complex128,
-                 device: torch.device | None = None) -> None:
+    def __init__(
+        self,
+        cfg: QPINNConfig,
+        dtype: torch.dtype = torch.complex128,
+        device: torch.device | None = None,
+    ) -> None:
         super().__init__()
         self.cfg = cfg
-        self.ops = CVOperators(d=cfg.cutoff, dtype=dtype,
-                               device=device or torch.device("cpu"))
+        self.ops = CVOperators(
+            d=cfg.cutoff, dtype=dtype, device=device or torch.device("cpu")
+        )
         gen = torch.Generator().manual_seed(cfg.seed)
         self.multi_layers = nn.ModuleList(
-            [CVMultiQumodeLayer(cfg.n_qumodes, cfg.active_sd, cfg.passive_sd, gen)
-             for _ in range(cfg.n_multi_layers)]
+            [
+                CVMultiQumodeLayer(cfg.n_qumodes, cfg.active_sd, cfg.passive_sd, gen)
+                for _ in range(cfg.n_multi_layers)
+            ]
         )
         self.single_layers = nn.ModuleList(
-            [CVSingleQumodeLayer(cfg.n_qumodes, cfg.active_sd, cfg.passive_sd, gen)
-             for _ in range(cfg.n_single_layers)]
+            [
+                CVSingleQumodeLayer(cfg.n_qumodes, cfg.active_sd, cfg.passive_sd, gen)
+                for _ in range(cfg.n_single_layers)
+            ]
         )
         vac = vacuum_state(cfg.n_qumodes, cfg.cutoff, dtype, self.ops.device)
         self.register_buffer("vac", vac)
@@ -196,7 +217,9 @@ class QPINN(nn.Module):
     def forward_state(self, inputs: torch.Tensor) -> torch.Tensor:
         return self._run_circuit(self._encode(inputs))
 
-    def forward(self, inputs: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    def forward(
+        self, inputs: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         """Return (u, ux, trace) for a batch of inputs.
 
         u  = <psi|X_0|psi>

@@ -58,15 +58,23 @@ def _run_poisson_qpinn(cfg: dict, run_dir: Path) -> dict:
     lambdas = cfg["training"]["lambdas"]
     history_path = run_dir / "history.json"
     schedule = cfg["training"].get("lr_schedule")
-    loss_fn = (poisson_nested_loss if cfg["training"].get("use_nested_loss")
-               else poisson_total_loss)
-    _LOG.info("QPINN trainable params: %d (loss=%s)", model.n_trainable(),
-              loss_fn.__name__)
+    loss_fn = (
+        poisson_nested_loss
+        if cfg["training"].get("use_nested_loss")
+        else poisson_total_loss
+    )
+    _LOG.info(
+        "QPINN trainable params: %d (loss=%s)", model.n_trainable(), loss_fn.__name__
+    )
     result = train_poisson(
-        model, x_coll, (x_bc_left, x_bc_right),
+        model,
+        x_coll,
+        (x_bc_left, x_bc_right),
         loss_fn=loss_fn,
-        lr=cfg["training"]["lr"], epochs=cfg["training"]["epochs"],
-        lambdas=lambdas, history_path=history_path,
+        lr=cfg["training"]["lr"],
+        epochs=cfg["training"]["epochs"],
+        lambdas=lambdas,
+        history_path=history_path,
         log_every=cfg["training"].get("log_every", 50),
         lr_schedule=schedule,
     )
@@ -101,7 +109,9 @@ def _run_poisson_pinn(cfg: dict, run_dir: Path) -> dict:
     target = cfg["model"]["target_param_count"]
     hidden_layers = hidden_layers_for_param_count(target_params=target, in_features=1)
     model = FCNN(in_features=1, hidden_layers=hidden_layers).to(torch.float64)
-    _LOG.info("PINN baseline trainable params: %d (target %d)", model.n_trainable(), target)
+    _LOG.info(
+        "PINN baseline trainable params: %d (target %d)", model.n_trainable(), target
+    )
     n_train = cfg["training"]["collocation_points"]
     x_coll = sobol_1d(n_train, problem.x_min, problem.x_max, seed=cfg.get("seed", 42))
     x_bc_left = torch.tensor([problem.x_min], dtype=torch.float64)
@@ -110,10 +120,14 @@ def _run_poisson_pinn(cfg: dict, run_dir: Path) -> dict:
     history_path = run_dir / "history.json"
     schedule = cfg["training"].get("lr_schedule")
     result = train_poisson(
-        model, x_coll, (x_bc_left, x_bc_right),
+        model,
+        x_coll,
+        (x_bc_left, x_bc_right),
         loss_fn=poisson_total_loss,
-        lr=cfg["training"]["lr"], epochs=cfg["training"]["epochs"],
-        lambdas=lambdas, history_path=history_path,
+        lr=cfg["training"]["lr"],
+        epochs=cfg["training"]["epochs"],
+        lambdas=lambdas,
+        history_path=history_path,
         log_every=cfg["training"].get("log_every", 50),
         lr_schedule=schedule,
     )
@@ -148,33 +162,48 @@ def _run_heat_qpinn(cfg: dict, run_dir: Path) -> dict:
     model = _build_qpinn(cfg)
     nx = cfg["training"]["nx"]
     nt = cfg["training"]["nt"]
-    xt_coll = regular_grid_2d(nx, nt, problem.x_min, problem.x_max,
-                              problem.t_min, problem.t_max)
+    xt_coll = regular_grid_2d(
+        nx, nt, problem.x_min, problem.x_max, problem.t_min, problem.t_max
+    )
     n_ic = cfg["training"]["n_ic"]
-    xt_ic = torch.stack([
-        torch.linspace(problem.x_min, problem.x_max, n_ic, dtype=torch.float64),
-        torch.zeros(n_ic, dtype=torch.float64),
-    ], dim=1)
+    xt_ic = torch.stack(
+        [
+            torch.linspace(problem.x_min, problem.x_max, n_ic, dtype=torch.float64),
+            torch.zeros(n_ic, dtype=torch.float64),
+        ],
+        dim=1,
+    )
     T_ic = problem.initial(xt_ic[:, 0])
     n_bc = cfg["training"]["n_bc"]
     t_bc = torch.linspace(problem.t_min, problem.t_max, n_bc, dtype=torch.float64)
-    xt_bc_left = torch.stack([torch.full((n_bc,), problem.x_min, dtype=torch.float64),
-                              t_bc], dim=1)
-    xt_bc_right = torch.stack([torch.full((n_bc,), problem.x_max, dtype=torch.float64),
-                               t_bc], dim=1)
+    xt_bc_left = torch.stack(
+        [torch.full((n_bc,), problem.x_min, dtype=torch.float64), t_bc], dim=1
+    )
+    xt_bc_right = torch.stack(
+        [torch.full((n_bc,), problem.x_max, dtype=torch.float64), t_bc], dim=1
+    )
     lambdas = cfg["training"]["lambdas"]
     history_path = run_dir / "history.json"
     schedule = cfg["training"].get("lr_schedule")
-    loss_fn = (heat_nested_loss if cfg["training"].get("use_nested_loss")
-               else heat_total_loss)
-    _LOG.info("QPINN trainable params: %d (loss=%s)", model.n_trainable(),
-              loss_fn.__name__)
+    loss_fn = (
+        heat_nested_loss if cfg["training"].get("use_nested_loss") else heat_total_loss
+    )
+    _LOG.info(
+        "QPINN trainable params: %d (loss=%s)", model.n_trainable(), loss_fn.__name__
+    )
     result = train_heat(
-        model, xt_coll, xt_ic, T_ic, (xt_bc_left, xt_bc_right),
-        loss_fn=loss_fn, lr=cfg["training"]["lr"],
+        model,
+        xt_coll,
+        xt_ic,
+        T_ic,
+        (xt_bc_left, xt_bc_right),
+        loss_fn=loss_fn,
+        lr=cfg["training"]["lr"],
         pretrain_epochs=cfg["training"]["pretrain_epochs"],
-        epochs=cfg["training"]["epochs"], lambdas=lambdas,
-        alpha=problem.alpha, history_path=history_path,
+        epochs=cfg["training"]["epochs"],
+        lambdas=lambdas,
+        alpha=problem.alpha,
+        history_path=history_path,
         log_every=cfg["training"].get("log_every", 50),
         lr_schedule=schedule,
     )
@@ -217,32 +246,47 @@ def _run_heat_pinn(cfg: dict, run_dir: Path) -> dict:
     target = cfg["model"]["target_param_count"]
     hidden_layers = hidden_layers_for_param_count(target_params=target, in_features=2)
     model = FCNN(in_features=2, hidden_layers=hidden_layers).to(torch.float64)
-    _LOG.info("PINN baseline trainable params: %d (target %d)", model.n_trainable(), target)
+    _LOG.info(
+        "PINN baseline trainable params: %d (target %d)", model.n_trainable(), target
+    )
     nx = cfg["training"]["nx"]
     nt = cfg["training"]["nt"]
-    xt_coll = regular_grid_2d(nx, nt, problem.x_min, problem.x_max,
-                              problem.t_min, problem.t_max)
+    xt_coll = regular_grid_2d(
+        nx, nt, problem.x_min, problem.x_max, problem.t_min, problem.t_max
+    )
     n_ic = cfg["training"]["n_ic"]
-    xt_ic = torch.stack([
-        torch.linspace(problem.x_min, problem.x_max, n_ic, dtype=torch.float64),
-        torch.zeros(n_ic, dtype=torch.float64),
-    ], dim=1)
+    xt_ic = torch.stack(
+        [
+            torch.linspace(problem.x_min, problem.x_max, n_ic, dtype=torch.float64),
+            torch.zeros(n_ic, dtype=torch.float64),
+        ],
+        dim=1,
+    )
     T_ic = problem.initial(xt_ic[:, 0])
     n_bc = cfg["training"]["n_bc"]
     t_bc = torch.linspace(problem.t_min, problem.t_max, n_bc, dtype=torch.float64)
-    xt_bc_left = torch.stack([torch.full((n_bc,), problem.x_min, dtype=torch.float64),
-                              t_bc], dim=1)
-    xt_bc_right = torch.stack([torch.full((n_bc,), problem.x_max, dtype=torch.float64),
-                               t_bc], dim=1)
+    xt_bc_left = torch.stack(
+        [torch.full((n_bc,), problem.x_min, dtype=torch.float64), t_bc], dim=1
+    )
+    xt_bc_right = torch.stack(
+        [torch.full((n_bc,), problem.x_max, dtype=torch.float64), t_bc], dim=1
+    )
     lambdas = cfg["training"]["lambdas"]
     history_path = run_dir / "history.json"
     schedule = cfg["training"].get("lr_schedule")
     result = train_heat(
-        model, xt_coll, xt_ic, T_ic, (xt_bc_left, xt_bc_right),
-        loss_fn=heat_total_loss, lr=cfg["training"]["lr"],
+        model,
+        xt_coll,
+        xt_ic,
+        T_ic,
+        (xt_bc_left, xt_bc_right),
+        loss_fn=heat_total_loss,
+        lr=cfg["training"]["lr"],
         pretrain_epochs=cfg["training"]["pretrain_epochs"],
-        epochs=cfg["training"]["epochs"], lambdas=lambdas,
-        alpha=problem.alpha, history_path=history_path,
+        epochs=cfg["training"]["epochs"],
+        lambdas=lambdas,
+        alpha=problem.alpha,
+        history_path=history_path,
         log_every=cfg["training"].get("log_every", 50),
         lr_schedule=schedule,
     )
@@ -298,7 +342,8 @@ _EXPERIMENTS = {
 def train_and_evaluate(cfg: dict, run_dir: Path) -> dict:
     experiment = cfg.get("experiment", "poisson_qpinn")
     if experiment not in _EXPERIMENTS:
-        raise ValueError(f"Unknown experiment '{experiment}'. "
-                         f"Available: {sorted(_EXPERIMENTS)}")
+        raise ValueError(
+            f"Unknown experiment '{experiment}'. " f"Available: {sorted(_EXPERIMENTS)}"
+        )
     _LOG.info("Running experiment '%s' in %s", experiment, run_dir)
     return _EXPERIMENTS[experiment](cfg, run_dir)

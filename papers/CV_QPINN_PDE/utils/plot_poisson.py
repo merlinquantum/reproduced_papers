@@ -33,8 +33,12 @@ def main() -> None:
         x = np.array(data["x"])
         u_pred = np.array(data["u_pred"])
         u_ref = np.array(data["u_ref"])
-        ax.plot(x, u_pred, label=f"{label_root} (RMSE={data['metrics']['rmse']:.2e})",
-                linewidth=1.6)
+        ax.plot(
+            x,
+            u_pred,
+            label=f"{label_root} (RMSE={data['metrics']['rmse']:.2e})",
+            linewidth=1.6,
+        )
     ax.plot(x, u_ref, label="Analytic", color="k", linestyle="--", linewidth=1.2)
     ax.set_xlabel("x")
     ax.set_ylabel("u(x)")

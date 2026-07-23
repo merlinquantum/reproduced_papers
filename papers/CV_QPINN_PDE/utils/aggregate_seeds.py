@@ -48,10 +48,10 @@ def _mean_std(values: list[float]) -> tuple[float, float]:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--outdir", type=Path,
-                    default=Path("papers/CV_QPINN_PDE/outdir"))
-    ap.add_argument("--out", type=Path,
-                    default=Path("papers/CV_QPINN_PDE/results/seed_summary.md"))
+    ap.add_argument("--outdir", type=Path, default=Path("papers/CV_QPINN_PDE/outdir"))
+    ap.add_argument(
+        "--out", type=Path, default=Path("papers/CV_QPINN_PDE/results/seed_summary.md")
+    )
     args = ap.parse_args()
 
     groups: dict[tuple, list[dict]] = defaultdict(list)
@@ -59,9 +59,11 @@ def main() -> None:
     # and the runtime nests the actual run under a timestamped folder. Collect
     # both layouts so the aggregator works no matter which outdir scheme the
     # user invoked.
-    candidates = (list(args.outdir.glob("run_*/summary.json"))
-                  + list(args.outdir.glob("*/run_*/summary.json"))
-                  + list(args.outdir.glob("*/summary.json")))
+    candidates = (
+        list(args.outdir.glob("run_*/summary.json"))
+        + list(args.outdir.glob("*/run_*/summary.json"))
+        + list(args.outdir.glob("*/summary.json"))
+    )
     for summary_path in sorted(set(candidates)):
         try:
             summary = json.loads(summary_path.read_text())
@@ -72,10 +74,14 @@ def main() -> None:
 
     md_lines: list[str] = []
     md_lines.append("# Seed sweep and ablation summary\n")
-    md_lines.append(f"Generated from `{args.outdir}` "
-                    f"covering {sum(len(v) for v in groups.values())} runs "
-                    f"across {len(groups)} configurations.\n")
-    md_lines.append("| Configuration | Seeds | RMSE mean ± std | MAE mean ± std | L∞ mean ± std | Wall time (s) |")
+    md_lines.append(
+        f"Generated from `{args.outdir}` "
+        f"covering {sum(len(v) for v in groups.values())} runs "
+        f"across {len(groups)} configurations.\n"
+    )
+    md_lines.append(
+        "| Configuration | Seeds | RMSE mean ± std | MAE mean ± std | L∞ mean ± std | Wall time (s) |"
+    )
     md_lines.append("|---|---:|---:|---:|---:|---:|")
     for key in sorted(groups):
         runs = groups[key]

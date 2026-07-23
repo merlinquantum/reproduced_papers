@@ -20,7 +20,7 @@ def l_infinity(pred: torch.Tensor, ref: torch.Tensor) -> torch.Tensor:
 def nmse(pred: torch.Tensor, ref: torch.Tensor) -> torch.Tensor:
     """NMSE = ||pred - ref||^2 / ||ref||^2."""
     num = ((pred - ref) ** 2).mean()
-    den = (ref ** 2).mean()
+    den = (ref**2).mean()
     return num / den
 
 

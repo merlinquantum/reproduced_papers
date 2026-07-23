@@ -51,9 +51,15 @@ class MerLinPINN(nn.Module):
     is not needed).
     """
 
-    def __init__(self, n_modes: int = 6, input_modes: tuple[int, ...] = (0, 1, 2),
-                 entangling_layers: int = 3, n_photons: int = 3,
-                 scale: float = math.pi, seed: int = 42) -> None:
+    def __init__(
+        self,
+        n_modes: int = 6,
+        input_modes: tuple[int, ...] = (0, 1, 2),
+        entangling_layers: int = 3,
+        n_photons: int = 3,
+        scale: float = math.pi,
+        seed: int = 42,
+    ) -> None:
         super().__init__()
         # Parameter init draws from torch's global RNG; callers seed it via
         # torch.manual_seed (see run_merlin_poisson). `seed` is kept for the
@@ -84,7 +90,9 @@ class MerLinPINN(nn.Module):
         self.head_ux = nn.Linear(out_size, 1, dtype=torch.float64)
         self.input_modes = input_modes
 
-    def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
+    def forward(
+        self, x: torch.Tensor
+    ) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         if x.dim() == 0:
             x = x.unsqueeze(0)
         if x.dim() == 1:
@@ -113,8 +121,11 @@ def run_merlin_poisson(cfg: dict, run_dir: Path) -> dict:
         scale=float(model_cfg.get("encoding_scale", math.pi)),
         seed=cfg.get("seed", 42),
     )
-    _LOG.info("MerLin PINN trainable params: %d, qlayer output size: %d",
-              model.n_trainable(), model.qlayer.output_size)
+    _LOG.info(
+        "MerLin PINN trainable params: %d, qlayer output size: %d",
+        model.n_trainable(),
+        model.qlayer.output_size,
+    )
     n_train = cfg["training"]["collocation_points"]
     x_coll = sobol_1d(n_train, problem.x_min, problem.x_max, seed=cfg.get("seed", 42))
     # Scale collocation points to fit roughly in [-1, 1] for the angle encoding;
@@ -125,10 +136,14 @@ def run_merlin_poisson(cfg: dict, run_dir: Path) -> dict:
     history_path = run_dir / "history.json"
     schedule = cfg["training"].get("lr_schedule")
     result = train_poisson(
-        model, x_coll, (x_bc_left, x_bc_right),
+        model,
+        x_coll,
+        (x_bc_left, x_bc_right),
         loss_fn=poisson_total_loss,
-        lr=cfg["training"]["lr"], epochs=cfg["training"]["epochs"],
-        lambdas=lambdas, history_path=history_path,
+        lr=cfg["training"]["lr"],
+        epochs=cfg["training"]["epochs"],
+        lambdas=lambdas,
+        history_path=history_path,
         log_every=cfg["training"].get("log_every", 50),
         lr_schedule=schedule,
     )
@@ -155,9 +170,11 @@ def run_merlin_poisson(cfg: dict, run_dir: Path) -> dict:
             "detector_model": "threshold",
             "n_photons": model_cfg.get("n_photons", 3),
             "n_modes": model_cfg.get("n_modes", 6),
-            "input_state": list(model.qlayer.input_state.tolist()
-                                if isinstance(model.qlayer.input_state, torch.Tensor)
-                                else model.qlayer.input_state),
+            "input_state": list(
+                model.qlayer.input_state.tolist()
+                if isinstance(model.qlayer.input_state, torch.Tensor)
+                else model.qlayer.input_state
+            ),
             "encoding": "angle",
             "encoding_modes": list(model.input_modes),
             "encoding_scale": float(model_cfg.get("encoding_scale", math.pi)),

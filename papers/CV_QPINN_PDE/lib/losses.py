@@ -11,9 +11,13 @@ from __future__ import annotations
 import torch
 
 
-def poisson_total_loss(model, x_collocation: torch.Tensor, x_bc_left: torch.Tensor,
-                       x_bc_right: torch.Tensor,
-                       lambdas: dict[str, float]) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
+def poisson_total_loss(
+    model,
+    x_collocation: torch.Tensor,
+    x_bc_left: torch.Tensor,
+    x_bc_right: torch.Tensor,
+    lambdas: dict[str, float],
+) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
     """1D Poisson: u'' + sin(4x) = 0, u(0)=u(pi/2)=0.
 
     The "physics" residual uses the chain ux -> d(ux)/dx (one autograd hop,
@@ -23,21 +27,23 @@ def poisson_total_loss(model, x_collocation: torch.Tensor, x_bc_left: torch.Tens
     u, ux, trace = model(x_collocation)
     ux_x = torch.autograd.grad(ux.sum(), x_collocation, create_graph=True)[0]
     pde_residual = ux_x + torch.sin(4 * x_collocation)
-    loss_pde = (pde_residual ** 2).mean()
+    loss_pde = (pde_residual**2).mean()
 
     u_left, _, _ = model(x_bc_left)
     u_right, _, _ = model(x_bc_right)
-    loss_bc = (u_left ** 2).mean() + (u_right ** 2).mean()
+    loss_bc = (u_left**2).mean() + (u_right**2).mean()
 
     u_x_auto = torch.autograd.grad(u.sum(), x_collocation, create_graph=True)[0]
     loss_consistency = ((u_x_auto - ux) ** 2).mean()
 
     loss_trace = ((trace - 1.0) ** 2).mean()
 
-    total = (lambdas["pde"] * loss_pde
-             + lambdas["bc"] * loss_bc
-             + lambdas["consistency"] * loss_consistency
-             + lambdas["trace"] * loss_trace)
+    total = (
+        lambdas["pde"] * loss_pde
+        + lambdas["bc"] * loss_bc
+        + lambdas["consistency"] * loss_consistency
+        + lambdas["trace"] * loss_trace
+    )
     return total, {
         "pde": loss_pde.detach(),
         "bc": loss_bc.detach(),
@@ -47,11 +53,17 @@ def poisson_total_loss(model, x_collocation: torch.Tensor, x_bc_left: torch.Tens
     }
 
 
-def heat_total_loss(model, xt_collocation: torch.Tensor, xt_ic: torch.Tensor,
-                    T_ic: torch.Tensor, xt_bc_left: torch.Tensor,
-                    xt_bc_right: torch.Tensor, alpha: float,
-                    lambdas: dict[str, float],
-                    pre_train_only_ic: bool = False) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
+def heat_total_loss(
+    model,
+    xt_collocation: torch.Tensor,
+    xt_ic: torch.Tensor,
+    T_ic: torch.Tensor,
+    xt_bc_left: torch.Tensor,
+    xt_bc_right: torch.Tensor,
+    alpha: float,
+    lambdas: dict[str, float],
+    pre_train_only_ic: bool = False,
+) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
     """1D heat: T_t = alpha T_xx.
 
     `xt_collocation`: (B, 2) interior points (x, t).
@@ -71,25 +83,27 @@ def heat_total_loss(model, xt_collocation: torch.Tensor, xt_ic: torch.Tensor,
     ux_grads = torch.autograd.grad(ux.sum(), xt_collocation, create_graph=True)[0]
     ux_x = ux_grads[:, 0]
     pde_residual = u_t - alpha * ux_x
-    loss_pde = (pde_residual ** 2).mean()
+    loss_pde = (pde_residual**2).mean()
 
     u_ic, _, _ = model(xt_ic)
     loss_ic = ((u_ic - T_ic) ** 2).mean()
 
     u_left, _, _ = model(xt_bc_left)
     u_right, _, _ = model(xt_bc_right)
-    loss_bc = (u_left ** 2).mean() + (u_right ** 2).mean()
+    loss_bc = (u_left**2).mean() + (u_right**2).mean()
 
     u_x_auto = grads[:, 0]
     loss_consistency = ((u_x_auto - ux) ** 2).mean()
 
     loss_trace = ((trace - 1.0) ** 2).mean()
 
-    total = (lambdas["pde"] * loss_pde
-             + lambdas["ic"] * loss_ic
-             + lambdas["bc"] * loss_bc
-             + lambdas["consistency"] * loss_consistency
-             + lambdas["trace"] * loss_trace)
+    total = (
+        lambdas["pde"] * loss_pde
+        + lambdas["ic"] * loss_ic
+        + lambdas["bc"] * loss_bc
+        + lambdas["consistency"] * loss_consistency
+        + lambdas["trace"] * loss_trace
+    )
     return total, {
         "pde": loss_pde.detach(),
         "ic": loss_ic.detach(),
@@ -100,9 +114,13 @@ def heat_total_loss(model, xt_collocation: torch.Tensor, xt_ic: torch.Tensor,
     }
 
 
-def poisson_nested_loss(model, x_collocation: torch.Tensor, x_bc_left: torch.Tensor,
-                        x_bc_right: torch.Tensor,
-                        lambdas: dict[str, float]) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
+def poisson_nested_loss(
+    model,
+    x_collocation: torch.Tensor,
+    x_bc_left: torch.Tensor,
+    x_bc_right: torch.Tensor,
+    lambdas: dict[str, float],
+) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
     """Ablation: no consistency loss, no second-output dependence.
 
     Computes the second derivative `u_xx` directly via nested autograd. The
@@ -115,17 +133,19 @@ def poisson_nested_loss(model, x_collocation: torch.Tensor, x_bc_left: torch.Ten
     u_x = torch.autograd.grad(u.sum(), x_collocation, create_graph=True)[0]
     u_xx = torch.autograd.grad(u_x.sum(), x_collocation, create_graph=True)[0]
     pde_residual = u_xx + torch.sin(4 * x_collocation)
-    loss_pde = (pde_residual ** 2).mean()
+    loss_pde = (pde_residual**2).mean()
 
     u_left, _, _ = model(x_bc_left)
     u_right, _, _ = model(x_bc_right)
-    loss_bc = (u_left ** 2).mean() + (u_right ** 2).mean()
+    loss_bc = (u_left**2).mean() + (u_right**2).mean()
 
     loss_trace = ((trace - 1.0) ** 2).mean()
 
-    total = (lambdas["pde"] * loss_pde
-             + lambdas["bc"] * loss_bc
-             + lambdas["trace"] * loss_trace)
+    total = (
+        lambdas["pde"] * loss_pde
+        + lambdas["bc"] * loss_bc
+        + lambdas["trace"] * loss_trace
+    )
     return total, {
         "pde": loss_pde.detach(),
         "bc": loss_bc.detach(),
@@ -136,11 +156,17 @@ def poisson_nested_loss(model, x_collocation: torch.Tensor, x_bc_left: torch.Ten
     }
 
 
-def heat_nested_loss(model, xt_collocation: torch.Tensor, xt_ic: torch.Tensor,
-                     T_ic: torch.Tensor, xt_bc_left: torch.Tensor,
-                     xt_bc_right: torch.Tensor, alpha: float,
-                     lambdas: dict[str, float],
-                     pre_train_only_ic: bool = False) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
+def heat_nested_loss(
+    model,
+    xt_collocation: torch.Tensor,
+    xt_ic: torch.Tensor,
+    T_ic: torch.Tensor,
+    xt_bc_left: torch.Tensor,
+    xt_bc_right: torch.Tensor,
+    alpha: float,
+    lambdas: dict[str, float],
+    pre_train_only_ic: bool = False,
+) -> tuple[torch.Tensor, dict[str, torch.Tensor]]:
     """Ablation: no consistency loss for the heat equation.
 
     `u_xx = d^2 u / dx^2` and `u_t = du/dt` are computed by nested autograd.
@@ -158,21 +184,23 @@ def heat_nested_loss(model, xt_collocation: torch.Tensor, xt_ic: torch.Tensor,
     u_xx_grads = torch.autograd.grad(u_x.sum(), xt_collocation, create_graph=True)[0]
     u_xx = u_xx_grads[:, 0]
     pde_residual = u_t - alpha * u_xx
-    loss_pde = (pde_residual ** 2).mean()
+    loss_pde = (pde_residual**2).mean()
 
     u_ic, _, _ = model(xt_ic)
     loss_ic = ((u_ic - T_ic) ** 2).mean()
 
     u_left, _, _ = model(xt_bc_left)
     u_right, _, _ = model(xt_bc_right)
-    loss_bc = (u_left ** 2).mean() + (u_right ** 2).mean()
+    loss_bc = (u_left**2).mean() + (u_right**2).mean()
 
     loss_trace = ((trace - 1.0) ** 2).mean()
 
-    total = (lambdas["pde"] * loss_pde
-             + lambdas["ic"] * loss_ic
-             + lambdas["bc"] * loss_bc
-             + lambdas["trace"] * loss_trace)
+    total = (
+        lambdas["pde"] * loss_pde
+        + lambdas["ic"] * loss_ic
+        + lambdas["bc"] * loss_bc
+        + lambdas["trace"] * loss_trace
+    )
     return total, {
         "pde": loss_pde.detach(),
         "ic": loss_ic.detach(),
@@ -183,5 +211,9 @@ def heat_nested_loss(model, xt_collocation: torch.Tensor, xt_ic: torch.Tensor,
     }
 
 
-__all__ = ["poisson_total_loss", "heat_total_loss",
-           "poisson_nested_loss", "heat_nested_loss"]
+__all__ = [
+    "poisson_total_loss",
+    "heat_total_loss",
+    "poisson_nested_loss",
+    "heat_nested_loss",
+]
