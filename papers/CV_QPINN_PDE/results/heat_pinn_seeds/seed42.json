@@ -1,0 +1,64 @@
+{
+  "experiment": "heat_pinn",
+  "n_params": 42,
+  "hidden_layers": [
+    8
+  ],
+  "metrics": {
+    "rmse": 0.008930889507093346,
+    "mae": 0.007324777457262101,
+    "l_inf": 0.027835185387720007,
+    "nmse": 0.0016972856894524073
+  },
+  "best": {
+    "epoch": 999,
+    "loss": 0.0006079156103455855
+  },
+  "wall_time_sec": 6.121806859970093,
+  "cfg": {
+    "seed": 42,
+    "dtype": [
+      "float64",
+      "torch.float64"
+    ],
+    "device": "cpu",
+    "logging": {
+      "level": "info",
+      "save_config_snapshot": true
+    },
+    "data_root": "/reproduced_papers/papers/CV_QPINN_PDE/data",
+    "description": "Classical PINN baseline matched to QPINN parameter count on Heat 1D.",
+    "experiment": "heat_pinn",
+    "outdir": "outdir/heat_pinn_seed42_d41d8c",
+    "model": {
+      "n_qumodes": 2,
+      "n_multi_layers": 2,
+      "n_single_layers": 2,
+      "cutoff": 8,
+      "active_sd": 0.001,
+      "passive_sd": 0.1,
+      "name": "FCNN",
+      "target_param_count": 44
+    },
+    "training": {
+      "epochs": 1000,
+      "lr": 0.01,
+      "collocation_points": 64,
+      "lambdas": {
+        "pde": 0.1,
+        "bc": 0.1,
+        "consistency": 0.1,
+        "trace": 0.0,
+        "ic": 0.6
+      },
+      "log_every": 100,
+      "pretrain_epochs": 300,
+      "nx": 18,
+      "nt": 10,
+      "n_ic": 258,
+      "n_bc": 16,
+      "eval_nx": 41,
+      "eval_nt": 11
+    }
+  }
+}

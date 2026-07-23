@@ -1,0 +1,85 @@
+{
+  "experiment": "poisson_merlin",
+  "n_params": 162,
+  "qlayer_output_size": 20,
+  "metrics": {
+    "rmse": 0.00023727797672954952,
+    "mae": 0.00020448653497101246,
+    "l_inf": 0.00044068809646543444,
+    "nmse": 2.8970883597311305e-05
+  },
+  "best": {
+    "epoch": 599,
+    "loss": 1.863830486845239e-05
+  },
+  "wall_time_sec": 401.68433594703674,
+  "merlin_hardware": {
+    "computation_space": "UNBUNCHED",
+    "detector_model": "threshold",
+    "n_photons": 3,
+    "n_modes": 6,
+    "input_state": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      0
+    ],
+    "encoding": "angle",
+    "encoding_modes": [
+      0,
+      1,
+      2
+    ],
+    "encoding_scale": 1.5707963267948966,
+    "measurement_strategy": "PROBABILITIES",
+    "postselection": "none",
+    "simulator": "MerLin CPU simulator (analytic, shots=0)"
+  },
+  "cfg": {
+    "seed": 42,
+    "dtype": [
+      "float64",
+      "torch.float64"
+    ],
+    "device": "cpu",
+    "logging": {
+      "level": "info",
+      "save_config_snapshot": true
+    },
+    "data_root": "/reproduced_papers/papers/CV_QPINN_PDE/data",
+    "description": "MerLin photonic linear-optics adaptation of the consistency-loss PINN on Poisson 1D.",
+    "experiment": "poisson_merlin",
+    "outdir": "outdir",
+    "model": {
+      "n_qumodes": 2,
+      "n_multi_layers": 2,
+      "n_single_layers": 2,
+      "cutoff": 8,
+      "active_sd": 0.001,
+      "passive_sd": 0.1,
+      "n_modes": 6,
+      "input_modes": [
+        0,
+        1,
+        2
+      ],
+      "entangling_layers": 3,
+      "n_photons": 3,
+      "encoding_scale": 1.5707963267948966
+    },
+    "training": {
+      "epochs": 600,
+      "lr": 0.02,
+      "collocation_points": 64,
+      "lambdas": {
+        "pde": 0.34,
+        "bc": 0.34,
+        "consistency": 0.32,
+        "trace": 0.0
+      },
+      "log_every": 50
+    }
+  }
+}

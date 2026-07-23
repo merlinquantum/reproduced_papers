@@ -1,0 +1,60 @@
+{
+  "experiment": "heat_qpinn",
+  "n_params": 48,
+  "metrics": {
+    "rmse": 0.020257583234863204,
+    "mae": 0.01540391100513713,
+    "l_inf": 0.08058423142543175,
+    "nmse": 0.008732543967317487,
+    "mean_trace": 1.0000000000000089
+  },
+  "best": {
+    "epoch": 199,
+    "loss": 0.0016993942606876283
+  },
+  "wall_time_sec": 1647.5742526054382,
+  "cfg": {
+    "seed": 7,
+    "dtype": [
+      "float64",
+      "torch.float64"
+    ],
+    "device": "cpu",
+    "logging": {
+      "level": "info",
+      "save_config_snapshot": true
+    },
+    "data_root": "/reproduced_papers/papers/CV_QPINN_PDE/data",
+    "description": "Smoke config for the 1D heat equation QPINN reproduction.",
+    "experiment": "heat_qpinn",
+    "outdir": "outdir/heat_qpinn_seed7_d41d8c",
+    "model": {
+      "n_qumodes": 2,
+      "n_multi_layers": 2,
+      "n_single_layers": 2,
+      "cutoff": 10,
+      "active_sd": 0.001,
+      "passive_sd": 0.1
+    },
+    "training": {
+      "epochs": 200,
+      "lr": 0.05,
+      "collocation_points": 64,
+      "lambdas": {
+        "pde": 0.1,
+        "bc": 0.1,
+        "consistency": 0.1,
+        "trace": 0.1,
+        "ic": 0.6
+      },
+      "log_every": 25,
+      "pretrain_epochs": 60,
+      "nx": 10,
+      "nt": 8,
+      "n_ic": 32,
+      "n_bc": 8,
+      "eval_nx": 41,
+      "eval_nt": 11
+    }
+  }
+}

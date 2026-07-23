@@ -1,0 +1,33 @@
+{
+  "description": "CV-QPINN reproduction runner",
+  "arguments": [
+    {
+      "flags": ["--epochs"],
+      "help": "Override number of training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.epochs"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Override learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lr"}
+    },
+    {
+      "flags": ["--cutoff"],
+      "help": "Override Fock-space cutoff dimension",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.cutoff"}
+    },
+    {
+      "flags": ["--collocation-points"],
+      "help": "Override number of Poisson collocation points",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.collocation_points"}
+    }
+  ]
+}

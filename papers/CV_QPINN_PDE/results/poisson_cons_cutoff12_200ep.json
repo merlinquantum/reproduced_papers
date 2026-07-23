@@ -1,0 +1,52 @@
+{
+  "experiment": "poisson_qpinn",
+  "n_params": 48,
+  "metrics": {
+    "rmse": 0.0018511716828567013,
+    "mae": 0.0017456265600243007,
+    "l_inf": 0.002920016008249489,
+    "nmse": 0.001763357124520786,
+    "mean_trace": 0.9999999999998608
+  },
+  "best": {
+    "epoch": 199,
+    "loss": 2.1010678589718404e-05
+  },
+  "wall_time_sec": 115.22531461715698,
+  "cfg": {
+    "seed": 42,
+    "dtype": [
+      "float64",
+      "torch.float64"
+    ],
+    "device": "cpu",
+    "logging": {
+      "level": "info",
+      "save_config_snapshot": true
+    },
+    "data_root": "/reproduced_papers/papers/CV_QPINN_PDE/data",
+    "description": "Smoke config (CPU-friendly): Poisson 1D QPINN, 2+2 layers, cutoff 8.",
+    "experiment": "poisson_qpinn",
+    "outdir": "outdir/poisson_cons_cutoff12",
+    "model": {
+      "n_qumodes": 2,
+      "n_multi_layers": 2,
+      "n_single_layers": 2,
+      "cutoff": 12,
+      "active_sd": 0.001,
+      "passive_sd": 0.1
+    },
+    "training": {
+      "epochs": 200,
+      "lr": 0.05,
+      "collocation_points": 64,
+      "lambdas": {
+        "pde": 0.25,
+        "bc": 0.25,
+        "consistency": 0.25,
+        "trace": 0.25
+      },
+      "log_every": 25
+    }
+  }
+}

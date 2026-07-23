@@ -1,0 +1,24 @@
+{
+    "description": "Default smoke configuration: Poisson 1D QPINN with reduced cutoff and short training.",
+    "experiment": "poisson_qpinn",
+    "seed": 42,
+    "dtype": "float64",
+    "device": "cpu",
+    "outdir": "outdir",
+    "model": {
+        "n_qumodes": 2,
+        "n_multi_layers": 2,
+        "n_single_layers": 2,
+        "cutoff": 8,
+        "active_sd": 0.001,
+        "passive_sd": 0.1
+    },
+    "training": {
+        "epochs": 60,
+        "lr": 0.05,
+        "collocation_points": 64,
+        "lambdas": {"pde": 0.25, "bc": 0.25, "consistency": 0.25, "trace": 0.25},
+        "log_every": 10
+    },
+    "logging": {"level": "info", "save_config_snapshot": true}
+}

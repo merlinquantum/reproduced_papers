@@ -1,0 +1,53 @@
+{
+  "experiment": "poisson_qpinn",
+  "n_params": 48,
+  "metrics": {
+    "rmse": 4.242324111363999e-05,
+    "mae": 3.6669509018762644e-05,
+    "l_inf": 7.0651263122265e-05,
+    "nmse": 9.260929346050749e-07,
+    "mean_trace": 1.0000000000000013
+  },
+  "best": {
+    "epoch": 199,
+    "loss": 2.30167132257091e-06
+  },
+  "wall_time_sec": 85.76286578178406,
+  "cfg": {
+    "seed": 42,
+    "dtype": [
+      "float64",
+      "torch.float64"
+    ],
+    "device": "cpu",
+    "logging": {
+      "level": "info",
+      "save_config_snapshot": true
+    },
+    "data_root": "/reproduced_papers/papers/CV_QPINN_PDE/data",
+    "description": "Ablation: Poisson QPINN with nested autograd (no consistency loss, no second output).",
+    "experiment": "poisson_qpinn",
+    "outdir": "outdir/poisson_qpinn_nested_seed42_576d7b",
+    "model": {
+      "n_qumodes": 2,
+      "n_multi_layers": 2,
+      "n_single_layers": 2,
+      "cutoff": 8,
+      "active_sd": 0.001,
+      "passive_sd": 0.1
+    },
+    "training": {
+      "epochs": 200,
+      "lr": 0.05,
+      "collocation_points": 64,
+      "lambdas": {
+        "pde": 0.34,
+        "bc": 0.33,
+        "consistency": 0.0,
+        "trace": 0.33
+      },
+      "log_every": 25,
+      "use_nested_loss": true
+    }
+  }
+}
