@@ -1,0 +1,2 @@
+# Raw sweep runs (npz sequences, per-run logs); curated views live in results/
+sweeps/
