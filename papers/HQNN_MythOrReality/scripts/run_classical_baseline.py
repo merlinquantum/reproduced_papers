@@ -19,7 +19,9 @@ from models.classical_baseline import (
     BaselineConfig,
     evaluate_architecture,
     generate_mlp_architectures,
-)  # noqa: E402
+)
+
+# noqa: E402
 from utils.io import save_experiment_results  # noqa: E402
 from utils.training import count_parameters  # noqa: E402
 

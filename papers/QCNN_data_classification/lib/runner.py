@@ -125,7 +125,6 @@ def _prepare_models(
 def _plot_training_figures(
     run_dir: Path, variant_histories: dict[str, list[dict[str, list[float]]]]
 ) -> None:
-
     matplotlib.use("Agg")
 
     def _save_metric(metric_key: str, ylabel: str, title: str, filename: Path) -> None:

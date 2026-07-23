@@ -683,7 +683,6 @@ def save_density_plot(
     run_id: str,
     backend: str,
 ) -> str:
-
     model.eval()
 
     nx, nt = SEE_NX_SAMPLES, SEE_NT_SAMPLES

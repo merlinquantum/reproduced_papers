@@ -1,0 +1,43 @@
+{
+  "description": "Fast-model IDS2012 comparison. Scalable non-ZZ models are evaluated on a larger matched split over three seeds.",
+  "data_source": "csv",
+  "dataset": "ids2012",
+  "ids_archive": "ISCX-IDS-2012/iscxids2012-master.tar.gz",
+  "ids_csv_files": [
+    "TestbedMonJun14Flows.csv",
+    "TestbedSatJun12Flows.csv",
+    "TestbedSunJun13Flows.csv",
+    "TestbedThuJun17Flows.csv",
+    "TestbedTueJun15Flows.csv",
+    "TestbedWedJun16Flows.csv"
+  ],
+  "label_column": "Label",
+  "subset_size": 200000,
+  "feature_limit": null,
+  "photonic_n_modes": null,
+  "photonic_n_photons": 3,
+  "encoder_batch_size": 2048,
+  "models": [
+    "svm_classical",
+    "state_svm_angle",
+    "state_svm_amplitude",
+    "hybrid_svm_angle",
+    "hybrid_svm_amplitude",
+    "photonic_hybrid_svm_angle",
+    "photonic_hybrid_svm_amplitude",
+    "photonic_state_svm_angle",
+    "knn_classical",
+    "state_knn_angle",
+    "state_knn_amplitude",
+    "hybrid_knn_angle",
+    "hybrid_knn_amplitude",
+    "photonic_hybrid_knn_angle",
+    "photonic_hybrid_knn_amplitude",
+    "photonic_state_knn_angle"
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ]
+}

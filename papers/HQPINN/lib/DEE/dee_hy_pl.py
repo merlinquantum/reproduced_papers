@@ -127,7 +127,10 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-2"):
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None, q_layers=q_layers, width=width, layers=layers: (
+                            lambda processor=None,
+                            q_layers=q_layers,
+                            width=width,
+                            layers=layers: (
                                 ClassicalPennyLanePinn(
                                     q_layers=q_layers,
                                     hidden_width=width,

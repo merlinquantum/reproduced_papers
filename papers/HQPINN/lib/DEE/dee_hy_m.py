@@ -119,7 +119,10 @@ def run(mode="train", backend="sim:ascella", model_size="10-4-1"):
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None, n_photons=n_photons, width=width, layers=layers: (
+                            lambda processor=None,
+                            n_photons=n_photons,
+                            width=width,
+                            layers=layers: (
                                 ClassicalInterferometerPinn(
                                     n_photons=n_photons,
                                     hidden_width=width,
