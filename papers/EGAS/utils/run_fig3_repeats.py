@@ -30,7 +30,6 @@ TOPK = int(sys.argv[2]) if len(sys.argv) > 2 else 10
 
 
 def main():
-
     X, y = load_dataset(
         DATASET,
         data_root=str(ROOT.parent.parent / "data"),
