@@ -69,7 +69,14 @@ def main():
             dEs = []
             for r in range(REPEATS):
                 _, Eb, Ea = refine_bias(
-                    seq, Xe, ye, N_QUBITS, epochs=120, batch_samples=25, lr=5e-4, seed=r
+                    seq,
+                    Xe,
+                    ye,
+                    N_QUBITS,
+                    epochs=120,
+                    batch_samples=25,
+                    lr=5e-4,
+                    seed=r,
                 )
                 dEs.append(Eb - Ea)
             means.append(float(np.mean(dEs)))
