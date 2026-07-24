@@ -98,7 +98,7 @@ def _run_photonic_eval(cfg, run_dir, logger):
         seed=seed,
     )
 
-    pool = build_token_pool(n_modes)
+    pool = build_token_pool(n_modes, X.shape[-1])
 
     # Photonic EGAS search on a fixed sample batch drawn from the first split's train set.
     rng = np.random.default_rng(seed)
@@ -530,12 +530,13 @@ def _run_egas_eval(cfg, run_dir, logger):
     dcfg, ecfg, bcfg, vcfg = cfg["dataset"], cfg["egas"], cfg["bias"], cfg["eval"]
     name = dcfg["name"]
     n_qubits = int(dcfg.get("n_qubits", 8))
-    pool = build_token_pool(n_qubits)
+
     X, y = load_dataset(name, data_root=dcfg["root"], n_components=n_qubits, seed=seed)
     from .data import (
         load_dataset_raw_for_wasserstein,
     )
 
+    pool = build_token_pool(n_qubits, X.shape[-1])
     X_wasser, y_wasser = load_dataset_raw_for_wasserstein(
         name, data_root=dcfg["root"], seed=seed
     )

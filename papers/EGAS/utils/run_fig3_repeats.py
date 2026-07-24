@@ -30,13 +30,14 @@ TOPK = int(sys.argv[2]) if len(sys.argv) > 2 else 10
 
 
 def main():
-    pool = build_token_pool(N_QUBITS)
+
     X, y = load_dataset(
         DATASET,
         data_root=str(ROOT.parent.parent / "data"),
         n_components=N_QUBITS,
         seed=0,
     )
+    pool = build_token_pool(N_QUBITS, X.shape[-1])
     slices = make_slices(X, y, n_train=400, n_test=50, n_repeats=1, seed=0)
     rng = np.random.default_rng(0)
     Xtr0 = slices[0]["X_train"]

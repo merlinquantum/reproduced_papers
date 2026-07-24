@@ -206,6 +206,9 @@ def run_egas(
                 loss.item(),
                 len(buffer),
             )
+        print(
+            f"Iter {history["iter"][-1]} add a min_energy: {history["min_energy"][-1]}, a mean_energy: {history["mean_energy"][-1]} and loss: {history["loss"][-1]}."
+        )
     return gpt, history, buffer
 
 

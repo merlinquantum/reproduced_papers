@@ -30,11 +30,11 @@ NONPARAM_1Q = ("H", "I")
 COEFFS = (0.1, 0.3, 0.5, 0.7, 1.0)
 
 
-def build_token_pool(n_qubits: int):
+def build_token_pool(n_qubits: int, num_features: int):
     """Enumerate the full token pool C. Returns list of (gate, q, data_idx, r)."""
     tokens = []
     for q in range(n_qubits):
-        for d in range(n_qubits):
+        for d in range(num_features):
             for r in COEFFS:
                 for g in PARAM_1Q:
                     tokens.append((g, q, d, r))
@@ -44,7 +44,7 @@ def build_token_pool(n_qubits: int):
     for q in range(n_qubits):  # CNOT (q, q+1)
         tokens.append(("CNOT", q, 0, 0.0))
     for q in range(n_qubits):  # MultiRZ (q, q+1) parameterized
-        for d in range(n_qubits):
+        for d in range(num_features):
             for r in COEFFS:
                 tokens.append(("MultiRZ", q, d, r))
     return tokens

@@ -44,4 +44,4 @@ def test_pairwise_energy_in_unit_range():
 
 def test_token_pool_size():
     # n=8: 3*8*8*5 (param 1q) + 2*8 (H,I) + 8 (CNOT) + 8*8*5 (MultiRZ) = 1304
-    assert len(build_token_pool(8)) == 1304
+    assert len(build_token_pool(8, 8)) == 1304
