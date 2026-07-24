@@ -1,0 +1,23 @@
+model,variant_label,base_model,family,profile,data_regime,dataset,seed,test_acc,test_auc,best_val_auc,best_epoch,attn_params,total_params,time_s
+OrthoFNN|baseline|full|standard,"OrthoFNN [baseline, full]",OrthoFNN,baseline,full,standard,pathmnist,42,0.6457,0.9316,0.9519,99,256,42601,69512.6
+VisionTransformer|baseline|full|standard,"VisionTransformer [baseline, full]",VisionTransformer,baseline,full,standard,pathmnist,123,0.7352,0.9543,0.9954,80,2048,9401,12427.3
+VisionTransformer|baseline|full|standard,"VisionTransformer [baseline, full]",VisionTransformer,baseline,full,standard,pathmnist,7,0.735,0.95,0.9955,94,2048,9401,5865.9
+OrthoFNN|baseline|full|standard,"OrthoFNN [baseline, full]",OrthoFNN,baseline,full,standard,retinamnist,123,0.495,0.6776,0.7659,96,256,12901,253.7
+OrthoFNN|baseline|full|standard,"OrthoFNN [baseline, full]",OrthoFNN,baseline,full,standard,retinamnist,42,0.4825,0.6759,0.7593,91,256,12901,288.5
+OrthoFNN|baseline|full|standard,"OrthoFNN [baseline, full]",OrthoFNN,baseline,full,standard,retinamnist,7,0.495,0.6625,0.7729,50,256,12901,245.4
+VisionTransformer|baseline|full|standard,"VisionTransformer [baseline, full]",VisionTransformer,baseline,full,standard,retinamnist,123,0.5225,0.7444,0.8425,26,2048,9333,83.6
+VisionTransformer|baseline|full|standard,"VisionTransformer [baseline, full]",VisionTransformer,baseline,full,standard,retinamnist,42,0.5475,0.7375,0.8187,15,2048,9333,77.7
+VisionTransformer|baseline|full|standard,"VisionTransformer [baseline, full]",VisionTransformer,baseline,full,standard,retinamnist,7,0.565,0.7433,0.8431,50,2048,9333,79.8
+A|generic|full|standard,"A: OrthoPatch [generic, full]",A,generic,full,standard,retinamnist,123,0.5425,0.7417,0.833,61,960,8213,2097.1
+A|generic|full|standard,"A: OrthoPatch [generic, full]",A,generic,full,standard,retinamnist,42,0.5425,0.7475,0.834,28,960,8213,2126.6
+A|generic|full|standard,"A: OrthoPatch [generic, full]",A,generic,full,standard,retinamnist,7,0.55,0.7413,0.8479,39,960,8213,2140.7
+B|generic|full|standard,"B: OrthoTransformer [generic, full]",B,generic,full,standard,retinamnist,123,0.5375,0.7503,0.8275,24,1920,9205,4428.9
+B|generic|full|standard,"B: OrthoTransformer [generic, full]",B,generic,full,standard,retinamnist,42,0.5175,0.7396,0.8394,49,1920,9205,4422.1
+B|generic|full|standard,"B: OrthoTransformer [generic, full]",B,generic,full,standard,retinamnist,7,0.5425,0.7376,0.8343,47,1920,9205,4404.0
+C|generic|full|standard,"C: DirectAttn [generic, full]",C,generic,full,standard,retinamnist,123,0.515,0.7497,0.8442,47,1920,9205,4433.9
+C|generic|full|standard,"C: DirectAttn [generic, full]",C,generic,full,standard,retinamnist,42,0.5375,0.7514,0.8512,48,1920,9205,4461.6
+C|generic|full|standard,"C: DirectAttn [generic, full]",C,generic,full,standard,retinamnist,7,0.5375,0.7456,0.8416,51,1920,9205,4415.1
+D|generic|full|standard,"D: Compound [generic, full]",D,generic,full,standard,retinamnist,42,0.5325,0.7566,0.8321,41,4224,11509,12566.9
+D_full|generic|full|standard,"D: Compound (full sector) [generic, full]",D_full,generic,full,standard,retinamnist,42,0.435,0.6506,0.7105,1,5248,12533,45.1
+E|generic|full|standard,"E: Multi-sector [generic, full]",E,generic,full,standard,retinamnist,42,0.4325,0.6356,0.6461,1,4224,11509,84.5
+F|generic|full|standard,"F: Hierarchical (3ph) [generic, full]",F,generic,full,standard,retinamnist,42,0.435,0.6414,0.6696,1,2208,9461,24.1

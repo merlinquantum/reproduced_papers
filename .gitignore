@@ -13,6 +13,8 @@ data/*
 !data/QLSTM/**
 models/
 !models/.gitkeep
+!papers/**/models/
+!papers/**/models/.gitkeep
 outdir/
 !outdir/.gitkeep
 .smoke_logs/
