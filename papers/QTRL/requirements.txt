@@ -1,4 +1,4 @@
 merlinquantum
 gymnasium[classic_control]
 minigrid
--e ./torchquantum
+-e git+https://github.com/mit-han-lab/torchquantum.git#egg=torchquantum
