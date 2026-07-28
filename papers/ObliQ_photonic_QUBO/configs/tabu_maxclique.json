@@ -1,7 +1,7 @@
 {
   "problem_type": "max-clique",
-  "solver": "obliq-static",
-  "name": "ObliQ Static",
+  "solver": "tabu",
+  "name": "Tabu",
   "sweep": {
     "size_range": [
       2,
@@ -23,9 +23,5 @@
   },
   "provider": null,
   "backend": null,
-  "solver_options": {
-    "nsamples": 5000,
-    "num_rep": 10,
-    "graph_mode": 0
-  }
+  "solver_options": {}
 }

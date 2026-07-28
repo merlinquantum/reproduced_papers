@@ -1,7 +1,7 @@
 {
   "problem_type": "max-clique",
-  "solver": "obliq-static",
-  "name": "ObliQ Static",
+  "solver": "Simulated_Annealing",
+  "name": "Simulated Annealing",
   "sweep": {
     "size_range": [
       2,
@@ -18,14 +18,11 @@
     "seed": 101200,
     "timeout": 60,
     "min_timeout_size": 14,
+    "num_reads": 5000,
     "parallel_workers": 10,
     "include_exact_results": false
   },
   "provider": null,
   "backend": null,
-  "solver_options": {
-    "nsamples": 5000,
-    "num_rep": 10,
-    "graph_mode": 0
-  }
+  "solver_options": {}
 }
