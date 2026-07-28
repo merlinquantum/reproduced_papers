@@ -41,12 +41,15 @@ def build_token_pool(n_qubits: int, num_features: int):
     for q in range(n_qubits):
         for g in NONPARAM_1Q:
             tokens.append((g, q, 0, 0.0))
-    for q in range(n_qubits):  # CNOT (q, q+1)
-        tokens.append(("CNOT", q, 0, 0.0))
-    for q in range(n_qubits):  # MultiRZ (q, q+1) parameterized
-        for d in range(num_features):
-            for r in COEFFS:
-                tokens.append(("MultiRZ", q, d, r))
+    for q1 in range(n_qubits):
+        for q2 in range(n_qubits):
+            if q1 != q2:
+                tokens.append(("CNOT", (q1, q2), 0, 0.0))
+    for q1 in range(n_qubits):
+        for q2 in range(n_qubits):
+            if q1 != q2:
+                for r in COEFFS:
+                    tokens.append(("MultiRZ", (q1, q2), d, r))
     return tokens
 
 
@@ -73,11 +76,9 @@ def embed_states(sequence, X: torch.Tensor, n_qubits: int, bias=None) -> torch.T
             if b_off is not None:
                 angle = angle + b_off[:, bias_index]
                 bias_index += 1
-            qn = (q + 1) % n_qubits
-            state = apply_gate(state, n_qubits, gate, (q, qn), angle)
+            state = apply_gate(state, n_qubits, gate, q, angle)
         elif gate == "CNOT":
-            qn = (q + 1) % n_qubits
-            state = apply_gate(state, n_qubits, gate, (q, qn))
+            state = apply_gate(state, n_qubits, gate, q)
         else:  # H, I
             state = apply_gate(state, n_qubits, gate, (q,))
     return state

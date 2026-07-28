@@ -143,7 +143,12 @@ def create_quantum_module(
                 layer_input = torch.zeros(x.shape[0], 0, dtype=x.dtype, device=x.device)
                 return self.layer()
 
-        def reset_bias(self, hidden: int | None = None, gain: float | None = None):
+        def reset_bias(
+            self,
+            hidden: int | None = None,
+            gain: float | None = None,
+            zero_init: bool = False,
+        ):
             if hidden is None:
                 hidden = 32
             if gain is None:
@@ -158,6 +163,7 @@ def create_quantum_module(
                     hidden=hidden,
                     gain=gain,
                 )
+                return
             else:
                 self.bias = BiasMLP(
                     n_in=num_features,
@@ -165,5 +171,13 @@ def create_quantum_module(
                     hidden=hidden,
                     gain=gain,
                 ).to(device=param.device, dtype=param.dtype)
+
+            if zero_init:
+                nn.init.zeros_(self.bias.net[-1].weight)
+                nn.init.zeros_(self.bias.net[-1].bias)
+            else:
+                for module in self.bias.net:
+                    if isinstance(module, nn.Linear):
+                        module.reset_parameters()
 
     return QuantumModule()

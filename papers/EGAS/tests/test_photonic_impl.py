@@ -129,3 +129,38 @@ def test_refine_bias_returns_same_energy_when_no_trainable_parameters():
     assert hasattr(encoder, "layer")
     assert hasattr(encoder.layer, "trainable_parameters")
     assert len(encoder.layer.trainable_parameters) == 0
+
+
+def test_refine_bias_returns_new_energy():
+    photonic_bias = importlib.import_module("lib.photonic_bias")
+
+    sequence = [
+        ("BS", 0, 0, torch.pi / 2),
+        ("PS", 0, 0, 1 * torch.pi),
+        ("BS", 0, 0, torch.pi / 2),
+        ("PS", 1, 1, 0.1 * torch.pi),
+        ("BS", 1, 0, torch.pi / 2),
+    ]
+    X = torch.randn(4, 2, dtype=torch.float32)
+    y = torch.tensor([0, 0, 1, 1], dtype=torch.long)
+
+    encoder, e_before, e_after = photonic_bias.refine_bias(
+        sequence,
+        X,
+        y,
+        num_features=2,
+        n_modes=3,
+        num_photons=2,
+        computation_space=ml.ComputationSpace.UNBUNCHED,
+        epochs=1,
+        batch_samples=2,
+        lr=0.1,
+        seed=0,
+        device="cpu",
+        hidden=None,
+        gain=None,
+    )
+
+    assert e_before != e_after
+    assert hasattr(encoder, "bias")
+    assert len(list(encoder.bias.parameters())) > 0

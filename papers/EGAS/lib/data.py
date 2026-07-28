@@ -142,9 +142,12 @@ def load_dataset(
     X_np, y = X_np[sel], y[sel]
 
     n_comp = min(n_components, X_np.shape[1])
-    X_std = StandardScaler().fit_transform(X_np)
-    X_pca = PCA(n_components=n_comp, random_state=seed).fit_transform(X_std)
-    X_scaled = MinMaxScaler(feature_range=(0.0, TWO_PI)).fit_transform(X_pca)
+    X_pca = PCA(n_components=n_comp, random_state=seed).fit_transform(X_np)
+    X_scaled = (
+        MinMaxScaler(feature_range=(0.0, TWO_PI))
+        .fit_transform(X_pca.transpose())
+        .transpose()
+    )
     if n_comp < n_components:  # pad if a dataset has < n features
         pad = np.zeros((X_scaled.shape[0], n_components - n_comp))
         X_scaled = np.concatenate([X_scaled, pad], axis=1)

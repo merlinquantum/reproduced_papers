@@ -6,7 +6,7 @@ Wasserstein-geometry diagnostic, with a MerLin photonic counterpart.
 ## Reference and Attribution
 - **Paper:** J. Heo and D. K. Park, *Generative Quantum Data Embeddings for Supervised Learning*,
   [arXiv:2605.30866v1](https://arxiv.org/abs/2605.30866v1) (29 May 2026), quant-ph / cs.LG. Yonsei University.
-- No official code repository was found; this is an independent reimplementation from the paper
+- The original repository was found after the complete reproduction: https://github.com/qDNA-yonsei/Generative-QDE; this is an independent reimplementation from the paper. However, the GPT model was changed to use the one of the original repo.
   text (the GPT logit-matching scheme follows the cited GQE work, ref [[40](https://arxiv.org/abs/2401.09253)]).
 - Datasets: public UCI ML Repository sets fetched via [ucimlrepo](https://github.com/uci-ml-repo/ucimlrepo) (see Data).
 

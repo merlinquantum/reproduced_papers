@@ -15,7 +15,7 @@ from __future__ import annotations
 import numpy as np
 import torch
 
-from .gpt import TokenGPT
+from .gpt import GPTQE, GPTConfig
 from .photonic_bias import refine_bias
 from .photonic_circuits import create_quantum_module
 from .photonic_kernel_svm import (
@@ -106,15 +106,13 @@ def run_egas(
     *,
     num_photons=2,
     computation_space=None,
-    n_iters=500,
+    n_iters=4000,
     n_candidates=24,
     select_k=6,
-    gamma=0.1,
     lr=5e-5,
     weight_decay=1e-2,
     temp_max=100.0,
     temp_min=0.04,
-    d_model=64,
     n_layers=2,
     n_heads=4,
     grad_clip=1.0,
@@ -126,12 +124,14 @@ def run_egas(
     """Run EGAS; return (gpt, history, buffer) where buffer is list of (seq_ids, energy)."""
     torch.manual_seed(seed)
     np.random.seed(seed)
-    vocab = len(pool) + 1
-    gpt = TokenGPT(
-        vocab, seq_len, d_model=d_model, n_layers=n_layers, n_heads=n_heads
-    ).to(device)
-    opt = torch.optim.Adam(
-        gpt.parameters(), lr=lr, weight_decay=weight_decay, betas=(0.9, 0.999)
+    vocab = len(pool)
+    gpt_config = GPTConfig(vocab_size=vocab, n_layer=n_layers, n_head=n_heads)
+    gpt = GPTQE(gpt_config).to(device)
+    opt = gpt.configure_optimizers(
+        weight_decay=weight_decay,
+        learning_rate=lr,
+        betas=(0.9, 0.999),
+        device_type="cpu",
     )
     ema = EMA()
     X = torch.as_tensor(X, dtype=torch.float32, device=device)
@@ -143,7 +143,7 @@ def run_egas(
 
     for it in range(n_iters):
         T = temp_max + (temp_min - temp_max) * (it / max(1, n_iters - 1))
-        seqs = gpt.sample(n_candidates, T, device=device)  # (M, D)
+        seqs = gpt.generate(n_candidates, seq_len, T, device=device)[0]  # (M, D)
         energies = evaluate_sequences(
             seqs.cpu().numpy(),
             pool,
@@ -181,12 +181,8 @@ def run_egas(
             sel_e_n[perm.cpu().numpy()], dtype=torch.float64, device=device
         )
 
-        # logit-matching loss, Eq. 10. Clamp exponents for numerical stability (raw logit
-        # sums are unbounded); small gamma keeps the exp() weighting well-conditioned.
-        w = gpt.w_sum(sel_ids).double()
-        pred = torch.exp((-gamma * w).clamp(-20, 20))
-        tgt = torch.exp((-gamma * target).clamp(-20, 20))
-        loss = ((pred - tgt) ** 2).mean()
+        # loss
+        loss = gpt.calculate_loss(sel_ids, target).double()
         opt.zero_grad()
         loss.backward()
         torch.nn.utils.clip_grad_norm_(gpt.parameters(), grad_clip)
