@@ -52,26 +52,19 @@ noisy simulator or a real QPU, where gradients do not exist).
 
 ### Deviations and assumptions
 
-- **The evaluation is adapted, not reproduced.** The paper reports QUBO approximation
-  quality on its own instance set. Here the same circuits are scored with the Q-score
-  $\beta$ metric on Erdős–Rényi Max-Cut / Max-Clique. The question this answers is
-  whether ObliQ's reported advantage carries over to that benchmark — it is not a
-  figure-for-figure reproduction.
+- **Adapted evaluation.** The paper reports QUBO approximation
+  quality on a random instance set. Here max-clique and max-cut instances are scored with the Q-score
+  $\beta$ metric on Erdős–Rényi Max-Cut / Max-Clique.  It is not a figure-for-figure reproduction.
 - **Two $\beta$ normalizations exist and they disagree at small $N$.** `plotter.py -e`
   scores each instance against *its own* graph (naive random search vs. the true
   optimum); without `-e` the Q-score standard's asymptotic constants are used, which
   deflate $\beta$ noticeably below $N \approx 10$. Use `-e` at these sizes; the
   asymptotic form is kept for comparability with published Q-score numbers.
-- **Q-score stops at the first failing size.** It is the largest $N$ that clears
+- **Q-score.** The largest $N$ that clears
   $\beta^* = 0.2$ *with every smaller size also clearing it*. The Atos definition
   ("largest $N$ above the threshold") assumes $\beta$ decreases with $N$, which makes the
   two readings identical; they differ only for a solver whose $\beta$ dips below the line
-  and recovers, and the literal reading would then credit it with a size it cannot
-  reliably solve.
-- **Every solver optimizes the QUBO it is scored on.** The CVaR-VQE baseline follows
-  Quandela's reference ansatz, objective and readout, but takes its matrix from
-  `utils.qubo.build_qubo` like every other solver, so its internal energies are the
-  numbers the benchmark reports.
+  and recovers.
 - **Exact optima are exhaustive at these sizes.** `utils.qubo.exact_optimum` enumerates
   (all $2^N$ partitions for Max-Cut, `max_weight_clique` for Max-Clique) and is the one
   definition used by both `benchmark.py sweep --exact` and `plotter.py -e`. Above
@@ -171,7 +164,7 @@ in that mode, so the sweep always seeds).
 
 | Flag | Effect |
 |------|--------|
-| `-t`, `--ignore_time_limit` | Decide the Q-score on mean $eta$ alone, ignoring the 60 s limit |
+| `-t`, `--ignore_time_limit` | Decide the Q-score on mean $\eta$ alone, ignoring the 60 s limit |
 | `--show_stddev`, `--stddev_lines` | $\pm1\sigma$ as shading, or as dotted bounds |
 | `--show_minmax`, `--minmax_lines` | Per-size min/max envelope as shading, or as dotted bounds |
 | `--log_time` | Logarithmic time axis |
@@ -282,7 +275,7 @@ Add an `"output": {"dir": "..."}` block to move a run's results; `output.dir` de
 Sweep settings for the run below: Erdős–Rényi $G(N, 1/2)$, $N = 2 \ldots 7$, 100
 instances/size, seed 101200, 60 s per-instance limit.
 
-![Max-Clique comparison](plots/comparison1.png)
+![Max-Clique comparison](plots/comparison.png)
 
 Mean exact $\beta$ by size:
 
