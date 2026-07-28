@@ -1,0 +1,18 @@
+{
+    "description": "Fourier Fingerprints runner",
+    "arguments":[
+        {
+            "flags":[
+            "--encoding"
+            ],
+            "help" : "linear or exponential en",
+            "type" : "str",
+            "default" : null,
+            "apply": {
+                "kind":"config_path",
+                "path":"encoding "
+            }
+        }
+        
+    ]
+}
