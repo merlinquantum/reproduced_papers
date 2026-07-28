@@ -1,5 +1,6 @@
 import merlin
 import torch
+
 from .kernels import FidelityKernel, ProjectedFidelityKernel
 
 
@@ -34,7 +35,7 @@ def calculate_g(K1, K2):
 def calculate_eta_max(K):
     """
     Compute the normalized largest eigenvalue of the kernel matrix K.
-    The normalization is by the trace (sum of eigenvalues), matching the 
+    The normalization is by the trace (sum of eigenvalues), matching the
     trace-normalized kernel Gram matrices defined in the paper where tr(K) = N.
     """
     L, V = torch.linalg.eigh(K)
@@ -79,7 +80,8 @@ def RBF_2(X_train):
     K_rbf_order_2 = 1.0 - z + 0.5 * (z**2)
     return K_rbf_order_2
 
-def fidelity_kernel(feature_map, X_train, X_test = None):
+
+def fidelity_kernel(feature_map, X_train, X_test=None):
     _fidelity_kernel = FidelityKernel(
         feature_map=feature_map,
         input_state=[
@@ -93,7 +95,8 @@ def fidelity_kernel(feature_map, X_train, X_test = None):
     else:
         return _fidelity_kernel(X_test, X_train)
 
-def projected_fidelity_kernel(feature_map, X_train, X_test = None):
+
+def projected_fidelity_kernel(feature_map, X_train, X_test=None):
     _projected_fidelity_kernel = ProjectedFidelityKernel(
         feature_map=feature_map,
         input_state=[

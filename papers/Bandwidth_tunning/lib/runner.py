@@ -107,11 +107,13 @@ def subset_PCA(X_train, y_train, X_test, y_test, nb_train, nb_test, dim=-1, seed
     )
 
 
-def train(feature_map, X_train, y_train_1D, X_test, y_test_1D, bandwidth=1.0,projected=False):
+def train(
+    feature_map, X_train, y_train_1D, X_test, y_test_1D, bandwidth=1.0, projected=False
+):
     X_train = X_train * bandwidth
     X_test = X_test * bandwidth
 
-    #Kernel calculation
+    # Kernel calculation
     if not projected:
         K_train = fidelity_kernel(feature_map, X_train)
         K_test = fidelity_kernel(feature_map, X_train, X_test)
@@ -134,7 +136,9 @@ def train(feature_map, X_train, y_train_1D, X_test, y_test_1D, bandwidth=1.0,pro
     y_test_np = y_test_1D.detach().numpy()
     decision_scores = svc.decision_function(K_test.detach().numpy())
     if np.unique(y_test_np).size < 2:
-        logger.warning("Skipping ROC AUC computation because the test subset has only one class.")
+        logger.warning(
+            "Skipping ROC AUC computation because the test subset has only one class."
+        )
         ROC_AUC = np.nan
     else:
         ROC_AUC = sklearn.metrics.roc_auc_score(y_test_np, decision_scores)
@@ -148,6 +152,7 @@ def train(feature_map, X_train, y_train_1D, X_test, y_test_1D, bandwidth=1.0,pro
         eta_max_C.item(),
         ROC_AUC,
     )
+
 
 def run_overlapping(cfg, new_folder):
     # importing the parameters of the experiments
@@ -167,9 +172,9 @@ def run_overlapping(cfg, new_folder):
     raw_data_dir.mkdir(parents=True, exist_ok=True)
 
     MIN, MAX, NB_Points = (
-            scale["min"],
-            scale["max"],
-            scale["number_of_points"],
+        scale["min"],
+        scale["max"],
+        scale["number_of_points"],
     )
 
     for i in range(nb_of_experiments):
@@ -177,7 +182,6 @@ def run_overlapping(cfg, new_folder):
         exp = cfg["experiments"][i]
         experiment_dir = raw_data_dir / _safe_name(exp["description"])
         experiment_dir.mkdir(parents=True, exist_ok=True)
-
 
         # Storage arrays for each metric
         x, y_g, y_FQK, y_RBF, y_F, y_eta_max_Q, y_eta_max_C, y_ROC_AUC = (
@@ -195,10 +199,14 @@ def run_overlapping(cfg, new_folder):
         NB_TRAIN = exp["train_sample"]
         NB_TEST = exp["test_sample"]
 
-        SEEDS = np.random.default_rng(seed).integers(low=0, high=10000, size=exp["nb_seeds"])
+        SEEDS = np.random.default_rng(seed).integers(
+            low=0, high=10000, size=exp["nb_seeds"]
+        )
 
         print(f"experiment {exp['description']} running")
-        X_train_full, y_train_full, X_test_full, y_test_full = data(cfg["dataset"]["name"])
+        X_train_full, y_train_full, X_test_full, y_test_full = data(
+            cfg["dataset"]["name"]
+        )
 
         for seed in range(exp["nb_seeds"]):
             X_train, y_train, X_test, y_test = subset_PCA(
@@ -212,7 +220,7 @@ def run_overlapping(cfg, new_folder):
                 seed=SEEDS[seed],
             )
 
-            #Circuit Building (once for every seed, since the feature map is fixed for a given dataset)
+            # Circuit Building (once for every seed, since the feature map is fixed for a given dataset)
             builder = merlin.CircuitBuilder(n_modes=X_train.shape[1] + 1)
             builder.add_entangling_layer(trainable=True, model="mzi", name="left")
             builder.add_angle_encoding(modes=range(X_train.shape[1]), name="phi")
@@ -232,7 +240,15 @@ def run_overlapping(cfg, new_folder):
             seed_y_ROC_AUC = np.zeros(NB_Points)
 
             for i in range(NB_Points):
-                res = train(feature_map, X_train, y_train, X_test, y_test, bandwidth=x[i], projected=exp["projected"])
+                res = train(
+                    feature_map,
+                    X_train,
+                    y_train,
+                    X_test,
+                    y_test,
+                    bandwidth=x[i],
+                    projected=exp["projected"],
+                )
                 seed_y_g[i] = res.g
                 seed_y_FQK[i] = res.var_FQK
                 seed_y_RBF[i] = res.var_RBF
@@ -305,7 +321,6 @@ def run_overlapping(cfg, new_folder):
 
 def _run_experiment(cfg: dict[str, Any], run_dir: Path):
     run_overlapping(cfg, run_dir)
-
 
 
 def train_and_evaluate(cfg: dict[str, Any], run_dir):
