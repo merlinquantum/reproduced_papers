@@ -1,7 +1,7 @@
 {
   "problem_type": "max-clique",
-  "solver": "obliq-vqc",
-  "name": "ObliQ VQC",
+  "solver": "Photonic_CVARVQE",
+  "name": "Photonic CVaR-VQE",
   "sweep": {
     "size_range": [
       2,
@@ -10,11 +10,13 @@
       5,
       6,
       7,
-      8
+      8,
+      9,
+      10
     ],
     "nb_instances_per_size": 100,
     "seed": 101200,
-    "timeout": 300,
+    "timeout": 60,
     "min_timeout_size": 14,
     "parallel_workers": 10,
     "include_exact_results": false
@@ -22,13 +24,11 @@
   "provider": null,
   "backend": null,
   "solver_options": {
-    "nsamples": 5000,
-    "num_rep": 10,
-    "graph_mode": 0,
-    "train": {
-      "optimizer": "adam",
-      "max_iter": 100,
-      "learning_rate": 0.05
-    }
+    "nb_samples": 5000,
+    "nb_inputs": 2,
+    "cvar_alpha": 0.25,
+    "max_iter": 100,
+    "learning_rate": 0.05,
+    "optimizer": "adam"
   }
 }
