@@ -30,6 +30,17 @@ RUN_TESTS=${1:-"yes"}
 RUN_GATE_EGAS=${2:-"yes"}
 RUN_PHOTONIC=${3:-"yes"}
 
+# Config directory: set PAPER_SCALE=yes to use the FAITHFUL paper-scale configs in
+# configs/paper/ (480-dim 8-layer GPT, 768 candidates, 4000 iters, 10 G/B, 10 pairs).
+# These match arXiv:2605.30866 / qDNA-yonsei Generative-QDE and require a GPU — they are
+# NOT expected to finish under CPU/qemu. Default uses the reduced-compute configs/.
+CFG_DIR="$SCRIPT_DIR/configs"
+if [ "${PAPER_SCALE:-no}" = "yes" ]; then
+    CFG_DIR="$SCRIPT_DIR/configs/paper"
+    echo -e "${YELLOW}[PAPER_SCALE=yes] Using faithful paper configs in $CFG_DIR (GPU-scale; will not finish under qemu).${NC}"
+    echo ""
+fi
+
 # Test suite
 if [ "$RUN_TESTS" = "yes" ]; then
     echo -e "${YELLOW}[1/8]${NC} Running photonic implementation tests..."
@@ -56,13 +67,13 @@ echo ""
 # ============ PW Dataset (Phishing) ============
 echo -e "${YELLOW}[4/12]${NC} Running EGAS search on Phishing (PW) dataset..."
 cd "$REPO_ROOT"
-$PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_PW.json" --outdir "$SCRIPT_DIR/outdir/PW"
+$PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$CFG_DIR/egas_PW.json" --outdir "$SCRIPT_DIR/outdir/PW"
 echo -e "${GREEN}✓ PW results saved${NC}"
 
 if [ "$RUN_PHOTONIC" = "yes" ]; then
     echo -e "${YELLOW}[5/12]${NC} Running photonic QKSVM on Phishing (PW) dataset..."
     cd "$REPO_ROOT"
-    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/photonic_PW.json" --outdir "$SCRIPT_DIR/outdir/photonic_PW"
+    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$CFG_DIR/photonic_PW.json" --outdir "$SCRIPT_DIR/outdir/photonic_PW"
     echo -e "${GREEN}✓ PW photonic results saved${NC}"
 fi
 echo ""
@@ -70,13 +81,13 @@ echo ""
 # ============ WQ Dataset (Wine Quality) ============
 echo -e "${YELLOW}[6/12]${NC} Running EGAS search on Wine Quality (WQ) dataset..."
 cd "$REPO_ROOT"
-$PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_WQ.json" --outdir "$SCRIPT_DIR/outdir/WQ"
+$PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$CFG_DIR/egas_WQ.json" --outdir "$SCRIPT_DIR/outdir/WQ"
 echo -e "${GREEN}✓ WQ results saved${NC}"
 
 if [ "$RUN_PHOTONIC" = "yes" ]; then
     echo -e "${YELLOW}[7/12]${NC} Running photonic QKSVM on Wine Quality (WQ) dataset..."
     cd "$REPO_ROOT"
-    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/photonic_WQ.json" --outdir "$SCRIPT_DIR/outdir/photonic_WQ"
+    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$CFG_DIR/photonic_WQ.json" --outdir "$SCRIPT_DIR/outdir/photonic_WQ"
     echo -e "${GREEN}✓ WQ photonic results saved${NC}"
 fi
 echo ""
@@ -84,13 +95,13 @@ echo ""
 # ============ MGT Dataset (MAGIC Gamma Telescope) ============
 echo -e "${YELLOW}[8/12]${NC} Running EGAS search on MAGIC Gamma Telescope (MGT) dataset..."
 cd "$REPO_ROOT"
-$PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_MGT.json" --outdir "$SCRIPT_DIR/outdir/MGT"
+$PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$CFG_DIR/egas_MGT.json" --outdir "$SCRIPT_DIR/outdir/MGT"
 echo -e "${GREEN}✓ MGT results saved${NC}"
 
 if [ "$RUN_PHOTONIC" = "yes" ]; then
     echo -e "${YELLOW}[9/12]${NC} Running photonic QKSVM on MAGIC Gamma Telescope (MGT)..."
     cd "$REPO_ROOT"
-    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/photonic_MGT.json" --outdir "$SCRIPT_DIR/outdir/photonic_MGT"
+    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$CFG_DIR/photonic_MGT.json" --outdir "$SCRIPT_DIR/outdir/photonic_MGT"
     echo -e "${GREEN}✓ MGT photonic results saved${NC}"
 fi
 echo ""
@@ -98,13 +109,13 @@ echo ""
 # ============ WDGV1 Dataset (Waveform, multiclass) ============
 echo -e "${YELLOW}[10/12]${NC} Running EGAS search on Waveform DB (WDGV1) dataset (multiclass)..."
 cd "$REPO_ROOT"
-$PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/egas_WDGV1.json" --outdir "$SCRIPT_DIR/outdir/WDGV1"
+$PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$CFG_DIR/egas_WDGV1.json" --outdir "$SCRIPT_DIR/outdir/WDGV1"
 echo -e "${GREEN}✓ WDGV1 results saved${NC}"
 
 if [ "$RUN_PHOTONIC" = "yes" ]; then
     echo -e "${YELLOW}[11/12]${NC} Running photonic QKSVM on Waveform DB (WDGV1) (multiclass)..."
     cd "$REPO_ROOT"
-    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$SCRIPT_DIR/configs/photonic_WDGV1.json" --outdir "$SCRIPT_DIR/outdir/photonic_WDGV1"
+    $PYTHON implementation.py --paper-dir "$SCRIPT_DIR" --config "$CFG_DIR/photonic_WDGV1.json" --outdir "$SCRIPT_DIR/outdir/photonic_WDGV1"
     echo -e "${GREEN}✓ WDGV1 photonic results saved${NC}"
 fi
 echo ""

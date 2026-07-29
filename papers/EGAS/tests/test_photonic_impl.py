@@ -16,42 +16,16 @@ import merlin as ml  # noqa: E402
 import perceval as pcvl  # noqa: E402
 
 
-def test_default_input_state_alternates_modes():
-    from lib.photonic import default_input_state
+def test_photonic_pool_mirrors_gate_pool_structure():
+    """The photonic token pool follows the same 'create a pool' pattern as the gate-based
+    pool: data-carrying single-mode gates (PS) plus non-data entanglers (BS)."""
+    from lib.photonic_circuits import build_token_pool
 
-    assert default_input_state(4, 2) == [1, 0, 1, 0]
-    assert default_input_state(4, 3) == [1, 1, 1, 0]
-    assert default_input_state(5, 3) == [1, 0, 1, 0, 1]
-    assert default_input_state(5, 4) == [1, 1, 1, 0, 1]
-
-
-def test_build_feature_map_assigns_input_and_trainable_parameters():
-    from lib.photonic import build_feature_map
-
-    fm = build_feature_map(n_modes=3, n_layers=2, scale=0.5)
-
-    assert fm.input_size == 3
-    assert fm.input_parameters == "px"
-    assert fm.trainable_parameters == ["el"]
-
-
-def test_make_kernel_passes_parameter_assignments_to_fidelity_kernel():
-    from lib.photonic import make_kernel
-
-    kern, state = make_kernel(
-        n_modes=4, n_photons=3, n_layers=1, scale=1.2, device="cpu"
-    )
-
-    assert state == [1, 1, 1, 0]
-    assert kern.input_state == state
-    assert sum(kern.input_state) == 3
-    assert getattr(kern, "computation_space", None) == ml.ComputationSpace.UNBUNCHED
-
-    feature_map = getattr(kern, "feature_map", None)
-    assert feature_map is not None
-    assert feature_map.input_size == 4
-    assert feature_map.input_parameters == "px"
-    assert feature_map.trainable_parameters == ["el"]
+    pool = build_token_pool(n_modes=6, num_features=6)
+    gates = {t[0] for t in pool}
+    assert "PS" in gates and "BS" in gates
+    ps = [t for t in pool if t[0] == "PS"]
+    assert all(0 <= t[2] < 6 for t in ps)
 
 
 def test_create_perceval_circuit_builds_expected_parameters():

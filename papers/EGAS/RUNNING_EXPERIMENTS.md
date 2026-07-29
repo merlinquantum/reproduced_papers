@@ -23,7 +23,25 @@ python run_all_experiments.py --only-gate
 
 # Skip tests, run everything else
 python run_all_experiments.py --skip-tests
+
+# FAITHFUL paper-scale configs (configs/paper/) over all 7 shipped datasets
+python run_all_experiments.py --paper-scale
 ```
+
+### Reduced-compute (default) vs faithful paper-scale
+
+There are two config sets:
+
+- `configs/*.json` — **reduced-compute, runnable** on this CPU/qemu container (tiny GPT, few
+  candidates/pairs). This is the default and what the committed figures come from.
+- `configs/paper/*.json` — **faithful to the paper / author repo** (arXiv:2605.30866 /
+  qDNA-yonsei `Generative-QDE`): `n_embd=480, n_layer=8, n_head=12`, 768 candidates → 256 selected,
+  4000 iters, 10 G/B candidates, 10 pairs, seed 42. Select them with `--paper-scale`
+  (`.py`) or `PAPER_SCALE=yes ./run_all_experiments.sh` (bash).
+
+> ⚠️ The paper-scale configs are **GPU-scale** (the authors used a GPU with 32-worker pools) and are
+> **not expected to finish under CPU/qemu emulation**. See `CODE_AUDIT.md` for the full
+> paper-vs-repo comparison and why the reduced-compute figures (esp. Fig 5) differ from the paper.
 
 ### Bash Script
 ```bash

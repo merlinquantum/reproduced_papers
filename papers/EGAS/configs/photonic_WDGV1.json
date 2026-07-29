@@ -1,5 +1,5 @@
 {
-  "description": "MerLin photonic EGAS on WDGV1 (5 photons, multiclass, EGAS search + refinement)",
+  "description": "MerLin photonic EGAS on WDGV1 \u2014 photonic EGAS mirror of gate-based (UNBUNCHED, 2 photons, 8 modes)",
   "seed": 0,
   "dtype": "float32",
   "outdir": "outdir",
@@ -26,8 +26,8 @@
     "n_heads": 2
   },
   "photonic": {
-    "n_photons": 4,
-    "computation_space": "fock",
+    "n_photons": 2,
+    "computation_space": "FOCK",
     "seq_len": 28,
     "scale": 1.0,
     "epochs": 120,

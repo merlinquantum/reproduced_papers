@@ -46,7 +46,7 @@ def refine_bias(
     num_features,
     *,
     num_photons=2,
-    computation_space=ml.ComputationSpace.UNBUNCHED,
+    computation_space=ml.ComputationSpace.FOCK,
     epochs=100,
     batch_samples=25,
     lr=5e-4,

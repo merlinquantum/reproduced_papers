@@ -77,7 +77,7 @@ def _run_photonic_eval(cfg, run_dir, logger):
     name = dcfg["name"]
     n_modes = int(dcfg.get("n_qubits", 8))
     n_photons = int(pcfg.get("n_photons", 2))
-    computation_space = pcfg.get("computation_space", "UNBUNCHED")
+    computation_space = pcfg.get("computation_space", "FOCK")
     if isinstance(computation_space, str):
         computation_space = computation_space.upper()
     X, y = load_dataset(name, data_root=dcfg["root"], n_components=n_modes, seed=seed)
@@ -125,8 +125,11 @@ def _run_photonic_eval(cfg, run_dir, logger):
         lr=float(ecfg.get("lr", pcfg.get("egas_lr", 5e-5))),
         temp_max=float(ecfg.get("temp_max", pcfg.get("temp_max", 100.0))),
         temp_min=float(ecfg.get("temp_min", pcfg.get("temp_min", 0.04))),
-        n_layers=int(ecfg.get("n_layers", 1)),
-        n_heads=int(ecfg.get("n_heads", pcfg.get("n_heads", 2))),
+        n_layers=int(ecfg.get("n_layers", 8)),
+        n_heads=int(ecfg.get("n_heads", 12)),
+        n_embd=int(ecfg.get("n_embd", ecfg.get("d_model", 480))),
+        dropout=float(ecfg.get("dropout", 0.2)),
+        weight_decay=float(ecfg.get("weight_decay", 1e-2)),
         seed=seed,
         device=device,
         logger=logger,
@@ -151,6 +154,14 @@ def _run_photonic_eval(cfg, run_dir, logger):
 
     G = build_unrefined(G_ids)
     B = build_unrefined(B_ids)
+
+    def _copy_energies(unrefined, refined):
+        # Mirror the gate-based metrics: the unrefined group carries the same E_before/E_after
+        # as its refinement so summaries never contain None (delta_E is read from *_refined).
+        for u, r in zip(unrefined, refined):
+            u["E_before"] = r.get("E_before")
+            u["E_after"] = r.get("E_after")
+
     refine_common = {
         "epochs": int(bcfg.get("epochs", pcfg.get("epochs", 25))),
         "batch_samples": int(bcfg.get("batch_samples", pcfg.get("batch", 24))),
@@ -178,6 +189,8 @@ def _run_photonic_eval(cfg, run_dir, logger):
         device=device,
         **refine_common,
     )
+    _copy_energies(G, G_refined)
+    _copy_energies(B, B_refined)
 
     def eval_group(group):
         accs = np.zeros((len(group), len(slices)))
@@ -567,8 +580,11 @@ def _run_egas_eval(cfg, run_dir, logger):
         lr=ecfg.get("lr", 5e-5),
         temp_max=ecfg.get("temp_max", 100.0),
         temp_min=ecfg.get("temp_min", 0.04),
-        n_layers=ecfg.get("n_layers", 2),
-        n_heads=ecfg.get("n_heads", 4),
+        n_layers=ecfg.get("n_layers", 8),
+        n_heads=ecfg.get("n_heads", 12),
+        n_embd=int(ecfg.get("n_embd", ecfg.get("d_model", 480))),
+        dropout=float(ecfg.get("dropout", 0.2)),
+        weight_decay=float(ecfg.get("weight_decay", 1e-2)),
         seed=seed,
         logger=logger,
     )

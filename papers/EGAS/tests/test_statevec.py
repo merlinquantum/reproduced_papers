@@ -23,8 +23,8 @@ def test_fidelity_is_one_on_identical_inputs():
     n = 4
     seq = [
         ("RY", 0, 1, 0.5),
-        ("CNOT", 1, 0, 0.0),
-        ("MultiRZ", 2, 3, 0.7),
+        ("CNOT", (1, 0), 0, 0.0),
+        ("MultiRZ", (2, 3), 3, 0.7),
         ("H", 3, 0, 0.0),
     ]
     x = torch.tensor(np.random.default_rng(1).uniform(0, 2 * math.pi, size=(1, n)))
@@ -43,5 +43,10 @@ def test_pairwise_energy_in_unit_range():
 
 
 def test_token_pool_size():
-    # n=8: 3*8*8*5 (param 1q) + 2*8 (H,I) + 8 (CNOT) + 8*8*5 (MultiRZ) = 1304
-    assert len(build_token_pool(8, 8)) == 1304
+    # Mirrors the author's make_op_pool (github.com/qDNA-yonsei/Generative-QDE):
+    #   RX/RY/RZ: 3 * 8 qubits * 8 features * 5 coeffs      = 960
+    #   H, I:     2 * 8 qubits                              =  16
+    #   CNOT:     8 * 7 ordered (control, target) pairs     =  56
+    #   MultiRZ:  C(8,2)=28 pairs * 8 features * 5 coeffs   = 1120
+    #   total                                               = 2152
+    assert len(build_token_pool(8, 8)) == 2152

@@ -31,23 +31,40 @@ COEFFS = (0.1, 0.3, 0.5, 0.7, 1.0)
 
 
 def build_token_pool(n_qubits: int, num_features: int):
-    """Enumerate the full token pool C. Returns list of (gate, q, data_idx, r)."""
+    """Enumerate the full token pool C. Returns list of (gate, q, data_idx, r).
+
+    Mirrors the author's ``make_op_pool``
+    (https://github.com/qDNA-yonsei/Generative-QDE, ``EGAS_and_refinement/utils.py``):
+
+    * single-qubit parameterized {RX, RY, RZ}: one token per (gate, qubit, feature, r);
+    * single-qubit non-parameterized {H, I}: one token per (gate, qubit);
+    * CNOT: one token per *ordered* (control, target) pair with control != target;
+    * MultiRZ: one token per *unordered* pair (q1 < q2), feature and coefficient r
+      (MultiRZ is data-dependent, so it carries a feature index just like the 1q rotations).
+
+    For n=8 qubits / 8 features this yields 960 + 16 + 56 + 1120 = 2152 tokens,
+    matching the reference implementation.
+    """
     tokens = []
-    for q in range(n_qubits):
-        for d in range(num_features):
-            for r in COEFFS:
-                for g in PARAM_1Q:
+    # single-qubit parameterized rotations (gate outer, to match the reference order)
+    for g in PARAM_1Q:
+        for q in range(n_qubits):
+            for d in range(num_features):
+                for r in COEFFS:
                     tokens.append((g, q, d, r))
-    for q in range(n_qubits):
-        for g in NONPARAM_1Q:
+    # single-qubit non-parameterized gates
+    for g in NONPARAM_1Q:
+        for q in range(n_qubits):
             tokens.append((g, q, 0, 0.0))
+    # CNOT: ordered pairs (control, target)
     for q1 in range(n_qubits):
         for q2 in range(n_qubits):
             if q1 != q2:
                 tokens.append(("CNOT", (q1, q2), 0, 0.0))
+    # MultiRZ: unordered pairs (q1 < q2), data-dependent (feature index + coefficient)
     for q1 in range(n_qubits):
-        for q2 in range(n_qubits):
-            if q1 != q2:
+        for q2 in range(q1 + 1, n_qubits):
+            for d in range(num_features):
                 for r in COEFFS:
                     tokens.append(("MultiRZ", (q1, q2), d, r))
     return tokens

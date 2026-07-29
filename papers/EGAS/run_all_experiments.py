@@ -69,6 +69,17 @@ def main():
     parser.add_argument(
         "--quick", action="store_true", help="Run quick smoke test only"
     )
+    parser.add_argument(
+        "--paper-scale",
+        action="store_true",
+        help=(
+            "Use the FAITHFUL paper-scale configs in configs/paper/ (480-dim 8-layer GPT, "
+            "768 candidates, 4000 iters, 10 G/B, 10 pairs) over all 7 available datasets. "
+            "These match arXiv:2605.30866 / qDNA-yonsei Generative-QDE and require a GPU; "
+            "they are NOT expected to finish under CPU/qemu. Default (omit) runs the "
+            "reduced-compute configs in configs/."
+        ),
+    )
     args = parser.parse_args()
 
     # Get paths
@@ -86,19 +97,42 @@ def main():
 
     print_header("EGAS Reproduction - All Experiments")
 
+    # Config directory: faithful paper-scale (configs/paper/) or reduced-compute (configs/).
+    cfg_dir = script_dir / "configs" / "paper" if args.paper_scale else script_dir / "configs"
+    if args.paper_scale:
+        print(
+            f"{YELLOW}[--paper-scale] Using FAITHFUL paper configs in {cfg_dir}.\n"
+            f"  480-dim 8-layer GPT, 768 candidates/iter, 4000 iters, 10 G/B, 10 pairs.\n"
+            f"  This matches the paper / author repo and needs a GPU — it will NOT finish\n"
+            f"  under CPU/qemu emulation. Omit --paper-scale for the runnable reduced set.{NC}\n"
+        )
+
     step = 1
-    gate_datasets = [
-        ("PW", "Phishing"),
-        ("WDGV1", "Waveform DB (multiclass)"),
-        ("WQ", "Wine Quality"),
-        ("MGT", "MAGIC Gamma Telescope"),
-    ]
-    photonic_datasets = [
-        ("PW", "Phishing"),
-        ("WQ", "Wine Quality"),
-        ("MGT", "MAGIC Gamma Telescope"),
-        ("WDGV1", "Waveform DB (multiclass)"),
-    ]
+    # The paper evaluates 8 datasets (adds 'Pol'); this repo ships data for 7.
+    if args.paper_scale:
+        gate_datasets = [
+            ("PW", "Phishing"),
+            ("WDGV1", "Waveform DB (multiclass)"),
+            ("WQ", "Wine Quality"),
+            ("MGT", "MAGIC Gamma Telescope"),
+            ("WC", "Wine Color"),
+            ("DB", "Dry Bean"),
+            ("EGSSD", "Electrical Grid Stability"),
+        ]
+        photonic_datasets = list(gate_datasets)
+    else:
+        gate_datasets = [
+            ("PW", "Phishing"),
+            ("WDGV1", "Waveform DB (multiclass)"),
+            ("WQ", "Wine Quality"),
+            ("MGT", "MAGIC Gamma Telescope"),
+        ]
+        photonic_datasets = [
+            ("PW", "Phishing"),
+            ("WQ", "Wine Quality"),
+            ("MGT", "MAGIC Gamma Telescope"),
+            ("WDGV1", "Waveform DB (multiclass)"),
+        ]
 
     if args.quick:
         total_steps = 1
@@ -209,7 +243,7 @@ def main():
                         "--paper-dir",
                         str(script_dir),
                         "--config",
-                        str(script_dir / "configs" / f"egas_{shortname}.json"),
+                        str(cfg_dir / f"egas_{shortname}.json"),
                         "--outdir",
                         str(script_dir / "outdir" / shortname),
                     ],
@@ -234,7 +268,7 @@ def main():
                     "--paper-dir",
                     str(script_dir),
                     "--config",
-                    str(script_dir / "configs" / f"photonic_{shortname}.json"),
+                    str(cfg_dir / f"photonic_{shortname}.json"),
                     "--outdir",
                     str(script_dir / "outdir" / f"photonic_{shortname}"),
                 ],
