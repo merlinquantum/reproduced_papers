@@ -149,7 +149,7 @@ python plotter.py -e -f configs/obliq_maxclique.json configs/qaoa_maxclique.json
                         configs/cvarvqe_maxclique.json -o comparison.png
 ```
 
-Each config already pins its sweep (sizes 2–8, 100 instances/size, seed 101200), so no
+Each config already pins its sweep (sizes 2–10, 100 instances/size, seed 101200), so no
 `--sizes` / `--instances` overrides are needed. That matters: **results are stored under
 a hash of the config, and the plotter re-hashes the same file to find them**, so
 overriding the sweep on one side only sends the plotter to a directory that does not
@@ -200,10 +200,10 @@ which makes it the cheapest variant to try on hardware.
   "solver": "obliq-hybrid",
   "name": "ObliQ Hybrid",             // plot label only; excluded from the hash
   "sweep": {
-    "size_range": [2, 3, 4, 5, 6, 7, 8],
+    "size_range": [2, 3, 4, 5, 6, 7, 8, 9, 10],
     "nb_instances_per_size": 100,
     "seed": 101200,                   // the only source of randomness in a run
-    "timeout": 300,                   // per-instance seconds
+    "timeout": 60,                   // per-instance seconds
     "min_timeout_size": 14,           // below this, timeouts are only checked post-hoc
     "parallel_workers": 10,           // execution-only; excluded from the hash
     "include_exact_results": false    // store exact optima too (needs a seed)
@@ -241,7 +241,7 @@ difference in the figure is a difference in method rather than in budget:
 
 | Shared | Value | Where |
 |--------|-------|-------|
-| Sweep | $N = 2 \ldots 8$, 100 instances/size, seed 101200, 300 s per instance | `sweep` in every config |
+| Sweep | $N = 2 \ldots 10$, 100 instances/size, seed 101200, 60 s per instance | `sweep` in every config |
 | Shot / read budget | 5000 | ObliQ `nsamples`, CVaR-VQE `nb_samples`, QAOA `number_of_shots`, SA `sweep.num_reads` |
 | Optimizer iterations | 100 | ObliQ `train.max_iter`, CVaR-VQE `max_iter`, QAOA `maxiter` |
 | Optimizer / learning rate | `adam`, 0.05 | both photonic variational solvers |
@@ -249,11 +249,7 @@ difference in the figure is a difference in method rather than in budget:
 
 Deliberately *not* equalized, because nothing else has a counterpart: `num_rep`
 (anchor repetitions), `cvar_alpha` and `nb_inputs` (CVaR-VQE's search), `reps` (QAOA
-layers), `graph_mode`. Tabu is also off the shared read budget: one tabu "read" is a
-complete local search rather than a shot or an anneal, and 5000 of them took 105 s on a
-single $N = 5$ instance against 0.9 s for Simulated Annealing at the same count. Equal iteration counts are a shared convention, not equal
-compute: ObliQ optimizes ~58 photonic coefficients at $N = 8$ where QAOA optimizes 2
-angles, and `obliq-static` trains nothing at all.
+layers), `graph_mode`. Equal iteration counts are a shared convention for the Adam optimizer; only for the cobyla the compute is equal leading to same maximum function evaluations.
 
 `graph_mode` selects how candidate bitstrings are ranked during decoding. Only mode `0`
 (prefixes of the photon-occupancy ranking) applies to Max-Cut and Max-Clique; modes `1`
@@ -265,30 +261,21 @@ Add an `"output": {"dir": "..."}` block to move a run's results; `output.dir` de
 
 ## 6. Results and Analysis
 
-> **The figure and table below are from an earlier sweep** — $N = 2 \ldots 7$, a 60 s
-> per-instance budget, and COBYLA at `max_iter: 5` for ObliQ — and cover only three of the
-> solvers. The configs now sweep $N = 2 \ldots 8$ with the aligned hyperparameters above,
-> so nothing in the repository currently resolves to stored results: `plotter.py` will
-> report none until the sweeps in §4 are re-run. The numbers are kept because they are
-> what was measured, not because they describe the current configs.
-
-Sweep settings for the run below: Erdős–Rényi $G(N, 1/2)$, $N = 2 \ldots 7$, 100
+Sweep settings for the run below: Erdős–Rényi $G(N, 1/2)$, $N = 2 \ldots 10$, 100
 instances/size, seed 101200, 60 s per-instance limit.
 
 ![Max-Clique comparison](plots/comparison.png)
 
 Mean exact $\beta$ by size:
 
-| Solver | $N=2$ | 3 | 4 | 5 | 6 | 7 | Q-score |
-|--------|------|---|---|---|---|---|---------|
-| ObliQ Hybrid | 1.000 | 1.000 | 0.985 | 0.938 | 0.951 | 0.920 | **7** |
-| QAOA | 1.000 | 1.000 | 0.969 | 0.927 | 0.845 | 0.769 | **7** |
-| Photonic CVaR-VQE | 1.000 | 0.521 | −0.089 | −0.080 | 0.606 | 0.569 | **3** |
+| Solver | $N=2$ | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | Q-score |
+|--------|------|---|---|---|---|---|---|---|---|---------|
+| ObliQ Hybrid | 1.000 | 1.000 | 0.985 | 0.944 | 0.944 | 0.888 | 0.914 | 0.851 | 0.846 | **10** |
+| QAOA | 1.000 | 1.000 | 0.972 | 0.943 | 0.856 | 0.862 | 0.830 | 0.800 | 0.759 | **10** |
+| Photonic CVaR-VQE | 1.000 | 0.985 | 0.817 | 0.713 | 0.926 | 0.839 | 0.760 | 0.696 | 0.799 | **10** |
 
-ObliQ Hybrid holds $\beta \approx 0.92$–$1.0$ across the whole range and leads QAOA,
-which decays to $0.77$ at $N = 7$. CVaR-VQE is not monotone: it falls *below* the random
-baseline at $N = 4$–$5$ before recovering, so its Q-score stops at 3 even though it clears
-the threshold again at 6 and 7. ObliQ and QAOA both reach 7 — the sweep does not go high
+ObliQ Hybrid holds $\beta \approx 0.85$–$1.0$ across the whole range and leads QAOA,
+which decays to $0.76$ at $N = 10$. CVaR-VQE is not monotone: it falls at $N = 4$–$5$ before recovering, with slow decline in performance. All models reach Q=10, the sweep does not go high
 enough to separate them on that single number, so the mean-$\beta$ curve is the
 informative comparison. ObliQ's runtime sits between QAOA's and CVaR-VQE's.
 
@@ -323,8 +310,7 @@ Where each solver's randomness lives, and what pins it:
 Instances are regenerated, never shipped between processes: `benchmark.py sweep --exact` and
 `plotter.py -e` both rebuild them with `utils.graphs.sample_instance_graph`. Using that
 one sampler matters because it retries edgeless draws — calling `nx.erdos_renyi_graph`
-directly disagrees with it wherever a draw is empty, which is about half of all instances
-at $N = 2$.
+directly disagrees with it wherever a draw is empty.
 
 Irreducible: real hardware. A QPU (`qpu:*`) and the D-Wave QPU / Leap hybrid solvers
 cannot be made to repeat themselves, and remote sampled backends only converge in
@@ -360,7 +346,7 @@ test**), the CLI, and end-to-end reproducibility of every local solver.
 
 ## 9. Extensions and Next Steps
 
-- Push the sweep past $N = 8$, where the solvers' Q-scores would actually separate.
+- Push the sweep past $N = 10$, where the solvers' Q-scores would actually separate.
   Cost is dominated by the Fock-space dimension, so `obliq-static` scales furthest.
 - Run `obliq-static` and a COBYLA-trained `obliq-hybrid` on `qpu:ascella` and compare
   against the noisy simulator, to separate encoding quality from hardware noise.

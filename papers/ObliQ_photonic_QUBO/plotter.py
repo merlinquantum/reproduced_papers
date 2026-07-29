@@ -426,9 +426,9 @@ def plot_graphs(
         beta_max_candidate = max(
             np.max(dataset["means_beta"] + dataset["stds_beta"]) for dataset in datasets
         )
-    beta_ylim_upper = max(0.5, min(1.5, beta_max_candidate * 1.1))
+    beta_ylim_upper = max(0.5, min(1.25, beta_max_candidate * 1.1))
 
-    fig, axs = plt.subplots(1, 2, figsize=(12, 8))
+    fig, axs = plt.subplots(1, 2, figsize=(12, 6))
     fig.suptitle(f"Q-score {problem_type} comparison ({len(datasets)} configurations)")
 
     color_cycle = cycle(
@@ -480,10 +480,12 @@ def plot_graphs(
         xlabel="Problem size N",
         ylabel="Beta",
         xlim=[x_min, x_max],
-        ylim=[-0.3, beta_ylim_upper],
+        ylim=[-0.15, beta_ylim_upper],
     )
     axs[0].set_xticks(all_sizes)
     axs[0].axhline(y=BETA_THRESHOLD, color="r", linestyle="--")
+    axs[0].set_axisbelow(True)
+    axs[0].grid()
 
     axs[1].set_title("Elapsed time")
     if log_time:
@@ -502,6 +504,8 @@ def plot_graphs(
     # for a run that sits just under it.
     if max(time_ylim, 1) >= TIME_LIMIT:
         axs[1].axhline(y=TIME_LIMIT, color="r", linestyle="--")
+    axs[1].set_axisbelow(True)
+    axs[1].grid()
 
     axs[0].legend(loc="lower right")
     axs[1].legend(loc="upper left")
