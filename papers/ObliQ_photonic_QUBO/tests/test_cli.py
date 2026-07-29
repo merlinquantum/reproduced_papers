@@ -49,9 +49,9 @@ def test_unpassed_flags_stay_none(parser):
     """This is what keeps an unused override out of the config -- and its hash."""
     args = parser.parse_args(["sweep", "--config", "configs/obliq_maxclique.json"])
     assert args.sweep__size_range is None
-    assert args.sweep__include_exact_results is None, (
-        "store_true must default to None, not False"
-    )
+    assert (
+        args.sweep__include_exact_results is None
+    ), "store_true must default to None, not False"
 
 
 def test_overrides_only_touch_what_was_passed(parser, cli_spec):
