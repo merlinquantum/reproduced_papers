@@ -29,7 +29,6 @@ from itertools import cycle
 
 import matplotlib.pyplot as plt
 import numpy as np
-
 from lib.config import RESULTS_FILE, config_hash, load_config, run_dir
 from lib.seeding import derive_seed
 from utils.graphs import sample_instance_graph

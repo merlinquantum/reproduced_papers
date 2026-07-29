@@ -2,7 +2,6 @@
 
 import numpy as np
 import pytest
-
 from utils.max_clique import create_qubo_max_clique
 from utils.max_cut import create_qubo_max_cut, exact_max_cut
 from utils.qubo import (

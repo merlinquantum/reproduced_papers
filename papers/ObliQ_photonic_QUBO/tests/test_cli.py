@@ -3,7 +3,6 @@
 import json
 
 import pytest
-
 from benchmark import build_parser
 from lib.config import config_hash, load_cli_spec, load_config
 

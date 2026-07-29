@@ -3,7 +3,6 @@
 import numpy as np
 import pytest
 import torch
-
 from models.circuits import expected_coeff_count
 from models.obliq import augment_qubo, distribution_to_result, qubo_norm_to_theta
 from utils.qubo import build_qubo, normalize_qubo, qubo_objective

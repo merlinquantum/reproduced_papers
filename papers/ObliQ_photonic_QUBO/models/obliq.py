@@ -28,7 +28,6 @@ from dataclasses import dataclass, field
 
 import numpy as np
 import torch
-
 from lib.seeding import set_global_seed
 from models.circuits import (
     SimulationConfig,

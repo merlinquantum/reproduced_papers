@@ -29,20 +29,19 @@ from functools import partial
 import numpy as np
 import perceval as pcvl
 import torch
+from lib.seeding import set_global_seed
 from merlin import MeasurementStrategy, QuantumLayer
 from merlin.core import ComputationSpace
-from networkx import Graph
-from perceval.components import GenericInterferometer
-from perceval.components.unitary_components import BS
-from scipy.optimize import minimize
-
-from lib.seeding import set_global_seed
 from models.circuits import (
     SimulationConfig,
     get_coeff_parameter,
     run_distribution,
     set_coeff_parameter,
 )
+from networkx import Graph
+from perceval.components import GenericInterferometer
+from perceval.components.unitary_components import BS
+from scipy.optimize import minimize
 from utils.qubo import build_qubo
 from utils.readout import EnergyTable, number_mapping
 

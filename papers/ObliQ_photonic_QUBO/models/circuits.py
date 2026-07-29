@@ -21,9 +21,8 @@ import perceval as pcvl
 import torch
 from merlin import MeasurementStrategy, QuantumLayer
 from merlin.core import ComputationSpace
-from perceval.components.unitary_components import BS, PERM, PS
-
 from models.backend import read_quandela_api_key
+from perceval.components.unitary_components import BS, PERM, PS
 
 
 @dataclass

@@ -2,7 +2,6 @@
 
 import networkx as nx
 import pytest
-
 from utils.graphs import MAX_GRAPH_ATTEMPTS, sample_instance_graph
 
 

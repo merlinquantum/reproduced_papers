@@ -17,9 +17,8 @@ always wins, so a config can pin a solver's seed by hand.
 
 from __future__ import annotations
 
-from networkx import Graph
-
 from lib.seeding import set_global_seed
+from networkx import Graph
 from utils.qubo import qubo_matrix_to_dict, to_quadratic_program
 
 #: Every solver name accepted by :func:`run_solver`.

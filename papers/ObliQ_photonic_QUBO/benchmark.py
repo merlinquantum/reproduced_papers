@@ -44,8 +44,6 @@ from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import numpy as np
-from networkx import Graph
-
 from lib.config import (
     CONFIG_FILE,
     RESULTS_FILE,
@@ -59,6 +57,7 @@ from lib.config import (
 from lib.seeding import derive_seed
 from lib.timeout import run_with_timeout
 from models.solver import PROCESS_TIMEOUT_SOLVERS, run_solver
+from networkx import Graph
 from utils.graphs import sample_instance_graph
 from utils.qubo import build_qubo, calculate_beta, exact_optimum, qubo_objective
 

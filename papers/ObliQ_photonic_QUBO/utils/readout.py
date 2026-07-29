@@ -15,7 +15,6 @@ from collections.abc import Callable, Sequence
 
 import numpy as np
 import torch
-
 from utils.qubo import qubo_objective
 
 

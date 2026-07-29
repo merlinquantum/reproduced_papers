@@ -4,7 +4,6 @@ import json
 import os
 
 import pytest
-
 from lib.config import (
     RESULTS_FILE,
     canonical_config,
