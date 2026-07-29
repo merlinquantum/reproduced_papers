@@ -141,7 +141,8 @@ python benchmark.py run -e --problem max-clique --size 8 --solver obliq-hybrid -
 **A full sweep**, then the figure:
 
 ```bash
-python benchmark.py sweep --config configs/obliq_maxclique.json
+python benchmark.py sweep --config configs/obliq_maxclique_cobyla.json
+python benchmark.py sweep --config configs/cvarvqe_maxclique_cobyla.json
 python benchmark.py sweep --config configs/qaoa_maxclique.json
 python benchmark.py sweep --config configs/cvarvqe_maxclique.json
 
@@ -249,7 +250,7 @@ difference in the figure is a difference in method rather than in budget:
 
 Deliberately *not* equalized, because nothing else has a counterpart: `num_rep`
 (anchor repetitions), `cvar_alpha` and `nb_inputs` (CVaR-VQE's search), `reps` (QAOA
-layers), `graph_mode`. Equal iteration counts are a shared convention for the Adam optimizer; only for the cobyla the compute is equal leading to same maximum function evaluations.
+layers), `graph_mode`. Equal iteration counts are a shared convention for the Adam optimizer; only for the cobyla the compute is equal leading to same maximum function evaluations across photonic optimizers and QAOA.
 
 `graph_mode` selects how candidate bitstrings are ranked during decoding. Only mode `0`
 (prefixes of the photon-occupancy ranking) applies to Max-Cut and Max-Clique; modes `1`
