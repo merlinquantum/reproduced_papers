@@ -182,6 +182,21 @@ jobs:
           done
           exit $status
 
+      - name: Show smoke test logs on failure
+        if: failure() && steps.authorize.outputs.authorized == 'true' && steps.detect.outputs.papers != ''
+        run: |
+          set -uo pipefail
+          for paper in ${{ steps.detect.outputs.papers }}; do
+            log_file=".smoke_logs/${paper//\//_}.log"
+            echo "::group::Smoke log for $paper ($log_file)"
+            if [[ -f "$log_file" ]]; then
+              cat "$log_file"
+            else
+              echo "No log file found at $log_file"
+            fi
+            echo "::endgroup::"
+          done
+
       - name: Upload smoke test logs
         if: always() && steps.authorize.outputs.authorized == 'true' && steps.detect.outputs.papers != ''
         uses: actions/upload-artifact@v4
