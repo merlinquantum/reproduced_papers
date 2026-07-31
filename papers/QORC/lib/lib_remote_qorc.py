@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import time
 
@@ -77,6 +79,7 @@ def forward_remote_qorc_quantum_layer(
                 qpu_device_name
             )
         )
+        raise ValueError(f"remote_processor_type not recognized: {qpu_device_name}")
         return -1
 
     # Création du MerlinProcessor

@@ -60,9 +60,9 @@ def generate_dataset(cfg: dict) -> dict[str, torch.Tensor]:
         values += coeff * np.exp(1j * n * xs)
 
     ys = values.real  # Imaginary residuals are numerical noise only.
-    assert np.allclose(
-        values.imag, 0, atol=1e-6
-    ), "Fourier series should evaluate to real values."
+    assert np.allclose(values.imag, 0, atol=1e-6), (
+        "Fourier series should evaluate to real values."
+    )
 
     x_tensor = torch.tensor(xs, dtype=torch.float32).unsqueeze(-1)
     y_tensor = torch.tensor(ys, dtype=torch.float32)
