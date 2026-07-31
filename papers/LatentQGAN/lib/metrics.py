@@ -37,7 +37,7 @@ def frechet_distance(real: np.ndarray, fake: np.ndarray, eps: float = 1e-6) -> f
     diff = mu_r - mu_g
     # Stabilise Sigma to ensure positive semi-definite.
     offset = eps * np.eye(Sigma_r.shape[0])
-    covmean, _ = linalg.sqrtm((Sigma_r + offset) @ (Sigma_g + offset), disp=False)
+    covmean = linalg.sqrtm((Sigma_r + offset) @ (Sigma_g + offset))
     if np.iscomplexobj(covmean):
         covmean = covmean.real
     fd = diff @ diff + np.trace(Sigma_r + Sigma_g - 2 * covmean)

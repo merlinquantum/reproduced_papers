@@ -72,7 +72,11 @@ def get_PS_name_for_mode_and_depth(circuit: pcvl.Circuit, mode: int, depth: int)
         for m in modes:
             depths[m] = d_current + add_depth
 
-        if isinstance(comp, pcvl.components.PS) and mode in modes and depths[mode] >= depth:
+        if (
+            isinstance(comp, pcvl.components.PS)
+            and mode in modes
+            and depths[mode] >= depth
+        ):
             ps_name = comp.get_variables()["phi"]
             return ps_name, depths[mode]
 
@@ -127,7 +131,7 @@ def create_quantum_layer_for_ascella(n_photons, logger):
     step = (n_modes - 1) / (n_photons - 1) if n_photons > 1 else 0
     qorc_input_state = [0] * n_modes
     for k in range(n_photons):
-        index = int(round(k * step))
+        index = round(k * step)
         qorc_input_state[index] = 1
 
     device_name = "cpu"
@@ -188,7 +192,7 @@ def create_qorc_quantum_layer(
     qorc_input_state = [0] * n_modes
     for k in range(n_photons):
         index = round(k * step)
-        qorc_input_state[int(index)] = 1
+        qorc_input_state[index] = 1
 
     params_prefix = ["px"]
 
