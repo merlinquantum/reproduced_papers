@@ -272,12 +272,12 @@ from lib.circuits import MerLinAmplitudeClassifier
 
 # MNIST: 256 pixels → 286 Fock states (no compression!)
 model = MerLinAmplitudeClassifier(
-    input_dim=256,        # MNIST 16x16
-    n_outputs=2,          # binary classification
-    n_modes=13,           # optical modes
-    n_photons=3,          # photon number → C(13,3)=286 states
-    n_layers=2,          # circuit depth
-    computation_space="unbunched"
+    input_dim=256,  # MNIST 16x16
+    n_outputs=2,  # binary classification
+    n_modes=13,  # optical modes
+    n_photons=3,  # photon number → C(13,3)=286 states
+    n_layers=2,  # circuit depth
+    computation_space="unbunched",
 )
 ```
 
@@ -303,12 +303,12 @@ This is different from amplitude encoding:
 from lib.models import HybridQuantumClassifier
 
 model = HybridQuantumClassifier(
-    input_dim=256,        # MNIST 16x16
-    n_outputs=2,          # binary classification
-    hidden_dims=[128, 64], # Classical compression: 256→128→64→13
-    n_modes=13,           # Same as amplitude for fair comparison
+    input_dim=256,  # MNIST 16x16
+    n_outputs=2,  # binary classification
+    hidden_dims=[128, 64],  # Classical compression: 256→128→64→13
+    n_modes=13,  # Same as amplitude for fair comparison
     n_photons=3,
-    n_layers=3            # Sandwich layers
+    n_layers=3,  # Sandwich layers
 )
 ```
 
@@ -358,7 +358,7 @@ results = compare_noise_vs_adversarial(
     model=model,
     dataloader=test_loader,
     epsilon_values=[0.01, 0.05, 0.1, 0.2],
-    attack_method="bim"
+    attack_method="bim",
 )
 # Results include: adversarial, random_uniform, random_gaussian, photon_loss
 ```
@@ -370,8 +370,8 @@ import perceval as pcvl
 
 experiment = pcvl.Experiment(circuit)
 experiment.noise = pcvl.NoiseModel(
-    brightness=0.9,      # 10% source loss
-    transmittance=0.85   # 15% propagation loss
+    brightness=0.9,  # 10% source loss
+    transmittance=0.85,  # 15% propagation loss
 )
 ```
 
