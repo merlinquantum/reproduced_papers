@@ -37,23 +37,37 @@ jobs:
           BASE_SHA="${{ github.event.pull_request.base.sha }}"
           HEAD_SHA="${{ github.event.pull_request.head.sha }}"
 
-          mapfile -t added_paths < <(git diff --name-status --diff-filter=A "$BASE_SHA" "$HEAD_SHA" -- papers/ | awk '{print $2}')
+          mapfile -t added_paths < <(git diff -M --name-status --diff-filter=AR "$BASE_SHA" "$HEAD_SHA" -- papers/ | awk '{print $NF}')
+
+          # Walk up from an added file's directory (in the checked-out HEAD tree) to find the
+          # nearest ancestor that carries the three project markers. This correctly identifies
+          # nested paper suites (e.g. papers/<parent>/<subproject>/) instead of only top-level dirs.
+          find_paper_root() {
+            local candidate="$1"
+            while [[ "$candidate" == papers/* ]]; do
+              if [[ -f "$candidate/cli.json" && -f "$candidate/configs/defaults.json" && -f "$candidate/lib/runner.py" ]]; then
+                echo "$candidate"
+                return 0
+              fi
+              [[ "$candidate" == "papers" ]] && break
+              candidate="$(dirname "$candidate")"
+            done
+            return 1
+          }
 
           declare -A seen
           new_papers=()
           for path in "${added_paths[@]}"; do
-            rel="${path#papers/}"
-            top="${rel%%/*}"
-            [[ -z "$top" ]] && continue
-            # Skip if this top-level papers/ folder already existed on the base branch
-            # (i.e. these are just new files inside an existing paper, not a new paper).
-            if git cat-file -e "$BASE_SHA:papers/$top" 2>/dev/null; then
+            root="$(find_paper_root "$(dirname "$path")")" || continue
+            rel="${root#papers/}"
+            [[ -n "${seen[$rel]:-}" ]] && continue
+            seen[$rel]=1
+            # Skip if this paper root already existed on the base branch (i.e. these are just
+            # new files inside an existing paper, not a new paper).
+            if git cat-file -e "$BASE_SHA:$root" 2>/dev/null; then
               continue
             fi
-            if [[ -z "${seen[$top]:-}" ]]; then
-              seen[$top]=1
-              new_papers+=("$top")
-            fi
+            new_papers+=("$rel")
           done
 
           if [[ ${#new_papers[@]} -eq 0 ]]; then
