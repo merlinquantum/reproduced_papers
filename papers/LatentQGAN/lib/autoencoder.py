@@ -23,7 +23,7 @@ class Encoder(nn.Module):
         super().__init__()
         self.T = T
         self.NG = NG
-        self.latent_dim = T * (2 ** NG)
+        self.latent_dim = T * (2**NG)
         self.conv1 = nn.Conv2d(1, 10, kernel_size=5)  # 28 -> 24
         self.conv2 = nn.Conv2d(10, 10, kernel_size=5)  # 24 -> 20
         self.flat_features = 10 * 20 * 20  # 4000
@@ -37,7 +37,7 @@ class Encoder(nn.Module):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         # reshape to (B, T, 2**NG) and normalise row-wise so each row sums to 1
-        x = x.view(-1, self.T, 2 ** self.NG)
+        x = x.view(-1, self.T, 2**self.NG)
         x = x + 1e-8  # avoid zero denominator
         x = x / x.sum(dim=-1, keepdim=True)
         return x
@@ -48,13 +48,13 @@ class Decoder(nn.Module):
         super().__init__()
         self.T = T
         self.NG = NG
-        self.latent_dim = T * (2 ** NG)
+        self.latent_dim = T * (2**NG)
         self.flat_features = 10 * 20 * 20  # 4000
         self.fc1 = nn.Linear(self.latent_dim, 400)
         self.fc2 = nn.Linear(400, self.flat_features)
         # ConvTranspose to invert the encoder kernels
         self.deconv1 = nn.ConvTranspose2d(10, 10, kernel_size=5)  # 20 -> 24
-        self.deconv2 = nn.ConvTranspose2d(10, 1, kernel_size=5)   # 24 -> 28
+        self.deconv2 = nn.ConvTranspose2d(10, 1, kernel_size=5)  # 24 -> 28
 
     def forward(self, z: torch.Tensor) -> torch.Tensor:
         # z: (B, T, 2**NG) or (B, latent_dim)

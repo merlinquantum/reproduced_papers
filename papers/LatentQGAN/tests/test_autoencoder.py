@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import torch
-
 from lib.autoencoder import Autoencoder, Decoder, Encoder
 
 

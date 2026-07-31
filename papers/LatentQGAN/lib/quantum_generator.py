@@ -23,13 +23,9 @@ precision) on a sample input.
 
 from __future__ import annotations
 
-import math
-from typing import Tuple
-
 import numpy as np
 import torch
 import torch.nn as nn
-
 
 # ---------------------------------------------------------------------------
 # Qiskit spec
@@ -53,16 +49,17 @@ def qiskit_circuit(N: int = 4, L: int = 7):
     for i in range(N):
         qc.ry(alpha[i], i)
     # L parametrised layers: RY rotations then CZ between consecutive qubits.
-    for l in range(L):
+    for layer_idx in range(L):
         for i in range(N):
-            qc.ry(theta[l * N + i], i)
+            qc.ry(theta[layer_idx * N + i], i)
         for i in range(N - 1):
             qc.cz(i, i + 1)
     return qc, alpha, theta
 
 
-def qiskit_forward(alpha: np.ndarray, theta: np.ndarray, N: int = 4, L: int = 7,
-                   NA: int = 1) -> np.ndarray:
+def qiskit_forward(
+    alpha: np.ndarray, theta: np.ndarray, N: int = 4, L: int = 7, NA: int = 1
+) -> np.ndarray:
     """Run the Qiskit circuit and return the post-selected probability vector.
 
     Output is a length-2**(N-NA) probability vector that sums to 1, obtained
@@ -72,7 +69,6 @@ def qiskit_forward(alpha: np.ndarray, theta: np.ndarray, N: int = 4, L: int = 7,
     We treat the ancilla qubits as the *last* NA qubits (i.e. qubits N-NA..N-1),
     matching the PyTorch implementation below.
     """
-    from qiskit import QuantumCircuit
     from qiskit.quantum_info import Statevector
 
     qc, alpha_pv, theta_pv = qiskit_circuit(N, L)
@@ -86,10 +82,10 @@ def qiskit_forward(alpha: np.ndarray, theta: np.ndarray, N: int = 4, L: int = 7,
     # last NA qubits => ancilla=0 corresponds to indices where the top NA
     # bits of i are 0, i.e. i < 2**(N-NA).
     NG = N - NA
-    keep = probs[: 2 ** NG]
+    keep = probs[: 2**NG]
     s = keep.sum()
     if s <= 0:
-        return np.ones(2 ** NG) / (2 ** NG)
+        return np.ones(2**NG) / (2**NG)
     return keep / s
 
 
@@ -108,7 +104,9 @@ def _ry_matrix(theta: torch.Tensor) -> torch.Tensor:
     return torch.stack([row0, row1], dim=-2)
 
 
-def _apply_single_qubit_gate(state: torch.Tensor, gate: torch.Tensor, qubit: int, N: int) -> torch.Tensor:
+def _apply_single_qubit_gate(
+    state: torch.Tensor, gate: torch.Tensor, qubit: int, N: int
+) -> torch.Tensor:
     """Apply a 2x2 gate to ``qubit`` of an N-qubit state vector ``state`` of shape (2,)*N (or (batch,) + (2,)*N).
 
     Convention: qubit 0 is the *least* significant bit (Qiskit convention).
@@ -202,16 +200,16 @@ class QuantumGeneratorTorch(nn.Module):
             out = torch.einsum("bmk,bjk->bmj", state_flat, ry)
             state = torch.movedim(out.reshape(shape), -1, dim)
         # Variational layers.
-        for l in range(self.L):
+        for layer_idx in range(self.L):
             for i in range(self.N):
-                ry_gate = _ry_matrix(self.theta[l, i]).to(dtype)  # (2, 2)
+                ry_gate = _ry_matrix(self.theta[layer_idx, i]).to(dtype)  # (2, 2)
                 state = _apply_single_qubit_gate(state, ry_gate, i, self.N)
             for i in range(self.N - 1):
                 state = _apply_cz(state, i, i + 1, self.N)
         # Compute probabilities, then post-select on ancilla qubits (last NA) = 0.
         # state shape: (batch, 2, 2, ..., 2). Qubit i corresponds to dim -(i+1).
         # ancillas are qubits NG..N-1 i.e. dims -(NG+1) ... -N (the leading data dims).
-        probs = (state.real ** 2 + state.imag ** 2)  # (batch, 2, ..., 2)
+        probs = state.real**2 + state.imag**2  # (batch, 2, ..., 2)
         # Sum the ancilla = 0 slice: for each ancilla qubit (index NG..N-1), slice 0
         # at dim -(q+1).
         sliced = probs
@@ -233,7 +231,7 @@ class QuantumGeneratorTorch(nn.Module):
             sliced = sliced.unsqueeze(0)
         # The current dim ordering for trailing axes: dim -1 corresponds to qubit 0
         # (since we kept indexing with -(i+1)); good — that's already little-endian.
-        flat = sliced.reshape(batch, 2 ** self.NG)
+        flat = sliced.reshape(batch, 2**self.NG)
         s = flat.sum(dim=-1, keepdim=True)
         flat = flat / (s + 1e-12)
         return flat

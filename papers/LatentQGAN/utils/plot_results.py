@@ -16,7 +16,6 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-
 HERE = Path(__file__).resolve().parent.parent
 
 
@@ -41,8 +40,12 @@ def main() -> None:
         "classical": "LatentGAN (classical, ~iso-param)",
         "random_decoder": "RandomDecoder",
     }
-    colors = {"quantum": "#1f77b4", "merlin": "#9467bd",
-              "classical": "#2ca02c", "random_decoder": "#d62728"}
+    colors = {
+        "quantum": "#1f77b4",
+        "merlin": "#9467bd",
+        "classical": "#2ca02c",
+        "random_decoder": "#d62728",
+    }
 
     n_seeds = max((len(v) for v in by_model_digit.values()), default=1)
 
@@ -59,14 +62,23 @@ def main() -> None:
             else:
                 means.append(np.nan)
                 stds.append(0.0)
-        ax.bar(x + (i - 1.5) * width, means, width, yerr=stds, capsize=3,
-               label=labels[m], color=colors[m])
+        ax.bar(
+            x + (i - 1.5) * width,
+            means,
+            width,
+            yerr=stds,
+            capsize=3,
+            label=labels[m],
+            color=colors[m],
+        )
 
     ax.set_xlabel("MNIST class")
     ax.set_ylabel("Best Fréchet Distance (lower is better)")
-    ax.set_title("LatentQGAN reproduction — best FD by model and class\n"
-                 f"Reduced compute (AE 40 epochs / 20k imgs, 1000 GAN iters, "
-                 f"{n_seeds} seed{'s' if n_seeds != 1 else ''})")
+    ax.set_title(
+        "LatentQGAN reproduction — best FD by model and class\n"
+        f"Reduced compute (AE 40 epochs / 20k imgs, 1000 GAN iters, "
+        f"{n_seeds} seed{'s' if n_seeds != 1 else ''})"
+    )
     ax.set_xticks(x)
     ax.set_xticklabels([str(d) for d in digits])
     ax.legend(fontsize=8)

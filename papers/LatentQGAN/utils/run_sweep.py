@@ -11,8 +11,8 @@ Writes per-run output under ``outdir/`` and a summary CSV at
 from __future__ import annotations
 
 import argparse
-import csv
 import copy
+import csv
 import json
 import sys
 import time
@@ -33,8 +33,11 @@ def main() -> None:
         nargs="+",
         default=["quantum", "classical", "merlin", "random_decoder"],
     )
-    ap.add_argument("--base", default="configs/mnist_reduced.json",
-                    help="Base config (per-model overrides loaded from configs/mnist_<model>.json)")
+    ap.add_argument(
+        "--base",
+        default="configs/mnist_reduced.json",
+        help="Base config (per-model overrides loaded from configs/mnist_<model>.json)",
+    )
     args = ap.parse_args()
 
     base_path = HERE / args.base
@@ -43,8 +46,18 @@ def main() -> None:
     results_dir = HERE / "results"
     results_dir.mkdir(parents=True, exist_ok=True)
     summary_path = results_dir / "sweep_summary.csv"
-    fieldnames = ["model", "digit", "seed", "gen_params", "disc_params",
-                  "final_fd", "best_fd", "ae_time_s", "gan_time_s", "run_dir"]
+    fieldnames = [
+        "model",
+        "digit",
+        "seed",
+        "gen_params",
+        "disc_params",
+        "final_fd",
+        "best_fd",
+        "ae_time_s",
+        "gan_time_s",
+        "run_dir",
+    ]
 
     rows = []
     for model in args.models:
@@ -68,18 +81,20 @@ def main() -> None:
                 print(f"\n=== model={model} digit={digit} seed={seed} ===")
                 out = train_and_evaluate(cfg, run_dir)
                 m = out["test_metrics"]
-                rows.append({
-                    "model": model,
-                    "digit": digit,
-                    "seed": seed,
-                    "gen_params": m.get("gen_params"),
-                    "disc_params": m.get("disc_params"),
-                    "final_fd": m.get("final_fd"),
-                    "best_fd": m.get("best_fd"),
-                    "ae_time_s": m.get("ae_train_time_s"),
-                    "gan_time_s": m.get("gan_train_time_s"),
-                    "run_dir": str(run_dir),
-                })
+                rows.append(
+                    {
+                        "model": model,
+                        "digit": digit,
+                        "seed": seed,
+                        "gen_params": m.get("gen_params"),
+                        "disc_params": m.get("disc_params"),
+                        "final_fd": m.get("final_fd"),
+                        "best_fd": m.get("best_fd"),
+                        "ae_time_s": m.get("ae_train_time_s"),
+                        "gan_time_s": m.get("gan_train_time_s"),
+                        "run_dir": str(run_dir),
+                    }
+                )
                 # Save incremental snapshot in case of interrupt.
                 with open(summary_path, "w", newline="") as f:
                     w = csv.DictWriter(f, fieldnames=fieldnames)

@@ -8,7 +8,6 @@ representation of shape (T, 2**NG).
 from __future__ import annotations
 
 import math
-from typing import Tuple
 
 import torch
 import torch.nn as nn
@@ -26,11 +25,13 @@ class LatentQGenerator(nn.Module):
         self.NA = NA
         self.NG = N - NA
         self.L = L
-        self.subs = nn.ModuleList([QuantumGeneratorTorch(N=N, NA=NA, L=L) for _ in range(T)])
+        self.subs = nn.ModuleList(
+            [QuantumGeneratorTorch(N=N, NA=NA, L=L) for _ in range(T)]
+        )
 
     @property
-    def latent_shape(self) -> Tuple[int, int]:
-        return (self.T, 2 ** self.NG)
+    def latent_shape(self) -> tuple[int, int]:
+        return (self.T, 2**self.NG)
 
     def sample_noise(self, batch: int, device=None) -> torch.Tensor:
         """Sample noise vectors uniformly in [0, pi] (alphas used by RY)."""
@@ -79,14 +80,15 @@ class ClassicalLatentGenerator(nn.Module):
     Parameter count is tuned to be ~140 (matches paper) by default.
     """
 
-    def __init__(self, T: int = 5, N: int = 4, noise_dim: int | None = None,
-                 hidden_dim: int = 4):
+    def __init__(
+        self, T: int = 5, N: int = 4, noise_dim: int | None = None, hidden_dim: int = 4
+    ):
         super().__init__()
         self.T = T
         self.N = N
         self.NG = N - 1
         self.noise_dim = noise_dim if noise_dim is not None else T * N
-        self.out_dim = T * (2 ** self.NG)  # 5*8 = 40
+        self.out_dim = T * (2**self.NG)  # 5*8 = 40
         # 2-layer MLP with hidden_dim chosen so total params ~ 140.
         # noise_dim=20 -> first: 20*hidden_dim + hidden_dim, second: hidden_dim*40 + 40.
         # 20*4+4 + 4*40+40 = 84 + 200 = 284, too many. Use hidden_dim=2 -> 20*2+2 + 2*40+40 = 42+120=162; still too many.
@@ -105,7 +107,7 @@ class ClassicalLatentGenerator(nn.Module):
     def forward(self, z: torch.Tensor) -> torch.Tensor:
         h = torch.relu(self.fc1(z))
         out = self.fc2(h)
-        out = out.view(-1, self.T, 2 ** self.NG)
+        out = out.view(-1, self.T, 2**self.NG)
         # Row-wise softmax for the same row-sum=1 invariant as the quantum generator.
         out = torch.softmax(out, dim=-1)
         return out

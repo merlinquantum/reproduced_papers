@@ -32,8 +32,6 @@ from __future__ import annotations
 
 import csv
 import json
-import os
-import sys
 import time
 from pathlib import Path
 from typing import Any
@@ -43,7 +41,7 @@ import torch
 import torch.nn as nn
 
 from .autoencoder import Autoencoder
-from .data import autoencoder_loader, gan_loader, load_mnist, subset_by_class
+from .data import autoencoder_loader, load_mnist, subset_by_class
 from .metrics import frechet_distance
 from .qgan import ClassicalLatentGenerator, LatentDiscriminator, LatentQGenerator
 
@@ -62,8 +60,10 @@ def _log(run_dir: Path, msg: str) -> None:
 def _save_grid(imgs: torch.Tensor, path: Path, ncol: int = 8) -> None:
     """Save a tiny image grid as PNG using matplotlib."""
     import matplotlib
+
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+
     n = imgs.shape[0]
     nrow = int(np.ceil(n / ncol))
     fig, axes = plt.subplots(nrow, ncol, figsize=(ncol, nrow))
@@ -89,12 +89,17 @@ def _build_generator(cfg: dict, T: int, N: int, NA: int, L: int):
         return ClassicalLatentGenerator(T=T, N=N, hidden_dim=hidden), "z"
     if model == "merlin":
         from .merlin_generator import MerlinLatentGenerator
+
         return MerlinLatentGenerator(T=T, N=N, NA=NA, L=L), "alpha"
     raise ValueError(f"unknown model: {model}")
 
 
-def train_autoencoder(ae: Autoencoder, imgs: torch.Tensor, cfg: dict, run_dir: Path, device: torch.device) -> None:
-    loader = autoencoder_loader(imgs, batch_size=cfg.get("ae_batch_size", 20), shuffle=True)
+def train_autoencoder(
+    ae: Autoencoder, imgs: torch.Tensor, cfg: dict, run_dir: Path, device: torch.device
+) -> None:
+    loader = autoencoder_loader(
+        imgs, batch_size=cfg.get("ae_batch_size", 20), shuffle=True
+    )
     opt = torch.optim.SGD(ae.parameters(), lr=cfg.get("ae_lr", 0.05))
     epochs = cfg.get("ae_epochs", 5)
     ae.train()
@@ -110,12 +115,20 @@ def train_autoencoder(ae: Autoencoder, imgs: torch.Tensor, cfg: dict, run_dir: P
             opt.step()
             total += float(loss.item()) * x.size(0)
             n += x.size(0)
-        _log(run_dir, f"[AE] epoch {ep+1}/{epochs} loss={total/n:.5f}")
+        _log(run_dir, f"[AE] epoch {ep + 1}/{epochs} loss={total / n:.5f}")
 
 
-def train_qgan(generator, discriminator: LatentDiscriminator, latents: torch.Tensor,
-               cfg: dict, run_dir: Path, device: torch.device, decoder, real_imgs: np.ndarray,
-               input_name: str = "alpha") -> list[dict]:
+def train_qgan(
+    generator,
+    discriminator: LatentDiscriminator,
+    latents: torch.Tensor,
+    cfg: dict,
+    run_dir: Path,
+    device: torch.device,
+    decoder,
+    real_imgs: np.ndarray,
+    input_name: str = "alpha",
+) -> list[dict]:
     """Train the QGAN (or classical-baseline GAN) on a single class.
 
     Returns the history of [{iter, loss_g, loss_d, fd?}] entries.
@@ -151,8 +164,9 @@ def train_qgan(generator, discriminator: LatentDiscriminator, latents: torch.Ten
         opt_d.zero_grad()
         d_real = discriminator(x_real)
         d_fake = discriminator(x_fake.detach())
-        loss_d = bce(d_real.clamp(eps, 1 - eps), torch.ones_like(d_real)) \
-                 + bce(d_fake.clamp(eps, 1 - eps), torch.zeros_like(d_fake))
+        loss_d = bce(d_real.clamp(eps, 1 - eps), torch.ones_like(d_real)) + bce(
+            d_fake.clamp(eps, 1 - eps), torch.zeros_like(d_fake)
+        )
         loss_d.backward()
         opt_d.step()
         # ---- Train generator ----
@@ -161,15 +175,26 @@ def train_qgan(generator, discriminator: LatentDiscriminator, latents: torch.Ten
         loss_g = bce(d_fake.clamp(eps, 1 - eps), torch.ones_like(d_fake))
         loss_g.backward()
         opt_g.step()
-        entry = {"iter": it + 1, "loss_g": float(loss_g.item()), "loss_d": float(loss_d.item())}
+        entry = {
+            "iter": it + 1,
+            "loss_g": float(loss_g.item()),
+            "loss_d": float(loss_d.item()),
+        }
         if (it + 1) % eval_every == 0 or (it + 1) == iters:
-            entry["fd"] = _evaluate_fd(generator, decoder, real_imgs, n_eval, device, input_name)
-            _log(run_dir, f"[GAN] it={it+1}/{iters} loss_g={entry['loss_g']:.4f} loss_d={entry['loss_d']:.4f} fd={entry['fd']:.3f}")
+            entry["fd"] = _evaluate_fd(
+                generator, decoder, real_imgs, n_eval, device, input_name
+            )
+            _log(
+                run_dir,
+                f"[GAN] it={it + 1}/{iters} loss_g={entry['loss_g']:.4f} loss_d={entry['loss_d']:.4f} fd={entry['fd']:.3f}",
+            )
         history.append(entry)
     return history
 
 
-def _evaluate_fd(generator, decoder, real_imgs: np.ndarray, n: int, device, input_name: str) -> float:
+def _evaluate_fd(
+    generator, decoder, real_imgs: np.ndarray, n: int, device, input_name: str
+) -> float:
     generator.eval()
     decoder.eval()
     with torch.no_grad():
@@ -224,7 +249,12 @@ def train_and_evaluate(cfg: dict, run_dir: str | Path) -> dict[str, Any]:
     # ---- Train autoencoder (with optional cache by (seed, ae_data_size, ae_epochs))
     _log(run_dir, "Training autoencoder...")
     ae = Autoencoder(T=T, NG=N - NA).to(device)
-    cache_dir = Path(cfg.get("ae_cache_dir", Path(__file__).resolve().parent.parent / "outdir" / "_ae_cache"))
+    cache_dir = Path(
+        cfg.get(
+            "ae_cache_dir",
+            Path(__file__).resolve().parent.parent / "outdir" / "_ae_cache",
+        )
+    )
     cache_dir.mkdir(parents=True, exist_ok=True)
     cache_key = f"ae_seed{seed}_size{cfg.get('ae_data_size', 'all')}_ep{cfg.get('ae_epochs', 1)}_bs{cfg.get('ae_batch_size', 20)}_lr{cfg.get('ae_lr', 0.05)}.pt"
     cache_path = cache_dir / cache_key
@@ -256,12 +286,17 @@ def train_and_evaluate(cfg: dict, run_dir: str | Path) -> dict[str, Any]:
     else:
         generator, input_name = _build_generator(cfg, T, N, NA, L)
         generator = generator.to(device)
-        discriminator = LatentDiscriminator(latent_dim=T * (2 ** (N - NA)),
-                                            h1=cfg.get("disc_h1", 64),
-                                            h2=cfg.get("disc_h2", 16)).to(device)
+        discriminator = LatentDiscriminator(
+            latent_dim=T * (2 ** (N - NA)),
+            h1=cfg.get("disc_h1", 64),
+            h2=cfg.get("disc_h2", 16),
+        ).to(device)
         n_gen_params = sum(p.numel() for p in generator.parameters())
         n_disc_params = sum(p.numel() for p in discriminator.parameters())
-        _log(run_dir, f"Generator params: {n_gen_params}, Discriminator params: {n_disc_params}")
+        _log(
+            run_dir,
+            f"Generator params: {n_gen_params}, Discriminator params: {n_disc_params}",
+        )
 
     # ---- Real-image reference set for FD (with no decoder pass to avoid double penalty)
     n_real = cfg.get("n_samples_real", min(256, digit_imgs.shape[0]))
@@ -273,14 +308,24 @@ def train_and_evaluate(cfg: dict, run_dir: str | Path) -> dict[str, Any]:
     if cfg.get("model") == "random_decoder":
         history = []
         # No GAN training; just evaluate the random-decoder baseline.
-        fake = _random_decoder_baseline(ae.decoder, (T, 2 ** (N - NA)),
-                                        cfg.get("n_samples_eval", 64), device)
+        fake = _random_decoder_baseline(
+            ae.decoder, (T, 2 ** (N - NA)), cfg.get("n_samples_eval", 64), device
+        )
         fd_final = frechet_distance(real_for_fd[: cfg.get("n_samples_eval", 64)], fake)
         _log(run_dir, f"[RandomDecoder] fd={fd_final:.3f}")
         history.append({"iter": 0, "fd": fd_final})
     else:
-        history = train_qgan(generator, discriminator, latents, cfg, run_dir, device,
-                             ae.decoder, real_for_fd, input_name=input_name)
+        history = train_qgan(
+            generator,
+            discriminator,
+            latents,
+            cfg,
+            run_dir,
+            device,
+            ae.decoder,
+            real_for_fd,
+            input_name=input_name,
+        )
     t_gan = time.time() - t1
     _log(run_dir, f"QGAN training: {t_gan:.1f}s")
 
@@ -290,11 +335,20 @@ def train_and_evaluate(cfg: dict, run_dir: str | Path) -> dict[str, Any]:
             writer = csv.writer(f)
             writer.writerow(["iter", "loss_g", "loss_d", "fd"])
             for e in history:
-                writer.writerow([e.get("iter", ""), e.get("loss_g", ""), e.get("loss_d", ""), e.get("fd", "")])
+                writer.writerow(
+                    [
+                        e.get("iter", ""),
+                        e.get("loss_g", ""),
+                        e.get("loss_d", ""),
+                        e.get("fd", ""),
+                    ]
+                )
 
     # ---- Generate samples for inspection
     if cfg.get("model") == "random_decoder":
-        fake_imgs_t = torch.tensor(_random_decoder_baseline(ae.decoder, (T, 2 ** (N - NA)), 16, device))
+        fake_imgs_t = torch.tensor(
+            _random_decoder_baseline(ae.decoder, (T, 2 ** (N - NA)), 16, device)
+        )
     else:
         with torch.no_grad():
             noise = generator.sample_noise(16, device=device)

@@ -6,10 +6,9 @@ Provides a per-class loader and a normalised 28x28 [0,1] tensor stream.
 from __future__ import annotations
 
 import os
-from typing import Iterable
 
 import torch
-from torch.utils.data import DataLoader, Subset, TensorDataset
+from torch.utils.data import DataLoader, TensorDataset
 from torchvision import datasets, transforms
 
 
@@ -38,7 +37,9 @@ def load_mnist(cfg: dict | None = None, train: bool = True) -> torch.Tensor:
     return imgs, labels
 
 
-def subset_by_class(imgs: torch.Tensor, labels: torch.Tensor, cls: int, n: int | None = None) -> torch.Tensor:
+def subset_by_class(
+    imgs: torch.Tensor, labels: torch.Tensor, cls: int, n: int | None = None
+) -> torch.Tensor:
     """Return at most ``n`` images for a single class."""
     mask = labels == cls
     out = imgs[mask]
@@ -47,12 +48,16 @@ def subset_by_class(imgs: torch.Tensor, labels: torch.Tensor, cls: int, n: int |
     return out
 
 
-def autoencoder_loader(imgs: torch.Tensor, batch_size: int = 20, shuffle: bool = True) -> DataLoader:
+def autoencoder_loader(
+    imgs: torch.Tensor, batch_size: int = 20, shuffle: bool = True
+) -> DataLoader:
     ds = TensorDataset(imgs)
     return DataLoader(ds, batch_size=batch_size, shuffle=shuffle, drop_last=True)
 
 
-def gan_loader(latent_rows: torch.Tensor, batch_size: int = 1, shuffle: bool = True) -> DataLoader:
+def gan_loader(
+    latent_rows: torch.Tensor, batch_size: int = 1, shuffle: bool = True
+) -> DataLoader:
     """latent_rows: (N, 5, 8) normalised rows; output a TensorDataset over flattened rows.
 
     For per-iteration training of QGAN we just iterate batch_size=1 samples.

@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 
 import matplotlib
@@ -25,7 +26,6 @@ import matplotlib.pyplot as plt
 import torch
 
 HERE = Path(__file__).resolve().parent.parent
-import sys
 
 sys.path.insert(0, str(HERE))
 
@@ -45,14 +45,17 @@ def main() -> None:
     T, N, NA = int(cfg.get("T", 5)), int(cfg.get("N", 4)), int(cfg.get("NA", 1))
 
     cache_dir = HERE / "outdir" / "_ae_cache"
-    key = (f"ae_seed{args.seed}_size{cfg.get('ae_data_size', 'all')}"
-           f"_ep{cfg.get('ae_epochs', 1)}_bs{cfg.get('ae_batch_size', 20)}"
-           f"_lr{cfg.get('ae_lr', 0.05)}.pt")
+    key = (
+        f"ae_seed{args.seed}_size{cfg.get('ae_data_size', 'all')}"
+        f"_ep{cfg.get('ae_epochs', 1)}_bs{cfg.get('ae_batch_size', 20)}"
+        f"_lr{cfg.get('ae_lr', 0.05)}.pt"
+    )
     cache_path = cache_dir / key
     if not cache_path.exists():
         raise SystemExit(
             f"No cached AE at {cache_path}.\n"
-            f"Run e.g.  python implementation.py --config {args.config} --seed {args.seed}  first.")
+            f"Run e.g.  python implementation.py --config {args.config} --seed {args.seed}  first."
+        )
 
     ae = Autoencoder(T=T, NG=N - NA)
     ae.load_state_dict(torch.load(cache_path, map_location="cpu"))
@@ -63,9 +66,11 @@ def main() -> None:
     with torch.no_grad():
         recon = ae(d)
     mse = torch.nn.functional.mse_loss(recon, d).item()
-    print(f"AE reconstruction MSE on digit {args.digit}: {mse:.4f} "
-          f"(recon pixel max={recon.max():.3f}; a healthy AE reaches ~0.02 "
-          "and max close to 1.0)")
+    print(
+        f"AE reconstruction MSE on digit {args.digit}: {mse:.4f} "
+        f"(recon pixel max={recon.max():.3f}; a healthy AE reaches ~0.02 "
+        "and max close to 1.0)"
+    )
 
     fig, ax = plt.subplots(2, args.n, figsize=(args.n, 2.2))
     for i in range(args.n):

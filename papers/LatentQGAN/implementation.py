@@ -48,7 +48,11 @@ def main() -> None:
     cfg.update(_parse_overrides(remaining))
 
     ts = time.strftime("%Y%m%d_%H%M%S")
-    run_dir = Path(__file__).parent / args.outdir / f"run_{ts}_seed{args.seed}_{cfg.get('model', 'na')}_d{cfg.get('digit', 0)}"
+    run_dir = (
+        Path(__file__).parent
+        / args.outdir
+        / f"run_{ts}_seed{args.seed}_{cfg.get('model', 'na')}_d{cfg.get('digit', 0)}"
+    )
     run_dir.mkdir(parents=True, exist_ok=True)
     out = train_and_evaluate(cfg, run_dir)
     print(json.dumps(out["test_metrics"], indent=2))

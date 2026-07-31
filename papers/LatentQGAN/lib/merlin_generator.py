@@ -26,13 +26,13 @@ Hardware-aware reporting (per sub-generator):
 from __future__ import annotations
 
 import math
-from typing import List
 
 import torch
 import torch.nn as nn
 
 try:
     import merlin as ml  # noqa: F401
+
     _HAS_MERLIN = True
 except Exception:
     _HAS_MERLIN = False
@@ -57,7 +57,7 @@ class MerlinSubGenerator(nn.Module):
         self.input_state = [1, 0, 1, 0, 1, 0]
         # Encode 4 input values on 4 of the 6 modes (one per dual-rail "qubit"
         # plus one extra on the second pair).
-        self.input_modes: List[int] = [0, 2, 4, 1][:N_inputs]
+        self.input_modes: list[int] = [0, 2, 4, 1][:N_inputs]
 
         builder = ml.CircuitBuilder(n_modes=self.n_modes)
         # Initial trainable entangling mesh.
@@ -100,7 +100,9 @@ class MerlinLatentGenerator(nn.Module):
         self.NG = N - NA
         self.L = L
         # Use N "input" angles per sub-gen to mirror the gate-based generator.
-        self.subs = nn.ModuleList([MerlinSubGenerator(N_inputs=N, L=L) for _ in range(T)])
+        self.subs = nn.ModuleList(
+            [MerlinSubGenerator(N_inputs=N, L=L) for _ in range(T)]
+        )
 
     def sample_noise(self, batch: int, device=None) -> torch.Tensor:
         device = device or torch.device("cpu")
