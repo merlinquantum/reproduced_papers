@@ -1,0 +1,91 @@
+name: Smoke Test New Papers
+
+# Runs scripts/smoke_test_all_papers.sh against any paper folder newly added by a PR.
+# This verifies (per new paper): the venv/deps install cleanly, the default config
+# runs to completion within the script's timeout, and pytest passes.
+
+on:
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'papers/**'
+
+jobs:
+  smoke-test:
+    # Restrict to trusted authors (merlinquantum org members/owners) since this job
+    # installs arbitrary paper dependencies and executes their code on the runner.
+    if: contains(fromJSON('["MEMBER", "OWNER"]'), github.event.pull_request.author_association)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15 # this timeout could be adapted in the future (15 minutes can be quite large if many new papers are added in a single PR, but is a reasonable default for a single paper).
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Detect newly added paper folders
+        id: detect
+        run: |
+          set -euo pipefail
+
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          mapfile -t added_paths < <(git diff --name-status --diff-filter=A "$BASE_SHA" "$HEAD_SHA" -- papers/ | awk '{print $2}')
+
+          declare -A seen
+          new_papers=()
+          for path in "${added_paths[@]}"; do
+            rel="${path#papers/}"
+            top="${rel%%/*}"
+            [[ -z "$top" ]] && continue
+            # Skip if this top-level papers/ folder already existed on the base branch
+            # (i.e. these are just new files inside an existing paper, not a new paper).
+            if git cat-file -e "$BASE_SHA:papers/$top" 2>/dev/null; then
+              continue
+            fi
+            if [[ -z "${seen[$top]:-}" ]]; then
+              seen[$top]=1
+              new_papers+=("$top")
+            fi
+          done
+
+          if [[ ${#new_papers[@]} -eq 0 ]]; then
+            echo "No new paper folders detected in this PR."
+            {
+              echo "papers="
+            } >> "$GITHUB_OUTPUT"
+          else
+            printf 'New paper folder(s) detected: %s\n' "${new_papers[*]}"
+            {
+              echo "papers=${new_papers[*]}"
+            } >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Smoke test new papers
+        if: steps.detect.outputs.papers != ''
+        run: |
+          set -euo pipefail
+          status=0
+          for paper in ${{ steps.detect.outputs.papers }}; do
+            echo "::group::Smoke test for $paper"
+            if ! scripts/smoke_test_all_papers.sh "$paper"; then
+              status=1
+            fi
+            echo "::endgroup::"
+          done
+          exit $status
+
+      - name: Upload smoke test logs
+        if: always() && steps.detect.outputs.papers != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-logs
+          path: .smoke_logs/
+          if-no-files-found: ignore
