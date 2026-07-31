@@ -12,25 +12,55 @@ on:
 
 jobs:
   smoke-test:
-    # Restrict to trusted authors (merlinquantum org members/owners) since this job
-    # installs arbitrary paper dependencies and executes their code on the runner.
-    if: contains(fromJSON('["MEMBER", "OWNER"]'), github.event.pull_request.author_association)
     runs-on: ubuntu-latest
     timeout-minutes: 15 # this timeout could be adapted in the future (15 minutes can be quite large if many new papers are added in a single PR, but is a reasonable default for a single paper).
 
     steps:
+      # Restrict to trusted authors since this job installs arbitrary paper dependencies
+      # and executes their code on the runner. Checks the PR author's actual repository
+      # permission via the API (rather than github.event.pull_request.author_association,
+      # which under-reports org members whose org membership is private) 
+      - name: Check smoke test authorization
+        id: authorize
+        uses: actions/github-script@v9
+        with:
+          script: |
+            let repositoryPermission = 'unknown';
+            try {
+              const response = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                username: context.payload.pull_request.user.login,
+              });
+              repositoryPermission = response.data.permission;
+            } catch (error) {
+              core.info(`repository_permission_lookup_failed=${error.status ?? error.message}`);
+            }
+
+            const trustedPermissions = new Set(['admin', 'maintain', 'write']);
+            const isAuthorized = trustedPermissions.has(repositoryPermission);
+
+            core.info(`actor=${context.payload.pull_request.user.login}`);
+            core.info(`repository_permission=${repositoryPermission}`);
+            core.info(`is_authorized=${isAuthorized}`);
+
+            core.setOutput('authorized', String(isAuthorized));
+
       - name: Checkout
+        if: steps.authorize.outputs.authorized == 'true'
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up Python
+        if: steps.authorize.outputs.authorized == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
       - name: Detect newly added paper folders
         id: detect
+        if: steps.authorize.outputs.authorized == 'true'
         run: |
           set -euo pipefail
 
@@ -83,7 +113,7 @@ jobs:
           fi
 
       - name: Validate paper structure
-        if: steps.detect.outputs.papers != ''
+        if: steps.authorize.outputs.authorized == 'true' && steps.detect.outputs.papers != ''
         run: |
           set -euo pipefail
 
@@ -139,7 +169,7 @@ jobs:
           fi
 
       - name: Smoke test new papers
-        if: steps.detect.outputs.papers != ''
+        if: steps.authorize.outputs.authorized == 'true' && steps.detect.outputs.papers != ''
         run: |
           set -euo pipefail
           status=0
@@ -153,7 +183,7 @@ jobs:
           exit $status
 
       - name: Upload smoke test logs
-        if: always() && steps.detect.outputs.papers != ''
+        if: always() && steps.authorize.outputs.authorized == 'true' && steps.detect.outputs.papers != ''
         uses: actions/upload-artifact@v4
         with:
           name: smoke-test-logs
