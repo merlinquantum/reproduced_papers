@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 # $ micromamba activate qml-cpu
 # $ python utils/draw_graph_qorc_vs_rff.py
 
@@ -7,6 +5,7 @@
 # Librairies loading and functions definitions
 
 import os
+
 import matplotlib.pyplot as plt
 import pandas as pd
 

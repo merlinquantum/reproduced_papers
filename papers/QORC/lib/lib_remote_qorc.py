@@ -1,14 +1,10 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
 import os
 import time
 
-import torch
 import perceval as pcvl
-
-from perceval.runtime import RemoteConfig
+import torch
 from merlin.core.merlin_processor import MerlinProcessor
+from perceval.runtime import RemoteConfig
 
 
 def _spin_until_with_ctrlc(
@@ -81,7 +77,6 @@ def forward_remote_qorc_quantum_layer(
                 qpu_device_name
             )
         )
-        raise
         return -1
 
     # Création du MerlinProcessor

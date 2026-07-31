@@ -1,6 +1,3 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
-
 from __future__ import annotations
 
 import sys
@@ -27,9 +24,9 @@ except ModuleNotFoundError:
     )
 
 __all__ = [
-    "tensor_dataset",
-    "seed_worker",
     "get_dataloader",
-    "split_fold_numpy",
     "get_mnist_variant",
+    "seed_worker",
+    "split_fold_numpy",
+    "tensor_dataset",
 ]
