@@ -336,7 +336,7 @@ def train(
         lr_str += f"  lr_quantum={lr_quantum}"
     logger.info("=" * 65)
     logger.info(
-        f"Model {model_type}  |  dataset={config.get('dataset','?')}  "
+        f"Model {model_type}  |  dataset={config.get('dataset', '?')}  "
         f"|  epochs={epochs}  {lr_str}"
     )
     logger.info(f"Params: {json.dumps(param_counts)}")
@@ -381,7 +381,7 @@ def train(
 
             # batch progress every 25%
             if n_batches > 4 and (bi + 1) % max(1, n_batches // 4) == 0:
-                logger.debug(f"  batch {bi+1}/{n_batches}  " f"loss={loss.item():.4f}")
+                logger.debug(f"  batch {bi + 1}/{n_batches}  loss={loss.item():.4f}")
 
         sched.step()
         gn = _grad_norm(model)
