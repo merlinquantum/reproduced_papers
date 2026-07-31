@@ -1,4 +1,5 @@
 {
+  "description": "LatentQGAN default configuration for MNIST latent-space quantum GAN",
   "model": "quantum",
   "digit": 0,
   "T": 5,
