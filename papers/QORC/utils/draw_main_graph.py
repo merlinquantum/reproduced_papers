@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # $ micromamba activate qml-cpu
 # $ python utils/draw_main_graph.py
 
