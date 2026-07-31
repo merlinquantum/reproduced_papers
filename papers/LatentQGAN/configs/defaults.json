@@ -1,0 +1,21 @@
+{
+  "model": "quantum",
+  "digit": 0,
+  "T": 5,
+  "N": 4,
+  "NA": 1,
+  "L": 7,
+  "ae_epochs": 30,
+  "ae_lr": 0.05,
+  "ae_batch_size": 20,
+  "ae_data_size": 10000,
+  "gan_iterations": 150,
+  "gen_lr": 0.3,
+  "disc_lr": 0.01,
+  "gan_batch_size": 4,
+  "eval_every": 50,
+  "n_samples_eval": 64,
+  "n_samples_real": 64,
+  "device": "cpu",
+  "_comment": "Smoke config: fast end-to-end check (~4 min). AE 30 epochs on 10k images -> recognizable recon. Not paper-accurate; use mnist_reduced.json for real results."
+}

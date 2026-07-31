@@ -1,0 +1,55 @@
+{
+  "description": "LatentQGAN MNIST latent-space QGAN reproduction runner",
+  "arguments": [
+    {
+      "flags": ["--model"],
+      "help": "Generator implementation",
+      "type": "str",
+      "choices": ["quantum", "merlin", "classical", "random_decoder"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model"}
+    },
+    {
+      "flags": ["--digit"],
+      "help": "MNIST digit class used for GAN training",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "digit"}
+    },
+    {
+      "flags": ["--data-root"],
+      "help": "Shared directory used to store or load MNIST",
+      "type": "path",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "data_root"}
+    },
+    {
+      "flags": ["--ae-epochs"],
+      "help": "Autoencoder training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "ae_epochs"}
+    },
+    {
+      "flags": ["--gan-iterations"],
+      "help": "Number of GAN training iterations",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "gan_iterations"}
+    },
+    {
+      "flags": ["--gan-batch-size"],
+      "help": "GAN training batch size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "gan_batch_size"}
+    },
+    {
+      "flags": ["--force-retrain-ae"],
+      "help": "Ignore the cached autoencoder checkpoint",
+      "action": "store_true",
+      "default": false,
+      "apply": {"kind": "config_path", "path": "force_retrain_ae", "value": true}
+    }
+  ]
+}
