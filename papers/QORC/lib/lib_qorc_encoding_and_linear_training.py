@@ -74,7 +74,11 @@ def get_PS_name_for_mode_and_depth(circuit: pcvl.Circuit, mode: int, depth: int)
         for m in modes:
             depths[m] = d_current + add_depth
 
-        if isinstance(comp, pcvl.components.PS) and mode in modes and depths[mode] >= depth:
+        if (
+            isinstance(comp, pcvl.components.PS)
+            and mode in modes
+            and depths[mode] >= depth
+        ):
             ps_name = comp.get_variables()["phi"]
             return ps_name, depths[mode]
 
