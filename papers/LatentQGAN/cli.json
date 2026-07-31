@@ -17,13 +17,6 @@
       "apply": {"kind": "config_path", "path": "digit"}
     },
     {
-      "flags": ["--data-root"],
-      "help": "Shared directory used to store or load MNIST",
-      "type": "path",
-      "default": null,
-      "apply": {"kind": "config_path", "path": "data_root"}
-    },
-    {
       "flags": ["--ae-epochs"],
       "help": "Autoencoder training epochs",
       "type": "int",
