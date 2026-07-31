@@ -32,7 +32,7 @@ def _parse_overrides(overrides: list[str]) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--config", required=True)
+    ap.add_argument("--config", default="configs/defaults.json")
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--outdir", default="outdir")
     ap.add_argument("--paper", default="LatentQGAN")
