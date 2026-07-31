@@ -145,7 +145,7 @@ jobs:
           status=0
           for paper in ${{ steps.detect.outputs.papers }}; do
             echo "::group::Smoke test for $paper"
-            if ! scripts/smoke_test_all_papers.sh "$paper"; then
+            if ! scripts/smoke_test_all_papers.sh --exact "$paper"; then
               status=1
             fi
             echo "::endgroup::"
