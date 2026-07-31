@@ -68,6 +68,62 @@ jobs:
             } >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Validate paper structure
+        if: steps.detect.outputs.papers != ''
+        run: |
+          set -euo pipefail
+
+          REQUIRED_FILES=(
+            "lib/runner.py"
+            "configs/defaults.json"
+            "cli.json"
+          )
+
+          VALIDATION_FAILED=0
+
+          for paper in ${{ steps.detect.outputs.papers }}; do
+            echo "::group::Validating structure for $paper"
+            PAPER_FAILED=0
+
+            for required_file in "${REQUIRED_FILES[@]}"; do
+              if [[ ! -f "papers/$paper/$required_file" ]]; then
+                echo "❌ MISSING: papers/$paper/$required_file"
+                PAPER_FAILED=1
+                VALIDATION_FAILED=1
+              else
+                echo "✓ Found: papers/$paper/$required_file"
+              fi
+            done
+
+            if [[ $PAPER_FAILED -eq 1 ]]; then
+              echo ""
+              echo "ERROR: Paper '$paper' does not follow the required structure."
+              echo ""
+              echo "Required files:"
+              printf '  - %s\n' "${REQUIRED_FILES[@]}"
+              echo ""
+              echo "Expected structure:"
+              cat << 'EOF'
+          papers/<paper_name>/
+          ├── lib/
+          │   └── runner.py          (entry point with train_and_evaluate function)
+          ├── configs/
+          │   └── defaults.json      (default runnable config)
+          └── cli.json               (paper-specific CLI schema)
+          EOF
+              echo ""
+              echo "See AGENTS.md section 'Repository Model' for more details."
+            fi
+
+            echo "::endgroup::"
+          done
+
+          if [[ $VALIDATION_FAILED -eq 1 ]]; then
+            echo ""
+            echo "::error::One or more papers failed structural validation."
+            exit 1
+          fi
+
       - name: Smoke test new papers
         if: steps.detect.outputs.papers != ''
         run: |
