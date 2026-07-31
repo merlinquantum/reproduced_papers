@@ -6,7 +6,7 @@
   "N": 4,
   "NA": 1,
   "L": 7,
-  "ae_epochs": 30,
+  "ae_epochs": 10,
   "ae_lr": 0.05,
   "ae_batch_size": 20,
   "ae_data_size": 10000,
