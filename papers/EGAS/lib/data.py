@@ -22,7 +22,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 
 # UCI repository ids and the rule for choosing the two classes.
 DATASETS = {
@@ -39,9 +39,6 @@ DATASETS = {
 }
 
 TWO_PI = 2 * math.pi
-
-
-from pathlib import Path
 
 
 def _find_project_root() -> Path:
