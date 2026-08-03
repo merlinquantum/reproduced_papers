@@ -98,7 +98,9 @@ def main():
     print_header("EGAS Reproduction - All Experiments")
 
     # Config directory: faithful paper-scale (configs/paper/) or reduced-compute (configs/).
-    cfg_dir = script_dir / "configs" / "paper" if args.paper_scale else script_dir / "configs"
+    cfg_dir = (
+        script_dir / "configs" / "paper" if args.paper_scale else script_dir / "configs"
+    )
     if args.paper_scale:
         print(
             f"{YELLOW}[--paper-scale] Using FAITHFUL paper configs in {cfg_dir}.\n"
