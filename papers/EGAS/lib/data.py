@@ -41,13 +41,39 @@ DATASETS = {
 TWO_PI = 2 * math.pi
 
 
-def _cache_dir(data_root: str) -> Path:
+from pathlib import Path
+
+
+def _find_project_root() -> Path:
+    """Find the project root by looking for the data directory."""
+    current = Path(__file__).resolve()
+
+    for parent in current.parents:
+        if (parent / "data").exists():
+            return parent
+
+    raise RuntimeError(
+        "Could not locate the project root containing the 'data' directory."
+    )
+
+
+PROJECT_ROOT = _find_project_root()
+DEFAULT_DATA_ROOT = PROJECT_ROOT / "data"
+
+
+def _cache_dir(data_root: str | Path | None = None) -> Path:
+    if data_root is None:
+        data_root = DEFAULT_DATA_ROOT
+
     d = Path(data_root) / "generative_quantum_embeddings"
     d.mkdir(parents=True, exist_ok=True)
     return d
 
 
-def _fetch_raw(name: str, data_root: str):
+def _fetch_raw(
+    name: str,
+    data_root: str | Path | None = None,
+):
     """Return (features DataFrame, target Series) for a dataset, with CSV caching."""
     cache = _cache_dir(data_root)
     spec = DATASETS[name]
@@ -115,7 +141,7 @@ def _select_binary(X: pd.DataFrame, y: pd.Series, rule: str):
 
 def load_dataset(
     name: str,
-    data_root: str = "data",
+    data_root: str | Path | None = None,
     n_components: int = 8,
     seed: int = 0,
     max_pool: int = 6000,
@@ -156,7 +182,7 @@ def load_dataset(
 
 def load_dataset_minimal_for_wasserstein(
     name: str,
-    data_root: str = "data",
+    data_root: str | Path | None = None,
     seed: int = 0,
     max_pool: int = 6000,
 ):
@@ -191,7 +217,7 @@ def load_dataset_minimal_for_wasserstein(
 
 def load_dataset_raw_for_wasserstein(
     name: str,
-    data_root: str = "data",
+    data_root: str | Path | None = None,
     seed: int = 0,
     max_pool: int = 6000,
 ):
