@@ -228,12 +228,12 @@ class HierarchicalPatchEmbed(nn.Module):
         super().__init__()
         region_size = img_size // n_regions_per_side
         patch_size = region_size // n_patches_per_side
-        assert (
-            img_size % n_regions_per_side == 0
-        ), f"img_size {img_size} not divisible by n_regions_per_side {n_regions_per_side}"
-        assert (
-            region_size % n_patches_per_side == 0
-        ), f"region_size {region_size} not divisible by n_patches_per_side {n_patches_per_side}"
+        assert img_size % n_regions_per_side == 0, (
+            f"img_size {img_size} not divisible by n_regions_per_side {n_regions_per_side}"
+        )
+        assert region_size % n_patches_per_side == 0, (
+            f"region_size {region_size} not divisible by n_patches_per_side {n_patches_per_side}"
+        )
 
         self.img_size = img_size
         self.in_channels = in_channels
