@@ -18,7 +18,7 @@
 #             base_env = gym.make("MiniGrid-Empty-5x5-v0")
 #             env = MinigridImageOnlyWrapper(base_env)
 #             obs, _ = env.reset()
-            
+
 #             # Vérification de la planéité et du type des données
 #             self.assertIsInstance(obs, np.ndarray)
 #             self.assertEqual(len(obs.shape), 1)  # Doit être 1D
@@ -33,12 +33,12 @@
 #         nb_modes = 2
 #         hidden_sizes = [16, 16]
 #         final_output_size = 8  # Ex: 4 variables d'état * 2 actions (CartPole)
-        
+
 #         model = HybridMLPModel(q_output_size, nb_photons, nb_modes, hidden_sizes, final_output_size)
-        
+
 #         # Passage avant pour vérifier que les graphes ne crashent pas
 #         out = model()
-        
+
 #         self.assertEqual(out.shape[-1], final_output_size)
 #         self.assertFalse(torch.isnan(out).any(), "La sortie contient des valeurs NaN")
 
@@ -46,9 +46,9 @@
 #         '''Test de la politique linéaire (génération des actions)'''
 #         state = torch.tensor([[1.0, 2.0, 3.0, 4.0]])
 #         weights = torch.ones(8)  # 4 inputs * 2 outputs
-        
+
 #         logits = rl_agent_forward(state, weights, input_dim=4, output_dim=2)
-        
+
 #         # Les dimensions de sortie doivent correspondre (batch_size=1, actions=2)
 #         self.assertEqual(logits.shape, (1, 2))
 
@@ -65,19 +65,20 @@
 
 
 import unittest
-import torch
-import torch.nn as nn
+
 import gymnasium as gym
 import numpy as np
+import torch
+import torch.nn as nn
 from lib.util import (
-    rl_agent_forward,
-    compute_discounted_returns,
-    MinigridImageOnlyWrapper,
-    create_hybrid_model,
     HybridMLPModel,
     HybridMPSModel,
+    MinigridImageOnlyWrapper,
     TorchQuantumModel,
     classic_model,
+    compute_discounted_returns,
+    create_hybrid_model,
+    rl_agent_forward,
 )
 
 
@@ -157,7 +158,7 @@ class TestMinigridWrapper(unittest.TestCase):
         """Test MinigridImageOnlyWrapper instantiation when environment is available."""
         if not self.available:
             self.skipTest("MiniGrid environment not installed")
-        
+
         wrapper = MinigridImageOnlyWrapper(self.env)
         self.assertIsNotNone(wrapper)
 
@@ -165,7 +166,7 @@ class TestMinigridWrapper(unittest.TestCase):
         """Test that wrapped observation space is correctly flattened."""
         if not self.available:
             self.skipTest("MiniGrid environment not installed")
-        
+
         wrapper = MinigridImageOnlyWrapper(self.env)
         # MiniGrid image is typically (7, 7, 3)
         expected_flat_dim = 7 * 7 * 3
@@ -175,7 +176,7 @@ class TestMinigridWrapper(unittest.TestCase):
         """Test that wrapped environment reset produces correct flattened observation."""
         if not self.available:
             self.skipTest("MiniGrid environment not installed")
-        
+
         wrapper = MinigridImageOnlyWrapper(self.env)
         obs, info = wrapper.reset()
         self.assertEqual(len(obs.shape), 1)
@@ -359,7 +360,7 @@ class TestCreateHybridModel(unittest.TestCase):
         }
         model = create_hybrid_model(cfg, total_weights_needed=8)
         self.assertIsInstance(model, HybridMLPModel)
-        
+
         with torch.no_grad():
             output = model()
         self.assertEqual(output.shape[1], 8)
@@ -377,7 +378,7 @@ class TestCreateHybridModel(unittest.TestCase):
         }
         model = create_hybrid_model(cfg, total_weights_needed=8)
         self.assertIsInstance(model, HybridMPSModel)
-        
+
         with torch.no_grad():
             output = model()
         self.assertEqual(output.shape[1], 8)
@@ -394,7 +395,7 @@ class TestCreateHybridModel(unittest.TestCase):
         }
         model = create_hybrid_model(cfg, total_weights_needed=8)
         self.assertIsInstance(model, TorchQuantumModel)
-        
+
         with torch.no_grad():
             output = model()
         self.assertEqual(output.shape[1], 8)
@@ -409,7 +410,7 @@ class TestCreateHybridModel(unittest.TestCase):
         }
         model = create_hybrid_model(cfg, total_weights_needed=8)
         self.assertIsInstance(model, classic_model)
-        
+
         with torch.no_grad():
             output = model()
         self.assertEqual(output.shape[1], 8)
