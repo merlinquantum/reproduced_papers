@@ -1,0 +1,54 @@
+{
+  "description": "QEGM rare-event prediction reproduction CLI",
+  "arguments": [
+    {
+      "flags": ["--epochs"],
+      "help": "Override number of training epochs.",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.epochs"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Override training batch size.",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.batch_size"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Override learning rate.",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lr"}
+    },
+    {
+      "flags": ["--n-samples"],
+      "help": "Number of synthetic samples to generate.",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.n_samples"}
+    },
+    {
+      "flags": ["--lambda-tail"],
+      "help": "Weight on the tail-aware loss term.",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lambda_tail"}
+    },
+    {
+      "flags": ["--seeds"],
+      "help": "Comma-separated list of seeds to run sequentially (e.g. '0,1,2'). Overrides top-level seed.",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.seeds"}
+    },
+    {
+      "flags": ["--models"],
+      "help": "Comma-separated list of models to train (vae, qegm, qegm_merlin).",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.models"}
+    }
+  ]
+}
