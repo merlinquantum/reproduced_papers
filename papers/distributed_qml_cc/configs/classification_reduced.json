@@ -1,0 +1,35 @@
+{
+  "description": "Reduced-compute single-config run: 300 iterations to allow a faster smoke validation of one (scheme, L). Use overrides to vary scheme.",
+  "pipeline": "quantum",
+  "seed": 42,
+  "seeds": [42, 1, 2],
+  "dtype": "float32",
+  "outdir": "outdir",
+  "dataset": {
+    "name": "synthetic_8d",
+    "params": {
+      "seed": 42,
+      "n_dim": 8,
+      "n_samples": 2048,
+      "n_clusters": 32,
+      "samples_per_cluster": 64,
+      "sphere_radius": 0.7853981633974483,
+      "train_fraction": 0.75
+    }
+  },
+  "model": {
+    "name": "DQML",
+    "params": {
+      "scheme": "cc",
+      "n_layers": 5,
+      "qubits_per_qpu": 4
+    }
+  },
+  "training": {
+    "n_iterations": 300,
+    "lr": 0.05,
+    "batch_size": 512,
+    "eval_every": 50
+  },
+  "logging": {"level": "info", "save_config_snapshot": true}
+}
