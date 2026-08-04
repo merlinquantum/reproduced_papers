@@ -47,13 +47,6 @@
       "apply": {"kind": "config_path", "path": "layer_dim"}
     },
     {
-      "flags": ["--final_output_size"],
-      "help": "Total number of generated weights (state_dim * action_dim)",
-      "type": "int",
-      "default": null,
-      "apply": {"kind": "config_path", "path": "final_output_size"}
-    },
-    {
       "flags": ["--num_episodes"],
       "help": "Episode number for agent training.",
       "type": "int",
