@@ -1,0 +1,89 @@
+{
+  "description": "QML passive-sonar reproduction (Bach & Nguyen, Ocean Eng. 2025).",
+  "arguments": [
+    {
+      "flags": ["--task"],
+      "help": "Task: sav_detection, classification, merlin_classification.",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "task"}
+    },
+    {
+      "flags": ["--model"],
+      "help": "Model name: cnn, hqcnn, hqcnn_merlin.",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.name"}
+    },
+    {
+      "flags": ["--dataset"],
+      "help": "Dataset name: shipear or deepship.",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.name"}
+    },
+    {
+      "flags": ["--spectrogram-method"],
+      "help": "Spectrogram preprocessing: sav, demon, or stft.",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.spectrogram_method"}
+    },
+    {
+      "flags": ["--epochs"],
+      "help": "Override training epochs.",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.epochs"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Override training batch size.",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.batch_size"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Override Adam learning rate.",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lr"}
+    },
+    {
+      "flags": ["--n-qubits"],
+      "help": "Override PQC qubit count.",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.n_qubits"}
+    },
+    {
+      "flags": ["--n-layers"],
+      "help": "Override PQC variational-layer count.",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.n_layers"}
+    },
+    {
+      "flags": ["--fc-dim"],
+      "help": "Override CNN backbone FC bottleneck dimension.",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.fc_dim"}
+    },
+    {
+      "flags": ["--image-size"],
+      "help": "Override input spectrogram image side length.",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.image_size"}
+    },
+    {
+      "flags": ["--download-data"],
+      "help": "Request the small public DeepShip GitHub sample before loading data.",
+      "action": "store_true",
+      "default": false,
+      "apply": {"kind": "config_path", "path": "dataset.download", "value": true}
+    }
+  ]
+}

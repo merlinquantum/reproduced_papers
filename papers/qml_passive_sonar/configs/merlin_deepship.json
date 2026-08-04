@@ -1,0 +1,32 @@
+{
+  "description": "Photonic-MerLin HQ-CNN variant on DeepShip (smoke-feasible with real .wav).",
+  "seed": 1337,
+  "device": "cpu",
+  "outdir": "outdir",
+  "task": "merlin_classification",
+  "dataset": {
+    "name": "deepship",
+    "spectrogram_method": "sav",
+    "frame_duration_s": 4.0,
+    "frame_overlap": 0.5,
+    "target_sr": 4000,
+    "image_size": 64,
+    "samples_per_class_synthetic": 6,
+    "duration_synthetic_s": 8.0,
+    "test_fraction": 0.3
+  },
+  "model": {
+    "name": "hqcnn_merlin",
+    "fc_dim": 64,
+    "n_modes": 6,
+    "n_photons": 2,
+    "no_bunching": true
+  },
+  "training": {
+    "epochs": 3,
+    "lr": 1e-3,
+    "batch_size": 4,
+    "save_checkpoint": false
+  },
+  "logging": {"level": "info"}
+}
