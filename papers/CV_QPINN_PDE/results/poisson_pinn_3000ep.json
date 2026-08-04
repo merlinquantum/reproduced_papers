@@ -1,0 +1,42 @@
+{
+  "label": "poisson_pinn_3000ep",
+  "experiment": "poisson_pinn",
+  "source_run": "run_20260528-120837",
+  "seed": 42,
+  "n_params": 90,
+  "metrics": {
+    "rmse": 0.0008279197526764025,
+    "mae": 0.0006619028759960785,
+    "l_inf": 0.001678822829333862,
+    "nmse": 0.0003527145445611445
+  },
+  "best": {
+    "epoch": 2999,
+    "loss": 5.504595711198335e-05
+  },
+  "wall_time_sec": 175.58881855010986,
+  "model": {
+    "n_qumodes": 2,
+    "n_multi_layers": 2,
+    "n_single_layers": 2,
+    "cutoff": 8,
+    "active_sd": 0.001,
+    "passive_sd": 0.1,
+    "name": "FCNN",
+    "target_param_count": 88
+  },
+  "training": {
+    "epochs": 3000,
+    "lr": 0.005,
+    "collocation_points": 258,
+    "lambdas": {
+      "pde": 0.25,
+      "bc": 0.25,
+      "consistency": 0.25,
+      "trace": 0.0
+    }
+  },
+  "hidden_layers": [
+    22
+  ]
+}
