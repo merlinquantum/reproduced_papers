@@ -1,0 +1,39 @@
+{
+  "description": "Default parameters for QuLTSF",
+  "seed": 42,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "device": "cpu",
+  "dataset": {
+    "name": "weather",
+    "path": "weather.csv",
+    "time_column": "date",
+    "features_mode": "MS",
+    "target": "OT",
+    "sequence_length": 96,
+    "prediction_horizon": 24,
+    "batch_size": 16,
+    "train_ratio": 0.7,
+    "val_ratio": 0.1,
+    "test_ratio": 0.2,
+    "max_rows": null
+  },
+  "model": {
+    "name": "qultsf_reference",
+    "params": {
+      "latent_dim": 4,
+      "hidden_dim": 16,
+      "shots": 0
+    }
+  },
+  "training": {
+    "epochs": 5,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "weight_decay": 0.0
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "description": "Paper reproduction runner",
+  "arguments": [
+    {
+      "flags": ["--epochs"],
+      "help": "Override number of training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.epochs"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Override dataset batch size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.batch_size"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Override learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lr"}
+    }
+  ]
+}
