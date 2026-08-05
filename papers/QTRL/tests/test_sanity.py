@@ -62,11 +62,10 @@
 #     unittest.main()
 
 
-
-
 import unittest
 
 import gymnasium as gym
+import minigrid
 import numpy as np
 import torch
 import torch.nn as nn
@@ -143,15 +142,12 @@ class TestMinigridWrapper(unittest.TestCase):
 
     def setUp(self):
         """Check if MiniGrid environment is available."""
-        try:
-            self.env = gym.make("MiniGrid-Empty-5x5-v0")
-            self.available = True
-        except Exception:
-            self.available = False
+        self.env = gym.make("MiniGrid-Empty-5x5-v0")
+        self.available = True
 
     def tearDown(self):
         """Close environment if it was created."""
-        if self.available and hasattr(self, 'env'):
+        if self.available and hasattr(self, "env"):
             self.env.close()
 
     def test_minigrid_wrapper_available(self):
