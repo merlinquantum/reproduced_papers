@@ -1,0 +1,5 @@
+merlinquantum
+gymnasium[classic_control]
+minigrid
+-e git+https://github.com/mit-han-lab/torchquantum.git#egg=torchquantum
+pytest
