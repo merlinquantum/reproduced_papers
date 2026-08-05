@@ -191,7 +191,6 @@ X_wall = np.stack([Xw_x, Xw_y], axis=-1)
 
 # Compute outward unit normals along the airfoil boundary
 def compute_normals(xs, ys):
-
     # Compute numerical tangent vector along the curve
     # This is derivative along the contour parameter (not ∂/∂x or ∂/∂y)
     dx = np.gradient(xs)
@@ -292,7 +291,6 @@ X_bot = np.stack([x_topbot, np.full_like(x_topbot, TAF_Y_MIN)], axis=-1)
 #   If the number of intersections is odd → point is inside.
 #   If even → point is outside.
 def point_in_polygon(xy_points, poly_x, poly_y):
-
     # Extract x and y coordinates of test points
     x = xy_points[:, 0]
     y = xy_points[:, 1]

@@ -1,0 +1,17 @@
+artifact,dataset,split,kernel_model,state_model,n_kernel_predictions,n_state_predictions,n_common_predictions,n_missing_from_state,n_extra_in_state,true_label_mismatches,prediction_matches,prediction_disagreements,prediction_agreement,score_count,max_abs_score_diff,mean_abs_score_diff
+kernel_vs_state_fidelity_ids2012,ids2012,train,qsvm_angle,state_svm_angle,120,120,120,0,0,0,120,0,1.0,120,0.00010200720910824579,1.6160489063329433e-05
+kernel_vs_state_fidelity_ids2012,ids2012,train,qsvm_amplitude,state_svm_amplitude,120,120,120,0,0,0,120,0,1.0,120,2.816635813474022e-13,3.9572511933982923e-14
+kernel_vs_state_fidelity_ids2012,ids2012,train,qsvm_zz,state_svm_zz,120,120,120,0,0,0,120,0,1.0,120,0.0005491801810545427,0.00017655816318635405
+kernel_vs_state_fidelity_ids2012,ids2012,train,qknn_angle,state_knn_angle,120,120,120,0,0,0,120,0,1.0,120,0.0,0.0
+kernel_vs_state_fidelity_ids2012,ids2012,train,qknn_amplitude,state_knn_amplitude,120,120,120,0,0,0,120,0,1.0,120,0.0,0.0
+kernel_vs_state_fidelity_ids2012,ids2012,train,qknn_zz,state_knn_zz,120,120,120,0,0,0,120,0,1.0,120,0.0,0.0
+kernel_vs_state_fidelity_ids2012,ids2012,train,photonic_fidelity_svm_angle,photonic_state_svm_angle,120,120,120,0,0,0,115,5,0.9583333333333334,120,1.6533041427902093,0.34915933873929306
+kernel_vs_state_fidelity_ids2012,ids2012,train,photonic_fidelity_knn_angle,photonic_state_knn_angle,120,120,120,0,0,0,120,0,1.0,120,0.0,0.0
+kernel_vs_state_fidelity_ids2012,ids2012,test,qsvm_angle,state_svm_angle,50,50,50,0,0,0,50,0,1.0,50,7.964340504751366e-05,1.8766563479523935e-05
+kernel_vs_state_fidelity_ids2012,ids2012,test,qsvm_amplitude,state_svm_amplitude,50,50,50,0,0,0,50,0,1.0,50,2.5579538487363607e-13,7.592815265411445e-14
+kernel_vs_state_fidelity_ids2012,ids2012,test,qsvm_zz,state_svm_zz,50,50,50,0,0,0,50,0,1.0,50,0.0004396607101970762,0.0001589710871545047
+kernel_vs_state_fidelity_ids2012,ids2012,test,qknn_angle,state_knn_angle,50,50,50,0,0,0,50,0,1.0,50,0.0,0.0
+kernel_vs_state_fidelity_ids2012,ids2012,test,qknn_amplitude,state_knn_amplitude,50,50,50,0,0,0,50,0,1.0,50,0.0,0.0
+kernel_vs_state_fidelity_ids2012,ids2012,test,qknn_zz,state_knn_zz,50,50,50,0,0,0,50,0,1.0,50,0.0,0.0
+kernel_vs_state_fidelity_ids2012,ids2012,test,photonic_fidelity_svm_angle,photonic_state_svm_angle,50,50,50,0,0,0,48,2,0.96,50,1.2584740274053312,0.27518505920322295
+kernel_vs_state_fidelity_ids2012,ids2012,test,photonic_fidelity_knn_angle,photonic_state_knn_angle,50,50,50,0,0,0,50,0,1.0,50,0.207337786335119,0.015924790226076777

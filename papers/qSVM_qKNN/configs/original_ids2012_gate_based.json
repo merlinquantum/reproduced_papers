@@ -1,0 +1,32 @@
+{
+  "description": "Original-style IDS2012 gate-based comparison using explicit state-fidelity equivalents, without repository-side ZZFeatureMap or photonic extensions.",
+  "data_source": "csv",
+  "dataset": "ids2012",
+  "ids_archive": "ISCX-IDS-2012/iscxids2012-master.tar.gz",
+  "ids_csv_files": [
+    "TestbedMonJun14Flows.csv",
+    "TestbedSatJun12Flows.csv",
+    "TestbedSunJun13Flows.csv",
+    "TestbedThuJun17Flows.csv",
+    "TestbedTueJun15Flows.csv",
+    "TestbedWedJun16Flows.csv"
+  ],
+  "label_column": "Label",
+  "subset_size": 300000,
+  "feature_limit": 10,
+  "models": [
+    "svm_classical",
+    "knn_classical",
+    "state_svm_angle",
+    "state_svm_amplitude",
+    "state_knn_angle",
+    "state_knn_amplitude",
+    "hybrid_svm_angle",
+    "hybrid_svm_amplitude",
+    "hybrid_knn_angle",
+    "hybrid_knn_amplitude"
+  ],
+  "seeds": [
+    42
+  ]
+}

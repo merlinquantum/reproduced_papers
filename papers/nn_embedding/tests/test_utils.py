@@ -23,7 +23,9 @@ from papers.nn_embedding.utils.merlin_model_utils import (  # noqa: E402
     ordered_variable_params,
     rename_params_in_current_order,
     strip_simple_negation_expressions,
-)  # noqa: E402
+)
+
+# noqa: E402
 from papers.nn_embedding.utils.utils import (  # noqa: E402
     LinearLoss,
     TransparentModel,
@@ -106,7 +108,6 @@ def _component_params(component):
 
 
 def test_calculate_distance():
-
     plus_state = torch.tensor(0.5 * np.array([[1, 1], [1, 1]]))
     minus_state = torch.tensor(0.5 * np.array([[1, -1], [-1, 1]]))
     zero_state = torch.tensor(np.array([[1, 0], [0, 0]]))

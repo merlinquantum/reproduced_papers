@@ -1,0 +1,51 @@
+{
+  "description": "Fast photonic smoke test: photonic EGAS mirror on WC (UNBUNCHED, 2 photons)",
+  "seed": 0,
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "task": "photonic_eval",
+  "dataset": {
+    "name": "WC",
+    "root": "data",
+    "n_qubits": 8,
+    "n_components": 8
+  },
+  "egas": {
+    "seq_len": 12,
+    "n_iters": 12,
+    "n_candidates": 4,
+    "select_k": 2,
+    "gamma": 0.1,
+    "lr": 5e-05,
+    "temp_max": 100.0,
+    "temp_min": 0.04,
+    "search_samples": 16,
+    "d_model": 32,
+    "n_layers": 1,
+    "n_heads": 2
+  },
+  "bias": {
+    "epochs": 30,
+    "batch_samples": 16,
+    "lr": 0.0005
+  },
+  "nqe": {
+    "epochs": 5
+  },
+  "eval": {
+    "n_train": 80,
+    "n_test": 30,
+    "n_repeats": 1,
+    "top": 2
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  },
+  "photonic": {
+    "n_photons": 2,
+    "computation_space": "FOCK",
+    "seq_len": 12
+  }
+}

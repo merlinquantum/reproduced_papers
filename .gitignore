@@ -11,8 +11,12 @@ data/*
 !data/photonic_QCNN/**
 !data/QLSTM/
 !data/QLSTM/**
+!data/generative_quantum_embeddings/
+!data/generative_quantum_embeddings/**
 models/
 !models/.gitkeep
+!papers/**/models/
+!papers/**/models/.gitkeep
 outdir/
 !outdir/.gitkeep
 .smoke_logs/

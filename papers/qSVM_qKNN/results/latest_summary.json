@@ -1,0 +1,414 @@
+{
+  "all_models_ids2012": {
+    "experiment": "ALL_MODELS",
+    "dataset": "ids2012",
+    "family": "all_models",
+    "artifact": "all_models_ids2012",
+    "description": "All-model IDS2012 comparison. Every implemented SVM and KNN variant sees the same compact truncated split.",
+    "subset_size": 90000,
+    "feature_limit": 8,
+    "n_train": 5608,
+    "n_test": 2000,
+    "class_counts_train": {
+      "0": 2804,
+      "1": 2804
+    },
+    "class_counts_test": {
+      "0": 1000,
+      "1": 1000
+    },
+    "models": [
+      "svm_classical",
+      "knn_classical",
+      "state_svm_angle",
+      "state_svm_amplitude",
+      "state_svm_zz",
+      "state_knn_angle",
+      "state_knn_amplitude",
+      "state_knn_zz",
+      "hybrid_svm_angle",
+      "hybrid_svm_amplitude",
+      "hybrid_svm_zz",
+      "hybrid_knn_angle",
+      "hybrid_knn_amplitude",
+      "hybrid_knn_zz",
+      "photonic_hybrid_svm_angle",
+      "photonic_hybrid_svm_amplitude",
+      "photonic_state_svm_angle",
+      "photonic_hybrid_knn_angle",
+      "photonic_hybrid_knn_amplitude",
+      "photonic_state_knn_angle"
+    ],
+    "seeds": [
+      42
+    ]
+  },
+  "all_models_url2016": {
+    "experiment": "ALL_MODELS",
+    "dataset": "url2016",
+    "family": "all_models",
+    "artifact": "all_models_url2016",
+    "description": "All-model URL2016 comparison. Every implemented SVM and KNN variant sees the same compact truncated split.",
+    "subset_size": 10000,
+    "feature_limit": 8,
+    "n_train": 7906,
+    "n_test": 2000,
+    "class_counts_train": {
+      "0": 3953,
+      "1": 3953
+    },
+    "class_counts_test": {
+      "0": 1000,
+      "1": 1000
+    },
+    "models": [
+      "svm_classical",
+      "knn_classical",
+      "state_svm_angle",
+      "state_svm_amplitude",
+      "state_svm_zz",
+      "state_knn_angle",
+      "state_knn_amplitude",
+      "state_knn_zz",
+      "hybrid_svm_angle",
+      "hybrid_svm_amplitude",
+      "hybrid_svm_zz",
+      "hybrid_knn_angle",
+      "hybrid_knn_amplitude",
+      "hybrid_knn_zz",
+      "photonic_hybrid_svm_angle",
+      "photonic_hybrid_svm_amplitude",
+      "photonic_state_svm_angle",
+      "photonic_hybrid_knn_angle",
+      "photonic_hybrid_knn_amplitude",
+      "photonic_state_knn_angle"
+    ],
+    "seeds": [
+      42
+    ]
+  },
+  "fast_models_ids2012": {
+    "experiment": "FAST_MODELS",
+    "dataset": "ids2012",
+    "family": "fast_models",
+    "artifact": "fast_models_ids2012",
+    "description": "Fast-model IDS2012 comparison. Scalable non-ZZ models are evaluated on a larger matched split over three seeds.",
+    "subset_size": 200000,
+    "feature_limit": null,
+    "n_train": 14906,
+    "n_test": 2000,
+    "class_counts_train": {
+      "0": 7453,
+      "1": 7453
+    },
+    "class_counts_test": {
+      "0": 1000,
+      "1": 1000
+    },
+    "models": [
+      "svm_classical",
+      "state_svm_angle",
+      "state_svm_amplitude",
+      "hybrid_svm_angle",
+      "hybrid_svm_amplitude",
+      "photonic_hybrid_svm_angle",
+      "photonic_hybrid_svm_amplitude",
+      "photonic_state_svm_angle",
+      "knn_classical",
+      "state_knn_angle",
+      "state_knn_amplitude",
+      "hybrid_knn_angle",
+      "hybrid_knn_amplitude",
+      "photonic_hybrid_knn_angle",
+      "photonic_hybrid_knn_amplitude",
+      "photonic_state_knn_angle"
+    ],
+    "seeds": [
+      42,
+      43,
+      44
+    ]
+  },
+  "fast_models_url2016": {
+    "experiment": "FAST_MODELS",
+    "dataset": "url2016",
+    "family": "fast_models",
+    "artifact": "fast_models_url2016",
+    "description": "Fast-model URL2016 comparison. Scalable non-ZZ models are evaluated on a larger matched split over three seeds.",
+    "subset_size": 0,
+    "feature_limit": 10,
+    "n_train": 13562,
+    "n_test": 2000,
+    "class_counts_train": {
+      "0": 6781,
+      "1": 6781
+    },
+    "class_counts_test": {
+      "0": 1000,
+      "1": 1000
+    },
+    "models": [
+      "svm_classical",
+      "state_svm_angle",
+      "state_svm_amplitude",
+      "hybrid_svm_angle",
+      "hybrid_svm_amplitude",
+      "photonic_hybrid_svm_angle",
+      "photonic_hybrid_svm_amplitude",
+      "photonic_state_svm_angle",
+      "knn_classical",
+      "state_knn_angle",
+      "state_knn_amplitude",
+      "hybrid_knn_angle",
+      "hybrid_knn_amplitude",
+      "photonic_hybrid_knn_angle",
+      "photonic_hybrid_knn_amplitude",
+      "photonic_state_knn_angle"
+    ],
+    "seeds": [
+      42,
+      43,
+      44
+    ]
+  },
+  "kernel_vs_state_fidelity_ids2012": {
+    "experiment": "KERNEL_VS_STATE_FIDELITY",
+    "dataset": "ids2012",
+    "family": "kernel_validation",
+    "artifact": "kernel_vs_state_fidelity_ids2012",
+    "description": "IDS2012 validation run comparing fidelity-kernel models against explicit state-amplitude fidelity models on the all_models truncation.",
+    "subset_size": 2000,
+    "feature_limit": 8,
+    "n_train": 120,
+    "n_test": 50,
+    "class_counts_train": {
+      "0": 60,
+      "1": 60
+    },
+    "class_counts_test": {
+      "0": 25,
+      "1": 25
+    },
+    "models": [
+      "qsvm_angle",
+      "state_svm_angle",
+      "qsvm_amplitude",
+      "state_svm_amplitude",
+      "qsvm_zz",
+      "state_svm_zz",
+      "qknn_angle",
+      "state_knn_angle",
+      "qknn_amplitude",
+      "state_knn_amplitude",
+      "qknn_zz",
+      "state_knn_zz",
+      "photonic_fidelity_svm_angle",
+      "photonic_state_svm_angle",
+      "photonic_fidelity_knn_angle",
+      "photonic_state_knn_angle"
+    ],
+    "seeds": [
+      42
+    ]
+  },
+  "kernel_vs_state_fidelity_url2016": {
+    "experiment": "KERNEL_VS_STATE_FIDELITY",
+    "dataset": "url2016",
+    "family": "kernel_validation",
+    "artifact": "kernel_vs_state_fidelity_url2016",
+    "description": "URL2016 validation run comparing fidelity-kernel models against explicit state-amplitude fidelity models on the all_models truncation.",
+    "subset_size": 176,
+    "feature_limit": 8,
+    "n_train": 122,
+    "n_test": 52,
+    "class_counts_train": {
+      "0": 61,
+      "1": 61
+    },
+    "class_counts_test": {
+      "0": 26,
+      "1": 26
+    },
+    "models": [
+      "qsvm_angle",
+      "state_svm_angle",
+      "qsvm_amplitude",
+      "state_svm_amplitude",
+      "qsvm_zz",
+      "state_svm_zz",
+      "qknn_angle",
+      "state_knn_angle",
+      "qknn_amplitude",
+      "state_knn_amplitude",
+      "qknn_zz",
+      "state_knn_zz",
+      "photonic_fidelity_svm_angle",
+      "photonic_state_svm_angle",
+      "photonic_fidelity_knn_angle",
+      "photonic_state_knn_angle"
+    ],
+    "seeds": [
+      42
+    ]
+  },
+  "merlin_ids2012": {
+    "experiment": "MERLIN",
+    "dataset": "ids2012",
+    "family": "photonic",
+    "artifact": "merlin_ids2012",
+    "description": "MerLin IDS2012 photonic comparison: reservoir explicit features and explicit state-fidelity SVM/KNN on a matched subset.",
+    "subset_size": 300000,
+    "feature_limit": null,
+    "n_train": 23358,
+    "n_test": 2000,
+    "class_counts_train": {
+      "0": 11679,
+      "1": 11679
+    },
+    "class_counts_test": {
+      "0": 1000,
+      "1": 1000
+    },
+    "models": [
+      "photonic_hybrid_svm_angle",
+      "photonic_hybrid_svm_amplitude",
+      "photonic_state_svm_angle",
+      "photonic_hybrid_knn_angle",
+      "photonic_hybrid_knn_amplitude",
+      "photonic_state_knn_angle"
+    ],
+    "seeds": [
+      42
+    ]
+  },
+  "merlin_url2016": {
+    "experiment": "MERLIN",
+    "dataset": "url2016",
+    "family": "photonic",
+    "artifact": "merlin_url2016",
+    "description": "MerLin URL2016 photonic comparison: reservoir explicit features and explicit state-fidelity SVM/KNN on a matched subset.",
+    "subset_size": 0,
+    "feature_limit": null,
+    "n_train": 13562,
+    "n_test": 2000,
+    "class_counts_train": {
+      "0": 6781,
+      "1": 6781
+    },
+    "class_counts_test": {
+      "0": 1000,
+      "1": 1000
+    },
+    "models": [
+      "photonic_hybrid_svm_angle",
+      "photonic_hybrid_svm_amplitude",
+      "photonic_state_svm_angle",
+      "photonic_hybrid_knn_angle",
+      "photonic_hybrid_knn_amplitude",
+      "photonic_state_knn_angle"
+    ],
+    "seeds": [
+      42
+    ]
+  },
+  "notebook_url2016": {
+    "experiment": "NOTEBOOK",
+    "dataset": "url2016",
+    "family": "explicit_features",
+    "artifact": "notebook_url2016",
+    "description": "Notebook pedagogical URL2016 explicit-feature comparison: classical, gate-based hybrid, and photonic hybrid SVM/KNN.",
+    "subset_size": 0,
+    "feature_limit": null,
+    "n_train": 13562,
+    "n_test": 2000,
+    "class_counts_train": {
+      "0": 6781,
+      "1": 6781
+    },
+    "class_counts_test": {
+      "0": 1000,
+      "1": 1000
+    },
+    "models": [
+      "svm_classical",
+      "hybrid_svm_angle",
+      "photonic_hybrid_svm_angle",
+      "photonic_hybrid_svm_amplitude",
+      "knn_classical",
+      "hybrid_knn_angle",
+      "photonic_hybrid_knn_angle",
+      "photonic_hybrid_knn_amplitude"
+    ],
+    "seeds": [
+      42
+    ]
+  },
+  "original_ids2012_gate_based": {
+    "experiment": "ORIGINAL",
+    "dataset": "ids2012",
+    "family": "gate_based",
+    "artifact": "original_ids2012_gate_based",
+    "description": "Original-style IDS2012 gate-based comparison using explicit state-fidelity equivalents, without repository-side ZZFeatureMap or photonic extensions.",
+    "subset_size": 300000,
+    "feature_limit": 10,
+    "n_train": 23358,
+    "n_test": 2000,
+    "class_counts_train": {
+      "0": 11679,
+      "1": 11679
+    },
+    "class_counts_test": {
+      "0": 1000,
+      "1": 1000
+    },
+    "models": [
+      "svm_classical",
+      "knn_classical",
+      "state_svm_angle",
+      "state_svm_amplitude",
+      "state_knn_angle",
+      "state_knn_amplitude",
+      "hybrid_svm_angle",
+      "hybrid_svm_amplitude",
+      "hybrid_knn_angle",
+      "hybrid_knn_amplitude"
+    ],
+    "seeds": [
+      42
+    ]
+  },
+  "original_url2016_gate_based": {
+    "experiment": "ORIGINAL",
+    "dataset": "url2016",
+    "family": "gate_based",
+    "artifact": "original_url2016_gate_based",
+    "description": "Original-style URL2016 gate-based comparison using explicit state-fidelity equivalents, without repository-side ZZFeatureMap or photonic extensions.",
+    "subset_size": 0,
+    "feature_limit": 10,
+    "n_train": 13562,
+    "n_test": 2000,
+    "class_counts_train": {
+      "0": 6781,
+      "1": 6781
+    },
+    "class_counts_test": {
+      "0": 1000,
+      "1": 1000
+    },
+    "models": [
+      "svm_classical",
+      "knn_classical",
+      "state_svm_angle",
+      "state_svm_amplitude",
+      "state_knn_angle",
+      "state_knn_amplitude",
+      "hybrid_svm_angle",
+      "hybrid_svm_amplitude",
+      "hybrid_knn_angle",
+      "hybrid_knn_amplitude"
+    ],
+    "seeds": [
+      42
+    ]
+  }
+}
