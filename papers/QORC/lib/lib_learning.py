@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-# -*- coding: utf-8 -*-
 
 """
 This module provides standard code for deep learning: train deep learning models, compute predictions over a given dataset.
@@ -11,6 +10,7 @@ Modified by: Vincent Espitalier <vincent.espitalier@quandela.com>
 
 import sys
 import time
+
 import torch
 from torch.optim.lr_scheduler import CosineAnnealingLR
 
@@ -20,10 +20,10 @@ def get_device(device_name):
 
 
 def affiche_tag_heure(logger):
-    from datetime import datetime
     import time
+    from datetime import datetime, timezone
 
-    now = datetime.now()
+    now = datetime.now(timezone.utc)
     logger.info(
         "tag heure: {} ({})".format(now.strftime("%Y-%m-%d_%H:%M:%S"), time.time())
     )
