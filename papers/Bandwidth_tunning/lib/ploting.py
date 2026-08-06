@@ -1,0 +1,157 @@
+import matplotlib.pyplot as plt
+
+
+def overlapping_plot(
+    x,
+    y_g_avg,
+    y_FQK_avg,
+    y_RBF_avg,
+    y_F_avg,
+    y_eta_max_Q_avg,
+    y_eta_max_C_avg,
+    y_ROC_AUC_avg,
+    folder_name,
+    list_of_plots,
+    legendes,
+    exp_name,
+    projected,
+):
+    n_plots = len(list_of_plots)
+
+    # If the list is empty, raise an error
+    if n_plots == 0:
+        raise ValueError("There must be at least 1 plot to generate")
+
+    # 1. Create the figure on a single row
+    fig, axes = plt.subplots(1, n_plots, figsize=(5 * n_plots, 5))
+
+    # 2. Handle Matplotlib edge case when n_plots == 1
+    if n_plots == 1:
+        axes = [axes]
+
+    # Custom color palette based on the reference screenshot
+    # (from light beige/peach to very dark purple/black)
+    couleurs = ["#f0b593", "#d65f49", "#a33f5f", "#662248", "#4a2a5f", "#2b1b36"]
+
+    # Line width to match the screenshot aesthetics
+    lw = 3
+
+    # 3. Main loop over requested plots
+    for i, plot_name in enumerate(list_of_plots):
+        ax = axes[i]  # Select the subplot
+
+        # 4. Inner loop: draw curves for each case
+        for j, legende in enumerate(legendes):
+            c = couleurs[
+                j % len(couleurs)
+            ]  # Unique color per case (cycles if more than 6 elements)
+
+            if plot_name == "Variances":
+                if isinstance(projected, (list, tuple)):
+                    is_projected = bool(projected[j])
+                else:
+                    is_projected = bool(projected)
+
+                qk_label = "PQK" if is_projected else "FQK"
+                rbf_label = "RBF_2" if is_projected else "RBF"
+
+                ax.loglog(
+                    x,
+                    y_FQK_avg[j],
+                    label=f"{qk_label} ({legende})",
+                    color=c,
+                    linestyle="-",
+                    linewidth=lw,
+                )
+                ax.loglog(
+                    x,
+                    y_RBF_avg[j],
+                    label=f"{rbf_label} ({legende})",
+                    color=c,
+                    linestyle="--",
+                    linewidth=lw,
+                )
+
+            elif plot_name == "Geometric_distance":
+                # Dash-dot line (-.) to match graph (D1) in the figure
+                ax.loglog(
+                    x, y_g_avg[j], label=legende, color=c, linestyle="-", linewidth=lw
+                )
+
+            elif plot_name == "Frobenius_distance":
+                # Dash-dot line (-.) to match graph (E1) in the figure
+                ax.loglog(
+                    x, y_F_avg[j], label=legende, color=c, linestyle="-", linewidth=lw
+                )
+
+            elif plot_name == "Eta_max":
+                if isinstance(projected, (list, tuple)):
+                    is_projected = bool(projected[j])
+                else:
+                    is_projected = bool(projected)
+
+                qk_label = "PQK" if is_projected else "FQK"
+                rbf_label = "RBF_2" if is_projected else "RBF"
+
+                ax.loglog(
+                    x,
+                    y_eta_max_Q_avg[j],
+                    label=f"eta_max_{qk_label} ({legende})",
+                    color=c,
+                    linestyle="-",
+                    linewidth=lw,
+                )
+                ax.loglog(
+                    x,
+                    y_eta_max_C_avg[j],
+                    label=f"eta_max_{rbf_label} ({legende})",
+                    color=c,
+                    linestyle="--",
+                    linewidth=lw,
+                )
+
+            elif plot_name == "ROC_AUC":
+                ax.semilogx(
+                    x,
+                    y_ROC_AUC_avg[j],
+                    label=legende,
+                    color=c,
+                    linestyle="-",
+                    linewidth=lw,
+                )
+
+            else:
+                raise NameError(f"'{plot_name}' is not a valid name of plot")
+
+        # 5. Configure the subplot
+        if plot_name == "Variances":
+            ax.set_title("Kernel variances")
+            ax.set_ylabel(r"$Var_D[\mathbf{K}]$")
+            ax.set_ylim(bottom=1e-10, top=1e4)
+        elif plot_name == "Geometric_distance":
+            ax.set_ylabel(r"$g(\mathbf{K}_C, \mathbf{K}_Q)$")
+            ax.set_ylim(bottom=5e-1, top=1e3)
+        elif plot_name == "Frobenius_distance":
+            ax.set_ylabel(r"$F(\mathbf{K}_C, \mathbf{K}_Q)$")
+            ax.set_ylim(bottom=1e-3, top=1e3)
+        elif plot_name == "Eta_max":
+            ax.set_ylabel(r"$\eta_{max(K)}$")
+            ax.set_ylim(bottom=1e-3, top=1e5)
+        elif plot_name == "ROC_AUC":
+            ax.set_ylabel("roc auc score")
+
+        # These settings are common to all plots
+        ax.set_xlabel(r"Bandwidth $c$")
+        ax.legend()
+        ax.grid(True, which="both", ls="--", alpha=0.5)
+
+    # ==========================================
+    # Clean display and save
+    # ==========================================
+    fig.suptitle(exp_name)
+    plt.tight_layout()
+
+    results_folder = folder_name / f"{exp_name}.png"
+    plt.savefig(results_folder)
+
+    plt.close()
