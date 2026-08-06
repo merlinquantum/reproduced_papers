@@ -265,7 +265,7 @@ def run_overlapping(cfg, new_folder):
                 y_eta_max_C[i] += res.eta_max_C
                 y_ROC_AUC[i] += res.ROC_AUC
                 print(
-                    f"experiment {exp['description']} running, seed {SEEDS[seed]}, bandwidth {x[i]} done ({(i+1+NB_Points*seed)/(NB_Points*len(SEEDS))*100:.2f}%)"
+                    f"experiment {exp['description']} running, seed {SEEDS[seed]}, bandwidth {x[i]} done ({(i + 1 + NB_Points * seed) / (NB_Points * len(SEEDS)) * 100:.2f}%)"
                 )
 
             _save_seed_metrics_csv(
