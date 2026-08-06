@@ -1,0 +1,11 @@
+# Core dependencies for the BVE photonic dual-rail QNN reproduction
+merlinquantum>=0.4.0
+perceval-quandela>=1.2.1
+torch>=2.0.0
+numpy>=1.26
+pytest
+
+# Only needed to reproduce the paper's Mollweide-projection figure
+# (papers/bve_qnn/utils/plot_mollweide.py)
+matplotlib>=3.8
+cartopy>=0.22
