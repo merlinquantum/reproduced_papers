@@ -265,7 +265,7 @@ def _print_summary(rows: list[dict]) -> None:
         rss_mb = "-" if row["max_rss_kb"] is None else f"{row['max_rss_kb'] / 1024:.0f}"
         cuda_mb = "-"
         if row["max_cuda_memory_bytes"] is not None:
-            cuda_mb = f"{row['max_cuda_memory_bytes'] / (1024 ** 2):.0f}"
+            cuda_mb = f"{row['max_cuda_memory_bytes'] / (1024**2):.0f}"
         print(
             f"{row['model']:<8} {row['device']:<8} {row['precision_mode']:<12} "
             f"{row['epoch_time_s']:>9} {row['reported_total_time_s']:>9} {rss_mb:>9} {cuda_mb:>10}"
