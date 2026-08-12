@@ -116,6 +116,29 @@ def test_readme_no_broken_latex():
     )
 
 
+def test_neutral_atom_notebooks_exist():
+    na_dir = os.path.join("papers", "bve_qnn", "notebooks", "neutral_atom")
+    assert os.path.isfile(os.path.join(na_dir, "quantum_bve_step_by_step.ipynb")), (
+        "Dataset generation notebook missing"
+    )
+    assert os.path.isfile(os.path.join(na_dir, "running_exp1.ipynb")), (
+        "Neutral-atom training notebook missing"
+    )
+
+
+def test_neutral_atom_config_exists():
+    cfg = os.path.join("papers", "bve_qnn", "configs", "neutral-atom.json")
+    assert os.path.isfile(cfg), "configs/neutral-atom.json missing"
+    with open(cfg, encoding="utf-8") as f:
+        data = json.load(f)
+    assert data["model"]["name"] == "neutral_atom_qadence"
+
+
+def test_generate_dataset_script_exists():
+    script = os.path.join("papers", "bve_qnn", "utils", "generate_dataset.py")
+    assert os.path.isfile(script), "utils/generate_dataset.py missing"
+
+
 def test_no_cursor_coauthor_in_commits():
     import subprocess
 

@@ -21,9 +21,9 @@ The original paper's **neutral-atom** QNN is built from:
 - a total-magnetisation observable $C = \sum_m Z_m$,
 - a learnable affine output map $\psi = \alpha_{\text{scale}} \cdot \text{QNN}(\cdot) + \alpha_{\text{shift}}$.
 
-**What lives in this MerLin package:** the photonic dual-rail implementation, shared-runtime CLI (`lib/runner.py`), committed checkpoint, metrics, notebook, and figure utility.
-
-**What lives in the linked personal repo:** the faithful neutral-atom / Qadence reproduction of Experiment 1 (median MRE 9.15%, PPMCC 0.873) and the dataset-generation notebooks. Only the MerLin photonic study is submitted here, as required by this repository.
+**What lives in this package:**
+- **Photonic (MerLin):** dual-rail implementation, shared-runtime CLI (`lib/runner.py`), committed checkpoint, metrics, notebook, and figure utility.
+- **Neutral-atom (Qadence):** the faithful reproduction of the original paper's QNN architecture (median MRE 9.15%, PPMCC 0.873) and the dataset-generation notebooks, under `notebooks/neutral_atom/`.
 
 ### Photonic adaptations
 
@@ -106,6 +106,21 @@ Each run writes a timestamped folder under `outdir` / `results` with `checkpoint
 ### Data location
 
 Dataset path: `data/bve_qnn/sem_supervised_dataset.npz` (repo root `data/`, not inside the paper folder). Contains supervised `(t, x, y, z) -> psi` pairs, SEM reference `psi_qcl_training`, and lat/lon grids.
+
+The original paper does not publish the dataset. We regenerated it by downloading ERA5 pressure-level reanalysis from [Copernicus CDS](https://cds.climate.copernicus.eu/datasets/reanalysis-era5-pressure-levels) and solving the barotropic vorticity equation at 4° resolution (Appendix B). The full generation pipeline is in `notebooks/neutral_atom/quantum_bve_step_by_step.ipynb`. See also `utils/generate_dataset.py` for setup instructions.
+
+### Neutral-atom reproduction (Qadence)
+
+The neutral-atom QNN reproduction uses [Qadence](https://github.com/pasqal-io/qadence) (not MerLin). The notebooks are in `notebooks/neutral_atom/`:
+
+- `quantum_bve_step_by_step.ipynb` — dataset generation from ERA5 reanalysis via Copernicus CDS API
+- `running_exp1.ipynb` — Qadence QNN training for Experiment 1 (HEA, 6 qubits, depth 32)
+
+Configuration reference: `configs/neutral-atom.json`
+
+```bash
+pip install qadence
+```
 
 ## Extensions and Next Steps
 
