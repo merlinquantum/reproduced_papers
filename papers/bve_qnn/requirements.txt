@@ -1,8 +1,5 @@
-# Core dependencies for the BVE photonic dual-rail QNN reproduction
+# Core dependency — perceval-quandela, torch and numpy are pulled transitively
 merlinquantum>=0.4.0
-perceval-quandela>=1.2.1
-torch>=2.0.0
-numpy>=1.26
 pytest
 
 # Only needed to reproduce the paper's Mollweide-projection figure

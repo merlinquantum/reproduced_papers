@@ -13,13 +13,13 @@
 
 The paper introduces the barotropic vorticity equation (BVE) as a model of the atmosphere and trains parameterised quantum circuits (PQCs) both (a) directly on real weather data (Experiment 1, Section V.A) and (b) as physics-informed solvers of the BVE PDE (Experiment 2, Section V.B).
 
-This folder reproduces **Experiment 1 with MerLin**: a photonic dual-rail QNN trained to regress the stream function \(\psi(t, x, y, z)\) against a reference Spectral Element Method (SEM) solution, at 4° global resolution.
+This folder reproduces **Experiment 1 with MerLin**: a photonic dual-rail QNN trained to regress the stream function $\psi(t, x, y, z)$ against a reference Spectral Element Method (SEM) solution, at 4° global resolution.
 
 The original paper's **neutral-atom** QNN is built from:
-- a serial trainable-frequency feature map (\(R_y\) with trainable frequencies \(\gamma_{r,m}\)) over \(N = 6\) logical qubits,
-- a Hardware-Efficient Ansatz (HEA) with \(l = 32\) layers and native CNOT entangling gates,
-- a total-magnetisation observable \(C = \sum_m Z_m\),
-- a learnable affine output map \(\psi = \alpha_{\mathrm{scale}}\,\mathrm{QNN}(\cdot) + \alpha_{\mathrm{shift}}\).
+- a serial trainable-frequency feature map ($R_y$ with trainable frequencies $\gamma_{r,m}$) over $N = 6$ logical qubits,
+- a Hardware-Efficient Ansatz (HEA) with $l = 32$ layers and native CNOT entangling gates,
+- a total-magnetisation observable $C = \sum_m Z_m$,
+- a learnable affine output map $\psi = \alpha_{\text{scale}} \cdot \text{QNN}(\cdot) + \alpha_{\text{shift}}$.
 
 **What lives in this MerLin package:** the photonic dual-rail implementation, shared-runtime CLI (`lib/runner.py`), committed checkpoint, metrics, notebook, and figure utility.
 
@@ -27,7 +27,7 @@ The original paper's **neutral-atom** QNN is built from:
 
 ### Photonic adaptations
 
-1. **Dual-rail sum-Z readout.** Each logical qubit is one photon on two modes (\(|0\rangle=|1,0\rangle\), \(|1\rangle=|0,1\rangle\)). Then \(Z_m \equiv n_{\mathrm{left},m}-n_{\mathrm{right},m}\), so \(\sum_m Z_m\) becomes \(\sum_m(\langle n_{\mathrm{left},m}\rangle-\langle n_{\mathrm{right},m}\rangle)\).
+1. **Dual-rail sum-Z readout.** Each logical qubit is one photon on two modes ($|0\rangle = |1,0\rangle$, $|1\rangle = |0,1\rangle$). Then $Z_m \equiv n_{\text{left},m} - n_{\text{right},m}$, so $\sum_m Z_m$ becomes $\sum_m (\langle n_{\text{left},m}\rangle - \langle n_{\text{right},m}\rangle)$.
 2. **Same learnable output scaling** as the paper, applied after the photonic observable.
 3. **Trainable photonic mixing** instead of fixed CNOTs. Linear optics cannot implement a native CNOT (KLM theorem). Nearest-neighbour beamsplitters replace CNOTs; making them trainable partially compensates for weaker entanglement.
 
@@ -54,7 +54,7 @@ These results validate MerLin as a viable framework for quantum scientific machi
 Artifacts:
 - `results/exp1_merlin_results.npz` — predictions, SEM reference, MRE/PPMCC arrays
 - `models/qnn_exp1_merlin_dualrail_depth32_step5000.pt` — trained checkpoint (step 5000)
-- `notebook.ipynb` — interactive walkthrough + Mollweide figure at \(t=22\mathrm{h}\)
+- `notebook.ipynb` — interactive walkthrough + Mollweide figure at $t = 22\text{h}$
 - `utils/plot_mollweide.py` — regenerates the comparison figure from saved results
 
 ## How to Run
