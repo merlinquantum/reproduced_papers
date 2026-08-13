@@ -98,8 +98,8 @@ def test_notebook_weather_pde_has_period():
 def test_requirements_no_transitive_deps():
     req_path = os.path.join("papers", "bve_qnn", "requirements.txt")
     with open(req_path, encoding="utf-8") as f:
-        lines = [l.strip() for l in f if l.strip() and not l.strip().startswith("#")]
-    dep_names = [l.split(">")[0].split("=")[0].split("<")[0] for l in lines]
+        lines = [ln.strip() for ln in f if ln.strip() and not ln.strip().startswith("#")]
+    dep_names = [ln.split(">")[0].split("=")[0].split("<")[0] for ln in lines]
     for dep in ["perceval-quandela", "torch", "numpy"]:
         assert dep not in dep_names, (
             f"Transitive dependency '{dep}' should be removed — "
