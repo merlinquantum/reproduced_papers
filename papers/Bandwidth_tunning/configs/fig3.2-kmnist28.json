@@ -1,0 +1,47 @@
+{
+    "description": "This configuration generates the results for Fig. 3 of the paper for the fashion_mnist dataset.",
+    "seed": 42,
+    "outdir": "outdir",
+    "device": "cpu",
+    "dataset": {
+        "name":"kmnist28",
+        "root": "data"
+    },
+    "logging": {
+        "level": "INFO",
+        "save_config_snapshot": true
+    },
+    "graph_name":"Fig 3 - k_mnist28",
+    "graphs" : {
+            "min" : -2.3,
+            "max" : 0.6,
+            "number_of_points" : 30
+    },
+    "figs" : [
+            "Variances",
+            "Geometric_distance",
+            "Frobenius_distance",
+            "Eta_max",
+            "ROC_AUC"
+    ],
+    "experiments":[
+        {
+        "projected":true,
+        "train_sample":320,
+        "test_sample":80,
+        "description":"4 k_mnist28 320-80",
+        "dimension" : 4,
+        "nb_seeds": 5
+        },
+        {
+        "projected":true,
+        "train_sample":320,
+        "test_sample":80,
+        "description":"8 k_mnist28 320-80",
+        "dimension" : 8,
+        "nb_seeds": 5
+        }
+    ]
+    
+    
+}
