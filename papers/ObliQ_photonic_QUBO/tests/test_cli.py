@@ -1,15 +1,15 @@
-"""The CLI is declared in cli.json; these pin what that declaration buys."""
+"""The CLI is declared in lib/benchmark_cli.json; these pin what that declaration buys."""
 
 import json
 
 import pytest
-from benchmark import build_parser
+from lib.benchmark import build_parser
 from lib.config import config_hash, load_cli_spec, load_config
 
 
 @pytest.fixture
 def cli_spec(configs_dir):
-    return load_cli_spec(configs_dir.parent / "cli.json")
+    return load_cli_spec(configs_dir.parent / "lib" / "benchmark_cli.json")
 
 
 @pytest.fixture
@@ -124,7 +124,7 @@ def test_run_collects_kwargs_for_the_benchmark(parser, cli_spec):
     # Every collected key must be a real run_instance parameter.
     import inspect
 
-    from benchmark import run_instance
+    from lib.benchmark import run_instance
 
     assert set(kwargs) <= set(inspect.signature(run_instance).parameters)
 

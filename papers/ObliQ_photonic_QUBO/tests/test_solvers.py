@@ -6,7 +6,7 @@ enough to exercise encode -> run -> decode -> train, fast enough for a test suit
 
 import numpy as np
 import pytest
-from benchmark import run_instance, run_sweep, seeds_for_size
+from lib.benchmark import run_instance, run_sweep, seeds_for_size
 from models.solver import (
     GRAPH_NATIVE_SOLVERS,
     OBLIQ_SOLVERS,

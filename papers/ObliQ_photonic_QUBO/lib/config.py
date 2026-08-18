@@ -16,7 +16,7 @@ lifecycle:
    excluded, so re-running with more workers or a different plot label reuses the
    same folder, while changing the seed/solver/options produces a new one.
 
-Layout written by :mod:`benchmark` and read by :mod:`plotter`::
+Layout written by :mod:`lib.benchmark` and read by :mod:`utils.plotter`::
 
     <output.dir>/<hash>/results.json   # the sweep output
     <output.dir>/<hash>/config.json    # a copy of the resolved config

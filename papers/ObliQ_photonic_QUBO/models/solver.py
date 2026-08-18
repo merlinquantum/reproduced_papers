@@ -3,7 +3,7 @@
 :func:`run_solver` is the reusable caller, decoupled from the benchmark. Hand it a
 QUBO matrix (and, for the graph-native solvers, the source graph) plus solver
 options and it returns a bitstring. It does not sample graphs, time itself, or enforce
-timeouts -- that is :mod:`benchmark`'s job.
+timeouts -- that is :mod:`lib.benchmark`'s job.
 
 Alongside the dispatch are the capability sets the harness needs to treat solvers
 differently: which ones have no native time limit, which need the graph rather
@@ -37,7 +37,7 @@ SOLVERS = (
 #: ObliQ variants (all served by :mod:`models.obliq`).
 OBLIQ_SOLVERS = {"obliq-static", "obliq-vqc", "obliq-hybrid"}
 
-#: Solvers with no native time limit; :mod:`benchmark` enforces theirs by
+#: Solvers with no native time limit; :mod:`lib.benchmark` enforces theirs by
 #: killing an out-of-process run. The D-Wave family instead takes ``timeout`` as a
 #: native sampler argument, so it is never process-wrapped.
 PROCESS_TIMEOUT_SOLVERS = {

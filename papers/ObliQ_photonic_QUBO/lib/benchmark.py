@@ -10,20 +10,28 @@ sizes and stores the results. They share one contract, the seed sequence:
 That sequence is the reproducibility backbone of the harness. An instance seed
 selects its graph verbatim (:mod:`utils.graphs`) and the solver's own randomness
 runs off a sub-seed derived from it (:mod:`lib.seeding`), so re-running a sweep
-reproduces both the instances and the solver trajectories. :mod:`plotter`'s
+reproduces both the instances and the solver trajectories. :mod:`utils.plotter`'s
 exact-beta path regenerates the instances by replaying the same sequence.
 
-Two subcommands, both described by ``cli.json`` so adding a flag needs no change
-here::
+Two subcommands, both described by ``benchmark_cli.json`` so adding a flag needs
+no change here. Run as a module from the paper directory (this file lives inside
+the ``lib`` package, so ``python lib/benchmark.py`` would break its own
+``lib.config``/``lib.seeding`` imports -- ``-m`` puts the paper directory, not
+``lib/``, on ``sys.path``)::
 
     # a full sweep from a config (writes results/<hash>/)
-    python benchmark.py sweep --config configs/obliq_maxclique.json
+    python -m lib.benchmark sweep --config configs/obliq_maxclique.json
 
     # override any declared config path
-    python benchmark.py sweep --config configs/obliq_maxclique.json --sizes 2,3,4 --instances 20
+    python -m lib.benchmark sweep --config configs/obliq_maxclique.json --sizes 2,3,4 --instances 20
 
     # one instance, no config file
-    python benchmark.py run --problem max-clique --size 8 --solver obliq-hybrid --seed 101200
+    python -m lib.benchmark run --problem max-clique --size 8 --solver obliq-hybrid --seed 101200
+
+Also reachable without a sweep-specific config file, through the repository's
+shared runner (see :mod:`lib.runner`)::
+
+    python implementation.py --paper ObliQ_photonic_QUBO --config configs/obliq_maxclique.json
 
 Each sweep is content-addressed by a hash of its config: the results
 (``results.json``) and a copy of the resolved config (``config.json``) are written
@@ -62,7 +70,7 @@ from utils.graphs import sample_instance_graph
 from utils.qubo import build_qubo, calculate_beta, exact_optimum, qubo_objective
 
 _HERE = Path(__file__).resolve().parent
-_CLI_SPEC = _HERE / "cli.json"
+_CLI_SPEC = _HERE / "benchmark_cli.json"
 
 
 # ---------------------------------------------------------------------------
@@ -118,7 +126,7 @@ def run_instance(
         found, or ``nan`` when the run failed or timed out.
 
         Beta is deliberately not computed here. The sweep discards it and
-        :mod:`plotter` derives it from the stored objectives, so scoring the exact
+        :mod:`utils.plotter` derives it from the stored objectives, so scoring the exact
         baselines on every instance -- 1000 random-search passes per Max-Clique
         instance -- would be pure waste. The graph is returned instead, which is all
         :func:`utils.qubo.calculate_beta` needs.
@@ -251,13 +259,13 @@ def run_sweep(
     # One entry per problem size. Run inputs live alongside in config.json, so
     # they are not duplicated into the results file.
     all_data: dict = {str(size): None for size in size_range}
-executor: ProcessPoolExecutor | None = None
-if parallel_workers and parallel_workers > 1:
-    import multiprocessing as mp
+    executor: ProcessPoolExecutor | None = None
+    if parallel_workers and parallel_workers > 1:
+        import multiprocessing as mp
 
-    executor = ProcessPoolExecutor(
-        max_workers=parallel_workers, mp_context=mp.get_context("spawn")
-    )
+        executor = ProcessPoolExecutor(
+            max_workers=parallel_workers, mp_context=mp.get_context("spawn")
+        )
 
     try:
         for size in size_range:
@@ -333,9 +341,9 @@ if parallel_workers and parallel_workers > 1:
 # Command line
 # ---------------------------------------------------------------------------
 def build_parser(cli_spec: dict) -> argparse.ArgumentParser:
-    """Build the two-subcommand parser from a ``cli.json`` spec."""
+    """Build the two-subcommand parser from a ``benchmark_cli.json`` spec."""
     parser = argparse.ArgumentParser(
-        prog="benchmark.py", description=cli_spec.get("description", "")
+        prog="python -m lib.benchmark", description=cli_spec.get("description", "")
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -357,17 +365,19 @@ def build_parser(cli_spec: dict) -> argparse.ArgumentParser:
     return parser
 
 
-def command_sweep(cli_spec: dict, args: argparse.Namespace) -> None:
-    """Run a config-driven sweep and store its results."""
-    arguments = cli_spec.get("commands", {}).get("sweep", {}).get("arguments", [])
-    config = load_config(args.config)
-    apply_overrides(config, arguments, args)
+def run_sweep_from_config(config: dict, output_dir: str | None = None) -> str:
+    """Run a sweep from a resolved config dict; returns the directory results land in.
 
+    Content-addresses the run by a hash of its experiment identity: results
+    (``results.json``) and a copy of the resolved config (``config.json``) are
+    written to ``<output_dir or output.dir>/<hash>/``. Shared by
+    :func:`command_sweep` (the ``benchmark_cli.json``-driven CLI) and
+    :func:`lib.runner.train_and_evaluate` (the repository's shared runner), so
+    both entrypoints produce the exact same results for the exact same config.
+    """
     sweep = config.get("sweep", {})
 
-    # Content-address the run by a hash of its experiment identity. Results and a
-    # copy of the resolved config go to <output.dir>/<hash>/.
-    hash_dir = run_dir(config)
+    hash_dir = output_dir or run_dir(config)
     os.makedirs(hash_dir, exist_ok=True)
     with open(os.path.join(hash_dir, CONFIG_FILE), "w", encoding="utf-8") as handle:
         json.dump(config, handle, indent=2)
@@ -396,6 +406,15 @@ def command_sweep(cli_spec: dict, args: argparse.Namespace) -> None:
         solver_options=config.get("solver_options"),
         output_dir=hash_dir,
     )
+    return hash_dir
+
+
+def command_sweep(cli_spec: dict, args: argparse.Namespace) -> None:
+    """Run a config-driven sweep and store its results."""
+    arguments = cli_spec.get("commands", {}).get("sweep", {}).get("arguments", [])
+    config = load_config(args.config)
+    apply_overrides(config, arguments, args)
+    run_sweep_from_config(config)
 
 
 def command_run(cli_spec: dict, args: argparse.Namespace) -> None:

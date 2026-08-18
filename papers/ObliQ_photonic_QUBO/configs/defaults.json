@@ -1,0 +1,23 @@
+{
+  "description": "Fast smoke test: obliq-static (no training) on max-clique, sizes 2-4, 2 instances each.",
+  "outdir": "outdir",
+  "problem_type": "max-clique",
+  "solver": "obliq-static",
+  "name": "ObliQ Static Smoke Test",
+  "sweep": {
+    "size_range": [2, 3, 4],
+    "nb_instances_per_size": 2,
+    "seed": 0,
+    "timeout": 30,
+    "min_timeout_size": null,
+    "parallel_workers": 1,
+    "include_exact_results": false
+  },
+  "provider": null,
+  "backend": null,
+  "solver_options": {
+    "nsamples": 200,
+    "num_rep": 5,
+    "graph_mode": 0
+  }
+}

@@ -3,8 +3,8 @@
 Each run is named by its config; the results are located by hashing that config
 (see :mod:`lib.config`), so plotting is just "give me the configs I ran"::
 
-    python plotter.py -f configs/obliq_maxclique.json configs/qaoa_maxclique.json -o comparison.png
-    python plotter.py -f obliq_maxclique.json -e          # exact per-instance beta
+    python -m utils.plotter -f configs/obliq_maxclique.json configs/qaoa_maxclique.json -o comparison.png
+    python -m utils.plotter -f obliq_maxclique.json -e          # exact per-instance beta
 
 Two beta normalizations are available:
 
@@ -116,7 +116,7 @@ def _resolve_results(config: dict) -> str:
     if not os.path.exists(path):
         raise FileNotFoundError(
             f"No results found for config (hash={config_hash(config)}) at {path}. "
-            "Run benchmark.py on this config first."
+            "Run `python -m lib.benchmark sweep --config ...` on this config first."
         )
     return path
 
@@ -520,7 +520,7 @@ def plot_graphs(
 
 
 def main() -> None:
-    """Entry point for ``python plotter.py``."""
+    """Entry point for ``python -m utils.plotter``."""
     args = parse_args()
     plot_graphs(
         args.configs,

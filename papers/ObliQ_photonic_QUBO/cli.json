@@ -1,38 +1,17 @@
 {
-  "description": "Q-score benchmark CLI. 'sweep' runs a config across problem sizes; 'run' evaluates a single instance. Flags declared here need no Python change.",
-  "commands": {
-    "sweep": {
-      "description": "Run a config-driven sweep; flags override individual config paths.",
-      "arguments": [
-        {"flags": ["--problem"], "help": "Problem type: max-cut or max-clique", "type": "str", "choices": ["max-cut", "max-clique"], "apply": {"kind": "config_path", "path": "problem_type"}},
-        {"flags": ["--solver"], "help": "Solver name (obliq-*, Photonic_CVARVQE, QAOA, Simulated_Annealing, tabu, ...)", "type": "str", "apply": {"kind": "config_path", "path": "solver"}},
-        {"flags": ["--sizes"], "help": "Comma-separated list of graph sizes to sweep", "type": "csv_int_list", "apply": {"kind": "config_path", "path": "sweep.size_range"}},
-        {"flags": ["--instances"], "help": "Number of instances per graph size", "type": "int", "apply": {"kind": "config_path", "path": "sweep.nb_instances_per_size"}},
-        {"flags": ["--seed"], "help": "Base RNG seed (incremented per instance)", "type": "int", "apply": {"kind": "config_path", "path": "sweep.seed"}},
-        {"flags": ["--timeout"], "help": "Per-instance solver timeout (seconds)", "type": "int", "apply": {"kind": "config_path", "path": "sweep.timeout"}},
-        {"flags": ["--num-reads"], "help": "Reads/samples for QPU / Simulated Annealing solvers", "type": "int", "apply": {"kind": "config_path", "path": "sweep.num_reads"}},
-        {"flags": ["--workers"], "help": "Parallel worker processes (1 = sequential)", "type": "int", "apply": {"kind": "config_path", "path": "sweep.parallel_workers"}},
-        {"flags": ["--exact"], "help": "Store each instance's exact optimum alongside the results", "action": "store_true", "apply": {"kind": "config_path", "path": "sweep.include_exact_results"}},
-        {"flags": ["--provider"], "help": "Hardware provider (QAOA): local simulator, ibm, qi", "type": "str", "apply": {"kind": "config_path", "path": "provider"}},
-        {"flags": ["--backend"], "help": "Backend name (QAOA) or Quandela platform (photonic), e.g. sim:ascella, qpu:ascella", "type": "str", "apply": {"kind": "config_path", "path": "backend"}},
-        {"flags": ["--solver-options"], "help": "JSON object merged into solver_options", "type": "json", "apply": {"kind": "config_path", "path": "solver_options"}}
-      ]
-    },
-    "run": {
-      "description": "Evaluate a single instance without a config file.",
-      "arguments": [
-        {"flags": ["-p", "--problem"], "help": "Problem type", "type": "str", "choices": ["max-cut", "max-clique"], "required": true, "apply": {"kind": "kwarg", "path": "problem_type"}},
-        {"flags": ["-s", "--size"], "help": "Problem size", "type": "int", "required": true, "apply": {"kind": "kwarg", "path": "size"}},
-        {"flags": ["--solver"], "help": "Solver name", "type": "str", "required": true, "apply": {"kind": "kwarg", "path": "solver"}},
-        {"flags": ["--seed"], "help": "Instance seed (selects the graph; the solver seed is derived from it)", "type": "int", "apply": {"kind": "kwarg", "path": "seed"}},
-        {"flags": ["-t", "--timeout"], "help": "Solver timeout (seconds)", "type": "int", "apply": {"kind": "kwarg", "path": "timeout"}},
-        {"flags": ["-n", "--num-reads"], "help": "Reads/samples for QPU / Simulated Annealing solvers", "type": "int", "apply": {"kind": "kwarg", "path": "num_reads"}},
-        {"flags": ["--provider"], "help": "Hardware provider (QAOA)", "type": "str", "apply": {"kind": "kwarg", "path": "provider"}},
-        {"flags": ["--backend"], "help": "Backend name (QAOA) or Quandela platform (photonic)", "type": "str", "apply": {"kind": "kwarg", "path": "backend"}},
-        {"flags": ["--min-timeout-size"], "help": "Smallest size that enforces process-based timeouts", "type": "int", "apply": {"kind": "kwarg", "path": "min_timeout_size"}},
-        {"flags": ["--solver-options"], "help": "JSON object of solver-specific keyword arguments", "type": "json", "apply": {"kind": "kwarg", "path": "solver_options"}},
-        {"flags": ["-e", "--exact"], "help": "Score beta against this instance's own optimum instead of the asymptotic baselines", "action": "store_true", "apply": {"kind": "cli", "path": "exact"}}
-      ]
-    }
-  }
+  "description": "ObliQ Q-score sweep, run through the repository's shared runner. For the single-instance mode and the full flag set (including --solver-options), use `python -m lib.benchmark run` instead.",
+  "arguments": [
+    {"flags": ["--config"], "help": "Run config JSON: a path, or a bare filename inside configs/.", "apply": {"kind": "config_file"}},
+    {"flags": ["--problem"], "help": "Problem type: max-cut or max-clique", "type": "str", "choices": ["max-cut", "max-clique"], "apply": {"kind": "config_path", "path": "problem_type"}},
+    {"flags": ["--solver"], "help": "Solver name (obliq-*, Photonic_CVARVQE, QAOA, Simulated_Annealing, tabu, ...)", "type": "str", "apply": {"kind": "config_path", "path": "solver"}},
+    {"flags": ["--sizes"], "help": "Comma-separated list of graph sizes to sweep", "type": "csv_int_list", "apply": {"kind": "config_path", "path": "sweep.size_range"}},
+    {"flags": ["--instances"], "help": "Number of instances per graph size", "type": "int", "apply": {"kind": "config_path", "path": "sweep.nb_instances_per_size"}},
+    {"flags": ["--seed"], "help": "Base RNG seed (incremented per instance)", "type": "int", "apply": {"kind": "config_path", "path": "sweep.seed"}},
+    {"flags": ["--timeout"], "help": "Per-instance solver timeout (seconds)", "type": "int", "apply": {"kind": "config_path", "path": "sweep.timeout"}},
+    {"flags": ["--num-reads"], "help": "Reads/samples for QPU / Simulated Annealing solvers", "type": "int", "apply": {"kind": "config_path", "path": "sweep.num_reads"}},
+    {"flags": ["--workers"], "help": "Parallel worker processes (1 = sequential)", "type": "int", "apply": {"kind": "config_path", "path": "sweep.parallel_workers"}},
+    {"flags": ["--exact"], "help": "Store each instance's exact optimum alongside the results", "action": "store_true", "apply": {"kind": "config_path", "path": "sweep.include_exact_results"}},
+    {"flags": ["--provider"], "help": "Hardware provider (QAOA): local simulator, ibm, qi", "type": "str", "apply": {"kind": "config_path", "path": "provider"}},
+    {"flags": ["--backend"], "help": "Backend name (QAOA) or Quandela platform (photonic), e.g. sim:ascella, qpu:ascella", "type": "str", "apply": {"kind": "config_path", "path": "backend"}}
+  ]
 }

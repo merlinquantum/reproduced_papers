@@ -55,7 +55,7 @@ noisy simulator or a real QPU, where gradients do not exist).
 - **Adapted evaluation.** The paper reports QUBO approximation
   quality on a random instance set. Here max-clique and max-cut instances are scored with the Q-score
   $\beta$ metric on Erdős–Rényi Max-Cut / Max-Clique.  It is not a figure-for-figure reproduction.
-- **Two $\beta$ normalizations exist and they disagree at small $N$.** `plotter.py -e`
+- **Two $\beta$ normalizations exist and they disagree at small $N$.** `utils.plotter -e`
   scores each instance against *its own* graph (naive random search vs. the true
   optimum); without `-e` the Q-score standard's asymptotic constants are used, which
   deflate $\beta$ noticeably below $N \approx 10$. Use `-e` at these sizes; the
@@ -67,7 +67,7 @@ noisy simulator or a real QPU, where gradients do not exist).
   and recovers.
 - **Exact optima are exhaustive at these sizes.** `utils.qubo.exact_optimum` enumerates
   (all $2^N$ partitions for Max-Cut, `max_weight_clique` for Max-Clique) and is the one
-  definition used by both `benchmark.py sweep --exact` and `plotter.py -e`. Above
+  definition used by both `lib.benchmark sweep --exact` and `utils.plotter -e`. Above
   `EXACT_MAX_CUT_LIMIT = 20` nodes Max-Cut falls back to a greedy bound.
 
 ### Environment
@@ -80,12 +80,13 @@ Developed on Windows 11 / Python 3.14, CPU only. Key versions: `merlinquantum` 0
 
 ```
 ObliQ/
-├── benchmark.py         # the benchmark: one instance, a sweep, and the CLI
-├── plotter.py           # beta vs N and time vs N figures
-├── cli.json             # the CLI, declared: flags -> config paths / kwargs
 ├── demo.ipynb           # end-to-end walkthrough of the method
-├── configs/             # one JSON per (problem x solver)
+├── cli.json             # shared-runner CLI: sweep-only (repo-root implementation.py)
+├── configs/             # one JSON per (problem x solver); defaults.json is the smoke config
 ├── lib/                 # harness infrastructure
+│   ├── benchmark.py     #   the benchmark: one instance, a sweep, and its own CLI
+│   ├── benchmark_cli.json #   benchmark.py's own CLI: flags -> config paths / kwargs
+│   ├── runner.py        #   shared-runner entrypoint (lib.runner.train_and_evaluate)
 │   ├── config.py        #   config load, CLI overrides, content addressing
 │   ├── seeding.py       #   deterministic seed derivation
 │   └── timeout.py       #   out-of-process timeout enforcement
@@ -98,6 +99,7 @@ ObliQ/
 │   ├── dwave.py         #   D-Wave QPU / SA / Tabu / Leap hybrid
 │   └── backend.py       #   Quandela credential resolution
 ├── utils/               # the problems
+│   ├── plotter.py       #   beta vs N and time vs N figures
 │   ├── qubo.py          #   QUBO representations, problem dispatch, beta
 │   ├── readout.py       #   Fock outcome -> bitstring -> energy (shared)
 │   ├── max_cut.py       #   Max-Cut QUBO, exact optimum, beta
@@ -110,7 +112,10 @@ ObliQ/
 ```
 
 `lib`, `models` and `utils` are namespace packages imported as top-level modules, so run
-everything from this directory.
+everything from this directory. `lib/benchmark.py` and `utils/plotter.py` import their own
+siblings (`lib.config`, `utils.graphs`, ...) by absolute path, which only resolves with this
+directory itself on `sys.path` — invoke both as modules (`python -m lib.benchmark ...`,
+`python -m utils.plotter ...`), not as bare scripts by file path.
 
 ## 4. How to Run
 
@@ -130,24 +135,33 @@ jupyter notebook demo.ipynb
 ```
 
 **A single instance**, no config file. `-e` scores beta against that instance's own
-optimum, exactly as `plotter.py -e` does for a whole sweep; without it you get the
+optimum, exactly as `utils.plotter -e` does for a whole sweep; without it you get the
 asymptotic baselines:
 
 ```bash
-python benchmark.py run -e --problem max-clique --size 8 --solver obliq-hybrid --seed 101200 \
+python -m lib.benchmark run -e --problem max-clique --size 8 --solver obliq-hybrid --seed 101200 \
     --solver-options '{"nsamples": 5000, "train": {"optimizer": "adam", "max_iter": 50}}'
 ```
 
 **A full sweep**, then the figure:
 
 ```bash
-python benchmark.py sweep --config configs/obliq_maxclique_cobyla.json
-python benchmark.py sweep --config configs/cvarvqe_maxclique_cobyla.json
-python benchmark.py sweep --config configs/qaoa_maxclique.json
-python benchmark.py sweep --config configs/cvarvqe_maxclique.json
+python -m lib.benchmark sweep --config configs/obliq_maxclique_cobyla.json
+python -m lib.benchmark sweep --config configs/cvarvqe_maxclique_cobyla.json
+python -m lib.benchmark sweep --config configs/qaoa_maxclique.json
+python -m lib.benchmark sweep --config configs/cvarvqe_maxclique.json
 
-python plotter.py -e -f configs/obliq_maxclique.json configs/qaoa_maxclique.json \
-                        configs/cvarvqe_maxclique.json -o comparison.png
+python -m utils.plotter -e -f configs/obliq_maxclique.json configs/qaoa_maxclique.json \
+                              configs/cvarvqe_maxclique.json -o comparison.png
+```
+
+A sweep can also be launched through the repository's shared runner instead, which lands
+in the exact same content-addressed `results/<hash>/` directory (the shared runner is
+sweep-only -- no `--solver-options` there, and no single-instance mode; use
+`python -m lib.benchmark run` for that):
+
+```bash
+python ../../implementation.py --paper ObliQ_photonic_QUBO --config configs/obliq_maxclique.json
 ```
 
 Each config already pins its sweep (sizes 2–10, 100 instances/size, seed 101200), so no
@@ -156,12 +170,12 @@ a hash of the config, and the plotter re-hashes the same file to find them**, so
 overriding the sweep on one side only sends the plotter to a directory that does not
 exist. Override on both sides, or neither.
 
-`python benchmark.py sweep --help` lists every declared flag; adding one means editing
-`cli.json`, not Python. `benchmark.py run` takes the same instance arguments without a
-config file, and omitting `--seed` there draws a random instance (nothing is reproducible
-in that mode, so the sweep always seeds).
+`python -m lib.benchmark sweep --help` lists every declared flag; adding one means editing
+`lib/benchmark_cli.json`, not Python. `lib.benchmark run` takes the same instance arguments
+without a config file, and omitting `--seed` there draws a random instance (nothing is
+reproducible in that mode, so the sweep always seeds).
 
-`plotter.py` accepts, beyond `-f`/`-o`/`-e`:
+`utils.plotter` accepts, beyond `-f`/`-o`/`-e`:
 
 | Flag | Effect |
 |------|--------|
@@ -280,7 +294,7 @@ which decays to $0.76$ at $N = 10$. CVaR-VQE is not monotone: it falls at $N = 4
 enough to separate them on that single number, so the mean-$\beta$ curve is the
 informative comparison. ObliQ's runtime sits between QAOA's and CVaR-VQE's.
 
-To regenerate: run the three sweeps in §4, then `plotter.py -e`.
+To regenerate: run the three sweeps in §4, then `utils.plotter -e`.
 
 ## 7. Reproducibility Notes
 
@@ -308,8 +322,8 @@ Where each solver's randomness lives, and what pins it:
 | `Simulated_Annealing`, `tabu` | the anneal / tabu search | the samplers' explicit `seed` |
 | `Advantage_system4.1`, `hybrid`, `qpu:*` | the hardware | nothing — see below |
 
-Instances are regenerated, never shipped between processes: `benchmark.py sweep --exact` and
-`plotter.py -e` both rebuild them with `utils.graphs.sample_instance_graph`. Using that
+Instances are regenerated, never shipped between processes: `lib.benchmark sweep --exact` and
+`utils.plotter -e` both rebuild them with `utils.graphs.sample_instance_graph`. Using that
 one sampler matters because it retries edgeless draws — calling `nx.erdos_renyi_graph`
 directly disagrees with it wherever a draw is empty.
 
