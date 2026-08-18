@@ -1,14 +1,13 @@
 # Core: problems, QUBO, plotting
-numpy>=2
 networkx>=3
 scipy>=1.11
 matplotlib>=3.5
 
 # Photonic solvers (ObliQ + CVaR-VQE): MerLin on top of Perceval, differentiated
-# by torch. `merlinquantum` is the PyPI name of the `merlin` package.
+# by torch. `merlinquantum` is the PyPI name of the `merlin` package; it already
+# pulls in numpy, perceval-quandela, and torch, so they're not pinned separately
+# here to avoid a second, possibly conflicting version constraint.
 merlinquantum>=0.4
-perceval-quandela>=1.2
-torch>=2.2
 
 # Gate-model baseline (QAOA)
 qiskit>=1
