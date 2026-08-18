@@ -1,0 +1,11 @@
+{
+  "description": "Figure 4: gradient variance versus circuit layers",
+  "experiment": "fig4_gb",
+  "backend": "gate_based",
+  "qubits": [2, 4, 6, 8, 10, 12, 14, 16],
+  "layers": [1, 2, 3, 4, 5, 10, 20, 50, 100, 200, 300],
+  "samples": 100,
+  "seed": 7,
+  "dtype": "float64",
+  "plot": true
+}
