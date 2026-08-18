@@ -1,5 +1,5 @@
 {
-  "description": "Qiskit backend configuration for the Quantum Self-Supervised Learning reproduction.",
+  "description": "Qiskit backend configuration with Hilbert-Schmidt distance tracking enabled, reproducing Fig. 4 of Jaderberg et al. (2022).",
   "seed": 42,
   "device": "cpu",
   "outdir": "outdir",
@@ -25,8 +25,8 @@
     "q_sweeps": 1,
     "activation": "null",
     "shots": 100,
-    "q_backend": "qasm_simulator",
-    "save_dhs": false,
+    "q_backend": "statevector_simulator",
+    "save_dhs": true,
     "dhs_freq": 1
   },
   "training": {

@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+import numpy as np
 import torch
 import torch.nn as nn
 import torch.nn.functional as f
@@ -94,19 +95,125 @@ class InfoNCELoss(torch.nn.Module):
         return ((loss_1.mean() + loss_2.mean()) / 2).unsqueeze(0)
 
 
-def training_step(model, train_loader, optimizer, max_steps=None):
+def get_qiskit_qnn(model):
+    """Return the underlying Qiskit QuantumNetworkCircuit for the representation
+    network, or None if the model does not use the Qiskit backend."""
+    return getattr(model.representation_network, "qnn", None)
+
+
+def compute_batch_hilbert_schmidt_metrics(statevectors):
+    """
+    Compute the Hilbert-Schmidt separation between positive and negative pairs
+    for one batch of quantum statevectors, following Jaderberg et al. (2022),
+    "Quantum Self-Supervised Learning" (arXiv:2103.14653), Fig. 4.
+
+    `statevectors` must be ordered as [psi(x_1^1), ..., psi(x_B^1),
+    psi(x_1^2), ..., psi(x_B^2)], i.e. the states produced by encoding view 1
+    of the whole batch followed by the states produced by encoding view 2 -
+    which is exactly the order QNet.qnn.statevectors accumulates in during a
+    single QSSL.forward call.
+
+    For each positive pair i = (x_i^1, x_i^2), rho_i is the ensemble density
+    matrix of its two views, and sigma_i is the ensemble density matrix of
+    every other statevector in the batch (i.e. all negative pairs w.r.t. i).
+    D_HS(rho_i, sigma_i) = tr((rho_i - sigma_i)^2) measures how well the
+    positive pair is separated from the rest of the batch in Hilbert space.
+
+    Returns the batch-averaged tr(rho^2), tr(sigma^2), tr(rho*sigma) and
+    D_HS, computed via a leave-one-pair-out sum rather than the naive O(B^2)
+    reconstruction of sigma_i for every i, so this is safe to run on full
+    batches (e.g. 256 samples) on GPU-scale training runs.
+    """
+    statevectors = np.asarray(statevectors)
+    n_total = statevectors.shape[0]
+    batch_size = n_total // 2
+    aug_1 = statevectors[:batch_size]
+    aug_2 = statevectors[batch_size:]
+
+    # Sum of outer products (unnormalised density matrix) of every statevector
+    # in the batch: sum_j |psi_j><psi_j|
+    total_sum = np.einsum("bi,bj->ij", statevectors, np.conj(statevectors))
+
+    rho_sq, sigma_sq, rho_sigma, dhs = [], [], [], []
+    for v1, v2 in zip(aug_1, aug_2):
+        pair_sum = np.outer(v1, np.conj(v1)) + np.outer(v2, np.conj(v2))
+        rho = pair_sum / 2
+        # Leave-one-pair-out: negatives are every statevector except this pair's two
+        sigma = (total_sum - pair_sum) / (n_total - 2)
+
+        # tr(A @ B) == sum(A * B.T) elementwise, avoids a full matrix product
+        rho_sq.append(np.sum(rho * rho.T).real)
+        sigma_sq.append(np.sum(sigma * sigma.T).real)
+        rho_sigma.append(np.sum(rho * sigma.T).real)
+        diff = rho - sigma
+        dhs.append(np.sum(diff * diff.T).real)
+
+    return {
+        "rho_squared": float(np.mean(rho_sq)),
+        "sigma_squared": float(np.mean(sigma_sq)),
+        "rho_sigma": float(np.mean(rho_sigma)),
+        "d_hs": float(np.mean(dhs)),
+    }
+
+
+def save_dhs_history(results_dir, dhs_history):
+    """Save the full per-batch Hilbert-Schmidt metric history to JSON."""
+    with open(os.path.join(results_dir, "hilbert_schmidt_metrics.json"), "w") as fp:
+        json.dump(dhs_history, fp, indent=2)
+
+
+def training_step(
+    model,
+    train_loader,
+    optimizer,
+    max_steps=None,
+    args=None,
+    dhs_history=None,
+    batch_offset=0,
+):
     pbar = tqdm(train_loader)
     total_loss = 0.0
     steps_run = 0
+
+    compute_dhs = (
+        args is not None
+        and getattr(args, "save_dhs", False)
+        and getattr(args, "qiskit", False)
+    )
+    qnn = get_qiskit_qnn(model) if compute_dhs else None
+    if compute_dhs and qnn is None:
+        print(
+            "Warning: --save-dhs requires --qiskit with a Qiskit representation "
+            "network; Hilbert-Schmidt tracking will be skipped."
+        )
+        compute_dhs = False
+    dhs_freq = max(getattr(args, "dhs_freq", 1) or 1, 1) if compute_dhs else 1
+
+    batch_index = batch_offset
     for (x1, x2), _target in pbar:
         if max_steps is not None and steps_run >= max_steps:
             break
+
+        if compute_dhs:
+            # Reset so this batch's forward pass only accumulates its own states
+            qnn.statevectors = []
+
         loss = model(x1, x2)
 
         # Check for NaN/inf loss
         if torch.isnan(loss) or torch.isinf(loss):
             print(f"Warning: Invalid loss detected: {loss}")
             continue
+
+        loss_scalar = loss.item() if loss.dim() == 0 else loss[0].item()
+
+        if compute_dhs and qnn.statevectors and batch_index % dhs_freq == 0:
+            metrics = compute_batch_hilbert_schmidt_metrics(qnn.statevectors)
+            metrics["batch"] = batch_index
+            metrics["loss"] = loss_scalar
+            dhs_history.append(metrics)
+        if compute_dhs:
+            qnn.statevectors = []  # bound memory even when this batch was skipped
 
         optimizer.zero_grad()
         loss.backward()
@@ -115,14 +222,14 @@ def training_step(model, train_loader, optimizer, max_steps=None):
         torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
 
         optimizer.step()
-        loss_scalar = loss.item() if loss.dim() == 0 else loss[0].item()
         total_loss += loss_scalar
         steps_run += 1
+        batch_index += 1
         pbar.set_postfix({"Loss": f"{loss_scalar:.4f}"})
 
     if steps_run == 0:
-        return 0.0, model
-    return total_loss / steps_run, model
+        return 0.0, model, batch_index
+    return total_loss / steps_run, model, batch_index
 
 
 def get_results_dir(args):
@@ -201,9 +308,25 @@ def save_metrics_during_training(
 def train(model, train_loader, results_dir, args):
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-6)
     training_losses = []
+    dhs_history = []
+    batch_offset = 0
 
     # Create results directory
     print(f"Saving training results to: {results_dir}")
+
+    if getattr(args, "save_dhs", False):
+        if not getattr(args, "qiskit", False):
+            print(
+                "Warning: --save-dhs is only implemented for --qiskit "
+                "(the representation network must expose raw statevectors); "
+                "Hilbert-Schmidt tracking will be skipped."
+            )
+        elif getattr(args, "q_backend", "") != "statevector_simulator":
+            print(
+                "Warning: --save-dhs requires --q_backend statevector_simulator "
+                "to access raw quantum statevectors; Hilbert-Schmidt tracking "
+                "will be skipped."
+            )
 
     torch.save(
         model.state_dict(),
@@ -212,12 +335,22 @@ def train(model, train_loader, results_dir, args):
     print(" - Initial model saved - ")
 
     for epoch in range(args.epochs):
-        loss, model = training_step(model, train_loader, optimizer, args.max_steps)
+        loss, model, batch_offset = training_step(
+            model,
+            train_loader,
+            optimizer,
+            args.max_steps,
+            args=args,
+            dhs_history=dhs_history,
+            batch_offset=batch_offset,
+        )
         print(f"epoch: {epoch + 1}/{args.epochs}, training loss: {loss}")
         training_losses.append(loss)
 
         # Save SSL training loss during training
         save_metrics_during_training(results_dir, epoch + 1, ssl_loss=loss)
+        if dhs_history:
+            save_dhs_history(results_dir, dhs_history)
         # Save model if required
         if (epoch + 1) % args.ckpt_step == 0:
             torch.save(
@@ -233,6 +366,9 @@ def train(model, train_loader, results_dir, args):
         os.path.join(results_dir, f"model-cl-{args.classes}-epoch-{args.epochs}.pth"),
     )
     print(f" - Final model saved to: {results_dir} - ")
+
+    if dhs_history:
+        plot_loss_and_hilbert_schmidt(training_losses, dhs_history, args, results_dir)
 
     return model, training_losses
 
@@ -322,6 +458,50 @@ def linear_evaluation(model, train_loader, val_loader, args, results_dir):
         )
 
     return model, train_losses, val_losses, train_accs, val_accs
+
+
+def plot_loss_and_hilbert_schmidt(training_losses, dhs_history, args, results_dir):
+    """
+    Reproduce Fig. 4 of Jaderberg et al. (2022): the SSL training loss recorded
+    after each batch, with insets tracking the average Hilbert-Schmidt distance
+    between positive and negative pairs (D_HS), the average positive pair
+    clustering tr(rho^2), the average clustering of all negative pairs
+    tr(sigma^2), and the ensemble inter-cluster overlap tr(rho*sigma).
+    """
+    if not dhs_history:
+        return
+
+    batches = [m["batch"] for m in dhs_history]
+    losses = [m["loss"] for m in dhs_history]
+    d_hs = [m["d_hs"] for m in dhs_history]
+    rho_sq = [m["rho_squared"] for m in dhs_history]
+    sigma_sq = [m["sigma_squared"] for m in dhs_history]
+    rho_sigma = [m["rho_sigma"] for m in dhs_history]
+
+    fig, ax = plt.subplots(figsize=(8, 8))
+    ax.plot(batches, losses, color="tab:blue", linewidth=1.5)
+    ax.set_xlabel("Training batches")
+    ax.set_ylabel("Loss")
+
+    inset_specs = [
+        ((0.30, 0.62, 0.30, 0.30), d_hs, "tab:orange", r"$\bar{D}_{HS}$"),
+        ((0.62, 0.62, 0.30, 0.30), rho_sq, "tab:green", r"$\overline{tr(\rho^2)}$"),
+        ((0.30, 0.30, 0.30, 0.30), rho_sigma, "tab:red", r"$\overline{tr(\rho\sigma)}$"),
+        ((0.62, 0.30, 0.30, 0.30), sigma_sq, "tab:purple", r"$\overline{tr(\sigma^2)}$"),
+    ]
+    for bbox, values, color, label in inset_specs:
+        inset = ax.inset_axes(bbox)
+        inset.plot(batches, values, color=color, linewidth=1.2)
+        inset.set_title(label, fontsize=9)
+        inset.tick_params(labelsize=7)
+
+    title = "Quantum_Qiskit"
+    fig.suptitle(f"SSL training with Hilbert-Schmidt tracking ({title})")
+    plt.tight_layout()
+    out_path = os.path.join(results_dir, "hilbert_schmidt_tracking.png")
+    plt.savefig(out_path, dpi=300, bbox_inches="tight")
+    plt.close(fig)
+    print(f"Saved Hilbert-Schmidt tracking figure to {out_path}")
 
 
 def plot_training_loss(training_losses, args):

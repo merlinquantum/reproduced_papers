@@ -69,6 +69,7 @@ def _build_args(cfg: dict[str, Any]) -> SimpleNamespace:
         "shots": int(model_cfg.get("shots", 100)),
         "q_backend": str(model_cfg.get("q_backend", "qasm_simulator")),
         "save_dhs": bool(model_cfg.get("save_dhs", False)),
+        "dhs_freq": int(model_cfg.get("dhs_freq", 1)),
         "device": str(cfg.get("device", "cpu")),
         "merlin": backend == "merlin",
         "qiskit": backend == "qiskit",
