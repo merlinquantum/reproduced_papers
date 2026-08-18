@@ -23,9 +23,9 @@ def test_augment_moves_a_varying_diagonal_onto_one_ancilla(clique_graph):
 
     assert augmented
     assert Q_aug.shape == (n + 1, n + 1)
-    assert np.allclose(
-        np.diag(Q_aug), 0.0
-    ), "augmented QUBO must be purely off-diagonal"
+    assert np.allclose(np.diag(Q_aug), 0.0), (
+        "augmented QUBO must be purely off-diagonal"
+    )
     # The linear terms are now couplings to the always-occupied ancilla mode.
     assert np.allclose(Q_aug[:n, n], np.diag(Q) / 2)
     assert np.allclose(Q_aug[n, :n], np.diag(Q) / 2)

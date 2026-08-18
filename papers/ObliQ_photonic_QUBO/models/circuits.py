@@ -116,8 +116,8 @@ def _add_mixing_layer(circ: pcvl.Circuit, size: int) -> None:
 
     Only :func:`vqc_model` needs this, immediately before :func:`_add_vqc_layers`.
     Independent per-mode phases applied to a single definite Fock basis state
-    are provably just a global phase which cancels out of every measurement 
-    probability, so that layer's ``size`` parameters would be inert regardless 
+    are provably just a global phase which cancels out of every measurement
+    probability, so that layer's ``size`` parameters would be inert regardless
     of training. This layer creates real interference first, hence
     the phases downstream of it are physically meaningful. :func:`obliq_model`
     does not need it: its anchor layer already mixes modes before the same mesh
