@@ -251,9 +251,13 @@ def run_sweep(
     # One entry per problem size. Run inputs live alongside in config.json, so
     # they are not duplicated into the results file.
     all_data: dict = {str(size): None for size in size_range}
-    executor: ProcessPoolExecutor | None = None
-    if parallel_workers and parallel_workers > 1:
-        executor = ProcessPoolExecutor(max_workers=parallel_workers)
+executor: ProcessPoolExecutor | None = None
+if parallel_workers and parallel_workers > 1:
+    import multiprocessing as mp
+
+    executor = ProcessPoolExecutor(
+        max_workers=parallel_workers, mp_context=mp.get_context("spawn")
+    )
 
     try:
         for size in size_range:
