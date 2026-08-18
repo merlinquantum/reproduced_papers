@@ -80,7 +80,7 @@ Developed on Windows 11 / Python 3.14, CPU only. Key versions: `merlinquantum` 0
 
 ```
 ObliQ/
-├── demo.ipynb           # end-to-end walkthrough of the method
+├── notebook.ipynb       # end-to-end walkthrough of the method
 ├── cli.json             # shared-runner CLI: sweep-only (repo-root implementation.py)
 ├── configs/             # one JSON per (problem x solver); defaults.json is the smoke config
 ├── lib/                 # harness infrastructure
@@ -131,7 +131,7 @@ Run everything from inside this directory.
 the hybrid, and reproduce the comparison figure:
 
 ```bash
-jupyter notebook demo.ipynb
+jupyter notebook notebook.ipynb
 ```
 
 **A single instance**, no config file. `-e` scores beta against that instance's own
@@ -290,11 +290,11 @@ Mean exact $\beta$ by size:
 | Photonic CVaR-VQE | 1.000 | 0.985 | 0.817 | 0.713 | 0.926 | 0.839 | 0.760 | 0.696 | 0.799 | **10** |
 
 ObliQ Hybrid holds $\beta \approx 0.85$–$1.0$ across the whole range and leads QAOA,
-which decays to $0.76$ at $N = 10$. CVaR-VQE is not monotone: it falls at $N = 4$–$5$ before recovering, with slow decline in performance. All models reach Q=10, the sweep does not go high
+which decays to $0.76$ at $N = 10$. CVaR-VQE is not monotone: it falls at $N = 4$–$5$ before recovering, with slow decline in performance. Note that the repository allows for real backends for all three solvers; however, these evaluations are performed in simulation. Additional evaluation can be added by modifying the backend arg. All models reach Q=10, the sweep does not go high
 enough to separate them on that single number, so the mean-$\beta$ curve is the
 informative comparison. ObliQ's runtime sits between QAOA's and CVaR-VQE's.
 
-To regenerate: run the three sweeps in §4, then `utils.plotter -e`.
+To regenerate: run the three sweeps in §4, then `utils.plotter -e`. 
 
 ## 7. Reproducibility Notes
 
