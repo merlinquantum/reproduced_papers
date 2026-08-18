@@ -274,6 +274,26 @@ code and are unreachable through the two problems here.
 Add an `"output": {"dir": "..."}` block to move a run's results; `output.dir` defaults to
 `results`.
 
+### How results are stored
+
+Every sweep writes to `<output.dir>/<hash>/`, where `<hash>` is a short digest of the
+config's *experiment identity* (see [`lib/config.py`](lib/config.py)): `problem_type`,
+`solver`, `sweep` (minus `parallel_workers`), `provider`, `backend`, `solver_options`.
+`name`, `output`, and `description` are excluded. Relabelling a config or moving its
+output directory reuses the same folder; changing anything experimentally meaningful
+(solver, sizes, seed, options, ...) produces a new one. Two files land in it:
+
+- `results.json` -- the sweep output, keyed by problem size.
+- `config.json` -- a full snapshot of the resolved config that produced it, so a
+  `results/<hash>/` folder is self-describing even without knowing which named config
+  maps to that hash.
+
+This repo ships seven such folders under `results/` already -- `obliq-hybrid`,
+`obliq-static`, `obliq-vqc`, `Photonic_CVARVQE`, `QAOA`, `Simulated_Annealing`, and
+`tabu`, all on Max-Clique -- so the notebook's comparison figure and §6 below render
+without needing a fresh sweep. Re-running `python -m lib.benchmark sweep --config ...`
+(or the shared runner) for the same config overwrites the same folder in place.
+
 ## 6. Results and Analysis
 
 Sweep settings for the run below: Erdős–Rényi $G(N, 1/2)$, $N = 2 \ldots 10$, 100
@@ -352,12 +372,13 @@ cd ObliQ
 pytest -q
 ```
 
-91 tests, no network or hardware required. They cover the encoding (augmentation,
+110 tests, no network or hardware required. They cover the encoding (augmentation,
 anchor-angle formula and ordering, decoding), the readout (including a behaviour lock
 against the upstream CVaR-VQE mapping), seed derivation (including stability across
 processes), instance generation (including the edgeless-draw retry), config hashing
-(**the shipped hashes are pinned, so a config edit that would orphan `results/` fails a
-test**), the CLI, and end-to-end reproducibility of every local solver.
+(which fields are ignored vs. experiment-defining, see `tests/test_config.py`), the CLI,
+and end-to-end reproducibility of every local solver. `test_stored_results_are_well_formed`
+validates any shipped `results/<hash>/` it finds.
 
 ## 9. Extensions and Next Steps
 
