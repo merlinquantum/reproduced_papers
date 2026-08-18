@@ -1,4 +1,5 @@
 {
+  "description": "Tabu: tabu on max-cut, sizes 2-10.",
   "problem_type": "max-cut",
   "solver": "tabu",
   "name": "Tabu",

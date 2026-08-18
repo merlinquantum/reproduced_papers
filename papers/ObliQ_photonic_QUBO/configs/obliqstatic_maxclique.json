@@ -1,4 +1,5 @@
 {
+  "description": "ObliQ Static: obliq-static on max-clique, sizes 2-10.",
   "problem_type": "max-clique",
   "solver": "obliq-static",
   "name": "ObliQ Static",

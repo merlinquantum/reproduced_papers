@@ -7,7 +7,7 @@
   "sweep": {
     "size_range": [2, 3, 4],
     "nb_instances_per_size": 2,
-    "seed": 0,
+    "seed": null,
     "timeout": 30,
     "min_timeout_size": null,
     "parallel_workers": 1,

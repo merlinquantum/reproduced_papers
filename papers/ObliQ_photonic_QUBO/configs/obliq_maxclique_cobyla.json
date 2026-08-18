@@ -1,4 +1,5 @@
 {
+  "description": "ObliQ Hybrid COBYLA: obliq-hybrid on max-clique, sizes 2-10.",
   "problem_type": "max-clique",
   "solver": "obliq-hybrid",
   "name": "ObliQ Hybrid COBYLA",

@@ -1,4 +1,5 @@
 {
+  "description": "Photonic CVaR-VQE: Photonic_CVARVQE on max-cut, sizes 2-10.",
   "problem_type": "max-cut",
   "solver": "Photonic_CVARVQE",
   "name": "Photonic CVaR-VQE",

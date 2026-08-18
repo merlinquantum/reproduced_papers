@@ -1,4 +1,5 @@
 {
+  "description": "Photonic CVaR-VQE: Photonic_CVARVQE on max-clique, sizes 2-10.",
   "problem_type": "max-clique",
   "solver": "Photonic_CVARVQE",
   "name": "Photonic CVaR-VQE",

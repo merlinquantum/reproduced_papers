@@ -12,9 +12,11 @@ lifecycle:
    config, and therefore out of its hash.
 3. **Address** -- a run is identified by a short hash of its config's *experiment
    identity*: the fields that actually determine the results. Execution-only knobs
-   (``output``, ``sweep.parallel_workers``) and the display-only ``name`` are
-   excluded, so re-running with more workers or a different plot label reuses the
-   same folder, while changing the seed/solver/options produces a new one.
+   (``output``, ``sweep.parallel_workers``), the display-only ``name``, and the
+   ``description`` required by the repository's shared runner (see
+   ``runtime_lib/config.py``) are excluded, so re-running with more workers, a
+   different plot label, or a config edited only to add ``description`` reuses
+   the same folder, while changing the seed/solver/options produces a new one.
 
 Layout written by :mod:`lib.benchmark` and read by :mod:`utils.plotter`::
 
@@ -22,8 +24,8 @@ Layout written by :mod:`lib.benchmark` and read by :mod:`utils.plotter`::
     <output.dir>/<hash>/config.json    # a copy of the resolved config
 
 Because the hash covers config *content*, keeping the shipped ``configs/*.json``
-byte-stable is what keeps the shipped ``results/<hash>/`` directories findable
-(``tests/test_config.py`` pins them). Derived seeds are computed in
+byte-stable outside the ignored fields above is what keeps the shipped
+``results/<hash>/`` directories findable. Derived seeds are computed in
 :mod:`lib.seeding` rather than stored in a config for exactly that reason.
 """
 
@@ -51,7 +53,10 @@ TYPES: dict[str, Any] = {
 }
 
 # Fields that do not affect the computed results and are stripped before hashing.
-_IGNORED_TOP_LEVEL = ("output", "name")
+# "description" is required by the shared runner's own config loader
+# (runtime_lib/config.py) for every file reachable through --config, but it is
+# purely documentation -- ignored here for the same reason as "name".
+_IGNORED_TOP_LEVEL = ("output", "name", "description")
 _IGNORED_SWEEP = ("parallel_workers",)
 
 

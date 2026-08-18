@@ -1,4 +1,5 @@
 {
+  "description": "ObliQ Hybrid: obliq-hybrid on max-cut, sizes 2-10.",
   "problem_type": "max-cut",
   "solver": "obliq-hybrid",
   "name": "ObliQ Hybrid",

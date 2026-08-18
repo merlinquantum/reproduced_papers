@@ -1,4 +1,5 @@
 {
+  "description": "QAOA: QAOA on max-clique, sizes 2-10.",
   "problem_type": "max-clique",
   "solver": "QAOA",
   "name": "QAOA",

@@ -42,6 +42,16 @@ def train_and_evaluate(cfg: dict, run_dir: Path) -> None:
     (``config_snapshot.json`` / ``run.log``) -- is unused here: the sweep is
     content-addressed by :func:`lib.benchmark.run_sweep_from_config` instead,
     independent of which entrypoint triggered it.
+
+    ``cfg["seed"]`` (set by the global ``--seed`` flag, or its default of 1337)
+    is a *fallback* for ``sweep.seed``, not an override: an experiment config
+    that pins its own ``sweep.seed`` -- every named ``configs/*.json`` does --
+    is left untouched, so results stay reproducible regardless of what
+    ``--seed`` happens to be. It only fills in when a config leaves
+    ``sweep.seed`` unset, which today is just ``configs/defaults.json``.
     """
     experiment_cfg = {key: cfg[key] for key in _EXPERIMENT_KEYS if key in cfg}
+    sweep = experiment_cfg.setdefault("sweep", {})
+    if sweep.get("seed") is None and cfg.get("seed") is not None:
+        sweep["seed"] = cfg["seed"]
     run_sweep_from_config(experiment_cfg)
