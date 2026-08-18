@@ -53,6 +53,16 @@ Run the short smoke test with:
 python implementation.py --paper BP_QNN --config papers/BP_QNN/configs/defaults.json
 ```
 
+For an explanatory, laptop-sized Fig. 3 walkthrough covering both backends,
+open `papers/BP_QNN/bp_qnn.ipynb`. The corresponding small CLI configs are
+`configs/demo_fig3.json` and `configs/demo_fig3_merlin.json`. The gate-based
+demo uses 2–6 qubits, ten layers per qubit, and 32 samples; the photonic demo
+remains at 2–4 qubits and four samples per point. Run the photonic version with:
+
+```bash
+python implementation.py --paper BP_QNN --config papers/BP_QNN/configs/demo_fig3_merlin.json
+```
+
 The reproduced figures use these configurations:
 
 ```bash
