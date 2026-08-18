@@ -6,7 +6,7 @@ This project formalizes the reproduction of McClean, Boixo, Smelyanskiy, Babbush
 and Neven, *Barren plateaus in quantum neural network training landscapes*,
 Nature Communications 9, 4812 (2018), DOI
 [10.1038/s41467-018-07090-4](https://doi.org/10.1038/s41467-018-07090-4).
-The partial reproduction (logical and photonic translation) of this work was handled by [Eason Xie](https://github.com/easonoob) and lead to a publication accepted to QCE2026 [Pre-Asymptotic Trainability in Photonic Variational Circuits under Postselection](https://arxiv.org/abs/2605.11879) as part as a collaboration with Quandela. Cassandre Notton reformatted the code from Eason to have it follow the repository template.
+The partial reproduction (logical and photonic translation) of this work was handled by [Eason Xie](https://github.com/easonoob) and lead to a publication accepted to QCE2026 [Pre-Asymptotic Trainability in Photonic Variational Circuits under Postselection](https://arxiv.org/abs/2605.11879) as part of a collaboration with Quandela. Cassandre Notton reformatted the code from Eason to have it follow the repository template.
 
 ## Original Paper
 
@@ -32,6 +32,12 @@ MerLin/Perceval photonic model and compares Fock, unbunched, and dual-rail
 computation spaces. This is an analogue rather than a numerical gate-for-gate
 equivalent: the Hilbert/computation spaces differ. The setup follows the
 post-selection comparison developed in [arXiv:2605.11879](https://arxiv.org/abs/2605.11879).
+
+The committed experiments and figures use reduced qubit counts and circuit
+depths so that they can be run with practical local resources. The implementation
+does not impose these reduced settings: users can provide their own configuration
+with the original paper-scale ranges, including up to 26 qubits and 500 layers,
+subject to the available memory and compute time.
 
 ## Install and Run
 
@@ -61,8 +67,10 @@ python implementation.py --paper BP_QNN --config papers/BP_QNN/configs/fig4_gb.j
 ```
 
 The paper-scale gate-based settings are in
-`papers/BP_QNN/configs/original_config.json`. Runs write timestamped artifacts
-under `papers/BP_QNN/outdir/run_YYYYMMDD-HHMMSS/` unless a global `--outdir` is
+`papers/BP_QNN/configs/original_config.json`. To run at the full scale, edit or
+copy that configuration and set the desired `qubits`, `layers`, and `samples`
+values (up to 26 qubits and 500 layers). Runs write timestamped artifacts under
+`papers/BP_QNN/outdir/run_YYYYMMDD-HHMMSS/` unless a global `--outdir` is
 supplied. With `"plot": true`, the runner writes PNG figures, along with
 `results.csv` and (for Fig. 3) the fitted parameters in `fit.json` or
 `fit_merlin.json`.
