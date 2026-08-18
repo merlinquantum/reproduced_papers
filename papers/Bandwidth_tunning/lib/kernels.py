@@ -28,8 +28,9 @@ from typing import cast
 import numpy as np
 import perceval as pcvl
 import torch
-from torch import Tensor
-
+from merlin.algorithms.layer import QuantumLayer
+from merlin.algorithms.layer_utils import _build_simple_circuit
+from merlin.algorithms.module import MerlinModule
 from merlin.builder.circuit_builder import ANGLE_ENCODING_MODE_ERROR, CircuitBuilder
 from merlin.core.computation_space import ComputationSpace
 from merlin.core.sectored_distribution import (
@@ -45,9 +46,7 @@ from merlin.measurement.strategies import MeasurementStrategy
 from merlin.pcvl_pytorch.locirc_to_tensor import CircuitConverter
 from merlin.utils.deprecations import sanitize_parameters
 from merlin.utils.dtypes import to_torch_dtype
-from merlin.algorithms.layer import QuantumLayer
-from merlin.algorithms.layer_utils import _build_simple_circuit
-from merlin.algorithms.module import MerlinModule
+from torch import Tensor
 
 
 def _require_angle_encoding_spec(
@@ -1432,13 +1431,15 @@ class _CCInvQuantumLayer(QuantumLayer):
         """
         # Serial loop is intentional: CircuitConverter.to_tensor holds shared
         # mutable state and is not safe to call concurrently.
-        return torch.stack([
-            self._compute_unitary(
-                self._encode_single(x),
-                apply_phase_error=apply_phase_error,
-            )
-            for x in x_batch
-        ])
+        return torch.stack(
+            [
+                self._compute_unitary(
+                    self._encode_single(x),
+                    apply_phase_error=apply_phase_error,
+                )
+                for x in x_batch
+            ]
+        )
 
     def _compute_all_kernel_circuits(
         self,
@@ -1475,8 +1476,7 @@ class _CCInvQuantumLayer(QuantumLayer):
 
         if x2 is not None:
             U_adjoint = (
-                self
-                ._compute_unitary_batch(
+                self._compute_unitary_batch(
                     x2,
                     apply_phase_error=apply_phase_error,
                 )
@@ -2333,18 +2333,19 @@ class FidelityKernel(MerlinModule):
                 stacklevel=2,
             )
 
+
 class ProjectedFidelityKernel(MerlinModule):
     """
     Projected Quantum Kernel.
-    
-    Calculates the similarity between two datapoints using the squared Euclidean 
-    distance between the marginal distributions of each mode (the probability 
+
+    Calculates the similarity between two datapoints using the squared Euclidean
+    distance between the marginal distributions of each mode (the probability
     of measuring 0 photons in mode k).
     """
 
     def __init__(
         self,
-        feature_map, # Type: FeatureMap
+        feature_map,  # Type: FeatureMap
         input_state: list[int] | None = None,
         *,
         gamma: float = 1.0,  # The new hyperparameter for the RBF/Gaussian kernel width
@@ -2357,23 +2358,23 @@ class ProjectedFidelityKernel(MerlinModule):
         dtype: str | torch.dtype | None = None,
     ) -> None:
         super().__init__()
-        
+
         # --- 1. Initialization of standard and new hyperparameters ---
         self.feature_map = feature_map
         self.gamma = gamma
         self.shots = shots or 0
         self.sampling_method = sampling_method
         self.force_psd = force_psd
-        
+
         base_device = device if device is not None else feature_map.device
         self.device = (
-            torch.device(base_device) 
-            if base_device is not None 
+            torch.device(base_device)
+            if base_device is not None
             else torch.device("cpu")
         )
         self.dtype = to_torch_dtype(dtype, default=feature_map.dtype)
         self.input_size = self.feature_map.input_size
-        
+
         if computation_space is None:
             self.computation_space = ComputationSpace.FOCK
         else:
@@ -2393,7 +2394,9 @@ class ProjectedFidelityKernel(MerlinModule):
                 input_state = [1 if i % 2 == 0 else 0 for i in range(m)]
             else:
                 if n_photons <= 0 or n_photons > m:
-                    raise ValueError(f"n_photons must be between 1 and {m} (the number of circuit modes).")
+                    raise ValueError(
+                        f"n_photons must be between 1 and {m} (the number of circuit modes)."
+                    )
                 alternating_slot_count = (m + 1) // 2
                 if n_photons <= alternating_slot_count:
                     state = [0] * m
@@ -2404,14 +2407,15 @@ class ProjectedFidelityKernel(MerlinModule):
                     state = [1 if i % 2 == 0 else 0 for i in range(m)]
                     remaining = n_photons - sum(state)
                     for i in range(1, m, 2):
-                        if remaining <= 0: break
+                        if remaining <= 0:
+                            break
                         state[i] = 1
                         remaining -= 1
                     input_state = state
 
         if len(input_state) != m:
             raise ValueError("Input state length does not match circuit size.")
-            
+
         self._kernel_input_state = list(input_state)
 
         # --- 3. Preparation of the Perceval experiment ---
@@ -2422,14 +2426,18 @@ class ProjectedFidelityKernel(MerlinModule):
         self.experiment = experiment
 
         # --- 4. Initialization of the computational backend ---
-        # We use a standard QuantumLayer (instead of _CCInvQuantumLayer) 
+        # We use a standard QuantumLayer (instead of _CCInvQuantumLayer)
         # because we only want to propagate data through U(x) and observe the output.
-        
+
         # Resolve the parameter size expected by the circuit
         spec_mappings = self.feature_map._circuit_graph.spec_mappings
         input_prefix = self.feature_map.input_parameters
-        backend_input_size = len(spec_mappings.get(input_prefix, [])) if input_prefix else self.input_size
-        if backend_input_size == 0: 
+        backend_input_size = (
+            len(spec_mappings.get(input_prefix, []))
+            if input_prefix
+            else self.input_size
+        )
+        if backend_input_size == 0:
             backend_input_size = self.input_size
 
         self._quantum_layer = QuantumLayer(
@@ -2444,16 +2452,16 @@ class ProjectedFidelityKernel(MerlinModule):
             dtype=self.dtype,
             device=self.device,
         )
-        
+
         self.is_trainable = self.feature_map.is_trainable
 
     def _build_projection_mask(self, keys: list[tuple[int, ...]]) -> None:
         """
         Builds a static projection mask to compute marginal probabilities efficiently.
-        
-        For each mode k, the mask contains 1.0 at the index of a basis state 
+
+        For each mode k, the mask contains 1.0 at the index of a basis state
         if that state has exactly 0 photons in mode k, and 0.0 otherwise.
-        
+
         Parameters
         ----------
         keys : list[tuple[int, ...]]
@@ -2461,15 +2469,15 @@ class ProjectedFidelityKernel(MerlinModule):
         """
         m = self.feature_map.circuit.m
         num_states = len(keys)
-        
+
         # Initialize a mask of shape (n_modes, n_states)
         mask = torch.zeros((m, num_states), dtype=self.dtype, device=self.device)
-        
+
         for state_idx, state in enumerate(keys):
             for mode_idx in range(m):
                 if state[mode_idx] == 0:
                     mask[mode_idx, state_idx] = 1.0
-                    
+
         # Register as a buffer so PyTorch handles device movements automatically
         self.register_buffer("_zero_photon_mask", mask)
 
@@ -2480,43 +2488,44 @@ class ProjectedFidelityKernel(MerlinModule):
         """
         # 1. Evaluate the circuit
         result = self._quantum_layer(x)
-        
+
         from merlin.core.sectored_distribution import SectoredDistribution
-        
+
         # Extract probabilities
         if isinstance(result, SectoredDistribution):
             probs = result.to(dtype=self.dtype)
         else:
             probs = result.to(dtype=self.dtype)
-            
+
         # Extract keys from the layer's internal attributes
         raw_keys = self._quantum_layer._raw_output_keys
-        
+
         # Handle sectored vs non-sectored keys
         if raw_keys and isinstance(raw_keys[0], list):
             keys = [k for sector in raw_keys for k in sector]
         else:
             keys = raw_keys
-            
+
         # Ensure probs is a 2D tensor (batch_size, num_states)
         if probs.ndim == 1:
             probs = probs.unsqueeze(0)
-            
+
         # 2. Build the projection mask dynamically on the first forward pass
         if not hasattr(self, "_zero_photon_mask"):
             self._build_projection_mask(keys)
-            
+
         # Optional: Apply pseudo-sampling (shot noise) if requested
         if self.shots > 0:
             from merlin.measurement.autodiff import AutoDiffProcess
+
             autodiff_process = AutoDiffProcess()
             probs = autodiff_process.sampling_noise.pcvl_sampler(
                 probs, self.shots, self.sampling_method
             )
-            
+
         # 3. Compute the marginals (rho_k) using PyTorch matrix multiplication
         projected_features = probs @ self._zero_photon_mask.T
-        
+
         return projected_features
 
     def forward(
@@ -2526,19 +2535,19 @@ class ProjectedFidelityKernel(MerlinModule):
     ) -> float | Tensor:
         """
         Calculates the projected quantum kernel matrix for the given inputs.
-        
+
         Parameters
         ----------
         x1 : float | list | tuple | torch.Tensor
             First input datapoint or dataset.
         x2 : float | list | tuple | torch.Tensor | None
-            Second input datapoint or dataset. If omitted, the symmetric 
+            Second input datapoint or dataset. If omitted, the symmetric
             training kernel matrix for `x1` is computed.
-            
+
         Returns
         -------
         float | torch.Tensor
-            Scalar kernel value for single datapoints, or a 2D kernel matrix 
+            Scalar kernel value for single datapoints, or a 2D kernel matrix
             for datasets.
         """
         # 1. Input formatting and validation
@@ -2555,10 +2564,12 @@ class ProjectedFidelityKernel(MerlinModule):
 
         # Handle single datapoint vs batch evaluation
         is_datapoint = self.feature_map.is_datapoint(x1)
-        
+
         if is_datapoint:
             if x2 is None:
-                raise ValueError("For a single input datapoint, you must specify an x2 argument.")
+                raise ValueError(
+                    "For a single input datapoint, you must specify an x2 argument."
+                )
             x1 = x1.reshape(1, self.input_size)
             x2 = x2.reshape(1, self.input_size)
         else:
@@ -2569,7 +2580,7 @@ class ProjectedFidelityKernel(MerlinModule):
         # 2. Extract projected quantum features (rho_k)
         # features shape: (batch_size, n_modes)
         features1 = self._get_projected_features(x1)
-        
+
         if x2 is None:
             features2 = features1
         else:
@@ -2589,10 +2600,10 @@ class ProjectedFidelityKernel(MerlinModule):
         if x2 is None:
             # Force the diagonal to be exactly 1.0 (distance of a point to itself is 0)
             kernel_matrix.fill_diagonal_(1.0)
-            
+
             # Symmetrize the matrix to fix tiny floating-point inaccuracies
             kernel_matrix = 0.5 * (kernel_matrix + kernel_matrix.T)
-            
+
             # Project to the closest Positive Semi-Definite matrix if requested
             if self.force_psd:
                 # We assume _project_psd_matrix is imported or available in the file

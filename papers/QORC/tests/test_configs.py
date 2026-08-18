@@ -8,7 +8,7 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-from runtime_lib.config import load_config  # noqa: E402
+from runtime_lib.config import load_config
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 CONFIG_DIR = PROJECT_DIR / "configs"
@@ -31,6 +31,6 @@ def test_cli_schema_matches_defaults_path() -> None:
     assert cli_schema_path.exists(), "cli.json missing"
 
     runner_module = importlib.import_module("lib.runner")
-    assert hasattr(
-        runner_module, "train_and_evaluate"
-    ), "Runner must expose train_and_evaluate()"
+    assert hasattr(runner_module, "train_and_evaluate"), (
+        "Runner must expose train_and_evaluate()"
+    )

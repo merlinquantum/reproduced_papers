@@ -4,14 +4,13 @@ import ssl
 import urllib.request
 from pathlib import Path
 
+import certifi
 import numpy as np
 import torch
-import certifi
 from sklearn.datasets import fetch_openml
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder
-from torchvision.datasets import FashionMNIST
-from torchvision.datasets import KMNIST
+from torchvision.datasets import KMNIST, FashionMNIST
 
 # ==============================================================================
 #
@@ -138,7 +137,9 @@ def _download_kmnist_fallback(cache_root: Path):
                 errors.append(f"{url}: {mirror_error}")
         else:
             joined = "\n".join(errors)
-            raise RuntimeError(f"Unable to download {filename} from fallback mirrors:\n{joined}")
+            raise RuntimeError(
+                f"Unable to download {filename} from fallback mirrors:\n{joined}"
+            )
 
         with gzip.open(gz_path, "rb") as src, extracted_path.open("wb") as dst:
             shutil.copyfileobj(src, dst)
@@ -150,7 +151,10 @@ def _download_with_ssl_fallback(url: str, destination: Path):
 
     strict_context = ssl.create_default_context(cafile=certifi.where())
     try:
-        with urllib.request.urlopen(url, context=strict_context) as response, destination.open("wb") as out:
+        with (
+            urllib.request.urlopen(url, context=strict_context) as response,
+            destination.open("wb") as out,
+        ):
             shutil.copyfileobj(response, out)
         return
     except ssl.SSLError:
@@ -158,7 +162,10 @@ def _download_with_ssl_fallback(url: str, destination: Path):
 
     # Last resort for environments with broken local certificate chains.
     unsafe_context = ssl._create_unverified_context()
-    with urllib.request.urlopen(url, context=unsafe_context) as response, destination.open("wb") as out:
+    with (
+        urllib.request.urlopen(url, context=unsafe_context) as response,
+        destination.open("wb") as out,
+    ):
         shutil.copyfileobj(response, out)
 
 

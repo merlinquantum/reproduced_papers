@@ -38,16 +38,27 @@ while IFS= read -r line; do
   PAPERS+=("$line")
 done < <($PYTHON_BIN implementation.py --list-papers)
 
-# Optional substring filter to target specific papers quickly (first arg)
+# Optional filter to target specific papers quickly: a plain arg is a substring
+# match; `--exact NAME` matches only the paper whose path (relative to papers/)
+# equals NAME exactly.
 FILTER=${1:-}
+EXACT=0
+if [[ "$FILTER" == "--exact" ]]; then
+  EXACT=1
+  FILTER=${2:-}
+fi
+
 filtered=()
 if [[ -n "$FILTER" ]]; then
   for p in "${PAPERS[@]}"; do
-    if [[ "$p" == *"$FILTER"* ]]; then
+    p_rel="${p#papers/}"
+    if [[ $EXACT -eq 1 ]]; then
+      [[ "$p_rel" == "$FILTER" ]] && filtered+=("$p")
+    elif [[ "$p" == *"$FILTER"* ]]; then
       filtered+=("$p")
     fi
   done
-  PAPERS=("${filtered[@]-}")
+  PAPERS=("${filtered[@]}")
 fi
 
 printf "Found %d papers\n" "${#PAPERS[@]}"

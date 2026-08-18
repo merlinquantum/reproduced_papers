@@ -13,8 +13,12 @@ data/*
 !data/QLSTM/**
 !data/Bandwidth_tunning/
 !data/Bandwidth_tunning/**
+!data/generative_quantum_embeddings/
+!data/generative_quantum_embeddings/**
 models/
 !models/.gitkeep
+!papers/**/models/
+!papers/**/models/.gitkeep
 outdir/
 !outdir/.gitkeep
 .smoke_logs/

@@ -16,7 +16,7 @@
     "graphs" : {
             "min" : -2.3,
             "max" : 0.6,
-            "number_of_points" : 30
+            "number_of_points" : 10
     },
     "figs" : [
             "Variances",
@@ -32,7 +32,7 @@
         "test_sample":20,
         "description":"4 kmnist28 80-20",
         "dimension" : 4,
-        "nb_seeds": 5
+        "nb_seeds": 2
         }
     ]
     

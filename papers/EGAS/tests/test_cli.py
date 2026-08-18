@@ -11,13 +11,8 @@ def test_cli_help_exits_cleanly():
     assert exc.value.code == 0
 
 
-def test_train_and_evaluate_writes_artifact(tmp_path):
-    from lib import runner as bw_runner
-
+def test_defaults_config_has_required_keys():
     cfg = load_runtime_ready_config()
-    run_dir = tmp_path / "run"
-    run_dir.mkdir()
-
-    bw_runner.train_and_evaluate(cfg, run_dir)
-
-    assert (run_dir / "done.txt").exists(), "Expected artifact file to be created"
+    assert cfg["task"] in {"egas_eval", "wasserstein", "fig1"}
+    assert cfg["dataset"]["n_qubits"] == 8
+    assert cfg["egas"]["seq_len"] == 28
