@@ -123,13 +123,17 @@ def run_solver(
         from models.cvar_vqe import run_photonic_cvarvqe
 
         options.setdefault("seed", seed)
+        if backend is not None:
+            options.setdefault("backend", backend)
         return run_photonic_cvarvqe(graph, problem_type, **options)
 
     if solver in OBLIQ_SOLVERS:
         from models.obliq import run_obliq_solver
 
         options.setdefault("seed", seed)
-        return run_obliq_solver(Q, variant=solver, backend=backend, **options).bitstring
+        if backend is not None:
+            options.setdefault("backend", backend)
+        return run_obliq_solver(Q, variant=solver, **options).bitstring
 
     # D-Wave family: their samplers take a QUBO dict, so the matrix is converted
     # here -- the one place that form is still needed. `timeout` reaches the Leap
