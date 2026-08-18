@@ -14,7 +14,7 @@ baseline, and classical annealing solvers.
 - **Baseline:** the CVaR-VQE solver follows Quandela's reference implementation.
 - The ObliQ circuits, QUBO encoding, and decoding are reproduced from the paper; the
   MerLin implementation and the Q-score evaluation harness are original to this folder.
-- License: Apache 2.0 (see `LICENSE`).
+- License: follows the repository license (MIT).
 
 ## 2. Overview
 
