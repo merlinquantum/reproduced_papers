@@ -111,6 +111,25 @@ def _add_anchor_layers(
                 circ.add(tuple(range(size)), PERM(perm))
 
 
+def _add_mixing_layer(circ: pcvl.Circuit, size: int) -> None:
+    """Fixed 50:50 beam splitters between adjacent modes (theta = pi/2).
+
+    Only :func:`vqc_model` needs this, immediately before :func:`_add_vqc_layers`.
+    Without it, the mesh's first phase-shifter layer sits directly on the raw
+    ``[1, 1, ..., 1]`` input -- a single, definite Fock basis state, not a
+    superposition. Independent per-mode phases applied to a single definite Fock
+    state are provably just a global phase (each mode contributes one scalar
+    factor to the one and only basis ket), and a global phase cancels out of
+    every measurement probability -- so that layer's ``size`` parameters would be
+    inert regardless of training. This layer creates real interference first, so
+    the phases downstream of it are physically meaningful. :func:`obliq_model`
+    does not need it: its anchor layer already mixes modes before the same mesh
+    code runs.
+    """
+    for i in range(size - 1):
+        circ.add((i, i + 1), BS(np.pi / 2))
+
+
 def _add_vqc_layers(circ: pcvl.Circuit, size: int) -> None:
     """Add the trainable mesh: two blocks of phase shifters and beam splitters.
 
@@ -216,8 +235,14 @@ def static_model(
 
 
 def vqc_model(size: int) -> QuantumLayer:
-    """Trainable mesh with no anchor -- the plain photonic VQC baseline."""
+    """Trainable mesh with no anchor -- the plain photonic VQC baseline.
+
+    Prefixed with a fixed mixing layer (see :func:`_add_mixing_layer`) so the
+    mesh's first phase-shifter layer acts on genuine interference instead of the
+    raw, definite ``[1, 1, ..., 1]`` input.
+    """
     circ = pcvl.Circuit(size)
+    _add_mixing_layer(circ, size)
     _add_vqc_layers(circ, size)
     return _quantum_layer(circ, [1] * size, trainable=True)
 
