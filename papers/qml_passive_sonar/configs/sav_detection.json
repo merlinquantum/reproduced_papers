@@ -1,0 +1,13 @@
+{
+  "description": "E1-E4: SAV vs DEMON detection on (synthetic) ShipsEar-like data.",
+  "task": "sav_detection",
+  "dataset": {
+    "name": "shipear",
+    "duration_synthetic_s": 60.0,
+    "samples_per_class_synthetic": 4,
+    "target_sr": 8000,
+    "image_size": 64,
+    "threshold_eta": 2.0,
+    "peak_tolerance_hz": 3.0
+  }
+}
