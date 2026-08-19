@@ -165,7 +165,7 @@
     },
     {
       "flags": ["--save-dhs"],
-      "help": "Track the average Hilbert-Schmidt distance (D_HS) between positive and negative pairs after each batch, reproducing Fig. 4 of Jaderberg et al. Requires --qiskit and --q_backend statevector_simulator",
+      "help": "Track the average Hilbert-Schmidt distance between positive and negative pairs after each batch. Qiskit uses statevectors; MerLin uses a probability-space diagonal-density-matrix surrogate.",
       "action": "store_true",
       "default": false,
       "apply": {"kind": "config_path", "path": "model.save_dhs", "value": true}

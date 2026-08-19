@@ -31,7 +31,8 @@
   },
   "training": {
     "epochs": 2,
-    "ckpt_step": 1,
-    "le_epochs": 100
+    "max_steps": 50,
+    "le_epochs": 100,
+    "le_max_steps": 1
   }
 }

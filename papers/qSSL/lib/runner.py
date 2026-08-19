@@ -116,10 +116,20 @@ def run_qssl_experiment(cfg: dict[str, Any], run_dir: Path) -> None:
     model, ssl_losses = train(model, ssl_loader, str(run_dir), args)
 
     LOGGER.info("Building frozen model for linear evaluation")
-    frozen_model = nn.Sequential(
+    frozen_representation_layers = [
         model.backbone,
         model.comp,
-        model.representation_network,
+    ]
+    if model.batch_norm:
+        frozen_representation_layers.append(model.bn)
+    frozen_representation_layers.extend(
+        [
+            model.quantum_input_preprocessor,
+            model.representation_network,
+        ]
+    )
+    frozen_model = nn.Sequential(
+        *frozen_representation_layers,
         nn.Linear(model.rep_net_output_size, args.classes),
     )
     frozen_model.requires_grad_(False)

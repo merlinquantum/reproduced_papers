@@ -156,6 +156,74 @@ def compute_batch_hilbert_schmidt_metrics(statevectors):
     }
 
 
+def compute_batch_probability_hilbert_schmidt_metrics(probability_vectors):
+    """Compute the Hilbert-Schmidt surrogate for photonic probability vectors.
+
+    MerLin currently returns photon-count probabilities rather than complex
+    amplitudes. Treating each probability vector as the diagonal of a density
+    matrix gives the exact Hilbert-Schmidt distance between those diagonal
+    density matrices, but discards optical phases and coherences.
+
+    Parameters
+    ----------
+    probability_vectors : array-like
+        State probabilities ordered as [view-1 batch, view-2 batch]. Every row
+        must describe one normalized probability distribution.
+
+    Returns
+    -------
+    dict
+        Batch-averaged squared positive density, negative density, overlap,
+        and probability-space Hilbert-Schmidt distance.
+
+    Raises
+    ------
+    ValueError
+        If the input does not contain two complete views or has invalid
+        probability values.
+    """
+    probability_vectors = np.asarray(probability_vectors, dtype=float)
+    if probability_vectors.ndim != 2:
+        raise ValueError(
+            "probability_vectors must have shape (2 * batch_size, dimension)"
+        )
+    if probability_vectors.shape[0] % 2 != 0 or probability_vectors.shape[0] < 4:
+        raise ValueError("probability_vectors must contain at least two complete views")
+    if not np.all(np.isfinite(probability_vectors)):
+        raise ValueError("probability_vectors must contain only finite values")
+    if np.any(probability_vectors < 0):
+        raise ValueError("probability_vectors cannot contain negative probabilities")
+    if not np.allclose(probability_vectors.sum(axis=1), 1.0, atol=1e-6):
+        raise ValueError("each probability vector must sum to one")
+
+    batch_size = probability_vectors.shape[0] // 2
+    aug_1 = probability_vectors[:batch_size]
+    aug_2 = probability_vectors[batch_size:]
+    total_sum = probability_vectors.sum(axis=0)
+
+    rho_squared = []
+    sigma_squared = []
+    rho_sigma = []
+    d_hs = []
+    for probability_view_1, probability_view_2 in zip(aug_1, aug_2):
+        pair_sum = probability_view_1 + probability_view_2
+        rho = pair_sum / 2
+        sigma = (total_sum - pair_sum) / (probability_vectors.shape[0] - 2)
+        difference = rho - sigma
+
+        rho_squared.append(np.dot(rho, rho))
+        sigma_squared.append(np.dot(sigma, sigma))
+        rho_sigma.append(np.dot(rho, sigma))
+        d_hs.append(np.dot(difference, difference))
+
+    return {
+        "rho_squared": float(np.mean(rho_squared)),
+        "sigma_squared": float(np.mean(sigma_squared)),
+        "rho_sigma": float(np.mean(rho_sigma)),
+        "d_hs": float(np.mean(d_hs)),
+    }
+
+
 def save_dhs_history(results_dir, dhs_history):
     """Save the full per-batch Hilbert-Schmidt metric history to JSON."""
     with open(os.path.join(results_dir, "hilbert_schmidt_metrics.json"), "w") as fp:
@@ -175,18 +243,20 @@ def training_step(
     total_loss = 0.0
     steps_run = 0
 
-    compute_dhs = (
-        args is not None
-        and getattr(args, "save_dhs", False)
-        and getattr(args, "qiskit", False)
-    )
-    qnn = get_qiskit_qnn(model) if compute_dhs else None
-    if compute_dhs and qnn is None:
+    compute_dhs = args is not None and getattr(args, "save_dhs", False)
+    use_qiskit_states = compute_dhs and getattr(args, "qiskit", False)
+    use_merlin_probabilities = compute_dhs and getattr(args, "merlin", False)
+    qnn = get_qiskit_qnn(model) if use_qiskit_states else None
+    if use_qiskit_states and qnn is None:
         print(
             "Warning: --save-dhs requires --qiskit with a Qiskit representation "
             "network; Hilbert-Schmidt tracking will be skipped."
         )
         compute_dhs = False
+    if use_merlin_probabilities and not hasattr(model, "photonic_probability_vectors"):
+        raise AttributeError(
+            "MerLin Hilbert-Schmidt tracking requires photonic probability vectors"
+        )
     dhs_freq = max(getattr(args, "dhs_freq", 1) or 1, 1) if compute_dhs else 1
 
     batch_index = batch_offset
@@ -194,9 +264,11 @@ def training_step(
         if max_steps is not None and steps_run >= max_steps:
             break
 
-        if compute_dhs:
+        if use_qiskit_states:
             # Reset so this batch's forward pass only accumulates its own states
             qnn.statevectors = []
+        elif use_merlin_probabilities:
+            model.photonic_probability_vectors = []
 
         loss = model(x1, x2)
 
@@ -207,13 +279,24 @@ def training_step(
 
         loss_scalar = loss.item() if loss.dim() == 0 else loss[0].item()
 
-        if compute_dhs and qnn.statevectors and batch_index % dhs_freq == 0:
-            metrics = compute_batch_hilbert_schmidt_metrics(qnn.statevectors)
+        metric_inputs = None
+        metric_function = None
+        if use_qiskit_states and qnn.statevectors:
+            metric_inputs = qnn.statevectors
+            metric_function = compute_batch_hilbert_schmidt_metrics
+        elif use_merlin_probabilities and model.photonic_probability_vectors:
+            metric_inputs = torch.cat(model.photonic_probability_vectors, dim=0).numpy()
+            metric_function = compute_batch_probability_hilbert_schmidt_metrics
+
+        if compute_dhs and metric_inputs is not None and batch_index % dhs_freq == 0:
+            metrics = metric_function(metric_inputs)
             metrics["batch"] = batch_index
             metrics["loss"] = loss_scalar
             dhs_history.append(metrics)
-        if compute_dhs:
+        if use_qiskit_states:
             qnn.statevectors = []  # bound memory even when this batch was skipped
+        elif use_merlin_probabilities:
+            model.photonic_probability_vectors = []
 
         optimizer.zero_grad()
         loss.backward()
@@ -315,13 +398,16 @@ def train(model, train_loader, results_dir, args):
     print(f"Saving training results to: {results_dir}")
 
     if getattr(args, "save_dhs", False):
-        if not getattr(args, "qiskit", False):
+        if not getattr(args, "qiskit", False) and not getattr(args, "merlin", False):
             print(
-                "Warning: --save-dhs is only implemented for --qiskit "
-                "(the representation network must expose raw statevectors); "
+                "Warning: --save-dhs requires --qiskit or --merlin "
+                "(the representation network must expose quantum outputs); "
                 "Hilbert-Schmidt tracking will be skipped."
             )
-        elif getattr(args, "q_backend", "") != "statevector_simulator":
+        elif (
+            getattr(args, "qiskit", False)
+            and getattr(args, "q_backend", "") != "statevector_simulator"
+        ):
             print(
                 "Warning: --save-dhs requires --q_backend statevector_simulator "
                 "to access raw quantum statevectors; Hilbert-Schmidt tracking "
