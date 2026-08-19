@@ -193,8 +193,9 @@ class QSSL(nn.Module):
                 ],
                 input_parameters=["feature"],
                 input_state=input_state,
-                computation_space=ComputationSpace.UNBUNCHED,
-                measurement_strategy=MeasurementStrategy.PROBABILITIES,
+                measurement_strategy=MeasurementStrategy.probs(
+                    ComputationSpace.UNBUNCHED
+                ),
             )
 
             self.rep_net_output_size = self.representation_network.output_size
@@ -281,17 +282,18 @@ class QSSL(nn.Module):
                 self.rep_net_output_size = args.width  # Output dimension matches input
         # ========== Contrastive Learning Components ==========
         self.loss_dim = args.loss_dim  # Dimension of contrastive loss space
+        self.projection_head = getattr(args, "projection_head", True)
 
-        # Projection head: maps representations to contrastive loss space
-        # This is a key component in contrastive learning (SimCLR, MoCo, etc.)
-        self.proj = nn.Sequential(
-            nn.Linear(
-                self.rep_net_output_size, self.width
-            ),  # Project to intermediate dim
-            nn.BatchNorm1d(self.width),  # Normalize features
-            nn.ReLU(),  # Non-linear activation
-            nn.Linear(self.width, self.loss_dim),  # Final projection to loss space
-        )
+        if self.projection_head:
+            # Projection head: maps representations to contrastive loss space.
+            self.proj = nn.Sequential(
+                nn.Linear(self.rep_net_output_size, self.width),
+                nn.BatchNorm1d(self.width),
+                nn.ReLU(),
+                nn.Linear(self.width, self.loss_dim),
+            )
+        else:
+            self.proj = nn.Identity()
 
         self.normalize = nn.Sigmoid()  # Normalization function (if needed)
         self.temperature = args.temperature  # Temperature parameter for InfoNCE loss

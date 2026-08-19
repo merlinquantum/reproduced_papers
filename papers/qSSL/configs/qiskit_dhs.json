@@ -8,13 +8,14 @@
   },
   "dataset": {
     "root": null,
-    "classes": 5,
+    "classes": 2,
     "batch_size": 256
   },
   "model": {
     "backend": "qiskit",
     "width": 8,
     "loss_dim": 128,
+    "projection_head": false,
     "batch_norm": false,
     "temperature": 0.07,
     "modes": 10,
@@ -30,9 +31,10 @@
     "dhs_freq": 1
   },
   "training": {
-    "epochs": 2,
-    "max_steps": 50,
+    "epochs": 3,
+    "max_steps": null,
+    "total_steps": 100,
     "le_epochs": 100,
-    "le_max_steps": 1
+    "le_max_steps": null
   }
 }

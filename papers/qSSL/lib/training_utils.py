@@ -421,11 +421,20 @@ def train(model, train_loader, results_dir, args):
     print(" - Initial model saved - ")
 
     for epoch in range(args.epochs):
+        remaining_steps = None
+        total_steps = getattr(args, "total_steps", None)
+        if total_steps is not None:
+            remaining_steps = total_steps - batch_offset
+            if remaining_steps <= 0:
+                break
+            if args.max_steps is not None:
+                remaining_steps = min(remaining_steps, args.max_steps)
+
         loss, model, batch_offset = training_step(
             model,
             train_loader,
             optimizer,
-            args.max_steps,
+            remaining_steps if args.total_steps is not None else args.max_steps,
             args=args,
             dhs_history=dhs_history,
             batch_offset=batch_offset,
@@ -445,6 +454,9 @@ def train(model, train_loader, results_dir, args):
                     results_dir, f"model-cl-{args.classes}-epoch-{epoch + 1}.pth"
                 ),
             )
+
+        if total_steps is not None and batch_offset >= total_steps:
+            break
             print(f" - Model saved at epoch {epoch + 1}/{args.epochs} - ")
 
     torch.save(

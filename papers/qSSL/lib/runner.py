@@ -50,6 +50,11 @@ def _build_args(cfg: dict[str, Any]) -> SimpleNamespace:
             if training_cfg.get("max_steps") is None
             else int(training_cfg.get("max_steps"))
         ),
+        "total_steps": (
+            None
+            if training_cfg.get("total_steps") is None
+            else int(training_cfg.get("total_steps"))
+        ),
         "le_max_steps": (
             None
             if training_cfg.get("le_max_steps") is None
@@ -57,6 +62,7 @@ def _build_args(cfg: dict[str, Any]) -> SimpleNamespace:
         ),
         "width": int(model_cfg.get("width", 8)),
         "loss_dim": int(model_cfg.get("loss_dim", 128)),
+        "projection_head": bool(model_cfg.get("projection_head", True)),
         "batch_norm": bool(model_cfg.get("batch_norm", False)),
         "temperature": float(model_cfg.get("temperature", 0.07)),
         "modes": int(model_cfg.get("modes", 10)),
