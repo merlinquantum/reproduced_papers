@@ -7,19 +7,18 @@ import matplotlib.pyplot as plt
 import merlin as ml
 import perceval as pcvl
 from merlin.builder import CircuitBuilder
-from merlin.utils.combinadics import Combinadics
 
 # =====================================================================
 # 0. CONFIGURATION
 # =====================================================================
 FACTEURS_ECHELLE_DISPONIBLES = {
     "linear": [1.0, 2.0, 1.0, 2.0],
-    "exponential": [1.0, 2.0, 1.0, 2.0],
+    "exponential": [1.0, 3.0, 1.0, 3.0],
     "balanced": [-1.0, 1.0, -1.0, 1.0],
 }
 
 # =====================================================================
-# 1. MERLIN 2D MODEL [1*x1, 2*x1, 1*x2, 2*x2]
+# 1. MERLIN 2D MODEL 
 # =====================================================================
 class PhotonicSpectralModel2D(nn.Module):
     def __init__(
@@ -48,18 +47,32 @@ class PhotonicSpectralModel2D(nn.Module):
         )
 
         self.circuit_index = circuit_index
-        self._presence_indices_cache = {}
+        self.n_encoding_layers = self._get_num_encoding_layers(circuit_index)
         self.quantum_layer = self._build_quantum_layer(circuit_index)
 
     def _build_quantum_layer(self, circuit_index):
         builder = self._build_circuit(circuit_index)
         return ml.QuantumLayer(
-            input_size=self.n_actifs,
+            input_size=self.n_actifs * self.n_encoding_layers,
             builder=builder,
             n_photons=self.n_photons,
             measurement_strategy=self.measurement_strategy,
             dtype=torch.float32,
         )
+
+    def _get_num_encoding_layers(self, circuit_index):
+        encoding_layers = {
+            0: 1,
+            1: 1,
+            2: 2,
+            3: 1,
+        }
+        if circuit_index not in encoding_layers:
+            raise ValueError(
+                f"Invalid circuit_index: {circuit_index}. "
+                f"Choose from {sorted(encoding_layers)}"
+            )
+        return encoding_layers[circuit_index]
 
     def _build_circuit(self, circuit_index):
         builder = CircuitBuilder(n_modes=self.n_modes)
@@ -67,6 +80,7 @@ class PhotonicSpectralModel2D(nn.Module):
             0: self._build_circuit_type_0,
             1: self._build_circuit_type_1,
             2: self._build_circuit_type_2,
+            3: self._build_circuit_type_3,
         }
         if circuit_index not in builders:
             raise ValueError(
@@ -80,22 +94,45 @@ class PhotonicSpectralModel2D(nn.Module):
         builder.add_angle_encoding(modes=modes, name="data_encoding")
 
     def _build_circuit_type_0(self, builder):
-        # Basic topology: entanglement -> encoding -> entanglement.
-        builder.add_entangling_layer(trainable=True, model="mzi", name="init_mzi")
-        self._add_encoding(builder)
-        builder.add_entangling_layer(trainable=True, model="mzi", name="mid_mzi")
-
+           # Basic topology: entanglement -> encoding -> entanglement.
+           builder.add_entangling_layer(trainable=True, model="mzi", name="init_mzi")
+           self._add_encoding(builder)
+           builder.add_entangling_layer(trainable=True, model="mzi", name="mid_mzi")
+   
     def _build_circuit_type_1(self, builder):
-        # Lighter topology: direct encoding followed by a single entangling layer.
-        self._add_encoding(builder)
-        builder.add_entangling_layer(trainable=True, model="mzi", name="post_mzi")
-
+           # Lighter topology: direct encoding followed by a single entangling layer.
+           builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs1")
+           builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs2")
+           builder.add_superpositions(targets=(2, 3), trainable_theta=True, name="bs3")
+           builder.add_superpositions(targets=(1, 2), trainable_theta=True, name="bs4")
+           builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs5")
+           builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs6")
+           self._add_encoding(builder)
+           builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs11")
+           builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs12")
+           builder.add_superpositions(targets=(2, 3), trainable_theta=True, name="bs13")
+           builder.add_superpositions(targets=(1, 2), trainable_theta=True, name="bs14")
+           builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs15")
+           builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs16")
     def _build_circuit_type_2(self, builder):
-        # Deeper topology: two layers before encoding followed by a final mixing layer.
-        builder.add_entangling_layer(trainable=True, model="mzi", name="pre_mzi_0")
-        builder.add_entangling_layer(trainable=True, model="mzi", name="pre_mzi_1")
-        self._add_encoding(builder)
-        builder.add_entangling_layer(trainable=True, model="mzi", name="post_mzi")
+           # Deeper topology: two layers before encoding followed by a final mixing layer.
+           builder.add_entangling_layer(trainable=True, model="mzi", name="pre_mzi_0")
+           self._add_encoding(builder)
+           builder.add_entangling_layer(trainable=True, model="mzi", name="pre_mzi_1")
+           self._add_encoding(builder)
+           builder.add_entangling_layer(trainable=True, model="mzi", name="post_mzi")
+   
+    def _build_circuit_type_3(self, builder):
+           # Simple naive entanglement: encoding -> entanglement -> encoding.
+           builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs1")
+           builder.add_superpositions(targets=(1, 2), trainable_theta=True, name="bs2")
+           builder.add_superpositions(targets=(2, 3), trainable_theta=True, name="bs3")
+           builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs4")
+           self._add_encoding(builder)
+           builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs1")
+           builder.add_superpositions(targets=(2, 3), trainable_theta=True, name="bs2")
+           builder.add_superpositions(targets=(1, 2), trainable_theta=True, name="bs3")
+           builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs4")
 
     def configure_circuit(self, circuit_index=None):
         """
@@ -105,41 +142,18 @@ class PhotonicSpectralModel2D(nn.Module):
             circuit_index = self.circuit_index
 
         self.circuit_index = circuit_index
-        self._presence_indices_cache.clear()
+        self.n_encoding_layers = self._get_num_encoding_layers(circuit_index)
         self.quantum_layer = self._build_quantum_layer(circuit_index)
-
-    def get_mode_presence_indices(self, mode_index=0, min_photons=1):
-        """
-        Return Fock-column indices where n_mode_index >= min_photons.
-        """
-        if not (0 <= mode_index < self.n_modes):
-            raise ValueError(
-                f"Invalid mode_index: {mode_index}. Valid range: [0, {self.n_modes - 1}]"
-            )
-        if min_photons < 1:
-            raise ValueError("min_photons must be >= 1")
-
-        cache_key = (mode_index, min_photons)
-        if cache_key not in self._presence_indices_cache:
-            basis = Combinadics(m=self.n_modes, n=self.n_photons, scheme=ml.ComputationSpace.FOCK)
-            n_cols = basis.compute_space_size()
-            indices = [
-                i for i in range(n_cols)
-                if basis.index_to_fock(i)[mode_index] >= min_photons
-            ]
-            if not indices:
-                raise RuntimeError(
-                    "No Fock component satisfies the presence criterion."
-                )
-            self._presence_indices_cache[cache_key] = indices
-
-        return self._presence_indices_cache[cache_key]
         
     def forward(self, x_2d):
         # x_2d has shape [batch, 2].
         # Keep the coordinate-to-mode mapping while applying the scale factors.
         x_multimode = x_2d[:, self.indices_coord] * self.facteurs
-        return self.quantum_layer(x_multimode)
+        repeated_input = torch.cat(
+            [x_multimode] * self.n_encoding_layers,
+            dim=1,
+        )
+        return self.quantum_layer(repeated_input)
 
 # =====================================================================
 # 2. 2D FOURIER COEFFICIENTS AND CORRELATIONS
@@ -149,8 +163,6 @@ def calculer_empreinte_fourier_2d(
     M=200,
     res_grid=32,
     n_omega=3,
-    mode_presence_index=0,
-    min_photons_in_mode=1,
 ):
     """
     Evaluate M configurations on a 2D grid (res_grid x res_grid points)
@@ -164,11 +176,6 @@ def calculer_empreinte_fourier_2d(
     
     # Input tensor [res_grid**2, 2].
     x_grid = torch.from_numpy(np.stack([grid_x1.flatten(), grid_x2.flatten()], axis=-1)).float()
-    presence_indices = model.get_mode_presence_indices(
-        mode_index=mode_presence_index,
-        min_photons=min_photons_in_mode,
-    )
-    
     coefficients_list = []
     
     for m in range(M):
@@ -180,11 +187,8 @@ def calculer_empreinte_fourier_2d(
             probs_out = model(x_grid)
             if m == 0:
                 print(probs_out.shape)  # Expected shape: (res_grid**2, 15) in Fock space.
-                print(
-                    f"Columns for n_mode{mode_presence_index} >= {min_photons_in_mode}: "
-                    f"{len(presence_indices)}"
-                )
-            signal_y = probs_out[:, presence_indices].sum(dim=1).numpy()
+            # Columns 0..4 are the Fock states with at least one photon in mode 0.
+            signal_y = probs_out[:, :5].sum(dim=1).numpy()
             
         # Reshape into a 2D image [32, 32] for the FFT.
         signal_2d = signal_y.reshape((res_grid, res_grid))
@@ -220,14 +224,20 @@ def calculer_empreinte_fourier_2d(
 
     indices_actifs = np.array(indices_filtres, dtype=int)
     C_actives = C_matrix[:, indices_actifs]
-        
+
     # Pearson correlation and FCC.
-    fingerprint = np.corrcoef(C_actives, rowvar=False)
-    fingerprint = np.nan_to_num(fingerprint, nan=0.0)
-    
     n_actives = len(indices_actifs)
-    masque_hors_diag = ~np.eye(n_actives, dtype=bool)
-    score_fcc = np.mean(np.abs(fingerprint[masque_hors_diag]))
+    if n_actives == 0:
+        fingerprint = np.empty((0, 0))
+        score_fcc = 0.0
+    elif n_actives == 1:
+        fingerprint = np.ones((1, 1))
+        score_fcc = 0.0
+    else:
+        fingerprint = np.corrcoef(C_actives, rowvar=False)
+        fingerprint = np.atleast_2d(np.nan_to_num(fingerprint, nan=0.0))
+        masque_hors_diag = ~np.eye(n_actives, dtype=bool)
+        score_fcc = np.mean(np.abs(fingerprint[masque_hors_diag]))
     
     return fingerprint, score_fcc, freqs_labels, C_actives
 
@@ -238,6 +248,7 @@ CIRCUITS_DISPONIBLES = {
     "circuit_0": 0,
     "circuit_1": 1,
     "circuit_2": 2,
+    "circuit_3": 3,
 }
 
 
@@ -283,8 +294,6 @@ def main(
     M=150,
     res_grid=32,
     n_omega=3,
-    mode_presence_index=0,
-    min_photons_in_mode=1,
     debug=False,
     rundir: Path | None = None,
     name: str | None = None,
@@ -334,8 +343,6 @@ def main(
             M=M,
             res_grid=res_grid,
             n_omega=n_omega,
-            mode_presence_index=mode_presence_index,
-            min_photons_in_mode=min_photons_in_mode,
         )
         resultats[nom_circuit] = (matrice_r, fcc, labels_w, matrice_c)
 
@@ -380,7 +387,8 @@ def main(
 if __name__ == "__main__":
     main(
         circuits=["circuit_0", "circuit_1", "circuit_2"],
-        facteur_echelle="linear",
+        facteur_echelle="balanced",
         rundir=Path(__file__).resolve().parent.parent / "outdir",
         name="fourier_fingerprint_2d",
+        debug=True
     )

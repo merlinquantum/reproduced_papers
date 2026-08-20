@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any
 
 from fourier_1D import main as main_1d
-from fourier_2D import main as main_2d
+from Fourier_Fingerprints.lib.fourier_2D import main as main_2d
 
 logger = logging.getLogger(__name__)
 

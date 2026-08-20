@@ -1,5 +1,5 @@
 {
-    "description": "This is the default configuration file for Fourier Fingerprints.",
+    "description": "This is the Balanced encoding configuration file for Fourier Fingerprints.",
     "seed": 42,
     "outdir": "outdir",
     "device": "cpu",
@@ -7,13 +7,13 @@
         "level": "INFO",
         "save_config_snapshot": true
     },
-    "graph_name":"Fig 2(a) - Test configuration",
+    "graph_name":"Fig 2(a) - Balanced encoding in 2D",
     "circuits" : [
             "circuit_0",
             "circuit_1",
             "circuit_2",
             "circuit_3"
         ],
-    "encoding": "linear",
-    "dimension": 1
+    "encoding": "balanced",
+    "dimension": 2
 }
