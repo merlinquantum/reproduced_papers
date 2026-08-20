@@ -1,0 +1,11 @@
+{
+  "description": "configuration for QTRL training on MiniGrid with TorchQuantum backend",
+  "env_name": "MiniGrid",
+  "backend": "torchquantum",
+  "n_qubit": 13,
+  "q_depth": 13,
+  "q_output_size": 8,
+  "hidden_sizes": [32],
+  "num_episodes": 4000,
+  "lr": 0.0001
+}
