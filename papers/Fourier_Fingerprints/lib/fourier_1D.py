@@ -58,12 +58,7 @@ class PhotonicSpectralModel(nn.Module):
         )
 
     def _get_num_encoding_layers(self, circuit_index):
-        encoding_layers = {
-            0: 1,
-            1: 1,
-            2: 2,
-            3: 1
-        }
+        encoding_layers = {0: 1, 1: 1, 2: 2, 3: 1}
         if circuit_index not in encoding_layers:
             raise ValueError(
                 f"Invalid circuit_index: {circuit_index}. Choose from {sorted(encoding_layers)}"
@@ -79,7 +74,9 @@ class PhotonicSpectralModel(nn.Module):
             3: self._build_circuit_type_3,
         }
         if circuit_index not in builders:
-            raise ValueError(f"Invalid circuit_index: {circuit_index}. Choose from {sorted(builders)}")
+            raise ValueError(
+                f"Invalid circuit_index: {circuit_index}. Choose from {sorted(builders)}"
+            )
         builders[circuit_index](builder)
         return builder
 
@@ -108,6 +105,7 @@ class PhotonicSpectralModel(nn.Module):
         builder.add_superpositions(targets=(1, 2), trainable_theta=True, name="bs14")
         builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs15")
         builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs16")
+
     def _build_circuit_type_2(self, builder):
         # Deeper topology: two layers before encoding followed by a final mixing layer.
         builder.add_entangling_layer(trainable=True, model="mzi", name="pre_mzi_0")
@@ -145,6 +143,7 @@ class PhotonicSpectralModel(nn.Module):
         repeated_input = torch.cat([encoded_input] * self.n_encoding_layers, dim=1)
         return self.quantum_layer(repeated_input)
 
+
 # =====================================================================
 # 2. FOURIER COEFFICIENTS AND PAIRWISE CORRELATIONS (FINGERPRINT)
 # =====================================================================
@@ -157,7 +156,11 @@ def calculer_empreinte_fourier_1d(model, M=200, n_points=64):
     print(f"--- 1. Sampling {M} random parameter configurations ---")
 
     # Grille d'échantillonnage régulière dans [0, 2pi)
-    x_grid = torch.from_numpy(np.linspace(0, 2 * np.pi, n_points, endpoint=False)).float().unsqueeze(1)
+    x_grid = (
+        torch.from_numpy(np.linspace(0, 2 * np.pi, n_points, endpoint=False))
+        .float()
+        .unsqueeze(1)
+    )
 
     coefficients_list = []
 
@@ -171,9 +174,13 @@ def calculer_empreinte_fourier_1d(model, M=200, n_points=64):
             # Evaluate the optical circuit on the 64 points.
             probs_out = model(x_grid)
             if m == 0:
-                print(probs_out.shape)  # Display the output tensor shape for verification.
+                print(
+                    probs_out.shape
+                )  # Display the output tensor shape for verification.
             # In the FOCK basis (5 modes, 2 photons), columns 0..4 are states with n0 >= 1.
-            signal_y = probs_out[:, :5].sum(dim=1).numpy()  # P(at least 1 photon in mode 0).
+            signal_y = (
+                probs_out[:, :5].sum(dim=1).numpy()
+            )  # P(at least 1 photon in mode 0).
 
         # Transformée de Fourier rapide réelle (rFFT)
         fft_coeffs = np.fft.rfft(signal_y) / n_points
@@ -211,10 +218,13 @@ def calculer_empreinte_fourier_1d(model, M=200, n_points=64):
 
     return fingerprint, score_fcc, indices_actifs, C_actives
 
+
 # =====================================================================
 # 3. PAPER-STYLE DISPLAY (TRIANGULAR HEATMAP WITH ACTUAL ω VALUES)
 # =====================================================================
-def afficher_fingerprint_physique(fingerprint, freqs, fcc_val, ax=None, nom_circuit=None):
+def afficher_fingerprint_physique(
+    fingerprint, freqs, fcc_val, ax=None, nom_circuit=None
+):
     """
     Display the lower triangular correlation matrix,
     labeling the axes with the actual integer frequencies ω.
@@ -235,7 +245,9 @@ def afficher_fingerprint_physique(fingerprint, freqs, fcc_val, ax=None, nom_circ
         ax.set_ylim(0, 1)
 
     # Replace column numbers with the actual frequency values w.
-    ax.set_xticks(range(len(freqs)), labels=[f"ω={w}" for w in freqs], rotation=45, ha="right")
+    ax.set_xticks(
+        range(len(freqs)), labels=[f"ω={w}" for w in freqs], rotation=45, ha="right"
+    )
     ax.set_yticks(range(len(freqs)), labels=[f"ω={w}" for w in freqs])
 
     titre = nom_circuit or "Fourier Fingerprint"
@@ -246,17 +258,11 @@ def afficher_fingerprint_physique(fingerprint, freqs, fcc_val, ax=None, nom_circ
         plt.show()
 
 
-
-
 # =====================================================================
 # 4. PROGRAM ENTRY POINT
 # =====================================================================
-CIRCUITS_DISPONIBLES = {
-    "circuit_0": 0,
-    "circuit_1": 1,
-    "circuit_2": 2,
-    "circuit_3": 3
-}
+CIRCUITS_DISPONIBLES = {"circuit_0": 0, "circuit_1": 1, "circuit_2": 2, "circuit_3": 3}
+
 
 def main(
     circuits=None,
@@ -284,8 +290,7 @@ def main(
     noms_inconnus = [
         nom_circuit
         for nom_circuit in circuits
-        if not isinstance(nom_circuit, str)
-        or nom_circuit not in CIRCUITS_DISPONIBLES
+        if not isinstance(nom_circuit, str) or nom_circuit not in CIRCUITS_DISPONIBLES
     ]
     if noms_inconnus:
         noms_valides = ", ".join(sorted(CIRCUITS_DISPONIBLES))
@@ -362,5 +367,5 @@ if __name__ == "__main__":
         circuits=["circuit_0", "circuit_1", "circuit_2", "circuit_3"],
         facteur_echelle="balanced",
         name="Fig 2(a) - Test configuration",
-        rundir=Path(__file__).resolve().parent.parent / "outdir"
+        rundir=Path(__file__).resolve().parent.parent / "outdir",
     )

@@ -17,6 +17,7 @@ FACTEURS_ECHELLE_DISPONIBLES = {
     "balanced": [-1.0, 1.0, -1.0, 1.0],
 }
 
+
 # =====================================================================
 # 1. MERLIN 2D MODEL
 # =====================================================================
@@ -94,45 +95,46 @@ class PhotonicSpectralModel2D(nn.Module):
         builder.add_angle_encoding(modes=modes, name="data_encoding")
 
     def _build_circuit_type_0(self, builder):
-           # Basic topology: entanglement -> encoding -> entanglement.
-           builder.add_entangling_layer(trainable=True, model="mzi", name="init_mzi")
-           self._add_encoding(builder)
-           builder.add_entangling_layer(trainable=True, model="mzi", name="mid_mzi")
+        # Basic topology: entanglement -> encoding -> entanglement.
+        builder.add_entangling_layer(trainable=True, model="mzi", name="init_mzi")
+        self._add_encoding(builder)
+        builder.add_entangling_layer(trainable=True, model="mzi", name="mid_mzi")
 
     def _build_circuit_type_1(self, builder):
-           # Lighter topology: direct encoding followed by a single entangling layer.
-           builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs1")
-           builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs2")
-           builder.add_superpositions(targets=(2, 3), trainable_theta=True, name="bs3")
-           builder.add_superpositions(targets=(1, 2), trainable_theta=True, name="bs4")
-           builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs5")
-           builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs6")
-           self._add_encoding(builder)
-           builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs11")
-           builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs12")
-           builder.add_superpositions(targets=(2, 3), trainable_theta=True, name="bs13")
-           builder.add_superpositions(targets=(1, 2), trainable_theta=True, name="bs14")
-           builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs15")
-           builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs16")
+        # Lighter topology: direct encoding followed by a single entangling layer.
+        builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs1")
+        builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs2")
+        builder.add_superpositions(targets=(2, 3), trainable_theta=True, name="bs3")
+        builder.add_superpositions(targets=(1, 2), trainable_theta=True, name="bs4")
+        builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs5")
+        builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs6")
+        self._add_encoding(builder)
+        builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs11")
+        builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs12")
+        builder.add_superpositions(targets=(2, 3), trainable_theta=True, name="bs13")
+        builder.add_superpositions(targets=(1, 2), trainable_theta=True, name="bs14")
+        builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs15")
+        builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs16")
+
     def _build_circuit_type_2(self, builder):
-           # Deeper topology: two layers before encoding followed by a final mixing layer.
-           builder.add_entangling_layer(trainable=True, model="mzi", name="pre_mzi_0")
-           self._add_encoding(builder)
-           builder.add_entangling_layer(trainable=True, model="mzi", name="pre_mzi_1")
-           self._add_encoding(builder)
-           builder.add_entangling_layer(trainable=True, model="mzi", name="post_mzi")
+        # Deeper topology: two layers before encoding followed by a final mixing layer.
+        builder.add_entangling_layer(trainable=True, model="mzi", name="pre_mzi_0")
+        self._add_encoding(builder)
+        builder.add_entangling_layer(trainable=True, model="mzi", name="pre_mzi_1")
+        self._add_encoding(builder)
+        builder.add_entangling_layer(trainable=True, model="mzi", name="post_mzi")
 
     def _build_circuit_type_3(self, builder):
-           # Simple naive entanglement: encoding -> entanglement -> encoding.
-           builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs1")
-           builder.add_superpositions(targets=(1, 2), trainable_theta=True, name="bs2")
-           builder.add_superpositions(targets=(2, 3), trainable_theta=True, name="bs3")
-           builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs4")
-           self._add_encoding(builder)
-           builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs1")
-           builder.add_superpositions(targets=(2, 3), trainable_theta=True, name="bs2")
-           builder.add_superpositions(targets=(1, 2), trainable_theta=True, name="bs3")
-           builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs4")
+        # Simple naive entanglement: encoding -> entanglement -> encoding.
+        builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs1")
+        builder.add_superpositions(targets=(1, 2), trainable_theta=True, name="bs2")
+        builder.add_superpositions(targets=(2, 3), trainable_theta=True, name="bs3")
+        builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs4")
+        self._add_encoding(builder)
+        builder.add_superpositions(targets=(3, 4), trainable_theta=True, name="bs1")
+        builder.add_superpositions(targets=(2, 3), trainable_theta=True, name="bs2")
+        builder.add_superpositions(targets=(1, 2), trainable_theta=True, name="bs3")
+        builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs4")
 
     def configure_circuit(self, circuit_index=None):
         """
@@ -155,6 +157,7 @@ class PhotonicSpectralModel2D(nn.Module):
         )
         return self.quantum_layer(repeated_input)
 
+
 # =====================================================================
 # 2. 2D FOURIER COEFFICIENTS AND CORRELATIONS
 # =====================================================================
@@ -168,14 +171,18 @@ def calculer_empreinte_fourier_2d(
     Evaluate M configurations on a 2D grid (res_grid x res_grid points)
     and extract the vector spectrum w = (w1, w2).
     """
-    print(f"--- 1. 2D grid ({res_grid}x{res_grid} = {res_grid**2} points), {M} samples ---")
+    print(
+        f"--- 1. 2D grid ({res_grid}x{res_grid} = {res_grid**2} points), {M} samples ---"
+    )
 
     # Create the regular grid [0, 2pi) x [0, 2pi).
     axes = [np.linspace(0, 2 * np.pi, res_grid, endpoint=False) for _ in range(2)]
-    grid_x1, grid_x2 = np.meshgrid(*axes, indexing='ij')
+    grid_x1, grid_x2 = np.meshgrid(*axes, indexing="ij")
 
     # Input tensor [res_grid**2, 2].
-    x_grid = torch.from_numpy(np.stack([grid_x1.flatten(), grid_x2.flatten()], axis=-1)).float()
+    x_grid = torch.from_numpy(
+        np.stack([grid_x1.flatten(), grid_x2.flatten()], axis=-1)
+    ).float()
     coefficients_list = []
 
     for m in range(M):
@@ -186,7 +193,9 @@ def calculer_empreinte_fourier_2d(
 
             probs_out = model(x_grid)
             if m == 0:
-                print(probs_out.shape)  # Expected shape: (res_grid**2, 15) in Fock space.
+                print(
+                    probs_out.shape
+                )  # Expected shape: (res_grid**2, 15) in Fock space.
             # Columns 0..4 are the Fock states with at least one photon in mode 0.
             signal_y = probs_out[:, :5].sum(dim=1).numpy()
 
@@ -194,7 +203,7 @@ def calculer_empreinte_fourier_2d(
         signal_2d = signal_y.reshape((res_grid, res_grid))
 
         # 2D Fourier transform (FFT).
-        fft_coeffs = np.fft.fftn(signal_2d) / (res_grid ** 2)
+        fft_coeffs = np.fft.fftn(signal_2d) / (res_grid**2)
 
         # Flatten the 2D frequency tensor into a 1D vector of magnitudes |c_w|.
         coefficients_list.append(np.abs(fft_coeffs.flatten()))
@@ -240,6 +249,7 @@ def calculer_empreinte_fourier_2d(
         score_fcc = np.mean(np.abs(fingerprint[masque_hors_diag]))
 
     return fingerprint, score_fcc, freqs_labels, C_actives
+
 
 # =====================================================================
 # 3. DISPLAY AND PROGRAM ENTRY POINT
@@ -312,7 +322,8 @@ def main(
         )
 
     unknown_circuits = [
-        circuit for circuit in circuits
+        circuit
+        for circuit in circuits
         if not isinstance(circuit, str) or circuit not in CIRCUITS_DISPONIBLES
     ]
     if unknown_circuits:
@@ -390,5 +401,5 @@ if __name__ == "__main__":
         facteur_echelle="balanced",
         rundir=Path(__file__).resolve().parent.parent / "outdir",
         name="fourier_fingerprint_2d",
-        debug=True
+        debug=True,
     )
