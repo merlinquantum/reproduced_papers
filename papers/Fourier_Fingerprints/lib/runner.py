@@ -1,5 +1,4 @@
 import logging
-import re
 from pathlib import Path
 from typing import Any
 
@@ -39,4 +38,4 @@ def train_and_evaluate(cfg: dict[str, Any], run_dir):
     logger.info("Finished. Artifacts in: %s", run_dir)
 
 
-__all__ = ["train_and_evaluate"] 
+__all__ = ["train_and_evaluate"]

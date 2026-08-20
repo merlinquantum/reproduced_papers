@@ -1,11 +1,11 @@
 from pathlib import Path
 
-import torch
-import torch.nn as nn
-import numpy as np
 import matplotlib.pyplot as plt
 import merlin as ml
+import numpy as np
 import perceval as pcvl
+import torch
+import torch.nn as nn
 from merlin.builder import CircuitBuilder
 
 # =====================================================================
@@ -18,7 +18,7 @@ FACTEURS_ECHELLE_DISPONIBLES = {
 }
 
 # =====================================================================
-# 1. MERLIN 2D MODEL 
+# 1. MERLIN 2D MODEL
 # =====================================================================
 class PhotonicSpectralModel2D(nn.Module):
     def __init__(
@@ -98,7 +98,7 @@ class PhotonicSpectralModel2D(nn.Module):
            builder.add_entangling_layer(trainable=True, model="mzi", name="init_mzi")
            self._add_encoding(builder)
            builder.add_entangling_layer(trainable=True, model="mzi", name="mid_mzi")
-   
+
     def _build_circuit_type_1(self, builder):
            # Lighter topology: direct encoding followed by a single entangling layer.
            builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs1")
@@ -121,7 +121,7 @@ class PhotonicSpectralModel2D(nn.Module):
            builder.add_entangling_layer(trainable=True, model="mzi", name="pre_mzi_1")
            self._add_encoding(builder)
            builder.add_entangling_layer(trainable=True, model="mzi", name="post_mzi")
-   
+
     def _build_circuit_type_3(self, builder):
            # Simple naive entanglement: encoding -> entanglement -> encoding.
            builder.add_superpositions(targets=(0, 1), trainable_theta=True, name="bs1")
@@ -144,7 +144,7 @@ class PhotonicSpectralModel2D(nn.Module):
         self.circuit_index = circuit_index
         self.n_encoding_layers = self._get_num_encoding_layers(circuit_index)
         self.quantum_layer = self._build_quantum_layer(circuit_index)
-        
+
     def forward(self, x_2d):
         # x_2d has shape [batch, 2].
         # Keep the coordinate-to-mode mapping while applying the scale factors.
@@ -169,40 +169,40 @@ def calculer_empreinte_fourier_2d(
     and extract the vector spectrum w = (w1, w2).
     """
     print(f"--- 1. 2D grid ({res_grid}x{res_grid} = {res_grid**2} points), {M} samples ---")
-    
+
     # Create the regular grid [0, 2pi) x [0, 2pi).
     axes = [np.linspace(0, 2 * np.pi, res_grid, endpoint=False) for _ in range(2)]
     grid_x1, grid_x2 = np.meshgrid(*axes, indexing='ij')
-    
+
     # Input tensor [res_grid**2, 2].
     x_grid = torch.from_numpy(np.stack([grid_x1.flatten(), grid_x2.flatten()], axis=-1)).float()
     coefficients_list = []
-    
+
     for m in range(M):
         with torch.no_grad():
             for param in model.parameters():
                 if param.requires_grad:
                     param.data.uniform_(0, 2 * np.pi)
-            
+
             probs_out = model(x_grid)
             if m == 0:
                 print(probs_out.shape)  # Expected shape: (res_grid**2, 15) in Fock space.
             # Columns 0..4 are the Fock states with at least one photon in mode 0.
             signal_y = probs_out[:, :5].sum(dim=1).numpy()
-            
+
         # Reshape into a 2D image [32, 32] for the FFT.
         signal_2d = signal_y.reshape((res_grid, res_grid))
-        
+
         # 2D Fourier transform (FFT).
         fft_coeffs = np.fft.fftn(signal_2d) / (res_grid ** 2)
-        
+
         # Flatten the 2D frequency tensor into a 1D vector of magnitudes |c_w|.
         coefficients_list.append(np.abs(fft_coeffs.flatten()))
-        
+
     C_matrix = np.array(coefficients_list)
-    
+
     print("--- 2. Identifying active frequency pairs (w1, w2) ---")
-    
+
     # Filter active frequencies (non-zero variance), then restrict to Omega_n.
     # Omega_n = {(w1, w2) : |w1| + |w2| <= n_omega}.
     variances = np.var(C_matrix, axis=0)
@@ -238,7 +238,7 @@ def calculer_empreinte_fourier_2d(
         fingerprint = np.atleast_2d(np.nan_to_num(fingerprint, nan=0.0))
         masque_hors_diag = ~np.eye(n_actives, dtype=bool)
         score_fcc = np.mean(np.abs(fingerprint[masque_hors_diag]))
-    
+
     return fingerprint, score_fcc, freqs_labels, C_actives
 
 # =====================================================================

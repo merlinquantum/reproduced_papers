@@ -1,11 +1,11 @@
 from pathlib import Path
 
-import torch
-import torch.nn as nn
-import numpy as np
 import matplotlib.pyplot as plt
 import merlin as ml
+import numpy as np
 import perceval as pcvl
+import torch
+import torch.nn as nn
 from merlin.builder import CircuitBuilder
 
 # =====================================================================
@@ -138,7 +138,7 @@ class PhotonicSpectralModel(nn.Module):
         self.circuit_index = circuit_index
         self.n_encoding_layers = self._get_num_encoding_layers(circuit_index)
         self.quantum_layer = self._build_quantum_layer(circuit_index)
-        
+
     def forward(self, x_1d):
         # Broadcast the 1D input across the 4 weighted waveguides.
         encoded_input = x_1d * self.facteurs
@@ -155,44 +155,44 @@ def calculer_empreinte_fourier_1d(model, M=200, n_points=64):
     and return the FCC score.
     """
     print(f"--- 1. Sampling {M} random parameter configurations ---")
-    
+
     # Grille d'échantillonnage régulière dans [0, 2pi)
     x_grid = torch.from_numpy(np.linspace(0, 2 * np.pi, n_points, endpoint=False)).float().unsqueeze(1)
-    
+
     coefficients_list = []
-    
+
     for m in range(M):
         with torch.no_grad():
             # Uniformly reset the theta parameters in [0, 2pi].
             for param in model.parameters():
                 if param.requires_grad:
                     param.data.uniform_(0, 2 * np.pi)
-            
+
             # Evaluate the optical circuit on the 64 points.
             probs_out = model(x_grid)
             if m == 0:
                 print(probs_out.shape)  # Display the output tensor shape for verification.
             # In the FOCK basis (5 modes, 2 photons), columns 0..4 are states with n0 >= 1.
             signal_y = probs_out[:, :5].sum(dim=1).numpy()  # P(at least 1 photon in mode 0).
-            
+
         # Transformée de Fourier rapide réelle (rFFT)
         fft_coeffs = np.fft.rfft(signal_y) / n_points
-        
+
         # Store the absolute amplitude |c_w| for each frequency.
         coefficients_list.append(np.abs(fft_coeffs))
-        
+
     # Matrice brute C de forme (M, n_points//2 + 1) -> (200, 33)
     C_matrix = np.array(coefficients_list)
-    
+
     print("--- 2. Filtrage des fréquences actives et calcul des corrélations ---")
-    
+
     # Identify the frequencies w that are actually present in this circuit (variance > threshold).
     variances = np.var(C_matrix, axis=0)
     indices_actifs = np.where(variances > 1e-8)[0]
 
     # Keep only the columns corresponding to active frequencies.
     C_actives = C_matrix[:, indices_actifs]
-    
+
     # Compute the Pearson correlation matrix r(w, w') between columns.
     n_actives = len(indices_actifs)
     if n_actives == 0:
@@ -208,7 +208,7 @@ def calculer_empreinte_fourier_1d(model, M=200, n_points=64):
         else:
             masque_hors_diag = ~np.eye(n_actives, dtype=bool)
             score_fcc = np.mean(np.abs(fingerprint[masque_hors_diag]))
-    
+
     return fingerprint, score_fcc, indices_actifs, C_actives
 
 # =====================================================================
@@ -221,7 +221,7 @@ def afficher_fingerprint_physique(fingerprint, freqs, fcc_val, ax=None, nom_circ
     """
     masque = np.triu(np.ones_like(fingerprint, dtype=bool))
     matrice_affichee = np.ma.masked_array(np.abs(fingerprint), masque)
-    
+
     figure_locale = ax is None
     if figure_locale:
         _, ax = plt.subplots(figsize=(8, 7))
@@ -233,11 +233,11 @@ def afficher_fingerprint_physique(fingerprint, freqs, fcc_val, ax=None, nom_circ
         ax.text(0.5, 0.5, "No active frequency", ha="center", va="center")
         ax.set_xlim(0, 1)
         ax.set_ylim(0, 1)
-    
+
     # Replace column numbers with the actual frequency values w.
     ax.set_xticks(range(len(freqs)), labels=[f"ω={w}" for w in freqs], rotation=45, ha="right")
     ax.set_yticks(range(len(freqs)), labels=[f"ω={w}" for w in freqs])
-    
+
     titre = nom_circuit or "Fourier Fingerprint"
     ax.set_title(f"{titre}\nFCC = {fcc_val:.4f}", fontweight="bold")
 
