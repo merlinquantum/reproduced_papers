@@ -1,0 +1,17 @@
+{
+    "description": "This is the default configuration file for Fourier Fingerprints.",
+    "seed": 42,
+    "outdir": "outdir",
+    "device": "cpu",
+    "logging": {
+        "level": "INFO",
+        "save_config_snapshot": true
+    },
+    "graph_name":"Fig 2(a) - Test configuration",
+    "circuits" : [
+            "circuit_0",
+            "circuit_2"
+        ],
+    "encoding": "linear",
+    "dimension": 1
+}
