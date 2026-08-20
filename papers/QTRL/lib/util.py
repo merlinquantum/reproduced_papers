@@ -1,5 +1,6 @@
 import os
 import random
+from pathlib import Path
 
 import gymnasium as gym
 import numpy as np
@@ -224,7 +225,10 @@ class TorchQuantumModel(nn.Module):
                 )
 
         # output computation
-        state_mag = qdev.get_states_1d().abs()[0]
+        state_vector = qdev.get_states_1d()[0]
+        state_mag = torch.sqrt(
+            state_vector.real.square() + state_vector.imag.square() + 1e-12
+        )
         probs = state_mag**2
 
         # We can only take the first probabilities to match mapping input size
@@ -337,7 +341,7 @@ def compute_discounted_returns(
         returns.insert(0, R)
 
     returns = torch.tensor(returns, dtype=torch.float32)
-    returns = (returns - returns.mean()) / (returns.std() + 1e-9)
+    returns = (returns - returns.mean()) / (returns.std(unbiased=False) + 1e-9)
     return returns
 
 
@@ -368,19 +372,39 @@ def train_environment(
     learning_rate: float = 0.005,
     env_name: str = "CartPole-v1",
     seed: int = 42,
-) -> float:
+    logit_clip: float = 20.0,
+    checkpoint_path: Path | None = None,
+    resume_from: Path | None = None,
+) -> list[float]:
     """
     Generic training function for different environments (CartPole or MiniGrid).
 
-    Args:
-        hybrid_model (nn.Module): The hybrid model to train.
-        num_episode (int): Number of episodes.
-        learning_rate (float): Learning rate.
-        env_name (str): Name of the Gym environment.
-        seed (int): Random seed.
+    Parameters
+    ----------
+    hybrid_model : torch.nn.Module
+        The hybrid model to train.
+    num_episode : int
+        Number of episodes.
+    learning_rate : float
+        Learning rate.
+    env_name : str
+        Name of the Gym environment.
+    seed : int
+        Random seed.
+    logit_clip : float
+        Symmetric bound applied to policy logits before sampling. Default value
+        is 20.0.
+    checkpoint_path : pathlib.Path | None
+        Path for episode checkpoints. If omitted, checkpoints are not written.
+        Default value is None.
+    resume_from : pathlib.Path | None
+        Existing checkpoint to resume. If omitted, training starts from episode
+        zero. Default value is None.
 
-    Returns:
-        float: Total reward of the last episode.
+    Returns
+    -------
+    list[float]
+        Total reward collected in each episode, in episode order.
     """
     # Load environment
     if env_name == "MiniGrid-Empty-5x5-v0":
@@ -400,8 +424,29 @@ def train_environment(
     )
 
     optimizer = optim.Adam(hybrid_model.parameters(), lr=learning_rate)
+    episode_rewards = []
+    start_episode = 0
 
-    for episode in range(num_episode):
+    if resume_from is not None:
+        checkpoint = torch.load(resume_from, map_location="cpu", weights_only=False)
+        hybrid_model.load_state_dict(checkpoint["model_state_dict"])
+        optimizer.load_state_dict(checkpoint["optimizer_state_dict"])
+        episode_rewards = list(checkpoint["episode_rewards"])
+        start_episode = int(checkpoint["next_episode"])
+        if checkpoint.get("environment_rng_state") is not None:
+            env.unwrapped.np_random.bit_generator.state = checkpoint[
+                "environment_rng_state"
+            ]
+        random.setstate(checkpoint["python_rng_state"])
+        np.random.set_state(checkpoint["numpy_rng_state"])
+        torch.set_rng_state(checkpoint["torch_rng_state"])
+        if torch.cuda.is_available() and checkpoint["cuda_rng_state"] is not None:
+            torch.cuda.set_rng_state_all(checkpoint["cuda_rng_state"])
+
+    if checkpoint_path is not None:
+        checkpoint_path.parent.mkdir(parents=True, exist_ok=True)
+
+    for episode in range(start_episode, num_episode):
         state, _ = env.reset(seed=seed if episode == 0 else None)
 
         log_probs = []
@@ -432,7 +477,13 @@ def train_environment(
             )
 
             # Scale logits for better exploration
-            logits = logits / 2.0
+            logits = torch.clamp(logits / 2.0, -logit_clip, logit_clip)
+
+            if not torch.isfinite(logits).all():
+                raise FloatingPointError(
+                    f"Non-finite policy logits at episode {episode}; "
+                    "the latest checkpoint contains the previous finite state."
+                )
 
             action_dist = torch.distributions.Categorical(logits=logits)
             action = action_dist.sample()
@@ -460,21 +511,52 @@ def train_environment(
             policy_loss_tensor = torch.cat(policy_loss).sum()
             optimizer.zero_grad()
             policy_loss_tensor.backward()
-            torch.nn.utils.clip_grad_norm_(hybrid_model.parameters(), max_norm=1.0)
+            torch.nn.utils.clip_grad_norm_(
+                hybrid_model.parameters(), max_norm=1.0, error_if_nonfinite=True
+            )
             optimizer.step()
+
+            if not all(
+                torch.isfinite(parameter).all()
+                for parameter in hybrid_model.parameters()
+            ):
+                raise FloatingPointError(
+                    f"Non-finite model parameters after episode {episode}."
+                )
 
             loss_val = policy_loss_tensor.item()
         else:
             loss_val = 0.0
 
         total_reward = sum(rewards)
+        episode_rewards.append(total_reward)
 
         print(
             f"Episode {episode:4d} | steps: {step_count:3d} | reward: {total_reward:5.2f} | Loss: {loss_val:.4f}"
         )
 
+        if checkpoint_path is not None:
+            torch.save(
+                {
+                    "model_state_dict": hybrid_model.state_dict(),
+                    "optimizer_state_dict": optimizer.state_dict(),
+                    "episode_rewards": episode_rewards,
+                    "next_episode": episode + 1,
+                    "python_rng_state": random.getstate(),
+                    "numpy_rng_state": np.random.get_state(),
+                    "torch_rng_state": torch.get_rng_state(),
+                    "cuda_rng_state": (
+                        torch.cuda.get_rng_state_all()
+                        if torch.cuda.is_available()
+                        else None
+                    ),
+                    "environment_rng_state": env.unwrapped.np_random.bit_generator.state,
+                },
+                checkpoint_path,
+            )
+
     env.close()
-    return total_reward
+    return episode_rewards
 
 
 def create_hybrid_model(args: dict, total_weights_needed: int) -> nn.Module:
@@ -504,7 +586,7 @@ def create_hybrid_model(args: dict, total_weights_needed: int) -> nn.Module:
             q_output_size=args["q_output_size"],
             nb_photons=args["nb_photons"],
             nb_modes=args.get("nb_modes", 3),
-            bond_dim=args.get("bond_dim", 2),
+            bond_dim=args["bond_dim"],
             final_output_size=total_weights_needed,
         )
 

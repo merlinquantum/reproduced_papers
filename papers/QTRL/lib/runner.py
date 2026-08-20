@@ -1,16 +1,98 @@
 from __future__ import annotations
 
+# Matplotlib's backend must be selected before importing pyplot.
+# ruff: noqa: I001
+
 import logging
 from pathlib import Path
 
 import gymnasium as gym
+import matplotlib
 import torch
+
 from lib.util import (
     MinigridImageOnlyWrapper,
     create_hybrid_model,
     set_global_seed,
     train_environment,
 )
+
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt  # noqa: E402
+
+
+def save_reward_plot(episode_rewards: list[float], output_path: Path) -> None:
+    """Save total episode reward against the episode number.
+
+    Parameters
+    ----------
+    episode_rewards : list[float]
+        Total reward collected during each training episode.
+    output_path : pathlib.Path
+        Destination path for the PNG plot.
+    """
+    episode_numbers = range(1, len(episode_rewards) + 1)
+    figure, axis = plt.subplots(figsize=(8, 5))
+    axis.plot(episode_numbers, episode_rewards, linewidth=1.2)
+    axis.set_xlabel("Episode")
+    axis.set_ylabel("Total reward")
+    axis.set_title("QTRL total reward by episode")
+    axis.grid(True, alpha=0.3)
+    figure.tight_layout()
+    figure.savefig(output_path, dpi=150)
+    plt.close(figure)
+
+
+def _resolve_environment(env_name: str) -> str:
+    """Resolve a configured environment alias to its Gymnasium ID.
+
+    Parameters
+    ----------
+    env_name : str
+        Environment alias or Gymnasium environment ID.
+
+    Returns
+    -------
+    str
+        Gymnasium environment ID.
+
+    Raises
+    ------
+    ValueError
+        If the environment is not supported by QTRL.
+    """
+    if env_name == "CartPole":
+        return "CartPole-v1"
+    if env_name in {"MiniGrid", "MiniGrid-Empty-5x5-v0"}:
+        import minigrid  # noqa: F401  # Registers MiniGrid environments.
+
+        return "MiniGrid-Empty-5x5-v0"
+    raise ValueError(f"Unknown environment: {env_name}")
+
+
+def _get_environment_dimensions(gym_env_id: str) -> tuple[int, int]:
+    """Return the flattened observation and action dimensions for an environment.
+
+    Parameters
+    ----------
+    gym_env_id : str
+        Gymnasium environment ID.
+
+    Returns
+    -------
+    tuple[int, int]
+        Observation dimension followed by action dimension.
+    """
+    if gym_env_id == "MiniGrid-Empty-5x5-v0":
+        base_env = gym.make(gym_env_id)
+        environment = MinigridImageOnlyWrapper(base_env)
+    else:
+        environment = gym.make(gym_env_id)
+
+    observation_dim = environment.observation_space.shape[0]
+    action_dim = environment.action_space.n
+    environment.close()
+    return observation_dim, action_dim
 
 
 def train_and_evaluate(cfg: dict, run_dir: Path) -> None:
@@ -23,6 +105,12 @@ def train_and_evaluate(cfg: dict, run_dir: Path) -> None:
                         will be saved.
     """
     logger = logging.getLogger(__name__)
+
+    if cfg.get("experiment") == "figure_1":
+        from lib.figure_1 import run_figure_1
+
+        run_figure_1(cfg, run_dir, logger)
+        return
 
     # Extract parameters from configuration
     env_name = cfg.get("env_name", "CartPole")
@@ -41,27 +129,11 @@ def train_and_evaluate(cfg: dict, run_dir: Path) -> None:
     set_global_seed(seed=seed)
 
     # Determine the correct Gym environment ID
-    if env_name == "CartPole":
-        gym_env_id = "CartPole-v1"
-    elif env_name == "MiniGrid":
-        gym_env_id = "MiniGrid-Empty-5x5-v0"
-    else:
-        raise ValueError(f"Unknown environment: {env_name}")
+    gym_env_id = _resolve_environment(env_name)
 
     # Instantiate a temporary environment to compute dimensions
-    if gym_env_id == "MiniGrid-Empty-5x5-v0":
-        base_env = gym.make(gym_env_id)
-        temp_env = MinigridImageOnlyWrapper(base_env)
-    else:
-        temp_env = gym.make(gym_env_id)
-
-    # Get state and action dimensions
-    state_dim = temp_env.observation_space.shape[0]
-    action_dim = temp_env.action_space.n
+    state_dim, action_dim = _get_environment_dimensions(gym_env_id)
     total_weights_needed = state_dim * action_dim
-
-    # Close the temporary environment
-    temp_env.close()
 
     logger.info(
         f"Detected dimensions for {env_name} : State = {state_dim}, Actions = {action_dim}"
@@ -77,7 +149,7 @@ def train_and_evaluate(cfg: dict, run_dir: Path) -> None:
     logger.info("Number of trainable parameters: %d", total_params)
 
     # Train the model
-    train_environment(
+    episode_rewards = train_environment(
         model,
         num_episode=num_episodes,
         learning_rate=lr,
@@ -87,6 +159,9 @@ def train_and_evaluate(cfg: dict, run_dir: Path) -> None:
 
     # Save the results
     run_dir.mkdir(parents=True, exist_ok=True)
+    reward_plot_path = run_dir / "total_reward_vs_episode.png"
+    save_reward_plot(episode_rewards, reward_plot_path)
+    logger.info("Saved reward plot to %s", reward_plot_path)
 
     model_path = run_dir / f"{backend}_model.pt"
     torch.save(model.state_dict(), model_path)

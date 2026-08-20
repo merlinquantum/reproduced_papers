@@ -1,5 +1,5 @@
 merlinquantum
-gymnasium[classic_control]
-minigrid
+gymnasium>=0.29.0
+minigrid>=0.3.0
 -e git+https://github.com/mit-han-lab/torchquantum.git#egg=torchquantum
 pytest
