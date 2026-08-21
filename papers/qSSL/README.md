@@ -86,6 +86,69 @@ See `configs/defaults.json` (overrides are described in `cli.json`). Key fields:
 
 You can combine `--config` with CLI overrides. The runner resolves the final configuration and saves it to the results directory (`args.json`).
 
+## Qiskit Hilbert-Schmidt results
+
+The Qiskit Hilbert-Schmidt experiment reproduces the same results as Fig. 4
+in the original paper: the SSL loss decreases during training while the mean
+Hilbert-Schmidt distance between positive and negative states increases.
+
+![Qiskit Hilbert-Schmidt results reproducing Fig. 4 of the paper](assets/hilbert_schmidt_qiskit.png)
+
+## MerLin Hilbert-Schmidt experiment
+
+The MerLin experiment extends SSL training with the Hilbert-Schmidt analysis
+shown below. It is the photonic counterpart of the paper's state-space
+analysis: MerLin exposes photon-count probabilities, rather than complex
+amplitudes, so this implementation uses a probability-space surrogate.
+
+![Hilbert-Schmidt tracking for the MerLin experiment](assets/hilbert_schmidt_merlin.png)
+
+For a batch of size `B`, the two augmented views are kept in the order
+`[view_1[0:B], view_2[0:B]]`. Each MerLin output is a normalized probability
+vector `p`. The implementation treats `p` as the diagonal of a density matrix,
+then computes the following vectors for each positive pair `i`:
+
+```text
+rho_i   = (p_i_view1 + p_i_view2) / 2
+sigma_i = (sum of all batch probability vectors - p_i_view1 - p_i_view2) / (2B - 2)
+```
+
+Because these density matrices are diagonal, their Hilbert-Schmidt quantities
+reduce to dot products:
+
+```text
+tr(rho_i^2), tr(sigma_i^2), tr(rho_i sigma_i),
+D_HS(rho_i, sigma_i) = ||rho_i - sigma_i||_2^2
+```
+
+The reported values are averages over the batch. This is an exact
+Hilbert-Schmidt distance for the diagonal density-matrix representation, but
+it does not include optical phases or coherences that would be present in a
+full complex state-vector calculation.
+
+Run the ready-made MerLin experiment from the repository root:
+
+```bash
+python implementation.py --paper qSSL --config qSSL/configs/merlin_dhs.json
+```
+
+The config uses two CIFAR-10 classes, 10 photonic modes, three SSL epochs, and
+tracks the metrics every batch. Override the data location or sampling
+frequency when needed:
+
+```bash
+python implementation.py --paper qSSL \
+  --config qSSL/configs/merlin_dhs.json \
+  --datadir /path/to/data --dhs-freq 10
+```
+
+The run directory contains `hilbert_schmidt_metrics.json` with the per-batch
+metrics and `hilbert_schmidt_tracking.png` with the generated plot, alongside
+the normal qSSL checkpoints and training summaries. The calculation is
+implemented by `compute_batch_probability_hilbert_schmidt_metrics` in
+`lib/training_utils.py` and is enabled by `model.save_dhs: true` in
+`configs/merlin_dhs.json`.
+
 ## Pretrained checkpoints
 - Reference weights are hosted on Hugging Face under `Quandela/ReproducedPapersQML/qSSL`. Each run directory mirrors the layout produced locally (checkpoints plus `args.json`).
 - `qSSL/utils/linear_probing.py` defaults to the MerLin checkpoint at `merlin/20250827_181840/model-cl-5-epoch-5.pth`. When `--pretrained` is a repo-relative path (or a full HF URL) the script automatically downloads the `.pth` file and matching `args.json`.
