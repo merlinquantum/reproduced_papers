@@ -15,6 +15,7 @@ from torchsummary import summary
 from lib.data_utils import load_finetuning_data, load_transformed_data
 from lib.model import QSSL
 from lib.training_utils import (
+    disable_qiskit_statevector_capture,
     linear_evaluation,
     save_results_to_json,
     train,
@@ -120,6 +121,10 @@ def run_qssl_experiment(cfg: dict[str, Any], run_dir: Path) -> None:
 
     LOGGER.info("Starting SSL training for %s epochs", args.epochs)
     model, ssl_losses = train(model, ssl_loader, str(run_dir), args)
+
+    if args.qiskit:
+        disable_qiskit_statevector_capture(model)
+        LOGGER.info("Disabled Qiskit statevector capture after SSL training")
 
     LOGGER.info("Building frozen model for linear evaluation")
     frozen_representation_layers = [

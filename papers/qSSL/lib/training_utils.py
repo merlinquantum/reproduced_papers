@@ -101,6 +101,22 @@ def get_qiskit_qnn(model):
     return getattr(model.representation_network, "qnn", None)
 
 
+def disable_qiskit_statevector_capture(model):
+    """Stop statevector capture for every QNet contained in a model.
+
+    Parameters
+    ----------
+    model : torch.nn.Module
+        QSSL model or frozen linear-evaluation model containing a QNet.
+    """
+    from .qnn.qnet import QNet
+
+    for qiskit_network in model.modules():
+        if isinstance(qiskit_network, QNet):
+            qiskit_network.save_statevectors = False
+            qiskit_network.qnn.statevectors.clear()
+
+
 def compute_batch_hilbert_schmidt_metrics(statevectors):
     """
     Compute the Hilbert-Schmidt separation between positive and negative pairs
@@ -472,6 +488,7 @@ def train(model, train_loader, results_dir, args):
 
 
 def linear_evaluation(model, train_loader, val_loader, args, results_dir):
+    disable_qiskit_statevector_capture(model)
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-6)
     criterion = nn.CrossEntropyLoss()
     train_losses, val_losses = [], []
@@ -603,7 +620,7 @@ def plot_loss_and_hilbert_schmidt(training_losses, dhs_history, args, results_di
         inset.set_title(label, fontsize=9)
         inset.tick_params(labelsize=7)
 
-    title = "Quantum_Qiskit"
+    title = "Quantum_MerLin" if args.merlin else "Quantum_Qiskit"
     fig.suptitle(f"SSL training with Hilbert-Schmidt tracking ({title})")
     plt.tight_layout()
     out_path = os.path.join(results_dir, "hilbert_schmidt_tracking.png")

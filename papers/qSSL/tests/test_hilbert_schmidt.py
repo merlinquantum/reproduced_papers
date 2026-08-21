@@ -1,8 +1,10 @@
 import sys
 from pathlib import Path
+from types import SimpleNamespace
 
 import numpy as np
 import pytest
+import torch.nn as nn
 from numpy.linalg import matrix_power
 
 # Ensure qSSL/ is on path so `lib` is importable
@@ -11,9 +13,12 @@ QSSL_DIR = THIS_DIR.parent
 if str(QSSL_DIR) not in sys.path:
     sys.path.insert(0, str(QSSL_DIR))
 
+from lib.qnn.qnet import QNet  # noqa: E402
 from lib.training_utils import (  # noqa: E402
     compute_batch_hilbert_schmidt_metrics,
     compute_batch_probability_hilbert_schmidt_metrics,
+    disable_qiskit_statevector_capture,
+    linear_evaluation,
 )
 
 
@@ -125,3 +130,30 @@ def test_probability_hilbert_schmidt_metrics_rejects_invalid_probabilities():
         compute_batch_probability_hilbert_schmidt_metrics(
             np.array([[0.5, 0.5], [0.5, 0.5], [0.2, 0.2], [0.8, 0.8]])
         )
+
+
+def test_disable_qiskit_statevector_capture_releases_retained_states():
+    qiskit_network = QNet.__new__(QNet)
+    nn.Module.__init__(qiskit_network)
+    qiskit_network.save_statevectors = True
+    qiskit_network.qnn = SimpleNamespace(statevectors=[np.ones(4), np.zeros(4)])
+    frozen_model = nn.Sequential(qiskit_network, nn.Linear(4, 2))
+
+    disable_qiskit_statevector_capture(frozen_model)
+
+    assert qiskit_network.save_statevectors is False
+    assert qiskit_network.qnn.statevectors == []
+
+
+def test_linear_evaluation_disables_qiskit_statevector_capture(tmp_path):
+    qiskit_network = QNet.__new__(QNet)
+    nn.Module.__init__(qiskit_network)
+    qiskit_network.save_statevectors = True
+    qiskit_network.qnn = SimpleNamespace(statevectors=[np.ones(4)])
+    frozen_model = nn.Sequential(qiskit_network, nn.Linear(4, 2))
+    args = SimpleNamespace(le_epochs=0)
+
+    linear_evaluation(frozen_model, [], [], args, str(tmp_path))
+
+    assert qiskit_network.save_statevectors is False
+    assert qiskit_network.qnn.statevectors == []
