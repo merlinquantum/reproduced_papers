@@ -584,8 +584,18 @@ def plot_loss_and_hilbert_schmidt(training_losses, dhs_history, args, results_di
     inset_specs = [
         ((0.30, 0.62, 0.30, 0.30), d_hs, "tab:orange", r"$\bar{D}_{HS}$"),
         ((0.62, 0.62, 0.30, 0.30), rho_sq, "tab:green", r"$\overline{tr(\rho^2)}$"),
-        ((0.30, 0.30, 0.30, 0.30), rho_sigma, "tab:red", r"$\overline{tr(\rho\sigma)}$"),
-        ((0.62, 0.30, 0.30, 0.30), sigma_sq, "tab:purple", r"$\overline{tr(\sigma^2)}$"),
+        (
+            (0.30, 0.30, 0.30, 0.30),
+            rho_sigma,
+            "tab:red",
+            r"$\overline{tr(\rho\sigma)}$",
+        ),
+        (
+            (0.62, 0.30, 0.30, 0.30),
+            sigma_sq,
+            "tab:purple",
+            r"$\overline{tr(\sigma^2)}$",
+        ),
     ]
     for bbox, values, color, label in inset_specs:
         inset = ax.inset_axes(bbox)
