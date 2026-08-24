@@ -1,0 +1,6 @@
+torch
+networkx
+torch-scatter
+torch-sparse
+-e git+https://github.com/pyg-team/pytorch_geometric.git#egg=torch_geometric
+rdkit
