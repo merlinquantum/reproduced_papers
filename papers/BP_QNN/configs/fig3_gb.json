@@ -1,0 +1,13 @@
+{
+  "description": "Figure 3: gradient variance versus number of qubits with exponential fit",
+  "experiment": "fig3_gb",
+  "backend": "gate_based",
+  "qubits": [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15],
+  "true_qubits": [11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
+  "layers": [10],
+  "layers_per_qubit": 10,
+  "samples": 1000,
+  "seed": 7,
+  "dtype": "float64",
+  "plot": true
+}

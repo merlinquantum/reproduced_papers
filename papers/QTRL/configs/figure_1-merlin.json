@@ -1,0 +1,70 @@
+{
+  "description": "Figure 1-style QTRL Merlin mode and photon comparison",
+  "experiment": "figure_1",
+  "seed": 42,
+  "logit_clip": 20.0,
+  "figure_1": {
+    "backend": "merlin_mlp",
+    "output_stem": "figure_1-merlin",
+    "repeats": 3,
+    "resume_run_dir": null,
+    "model": {
+      "hidden_sizes": [8, 8],
+      "layer_dim": [8, 16, 16, 8]
+    },
+    "environments": [
+      {
+        "env_name": "CartPole",
+        "num_episodes": 2000,
+        "lr": 0.01,
+        "q_output_size": 4,
+        "variants": [
+          {
+            "label": "Merlin, M=2, P=1",
+            "variant_id": "modes2_photons1",
+            "nb_modes": 2,
+            "nb_photons": 1
+          },
+          {
+            "label": "Merlin, M=3, P=1",
+            "variant_id": "modes3_photons1",
+            "nb_modes": 3,
+            "nb_photons": 1
+          },
+          {
+            "label": "Merlin, M=4, P=2",
+            "variant_id": "modes4_photons2",
+            "nb_modes": 4,
+            "nb_photons": 2
+          }
+        ]
+      },
+      {
+        "env_name": "MiniGrid",
+        "num_episodes": 4000,
+        "lr": 0.01,
+        "q_output_size": 8,
+        "variants": [
+          {
+            "label": "Merlin, M=3, P=1",
+            "variant_id": "modes3_photons1",
+            "nb_modes": 3,
+            "nb_photons": 1
+          },
+          {
+            "label": "Merlin, M=4, P=2",
+            "variant_id": "modes4_photons2",
+            "nb_modes": 4,
+            "nb_photons": 2
+          },
+          {
+            "label": "Merlin, M=5, P=2",
+            "variant_id": "modes5_photons2",
+            "nb_modes": 5,
+            "nb_photons": 2
+          }
+        ]
+      }
+    ]
+  }
+}
