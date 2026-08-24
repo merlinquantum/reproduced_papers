@@ -1,0 +1,33 @@
+{
+  "description": "Figure 1-style QTRL TorchQuantum depth comparison",
+  "resume_run_dir": "papers/QTRL/outdir/run_20260817-103807",
+  "experiment": "figure_1",
+  "seed": 42,
+  "logit_clip": 20.0,
+  "figure_1": {
+    "repeats": 3,
+    "resume_run_dir": null,
+    "model": {
+      "hidden_sizes": [128],
+      "layer_dim": [8, 16, 16, 8]
+    },
+    "environments": [
+      {
+        "env_name": "CartPole",
+        "depths": [1, 3, 5],
+        "num_episodes": 2000,
+        "lr": 0.001,
+        "q_output_size": 4,
+        "n_qubit": 10
+      },
+      {
+        "env_name": "MiniGrid",
+        "depths": [3, 7, 13],
+        "num_episodes": 4000,
+        "lr": 0.0001,
+        "q_output_size": 8,
+        "n_qubit": 13
+      }
+    ]
+  }
+}
