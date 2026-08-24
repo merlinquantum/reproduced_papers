@@ -1,0 +1,236 @@
+{
+  "description": "Sodar qSVM/qKNN: gate-based QSVM, QKNN, hybrid quantum-feature baselines, and MerLin photonic reservoir variants for encrypted traffic classification.",
+  "arguments": [
+    {
+      "flags": ["--dataset"],
+      "help": "Dataset key: synthetic, url2016, or ids2012",
+      "type": "str",
+      "choices": ["synthetic", "url2016", "ids2012"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset"}
+    },
+    {
+      "flags": ["--data_source"],
+      "help": "Data source: synthetic for file-free smoke runs, csv for CIC datasets",
+      "type": "str",
+      "choices": ["synthetic", "csv"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "data_source"}
+    },
+    {
+      "flags": ["--data_dir"],
+      "help": "Directory under data_root containing qSVM_qKNN datasets",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "data_dir"}
+    },
+    {
+      "flags": ["--dataset_file"],
+      "help": "URL2016 CSV path relative to data_dir",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_file"}
+    },
+    {
+      "flags": ["--subset_size"],
+      "help": "Pre-split stratified subset size; 0 uses all cleaned rows",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "subset_size"}
+    },
+    {
+      "flags": ["--max_test_size"],
+      "help": "Absolute cap on the stratified test split size; 0/null disables",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "max_test_size"}
+    },
+    {
+      "flags": ["--feature_limit"],
+      "help": "Keep the highest-variance training features; null keeps all",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "feature_limit"}
+    },
+    {
+      "flags": ["--test_size"],
+      "help": "Test split fraction",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "test_size"}
+    },
+    {
+      "flags": ["--models"],
+      "help": "Model variants to run",
+      "type": "str",
+      "nargs": "+",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "models"}
+    },
+    {
+      "flags": ["--quantum_device"],
+      "help": "PennyLane device for gate-based circuits",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "quantum_device"}
+    },
+    {
+      "flags": ["--photonic_computation_space"],
+      "help": "MerLin photonic output space",
+      "type": "str",
+      "choices": ["FOCK", "UNBUNCHED"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "photonic_computation_space"}
+    },
+    {
+      "flags": ["--parallel_n_jobs"],
+      "help": "CPU worker processes for row-wise gate-based encoders and fidelity kernels; -1 uses all cores",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "parallel_n_jobs"}
+    },
+    {
+      "flags": ["--parallel_chunk_size"],
+      "help": "Rows per parallel worker task; null/0 uses an automatic chunk size",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "parallel_chunk_size"}
+    },
+    {
+      "flags": ["--parallel_min_rows"],
+      "help": "Minimum number of left rows before spawning CPU workers",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "parallel_min_rows"}
+    },
+    {
+      "flags": ["--quantum_angle_scale"],
+      "help": "Multiplier applied to MinMax-scaled gate-based angle-encoding inputs",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "quantum_angle_scale"}
+    },
+    {
+      "flags": ["--zz_angle_scale"],
+      "help": "Multiplier applied to MinMax-scaled ZZFeatureMap inputs",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "zz_angle_scale"}
+    },
+    {
+      "flags": ["--zz_reps"],
+      "help": "Number of repetitions for the Qiskit-style ZZ feature map",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "zz_reps"}
+    },
+    {
+      "flags": ["--hybrid_readout"],
+      "help": "Hybrid quantum-feature readout",
+      "type": "str",
+      "choices": ["pauli_z", "state_real", "state_real_imag"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "hybrid_readout"}
+    },
+    {
+      "flags": ["--hybrid_standardize_features"],
+      "help": "Standardize explicit gate-based hybrid quantum features before sklearn fitting",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "hybrid_standardize_features"}
+    },
+    {
+      "flags": ["--zz_entanglement"],
+      "help": "Entanglement pattern for the ZZ feature map",
+      "type": "str",
+      "choices": ["full", "linear", "reverse_linear"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "zz_entanglement"}
+    },
+    {
+      "flags": ["--zz_alpha"],
+      "help": "Global alpha scale for the Qiskit-style ZZ feature map",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "zz_alpha"}
+    },
+    {
+      "flags": ["--svm_kernel"],
+      "help": "Classical/hybrid sklearn SVC kernel",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "svm_kernel"}
+    },
+    {
+      "flags": ["--knn_neighbors"],
+      "help": "K for classical/hybrid KNN",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "knn_neighbors"}
+    },
+    {
+      "flags": ["--qknn_neighbors"],
+      "help": "K for fidelity-based QKNN",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qknn_neighbors"}
+    },
+    {
+      "flags": ["--photonic_n_modes"],
+      "help": "Number of optical modes for the MerLin photonic reservoir; null matches selected features",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "photonic_n_modes"}
+    },
+    {
+      "flags": ["--photonic_n_photons"],
+      "help": "Number of photons for the QORC photonic reservoir",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "photonic_n_photons"}
+    },
+    {
+      "flags": ["--photonic_device"],
+      "help": "Torch device for MerLin photonic reservoir encoding",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "photonic_device"}
+    },
+    {
+      "flags": ["--encoder_batch_size"],
+      "help": "Rows per encoder batch for PennyLane and MerLin models",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "encoder_batch_size"}
+    },
+    {
+      "flags": ["--photonic_fidelity_shots"],
+      "help": "Pseudo-sampling shots for MerLin FidelityKernel; 0 uses exact probabilities",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "photonic_fidelity_shots"}
+    },
+    {
+      "flags": ["--photonic_fidelity_force_psd"],
+      "help": "Project final photonic fidelity train kernels to a PSD matrix; in parallel mode this is applied after chunk reassembly",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "photonic_fidelity_force_psd"}
+    },
+    {
+      "flags": ["--photonic_fidelity_qknn_neighbors"],
+      "help": "K for the photonic FidelityKernel KNN variant",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "photonic_fidelity_qknn_neighbors"}
+    },
+    {
+      "flags": ["--photonic_fidelity_knn_weights"],
+      "help": "Voting weights for the photonic FidelityKernel KNN variant",
+      "type": "str",
+      "choices": ["uniform", "distance"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "photonic_fidelity_knn_weights"}
+    }
+  ]
+}

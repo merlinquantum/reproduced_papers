@@ -1,0 +1,36 @@
+{
+  "description": "All-model URL2016 comparison. Every implemented SVM and KNN variant sees the same compact truncated split.",
+  "data_source": "csv",
+  "dataset": "url2016",
+  "dataset_file": "ISCX-URL-2016/Defacement_Infogain.csv",
+  "label_column": "class",
+  "subset_size": 10000,
+  "feature_limit": 8,
+  "photonic_n_modes": null,
+  "photonic_n_photons": 3,
+  "models": [
+    "svm_classical",
+    "knn_classical",
+    "state_svm_angle",
+    "state_svm_amplitude",
+    "state_svm_zz",
+    "state_knn_angle",
+    "state_knn_amplitude",
+    "state_knn_zz",
+    "hybrid_svm_angle",
+    "hybrid_svm_amplitude",
+    "hybrid_svm_zz",
+    "hybrid_knn_angle",
+    "hybrid_knn_amplitude",
+    "hybrid_knn_zz",
+    "photonic_hybrid_svm_angle",
+    "photonic_hybrid_svm_amplitude",
+    "photonic_state_svm_angle",
+    "photonic_hybrid_knn_angle",
+    "photonic_hybrid_knn_amplitude",
+    "photonic_state_knn_angle"
+  ],
+  "seeds": [
+    42
+  ]
+}

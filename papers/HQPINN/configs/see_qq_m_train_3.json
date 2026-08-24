@@ -1,0 +1,9 @@
+{
+  "experiment": "see-qq-m",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_photons": 3
+  },
+  "description": "HQPINN see qq m train 3 configuration."
+}

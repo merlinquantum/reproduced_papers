@@ -1,0 +1,24 @@
+{
+  "description": "Notebook pedagogical URL2016 explicit-feature comparison: classical, gate-based hybrid, and photonic hybrid SVM/KNN.",
+  "data_source": "csv",
+  "dataset": "url2016",
+  "dataset_file": "ISCX-URL-2016/Defacement_Infogain.csv",
+  "label_column": "class",
+  "subset_size": 0,
+  "feature_limit": null,
+  "photonic_n_modes": null,
+  "photonic_n_photons": 3,
+  "models": [
+    "svm_classical",
+    "hybrid_svm_angle",
+    "photonic_hybrid_svm_angle",
+    "photonic_hybrid_svm_amplitude",
+    "knn_classical",
+    "hybrid_knn_angle",
+    "photonic_hybrid_knn_angle",
+    "photonic_hybrid_knn_amplitude"
+  ],
+  "seeds": [
+    42
+  ]
+}

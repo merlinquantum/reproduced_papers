@@ -2,7 +2,7 @@
   "description": "Synthetic 8Q 4C configuration",
   "seed": 123,
   "device": "cpu",
-  "outdir": "results",
+  "outdir": "outdir",
   "dataset": {
     "name": "synthetic",
     "n_components": 8,
@@ -19,12 +19,7 @@
   },
   "experiments": [
     {
-      "classes": [
-        0,
-        1,
-        2,
-        3
-      ],
+      "classes": [0, 1, 2, 3],
       "description": "Paper Fig 8: Nq=8, Nc=4, Ns=1000 (40 points total, 20 train / 20 test)"
     }
   ]

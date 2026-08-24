@@ -1,26 +1,23 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
-import os
-import time
 import math
+import os
 import random
+import time
 
-import numpy as np
-from sklearn.decomposition import PCA
-import torch
-import torch.nn as nn
-
-import perceval as pcvl
 import merlin as ML
-
+import numpy as np
+import perceval as pcvl
+import torch
 from perceval.runtime import RemoteConfig
+from sklearn.decomposition import PCA
+from torch import nn
 
 from lib.lib_datasets import (
-    tensor_dataset,
     get_dataloader,
-    split_fold_numpy,
     get_mnist_variant,
+    split_fold_numpy,
+    tensor_dataset,
 )
 from lib.lib_learning import get_device, model_eval, model_fit
 
@@ -77,11 +74,13 @@ def get_PS_name_for_mode_and_depth(circuit: pcvl.Circuit, mode: int, depth: int)
         for m in modes:
             depths[m] = d_current + add_depth
 
-        if isinstance(comp, pcvl.components.PS):
-            if mode in modes:
-                if depths[mode] >= depth:
-                    ps_name = comp.get_variables()["phi"]
-                    return ps_name, depths[mode]
+        if (
+            isinstance(comp, pcvl.components.PS)
+            and mode in modes
+            and depths[mode] >= depth
+        ):
+            ps_name = comp.get_variables()["phi"]
+            return ps_name, depths[mode]
 
     # Pas de Phaseshifter trouvé avec une profondeur en BS suffisante (la depth demandée est trop élevée pour le circuit)
     return None, None
@@ -134,7 +133,7 @@ def create_quantum_layer_for_ascella(n_photons, logger):
     step = (n_modes - 1) / (n_photons - 1) if n_photons > 1 else 0
     qorc_input_state = [0] * n_modes
     for k in range(n_photons):
-        index = int(round(k * step))
+        index = round(k * step)
         qorc_input_state[index] = 1
 
     device_name = "cpu"
@@ -194,7 +193,7 @@ def create_qorc_quantum_layer(
     step = (n_modes - 1) / (n_photons - 1) if n_photons > 1 else 0
     qorc_input_state = [0] * n_modes
     for k in range(n_photons):
-        index = int(round(k * step))
+        index = round(k * step)
         qorc_input_state[index] = 1
 
     params_prefix = ["px"]
@@ -541,10 +540,10 @@ def qorc_encoding_and_linear_training(
     b_use_cosine_scheduler = False
     [
         train_loss_history,
-        train_accuracy_history,
-        val_loss_history,
-        val_accuracy_history,
-        duree_totale,
+        _train_accuracy_history,
+        _val_loss_history,
+        _val_accuracy_history,
+        _duree_totale,
         best_val_epoch,
     ] = model_fit(
         model,

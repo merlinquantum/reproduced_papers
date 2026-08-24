@@ -1,0 +1,9 @@
+{
+  "experiment": "dee-qq-m",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "n_photons": 2
+  },
+  "description": "HQPINN dee qq m run configuration."
+}

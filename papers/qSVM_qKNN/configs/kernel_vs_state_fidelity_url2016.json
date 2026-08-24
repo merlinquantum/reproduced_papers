@@ -1,0 +1,32 @@
+{
+  "description": "URL2016 validation run comparing fidelity-kernel models against explicit state-amplitude fidelity models on the all_models truncation.",
+  "data_source": "csv",
+  "dataset": "url2016",
+  "dataset_file": "ISCX-URL-2016/Defacement_Infogain.csv",
+  "label_column": "class",
+  "subset_size": 176,
+  "feature_limit": 8,
+  "photonic_n_modes": null,
+  "photonic_n_photons": 3,
+  "models": [
+    "qsvm_angle",
+    "state_svm_angle",
+    "qsvm_amplitude",
+    "state_svm_amplitude",
+    "qsvm_zz",
+    "state_svm_zz",
+    "qknn_angle",
+    "state_knn_angle",
+    "qknn_amplitude",
+    "state_knn_amplitude",
+    "qknn_zz",
+    "state_knn_zz",
+    "photonic_fidelity_svm_angle",
+    "photonic_state_svm_angle",
+    "photonic_fidelity_knn_angle",
+    "photonic_state_knn_angle"
+  ],
+  "seeds": [
+    42
+  ]
+}

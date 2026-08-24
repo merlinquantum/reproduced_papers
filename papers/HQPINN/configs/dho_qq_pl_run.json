@@ -1,0 +1,12 @@
+{
+  "experiment": "dho-qq-pl",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "n_layers": null,
+    "n_nodes": null,
+    "n_qubits": 3,
+    "n_photons": null
+  },
+  "description": "HQPINN dho qq pl run configuration."
+}

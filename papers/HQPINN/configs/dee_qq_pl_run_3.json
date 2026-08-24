@@ -1,0 +1,9 @@
+{
+  "experiment": "dee-qq-pl",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "q_layers": 3
+  },
+  "description": "HQPINN dee qq pl run 3 configuration."
+}

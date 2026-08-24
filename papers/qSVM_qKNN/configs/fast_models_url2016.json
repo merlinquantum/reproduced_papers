@@ -1,0 +1,53 @@
+{
+  "description": "Fast-model URL2016 comparison. Scalable non-ZZ models are evaluated on a larger matched split over three seeds.",
+  "data_source": "csv",
+  "dataset": "url2016",
+  "dataset_file": "ISCX-URL-2016/Defacement_Infogain.csv",
+  "label_column": "class",
+  "subset_size": 0,
+  "feature_limit": 10,
+  "photonic_n_modes": null,
+  "photonic_n_photons": 3,
+  "decision_boundary_models": [
+    "svm_classical",
+    "state_svm_angle",
+    "photonic_hybrid_svm_angle"
+  ],
+  "extra_decision_boundary_plots": [
+    {
+      "filename": "pca_photonic_hybrid_svm_angle_vs_amplitude.png",
+      "title": "QORC hybrid SVM angle vs amplitude",
+      "models": [
+        "photonic_hybrid_svm_angle",
+        "photonic_hybrid_svm_amplitude"
+      ]
+    }
+  ],
+  "decision_boundary_test_limit": 800,
+  "decision_boundary_grid_size": 300,
+  "decision_boundary_neighbors": 75,
+  "decision_boundary_weights": "distance",
+  "models": [
+    "svm_classical",
+    "state_svm_angle",
+    "state_svm_amplitude",
+    "hybrid_svm_angle",
+    "hybrid_svm_amplitude",
+    "photonic_hybrid_svm_angle",
+    "photonic_hybrid_svm_amplitude",
+    "photonic_state_svm_angle",
+    "knn_classical",
+    "state_knn_angle",
+    "state_knn_amplitude",
+    "hybrid_knn_angle",
+    "hybrid_knn_amplitude",
+    "photonic_hybrid_knn_angle",
+    "photonic_hybrid_knn_amplitude",
+    "photonic_state_knn_angle"
+  ],
+  "seeds": [
+    42,
+    43,
+    44
+  ]
+}

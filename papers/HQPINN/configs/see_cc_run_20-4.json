@@ -1,0 +1,10 @@
+{
+  "experiment": "see-cc",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "n_layers": 4,
+    "n_nodes": 20
+  },
+  "description": "HQPINN see cc run 20-4 configuration."
+}
