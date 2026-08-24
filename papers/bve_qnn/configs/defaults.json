@@ -6,7 +6,7 @@
     "outdir": "outdir",
     "device": "cpu",
     "dataset": {
-        "filename": "sem_supervised_dataset.npz",
+        "filename": "sem_supervised_subset.npz",
         "batch_size": 64
     },
     "model": {

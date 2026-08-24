@@ -14,7 +14,9 @@ data/*
 !data/generative_quantum_embeddings/
 !data/generative_quantum_embeddings/**
 !data/bve_qnn/
-!data/bve_qnn/**
+data/bve_qnn/*
+!data/bve_qnn/.gitkeep
+!data/bve_qnn/sem_supervised_subset.npz
 models/
 !models/.gitkeep
 !papers/**/models/

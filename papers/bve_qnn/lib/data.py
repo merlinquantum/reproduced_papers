@@ -1,9 +1,9 @@
 """Dataset loading for the BVE photonic dual-rail QNN reproduction.
 
-The dataset (``sem_supervised_dataset.npz``) contains supervised pairs
-``(t, x, y, z) -> psi`` sampled from a reference Spectral Element Method
-(SEM) solution of the Barotropic Vorticity Equation, as described in
-``main.tex`` Section IV.
+The smoke-test dataset (``sem_supervised_subset.npz``) contains a small
+grid of supervised pairs ``(t, x, y, z) -> psi``. The full SEM file
+``sem_supervised_dataset.npz`` is not stored in git; regenerate it from
+ERA5 via ``notebooks/neutral_atom/quantum_bve_step_by_step.ipynb``.
 """
 
 from __future__ import annotations
@@ -18,7 +18,8 @@ from torch.utils.data import DataLoader, TensorDataset
 from runtime_lib.data_paths import paper_data_dir
 
 PAPER_NAME = "bve_qnn"
-DEFAULT_DATASET_FILENAME = "sem_supervised_dataset.npz"
+DEFAULT_DATASET_FILENAME = "sem_supervised_subset.npz"
+FULL_DATASET_FILENAME = "sem_supervised_dataset.npz"
 
 
 def resolve_dataset_path(cfg: dict[str, Any]) -> Path:
@@ -39,11 +40,19 @@ def load_dataset(cfg: dict[str, Any]) -> dict[str, Any]:
     """Load the BVE dataset and return tensors plus raw reference arrays."""
 
     dataset_path = resolve_dataset_path(cfg)
+    filename = cfg.get("dataset", {}).get("filename", DEFAULT_DATASET_FILENAME)
     if not dataset_path.exists():
+        if filename == FULL_DATASET_FILENAME:
+            raise FileNotFoundError(
+                f"Full SEM dataset not found at {dataset_path}. It is not "
+                "committed (file too large for this repo). Regenerate it with "
+                "notebooks/neutral_atom/quantum_bve_step_by_step.ipynb "
+                "(Copernicus CDS account required), or run the smoke config "
+                f"which uses '{DEFAULT_DATASET_FILENAME}'."
+            )
         raise FileNotFoundError(
             f"BVE dataset not found at {dataset_path}. Place "
-            f"'{DEFAULT_DATASET_FILENAME}' under data/{PAPER_NAME}/ "
-            "(see README.md for details)."
+            f"'{filename}' under data/{PAPER_NAME}/ (see README.md)."
         )
 
     data = np.load(dataset_path)
@@ -70,4 +79,10 @@ def load_dataset(cfg: dict[str, Any]) -> dict[str, Any]:
     }
 
 
-__all__ = ["load_dataset", "resolve_dataset_path", "PAPER_NAME"]
+__all__ = [
+    "load_dataset",
+    "resolve_dataset_path",
+    "PAPER_NAME",
+    "DEFAULT_DATASET_FILENAME",
+    "FULL_DATASET_FILENAME",
+]

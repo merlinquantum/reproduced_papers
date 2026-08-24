@@ -142,6 +142,8 @@ def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         psi_pred_training=psi_pred_training,
         psi_qcl_training=psi_qcl_training,
         training_hours=training_hours,
+        lat_downsampled=dataset["lat_downsampled"],
+        lon_downsampled=dataset["lon_downsampled"],
         mre_per_time=figures_of_merit["mre_per_time"],
         ppmcc_per_grid_point=figures_of_merit["ppmcc_per_grid_point"],
         median_mre_percent=figures_of_merit["median_mre_percent"],

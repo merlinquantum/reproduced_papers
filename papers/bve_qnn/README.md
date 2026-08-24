@@ -105,9 +105,17 @@ Each run writes a timestamped folder under `outdir` / `results` with `checkpoint
 
 ### Data location
 
-Dataset path: `data/bve_qnn/sem_supervised_dataset.npz` (repo root `data/`, not inside the paper folder). Contains supervised `(t, x, y, z) -> psi` pairs, SEM reference `psi_qcl_training`, and lat/lon grids.
+Smoke tests and the notebook use a committed subset:
 
-The original paper does not publish the dataset. We regenerated it by downloading ERA5 pressure-level reanalysis from [Copernicus CDS](https://cds.climate.copernicus.eu/datasets/reanalysis-era5-pressure-levels) and solving the barotropic vorticity equation at 4° resolution (Appendix B). The full generation pipeline is in `notebooks/neutral_atom/quantum_bve_step_by_step.ipynb`. See also `utils/generate_dataset.py` for setup instructions.
+`data/bve_qnn/sem_supervised_subset.npz` (~6 KB, 128 points on a 2×8×8 grid).
+
+The full SEM file `data/bve_qnn/sem_supervised_dataset.npz` (~3.2 MB) is **not** in git. Paper-faithful evaluation (`configs/example.json`) needs it locally. The original paper does not publish the dataset; regenerate it from ERA5 via Copernicus CDS and the SEM solver (Appendix B):
+
+- `notebooks/neutral_atom/quantum_bve_step_by_step.ipynb` — full pipeline
+- `utils/generate_dataset.py` — CDS setup instructions
+- `utils/make_subset.py` — rebuilds the smoke subset from the full file
+
+Published MRE / PPMCC and the Mollweide figure come from `results/exp1_merlin_results.npz`, which does not require the 3.2 MB file.
 
 ### Neutral-atom reproduction (Qadence)
 

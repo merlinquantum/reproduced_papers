@@ -13,7 +13,10 @@ import numpy as np
 
 
 def plot_mollweide(
-    results_path: Path, data_path: Path, target_hour: int, out_path: Path
+    results_path: Path,
+    target_hour: int,
+    out_path: Path,
+    data_path: Path | None = None,
 ) -> None:
     import cartopy.crs as ccrs
     import matplotlib.pyplot as plt
@@ -23,9 +26,18 @@ def plot_mollweide(
     psi_qcl_training = exp1_results["psi_qcl_training"]
     training_hours = exp1_results["training_hours"]
 
-    sem_data = np.load(data_path)
-    lat_downsampled = sem_data["lat_downsampled"]
-    lon_downsampled = sem_data["lon_downsampled"]
+    if "lat_downsampled" in exp1_results.files:
+        lat_downsampled = exp1_results["lat_downsampled"]
+        lon_downsampled = exp1_results["lon_downsampled"]
+    elif data_path is not None and data_path.exists():
+        sem_data = np.load(data_path)
+        lat_downsampled = sem_data["lat_downsampled"]
+        lon_downsampled = sem_data["lon_downsampled"]
+    else:
+        raise FileNotFoundError(
+            "lat/lon grid not found in the results file. Re-run evaluation "
+            "or pass --data pointing at the SEM dataset."
+        )
 
     target_index = np.where(training_hours == target_hour)[0][0]
     psi_sem_t = psi_qcl_training[target_index]
@@ -83,7 +95,8 @@ def main() -> None:
     parser.add_argument(
         "--data",
         type=Path,
-        default=Path("../../data/bve_qnn/sem_supervised_dataset.npz"),
+        default=None,
+        help="Optional SEM npz used only if results lack lat/lon arrays",
     )
     parser.add_argument("--hour", type=int, default=22)
     parser.add_argument(
@@ -93,7 +106,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    plot_mollweide(args.results, args.data, args.hour, args.out)
+    plot_mollweide(args.results, args.hour, args.out, data_path=args.data)
 
 
 if __name__ == "__main__":

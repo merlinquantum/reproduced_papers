@@ -1,7 +1,13 @@
-"""Regenerate the SEM supervised dataset from ERA5 reanalysis data.
+"""Regenerate the full SEM supervised dataset from ERA5 reanalysis data.
 
-This script automates the dataset generation from the Copernicus Climate
-Data Store (CDS).  The full pipeline is documented step-by-step in
+The 3.2 MB full file is **not** stored in git. Smoke tests and the paper
+notebook use ``data/bve_qnn/sem_supervised_subset.npz`` (a few KB).
+
+This script documents how to rebuild the full file
+``data/bve_qnn/sem_supervised_dataset.npz`` for paper-faithful evaluation
+(``configs/example.json``).
+
+The pipeline is documented step-by-step in
 ``notebooks/neutral_atom/quantum_bve_step_by_step.ipynb``.
 
 Prerequisites
@@ -24,7 +30,12 @@ Usage
     cd papers/bve_qnn
     python utils/generate_dataset.py
 
-The output file ``data/bve_qnn/sem_supervised_dataset.npz`` contains:
+Then run the generation notebook. After the full ``.npz`` exists, rebuild
+the committed smoke subset with::
+
+    python utils/make_subset.py
+
+The full output file contains:
 
 - ``supervised_features``  — shape (N, 4), columns (t, x, y, z)
 - ``supervised_targets``   — shape (N,),   stream-function values
@@ -36,7 +47,7 @@ Notes
 The original paper does not publish the dataset.  We regenerate it by
 downloading ERA5 pressure-level reanalysis (Appendix B) and solving the
 barotropic vorticity equation with a spectral-element method at 4°
-resolution.  The generation notebook walks through every step.
+resolution.
 """
 
 from __future__ import annotations
@@ -46,16 +57,14 @@ import sys
 
 def main() -> None:
     print(
-        "Dataset generation requires the ERA5 pipeline from the notebook.\n"
+        "The full SEM dataset is not committed (too large for this repo).\n"
+        "Smoke tests use data/bve_qnn/sem_supervised_subset.npz.\n"
         "\n"
-        "Please run the full pipeline in:\n"
-        "  notebooks/neutral_atom/quantum_bve_step_by_step.ipynb\n"
-        "\n"
-        "Or follow the instructions in this file's docstring to set up\n"
-        "the CDS API and run the notebook cells programmatically.\n"
-        "\n"
-        "The pre-generated dataset is committed at:\n"
-        "  data/bve_qnn/sem_supervised_dataset.npz  (3.2 MB)"
+        "To rebuild the full file for paper-faithful evaluation:\n"
+        "  1. Set up a Copernicus CDS account (see this file's docstring)\n"
+        "  2. Run notebooks/neutral_atom/quantum_bve_step_by_step.ipynb\n"
+        "  3. Optionally refresh the smoke subset with:\n"
+        "       python utils/make_subset.py\n"
     )
     sys.exit(0)
 
