@@ -154,12 +154,8 @@ def train_qgan(
         idx = rng.integers(0, N_real, size=bs)
         x_real = latents[idx].to(device)
         # Sample fake latent rows
-        if input_name == "alpha":
-            noise = generator.sample_noise(bs, device=device)
-            x_fake = generator(noise)
-        else:
-            noise = generator.sample_noise(bs, device=device)
-            x_fake = generator(noise)
+        noise = generator.sample_noise(bs, device=device)
+        x_fake = generator(noise)
         # ---- Train discriminator ----
         opt_d.zero_grad()
         d_real = discriminator(x_real)
