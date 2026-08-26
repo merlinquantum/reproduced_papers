@@ -37,27 +37,9 @@ def _per_qubit_rx_batch(angles: np.ndarray) -> np.ndarray:
     return np.moveaxis(u, 1, 0)
 
 
-def _apply_rx_layer(psi: np.ndarray, angles: np.ndarray, n_qubits: int) -> np.ndarray:
-    """Apply tensor_q RX(theta_q) to a batch of states.
-
-    ``psi`` has shape ``(n_samples, 2**n_qubits)``; ``angles`` is
-    ``(n_samples, n_qubits)``.  Returns the updated psi.
-    """
-    n_samples = psi.shape[0]
-    u_each = _per_qubit_rx_batch(angles)  # (n_qubits, n_samples, 2, 2)
-    # Reshape psi to a tensor with one axis per qubit, plus the batch axis.
-    psi = psi.reshape((n_samples,) + (2,) * n_qubits)
-    for q in range(n_qubits):
-        # Apply 2x2 on axis (q+1), batched over n_samples (axis 0).
-        # einsum over psi: indices ('n', q-axis-then-rest)
-        # New psi axis q: U @ psi along that axis.
-        psi = np.einsum('nij,n...j...->n...i...', u_each[q], psi, optimize=False)\
-            if False else None  # placeholder, see specialised code below
-        raise NotImplementedError  # never executed; replaced below
-    return psi  # unreachable
-
-
-def _apply_rx_layer_vec(psi: np.ndarray, angles: np.ndarray, n_qubits: int) -> np.ndarray:
+def _apply_rx_layer_vec(
+    psi: np.ndarray, angles: np.ndarray, n_qubits: int
+) -> np.ndarray:
     """Vectorised: build the per-sample tensor product, then matmul."""
     n_samples = psi.shape[0]
     u_each = _per_qubit_rx_batch(angles)  # (n_qubits, n_samples, 2, 2)
@@ -68,14 +50,14 @@ def _apply_rx_layer_vec(psi: np.ndarray, angles: np.ndarray, n_qubits: int) -> n
         # -> (n_samples, 2**(q+1), 2**(q+1))
         d1 = U.shape[-1]
         d2 = u_each[q].shape[-1]
-        U = (
-            U[:, :, None, :, None] * u_each[q][:, None, :, None, :]
-        ).reshape(n_samples, d1 * d2, d1 * d2)
-    return np.einsum('nij,nj->ni', U, psi)
+        U = (U[:, :, None, :, None] * u_each[q][:, None, :, None, :]).reshape(
+            n_samples, d1 * d2, d1 * d2
+        )
+    return np.einsum("nij,nj->ni", U, psi)
 
 
 def _cnot_matrix(n_qubits: int, control: int, target: int) -> np.ndarray:
-    dim = 2 ** n_qubits
+    dim = 2**n_qubits
     U = np.zeros((dim, dim), dtype=np.complex128)
     for i in range(dim):
         bits = [(i >> (n_qubits - 1 - q)) & 1 for q in range(n_qubits)]
@@ -89,7 +71,7 @@ def _cnot_matrix(n_qubits: int, control: int, target: int) -> np.ndarray:
 
 
 def _cz_matrix(n_qubits: int, q1: int, q2: int) -> np.ndarray:
-    dim = 2 ** n_qubits
+    dim = 2**n_qubits
     U = np.eye(dim, dtype=np.complex128)
     for i in range(dim):
         b1 = (i >> (n_qubits - 1 - q1)) & 1
@@ -142,18 +124,29 @@ def _build_entangler(name: str, n_qubits: int) -> np.ndarray:
         if n_qubits != 8:
             raise ValueError("cnot8 requires n_qubits == 8")
         cnots = [
-            (0, 4), (1, 5), (2, 6), (3, 7),
-            (0, 2), (1, 3), (4, 6), (5, 7),
-            (0, 1), (2, 3), (4, 5), (6, 7),
+            (0, 4),
+            (1, 5),
+            (2, 6),
+            (3, 7),
+            (0, 2),
+            (1, 3),
+            (4, 6),
+            (5, 7),
+            (0, 1),
+            (2, 3),
+            (4, 5),
+            (6, 7),
         ]
-        U = np.eye(2 ** 8, dtype=np.complex128)
+        U = np.eye(2**8, dtype=np.complex128)
         for c, t in cnots:
             U = _cnot_matrix(8, c, t) @ U
         return U
     raise ValueError(f"Unknown ansatz: {name}")
 
 
-def make_ansatz(name: str, n_qubits: int) -> Callable[[np.ndarray, int, np.random.Generator], np.ndarray]:
+def make_ansatz(
+    name: str, n_qubits: int
+) -> Callable[[np.ndarray, int, np.random.Generator], np.ndarray]:
     """Return a function ``f(theta_batch, n_layers, rng) -> (n_samples, n_qubits) bits``.
 
     ``theta_batch`` has shape ``(n_samples, n_qubits)`` if ``n_layers == 1``,
@@ -162,9 +155,11 @@ def make_ansatz(name: str, n_qubits: int) -> Callable[[np.ndarray, int, np.rando
     Initial state is ``|0...0>``; measurement is in the computational basis.
     """
     entangler = _build_entangler(name, n_qubits)
-    dim = 2 ** n_qubits
+    dim = 2**n_qubits
 
-    def run(theta_batch: np.ndarray, n_layers: int, rng: np.random.Generator) -> np.ndarray:
+    def run(
+        theta_batch: np.ndarray, n_layers: int, rng: np.random.Generator
+    ) -> np.ndarray:
         if n_layers == 1 and theta_batch.ndim == 2:
             theta_layers = theta_batch[:, None, :]
         else:

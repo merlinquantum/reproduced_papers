@@ -8,23 +8,22 @@ import logging
 import time
 from dataclasses import asdict
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 
 from .classifiers import ClassifierResult, train_classifier
 from .data import load_dataset
 
-
 _LOGGER = logging.getLogger(__name__)
 
 
-def _resolve_data_root(cfg: Dict[str, Any]) -> Path:
+def _resolve_data_root(cfg: dict[str, Any]) -> Path:
     data_root = cfg.get("data_root") or "data"
     return Path(data_root)
 
 
-def _featurize(cfg: Dict[str, Any], X_train: np.ndarray, X_test: np.ndarray, seed: int):
+def _featurize(cfg: dict[str, Any], X_train: np.ndarray, X_test: np.ndarray, seed: int):
     qks_cfg = cfg.get("qks", {})
     backend = qks_cfg.get("backend", "gate")
     if backend == "gate":
@@ -90,7 +89,7 @@ def _featurize(cfg: Dict[str, Any], X_train: np.ndarray, X_test: np.ndarray, see
 
 
 def _classifier_run(
-    cfg: Dict[str, Any],
+    cfg: dict[str, Any],
     X_train: np.ndarray,
     y_train: np.ndarray,
     X_test: np.ndarray,
@@ -109,12 +108,12 @@ def _classifier_run(
     )
 
 
-def _resolve_seed(cfg: Dict[str, Any]) -> int:
+def _resolve_seed(cfg: dict[str, Any]) -> int:
     seed = cfg.get("seed", 42)
     return int(seed) if seed is not None else 0
 
 
-def _maybe_sigma_sweep(cfg: Dict[str, Any]) -> list[float] | None:
+def _maybe_sigma_sweep(cfg: dict[str, Any]) -> list[float] | None:
     sweep = cfg.get("sigma_sweep")
     if not sweep:
         return None
@@ -123,7 +122,7 @@ def _maybe_sigma_sweep(cfg: Dict[str, Any]) -> list[float] | None:
     raise ValueError("sigma_sweep must be a list of floats")
 
 
-def _maybe_e_sweep(cfg: Dict[str, Any]) -> list[int] | None:
+def _maybe_e_sweep(cfg: dict[str, Any]) -> list[int] | None:
     sweep = cfg.get("episodes_sweep")
     if not sweep:
         return None
@@ -132,14 +131,14 @@ def _maybe_e_sweep(cfg: Dict[str, Any]) -> list[int] | None:
     raise ValueError("episodes_sweep must be a list of ints")
 
 
-def _seed_list(cfg: Dict[str, Any]) -> list[int]:
+def _seed_list(cfg: dict[str, Any]) -> list[int]:
     seeds_field = cfg.get("seeds")
     if seeds_field:
         return [int(s) for s in seeds_field]
     return [_resolve_seed(cfg)]
 
 
-def train_and_evaluate(cfg: Dict[str, Any], run_dir: Path) -> None:
+def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> None:
     run_dir = Path(run_dir)
     run_dir.mkdir(parents=True, exist_ok=True)
     data_root = _resolve_data_root(cfg)

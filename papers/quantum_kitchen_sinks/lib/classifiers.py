@@ -8,14 +8,14 @@ non-linear classical reference in Fig. 5 of arXiv:1806.08321.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 
 
-def _filter_keys(d: Dict[str, Any], allowed: set[str]) -> Dict[str, Any]:
+def _filter_keys(d: dict[str, Any], allowed: set[str]) -> dict[str, Any]:
     return {k: v for k, v in d.items() if k in allowed}
 
 
@@ -35,7 +35,7 @@ def train_classifier(
     y_train: np.ndarray,
     X_test: np.ndarray,
     y_test: np.ndarray,
-    cfg: Dict[str, Any] | None = None,
+    cfg: dict[str, Any] | None = None,
     seed: int = 0,
 ) -> ClassifierResult:
     """Train a small classifier and report accuracies. `name` is one of:

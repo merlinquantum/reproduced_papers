@@ -15,8 +15,8 @@ episode = one fresh `(Omega, beta)` draw, used identically on every sample.
 
 from __future__ import annotations
 
+from collections.abc import Sequence
 from dataclasses import dataclass
-from typing import Sequence
 
 import numpy as np
 
@@ -24,6 +24,7 @@ import numpy as np
 @dataclass
 class EpisodeEncoding:
     """Static encoding for one episode: Omega (q, p), beta (q,)."""
+
     omega: np.ndarray
     beta: np.ndarray
 
@@ -98,9 +99,7 @@ def make_episodes(
     return episodes
 
 
-def encode_batch(
-    X: np.ndarray, episodes: Sequence[EpisodeEncoding]
-) -> np.ndarray:
+def encode_batch(X: np.ndarray, episodes: Sequence[EpisodeEncoding]) -> np.ndarray:
     """Apply each episode encoding to a batch.
 
     Returns a (n_episodes, n_samples, q) array of gate angles.

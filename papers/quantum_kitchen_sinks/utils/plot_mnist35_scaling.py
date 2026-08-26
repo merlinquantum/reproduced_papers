@@ -28,8 +28,12 @@ def main() -> None:
     parser.add_argument("--label", type=str, nargs="+", required=True)
     parser.add_argument("--baseline-lr", type=float, default=None)
     parser.add_argument("--baseline-svm", type=float, default=None)
-    parser.add_argument("--paper-points", type=str, default=None,
-                        help="comma-separated list of (label,error) pairs from the paper, e.g. '1q,0.033;2q,0.018;4q,0.014'")
+    parser.add_argument(
+        "--paper-points",
+        type=str,
+        default=None,
+        help="comma-separated list of (label,error) pairs from the paper, e.g. '1q,0.033;2q,0.018;4q,0.014'",
+    )
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
 
@@ -55,11 +59,19 @@ def main() -> None:
     ax.grid(alpha=0.3)
 
     if args.baseline_lr is not None:
-        ax.axhline(args.baseline_lr, color="C2", ls="--",
-                   label=f"Logistic regression baseline ({args.baseline_lr:.3f})")
+        ax.axhline(
+            args.baseline_lr,
+            color="C2",
+            ls="--",
+            label=f"Logistic regression baseline ({args.baseline_lr:.3f})",
+        )
     if args.baseline_svm is not None:
-        ax.axhline(args.baseline_svm, color="C3", ls=":",
-                   label=f"SVM-RBF baseline ({args.baseline_svm:.3f})")
+        ax.axhline(
+            args.baseline_svm,
+            color="C3",
+            ls=":",
+            label=f"SVM-RBF baseline ({args.baseline_svm:.3f})",
+        )
 
     if args.paper_points:
         labels = []
@@ -70,8 +82,7 @@ def main() -> None:
             values.append(float(val))
         xs = [args.label.index(lab) for lab in labels if lab in args.label]
         ys = [values[labels.index(args.label[i])] for i in xs]
-        ax.scatter(xs, ys, color="C1", marker="s",
-                   label="Paper Fig. 5 (QVM)", zorder=3)
+        ax.scatter(xs, ys, color="C1", marker="s", label="Paper Fig. 5 (QVM)", zorder=3)
 
     ax.legend()
     ax.set_title("(3,5)-MNIST: QKS error scaling with number of qubits")

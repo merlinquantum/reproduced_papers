@@ -15,15 +15,24 @@ def test_cli_known_flags_parse():
     parser, _ = build_project_cli_parser()
     args = parser.parse_args(
         [
-            "--experiment", "picture_frames",
-            "--circuit", "cnot2",
-            "--n-qubits", "2",
-            "--n-episodes", "100",
-            "--sigma", "1.0",
-            "--shots-per-episode", "1",
-            "--n-layers", "1",
-            "--classifier-kind", "logistic_regression",
-            "--classifier-c", "1.0",
+            "--experiment",
+            "picture_frames",
+            "--circuit",
+            "cnot2",
+            "--n-qubits",
+            "2",
+            "--n-episodes",
+            "100",
+            "--sigma",
+            "1.0",
+            "--shots-per-episode",
+            "1",
+            "--n-layers",
+            "1",
+            "--classifier-kind",
+            "logistic_regression",
+            "--classifier-c",
+            "1.0",
         ]
     )
     assert args.experiment == "picture_frames"

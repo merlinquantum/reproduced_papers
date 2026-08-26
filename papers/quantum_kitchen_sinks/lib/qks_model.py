@@ -12,8 +12,6 @@ randomness changes between fits, controlled by the `seed` passed to `transform`.
 
 from __future__ import annotations
 
-from typing import Sequence
-
 import numpy as np
 
 from .circuits import make_ansatz, number_of_gate_params
@@ -42,7 +40,7 @@ class QKSFeaturizer:
         self.input_dim = 0
         self._ansatz = None
 
-    def fit_episodes(self, input_dim: int, seed: int = 0) -> "QKSFeaturizer":
+    def fit_episodes(self, input_dim: int, seed: int = 0) -> QKSFeaturizer:
         self.input_dim = int(input_dim)
         q = number_of_gate_params(self.circuit, self.n_qubits)
         total_episodes = self.n_episodes * self.n_layers
@@ -78,7 +76,7 @@ class QKSFeaturizer:
             for e in range(E):
                 theta_batch = angles[e].transpose(1, 0, 2)  # (n_samples, n_layers, q)
                 bits = self._ansatz(theta_batch, n_layers, rng)  # (n_samples, n_qubits)
-                features[:, e * n_qubits:(e + 1) * n_qubits] = bits
+                features[:, e * n_qubits : (e + 1) * n_qubits] = bits
             return features
         # shots > 1: average the bit value over `shots_per_episode` independent shots.
         features = np.zeros((n_samples, E * n_qubits), dtype=np.float32)
@@ -88,7 +86,7 @@ class QKSFeaturizer:
             acc = np.zeros((n_samples, n_qubits), dtype=np.float32)
             for _ in range(S):
                 acc += self._ansatz(theta_batch, n_layers, rng).astype(np.float32)
-            features[:, e * n_qubits:(e + 1) * n_qubits] = acc / S
+            features[:, e * n_qubits : (e + 1) * n_qubits] = acc / S
         return features
 
 

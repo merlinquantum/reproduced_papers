@@ -9,7 +9,6 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Tuple
 
 import numpy as np
 
@@ -20,7 +19,7 @@ def _picture_frame_points(
     outer_radius: float,
     noise: float,
     rng: np.random.Generator,
-) -> Tuple[np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray]:
     """Sample 2-D points uniformly on two concentric square frames.
 
     Class 0 lives on the inner square frame (side = 2 * inner_radius).
@@ -61,7 +60,7 @@ def load_picture_frames(
     outer_radius: float = 0.7,
     noise: float = 0.02,
     seed: int = 0,
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Return (X_train, y_train, X_test, y_test) for the picture-frames task."""
     rng = np.random.default_rng(seed)
     X_train, y_train = _picture_frame_points(
@@ -93,7 +92,7 @@ def load_mnist35(
     n_test: int | None = None,
     standardize: bool = True,
     seed: int = 0,
-) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Return (X_train, y_train, X_test, y_test) for the (3,5)-MNIST subset.
 
     Labels are remapped: 3 -> 0, 5 -> 1.
@@ -115,7 +114,7 @@ def load_mnist35(
         str(root), train=False, download=True, transform=transform
     )
 
-    def _filter(ds) -> Tuple[np.ndarray, np.ndarray]:
+    def _filter(ds) -> tuple[np.ndarray, np.ndarray]:
         # `ds.data` is a uint8 tensor of shape (N, 28, 28); .targets is a tensor of ints.
         targets = ds.targets.numpy()
         mask = (targets == 3) | (targets == 5)
@@ -149,7 +148,9 @@ def load_mnist35(
     return X_train, y_train, X_test, y_test
 
 
-def load_dataset(cfg, data_root: str | os.PathLike) -> Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+def load_dataset(
+    cfg, data_root: str | os.PathLike
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """Dispatch on `cfg['dataset']['name']`."""
     ds_cfg = cfg["dataset"]
     name = ds_cfg["name"]

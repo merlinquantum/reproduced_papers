@@ -10,17 +10,16 @@ See README and INSIGHTS for the design rationale.
 
 from __future__ import annotations
 
-from typing import List, Sequence
-
-import numpy as np
-import torch
+from collections.abc import Sequence
 
 import merlin as ml
+import numpy as np
+import torch
 
 from .encoding import EpisodeEncoding, make_episodes
 
 
-def _validate_input_modes(n_modes: int, input_modes: Sequence[int]) -> List[int]:
+def _validate_input_modes(n_modes: int, input_modes: Sequence[int]) -> list[int]:
     ordered_modes = []
     seen = set()
     for mode in input_modes:
@@ -38,7 +37,7 @@ def _default_input_state(
     n_photons: int,
     input_modes: Sequence[int],
     computation_space: ml.ComputationSpace,
-) -> List[int]:
+) -> list[int]:
     if n_photons > n_modes:
         raise ValueError("n_photons must be <= n_modes")
     ordered_modes = _validate_input_modes(n_modes, input_modes)
@@ -102,7 +101,9 @@ class PhotonicQKSFeaturizer:
             list(range(0, self.n_modes, 2))
             if input_modes is None
             and self.computation_space is ml.ComputationSpace.DUAL_RAIL
-            else list(range(self.n_modes)) if input_modes is None else list(input_modes)
+            else list(range(self.n_modes))
+            if input_modes is None
+            else list(input_modes)
         )
         self.input_modes = _validate_input_modes(self.n_modes, self.input_modes)
         self.angle_scale = float(angle_scale)
@@ -112,8 +113,8 @@ class PhotonicQKSFeaturizer:
             self.input_modes,
             self.computation_space,
         )
-        self.episodes: List[EpisodeEncoding] = []
-        self._layer_seeds: List[int] = []
+        self.episodes: list[EpisodeEncoding] = []
+        self._layer_seeds: list[int] = []
         self.input_dim = 0
 
     def _build_layer(self, seed: int) -> ml.QuantumLayer:
@@ -135,12 +136,10 @@ class PhotonicQKSFeaturizer:
         gen = torch.Generator(device="cpu").manual_seed(int(seed))
         for p in layer.parameters():
             with torch.no_grad():
-                p.copy_(
-                    torch.empty_like(p).uniform_(0.0, 2.0 * np.pi, generator=gen)
-                )
+                p.copy_(torch.empty_like(p).uniform_(0.0, 2.0 * np.pi, generator=gen))
         return layer
 
-    def fit_episodes(self, input_dim: int, seed: int = 0) -> "PhotonicQKSFeaturizer":
+    def fit_episodes(self, input_dim: int, seed: int = 0) -> PhotonicQKSFeaturizer:
         self.input_dim = int(input_dim)
         total_episodes = self.n_episodes * self.n_layers
         self.episodes = make_episodes(
@@ -154,7 +153,9 @@ class PhotonicQKSFeaturizer:
         self._layer_seeds = [seed + 1000 * (e + 1) for e in range(self.n_episodes)]
         return self
 
-    def _sample_outcomes(self, probs: torch.Tensor, rng: np.random.Generator) -> np.ndarray:
+    def _sample_outcomes(
+        self, probs: torch.Tensor, rng: np.random.Generator
+    ) -> np.ndarray:
         probs_np = probs.detach().cpu().numpy().astype(np.float64)
         probs_np = np.clip(probs_np, 0.0, None)
         probs_np /= probs_np.sum(axis=1, keepdims=True)
@@ -187,7 +188,7 @@ class PhotonicQKSFeaturizer:
             if self.shots_per_episode == 1:
                 bits = self._sample_outcomes(probs, rng)
             else:
-                acc = np.zeros((n_samples, self.n_modes), dtype=np.float32)
+                acc = np.zeros((X.shape[0], self.n_modes), dtype=np.float32)
                 for _ in range(self.shots_per_episode):
                     acc += self._sample_outcomes(probs, rng).astype(np.float32)
                 bits = acc / self.shots_per_episode

@@ -23,7 +23,7 @@ for p in (REPO_ROOT, PROJECT_DIR):
     if str(p) not in sys.path:
         sys.path.insert(0, str(p))
 
-from lib.data import load_picture_frames
+from lib.data import load_picture_frames  # noqa: E402
 
 
 def main() -> None:
