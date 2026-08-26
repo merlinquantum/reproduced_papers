@@ -19,7 +19,8 @@ class QiskitQRKS(nn.Module):
     episode_count : int
         Number of randomized episodes.
     L_strategy : str
-        Encoding strategy, either ``L1`` or ``L2``.
+        Encoding strategy, either ``L1`` or ``L2``. Both strategies use the
+        Section III single-qubit ``Rx``-then-``Ry`` upload in the gate model.
     V_strategy : str | None
         Entangling strategy. ``None`` omits entangling gates.
     data_size : int
@@ -54,20 +55,15 @@ class QiskitQRKS(nn.Module):
         self.L_strategy = L_strategy
         self.V_strategy = V_strategy
         self.output_feature_count = episode_count * 2**qubit_count
-        input_size = (
-            depth * (qubit_count // 2) if L_strategy == "L1" else depth * qubit_count
-        )
+        # Section III assigns two encoded angles to every qubit in every
+        # upload layer: Rx(phi_x) followed by Ry(phi_y).
+        input_size = depth * qubit_count * 2
         self.register_buffer(
             "weights", torch.randn(episode_count, input_size, data_size) * 2.0
         )
         self.register_buffer(
             "biases", torch.rand(episode_count, input_size) * 2.0 * torch.pi
         )
-        self.random_angles = np.random.uniform(
-            0.0, 2.0 * np.pi, (depth + 1, qubit_count, 2)
-        )
-        if V_strategy == "V1" and same_random_layer:
-            self.random_angles[1:] = self.random_angles[0]
 
     def _build_circuit(self, angles: np.ndarray, episode: int):
         from qiskit import QuantumCircuit
@@ -75,26 +71,21 @@ class QiskitQRKS(nn.Module):
         circuit = QuantumCircuit(self.qubit_count)
         phase_index = 0
         for depth_index in range(self.depth):
-            if self.V_strategy is not None:
-                for qubit in range(self.qubit_count):
-                    random_ry, random_rz = self.random_angles[depth_index, qubit]
-                    circuit.ry(float(random_ry), qubit)
-                    circuit.rz(float(random_rz), qubit)
-                for qubit in range(self.qubit_count - 1):
-                    circuit.cx(qubit, qubit + 1)
-            if self.L_strategy == "L1":
-                for qubit in range(0, self.qubit_count, 2):
-                    circuit.ry(float(angles[phase_index]), qubit)
-                    phase_index += 1
-            else:
-                for qubit in range(self.qubit_count):
-                    circuit.ry(float(angles[phase_index]), qubit)
-                    phase_index += 1
-        if self.V_strategy is not None:
             for qubit in range(self.qubit_count):
-                random_ry, random_rz = self.random_angles[self.depth, qubit]
-                circuit.ry(float(random_ry), qubit)
-                circuit.rz(float(random_rz), qubit)
+                circuit.rx(float(angles[phase_index]), qubit)
+                phase_index += 1
+                circuit.ry(float(angles[phase_index]), qubit)
+                phase_index += 1
+
+            # Entanglers occur only between successive upload layers. The
+            # final upload is therefore never followed by a CZ ring.
+            if (
+                self.V_strategy is not None
+                and depth_index < self.depth - 1
+                and self.qubit_count > 1
+            ):
+                for qubit in range(self.qubit_count):
+                    circuit.cz(qubit, (qubit + 1) % self.qubit_count)
         return circuit
 
     def forward(self, features: torch.Tensor) -> torch.Tensor:

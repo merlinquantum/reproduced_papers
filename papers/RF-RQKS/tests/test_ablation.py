@@ -98,6 +98,42 @@ def test_qiskit_sampler_output_shape_and_probability_normalization() -> None:
     assert torch.allclose(episode_probabilities.sum(dim=2), torch.ones(4, 2), atol=1e-5)
 
 
+def test_qiskit_circuit_matches_section_iii_upload_and_entangler_order() -> None:
+    from lib.qiskit_qrks import QiskitQRKS
+
+    sampler = QiskitQRKS(
+        qubit_count=3,
+        depth=2,
+        episode_count=1,
+        L_strategy="L2",
+        V_strategy="V1",
+        data_size=4,
+    )
+    circuit = sampler._build_circuit(np.arange(12, dtype=np.float32), episode=0)
+
+    assert [instruction.operation.name for instruction in circuit.data] == [
+        "rx",
+        "ry",
+        "rx",
+        "ry",
+        "rx",
+        "ry",
+        "cz",
+        "cz",
+        "cz",
+        "rx",
+        "ry",
+        "rx",
+        "ry",
+        "rx",
+        "ry",
+    ]
+    assert [
+        tuple(circuit.qubits.index(qubit) for qubit in instruction.qubits)
+        for instruction in circuit.data[6:9]
+    ] == [(0, 1), (1, 2), (2, 0)]
+
+
 def test_qiskit_sampler_rejects_hardware_execution() -> None:
     with pytest.raises(ValueError, match="simulator-only"):
         build_sampler(

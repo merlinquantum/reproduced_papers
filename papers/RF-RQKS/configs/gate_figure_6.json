@@ -2,7 +2,7 @@
   "description": "Figure 6 direct versus gate-based readout comparison",
   "experiment": "readout_comparison",
   "data_source": "representation",
-  "representation_path": "representations/dct64x64_36_lte_1",
+  "representation_path": "representations/dct128x128_36_lte_1",
   "validation_fraction": 0.2,
   "standardization_batch_size": 64,
   "sampler": "qiskit",

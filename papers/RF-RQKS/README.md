@@ -366,6 +366,11 @@ the encoding choices, V1/V2/V3 are the optional entangling choices, and each
 episode emits ``2**qubit_count`` computational-basis probability features. It
 does not support ``run_on_hardware``.
 
+The Qiskit circuit follows Section III of the paper: every upload layer applies
+``Rx(phi_x)`` followed by ``Ry(phi_y)`` on each qubit, and an optional CZ ring
+is inserted only between consecutive upload layers. The final upload layer is
+not followed by an entangler.
+
 It evaluates all four direct and QKS readouts for the fixed model in the
 config and writes `figures/figure_6.png`. The QPU variant uses the same
 pipeline and requires the representation under
