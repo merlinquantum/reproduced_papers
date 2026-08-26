@@ -238,26 +238,36 @@ Test errors (1 − test accuracy):
 | Variant | Setting | Test error (mean ± std, 3 seeds) |
 |---------|---------|---------------------------------:|
 | Photonic QKS, ``m=4 / k=2 / E=2000`` | UNBUNCHED, tile encoding, σ=0.05 | 7.80 ± 0.08% |
-| Photonic QKS, ``m=6 / k=3 / E=10000`` | DUAL_RAIL, tile encoding, σ=0.05 | 3.83 ± 0.50% |
-| **Photonic QKS, ``m=6 / k=3 / E=10000``** | **DUAL_RAIL, tile encoding, σ=0.07** | **3.60 ± 0.42%** |
-| Photonic QKS, ``m=8 / k=4 / E=5000`` | DUAL_RAIL, tile encoding, σ=0.05 | 5.43 ± 0.45% |
-| Photonic QKS, ``m=8 / k=4 / E=5000`` | DUAL_RAIL, tile encoding, σ=0.07 | 5.40 ± 0.22% |
+| Photonic QKS, ``m=6 / k=3 / E=10000`` | DUAL_RAIL, tile encoding, σ=0.05 | *withdrawn, re-running* |
+| Photonic QKS, ``m=6 / k=3 / E=10000`` | DUAL_RAIL, tile encoding, σ=0.07 | *withdrawn, re-running* |
+| Photonic QKS, ``m=8 / k=4 / E=5000`` | DUAL_RAIL, tile encoding, σ=0.05 | *withdrawn, re-running* |
+| Photonic QKS, ``m=8 / k=4 / E=5000`` | DUAL_RAIL, tile encoding, σ=0.07 | *withdrawn, re-running* |
 | LR baseline (raw pixels, for reference) | n/a | 3.80% |
 | Gate-model QKS-1q, ``E=5000`` | tile encoding, σ=0.05 | 1.87 ± 0.09% |
 
-The small photonic setting (`m=4, k=2`) remains clearly below the gate-model
-QKS and above the LR baseline. In the enlarged settings, constraining the
-photonic model to the logical ``DUAL_RAIL`` subspace helps substantially, and
-the ``m=6, k=3`` geometry benefits strongly from more episodes and a slightly
-larger sigma. The best photonic MNIST result is **3.60 ± 0.42%** with
-``m=6, k=3, E=10000, σ=0.07`` in ``DUAL_RAIL``, which is effectively on par
-with the LR baseline and much closer to the gate-based regime than the compact
-UNBUNCHED setting.
+> **The ``DUAL_RAIL`` rows are withdrawn pending a re-run.**  They were produced
+> before the fix to the dual-rail outcome→click-pattern mapping in
+> ``lib/photonic_qks.py``: MerLin reports ``2**(m/2)`` outcomes in
+> ``DUAL_RAIL``, but the featurizer indexed them into a ``C(m, k)`` UNBUNCHED
+> table, relabelling outcomes onto unrelated click patterns and leaving mode 0
+> permanently occupied — a constant feature a linear classifier cannot recover
+> from.  ``UNBUNCHED`` used the correct table throughout, so the ``m=4, k=2``
+> row above, all picture-frames results, and the gate-model results are
+> unaffected.
+
+What can be said today: the compact ``m=4, k=2`` UNBUNCHED setting sits clearly
+below the gate-model QKS and *above* the LR baseline, i.e. no lift.  Whether the
+enlarged ``DUAL_RAIL`` geometries beat the linear baseline is an open question
+until the re-run lands.  A separate diagnostic (see `INSIGHTS.md`) suggests they
+will not at ``E = 10000``: per-feature signal-to-noise in the photonic layer is
+7–11× below the gate model, which on the standard random-features scaling
+implies an episode budget of order ``E ≈ 50 000–100 000`` for comparable feature
+quality.
 
 ### Hardware-aware reporting (MerLin photonic adaptation)
 
-| Field | Picture frames value | Best MNIST photonic value |
-|-------|----------------------|---------------------------|
+| Field | Picture frames value | MNIST photonic configuration (result re-running) |
+|-------|----------------------|--------------------------------------------------|
 | Computation space | UNBUNCHED | DUAL_RAIL |
 | Detector model | threshold | threshold |
 | Photon number | 2 | 3 |
@@ -288,16 +298,21 @@ under `results/` record the run each number comes from.
 `lib/photonic_qks.py` implements per-episode `ml.QuantumLayer`s with frozen
 entangling-mesh phases, data driving an `add_angle_encoding`, and single-shot
 sampling.  The photonic adaptation reproduces the central QKS claim on
-picture frames. On (3,5)-MNIST, the original UNBUNCHED setting remains weak,
-but enlarged DUAL_RAIL runs close much of the gap: the best current photonic
-result is ``m=6, k=3, E=10000, σ=0.07`` with **3.60 ± 0.42%** test error.
+picture frames. On (3,5)-MNIST the UNBUNCHED settings show no lift over the
+linear baseline, and the ``DUAL_RAIL`` results are being regenerated after the
+outcome-mapping fix (see the results section).
 
 ## Limitations
 
 - No QPU experiments. Entirely simulated.
 - (3,5)-MNIST uses a 4 000-train / 1 000-test subset.
-- Photonic adaptation on MNIST still trails the best gate-model QKS result,
-  but DUAL_RAIL plus larger ``n_modes``/``n_photons`` closes much of the gap.
+- Photonic adaptation on MNIST trails the gate-model QKS and shows no lift over
+  the linear baseline in the settings currently measurable; the ``DUAL_RAIL``
+  numbers are withdrawn pending a re-run after the outcome-mapping fix.
+- The photonic layer's per-feature signal-to-noise is 7–11× below the gate
+  model's and saturates: sweeping σ, ``angle_scale`` and ``n_layers`` does not
+  move it, so a lift on this task needs a much larger episode budget or a
+  higher-visibility encoder, not tuning.
 - As with classical Random Kitchen Sinks, the benefit is not universal: it
   likely depends strongly on the dataset and on how well the chosen feature map
   matches the underlying structure.
