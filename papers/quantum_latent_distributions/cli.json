@@ -23,7 +23,7 @@
       "flags": [
         "--latents"
       ],
-      "help": "Comma-separated latents. Paper: gaussian,bernoulli,distinguishable,boson. Classical challengers added by this reproduction: shuffled_boson,copula_boson,negative_binomial",
+      "help": "Comma-separated latents. Paper: gaussian,bernoulli,distinguishable,boson. Classical challengers added by this reproduction: shuffled_boson,copula_boson,negative_binomial,dirichlet_multinomial",
       "type": "str",
       "default": null,
       "apply": {
