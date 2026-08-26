@@ -1,0 +1,31 @@
+{
+  "description": "Lightweight ablation optimized for single-band RF-RQKS with 36_LTE_1 data",
+  "representation_path": "representations/dct64x64_36_lte_1",
+  "validation_fraction": 0.15,
+  "standardization_batch_size": 64,
+  "sampler": "photonic",
+  "device": "cpu",
+  "seed": 42,
+  "batch_size": 16,
+  "readout_c": 1.0,
+  "readout_max_iter": 10000,
+  "scale_sampled_features": true,
+  "kernel_components": 128,
+  "kernel_gamma": 1.0,
+  "maximum_output_features": 16384,
+  "initial_depth": 1,
+  "encoding_strategy": "L2",
+  "entangling_strategy": "V1",
+  "same_haar": false,
+  "stage_1": {
+    "mode_counts": [4, 6, 8, 10, 12],
+    "episode_counts": [8, 16, 32, 64]
+  },
+  "stage_2": {
+    "shortlist_count": 3,
+    "depths": [1, 2, 3, 4, 5]
+  },
+  "stage_3": {
+    "depth_episode_pairs": [[1, 64], [2, 32], [3, 16], [4, 8], [5, 4]]
+  }
+}

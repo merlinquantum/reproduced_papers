@@ -1,0 +1,29 @@
+{
+  "description": "Fast end-to-end RF-RQKS ablation smoke run on 36_LTE_1 DCT64x64",
+  "representation_path": "representations/dct64x64_36_lte_1",
+  "validation_fraction": 0.2,
+  "standardization_batch_size": 64,
+  "sampler": "dummy_rbf",
+  "batch_size": 32,
+  "readout_c": 1.0,
+  "readout_max_iter": 10000,
+  "scale_sampled_features": false,
+  "kernel_components": 32,
+  "kernel_gamma": 1.0,
+  "maximum_output_features": 4096,
+  "initial_depth": 1,
+  "encoding_strategy": "L2",
+  "entangling_strategy": "V1",
+  "same_haar": false,
+  "stage_1": {
+    "mode_counts": [2, 4],
+    "episode_counts": [2, 4]
+  },
+  "stage_2": {
+    "shortlist_count": 2,
+    "depths": [1, 2]
+  },
+  "stage_3": {
+    "depth_episode_pairs": [[1, 4], [2, 2]]
+  }
+}

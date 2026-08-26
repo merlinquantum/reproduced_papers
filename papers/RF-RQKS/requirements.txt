@@ -1,0 +1,7 @@
+merlinquantum==0.4.1
+scipy
+matplotlib
+numpy
+scikit-learn
+torch
+pytest
