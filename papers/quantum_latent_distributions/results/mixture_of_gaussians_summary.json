@@ -1,0 +1,264 @@
+{
+  "records": [
+    {
+      "latent": "gaussian",
+      "seed": 0,
+      "interpolation_rate": 0.3546,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.6454,
+      "mmd": 0.0246296226978302
+    },
+    {
+      "latent": "bernoulli",
+      "seed": 0,
+      "interpolation_rate": 0.2187,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.7813,
+      "mmd": 0.011996597051620483
+    },
+    {
+      "latent": "distinguishable",
+      "seed": 0,
+      "interpolation_rate": 0.1448,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.8552,
+      "mmd": 0.011955469846725464
+    },
+    {
+      "latent": "boson",
+      "seed": 0,
+      "interpolation_rate": 0.1312,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.8688,
+      "mmd": 0.01759856939315796
+    },
+    {
+      "latent": "gaussian",
+      "seed": 1,
+      "interpolation_rate": 0.3832,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.6168,
+      "mmd": 0.028214231133461
+    },
+    {
+      "latent": "bernoulli",
+      "seed": 1,
+      "interpolation_rate": 0.0409,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.9591,
+      "mmd": 0.014433234930038452
+    },
+    {
+      "latent": "distinguishable",
+      "seed": 1,
+      "interpolation_rate": 0.1463,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.8537,
+      "mmd": 0.022351250052452087
+    },
+    {
+      "latent": "boson",
+      "seed": 1,
+      "interpolation_rate": 0.1467,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.8533,
+      "mmd": 0.013642102479934692
+    },
+    {
+      "latent": "gaussian",
+      "seed": 2,
+      "interpolation_rate": 0.3972,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.6028,
+      "mmd": 0.02642311155796051
+    },
+    {
+      "latent": "bernoulli",
+      "seed": 2,
+      "interpolation_rate": 0.089,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.911,
+      "mmd": 0.006966531276702881
+    },
+    {
+      "latent": "distinguishable",
+      "seed": 2,
+      "interpolation_rate": 0.1265,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.8735,
+      "mmd": 0.012972220778465271
+    },
+    {
+      "latent": "boson",
+      "seed": 2,
+      "interpolation_rate": 0.1474,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.8526,
+      "mmd": 0.011414453387260437
+    },
+    {
+      "latent": "gaussian",
+      "seed": 3,
+      "interpolation_rate": 0.393,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.607,
+      "mmd": 0.024222329258918762
+    },
+    {
+      "latent": "bernoulli",
+      "seed": 3,
+      "interpolation_rate": 0.1288,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.8712,
+      "mmd": 0.011528730392456055
+    },
+    {
+      "latent": "distinguishable",
+      "seed": 3,
+      "interpolation_rate": 0.1301,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.8699,
+      "mmd": 0.017052844166755676
+    },
+    {
+      "latent": "boson",
+      "seed": 3,
+      "interpolation_rate": 0.1909,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.8091,
+      "mmd": 0.014096587896347046
+    },
+    {
+      "latent": "gaussian",
+      "seed": 4,
+      "interpolation_rate": 0.385,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.615,
+      "mmd": 0.02800878882408142
+    },
+    {
+      "latent": "bernoulli",
+      "seed": 4,
+      "interpolation_rate": 0.1398,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.8602,
+      "mmd": 0.012381017208099365
+    },
+    {
+      "latent": "distinguishable",
+      "seed": 4,
+      "interpolation_rate": 0.0423,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.9577,
+      "mmd": 0.009248703718185425
+    },
+    {
+      "latent": "boson",
+      "seed": 4,
+      "interpolation_rate": 0.1808,
+      "n_modes_covered": 7,
+      "captured_fraction": 0.8192,
+      "mmd": 0.01646701991558075
+    }
+  ],
+  "aggregate": {
+    "gaussian": {
+      "interpolation_rate": {
+        "mean": 0.3826,
+        "sem": 0.007454662970248885,
+        "n": 5
+      },
+      "n_modes_covered": {
+        "mean": 7.0,
+        "sem": 0.0,
+        "n": 5
+      },
+      "mmd": {
+        "mean": 0.026299616694450377,
+        "sem": 0.0008278366939999037,
+        "n": 5
+      }
+    },
+    "bernoulli": {
+      "interpolation_rate": {
+        "mean": 0.12344000000000002,
+        "sem": 0.02947016457368367,
+        "n": 5
+      },
+      "n_modes_covered": {
+        "mean": 7.0,
+        "sem": 0.0,
+        "n": 5
+      },
+      "mmd": {
+        "mean": 0.011461222171783447,
+        "sem": 0.001228257151581072,
+        "n": 5
+      }
+    },
+    "distinguishable": {
+      "interpolation_rate": {
+        "mean": 0.11800000000000002,
+        "sem": 0.019323922997155626,
+        "n": 5
+      },
+      "n_modes_covered": {
+        "mean": 7.0,
+        "sem": 0.0,
+        "n": 5
+      },
+      "mmd": {
+        "mean": 0.014716097712516784,
+        "sem": 0.002283752452753676,
+        "n": 5
+      }
+    },
+    "boson": {
+      "interpolation_rate": {
+        "mean": 0.1594,
+        "sem": 0.011293228059328293,
+        "n": 5
+      },
+      "n_modes_covered": {
+        "mean": 7.0,
+        "sem": 0.0,
+        "n": 5
+      },
+      "mmd": {
+        "mean": 0.014643746614456176,
+        "sem": 0.0010905574621808108,
+        "n": 5
+      }
+    }
+  },
+  "centers": [
+    [
+      5.0,
+      0.0
+    ],
+    [
+      3.1174490092936677,
+      3.909157412340149
+    ],
+    [
+      -1.1126046697815717,
+      4.874639560909118
+    ],
+    [
+      -4.504844339512095,
+      2.169418695587791
+    ],
+    [
+      -4.504844339512096,
+      -2.16941869558779
+    ],
+    [
+      -1.112604669781573,
+      -4.874639560909118
+    ],
+    [
+      3.117449009293667,
+      -3.9091574123401496
+    ]
+  ]
+}

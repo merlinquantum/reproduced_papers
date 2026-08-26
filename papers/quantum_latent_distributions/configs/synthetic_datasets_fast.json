@@ -1,0 +1,40 @@
+{
+  "description": "Reduced-budget variant of the Table I study for CPU-only environments: same optimizer, activation and architecture as Appendix D, but 5000 iterations instead of 40000 and 3 repeats instead of 12. Reproduces the ordering, not the absolute L1 values.",
+
+  "experiment": "synthetic_datasets",
+  "seed": 0,
+  "torch_threads": 1,
+
+  "latent": {
+    "dim": 16,
+    "architecture": "haar",
+    "normalize": "center",
+    "bank_size": 200000,
+    "kinds": ["gaussian", "bernoulli", "distinguishable", "boson"]
+  },
+
+  "dataset": {
+    "name": "synthetic",
+    "targets": ["quantum"],
+    "size": 50000,
+    "batch_size": 500
+  },
+
+  "model": {
+    "generator_hidden": [512, 512],
+    "critic_hidden": [512, 512],
+    "activation": "relu",
+    "latent_reinjection": false
+  },
+
+  "training": {
+    "iterations": 5000,
+    "optimizer": "rmsprop",
+    "lr": 5e-4,
+    "betas": [0.0, 0.9],
+    "n_critic": 5,
+    "gp_weight": 10.0
+  },
+
+  "evaluation": {"repeats": 3, "n_samples": 10000}
+}

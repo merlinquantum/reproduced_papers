@@ -1,0 +1,217 @@
+{
+  "description": "Quantum latent distributions in deep generative models (arXiv:2508.19857) - MerLin reproduction",
+  "arguments": [
+    {
+      "flags": [
+        "--experiment"
+      ],
+      "help": "Which study to run",
+      "type": "str",
+      "choices": [
+        "sampler_validation",
+        "mixture_of_gaussians",
+        "synthetic_datasets",
+        "qm9"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment"
+      }
+    },
+    {
+      "flags": [
+        "--latents"
+      ],
+      "help": "Comma-separated latents. Paper: gaussian,bernoulli,distinguishable,boson. Classical challengers added by this reproduction: shuffled_boson,copula_boson,negative_binomial",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "latent.kinds"
+      }
+    },
+    {
+      "flags": [
+        "--latent-dim"
+      ],
+      "help": "Latent dimension, i.e. the number of optical modes or time bins",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "latent.dim"
+      }
+    },
+    {
+      "flags": [
+        "--photons"
+      ],
+      "help": "Photon number for the photonic latents (default: half the modes)",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "latent.n_photons"
+      }
+    },
+    {
+      "flags": [
+        "--architecture"
+      ],
+      "help": "Interferometer family used to draw the photonic latents",
+      "type": "str",
+      "choices": [
+        "haar",
+        "1-1",
+        "1-3-9"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "latent.architecture"
+      }
+    },
+    {
+      "flags": [
+        "--normalize"
+      ],
+      "help": "Latent preprocessing; the paper describes centring only",
+      "type": "str",
+      "choices": [
+        "center",
+        "standardize",
+        "none"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "latent.normalize"
+      }
+    },
+    {
+      "flags": [
+        "--bank-size"
+      ],
+      "help": "Number of latent samples pre-drawn before training",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "latent.bank_size"
+      }
+    },
+    {
+      "flags": [
+        "--latent-source"
+      ],
+      "help": "Draw the boson-sampler bank from simulation or from a Quandela Cloud QPU",
+      "type": "str",
+      "choices": [
+        "simulation",
+        "hardware"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "latent.source"
+      }
+    },
+    {
+      "flags": [
+        "--platform"
+      ],
+      "help": "Quandela Cloud platform used when --latent-source hardware",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "latent.hardware.platform"
+      }
+    },
+    {
+      "flags": [
+        "--targets"
+      ],
+      "help": "Comma-separated target datasets for the synthetic study (quantum,bernoulli)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.targets"
+      }
+    },
+    {
+      "flags": [
+        "--iterations"
+      ],
+      "help": "Number of generator updates",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.iterations"
+      }
+    },
+    {
+      "flags": [
+        "--lr"
+      ],
+      "help": "Adam learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.lr"
+      }
+    },
+    {
+      "flags": [
+        "--n-critic"
+      ],
+      "help": "Critic updates per generator update",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.n_critic"
+      }
+    },
+    {
+      "flags": [
+        "--batch-size"
+      ],
+      "help": "Training batch size",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.batch_size"
+      }
+    },
+    {
+      "flags": [
+        "--repeats"
+      ],
+      "help": "Number of repeats; repeat k uses seed + k for the circuit draw and for training",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.repeats"
+      }
+    },
+    {
+      "flags": [
+        "--torch-threads"
+      ],
+      "help": "Cap torch intra-op threads (useful when running several studies in parallel)",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "torch_threads"
+      }
+    }
+  ]
+}
