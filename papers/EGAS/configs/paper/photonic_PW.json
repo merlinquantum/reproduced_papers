@@ -1,0 +1,57 @@
+{
+  "description": "[PAPER-SCALE] Photonic EGAS mirror on PW (UNBUNCHED, 2 photons, 8 modes) \u2014 FAITHFUL paper-scale config (arXiv:2605.30866v1 / qDNA-yonsei Generative-QDE). GPU-scale: 480-dim 8-layer GPT, 768 candidates/iter, 4000 iters, 10 G/B, 10 pairs. Author used GPU + 32-worker pools; NOT runnable under this container's CPU/qemu. Use configs/<name>.json (reduced-compute) for local runs.",
+  "seed": 42,
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "task": "photonic_eval",
+  "dataset": {
+    "name": "PW",
+    "root": "data",
+    "n_qubits": 8,
+    "n_components": 8
+  },
+  "egas": {
+    "seq_len": 28,
+    "n_iters": 4000,
+    "n_candidates": 768,
+    "select_k": 256,
+    "gamma": 0.1,
+    "lr": 5e-05,
+    "weight_decay": 0.01,
+    "temp_max": 100.0,
+    "temp_min": 0.04,
+    "search_samples": 100,
+    "n_embd": 480,
+    "n_layers": 8,
+    "n_heads": 12,
+    "dropout": 0.2
+  },
+  "photonic": {
+    "n_photons": 2,
+    "computation_space": "FOCK",
+    "seq_len": 28,
+    "scale": 1.0,
+    "epochs": 400,
+    "batch": 25,
+    "lr": 0.0005
+  },
+  "bias": {
+    "epochs": 400,
+    "batch_samples": 25,
+    "lr": 0.0005
+  },
+  "nqe": {
+    "epochs": 400
+  },
+  "eval": {
+    "n_train": 400,
+    "n_test": 50,
+    "n_repeats": 10,
+    "top": 10
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

@@ -1,0 +1,8 @@
+# Local inputs and disposable run outputs for this paper.
+import_data/
+outdir/
+outdir_*/
+
+# Large generated artifacts kept locally but not versioned.
+results/**/metrics.json
+results/**/*_predictions.csv
