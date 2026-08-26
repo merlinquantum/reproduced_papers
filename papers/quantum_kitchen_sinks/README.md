@@ -89,8 +89,15 @@ papers/quantum_kitchen_sinks/
 |-- tests/                         # 15 unit, kernel and smoke tests
 |-- utils/                         # 3 plotting scripts
 |-- outdir/                        # timestamped run artifacts (git-ignored)
-`-- results/                       # curated figures
+`-- results/                       # curated figures + run artifacts (*.json)
 ```
+
+`results/` holds the committed, citable outputs: the figures embedded below and
+four curated run artifacts (`picture_frames_lr_baseline.json`,
+`picture_frames_cnot2_sweep.json`, `picture_frames_cz2_sweep.json`,
+`picture_frames_merlin.json`).  Each artifact records the config it came from
+and the command that regenerates it, and `notebook.ipynb` reads them — so the
+notebook and the tables below work from a fresh clone without a prior run.
 
 ## Install and How to Run
 
@@ -171,7 +178,7 @@ All numbers below are mean ± std over 3 seeds where noted.
 | QKS-CNOT2 (best σ, E) | > 99.9% | **100.0 ± 0.0%** (σ=4, E=500) | 3 | paper-accurate |
 | QKS-CNOT2 (σ=1, E=5000) | > 99.9% | 99.17 ± 0.12% | 3 | **deviation** — at the paper's own σ ≈ 1 we do not reach > 99.9% |
 | QKS-CZ2 (σ × E sweep) | ≈ 50% ("no discrimination") | **48.51 ± 2.26%** (pooled, 27 runs); best cell 49.58 ± 1.94% | 3 | paper-accurate |
-| **Photonic MerLin QKS (σ=3, E=2000, 4 modes, 2 photons)** | n/a | **99.67 ± 0.47%** | 3 | paper-accurate (photonic adaptation) |
+| **Photonic MerLin QKS (σ=3, E=2000, 4 modes, 2 photons)** | n/a | **99.50 ± 0.41%** | 3 | paper-accurate (photonic adaptation) |
 
 σ × E sweeps for the two gate-model ansätze (test accuracy, mean over 3 seeds):
 
@@ -242,7 +249,7 @@ The small photonic setting (`m=4, k=2`) remains clearly below the gate-model
 QKS and above the LR baseline. In the enlarged settings, constraining the
 photonic model to the logical ``DUAL_RAIL`` subspace helps substantially, and
 the ``m=6, k=3`` geometry benefits strongly from more episodes and a slightly
-larger sigma. Our best photonic MNIST result is now **3.60 ± 0.42%** with
+larger sigma. The best photonic MNIST result is **3.60 ± 0.42%** with
 ``m=6, k=3, E=10000, σ=0.07`` in ``DUAL_RAIL``, which is effectively on par
 with the LR baseline and much closer to the gate-based regime than the compact
 UNBUNCHED setting.
@@ -272,6 +279,11 @@ SVM-RBF baseline of our own as an upper reference; the paper does not quote an
 SVM-RBF number, so this row has no paper counterpart.
 
 ## MerLin Photonic Extension
+
+The photonic mesh phases are drawn from the **torch** RNG, so the exact photonic
+figures move by a few tenths of a point between torch/MerLin versions; the
+gate-model rows are pure NumPy and reproduce bit-for-bit.  The curated artifacts
+under `results/` record the run each number comes from.
 
 `lib/photonic_qks.py` implements per-episode `ml.QuantumLayer`s with frozen
 entangling-mesh phases, data driving an `add_angle_encoding`, and single-shot

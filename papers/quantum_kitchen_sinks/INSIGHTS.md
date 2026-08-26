@@ -4,12 +4,11 @@ Distilled, durable notes worth keeping after the reproduction.
 
 ## Implementation pitfalls
 
-- The Quil snippets in the appendix use **`RX`** rotations, not `RY`.  We
-  initially wrote the simulator with `RY` and got correct shapes but
-  ill-tuned σ.  `RX` and `RY` give identical single-qubit measurement
-  probabilities (they differ only by a phase on the ``|1>`` component), so the
-  symptom is a mis-scaled σ rather than an obvious failure — but the phase does
-  matter once an entangler acts on the state.
+- The appendix Quil uses **`RX`** rotations, not `RY`.  Substituting `RY`
+  gives identical *single-qubit* measurement probabilities — the two differ
+  only by a phase on the ``|1>`` component — so the mistake does not announce
+  itself; it shows up only as a mis-scaled optimal σ.  The phase does matter
+  once an entangler acts on the state.
 - A 4-qubit Quil snippet `cnot4` (Fig. 6) reads in the order ``CNOT 0 2; CNOT
   1 3; CNOT 0 1; CNOT 2 3``.  Be careful with multiplication order when
   composing CNOT matrices.  Fig. 2(c) appears to draw the two pairs in the
@@ -62,13 +61,12 @@ Three things worth keeping:
    on top is linear (the paper's Linear Baseline rule), nothing downstream can
    use that correlation.  A non-linear classifier on the same features would
    not be chance-level — which is exactly why the LB rule is load-bearing.
-2. **Writing the ansatz as ``RX`` then ``CZ`` silently breaks the experiment.**
-   A CZ is diagonal, so applied *after* the rotations it cannot change Z-basis
-   marginals at all: the circuit collapses to two independent one-qubit QKS
-   circuits and scores ~98.5% on picture frames.  That looks like a refutation
-   of the paper and is really a transcription bug.  ``tests/test_kernel.py``
-   pins both orderings against the paper's closed-form kernels so it cannot
-   regress.
+2. **The ordering is load-bearing and fails silently if reversed.**  A CZ is
+   diagonal, so applied *after* the rotations it cannot change Z-basis
+   marginals at all; the ansatz would collapse to two independent one-qubit
+   QKS circuits and score ~98.5% on picture frames — a plausible-looking number
+   that contradicts the paper for no physical reason.  ``tests/test_kernel.py``
+   pins both orderings against the paper's closed-form kernels.
 3. **Train accuracy hides it.**  At ``E = 5000`` with 1600 training points the
    logistic regression fits the random features to ~99% train accuracy while
    test stays at chance.  A train-only check would have missed the effect
@@ -85,7 +83,7 @@ already classifies the data, QKS has no lift to demonstrate.
 ## Photonic adaptation
 
 The QKS recipe ports cleanly to MerLin on the **picture-frames** task
-(99.7% test accuracy with 4 modes / 2 photons / σ=3 / E=2000).
+(99.5% test accuracy with 4 modes / 2 photons / σ=3 / E=2000).
 
 On **(3,5)-MNIST** the photonic story depends strongly on the computation
 space, episode budget, and geometry:
@@ -93,7 +91,7 @@ space, episode budget, and geometry:
 | Variant | Best test error | Notes |
 |---------|---------------:|-------|
 | Gate QKS 1q (paper-aligned) | **1.87 ± 0.09%** | σ=0.05, E=5000 |
-| Photonic MerLin QKS (4 modes, 2 photons, UNBUNCHED) | 7.80 ± 0.08% | σ=0.05, E=2000, corrected input-state placement |
+| Photonic MerLin QKS (4 modes, 2 photons, UNBUNCHED) | 7.80 ± 0.08% | σ=0.05, E=2000 |
 | Photonic MerLin QKS (6 modes, 3 photons, UNBUNCHED) | 4.73 ± 0.25% | σ=0.05, E=10000 |
 | **Photonic MerLin QKS (6 modes, 3 photons, DUAL_RAIL)** | **3.60 ± 0.42%** | **σ=0.07, E=10000** |
 | Photonic MerLin QKS (8 modes, 4 photons, DUAL_RAIL) | 5.40 ± 0.22% | σ=0.07, E=5000 |
@@ -104,18 +102,18 @@ MNIST. The likely cause there is the mismatch between MNIST's high-dimensional
 input (784) and the *small* photonic Hilbert subspace
 ``C(n_modes, n_photons) = 6`` sampled per episode.
 
-Three experimental facts define the current picture:
+Three experimental facts define the picture:
 
-1. Fixing the photon placement so that the input state aligns with the encoded
-  `input_modes` improved the `(m=4, k=2)` MNIST run from **8.30 ± 0.98%** to
-  **7.80 ± 0.08%**.
-2. Increasing the episode budget matters a lot for larger photonic spaces, but
-  not uniformly. In UNBUNCHED mode, `(m=6, k=3)` improved from **14.40 ± 0.51%**
-  at `E=1000` to **4.73 ± 0.25%** at `E=10000`, whereas `(m=8, k=4)` improved
-  only from **19.23 ± 0.97%** to a plateau near **8.27 ± 0.29%** at `E=5000`.
+1. The input state must place its photons on the modes the encoding drives.
+  With `(m=4, k=2)` on MNIST, aligning the input state with `input_modes` is
+  worth about half a point of test error and most of the seed-to-seed variance.
+2. Episode budget matters a lot for larger photonic spaces, but not uniformly.
+  In UNBUNCHED mode `(m=6, k=3)` goes from **14.40 ± 0.51%** at `E=1000` to
+  **4.73 ± 0.25%** at `E=10000`, whereas `(m=8, k=4)` moves only from
+  **19.23 ± 0.97%** to a plateau near **8.27 ± 0.29%** at `E=5000`.
 3. Moving the enlarged settings into the logical `DUAL_RAIL` subspace helps
-  significantly. The best point we found is now `(m=6, k=3, E=10000, σ=0.07)`
-  with **3.60 ± 0.42%** test error, essentially matching the LR baseline.
+  significantly. The best point is `(m=6, k=3, E=10000, σ=0.07)` at
+  **3.60 ± 0.42%** test error, essentially matching the LR baseline.
 
 Taken together, these results show that the weak performance is specific to an
 underpowered UNBUNCHED setting rather than to photonic QKS as a whole.
@@ -124,8 +122,8 @@ The contrast between `6m3k` and `8m4k` is itself informative. Even in
 DUAL_RAIL, simply increasing the Hilbert space does not guarantee a better QKS
 feature map:
 
-1. `m=6, k=3` benefits from both larger `E` and a move from `σ=0.05` to
-  `σ=0.07`, reaching **3.60 ± 0.42%**.
+1. `m=6, k=3` benefits from both larger `E` and from `σ=0.07` rather than
+  `σ=0.05`, reaching **3.60 ± 0.42%**.
 2. `m=8, k=4` also improves in DUAL_RAIL, but only to **5.40 ± 0.22%**, and
   the sigma sweep around `0.05` shows only a shallow plateau between `0.05`
   and `0.07`.
@@ -164,4 +162,4 @@ well matched.
 | Best σ on picture frames | 1–4 | 2–3 |
 | Best σ on MNIST (best photonic run) | 0.05–0.10 depending on qubit count | **0.07** for `6m3k` DUAL_RAIL |
 | Wall clock for E=1000 | ~1 s | ~10 s |
-| MNIST lift over LR? | Yes (≥ 1.8% error vs 3.8%) | Not yet beyond LR, but `6m3k` DUAL_RAIL reaches parity-scale performance |
+| MNIST lift over LR? | Yes (1.8% error vs 3.8%) | No; `6m3k` DUAL_RAIL reaches parity (3.60% vs 3.80%) |
