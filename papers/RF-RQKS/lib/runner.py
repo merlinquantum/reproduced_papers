@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from .ablation import run_ablation
+from .ablation import run_ablation, run_readout_comparison
 from .ablation_data import DatasetSplits, load_dct_dataset
 
 
@@ -134,6 +134,26 @@ def train_and_evaluate(cfg: dict, run_dir: Path) -> None:
         dataset.test_labels.size,
         dataset.input_feature_count,
     )
+    experiment = str(cfg.get("experiment", "ablation"))
+    if experiment == "readout_comparison":
+        result = run_readout_comparison(cfg, dataset, run_dir)
+        (run_dir / "summary.json").write_text(
+            json.dumps(
+                {
+                    "status": "complete",
+                    "experiment": experiment,
+                    "configuration": result["configuration"],
+                    "best_qks_readout": result["best_qks_readout"],
+                    "direct_readouts": result["direct_readouts"],
+                    "qks_readouts": result["qks_readouts"],
+                },
+                indent=2,
+            ),
+            encoding="utf-8",
+        )
+        return
+    if experiment != "ablation":
+        raise ValueError(f"Unsupported RF-RQKS experiment: {experiment}")
     state = run_ablation(cfg, dataset, run_dir)
     summary = {
         "status": state["status"],

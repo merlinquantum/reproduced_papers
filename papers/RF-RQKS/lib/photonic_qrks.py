@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import math
+import os
+from pathlib import Path
 
 import merlin as ml
 import numpy as np
@@ -44,6 +46,10 @@ class PhotonicQRKS(nn.Module):
         V_strategy: str | None,
         data_size: int,
         v1_same_haar_dist: bool = False,
+        run_on_hardware: bool = False,
+        hardware: str = "sim:slos",
+        nsample: int = 5000,
+        forward_saves_directory: str | None = None,
     ) -> None:
         super().__init__()
         if m < 2:
@@ -63,6 +69,11 @@ class PhotonicQRKS(nn.Module):
         self.E = E
         self.L_strategy = L_strategy
         self.V_strategy = V_strategy
+        self.hardware = hardware
+        self.nsample = nsample
+        self.forward_saves_directory = forward_saves_directory
+        self.remote_processor = None
+        self.number_of_remote_forwards = 0
         self.compute_device = torch.device("cpu")
         self.layer_device = torch.device("cpu")
         self.haar_unitary = None
@@ -98,6 +109,9 @@ class PhotonicQRKS(nn.Module):
                 input_parameters=["x"],
             )
         self.layer = self.layer.to(self.layer_device)
+
+        if run_on_hardware:
+            self._enable_hardware()
 
         self.grouping = None
         if m >= 16:
@@ -141,10 +155,45 @@ class PhotonicQRKS(nn.Module):
         features = features.to(self.compute_device)
         phases = torch.einsum("bd,eid->bei", features, self.weights) + self.biases
         phases = phases.reshape(features.shape[0] * self.E, -1)
-        output = self.layer(phases.to(self.layer_device))
+        if self.remote_processor is None:
+            output = self.layer(phases.to(self.layer_device))
+        else:
+            outputs = []
+            remote_batch_size = 50
+            for start in range(0, phases.shape[0], remote_batch_size):
+                outputs.append(
+                    self.remote_processor.forward(
+                        self.layer.eval(),
+                        phases[start : start + remote_batch_size].to(self.layer_device),
+                        nsample=self.nsample,
+                        timeout=0,
+                    )
+                )
+            output = torch.cat(outputs, dim=0)
         if self.grouping is not None:
             output = self.grouping(output)
-        return output.to(self.compute_device).reshape(features.shape[0], -1)
+        output = output.to(self.compute_device).reshape(features.shape[0], -1)
+        if self.remote_processor is not None and self.forward_saves_directory is not None:
+            output_directory = Path(self.forward_saves_directory)
+            output_directory.mkdir(parents=True, exist_ok=True)
+            output_path = output_directory / (
+                f"result_m{self.m}_n{self.n}_E{self.E}_D{self.D}_"
+                f"L-{self.L_strategy}_V-{self.V_strategy}_"
+                f"num_{self.number_of_remote_forwards}.pt"
+            )
+            torch.save({"features": features.cpu(), "output": output.cpu()}, output_path)
+            self.number_of_remote_forwards += 1
+        return output
+
+    def _enable_hardware(self) -> None:
+        """Connect the sampler to the configured Quandela processor."""
+        token = os.environ["QUANDELA_API_TOKEN"]
+        from perceval.runtime import RemoteConfig
+
+        RemoteConfig.set_token(token)
+        remote_hardware = pcvl.RemoteProcessor(self.hardware)
+        self.remote_processor = ml.MerlinProcessor(remote_hardware)
+        self.layer.eval()
 
     def _build_circuit(self):
         """Build the configured encoding-entangling circuit.

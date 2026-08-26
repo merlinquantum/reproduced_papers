@@ -77,17 +77,24 @@ def build_sampler(
     encoding_strategy: str,
     entangling_strategy: str | None,
     same_haar: bool,
+    qubit_count: int | None = None,
+    run_on_hardware: bool = False,
+    hardware: str = "sim:slos",
+    nsample: int = 5000,
+    forward_saves_directory: str | None = None,
 ) -> nn.Module:
     """Construct the RQKS sampler.
 
     Parameters
     ----------
     sampler_name : str
-        ``dummy_rbf`` or ``photonic``.
-    photon_count : int
-        Number of photons.
-    mode_count : int
-        Number of optical modes.
+        ``dummy_rbf``, ``qiskit``, or ``photonic``.
+    photon_count : int | None
+        Number of photons for the photonic backend.
+    mode_count : int | None
+        Number of optical modes for the photonic backend.
+    qubit_count : int | None
+        Number of qubits for the Qiskit backend.
     depth : int
         Circuit depth.
     episode_count : int
@@ -100,6 +107,16 @@ def build_sampler(
         Photonic entangling layer name. If omitted, no entangler is used.
     same_haar : bool
         Whether V1 layers reuse a Haar unitary.
+    run_on_hardware : bool
+        Whether the photonic sampler should submit circuits to a remote
+        Perceval processor. Default value is False.
+    hardware : str
+        Perceval remote backend name. Default value is ``"sim:slos"``.
+    nsample : int
+        Number of samples requested for each remote circuit. Default value is
+        5000.
+    forward_saves_directory : str | None
+        Directory for cached remote forward results. Default value is None.
 
     Returns
     -------
@@ -142,5 +159,25 @@ def build_sampler(
             V_strategy=entangling_strategy,
             data_size=input_feature_count,
             v1_same_haar_dist=same_haar,
+            run_on_hardware=run_on_hardware,
+            hardware=hardware,
+            nsample=nsample,
+            forward_saves_directory=forward_saves_directory,
+        )
+    if sampler_name == "qiskit":
+        from .qiskit_qrks import QiskitQRKS
+
+        if run_on_hardware:
+            raise ValueError("The Qiskit sampler is simulator-only and does not support run_on_hardware")
+        if qubit_count is None:
+            raise ValueError("qubit_count is required for the Qiskit sampler")
+        return QiskitQRKS(
+            qubit_count=qubit_count,
+            depth=depth,
+            episode_count=episode_count,
+            L_strategy=encoding_strategy,
+            V_strategy=entangling_strategy,
+            data_size=input_feature_count,
+            same_random_layer=same_haar,
         )
     raise ValueError(f"Unsupported sampler: {sampler_name}")

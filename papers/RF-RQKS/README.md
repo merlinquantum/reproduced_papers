@@ -214,8 +214,7 @@ This representation contains 16,384 flattened coefficients per sample and requir
 
 ## Runnable ablation study
 
-The five-stage experiment protocol from the local `thales-qks` project is
-integrated with the repository runtime. It performs:
+The five-stage experiment protocol performs:
 
 1. a mode-count, episode-count, and entanglement sweep;
 2. a depth sweep over the Stage 1 shortlist;
@@ -267,8 +266,7 @@ to `representations/dct64x64_36_lte_1` and therefore uses 800 development rows
 and 210 test rows.
 
 The second command uses the photonic sampler and can be computationally
-expensive. First estimate runtime with `photonic_smoke_36_lte_1.json`. The
-unmodified Thales-QKS sweep grid is available as
+expensive. First estimate runtime with `photonic_smoke_36_lte_1.json`. The sweep grid is available as
 `configs/full_ablation.json`; it is substantially more expensive and
 does not turn this single LTE band into the paper's full multi-band dataset.
 
@@ -290,13 +288,12 @@ Every invocation creates `outdir/run_YYYYMMDD-HHMMSS/` containing
 `results.json`, `summary.json`, the resolved `config_snapshot.json`, and the
 ablation figures under `figures/`.
 
-The ablation figures use the same layouts as the original `thales-qks`
-protocol: Stage 1 entangling-on/off AUROC heatmaps, Stage 2 depth curves,
-Stage 3 matched-depth/episode grouped bars, Stage 4 photon-count AUROC/F1
-curves, and the Stage 5 direct-versus-photonic readout comparison. They are
+The ablation figures use the same layouts as the original protocol: Stage 1 entangling-on/off AUROC heatmaps, Stage 2 depth curves,
+Stage 3 matched-depth/episode grouped bars, Stage 4 count AUROC/F1 curves,
+and the Stage 5 direct-versus-quantum readout comparison. They are
 written as `stage_1_validation_auroc_*.png`,
 `stage_2_validation_auroc_depth.png`, `stage_3_validation_scores.png`,
-`stage_4_validation_scores_photons.png`, and
+`stage_4_validation_scores_photons.png` (photonic) or `stage_4.png` (Qiskit), and
 `stage_5_regression_functions.png`.
 
 ### Ablation figures
@@ -314,13 +311,60 @@ no-entangling Stage 1 figure is omitted.
 
 ![Stage 5 direct versus photonic readout comparison](assets/merlin/stage_5_regression_functions.png)
 
+The Qiskit gate-based results use the same available `36_LTE_1` representation
+and the qubit-count ablation configuration. The Stage 1 plots show both
+entangling-off and entangling-on sweeps; the remaining panels show the depth,
+matched depth/episode, qubit-count, and readout comparisons:
+
+![Qiskit Stage 1 validation AUROC without entangling](assets/qiskit/stage_1_validation_auroc_without_entangling.png)
+
+![Qiskit Stage 1 validation AUROC with entangling](assets/qiskit/stage_1_validation_auroc_with_entangling.png)
+
+![Qiskit Stage 2 validation AUROC by depth](assets/qiskit/stage_2_validation_auroc_depth.png)
+
+![Qiskit Stage 3 validation scores](assets/qiskit/stage_3_validation_scores.png)
+
+![Qiskit Stage 4 validation scores by qubit count](assets/qiskit/stage_4.png)
+
+![Qiskit Stage 5 direct versus Qiskit readout comparison](assets/qiskit/stage_5_regression_functions.png)
+
+In this Qiskit run, the direct readouts remain competitive with the Qiskit
+features on the held-out test split. The best Qiskit readout is the linear SVM;
+the approximate-kernel readout is close to chance-level performance in this
+small single-band reproduction. These results are not directly comparable to
+the paper's full WASD experiment because the available data covers one LTE
+band and substantially fewer independent captures.
+
 The standalone Figure 6 readout comparison is available with:
+
+![Figure 6 direct versus photonic readout comparison](assets/merlin/figure_6.png)
+
+![Figure 6 direct versus Qiskit readout comparison](assets/qiskit/figure_6.png)
 
 ```bash
 python implementation.py \
   --paper RF-RQKS \
   --config papers/RF-RQKS/configs/figure_6.json
 ```
+
+The same ablation and Figure 6 workflow is also available with the
+simulator-only Qiskit sampler. It uses Qiskit's exact statevector simulator and
+never requires a QPU or Quandela token:
+
+```bash
+python implementation.py \
+  --paper RF-RQKS \
+  --config papers/RF-RQKS/configs/gate_ablation_36_lte_1_lite.json
+
+python implementation.py \
+  --paper RF-RQKS \
+  --config papers/RF-RQKS/configs/gate_figure_6.json
+```
+
+The Qiskit sampler uses qubit count directly in the ablation sweep. L1/L2 are
+the encoding choices, V1/V2/V3 are the optional entangling choices, and each
+episode emits ``2**qubit_count`` computational-basis probability features. It
+does not support ``run_on_hardware``.
 
 It evaluates all four direct and QKS readouts for the fixed model in the
 config and writes `figures/figure_6.png`. The QPU variant uses the same

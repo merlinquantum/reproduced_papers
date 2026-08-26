@@ -54,15 +54,18 @@ class ModelConfiguration:
         Entangling strategy. If omitted, no entangler is used.
     same_haar : bool
         Whether V1 layers reuse the same Haar unitary.
+    qubit_count : int | None
+        Number of gate-model qubits. Set for the Qiskit backend.
     """
 
-    photon_count: int
-    mode_count: int
+    photon_count: int | None
+    mode_count: int | None
     depth: int
     episode_count: int
     encoding_strategy: str
     entangling_strategy: str | None
     same_haar: bool
+    qubit_count: int | None = None
 
     @property
     def nominal_output_feature_count(self) -> int:
@@ -73,6 +76,8 @@ class ModelConfiguration:
         int
             ``E * comb(m, n)``.
         """
+        if self.qubit_count is not None:
+            return self.episode_count * 2**self.qubit_count
         return self.episode_count * math.comb(self.mode_count, self.photon_count)
 
 
@@ -102,6 +107,14 @@ class RuntimeConfiguration:
         RBF gamma used during Stage 5.
     maximum_output_features : int
         Safety limit for a single sampler configuration.
+    run_on_hardware : bool
+        Whether photonic feature extraction uses a remote processor.
+    hardware : str
+        Perceval remote backend name.
+    nsample : int
+        Number of samples requested for each remote circuit.
+    forward_saves_directory : str | None
+        Directory for remote forward-result artifacts.
     """
 
     sampler: str
@@ -114,6 +127,10 @@ class RuntimeConfiguration:
     kernel_components: int
     kernel_gamma: float
     maximum_output_features: int
+    run_on_hardware: bool = False
+    hardware: str = "sim:slos"
+    nsample: int = 5000
+    forward_saves_directory: str | None = None
 
 
 def _configuration_seed(base_seed: int, configuration: ModelConfiguration) -> int:
@@ -155,12 +172,17 @@ def _build_model(
         sampler_name=runtime.sampler,
         photon_count=configuration.photon_count,
         mode_count=configuration.mode_count,
+        qubit_count=configuration.qubit_count,
         depth=configuration.depth,
         episode_count=configuration.episode_count,
         input_feature_count=input_feature_count,
         encoding_strategy=configuration.encoding_strategy,
         entangling_strategy=configuration.entangling_strategy,
         same_haar=configuration.same_haar,
+        run_on_hardware=runtime.run_on_hardware,
+        hardware=runtime.hardware,
+        nsample=runtime.nsample,
+        forward_saves_directory=runtime.forward_saves_directory,
     )
     return model.to(runtime.device)
 
@@ -238,8 +260,9 @@ def _run_configuration(
     state: dict[str, Any],
     run_dir: Path,
 ) -> dict[str, Any]:
-    print(f"  [{stage_name}] Testing config: m={configuration.mode_count}, "
-          f"n={configuration.photon_count}, D={configuration.depth}, "
+    count_label = (f"q={configuration.qubit_count}" if configuration.qubit_count is not None
+                   else f"m={configuration.mode_count}, n={configuration.photon_count}")
+    print(f"  [{stage_name}] Testing config: {count_label}, D={configuration.depth}, "
           f"E={configuration.episode_count}, ent={configuration.entangling_strategy}")
     result = {
         "configuration": asdict(configuration),
@@ -262,6 +285,7 @@ def _plot_stage_1_heatmap(
     mode_counts: list[int],
     episode_counts: list[int],
     output_path: Path,
+    count_key: str,
 ) -> None:
     score_grid = np.full((len(mode_counts), len(episode_counts)), np.nan)
     mode_indices = {value: index for index, value in enumerate(mode_counts)}
@@ -270,7 +294,7 @@ def _plot_stage_1_heatmap(
         configuration = result["configuration"]
         if (configuration["entangling_strategy"] is not None) != entangling_enabled:
             continue
-        mode_index = mode_indices.get(configuration["mode_count"])
+        mode_index = mode_indices.get(configuration[count_key])
         episode_index = episode_indices.get(configuration["episode_count"])
         if mode_index is not None and episode_index is not None:
             score_grid[mode_index, episode_index] = result["metrics"][
@@ -284,7 +308,7 @@ def _plot_stage_1_heatmap(
     axis.set_xticks(range(len(episode_counts)), episode_counts)
     axis.set_yticks(range(len(mode_counts)), mode_counts)
     axis.set_xlabel("Episodes (E)")
-    axis.set_ylabel("Modes / qubit count (m)")
+    axis.set_ylabel("Qubits" if count_key == "qubit_count" else "Modes (m)")
     label = "with entangling" if entangling_enabled else "without entangling"
     axis.set_title(f"Stage 1 validation AUROC {label}")
     for mode_index in range(len(mode_counts)):
@@ -381,11 +405,12 @@ def _plot_stage_3_bars(results: list[dict[str, Any]], output_path: Path) -> None
 
 
 def _plot_stage_4_lines(results: list[dict[str, Any]], output_path: Path) -> None:
+    count_key = "qubit_count" if results and results[0]["configuration"].get("qubit_count") is not None else "photon_count"
     ordered_results = sorted(
-        results, key=lambda result: result["configuration"]["photon_count"]
+        results, key=lambda result: result["configuration"][count_key]
     )
     photon_counts = [
-        result["configuration"]["photon_count"] for result in ordered_results
+        result["configuration"][count_key] for result in ordered_results
     ]
     figure, axis = plt.subplots(figsize=(8, 5), dpi=150)
     axis.plot(
@@ -404,7 +429,7 @@ def _plot_stage_4_lines(results: list[dict[str, Any]], output_path: Path) -> Non
         color="#ff7f0e",
         label="F1",
     )
-    axis.set_xlabel("Photon count (n)")
+    axis.set_xlabel("Qubit count" if count_key == "qubit_count" else "Photon count (n)")
     axis.set_ylabel("Validation score")
     axis.set_ylim(0.0, 1.0)
     axis.set_title("Stage 4 validation score by photon count")
@@ -423,7 +448,8 @@ def _plot_stage_5_readouts(result: dict[str, Any], output_path: Path) -> None:
     figure, axis = plt.subplots(figsize=(10, 4.8), dpi=150)
     bar_height = 0.35
     axis.barh(positions - bar_height / 2, direct_values, height=bar_height, color="#7f7f7f", label="Direct")
-    axis.barh(positions + bar_height / 2, qks_values, height=bar_height, color="#0e89e6", label="Photonic")
+    quantum_label = "Qiskit" if result.get("sampler") == "qiskit" else "Photonic"
+    axis.barh(positions + bar_height / 2, qks_values, height=bar_height, color="#0e89e6", label=quantum_label)
     axis.set_yticks(positions, readout_names)
     axis.set_xlim(0.0, 1.0)
     axis.set_xlabel("TEST AUROC")
@@ -546,7 +572,71 @@ def _run_stage_5(
             sampled,
             key=lambda name: (sampled[name]["test_auroc"], sampled[name]["test_f1"]),
         ),
+        "sampler": runtime.sampler,
     }
+
+
+def run_readout_comparison(
+    config: dict[str, Any], dataset: DatasetSplits, run_dir: Path
+) -> dict[str, Any]:
+    """Evaluate every direct and sampled readout for one fixed model.
+
+    Parameters
+    ----------
+    config : dict[str, Any]
+        Configuration containing one fixed ``model`` entry and runtime values.
+    dataset : DatasetSplits
+        Dataset used for development fitting and held-out evaluation.
+    run_dir : pathlib.Path
+        Timestamped output directory for results and figures.
+
+    Returns
+    -------
+    dict[str, Any]
+        Direct and QKS readout metrics for the configured model.
+    """
+    runtime = RuntimeConfiguration(
+        sampler=str(config["sampler"]),
+        device=str(config["device"]),
+        seed=int(config["seed"]),
+        batch_size=int(config["batch_size"]),
+        readout_c=float(config["readout_c"]),
+        readout_max_iter=int(config["readout_max_iter"]),
+        scale_sampled_features=bool(config["scale_sampled_features"]),
+        kernel_components=int(config["kernel_components"]),
+        kernel_gamma=float(config["kernel_gamma"]),
+        maximum_output_features=int(config["maximum_output_features"]),
+        run_on_hardware=bool(config.get("run_on_hardware", False)),
+        hardware=str(config.get("hardware", "sim:slos")),
+        nsample=int(config.get("nsample", 5000)),
+        forward_saves_directory=str(run_dir / "photonic_feature_batches")
+        if bool(config.get("run_on_hardware", False))
+        else None,
+    )
+    model_values = dict(config["model"])
+    configuration = ModelConfiguration(
+        photon_count=(int(model_values["photon_count"]) if "photon_count" in model_values else None),
+        mode_count=(int(model_values["mode_count"]) if "mode_count" in model_values else None),
+        depth=int(model_values["depth"]),
+        episode_count=int(model_values["episode_count"]),
+        encoding_strategy=str(model_values["encoding_strategy"]),
+        entangling_strategy=model_values["entangling_strategy"],
+        same_haar=bool(model_values["same_haar"]),
+        qubit_count=(int(model_values["qubit_count"]) if "qubit_count" in model_values else None),
+    )
+    result = _run_stage_5(
+        {
+            "configuration": asdict(configuration),
+        },
+        dataset,
+        runtime,
+    )
+    result["experiment"] = "readout_comparison"
+    figures_dir = run_dir / "figures"
+    figures_dir.mkdir(parents=True, exist_ok=True)
+    _plot_stage_5_readouts(result, figures_dir / "figure_6.png")
+    (run_dir / "results.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
+    return result
 
 
 def run_ablation(
@@ -568,6 +658,7 @@ def run_ablation(
     dict[str, Any]
         Complete ablation state.
     """
+    run_dir.mkdir(parents=True, exist_ok=True)
     print("\n" + "="*80)
     print("Starting RF-RQKS Five-Stage Ablation")
     print("="*80)
@@ -589,6 +680,12 @@ def run_ablation(
         kernel_components=int(config["kernel_components"]),
         kernel_gamma=float(config["kernel_gamma"]),
         maximum_output_features=int(config["maximum_output_features"]),
+        run_on_hardware=bool(config.get("run_on_hardware", False)),
+        hardware=str(config.get("hardware", "sim:slos")),
+        nsample=int(config.get("nsample", 5000)),
+        forward_saves_directory=str(run_dir / "photonic_feature_batches")
+        if bool(config.get("run_on_hardware", False))
+        else None,
     )
     state: dict[str, Any] = {
         "dataset": {
@@ -602,26 +699,29 @@ def run_ablation(
         "stages": {f"stage_{number}": {"results": []} for number in range(1, 6)},
     }
     encoding = str(config["encoding_strategy"])
+    is_qiskit = runtime.sampler == "qiskit"
     entangler = str(config["entangling_strategy"])
     same_haar = bool(config["same_haar"])
 
     # Stage 1: Sweep mode and episode counts
-    total_stage_1 = len(config["stage_1"]["mode_counts"]) * len(config["stage_1"]["episode_counts"]) * 2
+    count_key = "qubit_counts" if is_qiskit else "mode_counts"
+    total_stage_1 = len(config["stage_1"][count_key]) * len(config["stage_1"]["episode_counts"]) * 2
     print(f"[Stage 1] Starting - will test {total_stage_1} configurations")
     stage_1_count = 0
-    for mode_count in config["stage_1"]["mode_counts"]:
+    for count in config["stage_1"][count_key]:
         for episode_count in config["stage_1"]["episode_counts"]:
             for entangling_strategy in (None, entangler):
                 _run_configuration(
                     "stage_1",
                     ModelConfiguration(
-                        photon_count=int(mode_count) // 2,
-                        mode_count=int(mode_count),
+                        photon_count=None if is_qiskit else int(count) // 2,
+                        mode_count=None if is_qiskit else int(count),
                         depth=int(config["initial_depth"]),
                         episode_count=int(episode_count),
                         encoding_strategy=encoding,
                         entangling_strategy=entangling_strategy,
                         same_haar=same_haar,
+                        qubit_count=int(count) if is_qiskit else None,
                     ),
                     dataset,
                     runtime,
@@ -678,19 +778,27 @@ def run_ablation(
     best_stage_3 = _best(state["stages"]["stage_3"]["results"])[0]
     base = _configuration_from_result(best_stage_3)
 
-    print(f"[Stage 4] Starting - will test {base.mode_count // 2} photon counts (1 to {base.mode_count // 2})")
+    stage_4_counts = (config.get("stage_4", {}).get("qubit_counts")
+                      if is_qiskit else None)
+    if is_qiskit:
+        stage_4_counts = stage_4_counts or list(range(1, base.qubit_count + 1))
+    else:
+        stage_4_counts = list(range(1, base.mode_count // 2 + 1))
+    print(f"[Stage 4] Starting - will test {len(stage_4_counts)} {'qubit' if is_qiskit else 'photon'} counts")
     stage_4_count = 0
-    for photon_count in range(1, base.mode_count // 2 + 1):
+    for count in stage_4_counts:
         _run_configuration(
             "stage_4",
-            ModelConfiguration(**{**asdict(base), "photon_count": photon_count}),
+            ModelConfiguration(**{**asdict(base),
+                                  "photon_count": None if is_qiskit else int(count),
+                                  "qubit_count": int(count) if is_qiskit else None}),
             dataset,
             runtime,
             state,
             run_dir,
         )
         stage_4_count += 1
-        print(f"[Stage 4] Completed {stage_4_count}/{base.mode_count // 2} photon counts")
+        print(f"[Stage 4] Completed {stage_4_count}/{len(stage_4_counts)} counts")
     print(f"[Stage 4] Complete! Selecting best configuration...\n")
     best_stage_4 = _best(state["stages"]["stage_4"]["results"])[0]
     
@@ -705,8 +813,9 @@ def run_ablation(
     figures_dir = run_dir / "figures"
     figures_dir.mkdir(exist_ok=True)
     stage_1_results = state["stages"]["stage_1"]["results"]
+    plot_count_key = "qubit_count" if is_qiskit else "mode_count"
     mode_counts = sorted(
-        {result["configuration"]["mode_count"] for result in stage_1_results}
+        {result["configuration"][plot_count_key] for result in stage_1_results}
     )
     episode_counts = sorted(
         {result["configuration"]["episode_count"] for result in stage_1_results}
@@ -717,6 +826,7 @@ def run_ablation(
         mode_counts=mode_counts,
         episode_counts=episode_counts,
         output_path=figures_dir / "stage_1_validation_auroc_without_entangling.png",
+        count_key=plot_count_key,
     )
     _plot_stage_1_heatmap(
         stage_1_results,
@@ -724,6 +834,7 @@ def run_ablation(
         mode_counts=mode_counts,
         episode_counts=episode_counts,
         output_path=figures_dir / "stage_1_validation_auroc_with_entangling.png",
+        count_key=plot_count_key,
     )
     _plot_stage_2_curves(
         state["stages"]["stage_2"]["results"],

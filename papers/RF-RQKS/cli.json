@@ -12,7 +12,7 @@
       "flags": ["--sampler"],
       "help": "Feature sampler backend",
       "type": "str",
-      "choices": ["dummy_rbf", "photonic"],
+      "choices": ["dummy_rbf", "qiskit", "photonic"],
       "default": null,
       "apply": {"kind": "config_path", "path": "sampler"}
     },
