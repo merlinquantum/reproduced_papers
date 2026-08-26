@@ -28,9 +28,7 @@ def resolve_dataset_path(cfg: dict[str, Any]) -> Path:
 
     explicit_root = dataset_cfg.get("root")
     if explicit_root:
-        candidate = Path(explicit_root) / filename
-        if candidate.exists():
-            return candidate
+        return Path(explicit_root).expanduser() / filename
 
     data_dir = paper_data_dir(PAPER_NAME, data_root=cfg.get("data_root"))
     return data_dir / filename

@@ -27,8 +27,17 @@ def _resolve_checkpoint_path(cfg: dict[str, Any]) -> Path | None:
     checkpoint_name = cfg.get("model", {}).get("checkpoint")
     if not checkpoint_name:
         return None
-    path = Path("models") / checkpoint_name
-    return path if path.exists() else None
+
+    checkpoint_path = Path(checkpoint_name).expanduser()
+    candidates = (
+        [checkpoint_path]
+        if checkpoint_path.is_absolute()
+        else [checkpoint_path, Path("models") / checkpoint_path]
+    )
+    for path in candidates:
+        if path.exists():
+            return path
+    return None
 
 
 def _load_checkpoint(
@@ -127,8 +136,9 @@ def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
 
     model.eval()
     with torch.no_grad():
-        mse = torch.mean((model(features_tensor) - targets_tensor) ** 2)
-        psi_pred_flat = model(features_tensor).detach().cpu().numpy()
+        predictions = model(features_tensor)
+        mse = torch.mean((predictions - targets_tensor) ** 2)
+        psi_pred_flat = predictions.detach().cpu().numpy()
 
     psi_pred_training = psi_pred_flat.reshape(psi_qcl_training.shape)
     figures_of_merit = compute_figures_of_merit(psi_pred_training, psi_qcl_training)
@@ -137,7 +147,7 @@ def train_and_evaluate(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
     logger.info("Median MRE percent: %.3f", figures_of_merit["median_mre_percent"])
     logger.info("Median PPMCC: %.3f", figures_of_merit["median_ppmcc"])
 
-    np.savez(
+    np.savez_compressed(
         run_dir / "exp1_merlin_results.npz",
         psi_pred_training=psi_pred_training,
         psi_qcl_training=psi_qcl_training,

@@ -1,13 +1,15 @@
-"""Tests for notebook fixes in PR #99 — run from reproduced_papers repo root."""
+"""Regression tests for the BVE-QNN notebook review fixes."""
 
 import json
-import os
+import subprocess
+from pathlib import Path
 
-NOTEBOOK = os.path.join("papers", "bve_qnn", "notebook.ipynb")
+REPO_ROOT = Path(__file__).resolve().parent
+NOTEBOOK = REPO_ROOT / "papers" / "bve_qnn" / "notebook.ipynb"
 
 
 def _load_notebook():
-    with open(NOTEBOOK, encoding="utf-8") as f:
+    with NOTEBOOK.open(encoding="utf-8") as f:
         return json.load(f)
 
 
@@ -19,7 +21,7 @@ def _cell_source(cell):
 
 
 def test_notebook_exists():
-    assert os.path.isfile(NOTEBOOK)
+    assert NOTEBOOK.is_file()
 
 
 def test_notebook_has_h1_title():
@@ -56,11 +58,14 @@ def test_notebook_no_pip_noise():
 
 def test_notebook_no_qnn_rebound():
     nb = _load_notebook()
+    found_quantum_layer_cell = False
     for cell in nb["cells"]:
         src = _cell_source(cell)
         if "spec_mappings" in src and "quantum_layer" in src:
+            found_quantum_layer_cell = True
             assert "qnn_check" in src
             break
+    assert found_quantum_layer_cell, "Expected quantum_layer/spec_mappings cell missing"
 
 
 def test_notebook_no_leaked_filename():
@@ -96,8 +101,8 @@ def test_notebook_weather_pde_has_period():
 
 
 def test_requirements_no_transitive_deps():
-    req_path = os.path.join("papers", "bve_qnn", "requirements.txt")
-    with open(req_path, encoding="utf-8") as f:
+    req_path = REPO_ROOT / "papers" / "bve_qnn" / "requirements.txt"
+    with req_path.open(encoding="utf-8") as f:
         lines = [
             ln.strip() for ln in f if ln.strip() and not ln.strip().startswith("#")
         ]
@@ -110,8 +115,8 @@ def test_requirements_no_transitive_deps():
 
 
 def test_readme_no_broken_latex():
-    readme = os.path.join("papers", "bve_qnn", "README.md")
-    with open(readme, encoding="utf-8") as f:
+    readme = REPO_ROOT / "papers" / "bve_qnn" / "README.md"
+    with readme.open(encoding="utf-8") as f:
         text = f.read()
     assert "\\(" not in text and "\\)" not in text, (
         r"LaTeX \(...\) syntax does not render on GitHub — use $...$ instead"
@@ -119,36 +124,53 @@ def test_readme_no_broken_latex():
 
 
 def test_neutral_atom_notebooks_exist():
-    na_dir = os.path.join("papers", "bve_qnn", "notebooks", "neutral_atom")
-    assert os.path.isfile(os.path.join(na_dir, "quantum_bve_step_by_step.ipynb")), (
+    na_dir = REPO_ROOT / "papers" / "bve_qnn" / "notebooks" / "neutral_atom"
+    assert (na_dir / "quantum_bve_step_by_step.ipynb").is_file(), (
         "Dataset generation notebook missing"
     )
-    assert os.path.isfile(os.path.join(na_dir, "running_exp1.ipynb")), (
+    assert (na_dir / "running_exp1.ipynb").is_file(), (
         "Neutral-atom training notebook missing"
     )
 
 
 def test_neutral_atom_config_exists():
-    cfg = os.path.join("papers", "bve_qnn", "configs", "neutral-atom.json")
-    assert os.path.isfile(cfg), "configs/neutral-atom.json missing"
-    with open(cfg, encoding="utf-8") as f:
+    cfg = REPO_ROOT / "papers" / "bve_qnn" / "configs" / "neutral-atom.json"
+    assert cfg.is_file(), "configs/neutral-atom.json missing"
+    with cfg.open(encoding="utf-8") as f:
         data = json.load(f)
     assert data["model"]["name"] == "neutral_atom_qadence"
 
 
 def test_generate_dataset_script_exists():
-    script = os.path.join("papers", "bve_qnn", "utils", "generate_dataset.py")
-    assert os.path.isfile(script), "utils/generate_dataset.py missing"
+    script = REPO_ROOT / "papers" / "bve_qnn" / "utils" / "generate_dataset.py"
+    assert script.is_file(), "utils/generate_dataset.py missing"
 
 
 def test_no_cursor_coauthor_in_commits():
-    import subprocess
+    base_ref = "upstream/main"
+    if (
+        subprocess.run(
+            ["git", "rev-parse", "--verify", "--quiet", base_ref],
+            cwd=REPO_ROOT,
+        ).returncode
+        != 0
+    ):
+        base_ref = "origin/main"
+
+    merge_base = subprocess.run(
+        ["git", "merge-base", base_ref, "HEAD"],
+        capture_output=True,
+        check=True,
+        text=True,
+        cwd=REPO_ROOT,
+    ).stdout.strip()
 
     result = subprocess.run(
-        ["git", "log", "--format=%B", "origin/main..HEAD"],
+        ["git", "log", "--format=%B", f"{merge_base}..HEAD"],
         capture_output=True,
+        check=True,
         text=True,
-        cwd=os.path.dirname(os.path.abspath(__file__)),
+        cwd=REPO_ROOT,
     )
     assert "Co-authored-by: Cursor" not in result.stdout
 

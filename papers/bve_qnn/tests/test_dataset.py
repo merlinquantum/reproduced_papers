@@ -35,3 +35,14 @@ def test_defaults_config_points_at_subset():
     assert path.name == DEFAULT_DATASET_FILENAME
     loaded = load_dataset(cfg)
     assert loaded["features_tensor"].shape[0] == int(np.prod(loaded["psi_shape"]))
+
+
+def test_explicit_dataset_root_is_not_silently_ignored(tmp_path):
+    from lib.data import DEFAULT_DATASET_FILENAME, resolve_dataset_path
+
+    cfg = {
+        "dataset": {"root": str(tmp_path), "filename": DEFAULT_DATASET_FILENAME},
+        "data_root": str(REPO_ROOT / "data"),
+    }
+
+    assert resolve_dataset_path(cfg) == tmp_path / DEFAULT_DATASET_FILENAME

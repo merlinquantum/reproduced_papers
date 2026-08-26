@@ -39,7 +39,14 @@ def plot_mollweide(
             "or pass --data pointing at the SEM dataset."
         )
 
-    target_index = np.where(training_hours == target_hour)[0][0]
+    matching_indices = np.where(training_hours == target_hour)[0]
+    if len(matching_indices) == 0:
+        available_hours = ", ".join(str(int(hour)) for hour in training_hours)
+        raise ValueError(
+            f"Hour {target_hour} is not available in {results_path}. "
+            f"Available hours: {available_hours}."
+        )
+    target_index = matching_indices[0]
     psi_sem_t = psi_qcl_training[target_index]
     psi_qnn_t = psi_pred_training[target_index]
 
