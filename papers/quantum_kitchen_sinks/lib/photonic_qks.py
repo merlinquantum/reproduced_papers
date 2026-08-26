@@ -153,6 +153,41 @@ class PhotonicQKSFeaturizer:
         self._layer_seeds = [seed + 1000 * (e + 1) for e in range(self.n_episodes)]
         return self
 
+    def _build_outcome_table(self) -> np.ndarray:
+        """Map a measurement outcome index to the detector click pattern.
+
+        The table must match the basis MerLin reports probabilities in, which
+        depends on the computation space:
+
+        - ``UNBUNCHED``: ``C(n_modes, n_photons)`` outcomes, enumerated as
+          lexicographic combinations of occupied modes.
+        - ``DUAL_RAIL``: ``2 ** (n_modes // 2)`` outcomes; outcome ``i`` is the
+          binary word with logical qubit 0 as the most significant bit, and
+          qubit ``j`` places its photon in mode ``2 * j + bit_j``.
+
+        Getting this wrong does not raise on its own: it silently relabels
+        outcomes onto the wrong click patterns, which a *linear* classifier
+        cannot undo.  ``_sample_outcomes`` therefore also checks the row count
+        against the measured distribution.
+        """
+        if self.computation_space is ml.ComputationSpace.DUAL_RAIL:
+            n_logical = self.n_modes // 2
+            table = np.zeros((2**n_logical, self.n_modes), dtype=np.int8)
+            for index in range(2**n_logical):
+                for qubit in range(n_logical):
+                    bit = (index >> (n_logical - 1 - qubit)) & 1
+                    table[index, 2 * qubit + bit] = 1
+            return table
+
+        from itertools import combinations
+
+        outcomes = list(combinations(range(self.n_modes), self.n_photons))
+        table = np.zeros((len(outcomes), self.n_modes), dtype=np.int8)
+        for i, combo in enumerate(outcomes):
+            for m in combo:
+                table[i, m] = 1
+        return table
+
     def _sample_outcomes(
         self, probs: torch.Tensor, rng: np.random.Generator
     ) -> np.ndarray:
@@ -164,13 +199,13 @@ class PhotonicQKSFeaturizer:
         u = rng.uniform(size=(n, 1))
         outcome_indices = (u > cum).sum(axis=1)
         if not hasattr(self, "_outcome_table"):
-            from itertools import combinations
-
-            outcomes = list(combinations(range(self.n_modes), self.n_photons))
-            self._outcome_table = np.zeros((len(outcomes), self.n_modes), dtype=np.int8)
-            for i, combo in enumerate(outcomes):
-                for m in combo:
-                    self._outcome_table[i, m] = 1
+            self._outcome_table = self._build_outcome_table()
+        if self._outcome_table.shape[0] != probs_np.shape[1]:
+            raise RuntimeError(
+                f"outcome table has {self._outcome_table.shape[0]} rows but the "
+                f"{self.computation_space.value} measurement returned "
+                f"{probs_np.shape[1]} outcomes"
+            )
         return self._outcome_table[outcome_indices]
 
     def transform(self, X: np.ndarray, seed: int = 0) -> np.ndarray:

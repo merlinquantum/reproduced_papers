@@ -103,3 +103,43 @@ def test_encoding_split_and_tile():
         assert (nonzeros_per_row == 2).all()
         assert ep.omega.shape == (4, 8)
         assert ep.beta.shape == (4,)
+
+
+def test_dual_rail_outcome_table_matches_the_measured_basis():
+    """The outcome->click-pattern table must match the computation space.
+
+    DUAL_RAIL reports 2**(m/2) outcomes, not C(m, k). Indexing a C(m, k) table
+    with dual-rail outcome indices does not raise -- it silently maps outcomes
+    onto unrelated click patterns and leaves mode 0 permanently occupied, i.e.
+    a constant (dead) feature that a linear classifier cannot recover from.
+    """
+    import merlin as ml
+    from lib.photonic_qks import PhotonicQKSFeaturizer
+
+    dual = PhotonicQKSFeaturizer(
+        n_modes=6,
+        n_photons=3,
+        n_episodes=1,
+        sigma=0.05,
+        encoding="tile",
+        computation_space=ml.ComputationSpace.DUAL_RAIL,
+    )
+    table = dual._build_outcome_table()
+    assert table.shape == (8, 6), "dual rail has 2**(m/2) outcomes"
+    assert (table.sum(axis=1) == 3).all(), "one photon per logical qubit"
+    for pair in range(3):
+        assert (table[:, 2 * pair] + table[:, 2 * pair + 1] == 1).all(), (
+            "exactly one rail of each pair is occupied"
+        )
+    assert len({row.tobytes() for row in table}) == 8, "outcomes must be distinct"
+    assert table.var(axis=0).min() > 0, "no constant (dead) feature column"
+
+    unbunched = PhotonicQKSFeaturizer(
+        n_modes=4,
+        n_photons=2,
+        n_episodes=1,
+        sigma=0.05,
+        encoding="tile",
+        computation_space=ml.ComputationSpace.UNBUNCHED,
+    )
+    assert unbunched._build_outcome_table().shape == (6, 4), "C(4, 2) outcomes"
