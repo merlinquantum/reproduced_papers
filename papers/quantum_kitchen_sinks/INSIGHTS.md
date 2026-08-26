@@ -6,11 +6,18 @@ Distilled, durable notes worth keeping after the reproduction.
 
 - The Quil snippets in the appendix use **`RX`** rotations, not `RY`.  We
   initially wrote the simulator with `RY` and got correct shapes but
-  ill-tuned σ.  Switching to `RX` does not change the probabilities for the
-  CZ ansatz (since CZ is diagonal) but matters for the CNOT case.
+  ill-tuned σ.  `RX` and `RY` give identical single-qubit measurement
+  probabilities (they differ only by a phase on the ``|1>`` component), so the
+  symptom is a mis-scaled σ rather than an obvious failure — but the phase does
+  matter once an entangler acts on the state.
 - A 4-qubit Quil snippet `cnot4` (Fig. 6) reads in the order ``CNOT 0 2; CNOT
   1 3; CNOT 0 1; CNOT 2 3``.  Be careful with multiplication order when
-  composing CNOT matrices.
+  composing CNOT matrices.  Fig. 2(c) appears to draw the two pairs in the
+  opposite order, and they do not commute; the appendix Quil is the authority
+  we follow.
+- **Gate order is the whole story for Fig. 2(b).**  Its CZ comes *before* the
+  encoding rotations; putting it after makes it a no-op.  See the CZ section
+  below.
 
 ## Sigma scaling with qubit count
 
@@ -28,21 +35,44 @@ amplify σ.  For (3,5)-MNIST we found:
 **Heuristic.** When increasing ``q`` for the tile encoding, scale σ so that
 ``σ · sqrt(r)`` stays roughly constant.
 
-## CZ ansatz "no discrimination" claim
+## CZ ansatz "no discrimination" claim — reproduced, and why it is easy to miss
 
-The paper claims the CZ ansatz (Fig. 2b) "leads to classifiers that are no
-better than random" because its **implicit kernel is the constant 1/2**.  Our
-finite-``E`` reproduction sees this is misleading: at ``E = 5000`` the CZ
-ansatz still achieves ~98.5% test accuracy on picture frames.  The argument
-that "constant implicit kernel ⇒ no discrimination" is an *asymptotic*
-statement about the average over Ω draws; for any finite Ω budget the
-per-episode features remain non-trivial single-coordinate non-linear
-functions of ``u_i``.  For datasets whose decision boundary is expressible as
-``f(|u_0|, |u_1|)`` with a separable ``f`` (as in picture frames: ``max(|u_0|,
-|u_1|) ≈ r``), the CZ ansatz is **not** uninformative in practice.
+The paper states that the Fig. 2(b) ansatz has implicit kernel ``k(u,v) = 1/2``
+and "leads to classifiers that are no better than random".  We reproduce this:
+across a 3 x 3 ``(sigma, E)`` sweep on picture frames, 27 runs, test accuracy is
+**48.51 ± 2.26%** — chance.
 
-Test a "harder" 2-D dataset (e.g., XOR-on-rings) if you want to actually
-demonstrate the CZ failure mode.
+The mechanism is entirely in the **gate order**, which the figure shows and the
+running text does not spell out:
+
+    Fig. 2(a):  |0> -- RX(theta_i) -- CNOT -- measure
+    Fig. 2(b):  |0> -- H -- CZ -- RX(theta_i) -- measure
+
+In (b) the CZ acts *first*, on ``|++>``.  ``CZ|++>`` is maximally entangled, so
+each qubit's reduced state is maximally mixed; the subsequent ``RX(theta_i)`` is
+a local rotation of a maximally mixed state and cannot make any single-qubit
+marginal depend on ``theta``.  Every feature bit is an exactly fair coin, hence
+``k(u,v) = 1/2``.
+
+Three things worth keeping:
+
+1. **The input dependence is not destroyed, it is made unreachable.**  The
+   *joint* two-bit distribution still depends on ``theta``; only the marginals
+   are flat.  Because the QKS feature vector is the raw bits and the classifier
+   on top is linear (the paper's Linear Baseline rule), nothing downstream can
+   use that correlation.  A non-linear classifier on the same features would
+   not be chance-level — which is exactly why the LB rule is load-bearing.
+2. **Writing the ansatz as ``RX`` then ``CZ`` silently breaks the experiment.**
+   A CZ is diagonal, so applied *after* the rotations it cannot change Z-basis
+   marginals at all: the circuit collapses to two independent one-qubit QKS
+   circuits and scores ~98.5% on picture frames.  That looks like a refutation
+   of the paper and is really a transcription bug.  ``tests/test_kernel.py``
+   pins both orderings against the paper's closed-form kernels so it cannot
+   regress.
+3. **Train accuracy hides it.**  At ``E = 5000`` with 1600 training points the
+   logistic regression fits the random features to ~99% train accuracy while
+   test stays at chance.  A train-only check would have missed the effect
+   entirely.
 
 ## Linear baseline matters
 

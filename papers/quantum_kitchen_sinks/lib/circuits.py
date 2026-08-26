@@ -144,22 +144,52 @@ def _build_entangler(name: str, n_qubits: int) -> np.ndarray:
     raise ValueError(f"Unknown ansatz: {name}")
 
 
-def make_ansatz(
-    name: str, n_qubits: int
-) -> Callable[[np.ndarray, int, np.random.Generator], np.ndarray]:
-    """Return a function ``f(theta_batch, n_layers, rng) -> (n_samples, n_qubits) bits``.
+def _hadamard_layer(n_qubits: int) -> np.ndarray:
+    """H on every qubit."""
+    h = np.array([[1.0, 1.0], [1.0, -1.0]], dtype=np.complex128) / np.sqrt(2.0)
+    U = np.array([[1.0]], dtype=np.complex128)
+    for _ in range(n_qubits):
+        U = np.kron(U, h)
+    return U
 
-    ``theta_batch`` has shape ``(n_samples, n_qubits)`` if ``n_layers == 1``,
-    otherwise ``(n_samples, n_layers, n_qubits)``.  Each layer is a new
-    ``RX(theta)`` immediately followed by the same fixed entangling unitary.
-    Initial state is ``|0...0>``; measurement is in the computational basis.
+
+def entangler_precedes_rotations(name: str) -> bool:
+    """Whether the entangling layer comes *before* the RX layer.
+
+    Fig. 2(b) of arXiv:1806.08321 is drawn as ``H, H | CZ | RX(theta_0),
+    RX(theta_1) | measure`` -- the CZ acts on ``|++>`` and the data-dependent
+    rotations come afterwards.  This ordering is what makes the ansatz
+    non-discriminating: ``CZ|++>`` is maximally entangled, so each qubit's
+    reduced state is maximally mixed and no subsequent single-qubit rotation
+    can reintroduce any dependence on the input.  Fig. 2(a) and Fig. 2(c) use
+    the opposite order (rotations first, then the CNOT network).
+    """
+    return name == "cz2"
+
+
+def _prep_layer(name: str, n_qubits: int) -> np.ndarray | None:
+    """State-preparation layer applied once to ``|0...0>`` before everything."""
+    if name == "cz2":
+        return _hadamard_layer(n_qubits)
+    return None
+
+
+def make_ansatz_probs(
+    name: str, n_qubits: int
+) -> Callable[[np.ndarray, int], np.ndarray]:
+    """Return ``f(theta_batch, n_layers) -> (n_samples, 2**n_qubits)`` probabilities.
+
+    This is the noiseless, shot-free output distribution of the ansatz.  It is
+    the quantity the paper's implicit-kernel derivation is written in terms of,
+    so exposing it lets us check the simulator against the closed form in
+    ``tests/test_kernel.py`` without going through single-shot sampling.
     """
     entangler = _build_entangler(name, n_qubits)
+    prep = _prep_layer(name, n_qubits)
+    ent_first = entangler_precedes_rotations(name)
     dim = 2**n_qubits
 
-    def run(
-        theta_batch: np.ndarray, n_layers: int, rng: np.random.Generator
-    ) -> np.ndarray:
+    def probs_of(theta_batch: np.ndarray, n_layers: int) -> np.ndarray:
         if n_layers == 1 and theta_batch.ndim == 2:
             theta_layers = theta_batch[:, None, :]
         else:
@@ -167,13 +197,51 @@ def make_ansatz(
         n_samples = theta_layers.shape[0]
         psi = np.zeros((n_samples, dim), dtype=np.complex128)
         psi[:, 0] = 1.0
+        if prep is not None:
+            psi = psi @ prep.T
         for layer in range(n_layers):
             angles = theta_layers[:, layer, :]
-            psi = _apply_rx_layer_vec(psi, angles, n_qubits)
-            if n_qubits >= 2:
-                psi = psi @ entangler.T
-        probs = (psi * np.conj(psi)).real
-        return _measure_bitstring(probs, n_qubits, rng)
+            if ent_first:
+                if n_qubits >= 2:
+                    psi = psi @ entangler.T
+                psi = _apply_rx_layer_vec(psi, angles, n_qubits)
+            else:
+                psi = _apply_rx_layer_vec(psi, angles, n_qubits)
+                if n_qubits >= 2:
+                    psi = psi @ entangler.T
+        return (psi * np.conj(psi)).real
+
+    return probs_of
+
+
+def qubit_marginals(probs: np.ndarray, n_qubits: int) -> np.ndarray:
+    """``P(bit_q = 1)`` for each qubit, from a batch of outcome distributions."""
+    idx = np.arange(probs.shape[1])
+    out = np.empty((probs.shape[0], n_qubits), dtype=np.float64)
+    for q in range(n_qubits):
+        mask = (idx >> (n_qubits - 1 - q)) & 1
+        out[:, q] = probs[:, mask == 1].sum(axis=1)
+    return out
+
+
+def make_ansatz(
+    name: str, n_qubits: int
+) -> Callable[[np.ndarray, int, np.random.Generator], np.ndarray]:
+    """Return a function ``f(theta_batch, n_layers, rng) -> (n_samples, n_qubits) bits``.
+
+    ``theta_batch`` has shape ``(n_samples, n_qubits)`` if ``n_layers == 1``,
+    otherwise ``(n_samples, n_layers, n_qubits)``.  Initial state is
+    ``|0...0>`` and measurement is in the computational basis.  Gate order
+    follows Fig. 2 of the paper: the CNOT ansätze apply ``RX(theta)`` then the
+    entangling network, while ``cz2`` prepares ``|++>``, applies the CZ, and
+    only then applies ``RX(theta)`` (see ``entangler_precedes_rotations``).
+    """
+    probs_of = make_ansatz_probs(name, n_qubits)
+
+    def run(
+        theta_batch: np.ndarray, n_layers: int, rng: np.random.Generator
+    ) -> np.ndarray:
+        return _measure_bitstring(probs_of(theta_batch, n_layers), n_qubits, rng)
 
     return run
 

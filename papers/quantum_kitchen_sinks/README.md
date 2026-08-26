@@ -28,9 +28,15 @@ The paper demonstrates:
 - **Picture frames** (synthetic 2-D classification, Fig. 3): logistic
   regression alone gets ≈ 50% accuracy; QKS with a 2-qubit CNOT ansatz
   achieves > 99.9% test accuracy at the optimal ``σ ≈ 1``.
-- **(3,5)-MNIST subset** (Fig. 5): logistic regression baseline 95.9%
-  (4.1% error); QKS reduces the error to 1.4% (best, at the 4-qubit ansatz).
-- Real Rigetti QPU results on 1- and 2-qubit circuits.
+- **(3,5)-MNIST subset** (Fig. 5, *simulated on the Rigetti QVM*): logistic
+  regression baseline 4.1% error; QKS reduces this to **1.4%**.  Fig. 5 plots,
+  per qubit count, "the minimum error rate ... after optimizing the
+  hyperparameters σ and E"; the paper states "the maximum number of episodes
+  used was 20,000".  1.4% is the best point of that curve.
+- **Rigetti QPU results** (*noisy hardware*, full-sized MNIST images), reported
+  separately from Fig. 5: "for a one qubit circuit with σ=0.05 and E=10,000, we
+  find an error rate of 3.3%" and "the two qubit CNOT circuit ... with σ=0.05
+  and E=8,900 ... an error rate of 3.7%".
 
 ## Related reproductions in this repository
 
@@ -73,16 +79,16 @@ Deviations and notes:
 
 ```text
 papers/quantum_kitchen_sinks/
-|-- README.md, LOG.md, INSIGHTS.md, FEEDBACK.md, CONFLUENCE.md, VISITED_URLS.md
-|-- cli.json, requirements.txt
-|-- configs/                       # 11 named experiment configs
+|-- README.md, INSIGHTS.md
+|-- cli.json, requirements.txt, notebook.ipynb
+|-- configs/                       # 22 experiment configs (incl. baselines and sweeps)
 |-- lib/
 |   |-- data.py, encoding.py, circuits.py, qks_model.py
 |   |-- photonic_qks.py            # MerLin photonic adaptation
 |   |-- classifiers.py, runner.py
-|-- tests/                         # 6 unit + smoke tests
-|-- utils/                         # plotting scripts
-|-- outdir/                        # timestamped run artifacts
+|-- tests/                         # 15 unit, kernel and smoke tests
+|-- utils/                         # 3 plotting scripts
+|-- outdir/                        # timestamped run artifacts (git-ignored)
 `-- results/                       # curated figures
 ```
 
@@ -128,7 +134,8 @@ schema):
 | Flag | Default | Meaning |
 |------|---------|---------|
 | ``--circuit`` | ``cnot2`` | One of ``cnot1``, ``cnot2``, ``cz2``, ``cnot4``, ``cnot8`` |
-| ``--n-qubits`` | 2 | Number of qubits |
+| ``--n-qubits`` | 2 | Number of qubits ``q`` |
+| ``--encoding`` | ``split`` | ``split`` (``q = p``, one input dim per gate parameter) or ``tile`` (``q`` contiguous tiles, fan-in ``r = p/q``).  ``tile`` is what the paper uses for MNIST; note that σ must be rescaled with ``r`` — see `INSIGHTS.md` |
 | ``--n-episodes`` | 100 | ``E``: number of independent random circuits |
 | ``--sigma`` | 1.0 | Std-dev of the encoding distribution ``N(0, σ²)`` |
 | ``--shots-per-episode`` | 1 | Single-shot per episode matches the paper |
@@ -141,8 +148,16 @@ schema):
 
 - **Picture frames** — generated synthetically.  Two square frames at
   ``inner_radius = 0.4`` and ``outer_radius = 0.7`` with light Gaussian noise.
+  We use the paper's split verbatim: "the training set contained M=1600
+  two-dimensional points, 800 for each class ... tested using a different set
+  of 400 points".  Note that 400 test points quantise the error rate at 0.25%,
+  so the paper's "< 0.1%" headline is at or below the resolution of a single
+  test set; our best runs make 0 errors on 400 points × 3 seeds.
 - **(3,5)-MNIST** — downloaded via torchvision into
-  ``data/quantum_kitchen_sinks/MNIST_raw_cache/``.
+  ``data/quantum_kitchen_sinks/MNIST_raw_cache/``.  We use a 4 000-train /
+  1 000-test subset (the paper uses the full (3,5) subset).
+
+![Picture-frames dataset](results/picture_frames_dataset.png)
 
 ## Results Obtained and Comparison with the Paper
 
@@ -154,24 +169,60 @@ All numbers below are mean ± std over 3 seeds where noted.
 |--------|------------:|-----------------:|------:|-------|
 | LR baseline (no QKS) | ≈ 50% | 49.25% | 3 | paper-accurate |
 | QKS-CNOT2 (best σ, E) | > 99.9% | **100.0 ± 0.0%** (σ=4, E=500) | 3 | paper-accurate |
-| QKS-CNOT2 (σ=1, E=5000) | > 99.9% | 99.17 ± 0.12% | 3 | paper-accurate |
-| QKS-CZ2 (best σ, E)   | ≈ 50% ("no discrimination") | 98.50 ± 0.45% (σ=2, E=5000) | 3 | partial / deviation |
+| QKS-CNOT2 (σ=1, E=5000) | > 99.9% | 99.17 ± 0.12% | 3 | **deviation** — at the paper's own σ ≈ 1 we do not reach > 99.9% |
+| QKS-CZ2 (σ × E sweep) | ≈ 50% ("no discrimination") | **48.51 ± 2.26%** (pooled, 27 runs); best cell 49.58 ± 1.94% | 3 | paper-accurate |
 | **Photonic MerLin QKS (σ=3, E=2000, 4 modes, 2 photons)** | n/a | **99.67 ± 0.47%** | 3 | paper-accurate (photonic adaptation) |
 
-The CZ "no discrimination" claim does not reproduce in our finite-``E``
-experiments; see `INSIGHTS.md` for a detailed discussion.
+σ × E sweeps for the two gate-model ansätze (test accuracy, mean over 3 seeds):
 
-### (3,5)-MNIST (Fig. 5, gate-model)
+| CNOT ansatz (Fig. 2a) | CZ ansatz (Fig. 2b) |
+|---|---|
+| ![CNOT σ×E heatmap](results/picture_frames_cnot2_heatmap.png) | ![CZ σ×E heatmap](results/picture_frames_cz2_heatmap.png) |
 
-Test errors (1 − test accuracy):
+The CZ ansatz of Fig. 2(b) is chance-level at every point of the sweep, as the
+paper reports.  The mechanism is worth stating because it is easy to get wrong:
+Fig. 2(b) applies the CZ **before** the data-dependent rotations, to ``|++>``.
+``CZ|++>`` is maximally entangled, so each qubit's reduced state is maximally
+mixed and the following ``RX(θ_i)`` cannot reintroduce any dependence on the
+input — every feature bit is a fair coin.  Note that train accuracy still
+reaches ~99% (5000 random features, 1600 training points), so only the *test*
+number reveals it.  See `INSIGHTS.md`.
 
-| Method | Paper value | Reproduced value | Seeds | Label |
-|--------|------------:|-----------------:|------:|-------|
+### (3,5)-MNIST — gate-model, simulated (Fig. 5)
+
+Test errors (1 − test accuracy).  Fig. 5 reports only the *minimum* error per
+qubit count after a joint (σ, E) optimisation with E up to 20 000, so the paper
+column below carries the single value the text states — the best point of the
+curve, 1.4% — rather than a per-row value we cannot read off the figure.  Our
+runs use a fixed E = 5000 and a hand-picked σ, i.e. a smaller budget and no
+per-point optimisation.
+
+| Method | Paper (QVM) | Reproduced | Seeds | Label |
+|--------|------------:|-----------:|------:|-------|
 | LR baseline | 4.1% | **3.80%** | 1 | paper-accurate |
-| SVM-RBF (reference) | ≈ 3.0% | 0.90% | 1 | substitute hyperparameters |
-| QKS-1q (σ=0.05, E=5000) | 3.3% | **1.87 ± 0.09%** | 3 | reduced (E=5000 vs 10 000) |
-| QKS-2q (σ=0.10, E=5000) | ≈ 1.8% | **1.77 ± 0.24%** | 3 | reduced |
-| QKS-4q (σ=0.10, E=5000) | 1.4% (best) | 2.40 ± 0.21% | 3 | episode-budget-limited |
+| SVM-RBF (reference) | not stated | 0.90% | 1 | our own non-linear reference |
+| QKS-1q (σ=0.05, E=5000) | — | **1.87 ± 0.09%** | 3 | reduced budget |
+| QKS-2q (σ=0.10, E=5000) | — | **1.77 ± 0.24%** | 3 | reduced budget |
+| QKS-4q (σ=0.10, E=5000) | — | 2.40 ± 0.21% | 3 | reduced budget |
+| **best over qubit counts** | **1.4%** (E ≤ 20 000, σ and E optimised) | **1.77 ± 0.24%** (2q) | 3 | reduced budget |
+
+Unlike the paper we do not see a monotone improvement with qubit count: 4q is
+worse than 2q at a fixed E = 5000.  The tile fan-in ``r = p/q`` shrinks as ``q``
+grows, so σ and E should be re-optimised per qubit count (see `INSIGHTS.md`);
+we did not run that sweep.
+
+![(3,5)-MNIST test error vs qubit count](results/mnist35_error_vs_qubits.png)
+
+### (3,5)-MNIST — Rigetti QPU (not reproduced)
+
+These are **noisy-hardware** numbers on full-sized MNIST images.  They are not
+comparable with the simulated results above and we make no claim against them;
+they are listed so the two sets are not confused.
+
+| Circuit | Paper (QPU hardware) | Reproduced |
+|---------|---------------------:|------------|
+| 1 qubit, σ=0.05, E=10 000 | 3.3% | not reproduced (no QPU access) |
+| 2-qubit CNOT, σ=0.05, E=8 900 | 3.7% | not reproduced (no QPU access) |
 
 ### (3,5)-MNIST — Photonic MerLin QKS (new)
 
@@ -217,7 +268,8 @@ UNBUNCHED setting.
 The paper requires that the *only* non-linearity comes from the quantum
 circuit (LB rule).  Our fair classical baseline is therefore plain
 ``LogisticRegression`` on the raw inputs.  We also report an unfair (non-linear)
-SVM-RBF baseline as a Fig. 5 reference.
+SVM-RBF baseline of our own as an upper reference; the paper does not quote an
+SVM-RBF number, so this row has no paper counterpart.
 
 ## MerLin Photonic Extension
 
@@ -232,7 +284,6 @@ result is ``m=6, k=3, E=10000, σ=0.07`` with **3.60 ± 0.42%** test error.
 
 - No QPU experiments. Entirely simulated.
 - (3,5)-MNIST uses a 4 000-train / 1 000-test subset.
-- CZ ansatz reproduction does **not** confirm the paper's "no-better-than-random" claim — see the dedicated note in `INSIGHTS.md`.
 - Photonic adaptation on MNIST still trails the best gate-model QKS result,
   but DUAL_RAIL plus larger ``n_modes``/``n_photons`` closes much of the gap.
 - As with classical Random Kitchen Sinks, the benefit is not universal: it
@@ -244,6 +295,19 @@ result is ``m=6, k=3, E=10000, σ=0.07`` with **3.60 ± 0.42%** test error.
 ```bash
 cd papers/quantum_kitchen_sinks && pytest -q
 ```
+
+Beyond the usual smoke and CLI tests, `tests/test_kernel.py` checks the
+gate-model simulator against the *closed-form implicit kernel* the paper
+derives, which is a sharper check than any accuracy number:
+
+- Fig. 2(a): the measured kernel must equal
+  ``1/2 + (1/8)e^{-σ²‖u⁽¹⁾-v⁽¹⁾‖²/2} + (1/16)e^{-σ²‖u-v‖²/2}``
+  at several ``(u, v, σ)`` points.
+- Fig. 2(b): the measured kernel must equal the constant ``1/2``, and every
+  single-qubit marginal must be exactly ``1/2`` — this is what pins the CZ
+  gate order, since ``RX`` before a diagonal entangler would leave the
+  Z-basis marginals untouched and quietly turn the ansatz into two
+  independent one-qubit circuits.
 
 ## Citation and License
 
