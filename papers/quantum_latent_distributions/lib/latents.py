@@ -384,8 +384,8 @@ class SampleBankLatent(LatentDistribution):
         self._g = torch.Generator().manual_seed(0)
 
     def sample(self, batch_size: int, *, device=None, dtype=None) -> torch.Tensor:
-        if type(batch_size) is not int:
-            raise TypeError("batch_size must have int type.")
+        if not isinstance(batch_size, int):
+            raise TypeError("batch_size must be an int.")
         if batch_size <= 0:
             raise ValueError("batch_size must be positive.")
         idx = torch.randint(0, self.bank.shape[0], (batch_size,), generator=self._g)
