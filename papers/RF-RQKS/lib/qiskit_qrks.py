@@ -84,7 +84,8 @@ class QiskitQRKS(nn.Module):
                 and depth_index < self.depth - 1
                 and self.qubit_count > 1
             ):
-                for qubit in range(self.qubit_count):
+                ring_edge_count = 1 if self.qubit_count == 2 else self.qubit_count
+                for qubit in range(ring_edge_count):
                     circuit.cz(qubit, (qubit + 1) % self.qubit_count)
         return circuit
 

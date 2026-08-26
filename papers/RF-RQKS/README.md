@@ -1,5 +1,12 @@
 # RF Spectrogram Anomaly Detection with Quantum Kitchen Sinks - Reproduction
 
+## Reference and Attribution
+
+This reproduction is based on [*RF Spectrogram Anomaly Detection with Quantum
+Kitchen Sinks: Architecture, Representation, and Hardware Validation*](https://arxiv.org/abs/2607.13897)
+by Abdallah Aaraba, Alexis Vieloszynski, Remon Polus, Soumaya Cherkaoui, and
+Ola Ahmad (arXiv:2607.13897; accepted to IEEE Quantum Week 2026).
+
 ## Dataset construction
 
 The first reproduction stage builds the paper's binary anomaly-classification dataset from measured LTE IQ captures. The measured LTE waveform is always the normal signal; the builder does not synthesize a replacement LTE background.
@@ -222,9 +229,10 @@ The five-stage experiment protocol performs:
 4. a photon-count sweep; and
 5. held-out comparison of four direct and QKS readouts.
 
-The loader splits by the generated `pair_index`, ensuring that the normal and
-anomaly-injected versions of one source pair cannot occur in different
-partitions. The reduced `ablation_36_lte_1.json` configuration reserves 15% of
+The loader splits by `source_pair_index` when augmentation metadata provides it,
+ensuring that translated copies of the same source pair cannot cross model-
+selection partitions. Unaugmented metadata falls back to `pair_index`. The
+reduced `ablation_36_lte_1.json` configuration reserves 15% of
 the 10,800 augmented training pairs for validation: 18,360 training rows and
 3,240 validation rows. Stages 1-4 use DCT standardization fitted only on the
 resulting training partition. Stage 5 fits fresh statistics on all 21,600
@@ -398,10 +406,10 @@ download the paper's complete WASD IQ collection because it is larger than
 | Dataset | Training pairs | Test pairs | Labelled rows | Independent LTE captures |
 | --- | ---: | ---: | ---: | ---: |
 | This reproduction (`36_LTE_1`) | 400 | 105 | 1,010 | 505 |
-| Paper-sized ablation target | 10,800 | 2,031 | 25,662 | not available locally |
+| Paper-sized ablation target | 10,800 | 4,062 | 29,724 | not available locally |
 
-Thus, the available subset contains about 25.4 times fewer labelled rows and
-about 25.4 times fewer source pairs than the paper-sized target, and it covers
+Thus, the available subset contains about 29.4 times fewer labelled rows and
+about 29.4 times fewer source pairs than the paper-sized target, and it covers
 only one LTE band rather than the paper's multi-band collection. The optional
 paper-sized augmentation increases the stored data to 21,600 training rows
 and 4,062 test rows by resampling and translating the 505 available source

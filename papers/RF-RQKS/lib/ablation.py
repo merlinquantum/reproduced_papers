@@ -344,21 +344,27 @@ def _plot_stage_2_curves(results: list[dict[str, Any]], output_path: Path) -> No
     groups: dict[tuple[int, int, str | None], list[dict[str, Any]]] = {}
     for result in results:
         configuration = result["configuration"]
+        count_field = (
+            "qubit_count" if configuration["qubit_count"] is not None else "mode_count"
+        )
         group_key = (
-            configuration["mode_count"],
+            configuration[count_field],
             configuration["episode_count"],
             configuration["entangling_strategy"],
         )
         groups.setdefault(group_key, []).append(result)
-    for (mode_count, episode_count, entangling_strategy), group in groups.items():
+    for (count, episode_count, entangling_strategy), group in groups.items():
         group.sort(key=lambda result: result["configuration"]["depth"])
         entangling_label = "on" if entangling_strategy is not None else "off"
+        count_label = (
+            "q" if group[0]["configuration"]["qubit_count"] is not None else "m"
+        )
         axis.plot(
             [result["configuration"]["depth"] for result in group],
             [result["metrics"]["validation_auroc"] for result in group],
             marker="o",
             linewidth=1.8,
-            label=f"m={mode_count}, E={episode_count}, ent={entangling_label}",
+            label=f"{count_label}={count}, E={episode_count}, ent={entangling_label}",
         )
     axis.set_xlabel("Depth (D)")
     axis.set_ylabel("Validation AUROC")
@@ -422,10 +428,10 @@ def _plot_stage_4_lines(results: list[dict[str, Any]], output_path: Path) -> Non
     ordered_results = sorted(
         results, key=lambda result: result["configuration"][count_key]
     )
-    photon_counts = [result["configuration"][count_key] for result in ordered_results]
+    count_values = [result["configuration"][count_key] for result in ordered_results]
     figure, axis = plt.subplots(figsize=(8, 5), dpi=150)
     axis.plot(
-        photon_counts,
+        count_values,
         [result["metrics"]["validation_auroc"] for result in ordered_results],
         marker="o",
         linewidth=1.8,
@@ -433,7 +439,7 @@ def _plot_stage_4_lines(results: list[dict[str, Any]], output_path: Path) -> Non
         label="AUROC",
     )
     axis.plot(
-        photon_counts,
+        count_values,
         [result["metrics"]["validation_f1"] for result in ordered_results],
         marker="o",
         linewidth=1.8,
@@ -443,7 +449,10 @@ def _plot_stage_4_lines(results: list[dict[str, Any]], output_path: Path) -> Non
     axis.set_xlabel("Qubit count" if count_key == "qubit_count" else "Photon count (n)")
     axis.set_ylabel("Validation score")
     axis.set_ylim(0.0, 1.0)
-    axis.set_title("Stage 4 validation score by photon count")
+    axis.set_title(
+        "Stage 4 validation score by "
+        + ("qubit count" if count_key == "qubit_count" else "photon count")
+    )
     axis.grid(alpha=0.25)
     axis.legend()
     figure.tight_layout()

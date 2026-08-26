@@ -57,12 +57,13 @@ class DatasetSplits:
 
 
 def _read_pair_indices(metadata_path: Path) -> np.ndarray:
-    """Read source-pair identifiers from representation metadata.
+    """Read leakage-safe grouping identifiers from representation metadata.
 
     Parameters
     ----------
     metadata_path : pathlib.Path
-        Metadata CSV containing a ``pair_index`` column.
+        Metadata CSV containing a ``pair_index`` column and optionally a
+        ``source_pair_index`` column for augmented representations.
 
     Returns
     -------
@@ -78,7 +79,12 @@ def _read_pair_indices(metadata_path: Path) -> np.ndarray:
         reader = csv.DictReader(metadata_file)
         if reader.fieldnames is None or "pair_index" not in reader.fieldnames:
             raise ValueError(f"Metadata must contain pair_index: {metadata_path}")
-        return np.asarray([int(row["pair_index"]) for row in reader], dtype=np.int64)
+        grouping_field = (
+            "source_pair_index"
+            if "source_pair_index" in reader.fieldnames
+            else "pair_index"
+        )
+        return np.asarray([int(row[grouping_field]) for row in reader], dtype=np.int64)
 
 
 def _grouped_partition(

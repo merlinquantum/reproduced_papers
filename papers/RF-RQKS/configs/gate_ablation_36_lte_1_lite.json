@@ -14,7 +14,7 @@
   "kernel_components": 128,
   "kernel_gamma": 1.0,
   "maximum_output_features": 16384,
-  "initial_depth": 1,
+  "initial_depth": 2,
   "encoding_strategy": "L2",
   "entangling_strategy": "V1",
   "same_haar": false,

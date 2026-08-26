@@ -9,8 +9,17 @@ from pathlib import Path
 import numpy as np
 import pytest
 import torch
-from lib.ablation import run_ablation, run_readout_comparison
-from lib.ablation_data import load_dct_dataset
+from lib.ablation import (
+    _plot_stage_2_curves,
+    _plot_stage_4_lines,
+    run_ablation,
+    run_readout_comparison,
+)
+from lib.ablation_data import (
+    _grouped_partition,
+    _read_pair_indices,
+    load_dct_dataset,
+)
 from lib.qks import DummyRBFSampler, build_sampler
 
 
@@ -59,6 +68,47 @@ def test_loader_keeps_normal_anomaly_pairs_together(
     np.testing.assert_allclose(dataset.train_features.std(axis=0), 1.0, atol=1e-6)
 
 
+def test_grouping_uses_source_pair_index_for_augmented_metadata(
+    representation_root: Path,
+) -> None:
+    metadata_path = representation_root / "train" / "metadata.csv"
+    with metadata_path.open("w", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(
+            file,
+            fieldnames=["sample_index", "pair_index", "source_pair_index"],
+        )
+        writer.writeheader()
+        for sample_index in range(20):
+            generated_pair_index = sample_index // 2
+            writer.writerow(
+                {
+                    "sample_index": sample_index,
+                    "pair_index": generated_pair_index,
+                    "source_pair_index": generated_pair_index // 2,
+                }
+            )
+
+    grouping_indices = _read_pair_indices(metadata_path)
+    training_indices, validation_indices = _grouped_partition(
+        grouping_indices, validation_fraction=0.2, seed=42
+    )
+
+    assert set(grouping_indices[training_indices]).isdisjoint(
+        grouping_indices[validation_indices]
+    )
+
+
+def test_grouping_falls_back_to_pair_index_for_unaugmented_metadata(
+    representation_root: Path,
+) -> None:
+    metadata_path = representation_root / "train" / "metadata.csv"
+
+    np.testing.assert_array_equal(
+        _read_pair_indices(metadata_path),
+        np.repeat(np.arange(10), 2),
+    )
+
+
 def test_default_config_uses_file_free_synthetic_smoke_dataset() -> None:
     config = json.loads(
         (Path(__file__).resolve().parents[1] / "configs" / "defaults.json").read_text(
@@ -66,6 +116,61 @@ def test_default_config_uses_file_free_synthetic_smoke_dataset() -> None:
         )
     )
     assert config["data_source"] == "synthetic"
+
+
+def test_gate_ablation_stage_one_uses_entangling_depth() -> None:
+    config = json.loads(
+        (
+            Path(__file__).resolve().parents[1]
+            / "configs"
+            / "gate_ablation_36_lte_1_lite.json"
+        ).read_text(encoding="utf-8")
+    )
+    assert config["initial_depth"] >= 2
+
+
+def test_stage_two_qiskit_curves_group_by_qubit_count(tmp_path: Path) -> None:
+    def result(depth: int, qubit_count: int) -> dict:
+        return {
+            "configuration": {
+                "depth": depth,
+                "mode_count": None,
+                "qubit_count": qubit_count,
+                "episode_count": 4,
+                "entangling_strategy": "V1",
+            },
+            "metrics": {"validation_auroc": 0.5},
+        }
+
+    output_path = tmp_path / "stage_2.svg"
+    _plot_stage_2_curves(
+        [result(1, 2), result(2, 2), result(1, 3)],
+        output_path,
+    )
+
+    plot = output_path.read_text(encoding="utf-8")
+    assert "q=2" in plot
+    assert "q=3" in plot
+    assert "m=None" not in plot
+
+
+def test_stage_four_qiskit_plot_titles_qubit_count(tmp_path: Path) -> None:
+    results = [
+        {
+            "configuration": {"qubit_count": 2, "photon_count": None},
+            "metrics": {"validation_auroc": 0.5, "validation_f1": 0.5},
+        },
+        {
+            "configuration": {"qubit_count": 3, "photon_count": None},
+            "metrics": {"validation_auroc": 0.6, "validation_f1": 0.6},
+        },
+    ]
+    output_path = tmp_path / "stage_4.svg"
+    _plot_stage_4_lines(results, output_path)
+
+    plot = output_path.read_text(encoding="utf-8")
+    assert "Stage 4 validation score by qubit count" in plot
+    assert "Stage 4 validation score by photon count" not in plot
 
 
 def test_dummy_sampler_output_shape() -> None:
@@ -132,6 +237,31 @@ def test_qiskit_circuit_matches_section_iii_upload_and_entangler_order() -> None
         tuple(circuit.qubits.index(qubit) for qubit in instruction.qubits)
         for instruction in circuit.data[6:9]
     ] == [(0, 1), (1, 2), (2, 0)]
+
+
+def test_qiskit_two_qubit_ring_has_one_unique_entangler() -> None:
+    from lib.qiskit_qrks import QiskitQRKS
+
+    sampler = QiskitQRKS(
+        qubit_count=2,
+        depth=2,
+        episode_count=1,
+        L_strategy="L2",
+        V_strategy="V1",
+        data_size=4,
+    )
+    circuit = sampler._build_circuit(np.arange(8, dtype=np.float32), episode=0)
+
+    entanglers = [
+        instruction
+        for instruction in circuit.data
+        if instruction.operation.name == "cz"
+    ]
+    assert len(entanglers) == 1
+    assert tuple(circuit.qubits.index(qubit) for qubit in entanglers[0].qubits) == (
+        0,
+        1,
+    )
 
 
 def test_qiskit_sampler_rejects_hardware_execution() -> None:
