@@ -81,7 +81,7 @@ Deviations and notes:
 papers/quantum_kitchen_sinks/
 |-- README.md, INSIGHTS.md
 |-- cli.json, requirements.txt, notebook.ipynb
-|-- configs/                       # 22 experiment configs (incl. baselines and sweeps)
+|-- configs/                       # 25 experiment configs (incl. baselines and sweeps)
 |-- lib/
 |   |-- data.py, encoding.py, circuits.py, qks_model.py
 |   |-- photonic_qks.py            # MerLin photonic adaptation
@@ -93,11 +93,14 @@ papers/quantum_kitchen_sinks/
 ```
 
 `results/` holds the committed, citable outputs: the figures embedded below and
-four curated run artifacts (`picture_frames_lr_baseline.json`,
-`picture_frames_cnot2_sweep.json`, `picture_frames_cz2_sweep.json`,
-`picture_frames_merlin.json`).  Each artifact records the config it came from
-and the command that regenerates it, and `notebook.ipynb` reads them — so the
-notebook and the tables below work from a fresh clone without a prior run.
+twelve curated run artifacts — four for picture frames
+(`picture_frames_{lr_baseline,cnot2_sweep,cz2_sweep,merlin}.json`) and eight for
+(3,5)-MNIST (`mnist35_{lr_baseline,svm_baseline,gate_1q,gate_2q,gate_4q,
+photonic_dual_rail_mzi_1q,photonic_dual_rail_mzi_2q,
+photonic_random_mesh_6m3k}.json`).  Each artifact
+records the config it came from and the command that regenerates it, and
+`notebook.ipynb` reads them — so the notebook and the tables below work from a
+fresh clone without a prior run.
 
 ## Install and How to Run
 
@@ -150,6 +153,7 @@ schema):
 | ``--dataset-name`` | ``picture_frames`` | ``picture_frames`` or ``mnist35`` |
 | ``--classifier-kind`` | ``logistic_regression`` | ``logistic_regression``, ``svm_rbf``, ``svm_linear`` |
 | ``--backend`` | ``gate`` | ``gate`` (NumPy simulator) or ``photonic_merlin`` |
+| ``architecture`` (config only) | ``random_mesh`` | ``random_mesh`` (random interferometer either side of the encoding) or ``dual_rail_mzi`` (balanced 50:50 splitters, exactly ``RX(θ)`` per logical qubit).  ``dual_rail_mzi`` requires ``computation_space = DUAL_RAIL`` |
 
 ## Data
 
@@ -204,19 +208,26 @@ curve, 1.4% — rather than a per-row value we cannot read off the figure.  Our
 runs use a fixed E = 5000 and a hand-picked σ, i.e. a smaller budget and no
 per-point optimisation.
 
+All rows share one 4 000/1 000 subsample (the dataset is loaded once per run),
+so every comparison against the baseline is paired.
+
 | Method | Paper (QVM) | Reproduced | Seeds | Label |
 |--------|------------:|-----------:|------:|-------|
-| LR baseline | 4.1% | **3.80%** | 1 | paper-accurate |
-| SVM-RBF (reference) | not stated | 0.90% | 1 | our own non-linear reference |
+| LR baseline | 4.1% | **4.40%** | 3 | paper-accurate |
+| SVM-RBF (reference) | not stated | 0.90% | 3 | our own non-linear reference |
 | QKS-1q (σ=0.05, E=5000) | — | **1.87 ± 0.09%** | 3 | reduced budget |
 | QKS-2q (σ=0.10, E=5000) | — | **1.77 ± 0.24%** | 3 | reduced budget |
 | QKS-4q (σ=0.10, E=5000) | — | 2.40 ± 0.21% | 3 | reduced budget |
 | **best over qubit counts** | **1.4%** (E ≤ 20 000, σ and E optimised) | **1.77 ± 0.24%** (2q) | 3 | reduced budget |
 
 Unlike the paper we do not see a monotone improvement with qubit count: 4q is
-worse than 2q at a fixed E = 5000.  The tile fan-in ``r = p/q`` shrinks as ``q``
-grows, so σ and E should be re-optimised per qubit count (see `INSIGHTS.md`);
-we did not run that sweep.
+worse than 2q at a fixed E = 5000.  Two candidate causes, neither yet settled:
+σ is not re-optimised per qubit count (the tile fan-in ``r = p/q`` shrinks as
+``q`` grows — see `INSIGHTS.md`), and at fixed ``E`` the feature count scales
+with ``q``, so 4q fits 20 000 features to 4 000 training images at the same
+``C = 1.0`` as 1q fits 5 000.  The paper optimises ``E`` per qubit count, which
+controls for exactly this; holding ``E`` fixed instead compares three different
+model capacities.  Treat the qubit-count trend here as not established.
 
 ![(3,5)-MNIST test error vs qubit count](results/mnist35_error_vs_qubits.png)
 
@@ -235,34 +246,36 @@ they are listed so the two sets are not confused.
 
 Test errors (1 − test accuracy):
 
-| Variant | Setting | Test error (mean ± std, 3 seeds) |
-|---------|---------|---------------------------------:|
-| Photonic QKS, ``m=4 / k=2 / E=2000`` | UNBUNCHED, tile encoding, σ=0.05 | 7.80 ± 0.08% |
-| Photonic QKS, ``m=6 / k=3 / E=10000`` | DUAL_RAIL, tile encoding, σ=0.05 | *withdrawn, re-running* |
-| Photonic QKS, ``m=6 / k=3 / E=10000`` | DUAL_RAIL, tile encoding, σ=0.07 | *withdrawn, re-running* |
-| Photonic QKS, ``m=8 / k=4 / E=5000`` | DUAL_RAIL, tile encoding, σ=0.05 | *withdrawn, re-running* |
-| Photonic QKS, ``m=8 / k=4 / E=5000`` | DUAL_RAIL, tile encoding, σ=0.07 | *withdrawn, re-running* |
-| LR baseline (raw pixels, for reference) | n/a | 3.80% |
-| Gate-model QKS-1q, ``E=5000`` | tile encoding, σ=0.05 | 1.87 ± 0.09% |
+Test errors (1 − test accuracy), same subsample and seeds as the table above:
 
-> **The ``DUAL_RAIL`` rows are withdrawn pending a re-run.**  They were produced
-> before the fix to the dual-rail outcome→click-pattern mapping in
-> ``lib/photonic_qks.py``: MerLin reports ``2**(m/2)`` outcomes in
-> ``DUAL_RAIL``, but the featurizer indexed them into a ``C(m, k)`` UNBUNCHED
-> table, relabelling outcomes onto unrelated click patterns and leaving mode 0
-> permanently occupied — a constant feature a linear classifier cannot recover
-> from.  ``UNBUNCHED`` used the correct table throughout, so the ``m=4, k=2``
-> row above, all picture-frames results, and the gate-model results are
-> unaffected.
+| Variant | Setting | Test error (3 seeds) |
+|---------|---------|---------------------:|
+| LR baseline (raw pixels) | — | 4.40% |
+| Photonic QKS, ``m=4 / k=2 / E=2000`` | random mesh, UNBUNCHED, σ=0.05 | 7.80 ± 0.08% |
+| Photonic QKS, ``m=6 / k=3 / E=10000`` | random mesh, DUAL_RAIL, σ=0.05 | 4.43 ± 0.34% |
+| **Photonic QKS, ``m=2 / k=1 / E=5000``** | **dual-rail MZI, σ=0.05** | **1.73 ± 0.17%** |
+| **Photonic QKS, ``m=4 / k=2 / E=2500``** | **dual-rail MZI, σ=0.10** | **1.43 ± 0.24%** |
+| Gate-model QKS-1q, ``E=5000`` | σ=0.05 | 1.87 ± 0.09% |
+| Gate-model QKS-2q, ``E=5000`` | σ=0.10 | 1.77 ± 0.24% |
 
-What can be said today: the compact ``m=4, k=2`` UNBUNCHED setting sits clearly
-below the gate-model QKS and *above* the LR baseline, i.e. no lift.  Whether the
-enlarged ``DUAL_RAIL`` geometries beat the linear baseline is an open question
-until the re-run lands.  A separate diagnostic (see `INSIGHTS.md`) suggests they
-will not at ``E = 10000``: per-feature signal-to-noise in the photonic layer is
-7–11× below the gate model, which on the standard random-features scaling
-implies an episode budget of order ``E ≈ 50 000–100 000`` for comparable feature
-quality.
+**The architecture, not the photonics, was the limitation.**  With the shipped
+``random_mesh`` circuit (a random interferometer either side of the angle
+encoding) the photonic model never beats the linear baseline: 4.43 ± 0.34%
+against 4.40%.  With ``dual_rail_mzi`` — a balanced 50:50 splitter either side
+of the encoding, i.e. one Mach-Zehnder per logical qubit — it reaches
+**1.43 ± 0.24%**, a ~3 percentage-point lift over the baseline (≈ 30 of 1 000
+test images) and on a par with the gate model.
+
+The reason is exact rather than empirical: on a dual-rail qubit, a 50:50
+splitter, a phase ``θ``, and a second 50:50 splitter is an interferometer whose
+even-rail click probability is ``sin²(θ/2)`` — *precisely* the paper's
+``RX(θ)`` ansatz read out in the computational basis.  Any single-qubit gate is
+deterministic in dual rail, so the photonic featurizer is not an approximation
+of the gate model here; it is the same feature map, and
+`tests/test_photonic_gate_equivalence.py` asserts agreement to 1e-5.  A random
+mesh is *not* balanced, so its interference fringe has low visibility and the
+click probability barely moves with the input — which is the whole of the
+earlier deficit.
 
 ### Hardware-aware reporting (MerLin photonic adaptation)
 
@@ -296,23 +309,40 @@ gate-model rows are pure NumPy and reproduce bit-for-bit.  The curated artifacts
 under `results/` record the run each number comes from.
 
 `lib/photonic_qks.py` implements per-episode `ml.QuantumLayer`s with frozen
-entangling-mesh phases, data driving an `add_angle_encoding`, and single-shot
-sampling.  The photonic adaptation reproduces the central QKS claim on
-picture frames. On (3,5)-MNIST the UNBUNCHED settings show no lift over the
-linear baseline, and the ``DUAL_RAIL`` results are being regenerated after the
-outcome-mapping fix (see the results section).
+phases, data driving an `add_angle_encoding`, and single-shot sampling.  Two
+circuit architectures are available:
+
+- ``random_mesh`` — a random interferometer either side of the encoding.  This
+  is the generic "random photonic feature" reading of QKS.  It reproduces the
+  central claim on picture frames, but on (3,5)-MNIST it shows **no lift** over
+  the linear baseline in any setting measured (best: 4.43 ± 0.34% against
+  4.40%).  A random mesh is not balanced, so its fringe visibility is low and
+  the click probability barely responds to the input.
+- ``dual_rail_mzi`` — a balanced 50:50 splitter either side of the encoding,
+  one Mach-Zehnder per logical qubit.  This is *exactly* ``RX(θ)`` on a
+  dual-rail qubit, so it reproduces the gate-model ansatz rather than
+  approximating it, and it lifts (3,5)-MNIST to **1.43 ± 0.24%** against the
+  4.40% baseline.
+
+One implementation detail is worth flagging because it fails silently: MerLin
+parameterises a beam splitter by ``R = cos²(θ/2)``, so a balanced splitter is
+``θ = π/2``.  The library default of ``θ = π/4`` is an **85:15** splitter and
+caps the interferometer's fringe visibility at 0.5.  Both values run; only an
+equivalence check against the gate model distinguishes them.
 
 ## Limitations
 
 - No QPU experiments. Entirely simulated.
 - (3,5)-MNIST uses a 4 000-train / 1 000-test subset.
-- Photonic adaptation on MNIST trails the gate-model QKS and shows no lift over
-  the linear baseline in the settings currently measurable; the ``DUAL_RAIL``
-  numbers are withdrawn pending a re-run after the outcome-mapping fix.
-- The photonic layer's per-feature signal-to-noise is 7–11× below the gate
-  model's and saturates: sweeping σ, ``angle_scale`` and ``n_layers`` does not
-  move it, so a lift on this task needs a much larger episode budget or a
-  higher-visibility encoder, not tuning.
+- The ``random_mesh`` photonic architecture shows no lift over the linear
+  baseline on (3,5)-MNIST at any setting measured, and its per-feature
+  signal-to-noise saturates 7× below the gate model under σ, ``angle_scale``
+  and ``n_layers`` sweeps.  ``dual_rail_mzi`` removes the gap entirely, so this
+  is a statement about circuit design, not about photonics.
+- The photonic two-qubit runs use *independent* dual-rail qubits (no
+  entangler).  A dual-rail CNOT needs post-selection (KLM, success 1/9); it is
+  not implemented here, so the 2-qubit photonic row is the analogue of the gate
+  ansatz *without* its CNOT.
 - As with classical Random Kitchen Sinks, the benefit is not universal: it
   likely depends strongly on the dataset and on how well the chosen feature map
   matches the underlying structure.

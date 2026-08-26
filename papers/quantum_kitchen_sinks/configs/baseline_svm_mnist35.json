@@ -1,7 +1,11 @@
 {
-    "description": "Nonlinear SVM-RBF baseline on raw (3,5)-MNIST pixels (Fig. 5 reference).",
+    "description": "Nonlinear SVM-RBF baseline on raw (3,5)-MNIST pixels (Fig. 5 reference). Uses the same three seeds as the QKS runs; the dataset subsample is loaded once per run, so the comparison is paired.",
     "experiment": "mnist35_baseline",
-    "seeds": [42],
+    "seeds": [
+        42,
+        43,
+        44
+    ],
     "dataset": {
         "name": "mnist35",
         "n_train": 4000,

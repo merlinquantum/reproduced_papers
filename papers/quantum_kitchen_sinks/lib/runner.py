@@ -63,6 +63,8 @@ def _featurize(cfg: dict[str, Any], X_train: np.ndarray, X_test: np.ndarray, see
             input_modes=qks_cfg.get("input_modes"),
             angle_scale=float(qks_cfg.get("angle_scale", 1.0)),
             computation_space=qks_cfg.get("computation_space", "UNBUNCHED"),
+            architecture=qks_cfg.get("architecture", "random_mesh"),
+            mesh_after=bool(qks_cfg.get("mesh_after", False)),
         )
         feat.fit_episodes(input_dim=X_train.shape[1], seed=seed)
         t0 = time.perf_counter()
@@ -77,6 +79,8 @@ def _featurize(cfg: dict[str, Any], X_train: np.ndarray, X_test: np.ndarray, see
             "n_photons": feat.n_photons,
             "input_state": list(feat.input_state),
             "computation_space": feat.computation_space.name,
+            "architecture": feat.architecture,
+            "mesh_after": feat.mesh_after,
             "detector_model": "threshold",
             "measurement_strategy": "PROBABILITIES",
             "postselection": "none",

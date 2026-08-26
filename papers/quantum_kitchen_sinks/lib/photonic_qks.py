@@ -18,6 +18,14 @@ import torch
 
 from .encoding import EpisodeEncoding, make_episodes
 
+# MerLin parameterises a beam splitter by its reflectivity R = cos^2(theta / 2),
+# so a balanced 50:50 splitter is theta = pi/2.  The library default of pi/4 is
+# an 85:15 splitter, which caps the interference-fringe visibility of a
+# dual-rail MZI at 0.5 instead of 1.0.
+BALANCED_BEAMSPLITTER_THETA = np.pi / 2
+
+ARCHITECTURES = ("random_mesh", "dual_rail_mzi")
+
 
 def _validate_input_modes(n_modes: int, input_modes: Sequence[int]) -> list[int]:
     ordered_modes = []
@@ -88,6 +96,8 @@ class PhotonicQKSFeaturizer:
         input_modes: Sequence[int] | None = None,
         angle_scale: float = 1.0,
         computation_space: ml.ComputationSpace | str = ml.ComputationSpace.UNBUNCHED,
+        architecture: str = "random_mesh",
+        mesh_after: bool = False,
     ) -> None:
         self.n_modes = int(n_modes)
         self.n_photons = int(n_photons)
@@ -106,6 +116,15 @@ class PhotonicQKSFeaturizer:
             else list(input_modes)
         )
         self.input_modes = _validate_input_modes(self.n_modes, self.input_modes)
+        if architecture not in ARCHITECTURES:
+            raise ValueError(f"architecture must be one of {ARCHITECTURES}")
+        if (
+            architecture == "dual_rail_mzi"
+            and self.computation_space is not ml.ComputationSpace.DUAL_RAIL
+        ):
+            raise ValueError("architecture='dual_rail_mzi' requires DUAL_RAIL")
+        self.architecture = architecture
+        self.mesh_after = bool(mesh_after)
         self.angle_scale = float(angle_scale)
         self.input_state = _default_input_state(
             self.n_modes,
@@ -118,10 +137,39 @@ class PhotonicQKSFeaturizer:
         self.input_dim = 0
 
     def _build_layer(self, seed: int) -> ml.QuantumLayer:
+        """Build one episode's frozen photonic circuit.
+
+        ``random_mesh`` (the paper-agnostic default) sandwiches the angle
+        encoding between two random meshes.  Because a random mesh is not
+        balanced, the interference fringe it produces has low visibility -- the
+        click probability barely moves with the input -- which is the dominant
+        reason the photonic features carry far less signal than the gate-model
+        ones.
+
+        ``dual_rail_mzi`` puts a balanced 50:50 splitter on each rail pair
+        either side of the encoding, i.e. a textbook MZI per logical qubit.
+        That is *exactly* an ``RX(theta)`` on a dual-rail qubit: the even-rail
+        click probability is ``sin^2(theta / 2)`` to numerical precision, so the
+        photonic featurizer reproduces the gate-model ansatz rather than
+        approximating it.  ``mesh_after`` optionally appends a random mesh to
+        recover cross-qubit photonic mixing at the cost of that exactness.
+        """
         builder = ml.CircuitBuilder(n_modes=self.n_modes)
-        builder.add_entangling_layer()
-        builder.add_angle_encoding(modes=self.input_modes, scale=self.angle_scale)
-        builder.add_entangling_layer()
+        if self.architecture == "dual_rail_mzi":
+            pairs = [(2 * j, 2 * j + 1) for j in range(self.n_modes // 2)]
+            builder.add_superpositions(
+                targets=pairs, theta=BALANCED_BEAMSPLITTER_THETA, trainable=False
+            )
+            builder.add_angle_encoding(modes=self.input_modes, scale=self.angle_scale)
+            builder.add_superpositions(
+                targets=pairs, theta=BALANCED_BEAMSPLITTER_THETA, trainable=False
+            )
+            if self.mesh_after:
+                builder.add_entangling_layer()
+        else:
+            builder.add_entangling_layer()
+            builder.add_angle_encoding(modes=self.input_modes, scale=self.angle_scale)
+            builder.add_entangling_layer()
         layer = ml.QuantumLayer(
             input_size=len(self.input_modes),
             builder=builder,

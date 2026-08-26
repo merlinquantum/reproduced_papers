@@ -1,7 +1,11 @@
 {
-    "description": "Logistic regression baseline on raw (3,5)-MNIST pixels.",
+    "description": "Logistic regression baseline on raw (3,5)-MNIST pixels. Uses the same three seeds as the QKS runs; the dataset subsample is loaded once per run, so the comparison is paired.",
     "experiment": "mnist35_baseline",
-    "seeds": [42],
+    "seeds": [
+        42,
+        43,
+        44
+    ],
     "dataset": {
         "name": "mnist35",
         "n_train": 4000,

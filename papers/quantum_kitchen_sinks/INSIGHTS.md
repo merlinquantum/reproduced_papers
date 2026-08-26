@@ -76,99 +76,100 @@ Three things worth keeping:
 
 QKS is only meaningful relative to a fair linear classifier (the Linear
 Baseline Rule).  Our LR baseline on picture frames gives 49.25% (≈ chance)
-and on (3,5)-MNIST gives 96.2% — closely matching the paper's 50% and 95.9%.
+and on (3,5)-MNIST gives 95.60% (4.40% error) against the paper's 50% and 4.1%.
 Reproducing these baselines is **the first checkpoint**: if the LR baseline
 already classifies the data, QKS has no lift to demonstrate.
 
-## Photonic adaptation
+## Photonic adaptation: the circuit, not the platform, is what matters
 
-The QKS recipe ports cleanly to MerLin on the **picture-frames** task
-(99.5% test accuracy with 4 modes / 2 photons / σ=3 / E=2000).
+**A dual-rail photonic qubit reproduces the gate ansatz exactly.**  Any
+single-qubit gate is deterministic in dual rail, so there is no reason for a
+photonic QKS to underperform the gate model at one qubit — and it does not, once
+the circuit is right.  A balanced 50:50 splitter, the encoding phase ``θ``, and a
+second balanced splitter form a Mach-Zehnder whose even-rail click probability is
 
-On **(3,5)-MNIST** the photonic story depends strongly on the computation
-space, episode budget, and geometry:
+    P(even rail) = sin²(θ / 2)
 
-| Variant | Best test error | Notes |
-|---------|---------------:|-------|
-| Gate QKS 1q (paper-aligned) | **1.87 ± 0.09%** | σ=0.05, E=5000 |
-| Photonic MerLin QKS (4 modes, 2 photons, UNBUNCHED) | 7.80 ± 0.08% | σ=0.05, E=2000 |
-| Photonic MerLin QKS (6 modes, 3 photons, UNBUNCHED) | 4.73 ± 0.25% | σ=0.05, E=10000 |
-| Photonic MerLin QKS (6 modes, 3 photons, DUAL_RAIL) | *withdrawn, re-running* | σ=0.07, E=10000 |
-| Photonic MerLin QKS (8 modes, 4 photons, DUAL_RAIL) | *withdrawn, re-running* | σ=0.07, E=5000 |
-| LR baseline on raw pixels | 3.8% | n/a |
+which *is* the paper's ``RX(θ)`` ansatz read out in the computational basis.
+Measured agreement with the gate-model code path is 2e-07 (float32 precision) for
+1, 2 and 3 qubits, and the per-feature signal-to-noise matches to four decimals.
+This is pinned by `tests/test_photonic_gate_equivalence.py`.
 
-The `DUAL_RAIL` rows predate the fix to the dual-rail outcome→click-pattern
-mapping in `lib/photonic_qks.py` and are being regenerated.  `UNBUNCHED` rows
-are unaffected.
+**The pitfall that hid it: MerLin parameterises a beam splitter by
+``R = cos²(θ / 2)``.**  A balanced splitter is therefore ``θ = π/2``; the library
+default ``θ = π/4`` is an **85:15** splitter.  Fringe visibility as a function of
+the splitter:
 
-The small UNBUNCHED photonic setting does **not** beat the LR baseline on
-MNIST. The likely cause there is the mismatch between MNIST's high-dimensional
-input (784) and the *small* photonic Hilbert subspace
-``C(n_modes, n_photons) = 6`` sampled per episode.
+| splitter | R | MZI fringe visibility |
+|----------|--:|----------------------:|
+| random mesh (`add_entangling_layer`) | — | **0.18** |
+| `add_superpositions` default, θ = π/4 | 0.854 | 0.50 |
+| balanced, θ = π/2 | 0.500 | **1.00** |
 
-Three experimental facts define the picture:
+Every one of these runs without error and returns plausible accuracies.  Only an
+equivalence check against a known-good reference separates them.
 
-1. The input state must place its photons on the modes the encoding drives.
-  With `(m=4, k=2)` on MNIST, aligning the input state with `input_modes` is
-  worth about half a point of test error and most of the seed-to-seed variance.
-2. Episode budget matters a lot for larger photonic spaces, but not uniformly.
-  In UNBUNCHED mode `(m=6, k=3)` goes from **14.40 ± 0.51%** at `E=1000` to
-  **4.73 ± 0.25%** at `E=10000`, whereas `(m=8, k=4)` moves only from
-  **19.23 ± 0.97%** to a plateau near **8.27 ± 0.29%** at `E=5000`.
-3. Whether the logical `DUAL_RAIL` subspace helps is open: those runs are being
-  regenerated after the outcome-mapping fix.  What is already established is
-  that no `UNBUNCHED` setting measured so far beats the 3.80% LR baseline.
+### Results on (3,5)-MNIST
 
-Taken together, these results show that the weak performance is specific to an
-underpowered UNBUNCHED setting rather than to photonic QKS as a whole.
+All rows share one 4 000/1 000 subsample, so the comparisons are paired.
 
-In UNBUNCHED, where the measurements are trustworthy, `8m4k` is *worse* than
-`6m3k` at every episode budget tried: simply enlarging the Hilbert space does
-not buy a better QKS feature map when the episode budget cannot exploit it.
+| Variant | Test error (3 seeds) |
+|---------|---------------------:|
+| LR baseline (raw pixels) | 4.40% |
+| Photonic, random mesh, 4 modes / 2 photons, UNBUNCHED, E=2000 | 7.80 ± 0.08% |
+| Photonic, random mesh, 6 modes / 3 photons, DUAL_RAIL, E=10000 | 4.43 ± 0.34% |
+| **Photonic, dual-rail MZI, 1 qubit, E=5000** | **1.73 ± 0.17%** |
+| **Photonic, dual-rail MZI, 2 qubits, E=2500** | **1.43 ± 0.24%** |
+| Gate QKS 1q, E=5000 | 1.87 ± 0.09% |
+| Gate QKS 2q, E=5000 | 1.77 ± 0.24% |
+| SVM-RBF (non-linear reference) | 0.90% |
 
-## The photonic bottleneck is feature contrast, and it is a ceiling
+The `random_mesh` architecture never beats the linear baseline; the dual-rail MZI
+beats it by ~3 percentage points, about 30 of 1 000 test images.  **The earlier
+conclusion that photonic QKS shows no lift on MNIST was a statement about one
+circuit choice, not about photonic QKS.**
+
+### Why the random mesh loses
 
 The useful quantity is the per-feature signal-to-noise of a single-shot click,
 
     SNR = Var_u[ p(u) ] / E_u[ p(u)(1 - p(u)) ]
 
-— how much the click probability actually moves with the input, against the
-Bernoulli noise of the single shot that reads it.  It sets how many episodes are
-needed: halving SNR roughly doubles the episodes required for the same signal.
-Measured on 784-dimensional standardised inputs with the tile encoding:
+— how much the click probability moves with the input, against the Bernoulli
+noise of the shot that reads it.  It sets the episode budget: halving SNR roughly
+doubles the episodes needed.  Measured on 784-dimensional standardised inputs:
 
 | Feature map | SNR |
 |-------------|----:|
-| gate 1q, σ=0.05 | **0.88** |
-| photonic 6 modes / 3 photons, DUAL_RAIL | **0.12** |
+| gate 1q, σ=0.05 | 0.886 |
+| photonic dual-rail MZI, 1 qubit | **0.886** (identical, as it must be) |
+| photonic random mesh, 6 modes / 3 photons | 0.12 |
 
-The gate model's `p = sin²(θ/2)` sweeps the full `[0, 1]`; the photonic click
-probability only wanders about ±0.17 around 0.5, because the random entangling
-meshes wash out the interference fringe.
+For the random mesh this is a **ceiling, not a tuning problem**: across
+σ ∈ [0.05, 0.8], `angle_scale` ∈ {1, 2, 4} and `n_layers` ∈ {1, 2, 3} it saturates
+at ≈ 0.123, while locality collapses (0.94 → 0.55 → 0.16 → 0.00) once σ passes
+≈ 0.1 — features decorrelating faster than the data varies, the classic
+random-features bandwidth failure, reached without ever gaining signal.  Adding
+photons makes it worse per feature (1 photon 0.28, 2 → 0.15, 3 → 0.12, 4 → 0.10),
+though per *episode* it roughly cancels because larger chips emit more bits.
 
-**This is a ceiling, not a tuning problem.**  Across σ ∈ [0.05, 0.8],
-`angle_scale` ∈ {1, 2, 4} and `n_layers` ∈ {1, 2, 3}, SNR saturates at ≈ 0.123.
-Past σ ≈ 0.1 the extra σ buys nothing and costs locality: the correlation
-between the features of a point and of a small perturbation of it falls
-0.94 → 0.55 → 0.16 → 0.00, i.e. the features decorrelate faster than the data
-varies and the model stops generalising.  That is the classical random-features
-bandwidth failure, reached without ever gaining signal.
+Two things follow.  Scaling a low-visibility architecture up — more modes, more
+photons, more episodes — buys very little; that is why `8m4k` never beat `6m3k`.
+And per-feature SNR falling with circuit size is *not* photonic-specific: the gate
+model does it too (0.89 → 0.59 → 0.33 for 1, 2, 4 qubits) because entanglement
+flattens single-qubit marginals.  What distinguishes the architectures is the
+level, and the level is set by fringe visibility.
 
-**The architecture is the lever.**  Replacing the random meshes around the
-encoder with fixed 50:50 splitters on each rail pair — a proper dual-rail MZI —
-improves both axes at once (at σ=0.2: SNR 0.123 → 0.151 and locality
-0.55 → 0.69; dropping the trailing mesh as well reaches 0.200 / 0.734).  So the
-trailing random mesh is measurably part of the problem.  Even so the best
-variant tried is ~4× short of the gate model, so the practical implications are:
+### Two-qubit photonics
 
-- a lift on (3,5)-MNIST needs an episode budget of order `E ≈ 50 000–100 000`,
-  not 10 000; or
-- a higher-visibility encoder; or
-- a task with more headroom.  MNIST 3-vs-5 gives the linear baseline 3.80%
-  error on 1000 test points, so the whole prize is 3.8 points and fractions of
-  it must be resolved against ±0.59 pp of binomial noise.  Picture frames,
-  where LR is at chance, is where the photonic model already shows a 50-point
-  gap.
+The two-qubit photonic rows above use *independent* dual-rail qubits with no
+entangler, which is exact.  Reproducing the paper's Fig. 2(a) CNOT photonically
+needs a post-selected KLM gate (three ``R = 1/3`` splitters and two ancilla
+vacuum modes, success probability 1/9).  That is not implemented here: Perceval
+requires beam splitters on consecutive modes, which constrains the rail layout,
+and the sign convention on the central splitter still needs to be pinned down.
+The no-entangler photonic 2-qubit map is verified exact to 1.6e-07, so the
+remaining work is entirely the entangling gate.
 
 ## Where QKS is most useful
 
@@ -181,10 +182,9 @@ variant tried is ~4× short of the gate model, so the practical implications are
 ## When QKS is *less* compelling
 
 - Data already separable by a linear classifier (no lift to demonstrate).
-- High-dimensional inputs paired with a *small* Hilbert subspace per episode
-  (the photonic UNBUNCHED `(m=4, k=2)` setting on MNIST is a clear example).
-- Larger photonic meshes when the episode budget is still too small to exploit
-  them effectively (the `8m4k` plateau is the concrete example here).
+- Any encoder whose transfer function has low fringe visibility: the signal per
+  feature is then small no matter how many episodes, modes or photons are added
+  (the `random_mesh` photonic architecture is the concrete example here).
 - Whenever a non-linear classical baseline (SVM-RBF) is cheap and already
   strong.
 
@@ -192,10 +192,10 @@ variant tried is ~4× short of the gate model, so the practical implications are
 
 | Aspect | Gate QKS (Rigetti QVM) | Photonic QKS (MerLin) |
 |--------|------------------------|----------------------|
-| Entangling primitive | CNOT/CZ between qubits | MZI mesh between modes |
+| Entangling primitive | CNOT/CZ between qubits | MZI mesh between modes; a dual-rail CNOT needs post-selection (KLM, 1/9) |
 | Bits per episode | ``n_qubits`` | ``n_modes`` occupancy bits after single-shot sampling |
 | Output cardinality | ``2^n`` outcomes | ``C(n_modes, n_photons)`` in UNBUNCHED, ``2^(n_modes/2)`` in DUAL_RAIL |
 | Best σ on picture frames | 1–4 | 2–3 |
-| Per-feature SNR (784-dim inputs) | **0.88** (1q, σ=0.05) | **0.12**, saturating — see the bottleneck note above |
+| Per-feature SNR (784-dim inputs) | **0.886** (1q, σ=0.05) | **0.886** with a dual-rail MZI (identical by construction); **0.12** with a random mesh |
 | Wall clock for E=1000 | ~1 s | ~10 s |
-| MNIST lift over LR? | Yes (1.8% error vs 3.8%) | No lift in any UNBUNCHED setting; DUAL_RAIL re-running |
+| MNIST lift over LR? | Yes (1.77% vs 4.40%) | Yes with a dual-rail MZI (1.43%); none with a random mesh (4.43%) |
