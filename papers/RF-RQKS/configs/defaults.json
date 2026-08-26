@@ -1,6 +1,10 @@
 {
-  "description": "Fast end-to-end RF-RQKS ablation smoke run on 36_LTE_1 DCT64x64",
-  "representation_path": "representations/dct64x64_36_lte_1",
+  "description": "Fast file-free RF-RQKS ablation smoke run",
+  "data_source": "synthetic",
+  "synthetic_feature_count": 64,
+  "synthetic_train_samples": 32,
+  "synthetic_validation_samples": 16,
+  "synthetic_test_samples": 16,
   "validation_fraction": 0.2,
   "standardization_batch_size": 64,
   "sampler": "dummy_rbf",

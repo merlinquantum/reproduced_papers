@@ -1,5 +1,7 @@
 {
   "description": "Minimal photonic end-to-end check on 36_LTE_1 DCT64x64",
+  "data_source": "representation",
+  "representation_path": "representations/dct64x64_36_lte_1",
   "sampler": "photonic",
   "batch_size": 32,
   "maximum_output_features": 64,

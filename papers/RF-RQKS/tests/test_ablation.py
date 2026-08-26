@@ -60,6 +60,15 @@ def test_loader_keeps_normal_anomaly_pairs_together(
     np.testing.assert_allclose(dataset.train_features.std(axis=0), 1.0, atol=1e-6)
 
 
+def test_default_config_uses_file_free_synthetic_smoke_dataset() -> None:
+    config = json.loads(
+        (Path(__file__).resolve().parents[1] / "configs" / "defaults.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert config["data_source"] == "synthetic"
+
+
 def test_dummy_sampler_output_shape() -> None:
     sampler = DummyRBFSampler(
         photon_count=1,

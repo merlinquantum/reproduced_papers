@@ -1,5 +1,7 @@
 {
   "description": "Reduced photonic RF-RQKS ablation on the available 36_LTE_1 band",
+  "data_source": "representation",
+  "representation_path": "representations/dct64x64_36_lte_1",
   "sampler": "photonic",
   "batch_size": 16,
   "maximum_output_features": 8192,

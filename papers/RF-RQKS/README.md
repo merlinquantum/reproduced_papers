@@ -64,6 +64,12 @@ python utils/generate_dataset.py \
 
 This produces 800 training samples and 210 test samples after pairing every LTE capture with its anomaly-injected version. The spectrogram arrays require approximately 617 MiB. This subset is suitable for pipeline development and single-band experiments, but it does not reproduce the paper's full multi-band sample count.
 
+The results reported in this reproduction are obtained on this smaller
+`36_LTE_1` subset. The measured LTE IQ files must be downloaded separately
+from the [WASD Wireless Anomaly Signal Dataset](https://ieee-dataport.org/open-access/wasd-wireless-anomaly-signal-dataset)
+and placed under `data/RF-RQKS/raw/36_LTE_1/`. The complete WASD collection used
+by the paper is much larger; it is not bundled with this repository.
+
 ### Match the paper's ablation dataset size
 
 When only the 36_LTE_1 processed subset is available, expand it to the paper's
@@ -267,11 +273,18 @@ unmodified Thales-QKS sweep grid is available as
 does not turn this single LTE band into the paper's full multi-band dataset.
 
 Running without a named config executes a fast classical random-feature smoke
-test of all five stages:
+test of all five stages on a deterministic synthetic feature dataset. It does
+not require the downloaded WASD files:
 
 ```bash
 python implementation.py --paper RF-RQKS
 ```
+
+Configs for real experiments, including `ablation_36_lte_1_lite.json` and
+`photonic_smoke_36_lte_1.json`, explicitly use cached representations and
+therefore require the processed WASD data. The file-free default smoke run is
+only an integration check; its synthetic data is not used for reported
+results.
 
 Every invocation creates `outdir/run_YYYYMMDD-HHMMSS/` containing
 `results.json`, `summary.json`, the resolved `config_snapshot.json`, and the
@@ -285,6 +298,24 @@ written as `stage_1_validation_auroc_*.png`,
 `stage_2_validation_auroc_depth.png`, `stage_3_validation_scores.png`,
 `stage_4_validation_scores_photons.png`, and
 `stage_5_regression_functions.png`.
+
+## Results and comparison with the paper
+
+This reproduction currently reports results only for the independently
+downloaded `36_LTE_1` WASD subset: 400 training LTE pairs and 105 held-out test
+LTE pairs, or 800 and 210 labelled rows respectively. These results should not
+be interpreted as results on the full WASD dataset or as a complete numerical
+reproduction of the paper.
+
+The observed results are subpar compared with the paper's reported results.
+The primary limitation is the substantially smaller dataset and its single LTE
+band: the paper uses many more independent LTE captures across multiple bands,
+whereas this reproduction has only 505 source captures in total. The optional
+paper-sized augmentation increases the number of stored rows by resampling and
+translating these captures, but it does not create new independent LTE
+measurements. Consequently, it cannot provide the same data diversity as the
+paper's dataset, and the performance gap should not be attributed solely to the
+quantum model or the DCT representation.
 
 ## Tests
 

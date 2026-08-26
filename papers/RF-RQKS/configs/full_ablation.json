@@ -1,5 +1,7 @@
 {
   "description": "Original Thales-QKS sweep values; computationally expensive",
+  "data_source": "representation",
+  "representation_path": "representations/dct64x64",
   "sampler": "photonic",
   "batch_size": 16,
   "maximum_output_features": 50000000,

@@ -1,5 +1,6 @@
 {
   "description": "Lightweight ablation optimized for single-band RF-RQKS with 36_LTE_1 data",
+  "data_source": "representation",
   "representation_path": "representations/dct64x64_36_lte_1",
   "validation_fraction": 0.15,
   "standardization_batch_size": 64,
