@@ -136,7 +136,7 @@ python ../../implementation.py --config configs/synthetic_datasets.json \
     --latent-source hardware --platform qpu:belenos --latent-dim 32 --architecture 1-1
 ```
 
-`1-1` is the ORCA PT-2 delay-line configuration used for the paper's hardware runs. Lossy shots are **kept**, not post-selected: loss is part of the distribution the generator actually sees, and discarding it biases the latent.
+`1-1` is the ORCA PT-2 delay-line configuration used for the paper's hardware runs. Lossy shots are post-selected by default (matching the paper): shots with fewer than `n_photons` detections are discarded; keeping lossy shots would require setting `post_select=False` in the hardware path.
 
 ## Configuration
 
