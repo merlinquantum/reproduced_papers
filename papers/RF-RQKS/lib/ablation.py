@@ -223,7 +223,9 @@ def _selection_metrics(
         "actual_output_feature_count": int(sampled_train.shape[1]),
         "metrics": {
             "train_auroc": float(roc_auc_score(dataset.train_labels, train_scores)),
-            "train_f1": float(f1_score(dataset.train_labels, readout.predict(sampled_train))),
+            "train_f1": float(
+                f1_score(dataset.train_labels, readout.predict(sampled_train))
+            ),
             "validation_auroc": float(
                 roc_auc_score(dataset.validation_labels, validation_scores)
             ),
@@ -260,16 +262,23 @@ def _run_configuration(
     state: dict[str, Any],
     run_dir: Path,
 ) -> dict[str, Any]:
-    count_label = (f"q={configuration.qubit_count}" if configuration.qubit_count is not None
-                   else f"m={configuration.mode_count}, n={configuration.photon_count}")
-    print(f"  [{stage_name}] Testing config: {count_label}, D={configuration.depth}, "
-          f"E={configuration.episode_count}, ent={configuration.entangling_strategy}")
+    count_label = (
+        f"q={configuration.qubit_count}"
+        if configuration.qubit_count is not None
+        else f"m={configuration.mode_count}, n={configuration.photon_count}"
+    )
+    print(
+        f"  [{stage_name}] Testing config: {count_label}, D={configuration.depth}, "
+        f"E={configuration.episode_count}, ent={configuration.entangling_strategy}"
+    )
     result = {
         "configuration": asdict(configuration),
         **_selection_metrics(configuration, dataset, runtime),
     }
-    print(f"  [{stage_name}] Result - validation_auroc: {result['metrics']['validation_auroc']:.4f}, "
-          f"validation_f1: {result['metrics']['validation_f1']:.4f}")
+    print(
+        f"  [{stage_name}] Result - validation_auroc: {result['metrics']['validation_auroc']:.4f}, "
+        f"validation_f1: {result['metrics']['validation_f1']:.4f}"
+    )
     state["stages"][stage_name]["results"].append(result)
     _write_state(state, run_dir)
     return result
@@ -405,13 +414,15 @@ def _plot_stage_3_bars(results: list[dict[str, Any]], output_path: Path) -> None
 
 
 def _plot_stage_4_lines(results: list[dict[str, Any]], output_path: Path) -> None:
-    count_key = "qubit_count" if results and results[0]["configuration"].get("qubit_count") is not None else "photon_count"
+    count_key = (
+        "qubit_count"
+        if results and results[0]["configuration"].get("qubit_count") is not None
+        else "photon_count"
+    )
     ordered_results = sorted(
         results, key=lambda result: result["configuration"][count_key]
     )
-    photon_counts = [
-        result["configuration"][count_key] for result in ordered_results
-    ]
+    photon_counts = [result["configuration"][count_key] for result in ordered_results]
     figure, axis = plt.subplots(figsize=(8, 5), dpi=150)
     axis.plot(
         photon_counts,
@@ -442,14 +453,28 @@ def _plot_stage_4_lines(results: list[dict[str, Any]], output_path: Path) -> Non
 
 def _plot_stage_5_readouts(result: dict[str, Any], output_path: Path) -> None:
     readout_names = list(READOUT_NAMES)
-    direct_values = [result["direct_readouts"][name]["test_auroc"] for name in readout_names]
+    direct_values = [
+        result["direct_readouts"][name]["test_auroc"] for name in readout_names
+    ]
     qks_values = [result["qks_readouts"][name]["test_auroc"] for name in readout_names]
     positions = np.arange(len(readout_names))
     figure, axis = plt.subplots(figsize=(10, 4.8), dpi=150)
     bar_height = 0.35
-    axis.barh(positions - bar_height / 2, direct_values, height=bar_height, color="#7f7f7f", label="Direct")
+    axis.barh(
+        positions - bar_height / 2,
+        direct_values,
+        height=bar_height,
+        color="#7f7f7f",
+        label="Direct",
+    )
     quantum_label = "Qiskit" if result.get("sampler") == "qiskit" else "Photonic"
-    axis.barh(positions + bar_height / 2, qks_values, height=bar_height, color="#0e89e6", label=quantum_label)
+    axis.barh(
+        positions + bar_height / 2,
+        qks_values,
+        height=bar_height,
+        color="#0e89e6",
+        label=quantum_label,
+    )
     axis.set_yticks(positions, readout_names)
     axis.set_xlim(0.0, 1.0)
     axis.set_xlabel("TEST AUROC")
@@ -615,14 +640,22 @@ def run_readout_comparison(
     )
     model_values = dict(config["model"])
     configuration = ModelConfiguration(
-        photon_count=(int(model_values["photon_count"]) if "photon_count" in model_values else None),
-        mode_count=(int(model_values["mode_count"]) if "mode_count" in model_values else None),
+        photon_count=(
+            int(model_values["photon_count"])
+            if "photon_count" in model_values
+            else None
+        ),
+        mode_count=(
+            int(model_values["mode_count"]) if "mode_count" in model_values else None
+        ),
         depth=int(model_values["depth"]),
         episode_count=int(model_values["episode_count"]),
         encoding_strategy=str(model_values["encoding_strategy"]),
         entangling_strategy=model_values["entangling_strategy"],
         same_haar=bool(model_values["same_haar"]),
-        qubit_count=(int(model_values["qubit_count"]) if "qubit_count" in model_values else None),
+        qubit_count=(
+            int(model_values["qubit_count"]) if "qubit_count" in model_values else None
+        ),
     )
     result = _run_stage_5(
         {
@@ -635,7 +668,9 @@ def run_readout_comparison(
     figures_dir = run_dir / "figures"
     figures_dir.mkdir(parents=True, exist_ok=True)
     _plot_stage_5_readouts(result, figures_dir / "figure_6.png")
-    (run_dir / "results.json").write_text(json.dumps(result, indent=2), encoding="utf-8")
+    (run_dir / "results.json").write_text(
+        json.dumps(result, indent=2), encoding="utf-8"
+    )
     return result
 
 
@@ -659,13 +694,15 @@ def run_ablation(
         Complete ablation state.
     """
     run_dir.mkdir(parents=True, exist_ok=True)
-    print("\n" + "="*80)
+    print("\n" + "=" * 80)
     print("Starting RF-RQKS Five-Stage Ablation")
-    print("="*80)
-    print(f"Dataset: train={dataset.train_labels.size}, "
-          f"validation={dataset.validation_labels.size}, "
-          f"development={dataset.development_labels.size}, "
-          f"test={dataset.test_labels.size}")
+    print("=" * 80)
+    print(
+        f"Dataset: train={dataset.train_labels.size}, "
+        f"validation={dataset.validation_labels.size}, "
+        f"development={dataset.development_labels.size}, "
+        f"test={dataset.test_labels.size}"
+    )
     print(f"Input features: {dataset.input_feature_count}")
     print(f"Sampler: {config['sampler']}, Device: {config['device']}")
     print()
@@ -705,7 +742,9 @@ def run_ablation(
 
     # Stage 1: Sweep mode and episode counts
     count_key = "qubit_counts" if is_qiskit else "mode_counts"
-    total_stage_1 = len(config["stage_1"][count_key]) * len(config["stage_1"]["episode_counts"]) * 2
+    total_stage_1 = (
+        len(config["stage_1"][count_key]) * len(config["stage_1"]["episode_counts"]) * 2
+    )
     print(f"[Stage 1] Starting - will test {total_stage_1} configurations")
     stage_1_count = 0
     for count in config["stage_1"][count_key]:
@@ -729,14 +768,21 @@ def run_ablation(
                     run_dir,
                 )
                 stage_1_count += 1
-                print(f"[Stage 1] Completed {stage_1_count}/{total_stage_1} configurations")
-    print(f"[Stage 1] Complete! Shortlisting top configurations...\n")
+                print(
+                    f"[Stage 1] Completed {stage_1_count}/{total_stage_1} configurations"
+                )
+    print("[Stage 1] Complete! Shortlisting top configurations...\n")
     shortlisted = _best(
         state["stages"]["stage_1"]["results"],
-        min(int(config["stage_2"]["shortlist_count"]), len(state["stages"]["stage_1"]["results"])),
+        min(
+            int(config["stage_2"]["shortlist_count"]),
+            len(state["stages"]["stage_1"]["results"]),
+        ),
     )
-    print(f"[Stage 2] Starting - will test {len(shortlisted)} configs × {len(config['stage_2']['depths'])} depths = "
-          f"{len(shortlisted) * len(config['stage_2']['depths'])} configurations")
+    print(
+        f"[Stage 2] Starting - will test {len(shortlisted)} configs × {len(config['stage_2']['depths'])} depths = "
+        f"{len(shortlisted) * len(config['stage_2']['depths'])} configurations"
+    )
     stage_2_count = 0
     for parent in shortlisted:
         base = _configuration_from_result(parent)
@@ -750,12 +796,16 @@ def run_ablation(
                 run_dir,
             )
             stage_2_count += 1
-            print(f"[Stage 2] Completed {stage_2_count}/{len(shortlisted) * len(config['stage_2']['depths'])} configurations")
-    print(f"[Stage 2] Complete! Selecting best configuration...\n")
+            print(
+                f"[Stage 2] Completed {stage_2_count}/{len(shortlisted) * len(config['stage_2']['depths'])} configurations"
+            )
+    print("[Stage 2] Complete! Selecting best configuration...\n")
     best_stage_2 = _best(state["stages"]["stage_2"]["results"])[0]
     base = _configuration_from_result(best_stage_2)
 
-    print(f"[Stage 3] Starting - will test {len(config['stage_3']['depth_episode_pairs'])} depth-episode pairs")
+    print(
+        f"[Stage 3] Starting - will test {len(config['stage_3']['depth_episode_pairs'])} depth-episode pairs"
+    )
     stage_3_count = 0
     for depth, episode_count in config["stage_3"]["depth_episode_pairs"]:
         _run_configuration(
@@ -773,25 +823,34 @@ def run_ablation(
             run_dir,
         )
         stage_3_count += 1
-        print(f"[Stage 3] Completed {stage_3_count}/{len(config['stage_3']['depth_episode_pairs'])} pairs")
-    print(f"[Stage 3] Complete! Selecting best configuration...\n")
+        print(
+            f"[Stage 3] Completed {stage_3_count}/{len(config['stage_3']['depth_episode_pairs'])} pairs"
+        )
+    print("[Stage 3] Complete! Selecting best configuration...\n")
     best_stage_3 = _best(state["stages"]["stage_3"]["results"])[0]
     base = _configuration_from_result(best_stage_3)
 
-    stage_4_counts = (config.get("stage_4", {}).get("qubit_counts")
-                      if is_qiskit else None)
+    stage_4_counts = (
+        config.get("stage_4", {}).get("qubit_counts") if is_qiskit else None
+    )
     if is_qiskit:
         stage_4_counts = stage_4_counts or list(range(1, base.qubit_count + 1))
     else:
         stage_4_counts = list(range(1, base.mode_count // 2 + 1))
-    print(f"[Stage 4] Starting - will test {len(stage_4_counts)} {'qubit' if is_qiskit else 'photon'} counts")
+    print(
+        f"[Stage 4] Starting - will test {len(stage_4_counts)} {'qubit' if is_qiskit else 'photon'} counts"
+    )
     stage_4_count = 0
     for count in stage_4_counts:
         _run_configuration(
             "stage_4",
-            ModelConfiguration(**{**asdict(base),
-                                  "photon_count": None if is_qiskit else int(count),
-                                  "qubit_count": int(count) if is_qiskit else None}),
+            ModelConfiguration(
+                **{
+                    **asdict(base),
+                    "photon_count": None if is_qiskit else int(count),
+                    "qubit_count": int(count) if is_qiskit else None,
+                }
+            ),
             dataset,
             runtime,
             state,
@@ -799,13 +858,17 @@ def run_ablation(
         )
         stage_4_count += 1
         print(f"[Stage 4] Completed {stage_4_count}/{len(stage_4_counts)} counts")
-    print(f"[Stage 4] Complete! Selecting best configuration...\n")
+    print("[Stage 4] Complete! Selecting best configuration...\n")
     best_stage_4 = _best(state["stages"]["stage_4"]["results"])[0]
-    
-    print(f"[Stage 5] Starting - testing best configuration on test set with {len(READOUT_NAMES)} readout types")
+
+    print(
+        f"[Stage 5] Starting - testing best configuration on test set with {len(READOUT_NAMES)} readout types"
+    )
     stage_5 = _run_stage_5(best_stage_4, dataset, runtime)
-    print(f"[Stage 5] Complete! Best readout: {stage_5['best_qks_readout']} "
-          f"(AUROC: {stage_5['qks_readouts'][stage_5['best_qks_readout']]['test_auroc']:.4f})\n")
+    print(
+        f"[Stage 5] Complete! Best readout: {stage_5['best_qks_readout']} "
+        f"(AUROC: {stage_5['qks_readouts'][stage_5['best_qks_readout']]['test_auroc']:.4f})\n"
+    )
     state["stages"]["stage_5"]["results"].append(stage_5)
     state["best_model"] = best_stage_4
     state["status"] = "complete"
@@ -859,8 +922,8 @@ def run_ablation(
         figures_dir / "stage_5_regression_functions.png",
     )
     _write_state(state, run_dir)
-    print("="*80)
+    print("=" * 80)
     print(f"Ablation Complete! Results saved to {run_dir}")
-    print("="*80)
+    print("=" * 80)
     print()
     return state

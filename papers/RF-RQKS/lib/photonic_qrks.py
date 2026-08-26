@@ -86,9 +86,7 @@ class PhotonicQRKS(nn.Module):
         self.register_buffer(
             "weights", torch.normal(mean=0.0, std=2.0, size=(E, input_size, data_size))
         )
-        self.register_buffer(
-            "biases", torch.rand(E, input_size) * 2.0 * torch.pi
-        )
+        self.register_buffer("biases", torch.rand(E, input_size) * 2.0 * torch.pi)
         builder_or_circuit = self._build_circuit()
         measurement = ml.MeasurementStrategy.probs(
             computation_space=ml.ComputationSpace.UNBUNCHED
@@ -173,7 +171,10 @@ class PhotonicQRKS(nn.Module):
         if self.grouping is not None:
             output = self.grouping(output)
         output = output.to(self.compute_device).reshape(features.shape[0], -1)
-        if self.remote_processor is not None and self.forward_saves_directory is not None:
+        if (
+            self.remote_processor is not None
+            and self.forward_saves_directory is not None
+        ):
             output_directory = Path(self.forward_saves_directory)
             output_directory.mkdir(parents=True, exist_ok=True)
             output_path = output_directory / (
@@ -181,7 +182,9 @@ class PhotonicQRKS(nn.Module):
                 f"L-{self.L_strategy}_V-{self.V_strategy}_"
                 f"num_{self.number_of_remote_forwards}.pt"
             )
-            torch.save({"features": features.cpu(), "output": output.cpu()}, output_path)
+            torch.save(
+                {"features": features.cpu(), "output": output.cpu()}, output_path
+            )
             self.number_of_remote_forwards += 1
         return output
 
@@ -295,12 +298,12 @@ def _v1(mode_count: int, unitary: np.ndarray | None) -> pcvl.Circuit:
     return circuit
 
 
-def _add_entangler(
-    builder: ml.CircuitBuilder, strategy: str
-) -> ml.CircuitBuilder:
+def _add_entangler(builder: ml.CircuitBuilder, strategy: str) -> ml.CircuitBuilder:
     mode_count = builder.n_modes
     if strategy == "V2":
-        builder.add_superpositions([[index, index + 1] for index in range(mode_count - 1)])
+        builder.add_superpositions(
+            [[index, index + 1] for index in range(mode_count - 1)]
+        )
         builder.add_superpositions(
             [[index, index + 1] for index in reversed(range(mode_count - 2))]
         )

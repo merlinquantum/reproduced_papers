@@ -169,11 +169,14 @@ def load_dct_dataset(
     test_labels = np.asarray(
         np.load(representation_root / "test" / "labels.npy"), dtype=np.int64
     )
-    pair_indices = _read_pair_indices(
-        representation_root / "train" / "metadata.csv"
-    )
-    if raw_train_features.shape[0] != train_labels.size or pair_indices.size != train_labels.size:
-        raise ValueError("Training features, labels, and metadata have inconsistent lengths")
+    pair_indices = _read_pair_indices(representation_root / "train" / "metadata.csv")
+    if (
+        raw_train_features.shape[0] != train_labels.size
+        or pair_indices.size != train_labels.size
+    ):
+        raise ValueError(
+            "Training features, labels, and metadata have inconsistent lengths"
+        )
     if raw_test_features.shape[0] != test_labels.size:
         raise ValueError("Test features and labels have inconsistent lengths")
 
@@ -190,11 +193,15 @@ def load_dct_dataset(
 
     return DatasetSplits(
         train_features=standardize_features(
-            np.asarray(raw_train_features[training_indices]), selection_mean, selection_std
+            np.asarray(raw_train_features[training_indices]),
+            selection_mean,
+            selection_std,
         ).astype(np.float32),
         train_labels=train_labels[training_indices],
         validation_features=standardize_features(
-            np.asarray(raw_train_features[validation_indices]), selection_mean, selection_std
+            np.asarray(raw_train_features[validation_indices]),
+            selection_mean,
+            selection_std,
         ).astype(np.float32),
         validation_labels=train_labels[validation_indices],
         test_features=standardize_features(

@@ -57,15 +57,16 @@ def _build_synthetic_smoke_dataset(config: dict) -> DatasetSplits:
     if feature_count <= 0:
         raise ValueError("synthetic_feature_count must be positive")
     if any(
-        sample_count <= 1
-        or sample_count % 2
+        sample_count <= 1 or sample_count % 2
         for sample_count in (
             train_sample_count,
             validation_sample_count,
             test_sample_count,
         )
     ):
-        raise ValueError("Synthetic sample counts must be positive even values greater than one")
+        raise ValueError(
+            "Synthetic sample counts must be positive even values greater than one"
+        )
 
     rng = np.random.default_rng(int(_require(config, "seed")))
 

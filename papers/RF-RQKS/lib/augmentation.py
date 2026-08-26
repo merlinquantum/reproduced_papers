@@ -58,13 +58,18 @@ def _read_split_metadata(metadata_path: Path) -> list[dict[str, str]]:
 
 
 def _validate_split(
-    split_root: Path, spectrograms: np.ndarray, labels: np.ndarray, rows: list[dict[str, str]]
+    split_root: Path,
+    spectrograms: np.ndarray,
+    labels: np.ndarray,
+    rows: list[dict[str, str]],
 ) -> dict[int, tuple[int, int]]:
     """Validate pair layout and return pair IDs mapped to row indices."""
     if spectrograms.ndim != 3:
         raise ValueError(f"Spectrograms must be three-dimensional: {split_root}")
     if labels.shape != (spectrograms.shape[0],) or len(rows) != spectrograms.shape[0]:
-        raise ValueError(f"Spectrogram, label, and metadata lengths disagree: {split_root}")
+        raise ValueError(
+            f"Spectrogram, label, and metadata lengths disagree: {split_root}"
+        )
 
     pair_rows: dict[int, list[int]] = {}
     for row_index, row in enumerate(rows):
@@ -118,7 +123,9 @@ def _augment_split(
     )
     source_pair_indices = np.asarray(sorted(pair_rows), dtype=np.int64)
     rng = np.random.default_rng(seed)
-    frequency_limit = int(round(spectrograms.shape[1] * maximum_frequency_shift_fraction))
+    frequency_limit = int(
+        round(spectrograms.shape[1] * maximum_frequency_shift_fraction)
+    )
     time_limit = int(round(spectrograms.shape[2] * maximum_time_shift_fraction))
 
     metadata_fields = list(rows[0])
@@ -202,9 +209,13 @@ def augment_processed_dataset(
         raise FileExistsError(f"Refusing to overwrite existing dataset: {output_root}")
     if train_pair_count <= 0 or test_pair_count <= 0:
         raise ValueError("Target pair counts must be positive")
-    temporary_root = output_root.with_name(f".{output_root.name}.building-{os.getpid()}")
+    temporary_root = output_root.with_name(
+        f".{output_root.name}.building-{os.getpid()}"
+    )
     if temporary_root.exists():
-        raise FileExistsError(f"Temporary build directory already exists: {temporary_root}")
+        raise FileExistsError(
+            f"Temporary build directory already exists: {temporary_root}"
+        )
     temporary_root.mkdir(parents=True)
     _augment_split(
         input_root / "train",

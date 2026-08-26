@@ -168,7 +168,9 @@ def build_sampler(
         from .qiskit_qrks import QiskitQRKS
 
         if run_on_hardware:
-            raise ValueError("The Qiskit sampler is simulator-only and does not support run_on_hardware")
+            raise ValueError(
+                "The Qiskit sampler is simulator-only and does not support run_on_hardware"
+            )
         if qubit_count is None:
             raise ValueError("qubit_count is required for the Qiskit sampler")
         return QiskitQRKS(

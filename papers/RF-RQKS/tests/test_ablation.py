@@ -9,9 +9,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 import torch
-
-from lib.ablation import run_ablation
-from lib.ablation import run_readout_comparison
+from lib.ablation import run_ablation, run_readout_comparison
 from lib.ablation_data import load_dct_dataset
 from lib.qks import DummyRBFSampler, build_sampler
 
@@ -97,15 +95,22 @@ def test_qiskit_sampler_output_shape_and_probability_normalization() -> None:
     output = sampler(torch.zeros(4, 8))
     assert tuple(output.shape) == (4, 16)
     episode_probabilities = output.reshape(4, 2, 8)
-    assert torch.allclose(
-        episode_probabilities.sum(dim=2), torch.ones(4, 2), atol=1e-5
-    )
+    assert torch.allclose(episode_probabilities.sum(dim=2), torch.ones(4, 2), atol=1e-5)
 
 
 def test_qiskit_sampler_rejects_hardware_execution() -> None:
     with pytest.raises(ValueError, match="simulator-only"):
         build_sampler(
-            "qiskit", None, None, 1, 1, 4, "L2", None, False, run_on_hardware=True,
+            "qiskit",
+            None,
+            None,
+            1,
+            1,
+            4,
+            "L2",
+            None,
+            False,
+            run_on_hardware=True,
             qubit_count=2,
         )
 
@@ -153,7 +158,9 @@ def test_five_stage_smoke_run(representation_root: Path, tmp_path: Path) -> None
     assert (run_dir / "figures" / "stage_4.png").exists()
 
 
-def test_figure_six_readout_comparison(representation_root: Path, tmp_path: Path) -> None:
+def test_figure_six_readout_comparison(
+    representation_root: Path, tmp_path: Path
+) -> None:
     dataset = load_dct_dataset(
         representation_root,
         validation_fraction=0.2,

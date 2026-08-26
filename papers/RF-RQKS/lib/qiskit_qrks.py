@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-import math
-
 import numpy as np
 import torch
 from torch import nn
@@ -56,10 +54,18 @@ class QiskitQRKS(nn.Module):
         self.L_strategy = L_strategy
         self.V_strategy = V_strategy
         self.output_feature_count = episode_count * 2**qubit_count
-        input_size = depth * (qubit_count // 2) if L_strategy == "L1" else depth * qubit_count
-        self.register_buffer("weights", torch.randn(episode_count, input_size, data_size) * 2.0)
-        self.register_buffer("biases", torch.rand(episode_count, input_size) * 2.0 * torch.pi)
-        self.random_angles = np.random.uniform(0.0, 2.0 * np.pi, (depth + 1, qubit_count, 2))
+        input_size = (
+            depth * (qubit_count // 2) if L_strategy == "L1" else depth * qubit_count
+        )
+        self.register_buffer(
+            "weights", torch.randn(episode_count, input_size, data_size) * 2.0
+        )
+        self.register_buffer(
+            "biases", torch.rand(episode_count, input_size) * 2.0 * torch.pi
+        )
+        self.random_angles = np.random.uniform(
+            0.0, 2.0 * np.pi, (depth + 1, qubit_count, 2)
+        )
         if V_strategy == "V1" and same_random_layer:
             self.random_angles[1:] = self.random_angles[0]
 
@@ -117,6 +123,8 @@ class QiskitQRKS(nn.Module):
                     phases[sample_index, episode].detach().cpu().numpy(), episode
                 )
                 probabilities = Statevector.from_instruction(circuit).probabilities()
-                sample_outputs.append(torch.from_numpy(np.asarray(probabilities, dtype=np.float32)))
+                sample_outputs.append(
+                    torch.from_numpy(np.asarray(probabilities, dtype=np.float32))
+                )
             outputs.append(torch.cat(sample_outputs))
         return torch.stack(outputs).to(features.device)
