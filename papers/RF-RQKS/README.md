@@ -152,7 +152,7 @@ python utils/plot_dataset_examples.py --synthetic-demo
 
 The synthetic option is for implementation verification only and is not used to build the reproduced dataset.
 
-![RF-RQKS dataset pipeline verification](results/rf_rqks_dataset_examples.png)
+![RF-RQKS dataset pipeline verification](assets/rf_rqks_dataset_examples.png)
 
 ## Representation generation
 
@@ -299,23 +299,67 @@ written as `stage_1_validation_auroc_*.png`,
 `stage_4_validation_scores_photons.png`, and
 `stage_5_regression_functions.png`.
 
+### Ablation figures
+
+The committed Merlin results for the ablation study are shown below. The
+no-entangling Stage 1 figure is omitted.
+
+![Stage 1 validation AUROC with entangling](assets/merlin/stage_1_validation_auroc_with_entangling.png)
+
+![Stage 2 validation AUROC by depth](assets/merlin/stage_2_validation_auroc_depth.png)
+
+![Stage 3 validation scores](assets/merlin/stage_3_validation_scores.png)
+
+![Stage 4 validation scores by photon count](assets/merlin/stage_4_validation_scores_photons.png)
+
+![Stage 5 direct versus photonic readout comparison](assets/merlin/stage_5_regression_functions.png)
+
+The standalone Figure 6 readout comparison is available with:
+
+```bash
+python implementation.py \
+  --paper RF-RQKS \
+  --config papers/RF-RQKS/configs/figure_6.json
+```
+
+It evaluates all four direct and QKS readouts for the fixed model in the
+config and writes `figures/figure_6.png`. The QPU variant uses the same
+pipeline and requires the representation under
+`data/RF-RQKS/representations/dct64x64_qpu`, MerLin 0.4.1, and
+`QUANDELA_API_TOKEN`:
+
+```bash
+python implementation.py \
+  --paper RF-RQKS \
+  --config papers/RF-RQKS/configs/qpu_run.json
+```
+
+Set `hardware` and `nsample` in `qpu_run.json` for the target Quandela
+backend and shot budget. Remote forward outputs are saved under the run's
+`photonic_feature_batches/` directory.
+
 ## Results and comparison with the paper
 
-This reproduction currently reports results only for the independently
-downloaded `36_LTE_1` WASD subset: 400 training LTE pairs and 105 held-out test
-LTE pairs, or 800 and 210 labelled rows respectively. These results should not
-be interpreted as results on the full WASD dataset or as a complete numerical
-reproduction of the paper.
+The reproduced results are subpar compared with the paper's reported results,
+primarily because this implementation uses a much smaller dataset. We did not
+download the paper's complete WASD IQ collection because it is larger than
+200 GB. Instead, the reproduction uses the independently downloaded
+`36_LTE_1` subset:
 
-The observed results are subpar compared with the paper's reported results.
-The primary limitation is the substantially smaller dataset and its single LTE
-band: the paper uses many more independent LTE captures across multiple bands,
-whereas this reproduction has only 505 source captures in total. The optional
-paper-sized augmentation increases the number of stored rows by resampling and
-translating these captures, but it does not create new independent LTE
-measurements. Consequently, it cannot provide the same data diversity as the
-paper's dataset, and the performance gap should not be attributed solely to the
-quantum model or the DCT representation.
+| Dataset | Training pairs | Test pairs | Labelled rows | Independent LTE captures |
+| --- | ---: | ---: | ---: | ---: |
+| This reproduction (`36_LTE_1`) | 400 | 105 | 1,010 | 505 |
+| Paper-sized ablation target | 10,800 | 2,031 | 25,662 | not available locally |
+
+Thus, the available subset contains about 25.4 times fewer labelled rows and
+about 25.4 times fewer source pairs than the paper-sized target, and it covers
+only one LTE band rather than the paper's multi-band collection. The optional
+paper-sized augmentation increases the stored data to 21,600 training rows
+and 4,062 test rows by resampling and translating the 505 available source
+captures. It does not create new independent LTE measurements or recover the
+diversity of the full WASD collection. The resulting performance gap should
+therefore not be attributed solely to the quantum model or the DCT
+representation.
 
 ## Tests
 
