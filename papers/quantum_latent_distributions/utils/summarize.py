@@ -47,8 +47,12 @@ def main() -> None:
     for run_dir in args.run_dirs:
         records.extend(json.loads((run_dir / "metrics.json").read_text()))
 
+    if not records:
+        raise SystemExit(
+            "no metrics records found (expected each run dir to contain a non-empty metrics.json)"
+        )
+
     if "target" in records[0]:  # synthetic datasets, paper Table I
-        grouped = defaultdict(list)
         for record in records:
             grouped[(record["target"], record["latent"])].append(
                 record["l1_nearest_int"]
