@@ -244,8 +244,6 @@ they are listed so the two sets are not confused.
 
 ### (3,5)-MNIST — Photonic MerLin QKS (new)
 
-Test errors (1 − test accuracy):
-
 Test errors (1 − test accuracy), same subsample and seeds as the table above:
 
 | Variant | Setting | Test error (3 seeds) |
