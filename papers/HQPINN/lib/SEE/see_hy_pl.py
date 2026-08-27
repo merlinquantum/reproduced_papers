@@ -155,10 +155,7 @@ def run(
                     try:
                         model = load_model(
                             existing_ckpt,
-                            lambda processor=None,
-                            q_layers=q_layers,
-                            width=width,
-                            layers=layers: (
+                            lambda processor=None, q_layers=q_layers, width=width, layers=layers: (
                                 ClassicalPennyLanePinn(
                                     q_layers=q_layers,
                                     hidden_width=width,

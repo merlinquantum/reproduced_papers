@@ -7,6 +7,7 @@
 # Librairies loading and functions definitions
 
 import os
+
 import matplotlib.pyplot as plt
 import pandas as pd
 

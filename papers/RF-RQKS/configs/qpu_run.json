@@ -1,0 +1,30 @@
+{
+  "description": "Fixed QKS readout comparison on a remote Quandela backend",
+  "experiment": "readout_comparison",
+  "data_source": "representation",
+  "representation_path": "representations/dct64x64_qpu",
+  "validation_fraction": 0.2,
+  "standardization_batch_size": 64,
+  "sampler": "photonic",
+  "device": "cpu",
+  "seed": 42,
+  "batch_size": 32,
+  "readout_c": 0.8,
+  "readout_max_iter": 10000,
+  "scale_sampled_features": false,
+  "kernel_components": 64,
+  "kernel_gamma": 1.0,
+  "maximum_output_features": 1000000,
+  "run_on_hardware": true,
+  "hardware": "qpu:ascella",
+  "nsample": 5000,
+  "model": {
+    "photon_count": 3,
+    "mode_count": 12,
+    "depth": 1,
+    "episode_count": 32,
+    "encoding_strategy": "L2",
+    "entangling_strategy": "V1",
+    "same_haar": true
+  }
+}

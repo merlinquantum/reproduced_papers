@@ -1,0 +1,11 @@
+{
+  "description": "configuration for QTRL training on MiniGrid environments",
+  "env_name": "MiniGrid",
+  "backend": "merlin_mlp",
+  "num_episodes": 1000,
+  "lr": 0.01,
+  "q_output_size": 8,
+  "hidden_sizes": [16, 16],
+  "nb_photons": 2,
+  "nb_modes": 4
+}
