@@ -277,13 +277,13 @@ deterministic in dual rail, so the photonic featurizer is not an approximation
 of the gate model here; it is the same feature map, and
 `tests/test_photonic_gate_equivalence.py` asserts agreement to 1e-5.  A random
 mesh is *not* balanced, so its interference fringe has low visibility and the
-click probability barely moves with the input — which is the whole of the
-earlier deficit.
+click probability barely moves with the input, which is why that architecture
+carries far less signal per feature.
 
 ### Hardware-aware reporting (MerLin photonic adaptation)
 
-| Field | Picture frames value | MNIST photonic configuration (result re-running) |
-|-------|----------------------|--------------------------------------------------|
+| Field | Picture frames value | MNIST photonic configuration |
+|-------|----------------------|------------------------------|
 | Computation space | UNBUNCHED | DUAL_RAIL |
 | Detector model | threshold | threshold |
 | Photon number | 2 | 3 |
@@ -333,8 +333,8 @@ circuit architectures are available:
   nothing is discarded and the circuit is deterministic.  ``mixing`` selects the
   entangling element: ``"none"``, ``"splitter"`` (one balanced splitter joining
   the two logical-|1> rails — HOM interference, ancilla-free) or ``"mesh"`` (a
-  shallow random mesh).  ``"splitter"`` is the best circuit in this
-  reproduction.
+  shallow random mesh).  ``"splitter"`` gives the best measured result of the
+  photonic architectures here.
 - ``dual_rail_klm_cnot`` — two dual-rail qubits plus the paper's Fig. 2(a)
   CNOT, realised as ``H_B · CZ · H_B`` with a post-selected KLM CZ (three
   reflectivity-1/3 splitters, two vacuum ancillas, success exactly 1/9).  Built
@@ -343,11 +343,12 @@ circuit architectures are available:
   specific splitter conventions.  Exact against the gate ``cnot2`` ansatz to
   1.3e-07.
 
-One implementation detail is worth flagging because it fails silently: MerLin
-parameterises a beam splitter by ``R = cos²(θ/2)``, so a balanced splitter is
-``θ = π/2``.  The library default of ``θ = π/4`` is an **85:15** splitter and
-caps the interferometer's fringe visibility at 0.5.  Both values run; only an
-equivalence check against the gate model distinguishes them.
+Two MerLin conventions the photonic code depends on: a beam splitter is
+parameterised by ``R = cos²(θ/2)``, so a balanced splitter is ``θ = π/2`` (the
+library default ``θ = π/4`` is an 85:15 splitter, capping interferometer fringe
+visibility at 0.5); and the ``FOCK`` distribution is reported in reverse
+lexicographic order of occupation tuples.  Both are pinned by
+`tests/test_photonic_gate_equivalence.py`.
 
 ## Limitations
 
@@ -356,20 +357,23 @@ equivalence check against the gate model distinguishes them.
 - The ``random_mesh`` photonic architecture shows no lift over the linear
   baseline on (3,5)-MNIST at any setting measured, and its per-feature
   signal-to-noise saturates 7× below the gate model under σ, ``angle_scale``
-  and ``n_layers`` sweeps.  ``dual_rail_mzi`` removes the gap entirely, so this
-  is a statement about circuit design, not about photonics.
+  and ``n_layers`` sweeps.  ``dual_rail_mzi`` and ``mzi_threshold`` remove the
+  gap entirely, so this is a statement about circuit design, not about
+  photonics.
 - The paper's Fig. 2(a) CNOT is reproduced photonically with a post-selected
   KLM gate (``architecture="dual_rail_klm_cnot"``), exact to 1.3e-07 against
   the gate code path at the textbook 1/9 success probability.  It costs 9× the
-  shots and does **not** improve accuracy on this task: 1.87 ± 0.40% against
+  shots without improving accuracy on this task: 1.87 ± 0.40% against
   1.43 ± 0.24% for the deterministic, ancilla-free two-qubit circuit.
-- Reproducing *that* gate is not required, and is not even the best option.
+- Reproducing *that* gate is not required.
   ``architecture="mzi_threshold"`` is a fully deterministic 4-mode circuit read
   out with threshold detectors and **no post-selection at all** — a bunched
   event fires one detector and is an ordinary click pattern, not a failure.
   With one balanced splitter joining the two logical-|1> rails (genuine photonic
-  entanglement, no ancillas, no heralding) it reaches **1.60 ± 0.00%**, edging
-  both the gate ansatz and its KLM reproduction.  See `INSIGHTS.md`.
+  entanglement, no ancillas, no heralding) it reaches **1.60 ± 0.00%** — parity
+  with the gate ansatz (1.77 ± 0.24%), with some possible evidence of beating
+  it, though a 1.7-image gap on a 1 000-point test set is well inside the noise.
+  See `INSIGHTS.md`.
 - As with classical Random Kitchen Sinks, the benefit is not universal: it
   likely depends strongly on the dataset and on how well the chosen feature map
   matches the underlying structure.

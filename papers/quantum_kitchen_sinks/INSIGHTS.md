@@ -2,21 +2,19 @@
 
 Distilled, durable notes worth keeping after the reproduction.
 
-## Implementation pitfalls
+## Reading the ansatz figures
 
-- The appendix Quil uses **`RX`** rotations, not `RY`.  Substituting `RY`
-  gives identical *single-qubit* measurement probabilities — the two differ
-  only by a phase on the ``|1>`` component — so the mistake does not announce
-  itself; it shows up only as a mis-scaled optimal σ.  The phase does matter
-  once an entangler acts on the state.
-- A 4-qubit Quil snippet `cnot4` (Fig. 6) reads in the order ``CNOT 0 2; CNOT
-  1 3; CNOT 0 1; CNOT 2 3``.  Be careful with multiplication order when
-  composing CNOT matrices.  Fig. 2(c) appears to draw the two pairs in the
-  opposite order, and they do not commute; the appendix Quil is the authority
+- The appendix Quil uses **`RX`** rotations, not `RY`.  The two give identical
+  *single-qubit* measurement probabilities — they differ only by a phase on the
+  ``|1>`` component — but the phase matters once an entangler acts on the state,
+  and the choice shifts the optimal σ.
+- The 4-qubit ansatz (Fig. 6) is ``CNOT 0 2; CNOT 1 3; CNOT 0 1; CNOT 2 3``.
+  These do not all commute, so composition order matters.  Fig. 2(c) appears to
+  draw the two pairs in the opposite order; the appendix Quil is the authority
   we follow.
-- **Gate order is the whole story for Fig. 2(b).**  Its CZ comes *before* the
-  encoding rotations; putting it after makes it a no-op.  See the CZ section
-  below.
+- **Gate order distinguishes Fig. 2(a) from Fig. 2(b).**  In 2(b) the CZ acts
+  *before* the encoding rotations, on ``|++>``; a diagonal entangler placed
+  after them cannot change Z-basis marginals at all.  See the CZ section below.
 
 ## Sigma scaling with qubit count
 
@@ -34,7 +32,7 @@ amplify σ.  For (3,5)-MNIST we found:
 **Heuristic.** When increasing ``q`` for the tile encoding, scale σ so that
 ``σ · sqrt(r)`` stays roughly constant.
 
-## CZ ansatz "no discrimination" claim — reproduced, and why it is easy to miss
+## The CZ ansatz: why Fig. 2(b) carries no discrimination
 
 The paper states that the Fig. 2(b) ansatz has implicit kernel ``k(u,v) = 1/2``
 and "leads to classifiers that are no better than random".  We reproduce this:
@@ -61,16 +59,14 @@ Three things worth keeping:
    on top is linear (the paper's Linear Baseline rule), nothing downstream can
    use that correlation.  A non-linear classifier on the same features would
    not be chance-level — which is exactly why the LB rule is load-bearing.
-2. **The ordering is load-bearing and fails silently if reversed.**  A CZ is
-   diagonal, so applied *after* the rotations it cannot change Z-basis
-   marginals at all; the ansatz would collapse to two independent one-qubit
-   QKS circuits and score ~98.5% on picture frames — a plausible-looking number
-   that contradicts the paper for no physical reason.  ``tests/test_kernel.py``
-   pins both orderings against the paper's closed-form kernels.
-3. **Train accuracy hides it.**  At ``E = 5000`` with 1600 training points the
-   logistic regression fits the random features to ~99% train accuracy while
-   test stays at chance.  A train-only check would have missed the effect
-   entirely.
+2. **The gate order is what produces the effect.**  A CZ is diagonal, so placed
+   *after* the rotations it cannot change Z-basis marginals; the ansatz would
+   then be two independent one-qubit QKS circuits and would score ~98.5% on
+   picture frames rather than chance.  ``tests/test_kernel.py`` pins both
+   orderings against the paper's closed-form kernels.
+3. **Only the test number reveals it.**  At ``E = 5000`` with 1600 training
+   points the logistic regression fits the random features to ~99% train
+   accuracy while test accuracy stays at chance.
 
 ## Linear baseline matters
 
@@ -95,10 +91,9 @@ Measured agreement with the gate-model code path is 2e-07 (float32 precision) fo
 1, 2 and 3 qubits, and the per-feature signal-to-noise matches to four decimals.
 This is pinned by `tests/test_photonic_gate_equivalence.py`.
 
-**The pitfall that hid it: MerLin parameterises a beam splitter by
-``R = cos²(θ / 2)``.**  A balanced splitter is therefore ``θ = π/2``; the library
-default ``θ = π/4`` is an **85:15** splitter.  Fringe visibility as a function of
-the splitter:
+**MerLin parameterises a beam splitter by ``R = cos²(θ / 2)``**, so a balanced
+splitter is ``θ = π/2``; the library default ``θ = π/4`` is an **85:15**
+splitter.  Fringe visibility follows directly from the splitter:
 
 | splitter | R | MZI fringe visibility |
 |----------|--:|----------------------:|
@@ -106,8 +101,9 @@ the splitter:
 | `add_superpositions` default, θ = π/4 | 0.854 | 0.50 |
 | balanced, θ = π/2 | 0.500 | **1.00** |
 
-Every one of these runs without error and returns plausible accuracies.  Only an
-equivalence check against a known-good reference separates them.
+Visibility is what sets the feature quality: the click probability of a
+low-visibility interferometer barely moves with the input.  The equivalence
+tests in `tests/test_photonic_gate_equivalence.py` fix this by construction.
 
 ### Results on (3,5)-MNIST
 
@@ -124,10 +120,10 @@ All rows share one 4 000/1 000 subsample, so the comparisons are paired.
 | Gate QKS 2q, E=5000 | 1.77 ± 0.24% |
 | SVM-RBF (non-linear reference) | 0.90% |
 
-The `random_mesh` architecture never beats the linear baseline; the dual-rail MZI
-beats it by ~3 percentage points, about 30 of 1 000 test images.  **The earlier
-conclusion that photonic QKS shows no lift on MNIST was a statement about one
-circuit choice, not about photonic QKS.**
+The `random_mesh` architecture does not beat the linear baseline; the dual-rail
+MZI beats it by ~3 percentage points, about 30 of 1 000 test images.  **Whether
+photonic QKS lifts the baseline on this task is a question about the circuit,
+not about the platform.**
 
 ### Why the random mesh loses
 
@@ -179,9 +175,8 @@ Three practical notes for anyone rebuilding it:
    their ancillas, and photons enter on the *outer* rails so that
    `P(|1>) = sin²(θ/2)` on each qubit.
 3. **Perceval's `compute_unitary()` uses the transposed index convention**
-   relative to "amplitude from input mode i to output mode k". Getting this
-   wrong reproduces the *no-entangler* distribution exactly — a very convincing
-   wrong answer, since the gate silently drops out.
+   relative to "amplitude from input mode i to output mode k", which matters
+   when computing two-photon amplitudes by hand from the mode unitary.
 
 The construction actually yields `Z_A · CNOT`; the spurious `Z` on the control
 is diagonal and therefore invisible to a computational-basis measurement.
@@ -224,13 +219,15 @@ the shipped ``mesh`` and is reported to show where the trend ends.
 
 Three conclusions:
 
-1. **A single 50:50 splitter is enough, and is the best circuit here.** It is
-   genuine photonic entanglement — HOM interference, ~24% of the output mass in
-   bunched events — needing no ancillas, no CNOT and no heralding, and at
-   1.60 ± 0.00% it edges both the gate model's CNOT ansatz (1.77 ± 0.24%) and
-   the post-selected KLM reproduction of it (1.87 ± 0.40%). This is the last
-   mile of the photonic translation: the paper's entangler is reproducible, but
-   it is not *required*, and the native photonic element is the better circuit.
+1. **A single 50:50 splitter is enough.** It is genuine photonic entanglement —
+   HOM interference, ~24% of the output mass in bunched events — needing no
+   ancillas, no CNOT and no heralding, and at 1.60 ± 0.00% it reaches **parity
+   with the gate model's CNOT ansatz** (1.77 ± 0.24%), with some possible
+   evidence of beating it. The gap is 1.7 test images out of 1 000, well inside
+   the ±0.4 pp binomial noise of a 1 000-point test set, so parity is the
+   defensible claim. This is the last mile of the photonic translation: the
+   paper's entangler is reproducible, but it is not *required*, and a native
+   photonic element does the job.
 2. **Entanglement does not help on this task.** No mixing at all is as good or
    better. That is consistent with the gate model, where 1q (1.87%) and 2q
    (1.77%) sit inside each other's error bars — the lift comes from the random
