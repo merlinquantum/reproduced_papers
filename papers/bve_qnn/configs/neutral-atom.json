@@ -1,0 +1,38 @@
+{
+    "description": "Neutral-atom (Qadence) reproduction of Experiment 1 — faithful to the original paper architecture. Requires qadence (pip install qadence). The training and dataset-generation notebooks are in notebooks/neutral_atom/.",
+
+    "seed": 42,
+    "dtype": "float64",
+    "outdir": "results",
+    "device": "cpu",
+    "dataset": {
+        "filename": "sem_supervised_dataset.npz",
+        "batch_size": 1602
+    },
+    "model": {
+        "name": "neutral_atom_qadence",
+        "params": {
+            "n_qubits": 6,
+            "depth": 32,
+            "feature_map": "fourier_tower_series_ry",
+            "ansatz": "hea_digital",
+            "observable": "total_magnetization_z"
+        },
+        "checkpoint": null
+    },
+    "training": {
+        "total_steps": 5000,
+        "lr": 1e-2
+    },
+    "logging": {"level": "info", "save_config_snapshot": true},
+
+    "_notes": {
+        "framework": "Qadence (not MerLin) — this config documents the neutral-atom reproduction settings",
+        "results": "Median MRE 9.15%, Median PPMCC 0.873 (654 trainable parameters)",
+        "notebooks": [
+            "notebooks/neutral_atom/quantum_bve_step_by_step.ipynb (dataset generation from ERA5 via Copernicus CDS)",
+            "notebooks/neutral_atom/running_exp1.ipynb (Qadence QNN training, Experiment 1)"
+        ],
+        "external_repo": "https://github.com/CyrilDeloince/qml_PINN_pasqal"
+    }
+}
