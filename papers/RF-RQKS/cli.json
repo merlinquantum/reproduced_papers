@@ -1,0 +1,41 @@
+{
+  "description": "Run the RF-RQKS five-stage ablation protocol",
+  "arguments": [
+    {
+      "flags": ["--representation-path"],
+      "help": "Path below data/RF-RQKS containing the cached DCT representation",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "representation_path"}
+    },
+    {
+      "flags": ["--sampler"],
+      "help": "Feature sampler backend",
+      "type": "str",
+      "choices": ["dummy_rbf", "qiskit", "photonic"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "sampler"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Sampler feature-extraction batch size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "batch_size"}
+    },
+    {
+      "flags": ["--validation-fraction"],
+      "help": "Fraction of LTE source pairs reserved for validation",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "validation_fraction"}
+    },
+    {
+      "flags": ["--readout-c"],
+      "help": "Linear readout regularization parameter",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "readout_c"}
+    }
+  ]
+}
