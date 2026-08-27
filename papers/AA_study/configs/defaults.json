@@ -1,0 +1,9 @@
+{
+    "description": "Defaults for AA_study experiments (FIG4).",
+    "outdir": "results",
+    "exp_to_run": "FIG4",
+    "batch_size":50,
+    "num_epochs":50,
+    "lr":0.01,
+    "num_samples_per_class":100
+}

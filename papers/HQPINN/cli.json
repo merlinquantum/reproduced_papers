@@ -1,0 +1,142 @@
+{
+  "description": "HQPINN shared-runtime runner",
+  "arguments": [
+    {
+      "flags": [
+        "--experiment"
+      ],
+      "help": "HQPINN experiment family and architecture variant",
+      "type": "str",
+      "choices": [
+        "dho-cc",
+        "dho-hy-pl",
+        "dho-hy-m",
+        "dho-hy-mp",
+        "dho-qq-pl",
+        "dho-qq-m",
+        "dho-qq-mp",
+        "see-cc",
+        "see-hy-pl",
+        "see-hy-m",
+        "see-qq-pl",
+        "see-qq-m",
+        "dee-cc",
+        "dee-hy-pl",
+        "dee-hy-m",
+        "dee-qq-pl",
+        "dee-qq-m",
+        "taf-cc",
+        "taf-hy-pl",
+        "taf-hy-m",
+        "taf-qq-pl",
+        "taf-qq-m"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment"
+      }
+    },
+    {
+      "flags": [
+        "--mode"
+      ],
+      "help": "Execution mode",
+      "type": "str",
+      "choices": [
+        "train",
+        "run",
+        "remote"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "mode"
+      }
+    },
+    {
+      "flags": [
+        "--backend"
+      ],
+      "help": "Backend name for local or remote execution",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "backend"
+      }
+    },
+    {
+      "flags": [
+        "--n-layers"
+      ],
+      "help": "Number of classical hidden layers",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.n_layers"
+      }
+    },
+    {
+      "flags": [
+        "--n-nodes"
+      ],
+      "help": "Classical hidden-layer width",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.n_nodes"
+      }
+    },
+    {
+      "flags": [
+        "--n-qubits"
+      ],
+      "help": "Number of PennyLane qubits for DHO variants",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.n_qubits"
+      }
+    },
+    {
+      "flags": [
+        "--n-photons"
+      ],
+      "help": "Number of Merlin photons",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.n_photons"
+      }
+    },
+    {
+      "flags": [
+        "--q-layers"
+      ],
+      "help": "Number of PennyLane circuit layers for SEE/DEE/TAF variants",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.q_layers"
+      }
+    },
+    {
+      "flags": [
+        "--force-retrain"
+      ],
+      "help": "Ignore reusable checkpoints where the benchmark supports it",
+      "action": "store_true",
+      "default": false,
+      "apply": {
+        "kind": "config_path",
+        "path": "shared_runner.force_retrain"
+      }
+    }
+  ]
+}

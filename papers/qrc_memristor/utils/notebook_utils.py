@@ -5,16 +5,12 @@ import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as optim
+from utils.datasets import generate_narma
 
-try:
-    from lib.datasets import generate_narma
-except ModuleNotFoundError:
-    # Ensure the project root is on sys.path so local `lib` imports work.
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    parent_dir = os.path.abspath(os.path.join(current_dir, ".."))
-    if parent_dir not in sys.path:
-        sys.path.append(parent_dir)
-    from lib.datasets import generate_narma
+current_dir = os.path.dirname(os.path.abspath(__file__))
+paper_root = os.path.abspath(os.path.join(current_dir, ".."))
+if paper_root not in sys.path:
+    sys.path.append(paper_root)
 
 
 class NotebookArgs:

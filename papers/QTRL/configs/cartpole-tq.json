@@ -1,0 +1,11 @@
+{
+  "description": "configuration for QTRL training on CartPole with TorchQuantum backend",
+  "env_name": "CartPole",
+  "backend": "torchquantum",
+  "n_qubit": 10,
+  "q_depth": 5,
+  "q_output_size": 4,
+  "hidden_sizes": [128],
+  "num_episodes": 1000,
+  "lr": 0.001
+}

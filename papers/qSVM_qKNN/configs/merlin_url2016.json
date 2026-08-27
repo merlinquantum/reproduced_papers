@@ -1,0 +1,22 @@
+{
+  "description": "MerLin URL2016 photonic comparison: reservoir explicit features and explicit state-fidelity SVM/KNN on a matched subset.",
+  "data_source": "csv",
+  "dataset": "url2016",
+  "dataset_file": "ISCX-URL-2016/Defacement_Infogain.csv",
+  "label_column": "class",
+  "subset_size": 0,
+  "feature_limit": null,
+  "photonic_n_modes": null,
+  "photonic_n_photons": 3,
+  "models": [
+    "photonic_hybrid_svm_angle",
+    "photonic_hybrid_svm_amplitude",
+    "photonic_state_svm_angle",
+    "photonic_hybrid_knn_angle",
+    "photonic_hybrid_knn_amplitude",
+    "photonic_state_knn_angle"
+  ],
+  "seeds": [
+    42
+  ]
+}

@@ -1,0 +1,289 @@
+# dho_qq_m.py
+# Interferometer-Interferometer PINN for the damped oscillator using oscillator_core + merlin_quantum
+
+import os
+import sys
+from datetime import datetime
+
+import matplotlib
+
+# Keep batch exports headless, but do not disable inline notebook rendering.
+if "ipykernel" not in sys.modules:
+    matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import torch
+import torch.nn as nn
+
+from ..config import DHO_LR, DHO_N_EPOCHS, DHO_PLOT_EVERY
+from ..layer_classical import LearnedScalarFusion
+from ..layer_merlin import BranchMerlin, make_interf_qlayer
+from ..paths import results_case_dir_for_model_dir
+from ..run_common import run_series_inference_mode
+from ..runtime import seed_everything
+from ..utils import (
+    count_trainable_params,
+    finalize_training_session,
+    get_latest_checkpoint,
+    load_model,
+    make_optimizer,
+    make_time_grid,
+    prepare_training_session,
+)
+from .core_dho import (
+    append_summary_row,
+    evaluate_dho_error,
+    get_run_id_from_checkpoint,
+    load_training_row_for_run_id,
+    train_oscillator_pinn,
+    u_exact,
+)
+
+# ============================================================
+#  MerlinMerlinPinn model: two MerLin quantum branches
+# ============================================================
+
+
+class MerlinMerlinPinn(nn.Module):
+    """
+    Interferometer-Interferometer PINN with linear fusion to scalar output.
+    """
+
+    def __init__(
+        self,
+        processor=None,
+        *,
+        n_photons: int = 1,
+    ) -> None:
+        super().__init__()
+
+        # Two distinct quantum branches with independent parameters
+        self.branch1 = BranchMerlin(
+            make_interf_qlayer(n_photons=n_photons),
+            processor=processor,
+            feature_map_kind="dho",
+        )
+        self.branch2 = BranchMerlin(
+            make_interf_qlayer(n_photons=n_photons),
+            processor=processor,
+            feature_map_kind="dho",
+        )
+        self.fusion = LearnedScalarFusion()
+
+    def forward(self, t: torch.Tensor) -> torch.Tensor:
+        out1 = self.branch1(t)
+        out2 = self.branch2(t)
+        return self.fusion(out1, out2)
+
+
+def plot_model_prediction(u_pred, u_ex, t, save_path="results/DHO/dho_qq_m/"):
+    plt.figure(figsize=(10, 6))
+    plt.plot(t.cpu().numpy(), u_pred, label="Prediction PINN", lw=2)
+    plt.plot(t.cpu().numpy(), u_ex, "--", label="Exact solution", lw=2)
+    plt.xlabel("t")
+    plt.ylabel("u(t)")
+    plt.title("DHO – Interferometer–Interferometer PINN")
+    plt.grid(True)
+    plt.legend()
+
+    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+
+    os.makedirs(save_path, exist_ok=True)
+    save_path = os.path.join(save_path, f"dho_qq_m_plot_{timestamp}.png")
+
+    plt.savefig(save_path, bbox_inches="tight")
+    plt.close()
+
+    print(f"Plot saved to: {save_path}")
+
+
+def _case_prefix(n_photons: int) -> str:
+    if n_photons == 1:
+        return "dho_qq_m"
+    return f"dho_qq_m_p{n_photons}"
+
+
+def run(
+    mode="train",
+    backend="sim:ascella",
+    *,
+    n_photons: int = 1,
+    force_retrain: bool = False,
+) -> None:
+    """
+    mode = "train" : train the model from scratch and save the checkpoint
+    mode = "run"   : load the latest checkpoint and run inference (not implemented here, but can be added)
+    mode = "remote" : load and run in remote
+    """
+    seed_everything(0)
+
+    ckpt_dir = "models/DHO"
+    case_prefix = _case_prefix(n_photons)
+    results_dir = results_case_dir_for_model_dir(ckpt_dir, case_prefix)
+    summary_csv = "results/DHO/dho_summary.csv"
+    run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
+
+    # ======================
+    #  MODE TRAIN
+    # ======================
+    if mode == "train":
+        print("=== TRAINING MODE ===")
+        existing_ckpt = (
+            None if force_retrain else get_latest_checkpoint(ckpt_dir, case_prefix)
+        )
+        if force_retrain:
+            print(
+                f"Forcing retraining for {case_prefix}; existing checkpoints will be ignored."
+            )
+        if existing_ckpt is not None:
+            try:
+                model = load_model(
+                    existing_ckpt,
+                    lambda processor=None: MerlinMerlinPinn(
+                        processor=processor,
+                        n_photons=n_photons,
+                    ),
+                )
+            except Exception as exc:
+                print(
+                    f"Checkpoint validation failed for {case_prefix} at "
+                    f"{existing_ckpt}: {exc}; retraining model."
+                )
+            else:
+                t_train = make_time_grid()
+                case_run_id = get_run_id_from_checkpoint(existing_ckpt, case_prefix)
+                row = (
+                    load_training_row_for_run_id(results_dir, "qq-m", case_run_id)
+                    if case_run_id is not None
+                    else None
+                )
+                is_duplicate = append_summary_row(
+                    summary_csv,
+                    {
+                        "run_id": case_run_id or "",
+                        "Model": "qq-m",
+                        "Size": str(n_photons),
+                        "epoch": row["epoch"] if row is not None else "",
+                        "elapsed time (s)": row["elapsed time (s)"]
+                        if row is not None
+                        else "",
+                        "Trainable parameters": count_trainable_params(model),
+                        "Loss": row["Loss"] if row is not None else "",
+                        "IC_u": row["IC_u"] if row is not None else "",
+                        "IC_du": row["IC_du"] if row is not None else "",
+                        "PDE": row["PDE"] if row is not None else "",
+                        "Relative L2 error": f"{evaluate_dho_error(model, t_train):.6e}",
+                    },
+                )
+                print(
+                    f"Skipping training for {case_prefix}: existing checkpoint found at {existing_ckpt}."
+                )
+                if is_duplicate:
+                    print(
+                        f"Duplicate summary row appended for run_id={case_run_id} to: {summary_csv}"
+                    )
+                else:
+                    print(f"Summary CSV appended to: {summary_csv}")
+                print(f"Reused checkpoint metrics for {case_prefix}.")
+                print()
+                return
+
+        model = MerlinMerlinPinn(n_photons=n_photons)
+        optimizer = make_optimizer(model, lr=DHO_LR)
+        run_id, resume_state, resume_ckpt_path = prepare_training_session(
+            model=model,
+            optimizer=optimizer,
+            ckpt_dir=ckpt_dir,
+            case_prefix=case_prefix,
+            default_run_id=run_id,
+            force_retrain=force_retrain,
+        )
+        t_train = make_time_grid()
+
+        train_oscillator_pinn(
+            model=model,
+            t_train=t_train,
+            optimizer=optimizer,
+            n_epochs=DHO_N_EPOCHS,
+            plot_every=DHO_PLOT_EVERY,
+            out_dir=results_dir,
+            model_label="qq-m",
+            run_id=run_id,
+            checkpoint_path=resume_ckpt_path,
+            resume_state=resume_state,
+        )
+        row = load_training_row_for_run_id(results_dir, "qq-m", run_id)
+        is_duplicate = append_summary_row(
+            summary_csv,
+            {
+                "run_id": run_id,
+                "Model": "qq-m",
+                "Size": str(n_photons),
+                "epoch": row["epoch"] if row is not None else "",
+                "elapsed time (s)": row["elapsed time (s)"] if row is not None else "",
+                "Trainable parameters": count_trainable_params(model),
+                "Loss": row["Loss"] if row is not None else "",
+                "IC_u": row["IC_u"] if row is not None else "",
+                "IC_du": row["IC_du"] if row is not None else "",
+                "PDE": row["PDE"] if row is not None else "",
+                "Relative L2 error": f"{evaluate_dho_error(model, t_train):.6e}",
+            },
+        )
+
+        finalize_training_session(
+            model=model,
+            ckpt_dir=ckpt_dir,
+            case_prefix=case_prefix,
+            run_id=run_id,
+            resume_checkpoint_path=resume_ckpt_path,
+        )
+        if is_duplicate:
+            print(
+                f"Duplicate summary row appended for run_id={run_id} to: {summary_csv}"
+            )
+        else:
+            print(f"Summary CSV appended to: {summary_csv}")
+        print()
+
+    # ======================
+    #  MODE RUN
+    # ======================
+    elif mode == "run":
+        print("=== RUN MODE ===")
+        run_series_inference_mode(
+            mode="run",
+            backend=backend,
+            ckpt_dir=ckpt_dir,
+            case_prefix=case_prefix,
+            model_factory=lambda processor=None: MerlinMerlinPinn(
+                processor=processor,
+                n_photons=n_photons,
+            ),
+            make_time_grid=make_time_grid,
+            exact_fn=u_exact,
+            plot_fn=lambda u_pred, u_ex, t: plot_model_prediction(
+                u_pred, u_ex, t, save_path=results_dir
+            ),
+        )
+
+    # ======================
+    #  MODE RUN REMOTE
+    # ======================
+    elif mode == "remote":
+        run_series_inference_mode(
+            mode="remote",
+            backend=backend,
+            ckpt_dir=ckpt_dir,
+            case_prefix=case_prefix,
+            model_factory=lambda processor=None: MerlinMerlinPinn(
+                processor=processor,
+                n_photons=n_photons,
+            ),
+            make_time_grid=make_time_grid,
+            exact_fn=u_exact,
+            plot_fn=lambda u_pred, u_ex, t: plot_model_prediction(
+                u_pred, u_ex, t, save_path=results_dir
+            ),
+        )
+
+    else:
+        raise ValueError("mode must be 'train', 'run', or 'remote'")

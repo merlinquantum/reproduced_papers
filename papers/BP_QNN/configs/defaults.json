@@ -1,0 +1,12 @@
+{
+  "description": "Short smoke run for the barren-plateau gradient-variance reproduction",
+  "experiment": "fig3_gb",
+  "backend": "gate_based",
+  "qubits": [2, 3],
+  "layers": [1],
+  "layers_per_qubit": 1,
+  "samples": 3,
+  "seed": 7,
+  "dtype": "float32",
+  "plot": false
+}

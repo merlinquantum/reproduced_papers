@@ -1,0 +1,49 @@
+\documentclass{article}
+\usepackage[paperwidth=10.8in,paperheight=5.4in,margin=0.35in]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{array}
+\pagestyle{empty}
+
+\definecolor{header}{HTML}{1F2937}
+\definecolor{textgray}{HTML}{374151}
+
+\begin{document}
+\sffamily
+
+{\Large\bfseries\color{header} Kernel and distance conventions}
+
+\vspace{0.35cm}
+
+\renewcommand{\arraystretch}{1.55}
+\begin{tabular}{>{\bfseries}p{0.23\linewidth} p{0.34\linewidth} p{0.35\linewidth}}
+\toprule
+Model family & Similarity or distance & Classifier use \\
+\midrule
+State-fidelity SVM &
+$K(x,y)=\left|\left\langle\psi(x)\,\vert\,\psi(y)\right\rangle\right|^2$ &
+Precomputed SVM kernel; the quantum work is pairwise in train/test samples. \\
+\addlinespace
+State-fidelity KNN &
+$d(x,y)=1-K(x,y)$ &
+KNN distances derived from state fidelity. \\
+\addlinespace
+Explicit-feature SVM &
+$K_{\mathrm{RBF}}(u,v)=\exp\!\left(-\gamma\lVert u-v\rVert_2^2\right)$ &
+Classical RBF SVM on standardized quantum or tabular features. \\
+\addlinespace
+Explicit-feature KNN &
+$d(u,v)=\lVert u-v\rVert_2$ &
+Euclidean nearest neighbors with inverse-distance voting. \\
+\bottomrule
+\end{tabular}
+
+\vspace{0.25cm}
+{\small\color{textgray}
+Here $\psi(\cdot)$ denotes a gate-based or photonic quantum state, while
+$u,v$ denote explicit feature vectors such as Pauli-Z expectations or QORC
+probability readouts.}
+
+\end{document}

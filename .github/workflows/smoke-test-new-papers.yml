@@ -1,0 +1,206 @@
+name: Smoke Test New Papers
+
+# Runs scripts/smoke_test_all_papers.sh against any paper folder newly added by a PR.
+# This verifies (per new paper): the venv/deps install cleanly, the default config
+# runs to completion within the script's timeout, and pytest passes.
+
+on:
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'papers/**'
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15 # this timeout could be adapted in the future (15 minutes can be quite large if many new papers are added in a single PR, but is a reasonable default for a single paper).
+
+    steps:
+      # Restrict to trusted authors since this job installs arbitrary paper dependencies
+      # and executes their code on the runner. Checks the PR author's actual repository
+      # permission via the API (rather than github.event.pull_request.author_association,
+      # which under-reports org members whose org membership is private) 
+      - name: Check smoke test authorization
+        id: authorize
+        uses: actions/github-script@v9
+        with:
+          script: |
+            let repositoryPermission = 'unknown';
+            try {
+              const response = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                username: context.payload.pull_request.user.login,
+              });
+              repositoryPermission = response.data.permission;
+            } catch (error) {
+              core.info(`repository_permission_lookup_failed=${error.status ?? error.message}`);
+            }
+
+            const trustedPermissions = new Set(['admin', 'maintain', 'write']);
+            const isAuthorized = trustedPermissions.has(repositoryPermission);
+
+            core.info(`actor=${context.payload.pull_request.user.login}`);
+            core.info(`repository_permission=${repositoryPermission}`);
+            core.info(`is_authorized=${isAuthorized}`);
+
+            core.setOutput('authorized', String(isAuthorized));
+
+      - name: Checkout
+        if: steps.authorize.outputs.authorized == 'true'
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        if: steps.authorize.outputs.authorized == 'true'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Detect newly added paper folders
+        id: detect
+        if: steps.authorize.outputs.authorized == 'true'
+        run: |
+          set -euo pipefail
+
+          BASE_SHA="${{ github.event.pull_request.base.sha }}"
+          HEAD_SHA="${{ github.event.pull_request.head.sha }}"
+
+          mapfile -t added_paths < <(git diff -M --name-status --diff-filter=AR "$BASE_SHA" "$HEAD_SHA" -- papers/ | awk '{print $NF}')
+
+          # Walk up from an added file's directory (in the checked-out HEAD tree) to find the
+          # nearest ancestor that carries the three project markers. This correctly identifies
+          # nested paper suites (e.g. papers/<parent>/<subproject>/) instead of only top-level dirs.
+          find_paper_root() {
+            local candidate="$1"
+            while [[ "$candidate" == papers/* ]]; do
+              if [[ -f "$candidate/cli.json" && -f "$candidate/configs/defaults.json" && -f "$candidate/lib/runner.py" ]]; then
+                echo "$candidate"
+                return 0
+              fi
+              [[ "$candidate" == "papers" ]] && break
+              candidate="$(dirname "$candidate")"
+            done
+            return 1
+          }
+
+          declare -A seen
+          new_papers=()
+          for path in "${added_paths[@]}"; do
+            root="$(find_paper_root "$(dirname "$path")")" || continue
+            rel="${root#papers/}"
+            [[ -n "${seen[$rel]:-}" ]] && continue
+            seen[$rel]=1
+            # Skip if this paper root already existed on the base branch (i.e. these are just
+            # new files inside an existing paper, not a new paper).
+            if git cat-file -e "$BASE_SHA:$root" 2>/dev/null; then
+              continue
+            fi
+            new_papers+=("$rel")
+          done
+
+          if [[ ${#new_papers[@]} -eq 0 ]]; then
+            echo "No new paper folders detected in this PR."
+            {
+              echo "papers="
+            } >> "$GITHUB_OUTPUT"
+          else
+            printf 'New paper folder(s) detected: %s\n' "${new_papers[*]}"
+            {
+              echo "papers=${new_papers[*]}"
+            } >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validate paper structure
+        if: steps.authorize.outputs.authorized == 'true' && steps.detect.outputs.papers != ''
+        run: |
+          set -euo pipefail
+
+          REQUIRED_FILES=(
+            "lib/runner.py"
+            "configs/defaults.json"
+            "cli.json"
+          )
+
+          VALIDATION_FAILED=0
+
+          for paper in ${{ steps.detect.outputs.papers }}; do
+            echo "::group::Validating structure for $paper"
+            PAPER_FAILED=0
+
+            for required_file in "${REQUIRED_FILES[@]}"; do
+              if [[ ! -f "papers/$paper/$required_file" ]]; then
+                echo "❌ MISSING: papers/$paper/$required_file"
+                PAPER_FAILED=1
+                VALIDATION_FAILED=1
+              else
+                echo "✓ Found: papers/$paper/$required_file"
+              fi
+            done
+
+            if [[ $PAPER_FAILED -eq 1 ]]; then
+              echo ""
+              echo "ERROR: Paper '$paper' does not follow the required structure."
+              echo ""
+              echo "Required files:"
+              printf '  - %s\n' "${REQUIRED_FILES[@]}"
+              echo ""
+              echo "Expected structure:"
+              cat << 'EOF'
+          papers/<paper_name>/
+          ├── lib/
+          │   └── runner.py          (entry point with train_and_evaluate function)
+          ├── configs/
+          │   └── defaults.json      (default runnable config)
+          └── cli.json               (paper-specific CLI schema)
+          EOF
+              echo ""
+              echo "See AGENTS.md section 'Repository Model' for more details."
+            fi
+
+            echo "::endgroup::"
+          done
+
+          if [[ $VALIDATION_FAILED -eq 1 ]]; then
+            echo ""
+            echo "::error::One or more papers failed structural validation."
+            exit 1
+          fi
+
+      - name: Smoke test new papers
+        if: steps.authorize.outputs.authorized == 'true' && steps.detect.outputs.papers != ''
+        run: |
+          set -euo pipefail
+          status=0
+          for paper in ${{ steps.detect.outputs.papers }}; do
+            echo "::group::Smoke test for $paper"
+            if ! scripts/smoke_test_all_papers.sh --exact "$paper"; then
+              status=1
+            fi
+            echo "::endgroup::"
+          done
+          exit $status
+
+      - name: Show smoke test logs on failure
+        if: failure() && steps.authorize.outputs.authorized == 'true' && steps.detect.outputs.papers != ''
+        run: |
+          set -uo pipefail
+          for paper in ${{ steps.detect.outputs.papers }}; do
+            log_file=".smoke_logs/${paper//\//_}.log"
+            echo "::group::Smoke log for $paper ($log_file)"
+            if [[ -f "$log_file" ]]; then
+              cat "$log_file"
+            else
+              echo "No log file found at $log_file"
+            fi
+            echo "::endgroup::"
+          done
+
+      - name: Upload smoke test logs
+        if: always() && steps.authorize.outputs.authorized == 'true' && steps.detect.outputs.papers != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-test-logs
+          path: .smoke_logs/
+          if-no-files-found: ignore

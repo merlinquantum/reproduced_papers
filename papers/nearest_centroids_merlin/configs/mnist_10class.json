@@ -1,7 +1,7 @@
 {
   "description": "Mnist 10Class configuration",
   "seed": 42,
-  "outdir": "results",
+  "outdir": "outdir",
   "logging": {
     "level": "info"
   },
@@ -17,18 +17,7 @@
   },
   "experiments": [
     {
-      "classes": [
-        0,
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9
-      ],
+      "classes": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
       "max_samples": 400,
       "description": "all digits (400 samples -> 200 train / 200 test)"
     }

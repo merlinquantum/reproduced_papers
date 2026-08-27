@@ -1,0 +1,9 @@
+{
+  "experiment": "taf-qq-m",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_photons": 2
+  },
+  "description": "HQPINN taf qq m train 2 configuration."
+}

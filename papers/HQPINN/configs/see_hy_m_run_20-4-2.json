@@ -1,0 +1,11 @@
+{
+  "experiment": "see-hy-m",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "n_layers": 4,
+    "n_nodes": 20,
+    "n_photons": 2
+  },
+  "description": "HQPINN see hy m run 20-4-2 configuration."
+}
