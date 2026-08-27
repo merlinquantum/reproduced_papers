@@ -9,6 +9,71 @@ from merlin.core.merlin_processor import MerlinProcessor
 from perceval.runtime import RemoteConfig
 
 
+class _QORCProcessor:
+    def __init__(self, processor, nsample):
+        self.processor = processor
+        self.nsample = nsample
+
+    def forward(self, module, inputs):
+        return self.processor.forward(module, inputs, nsample=self.nsample)
+
+
+def create_remote_qorc_processor(
+    qpu_device_name, qorc_quantum_layer, qpu_device_nsample, logger
+):
+    """Create the Merlin processor used by ``ReservoirClassifier`` remotely.
+
+    Parameters
+    ----------
+    qpu_device_name : str
+        Merlin or Perceval remote processor name.
+    qorc_quantum_layer : merlin.QuantumLayer
+        Frozen quantum layer exposed by ``ReservoirClassifier.layer``.
+    qpu_device_nsample : int
+        Number of samples requested for each remote execution.
+    logger : logging.Logger
+        Logger receiving processor setup messages.
+
+    Returns
+    -------
+    merlin.core.merlin_processor.MerlinProcessor
+        Processor configured for the requested remote backend.
+
+    Raises
+    ------
+    ValueError
+        If the requested processor name is not supported by QORC.
+    """
+    qpu_device_name = qpu_device_name.lower()
+    valid_qpu_device_name_list = [
+        "sim:slos",
+        "sim:ascella",
+        "sim:belenos",
+        "qpu:ascella",
+        "qpu:belenos",
+    ]
+    force_simulation = ":local" in qpu_device_name
+    if force_simulation:
+        qpu_device_name = qpu_device_name.replace(":local", "")
+        qorc_quantum_layer.force_simulation = True
+        logger.info("':local' detected: local treatment of remote processor")
+    if qpu_device_name not in valid_qpu_device_name_list:
+        raise ValueError(f"remote_processor_type not recognized: {qpu_device_name}")
+
+    logger.info("Using MerlinProcessor with remote_processor name: %s", qpu_device_name)
+    token = os.environ.get("QUANDELA_TOKEN", "").strip()
+    RemoteConfig.set_token(token)
+    remote_processor = pcvl.RemoteProcessor(qpu_device_name)
+    return _QORCProcessor(
+        MerlinProcessor(
+            remote_processor,
+            chunk_concurrency=20,
+            microbatch_size=102400,
+        ),
+        qpu_device_nsample,
+    )
+
+
 def _spin_until_with_ctrlc(
     pred, timeout_s: float = 10.0, sleep_s: float = 0.02
 ) -> bool:

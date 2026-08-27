@@ -17,7 +17,6 @@ from lib.lib_datasets import (
     get_dataloader,
     get_mnist_variant,
     split_fold_numpy,
-    tensor_dataset,
 )
 from lib.lib_learning import get_device, model_eval, model_fit
 
@@ -229,6 +228,58 @@ def create_qorc_quantum_layer(
     return [qorc_quantum_layer, qorc_output_size]
 
 
+def create_qorc_reservoir_classifier(
+    n_photons,
+    n_components,
+    seed,
+    device_name,
+    b_no_bunching,
+):
+    """Create the Merlin 0.4 reservoir classifier used by QORC.
+
+    Parameters
+    ----------
+    n_photons : int
+        Number of photons injected into the frozen reservoir.
+    n_components : int
+        Number of PCA components encoded by the reservoir.
+    seed : int
+        Seed used for the reservoir unitary and readout initialization.
+    device_name : str
+        Torch device used by the classifier.
+    b_no_bunching : bool
+        Whether the measurement output excludes photon bunching states.
+
+    Returns
+    -------
+    merlin.ReservoirClassifier
+        Frozen reservoir with a trainable linear readout.
+
+    Raises
+    ------
+    ValueError
+        If the classifier configuration is invalid.
+    """
+    reservoir = ML.ReservoirClassifier(
+        in_features=28 * 28,
+        out_features=10,
+        n_photons=n_photons,
+        reduction=PCA(n_components=n_components),
+        concatenate=True,
+        cache=True,
+        seed=seed,
+        device=torch.device(device_name),
+        dtype=torch.float32,
+    )
+    if b_no_bunching:
+        reservoir.layer.measurement_strategy = ML.MeasurementStrategy.probs()
+    else:
+        reservoir.layer.measurement_strategy = ML.MeasurementStrategy.probs(
+            computation_space=ML.ComputationSpace.FOCK
+        )
+    return reservoir
+
+
 def qorc_encoding_and_linear_training(
     # Main parameters
     n_photons,
@@ -257,7 +308,6 @@ def qorc_encoding_and_linear_training(
     run_dir,
     logger,
 ):
-    storage_device = torch.device("cpu")
     compute_device = get_device(device_name)
 
     n_components = n_modes
@@ -318,7 +368,6 @@ def qorc_encoding_and_linear_training(
         test_label = test_label[:dataset_truncate]
 
     n_pixels = 28 * 28  # MNIST images size
-    n_classes = 10  # 10 classes, one for each figure
 
     logger.info("Datasets sizes:")
     logger.info(train_label.shape)  # (48000,)
@@ -329,140 +378,45 @@ def qorc_encoding_and_linear_training(
     logger.info(test_data.shape)  # (10000, 784)
 
     ####################################################
-    # Quantum features computation
-    logger.info("Creation of the encoder of the quantum reservoir...")
-
-    # 1) PCA Components computation
-    pca = PCA(n_components=n_components)
-    train_data_pca = pca.fit_transform(train_data)
-    val_data_pca = pca.transform(val_data)
-    test_data_pca = pca.transform(test_data)
-
-    # 2) PCA comp normalization (to [0, 1] (global min/max) )
-    pca_train_global_min = train_data_pca.min()
-    pca_train_global_max = train_data_pca.max()
-
-    def normalize_global_min_max(data, global_min, global_max):
-        epsilon = 1e-8  # Avoid zero division
-        return (data - global_min) / (global_max - global_min + epsilon)
-
-    train_data_pca_norm = normalize_global_min_max(
-        train_data_pca, pca_train_global_min, pca_train_global_max
-    )
-    val_data_pca_norm = normalize_global_min_max(
-        val_data_pca, pca_train_global_min, pca_train_global_max
-    )
-    test_data_pca_norm = normalize_global_min_max(
-        test_data_pca, pca_train_global_min, pca_train_global_max
+    # Quantum reservoir feature computation
+    logger.info("Creation of the Merlin ReservoirClassifier...")
+    reservoir = create_qorc_reservoir_classifier(
+        n_photons=n_photons,
+        n_components=n_components,
+        seed=run_seed,
+        device_name=device_name,
+        b_no_bunching=b_no_bunching,
     )
 
-    # 3) Qorc quantum layer creation
-    if "ascella" in qpu_device_name:
-        [qorc_quantum_layer, qorc_output_size] = create_quantum_layer_for_ascella(
-            n_photons, logger
-        )
-    else:
-        [qorc_quantum_layer, qorc_output_size] = create_qorc_quantum_layer(
-            n_photons,  # Nb photons
-            n_modes,  # Nb modes
-            b_no_bunching,
-            device_name,
-            logger,
-        )
-
-    logger.info("Quantum features size: {}".format(qorc_output_size))
     logger.info("Computation of the quantum features...")
     time_t2 = time.time()
-    train_tensor = torch.tensor(
-        train_data_pca_norm, dtype=torch.float32, device=compute_device
-    )
-    val_tensor = torch.tensor(
-        val_data_pca_norm, dtype=torch.float32, device=compute_device
-    )
-    test_tensor = torch.tensor(
-        test_data_pca_norm, dtype=torch.float32, device=compute_device
-    )
+    remote_processor = None
+    if qpu_device_name not in ("none", ""):
+        from lib.lib_remote_qorc import create_remote_qorc_processor
 
-    if qpu_device_name == "none" or qpu_device_name == "":
-        train_data_qorc = qorc_quantum_layer(train_tensor)
-        val_data_qorc = qorc_quantum_layer(val_tensor)
-        test_data_qorc = qorc_quantum_layer(test_tensor)
-    else:
-        from lib.lib_remote_qorc import forward_remote_qorc_quantum_layer
-
-        train_data_qorc, val_data_qorc, test_data_qorc = (
-            forward_remote_qorc_quantum_layer(
-                train_tensor,
-                val_tensor,
-                test_tensor,
-                qorc_quantum_layer,
-                qpu_device_name,
-                qpu_device_nsample,
-                logger,
-            )
+        remote_processor = create_remote_qorc_processor(
+            qpu_device_name, reservoir.layer, qpu_device_nsample, logger
         )
 
+    reservoir.fit_reservoir(train_data, processor=remote_processor)
+    train_dataset = reservoir.make_dataset(train_data, train_label)
+    val_dataset = reservoir.make_dataset(
+        val_data, val_label, processor=remote_processor
+    )
+    test_dataset = reservoir.make_dataset(
+        test_data, test_label, processor=remote_processor
+    )
+    qorc_output_size = reservoir.layer.output_size
+    logger.info("Quantum features size: {}".format(qorc_output_size))
     logger.info("Computation over.")
     time_t3 = time.time()
-
-    # 4) Quantum features normalization (standard_scaler)
-    qorc_train_mean = train_data_qorc.detach().mean(dim=0)
-    qorc_train_std = train_data_qorc.detach().std(dim=0)
-
-    def normalize_standard_scaler(data, mean, std):
-        epsilon = 1e-8  # Avoid zero division
-        return (data - mean) / (std + epsilon)
-
-    train_data_qorc_norm = normalize_standard_scaler(
-        train_data_qorc, qorc_train_mean, qorc_train_std
-    )
-    val_data_qorc_norm = normalize_standard_scaler(
-        val_data_qorc, qorc_train_mean, qorc_train_std
-    )
-    test_data_qorc_norm = normalize_standard_scaler(
-        test_data_qorc, qorc_train_mean, qorc_train_std
-    )
-
-    dtype = torch.float32
-    all_train_data = torch.cat(
-        (
-            torch.tensor(train_data, dtype=dtype, device=compute_device),
-            train_data_qorc_norm,
-        ),
-        dim=1,
-    )
-    all_val_data = torch.cat(
-        (
-            torch.tensor(val_data, dtype=dtype, device=compute_device),
-            val_data_qorc_norm,
-        ),
-        dim=1,
-    )
-    all_test_data = torch.cat(
-        (
-            torch.tensor(test_data, dtype=dtype, device=compute_device),
-            test_data_qorc_norm,
-        ),
-        dim=1,
-    )
 
     ####################################################
     # Prepare structures (Dataset, DataLoader)
     # Datasets
-    ds_train = tensor_dataset(
-        all_train_data,
-        train_label,
-        storage_device,
-        dtype=torch.float32,
-        transform=None,
-        n_side_pixels=28,
-    )
-    ds_val = tensor_dataset(
-        all_val_data, val_label, storage_device, dtype=torch.float32
-    )
-    ds_test = tensor_dataset(
-        all_test_data, test_label, storage_device, dtype=torch.float32
-    )
+    ds_train = train_dataset
+    ds_val = val_dataset
+    ds_test = test_dataset
 
     logger.info("train dataset len: {}".format(len(ds_train)))
     logger.info("val dataset len  : {}".format(len(ds_val)))
@@ -491,16 +445,8 @@ def qorc_encoding_and_linear_training(
 
     n_model_input_features = n_pixels + qorc_output_size
     logger.info("n_model_input_features: {}".format(n_model_input_features))
-    linear = nn.Linear(
-        n_model_input_features, n_classes, bias=True, device=compute_device
-    )
-
-    nn.init.xavier_uniform_(linear.weight)  # Xavier uniforme init (Glorot)
-    nn.init.zeros_(linear.bias)
-    model = linear
-    model.to(compute_device)
+    model = reservoir
     model.train()
-    torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
 
     criterion = nn.CrossEntropyLoss(reduction="sum")
 
