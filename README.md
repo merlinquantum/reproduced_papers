@@ -2,7 +2,6 @@
 
 ## About this repository
 
-
 This repository contains implementations and resources for reproducing key quantum machine learning papers, with a focus on photonic and optical quantum computing.
 
 It is part of the main MerLin project: [https://github.com/merlinquantum/merlin](https://github.com/merlinquantum/merlin)
@@ -21,7 +20,6 @@ This repository also includes or adapts third-party material. Files copied or
 derived from upstream projects keep their original license headers and remain
 subject to those terms. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
 and any per-file or per-directory notices for details.
-
 
 ## Papers reproduced:
 | Paper | Reproduction |
@@ -54,6 +52,7 @@ and any per-file or per-directory notices for details.
 | [Limitations of Amplitude Encoding on Quantum Classification](papers/AA_study/). Source: [Wang_2025](https://arxiv.org/abs/2503.01545) | The authors proved and showed numerically the main limitations of amplitude encoding. We observe the same results with a photonic architecture for the simple synthetic datasets and popular image-based datasets. We used the [Photonic Quantum Convolutional Neural Networks with Adaptive State Injection](papers/photonic_QCNN/)'s QCNN architecture for our tests. Our Merlin model seems more stable over the iterations. By just replacing the amplitude encoder by an angle encoder on the simple synthetic datasets, we are able to correctly distinguish both classes. This result show that a user guide for an encoding choice depending on the dataset could be quite useful.|
 | [Neural Quantum Embedding: Pushing the Limits of Quantum Supervised Learning](papers/nn_embedding/). Source: [Hur_2024](https://arxiv.org/abs/2311.11412v2) | The authors introduce a novel way to encode classical data on quantum computers using. Indeed, a QML model is separated into two parts: an embedding and classifying circuit. We optimize both of those sections one after the other. The embedding is optimized by training a classical model that takes the classical features as inputs and generates the parameters for the quantum embedding circuit in order to create maximally distant average encoded states. The MerLin implementation is faster and has the same or better performance across all reproduced figures.  |
 | [Barren Plateaus in Quantum Neural Network Training Landscapes](papers/BP_QNN/). Source: [McClean_2018](https://doi.org/10.1038/s41467-018-07090-4) | Formalized reproductions of Fig. 3 (gradient-variance decay versus qubits, with fitted slope) and Fig. 4 (variance versus 1D circuit layers), plus a MerLin computation-space analogue of Fig. 3. |
+| [ObliQ: Solving Quadratic Unconstrained Binary Optimization Problems on Real Photonic Quantum Machines](papers/ObliQ_photonic_QUBO/). Source: [Ranjan_2025](https://dl.acm.org/doi/10.1145/3771573)                                                                                                                                                                           | The paper introduces a zero-shot QUBO solver called static ObliQ, which uses beam-splitter gate parameters calculated directly from the QUBO matrix being solved. It further combines the static ObliQ circuit with a VQC, using the static circuit's output as the hybrid ObliQ's input photon state. In this repo, we implement the execution with MerLin, enabling a gradient-descent implementation. The original paper implements only constant-diagonal QUBO matrices; the current implementation extends it to non-constant matrices such as Max-Cut by augmenting an ancilla mode. The repo also implements competing QUBO quantum solvers, such as a CVaR-based photonic VQC, QAOA, and D-Wave-based solvers. Simulation over 100 random Max-Clique problems shows that ObliQ achieves better performance than CVaR-VQE and QAOA (with more compute). |
 | [Potential of quantum scientific machine learning applied to weather modelling](papers/bve_qnn/). Source: [jaderberg_2024](https://arxiv.org/abs/2404.08737) | Photonic dual-rail MerLin reproduction of Experiment 1 (supervised stream-function regression). Paper neutral-atom baseline reports median MRE 7.1–10.9% and PPMCC 0.870; this MerLin dual-rail model with trainable photonic mixing reaches median MRE 14.85% and PPMCC 0.754 (1006 params), consistent with a weaker native entangling resource than CNOT. Full neutral-atom-side work: [qml_PINN_pasqal](https://github.com/CyrilDeloince/qml_PINN_pasqal). |
 
 
@@ -65,11 +64,6 @@ You can also list available reproductions with `python implementation.py --list-
 
 - `cd` into `papers/<NAME>` and install its dependencies: `pip install -r requirements.txt` (each reproduction keeps its own list).
 - Launch training/eval runs through the shared CLI from the repo root (the runner will `cd` into the project automatically):
-
-	```bash
-	python implementation.py --paper <NAME> --config configs/<config>.json
-	```
-
 - If you prefer running from inside `papers/<NAME>`, reference the repo-level runner: `python ../../implementation.py --config configs/<config>.json` (no `--paper` flag needed when executed from within the project).
 
 All logs, checkpoints, and figures land in `papers/<NAME>/outdir/run_YYYYMMDD-HHMMSS/` unless the configs specify a different base path.
@@ -82,15 +76,19 @@ Need a quick tour of a project’s knobs? Run `python implementation.py --paper 
 - Override with `DATA_DIR=/abs/path` or `python implementation.py --data-root /abs/path ...` (applies to the current run and is exported to downstream loaders).
 
 Shared data helpers:
+
 - Common dataset-generation code lives under `papers/shared/<paper>/` when multiple reproductions reuse the same logic. Each paper exposes a thin `lib/data.py` (or equivalent) that simply imports from the shared module.
 - If you add new shared data utilities, place them in `papers/shared/<paper>/` and have paper-local `lib/` importers forward to them so tests and runners stay stable.
 
 Universal CLI flags provided by the shared runner:
+
 - `--seed INT` Reproducibility seed propagated to Python/NumPy/PyTorch backends.
 - `--dtype STR` Force a global tensor dtype before model-specific overrides.
 - `--device STR` Torch device string (`cpu`, `cuda:0`, `mps`, ...).
 - `--log-level LEVEL` Runtime logging verbosity (`INFO` by default).
 Project-specific `cli.json` files only declare the extra paper knobs; the runner injects the global options automatically.
+
+
 
 ### Smoke-test all papers quickly
 
@@ -98,11 +96,15 @@ Project-specific `cli.json` files only declare the extra paper knobs; the runner
 - Pass an optional substring to target specific papers (faster dev loop): `scripts/smoke_test_all_papers.sh QRKD` only runs papers whose names contain `QRKD`.
 - Timeout markers appear in logs when a run or test exceeds the limit; rerun after adjusting configs or deps as needed.
 
+
+
 ### Precision control (`dtype`)
 
 - Every reproduction accepts an optional top-level `"dtype"` entry in its configs, just like `"seed"`. When present, the shared runner casts input tensors and initializes models in that dtype.
 - Individual models can still override via `model.dtype`; if omitted, each reproduction picks a sensible default (e.g., `float64` for photonic MerLin layers).
 - Use this to downgrade to `float32` for speed, experiment with `bfloat16`, or enforce `float64` reproducibility across classical/quantum variants.
+
+
 
 ## How to contribute a reproduced paper
 
