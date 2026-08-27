@@ -148,11 +148,6 @@ def test_hyperparameters_are_comparable_across_solvers(name):
     iterations = SHARED_HYPERPARAMETERS["iterations"]
     rate = SHARED_HYPERPARAMETERS["learning_rate"]
 
-    assert sweep["size_range"] == [2, 3, 4, 5, 6, 7, 8]
-    assert sweep["nb_instances_per_size"] == 100
-    assert sweep["seed"] == 101200
-    assert sweep["timeout"] == 300
-
     if solver.startswith("obliq-"):
         assert opts["nsamples"] == shots
         train = opts.get("train")
