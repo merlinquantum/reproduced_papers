@@ -1,0 +1,20 @@
+{
+  "model": "quantum",
+  "digit": 0,
+  "T": 5,
+  "N": 4,
+  "NA": 1,
+  "L": 7,
+  "ae_epochs": 100,
+  "ae_lr": 0.05,
+  "ae_batch_size": 20,
+  "gan_iterations": 490,
+  "gen_lr": 0.3,
+  "disc_lr": 0.01,
+  "gan_batch_size": 1,
+  "eval_every": 25,
+  "n_samples_eval": 256,
+  "n_samples_real": 256,
+  "device": "cpu",
+  "_comment": "Paper-accurate config: AE 100 epochs full MNIST, QGAN 490 iters per class. Slow on CPU."
+}
