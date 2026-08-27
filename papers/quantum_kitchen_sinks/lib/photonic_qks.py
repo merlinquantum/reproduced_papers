@@ -24,7 +24,48 @@ from .encoding import EpisodeEncoding, make_episodes
 # dual-rail MZI at 0.5 instead of 1.0.
 BALANCED_BEAMSPLITTER_THETA = np.pi / 2
 
-ARCHITECTURES = ("random_mesh", "dual_rail_mzi")
+ARCHITECTURES = ("random_mesh", "dual_rail_mzi", "dual_rail_klm_cnot")
+
+# Post-selected KLM CZ: three beam splitters of reflectivity 1/3 (Ralph et al.),
+# two of which pair a logical-|0> rail with a vacuum ancilla.  Success
+# probability is exactly 1/9 and independent of the input.
+KLM_BEAMSPLITTER_THETA = 2 * np.arccos(1 / np.sqrt(3))
+
+# Mode layout for the two-qubit KLM ansatz:
+#   0 = vacuum ancilla     1 = |0>_A   2 = |1>_A
+#   3 = |1>_B              4 = |0>_B   5 = vacuum ancilla
+# The two logical-|1> rails are adjacent so the central splitter can act on
+# them (Perceval requires beam splitters on consecutive modes), and the photons
+# enter on the outer rails so that P(|1>) = sin^2(theta/2) on each qubit.
+KLM_RAIL_MODES = (1, 2, 3, 4)
+KLM_INPUT_STATE = (0, 1, 0, 0, 1, 0)
+KLM_ENCODED_MODES = (2, 3)
+
+
+def _klm_cnot_circuit(theta_names: Sequence[str]) -> pcvl.Circuit:
+    """RX(theta_0) (x) RX(theta_1) followed by a post-selected CNOT.
+
+    Each qubit is a Mach-Zehnder (balanced splitter, encoding phase, balanced
+    splitter) which is exactly ``RX(theta)`` in dual rail.  The CNOT is
+    ``H_B . CZ . H_B`` with the CZ realised by the three 1/3 splitters; the
+    construction yields ``Z_A . CNOT``, and the spurious ``Z`` on the control is
+    diagonal, so it leaves computational-basis probabilities unchanged.
+    """
+    import perceval as pcvl
+
+    bs50 = dict(theta=BALANCED_BEAMSPLITTER_THETA)
+    circuit = pcvl.Circuit(6)
+    circuit.add(1, pcvl.BS.H(**bs50))
+    circuit.add(3, pcvl.BS.H(**bs50))
+    for mode, name in zip(KLM_ENCODED_MODES, theta_names):
+        circuit.add(mode, pcvl.PS(pcvl.P(name)))
+    circuit.add(1, pcvl.BS.H(**bs50))
+    circuit.add(3, pcvl.BS.H(**bs50))
+    circuit.add(3, pcvl.BS.H(**bs50))
+    for mode in (0, 2, 4):
+        circuit.add(mode, pcvl.BS.Rx(theta=KLM_BEAMSPLITTER_THETA))
+    circuit.add(3, pcvl.BS.H(**bs50))
+    return circuit
 
 
 def _validate_input_modes(n_modes: int, input_modes: Sequence[int]) -> list[int]:
@@ -115,6 +156,8 @@ class PhotonicQKSFeaturizer:
             if input_modes is None
             else list(input_modes)
         )
+        if architecture == "dual_rail_klm_cnot":
+            self.input_modes = list(KLM_ENCODED_MODES)
         self.input_modes = _validate_input_modes(self.n_modes, self.input_modes)
         if architecture not in ARCHITECTURES:
             raise ValueError(f"architecture must be one of {ARCHITECTURES}")
@@ -123,14 +166,27 @@ class PhotonicQKSFeaturizer:
             and self.computation_space is not ml.ComputationSpace.DUAL_RAIL
         ):
             raise ValueError("architecture='dual_rail_mzi' requires DUAL_RAIL")
+        if architecture == "dual_rail_klm_cnot":
+            # Two logical qubits on four rails plus two vacuum ancillas.  The
+            # post-selection is ours, not MerLin's, so we read the unbunched
+            # distribution and condition on one photon per rail pair.
+            if (self.n_modes, self.n_photons) != (6, 2):
+                raise ValueError(
+                    "architecture='dual_rail_klm_cnot' requires n_modes=6, n_photons=2"
+                )
+            self.computation_space = ml.ComputationSpace.UNBUNCHED
         self.architecture = architecture
         self.mesh_after = bool(mesh_after)
         self.angle_scale = float(angle_scale)
-        self.input_state = _default_input_state(
-            self.n_modes,
-            self.n_photons,
-            self.input_modes,
-            self.computation_space,
+        self.input_state = (
+            list(KLM_INPUT_STATE)
+            if architecture == "dual_rail_klm_cnot"
+            else _default_input_state(
+                self.n_modes,
+                self.n_photons,
+                self.input_modes,
+                self.computation_space,
+            )
         )
         self.episodes: list[EpisodeEncoding] = []
         self._layer_seeds: list[int] = []
@@ -154,6 +210,20 @@ class PhotonicQKSFeaturizer:
         approximating it.  ``mesh_after`` optionally appends a random mesh to
         recover cross-qubit photonic mixing at the cost of that exactness.
         """
+        if self.architecture == "dual_rail_klm_cnot":
+            names = [f"px_{i}" for i in range(len(KLM_ENCODED_MODES))]
+            layer = ml.QuantumLayer(
+                circuit=_klm_cnot_circuit(names),
+                input_parameters=["px"],
+                input_state=self.input_state,
+                n_photons=self.n_photons,
+                measurement_strategy=ml.MeasurementStrategy.probs(
+                    computation_space=self.computation_space
+                ),
+            )
+            for p in layer.parameters():
+                p.requires_grad = False
+            return layer
         builder = ml.CircuitBuilder(n_modes=self.n_modes)
         if self.architecture == "dual_rail_mzi":
             pairs = [(2 * j, 2 * j + 1) for j in range(self.n_modes // 2)]
@@ -218,6 +288,23 @@ class PhotonicQKSFeaturizer:
         cannot undo.  ``_sample_outcomes`` therefore also checks the row count
         against the measured distribution.
         """
+        if self.architecture == "dual_rail_klm_cnot":
+            from itertools import combinations
+
+            basis = list(combinations(range(self.n_modes), self.n_photons))
+            keep, rows = [], []
+            for index, occupied in enumerate(basis):
+                a = [m for m in occupied if m in KLM_RAIL_MODES[:2]]
+                b = [m for m in occupied if m in KLM_RAIL_MODES[2:]]
+                if len(a) != 1 or len(b) != 1:
+                    continue
+                keep.append(index)
+                row = np.zeros(len(KLM_RAIL_MODES), dtype=np.int8)
+                row[KLM_RAIL_MODES.index(a[0])] = 1
+                row[KLM_RAIL_MODES.index(b[0])] = 1
+                rows.append(row)
+            self._postselect_columns = np.asarray(keep, dtype=int)
+            return np.stack(rows)
         if self.computation_space is ml.ComputationSpace.DUAL_RAIL:
             n_logical = self.n_modes // 2
             table = np.zeros((2**n_logical, self.n_modes), dtype=np.int8)
@@ -241,6 +328,14 @@ class PhotonicQKSFeaturizer:
     ) -> np.ndarray:
         probs_np = probs.detach().cpu().numpy().astype(np.float64)
         probs_np = np.clip(probs_np, 0.0, None)
+        if not hasattr(self, "_outcome_table"):
+            self._outcome_table = self._build_outcome_table()
+        columns = getattr(self, "_postselect_columns", None)
+        if columns is not None:
+            # Condition on the heralding pattern (one photon per rail pair, none
+            # in the ancillas).  For the KLM gadget the surviving mass is a
+            # constant 1/9, so this renormalisation discards no information.
+            probs_np = probs_np[:, columns]
         probs_np /= probs_np.sum(axis=1, keepdims=True)
         n = probs_np.shape[0]
         cum = np.cumsum(probs_np, axis=1)
@@ -271,7 +366,8 @@ class PhotonicQKSFeaturizer:
             if self.shots_per_episode == 1:
                 bits = self._sample_outcomes(probs, rng)
             else:
-                acc = np.zeros((X.shape[0], self.n_modes), dtype=np.float32)
+                width = self._outcome_table.shape[1]
+                acc = np.zeros((X.shape[0], width), dtype=np.float32)
                 for _ in range(self.shots_per_episode):
                     acc += self._sample_outcomes(probs, rng).astype(np.float32)
                 bits = acc / self.shots_per_episode

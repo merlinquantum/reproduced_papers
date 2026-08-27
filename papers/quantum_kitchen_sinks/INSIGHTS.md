@@ -160,16 +160,79 @@ model does it too (0.89 → 0.59 → 0.33 for 1, 2, 4 qubits) because entangleme
 flattens single-qubit marginals.  What distinguishes the architectures is the
 level, and the level is set by fringe visibility.
 
-### Two-qubit photonics
+### Two-qubit photonics: KLM works, and is not needed
 
-The two-qubit photonic rows above use *independent* dual-rail qubits with no
-entangler, which is exact.  Reproducing the paper's Fig. 2(a) CNOT photonically
-needs a post-selected KLM gate (three ``R = 1/3`` splitters and two ancilla
-vacuum modes, success probability 1/9).  That is not implemented here: Perceval
-requires beam splitters on consecutive modes, which constrains the rail layout,
-and the sign convention on the central splitter still needs to be pinned down.
-The no-entangler photonic 2-qubit map is verified exact to 1.6e-07, so the
-remaining work is entirely the entangling gate.
+The paper's Fig. 2(a) CNOT *is* reproducible photonically. A dual-rail CNOT is
+``H_B · CZ · H_B`` with a post-selected KLM CZ: three reflectivity-1/3 beam
+splitters, two of which pair a logical-|0> rail with a vacuum ancilla. Verified
+exact against the gate `cnot2` ansatz to **1.3e-07**, with success probability
+exactly **1/9**, independent of the input.
+
+Three practical notes for anyone rebuilding it:
+
+1. **Use MerLin's explicit-circuit interface** (`QuantumLayer(circuit=…)`), not
+   the `CircuitBuilder` shorthand. The gadget needs specific splitter
+   conventions and non-default reflectivities.
+2. **Perceval requires beam splitters on consecutive modes.** A layout that
+   works: `[anc, |0>_A, |1>_A, |1>_B, |0>_B, anc]` — the two logical-|1> rails
+   are adjacent for the central splitter, the two logical-|0> rails sit next to
+   their ancillas, and photons enter on the *outer* rails so that
+   `P(|1>) = sin²(θ/2)` on each qubit.
+3. **Perceval's `compute_unitary()` uses the transposed index convention**
+   relative to "amplitude from input mode i to output mode k". Getting this
+   wrong reproduces the *no-entangler* distribution exactly — a very convincing
+   wrong answer, since the gate silently drops out.
+
+The construction actually yields `Z_A · CNOT`; the spurious `Z` on the control
+is diagonal and therefore invisible to a computational-basis measurement.
+
+**But it does not pay for itself.** On (3,5)-MNIST:
+
+| two-qubit photonic circuit | modes | herald | test error |
+|---|---|---|---|
+| dual-rail MZI, no entangler | 4 | deterministic | **1.43 ± 0.24%** |
+| dual-rail MZI + KLM CNOT | 6 (+2 ancillas) | 1/9 | 1.87 ± 0.40% |
+| *gate model `cnot2` for reference* | — | — | *1.77 ± 0.24%* |
+
+The entangler costs 9× the shots and buys nothing here. That is consistent with
+the gate model itself, where 1q (1.87%) and 2q (1.77%) are within each other's
+error bars — on this task the CNOT is not what produces the lift.
+
+### Do we need post-selection at all? A native 4-mode entangler
+
+A bare central splitter between the two logical-|1> rails — no ancillas, four
+modes, two photons — gives the post-selected map `diag(1, a, a, x)` with
+`a = √(1-η)` and `x` set by the reflectivity `η`:
+
+| η | normalised diagonal | herald on \|11> |
+|---|---|---|
+| 1/3 | (1, 0.577, 0.577, **−1/3**) | 1/9 |
+| 1/2 | (1, 0.707, 0.707, 0) | 0 |
+| 0.9 | (1, 0.949, 0.949, 0.8) | 0.64 |
+
+At `η = 1/3` this is `diag(1, a, a, −a²)`, i.e. **CZ up to local amplitude
+damping on each qubit** — an entangling gate, ancilla-free. The two balancing
+splitters in the full KLM gadget exist only to undo that local damping and make
+the map exactly unitary-on-the-subspace.
+
+For QKS the damping is not obviously fatal, since the features are measured
+marginals fed to a linear model. Measured per-feature SNR of the native
+four-mode circuit (gate `cnot2` reference: 0.590):
+
+| native 4-mode circuit | SNR | locality ρ | herald |
+|---|---|---|---|
+| no entangler | **0.971** | +0.89 | 1.00 |
+| central splitter η=1/3 | 0.516 | +0.83 | 0.43 (input-dependent) |
+| central splitter η=2/3 | 0.762 | +0.88 | 0.60 (input-dependent) |
+
+So a native four-mode entangler is available and roughly matches the gate
+model's feature quality — but it is strictly worse than using no entangler at
+all, and its herald rate depends on the input (std 0.16), which means the
+post-selection leaks data-dependent information rather than merely heralding a
+gate. **The honest photonic translation of QKS on this task is the
+deterministic, ancilla-free, four-mode circuit.** KLM is the right tool only
+when the goal is bit-exact reproduction of the paper's circuit rather than
+equal performance.
 
 ## Where QKS is most useful
 

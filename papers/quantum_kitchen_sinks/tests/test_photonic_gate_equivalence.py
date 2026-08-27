@@ -121,3 +121,96 @@ def test_dual_rail_mzi_requires_dual_rail_space():
             computation_space="UNBUNCHED",
             architecture="dual_rail_mzi",
         )
+
+
+def _klm_marginal_distribution(x: np.ndarray, sigma: float, n_episodes: int):
+    """Noiseless post-selected outcome distribution of the KLM two-qubit ansatz."""
+    import torch
+    from lib.photonic_qks import KLM_RAIL_MODES, PhotonicQKSFeaturizer
+
+    feat = PhotonicQKSFeaturizer(
+        n_modes=6,
+        n_photons=2,
+        n_episodes=n_episodes,
+        sigma=sigma,
+        encoding="tile",
+        architecture="dual_rail_klm_cnot",
+    )
+    feat.fit_episodes(input_dim=x.shape[1], seed=0)
+    table = feat._build_outcome_table()
+    # order outcomes as (bit_A, bit_B) with A = rail mode 2, B = rail mode 3
+    bits = [
+        (int(row[KLM_RAIL_MODES.index(2)]), int(row[KLM_RAIL_MODES.index(3)]))
+        for row in table
+    ]
+    order = sorted(range(len(bits)), key=lambda i: bits[i])
+    out, herald = [], []
+    for e in range(n_episodes):
+        layer = feat._build_layer(feat._layer_seeds[e])
+        episode = feat.episodes[e]
+        theta = x @ episode.omega.T + episode.beta
+        probs = layer(torch.from_numpy(theta.astype(np.float32))).detach().numpy()
+        probs = np.clip(probs.astype(np.float64), 0.0, None)
+        kept = probs[:, feat._postselect_columns]
+        herald.append(kept.sum(axis=1))
+        out.append((kept / kept.sum(axis=1, keepdims=True))[:, order])
+    return out, np.concatenate(herald), feat
+
+
+def test_klm_cnot_matches_the_gate_cnot2_ansatz():
+    """The post-selected KLM CNOT reproduces Fig. 2(a) exactly, not approximately.
+
+    A dual-rail CNOT is not deterministic -- it needs post-selection, at the
+    textbook 1/9 success probability -- but conditioned on the herald it is the
+    exact gate. So the two-qubit photonic ansatz must agree with the gate-model
+    `cnot2` distribution to numerical precision, and it does.
+    """
+    x = _inputs()
+    photonic, _, feat = _klm_marginal_distribution(x, SIGMA, N_EPISODES)
+    probs_of = make_ansatz_probs("cnot2", 2)
+    for e, block in enumerate(photonic):
+        episode = feat.episodes[e]
+        theta = x @ episode.omega.T + episode.beta
+        assert np.abs(block - probs_of(theta, 1)).max() < 1e-5
+
+
+def test_klm_success_probability_is_one_ninth():
+    """The KLM gadget must herald at exactly 1/9, independently of the input.
+
+    This is computed from the circuit unitary over the full Fock space, not from
+    MerLin's ``UNBUNCHED`` probabilities -- those are already renormalised over
+    unbunched outcomes, so the fraction surviving *our* herald is conditional on
+    that and is not 1/9.  Conditioning twice on nested sets leaves the final
+    distribution correct, which is what the equivalence test above checks.
+
+    An input-dependent success probability would mean the post-selection is
+    leaking information about the data rather than merely heralding the gate.
+    """
+    import perceval as pcvl  # noqa: F401
+    from lib.photonic_qks import KLM_RAIL_MODES, _klm_cnot_circuit
+
+    outcomes = [(a, b) for a in KLM_RAIL_MODES[:2] for b in KLM_RAIL_MODES[2:]]
+    rates = []
+    for theta in [(0.0, 0.0), (0.7, 2.1), (np.pi, 1.3), (2.4, 5.0)]:
+        circuit = _klm_cnot_circuit(["px_0", "px_1"])
+        for param, value in zip(circuit.get_parameters(), theta):
+            param.set_value(value)
+        # Perceval's compute_unitary uses the transposed index convention
+        # relative to "amplitude from input mode i to output mode k".
+        u = np.array(circuit.compute_unitary()).T
+        i, j = 1, 4
+        amps = [u[i, k] * u[j, l] + u[i, l] * u[j, k] for k, l in outcomes]
+        rates.append(float(np.sum(np.abs(amps) ** 2)))
+    assert np.allclose(rates, 1.0 / 9.0, atol=1e-9), rates
+
+
+def test_klm_requires_six_modes_and_two_photons():
+    with pytest.raises(ValueError, match="n_modes=6"):
+        PhotonicQKSFeaturizer(
+            n_modes=4,
+            n_photons=2,
+            n_episodes=1,
+            sigma=0.1,
+            encoding="tile",
+            architecture="dual_rail_klm_cnot",
+        )

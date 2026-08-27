@@ -81,7 +81,7 @@ Deviations and notes:
 papers/quantum_kitchen_sinks/
 |-- README.md, INSIGHTS.md
 |-- cli.json, requirements.txt, notebook.ipynb
-|-- configs/                       # 25 experiment configs (incl. baselines and sweeps)
+|-- configs/                       # 26 experiment configs (incl. baselines and sweeps)
 |-- lib/
 |   |-- data.py, encoding.py, circuits.py, qks_model.py
 |   |-- photonic_qks.py            # MerLin photonic adaptation
@@ -93,10 +93,10 @@ papers/quantum_kitchen_sinks/
 ```
 
 `results/` holds the committed, citable outputs: the figures embedded below and
-twelve curated run artifacts — four for picture frames
-(`picture_frames_{lr_baseline,cnot2_sweep,cz2_sweep,merlin}.json`) and eight for
+thirteen curated run artifacts — four for picture frames
+(`picture_frames_{lr_baseline,cnot2_sweep,cz2_sweep,merlin}.json`) and nine for
 (3,5)-MNIST (`mnist35_{lr_baseline,svm_baseline,gate_1q,gate_2q,gate_4q,
-photonic_dual_rail_mzi_1q,photonic_dual_rail_mzi_2q,
+photonic_dual_rail_mzi_1q,photonic_dual_rail_mzi_2q,photonic_klm_cnot_2q,
 photonic_random_mesh_6m3k}.json`).  Each artifact
 records the config it came from and the command that regenerates it, and
 `notebook.ipynb` reads them — so the notebook and the tables below work from a
@@ -252,7 +252,8 @@ Test errors (1 − test accuracy), same subsample and seeds as the table above:
 | Photonic QKS, ``m=4 / k=2 / E=2000`` | random mesh, UNBUNCHED, σ=0.05 | 7.80 ± 0.08% |
 | Photonic QKS, ``m=6 / k=3 / E=10000`` | random mesh, DUAL_RAIL, σ=0.05 | 4.43 ± 0.34% |
 | **Photonic QKS, ``m=2 / k=1 / E=5000``** | **dual-rail MZI, σ=0.05** | **1.73 ± 0.17%** |
-| **Photonic QKS, ``m=4 / k=2 / E=2500``** | **dual-rail MZI, σ=0.10** | **1.43 ± 0.24%** |
+| **Photonic QKS, ``m=4 / k=2 / E=2500``** | **dual-rail MZI, no entangler, σ=0.10** | **1.43 ± 0.24%** |
+| Photonic QKS, ``m=6 / k=2 / E=5000`` | dual-rail MZI + post-selected KLM CNOT, σ=0.10 | 1.87 ± 0.40% |
 | Gate-model QKS-1q, ``E=5000`` | σ=0.05 | 1.87 ± 0.09% |
 | Gate-model QKS-2q, ``E=5000`` | σ=0.10 | 1.77 ± 0.24% |
 
@@ -320,7 +321,15 @@ circuit architectures are available:
   one Mach-Zehnder per logical qubit.  This is *exactly* ``RX(θ)`` on a
   dual-rail qubit, so it reproduces the gate-model ansatz rather than
   approximating it, and it lifts (3,5)-MNIST to **1.43 ± 0.24%** against the
-  4.40% baseline.
+  4.40% baseline.  It is deterministic: with no cross-pair mixing no photon can
+  leave its rail pair, so the dual-rail heralding succeeds with probability 1.
+- ``dual_rail_klm_cnot`` — two dual-rail qubits plus the paper's Fig. 2(a)
+  CNOT, realised as ``H_B · CZ · H_B`` with a post-selected KLM CZ (three
+  reflectivity-1/3 splitters, two vacuum ancillas, success exactly 1/9).  Built
+  through MerLin's explicit-circuit interface (``QuantumLayer(circuit=…)``)
+  rather than the ``CircuitBuilder`` shorthand, because the gadget needs
+  specific splitter conventions.  Exact against the gate ``cnot2`` ansatz to
+  1.3e-07.
 
 One implementation detail is worth flagging because it fails silently: MerLin
 parameterises a beam splitter by ``R = cos²(θ/2)``, so a balanced splitter is
@@ -337,10 +346,12 @@ equivalence check against the gate model distinguishes them.
   signal-to-noise saturates 7× below the gate model under σ, ``angle_scale``
   and ``n_layers`` sweeps.  ``dual_rail_mzi`` removes the gap entirely, so this
   is a statement about circuit design, not about photonics.
-- The photonic two-qubit runs use *independent* dual-rail qubits (no
-  entangler).  A dual-rail CNOT needs post-selection (KLM, success 1/9); it is
-  not implemented here, so the 2-qubit photonic row is the analogue of the gate
-  ansatz *without* its CNOT.
+- The paper's Fig. 2(a) CNOT is reproduced photonically with a post-selected
+  KLM gate (``architecture="dual_rail_klm_cnot"``), exact to 1.3e-07 against
+  the gate code path at the textbook 1/9 success probability.  It costs 9× the
+  shots and does **not** improve accuracy on this task: 1.87 ± 0.40% against
+  1.43 ± 0.24% for the deterministic, ancilla-free two-qubit circuit.  On
+  (3,5)-MNIST the entangler simply does not earn its keep.
 - As with classical Random Kitchen Sinks, the benefit is not universal: it
   likely depends strongly on the dataset and on how well the chosen feature map
   matches the underlying structure.
