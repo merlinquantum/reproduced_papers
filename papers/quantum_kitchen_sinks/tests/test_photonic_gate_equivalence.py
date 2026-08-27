@@ -199,7 +199,10 @@ def test_klm_success_probability_is_one_ninth():
         # relative to "amplitude from input mode i to output mode k".
         u = np.array(circuit.compute_unitary()).T
         i, j = 1, 4
-        amps = [u[i, k] * u[j, l] + u[i, l] * u[j, k] for k, l in outcomes]
+        amps = [
+            u[i, rail_a] * u[j, rail_b] + u[i, rail_b] * u[j, rail_a]
+            for rail_a, rail_b in outcomes
+        ]
         rates.append(float(np.sum(np.abs(amps) ** 2)))
     assert np.allclose(rates, 1.0 / 9.0, atol=1e-9), rates
 
@@ -213,4 +216,90 @@ def test_klm_requires_six_modes_and_two_photons():
             sigma=0.1,
             encoding="tile",
             architecture="dual_rail_klm_cnot",
+        )
+
+
+def test_merlin_fock_basis_is_reverse_lexicographic():
+    """The threshold click table depends on MerLin's Fock ordering, so pin it.
+
+    Nothing in the API states the ordering, and getting it wrong silently
+    permutes the feature columns -- which a linear classifier cannot undo.
+    """
+    from itertools import product
+
+    import merlin as ml
+    import perceval as pcvl
+    import torch
+
+    states = sorted(
+        (t for t in product(range(3), repeat=4) if sum(t) == 2), reverse=True
+    )
+    for index, occupation in enumerate(states):
+        circuit = pcvl.Circuit(4)
+        circuit.add(0, pcvl.PS(pcvl.P("px_0")))
+        layer = ml.QuantumLayer(
+            circuit=circuit,
+            input_parameters=["px"],
+            input_state=list(occupation),
+            n_photons=2,
+            measurement_strategy=ml.MeasurementStrategy.probs(
+                computation_space=ml.ComputationSpace.FOCK
+            ),
+        )
+        for parameter in layer.parameters():
+            parameter.requires_grad = False
+        probs = layer(torch.zeros(1, 1)).detach().numpy()[0]
+        assert int(probs.argmax()) == index, (occupation, index, probs.argmax())
+
+
+def test_threshold_click_table_keeps_bunched_events():
+    """Bunched outcomes are click patterns, not failures.
+
+    That is precisely what makes this readout deterministic: nothing is
+    discarded, so there is no heralding and no success probability to pay.
+    """
+    from lib.photonic_qks import _threshold_click_table
+
+    table = _threshold_click_table(4, 2)
+    assert table.shape == (10, 4), "10 Fock states for 2 photons in 4 modes"
+    counts = table.sum(axis=1)
+    assert sorted(set(counts.tolist())) == [1, 2]
+    assert (counts == 1).sum() == 4, "one bunched state per mode, one click each"
+    assert (counts == 2).sum() == 6, "C(4, 2) unbunched states, two clicks each"
+
+
+@pytest.mark.parametrize("mixing", ["none", "splitter", "mesh"])
+def test_mzi_threshold_is_deterministic(mixing):
+    """No post-selection: every outcome is kept, so no column is ever dropped."""
+    from lib.photonic_qks import PhotonicQKSFeaturizer
+
+    feat = PhotonicQKSFeaturizer(
+        n_modes=4,
+        n_photons=2,
+        n_episodes=2,
+        sigma=0.4,
+        encoding="tile",
+        architecture="mzi_threshold",
+        mixing=mixing,
+    )
+    feat.fit_episodes(input_dim=INPUT_DIM, seed=0)
+    assert feat.computation_space.name == "FOCK"
+    features = feat.transform(_inputs(20), seed=0)
+    assert not hasattr(feat, "_postselect_columns"), "nothing is post-selected"
+    assert features.shape == (20, 2 * 4)
+    assert set(np.unique(features).tolist()) <= {0.0, 1.0}
+
+
+def test_mzi_threshold_requires_the_four_mode_layout():
+    """The layout that puts both logical-|1> rails adjacent is 4 modes only."""
+    from lib.photonic_qks import PhotonicQKSFeaturizer
+
+    with pytest.raises(ValueError, match="n_modes=4"):
+        PhotonicQKSFeaturizer(
+            n_modes=6,
+            n_photons=3,
+            n_episodes=1,
+            sigma=0.1,
+            encoding="tile",
+            architecture="mzi_threshold",
         )

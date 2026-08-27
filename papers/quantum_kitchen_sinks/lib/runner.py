@@ -65,6 +65,7 @@ def _featurize(cfg: dict[str, Any], X_train: np.ndarray, X_test: np.ndarray, see
             computation_space=qks_cfg.get("computation_space", "UNBUNCHED"),
             architecture=qks_cfg.get("architecture", "random_mesh"),
             mesh_after=bool(qks_cfg.get("mesh_after", False)),
+            mixing=qks_cfg.get("mixing", "splitter"),
         )
         feat.fit_episodes(input_dim=X_train.shape[1], seed=seed)
         t0 = time.perf_counter()
@@ -81,6 +82,7 @@ def _featurize(cfg: dict[str, Any], X_train: np.ndarray, X_test: np.ndarray, see
             "computation_space": feat.computation_space.name,
             "architecture": feat.architecture,
             "mesh_after": feat.mesh_after,
+            "mixing": feat.mixing,
             "detector_model": "threshold",
             "measurement_strategy": "PROBABILITIES",
             "postselection": "none",

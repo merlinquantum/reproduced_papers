@@ -11,6 +11,7 @@ See README and INSIGHTS for the design rationale.
 from __future__ import annotations
 
 from collections.abc import Sequence
+from typing import Any
 
 import merlin as ml
 import numpy as np
@@ -24,7 +25,51 @@ from .encoding import EpisodeEncoding, make_episodes
 # dual-rail MZI at 0.5 instead of 1.0.
 BALANCED_BEAMSPLITTER_THETA = np.pi / 2
 
-ARCHITECTURES = ("random_mesh", "dual_rail_mzi", "dual_rail_klm_cnot")
+ARCHITECTURES = (
+    "random_mesh",
+    "dual_rail_mzi",
+    "dual_rail_klm_cnot",
+    "mzi_threshold",
+)
+
+MIXINGS = ("none", "splitter", "mesh")
+
+# Mode layout for the deterministic threshold-readout ansatz:
+#   0 = |0>_A   1 = |1>_A   2 = |1>_B   3 = |0>_B
+# Photons enter on the outer rails, phases drive the inner ones, so the two
+# logical-|1> rails are adjacent and a single balanced splitter between them is
+# an entangling element requiring no ancillas and no heralding.
+MZI_THRESHOLD_INPUT_STATE = (1, 0, 0, 1)
+MZI_THRESHOLD_ENCODED_MODES = (1, 2)
+
+
+def _threshold_click_table(n_modes: int, n_photons: int) -> np.ndarray:
+    """Threshold-detector click pattern for each Fock outcome.
+
+    MerLin reports the ``FOCK`` distribution in *reverse lexicographic* order of
+    occupation tuples (verified exhaustively in
+    ``tests/test_photonic_gate_equivalence.py``).  A threshold detector cannot
+    count photons, so an outcome with two photons in one mode fires a single
+    detector: bunched events are ordinary click patterns rather than failures,
+    which is what makes this readout deterministic -- nothing is discarded.
+    """
+    from itertools import product
+
+    states = sorted(
+        (
+            t
+            for t in product(range(n_photons + 1), repeat=n_modes)
+            if sum(t) == n_photons
+        ),
+        reverse=True,
+    )
+    table = np.zeros((len(states), n_modes), dtype=np.int8)
+    for i, occupation in enumerate(states):
+        for mode, count in enumerate(occupation):
+            if count:
+                table[i, mode] = 1
+    return table
+
 
 # Post-selected KLM CZ: three beam splitters of reflectivity 1/3 (Ralph et al.),
 # two of which pair a logical-|0> rail with a vacuum ancilla.  Success
@@ -42,7 +87,7 @@ KLM_INPUT_STATE = (0, 1, 0, 0, 1, 0)
 KLM_ENCODED_MODES = (2, 3)
 
 
-def _klm_cnot_circuit(theta_names: Sequence[str]) -> pcvl.Circuit:
+def _klm_cnot_circuit(theta_names: Sequence[str]) -> Any:
     """RX(theta_0) (x) RX(theta_1) followed by a post-selected CNOT.
 
     Each qubit is a Mach-Zehnder (balanced splitter, encoding phase, balanced
@@ -53,7 +98,7 @@ def _klm_cnot_circuit(theta_names: Sequence[str]) -> pcvl.Circuit:
     """
     import perceval as pcvl
 
-    bs50 = dict(theta=BALANCED_BEAMSPLITTER_THETA)
+    bs50 = {"theta": BALANCED_BEAMSPLITTER_THETA}
     circuit = pcvl.Circuit(6)
     circuit.add(1, pcvl.BS.H(**bs50))
     circuit.add(3, pcvl.BS.H(**bs50))
@@ -139,6 +184,7 @@ class PhotonicQKSFeaturizer:
         computation_space: ml.ComputationSpace | str = ml.ComputationSpace.UNBUNCHED,
         architecture: str = "random_mesh",
         mesh_after: bool = False,
+        mixing: str = "splitter",
     ) -> None:
         self.n_modes = int(n_modes)
         self.n_photons = int(n_photons)
@@ -156,6 +202,13 @@ class PhotonicQKSFeaturizer:
             if input_modes is None
             else list(input_modes)
         )
+        if architecture == "mzi_threshold":
+            # Layout [|0>_A, |1>_A, |1>_B, |0>_B]: each photon enters on an
+            # *outer* rail and its phase drives the neighbouring inner rail, so
+            # P(inner rail) = sin^2(theta/2) and the two logical-|1> rails are
+            # adjacent -- which is where a mixing splitter can sit (Perceval
+            # needs consecutive modes).
+            self.input_modes = list(MZI_THRESHOLD_ENCODED_MODES)
         if architecture == "dual_rail_klm_cnot":
             self.input_modes = list(KLM_ENCODED_MODES)
         self.input_modes = _validate_input_modes(self.n_modes, self.input_modes)
@@ -175,11 +228,25 @@ class PhotonicQKSFeaturizer:
                     "architecture='dual_rail_klm_cnot' requires n_modes=6, n_photons=2"
                 )
             self.computation_space = ml.ComputationSpace.UNBUNCHED
+        if architecture == "mzi_threshold":
+            if (self.n_modes, self.n_photons) != (4, 2):
+                raise ValueError(
+                    "architecture='mzi_threshold' requires n_modes=4, n_photons=2 "
+                    "(the layout that puts both logical-|1> rails adjacent)"
+                )
+            # Threshold detectors on every mode and no post-selection at all, so
+            # the full Fock distribution is needed, bunched outcomes included.
+            self.computation_space = ml.ComputationSpace.FOCK
+        if mixing not in MIXINGS:
+            raise ValueError(f"mixing must be one of {MIXINGS}")
+        self.mixing = mixing
         self.architecture = architecture
         self.mesh_after = bool(mesh_after)
         self.angle_scale = float(angle_scale)
         self.input_state = (
-            list(KLM_INPUT_STATE)
+            list(MZI_THRESHOLD_INPUT_STATE)
+            if architecture == "mzi_threshold"
+            else list(KLM_INPUT_STATE)
             if architecture == "dual_rail_klm_cnot"
             else _default_input_state(
                 self.n_modes,
@@ -210,6 +277,40 @@ class PhotonicQKSFeaturizer:
         approximating it.  ``mesh_after`` optionally appends a random mesh to
         recover cross-qubit photonic mixing at the cost of that exactness.
         """
+        if self.architecture == "mzi_threshold":
+            import perceval as pcvl
+
+            circuit = pcvl.Circuit(self.n_modes)
+            for lo in (0, 2):
+                circuit.add(lo, pcvl.BS.H(theta=BALANCED_BEAMSPLITTER_THETA))
+            for i, mode in enumerate(self.input_modes):
+                circuit.add(mode, pcvl.PS(pcvl.P(f"px_{i}")))
+            for lo in (0, 2):
+                circuit.add(lo, pcvl.BS.H(theta=BALANCED_BEAMSPLITTER_THETA))
+            if self.mixing == "splitter":
+                # one balanced splitter joining the two logical-|1> rails:
+                # entangling (HOM), ancilla-free, and still deterministic
+                circuit.add(1, pcvl.BS.H(theta=BALANCED_BEAMSPLITTER_THETA))
+            elif self.mixing == "mesh":
+                gen = np.random.default_rng(int(seed))
+                for _ in range(2):
+                    for mode in range(self.n_modes - 1):
+                        circuit.add(
+                            mode, pcvl.BS.Rx(theta=float(gen.uniform(0.0, np.pi)))
+                        )
+                        circuit.add(mode, pcvl.PS(float(gen.uniform(0.0, 2.0 * np.pi))))
+            layer = ml.QuantumLayer(
+                circuit=circuit,
+                input_parameters=["px"],
+                input_state=self.input_state,
+                n_photons=self.n_photons,
+                measurement_strategy=ml.MeasurementStrategy.probs(
+                    computation_space=self.computation_space
+                ),
+            )
+            for p in layer.parameters():
+                p.requires_grad = False
+            return layer
         if self.architecture == "dual_rail_klm_cnot":
             names = [f"px_{i}" for i in range(len(KLM_ENCODED_MODES))]
             layer = ml.QuantumLayer(
@@ -288,6 +389,8 @@ class PhotonicQKSFeaturizer:
         cannot undo.  ``_sample_outcomes`` therefore also checks the row count
         against the measured distribution.
         """
+        if self.architecture == "mzi_threshold":
+            return _threshold_click_table(self.n_modes, self.n_photons)
         if self.architecture == "dual_rail_klm_cnot":
             from itertools import combinations
 

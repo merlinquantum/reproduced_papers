@@ -81,23 +81,24 @@ Deviations and notes:
 papers/quantum_kitchen_sinks/
 |-- README.md, INSIGHTS.md
 |-- cli.json, requirements.txt, notebook.ipynb
-|-- configs/                       # 26 experiment configs (incl. baselines and sweeps)
+|-- configs/                       # 29 experiment configs (incl. baselines and sweeps)
 |-- lib/
 |   |-- data.py, encoding.py, circuits.py, qks_model.py
 |   |-- photonic_qks.py            # MerLin photonic adaptation
 |   |-- classifiers.py, runner.py
-|-- tests/                         # 15 unit, kernel and smoke tests
+|-- tests/                         # 30 unit, kernel, equivalence and smoke tests
 |-- utils/                         # 3 plotting scripts
 |-- outdir/                        # timestamped run artifacts (git-ignored)
 `-- results/                       # curated figures + run artifacts (*.json)
 ```
 
 `results/` holds the committed, citable outputs: the figures embedded below and
-thirteen curated run artifacts — four for picture frames
-(`picture_frames_{lr_baseline,cnot2_sweep,cz2_sweep,merlin}.json`) and nine for
+sixteen curated run artifacts — four for picture frames
+(`picture_frames_{lr_baseline,cnot2_sweep,cz2_sweep,merlin}.json`) and twelve for
 (3,5)-MNIST (`mnist35_{lr_baseline,svm_baseline,gate_1q,gate_2q,gate_4q,
 photonic_dual_rail_mzi_1q,photonic_dual_rail_mzi_2q,photonic_klm_cnot_2q,
-photonic_random_mesh_6m3k}.json`).  Each artifact
+photonic_random_mesh_6m3k,photonic_threshold_none,photonic_threshold_splitter,
+photonic_threshold_mesh}.json`).  Each artifact
 records the config it came from and the command that regenerates it, and
 `notebook.ipynb` reads them — so the notebook and the tables below work from a
 fresh clone without a prior run.
@@ -254,6 +255,9 @@ Test errors (1 − test accuracy), same subsample and seeds as the table above:
 | **Photonic QKS, ``m=2 / k=1 / E=5000``** | **dual-rail MZI, σ=0.05** | **1.73 ± 0.17%** |
 | **Photonic QKS, ``m=4 / k=2 / E=2500``** | **dual-rail MZI, no entangler, σ=0.10** | **1.43 ± 0.24%** |
 | Photonic QKS, ``m=6 / k=2 / E=5000`` | dual-rail MZI + post-selected KLM CNOT, σ=0.10 | 1.87 ± 0.40% |
+| **Photonic QKS, ``m=4 / k=2 / E=2500``** | **MZI + one splitter, threshold readout, no post-selection, σ=0.10** | **1.60 ± 0.00%** |
+| Photonic QKS, ``m=4 / k=2 / E=2500`` | MZI only, threshold readout, σ=0.10 | 1.73 ± 0.21% |
+| Photonic QKS, ``m=4 / k=2 / E=2500`` | MZI + random mesh, threshold readout, σ=0.10 | 2.57 ± 0.17% |
 | Gate-model QKS-1q, ``E=5000`` | σ=0.05 | 1.87 ± 0.09% |
 | Gate-model QKS-2q, ``E=5000`` | σ=0.10 | 1.77 ± 0.24% |
 
@@ -323,6 +327,14 @@ circuit architectures are available:
   approximating it, and it lifts (3,5)-MNIST to **1.43 ± 0.24%** against the
   4.40% baseline.  It is deterministic: with no cross-pair mixing no photon can
   leave its rail pair, so the dual-rail heralding succeeds with probability 1.
+- ``mzi_threshold`` — the same MZI encoders on a 4-mode chip, read out with
+  **threshold detectors on every mode and no post-selection whatsoever**: a
+  bunched event fires one detector and is a perfectly good click pattern, so
+  nothing is discarded and the circuit is deterministic.  ``mixing`` selects the
+  entangling element: ``"none"``, ``"splitter"`` (one balanced splitter joining
+  the two logical-|1> rails — HOM interference, ancilla-free) or ``"mesh"`` (a
+  shallow random mesh).  ``"splitter"`` is the best circuit in this
+  reproduction.
 - ``dual_rail_klm_cnot`` — two dual-rail qubits plus the paper's Fig. 2(a)
   CNOT, realised as ``H_B · CZ · H_B`` with a post-selected KLM CZ (three
   reflectivity-1/3 splitters, two vacuum ancillas, success exactly 1/9).  Built
@@ -351,11 +363,13 @@ equivalence check against the gate model distinguishes them.
   the gate code path at the textbook 1/9 success probability.  It costs 9× the
   shots and does **not** improve accuracy on this task: 1.87 ± 0.40% against
   1.43 ± 0.24% for the deterministic, ancilla-free two-qubit circuit.
-- Reproducing *that* gate is not required, though.  A fully deterministic
-  4-mode circuit with threshold detectors and no post-selection — one 50:50
-  splitter after the encoders, bunched events kept as ordinary click patterns —
-  reaches 1.93 ± 0.12%, within error of the gate ansatz.  See `INSIGHTS.md`;
-  entanglement is admissible but not what produces the lift here.
+- Reproducing *that* gate is not required, and is not even the best option.
+  ``architecture="mzi_threshold"`` is a fully deterministic 4-mode circuit read
+  out with threshold detectors and **no post-selection at all** — a bunched
+  event fires one detector and is an ordinary click pattern, not a failure.
+  With one balanced splitter joining the two logical-|1> rails (genuine photonic
+  entanglement, no ancillas, no heralding) it reaches **1.60 ± 0.00%**, edging
+  both the gate ansatz and its KLM reproduction.  See `INSIGHTS.md`.
 - As with classical Random Kitchen Sinks, the benefit is not universal: it
   likely depends strongly on the dataset and on how well the chosen feature map
   matches the underlying structure.

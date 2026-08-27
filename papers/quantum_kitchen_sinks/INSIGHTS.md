@@ -211,24 +211,32 @@ post-selection**, E=2500, 3 seeds:
 
 | mixing layer after the MZI encoders | deterministic? | test error |
 |---|---|---|
-| none (photons stay in their rail pairs) | yes | **1.63 ± 0.34%** |
-| one 50:50 splitter on the inner rails | yes | 1.93 ± 0.12% |
-| Haar-random 4-mode mesh | yes | 4.67 ± 0.29% — *no lift* |
+| none (photons stay in their rail pairs) | yes | 1.73 ± 0.21% |
+| **one 50:50 splitter joining the logical-\|1> rails** | **yes** | **1.60 ± 0.00%** |
+| shallow random mesh | yes | 2.57 ± 0.17% |
+| Haar-random 4×4 mesh | yes | 4.67 ± 0.29% — *no lift* |
 | *LR baseline* | — | *4.40%* |
 | *gate model `cnot2`, for reference* | — | *1.77 ± 0.24%* |
 
+Shipped as ``architecture="mzi_threshold"`` with ``mixing`` in
+``{"none", "splitter", "mesh"}``.  The Haar row is a stronger randomisation than
+the shipped ``mesh`` and is reported to show where the trend ends.
+
 Three conclusions:
 
-1. **A single 50:50 splitter is enough.** It is genuine photonic entanglement —
-   HOM interference, 24% of the output mass in bunched events — it needs no
-   ancillas, no CNOT and no heralding, and it lands within error of the gate
-   model's CNOT ansatz. This is the "last mile" of the photonic translation:
-   the paper's entangler is reproducible, but it is not *required*.
+1. **A single 50:50 splitter is enough, and is the best circuit here.** It is
+   genuine photonic entanglement — HOM interference, ~24% of the output mass in
+   bunched events — needing no ancillas, no CNOT and no heralding, and at
+   1.60 ± 0.00% it edges both the gate model's CNOT ansatz (1.77 ± 0.24%) and
+   the post-selected KLM reproduction of it (1.87 ± 0.40%). This is the last
+   mile of the photonic translation: the paper's entangler is reproducible, but
+   it is not *required*, and the native photonic element is the better circuit.
 2. **Entanglement does not help on this task.** No mixing at all is as good or
    better. That is consistent with the gate model, where 1q (1.87%) and 2q
    (1.77%) sit inside each other's error bars — the lift comes from the random
    non-linear encoding, not from the two-qubit gate.
-3. **Too much mixing destroys it.** A Haar-random mesh falls back to the linear
+3. **Too much mixing destroys it, monotonically.** One splitter 1.60%, a shallow
+   random mesh 2.57%, a Haar-random 4×4 mesh 4.67% — back to the linear
    baseline. This is the same failure as the `random_mesh` architecture, seen
    from the other side: random mixing averages away the input dependence of
    every single-mode marginal. There is a sweet spot — *structured, weak*
