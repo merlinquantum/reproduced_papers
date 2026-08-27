@@ -3,9 +3,9 @@
 
     "xp_type" : "qorc",
 
-    "n_photons" : 2,
-    "n_modes"   : 10,
-    "seed"      : 42,
+    "n_photons" : 3,
+    "n_modes"   : 20,
+    "run_seed"  : 42,
     "fold_index": 0,
 
     "n_epochs": 100,

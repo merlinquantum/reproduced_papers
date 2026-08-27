@@ -44,8 +44,8 @@ def forward_remote_qorc_quantum_layer(
     # max_batch_size    = 64
     # max_batch_size    = 128
     # max_batch_size    = 1024
-    # max_batch_size    = 10240  # 10k images à la fois => 7/8 batchs par run  => En pratique plus long
-    max_batch_size = 102400  # 100k images à la fois => un seul batch
+    # max_batch_size    = 10240  # 10k images in a row => Takes more time
+    max_batch_size = 102400  # 100k images in a row => only one batch
 
     logger.info("Call to remote_qorc_quantum_layer ")
     logger.info(
@@ -62,7 +62,7 @@ def forward_remote_qorc_quantum_layer(
         )
         qpu_device_name = qpu_device_name.replace(LOCAL_STR, "")
         logger.info(
-            "'{}' détecté: Traitement local du remote processor".format(LOCAL_STR)
+            "'{}' detected: local treatment of remote processor".format(LOCAL_STR)
         )
 
     valid_qpu_device_name_list = [
@@ -90,7 +90,7 @@ def forward_remote_qorc_quantum_layer(
     proc = MerlinProcessor(
         remote_processor,
         chunk_concurrency=chunk_concurrency,
-        max_batch_size=max_batch_size,
+        microbatch_size=max_batch_size,
     )
 
     train_size = train_tensor.shape[0]
