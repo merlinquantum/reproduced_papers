@@ -14,6 +14,6 @@
             "circuit_2",
             "circuit_3"
         ],
-    "encoding": "exponential",
+    "encoding": "balanced",
     "dimension": 1
 }
