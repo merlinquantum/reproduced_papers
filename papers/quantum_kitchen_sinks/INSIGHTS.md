@@ -198,41 +198,51 @@ The entangler costs 9× the shots and buys nothing here. That is consistent with
 the gate model itself, where 1q (1.87%) and 2q (1.77%) are within each other's
 error bars — on this task the CNOT is not what produces the lift.
 
-### Do we need post-selection at all? A native 4-mode entangler
+### Do we need a CNOT, or post-selection, at all? No to both
 
-A bare central splitter between the two logical-|1> rails — no ancillas, four
-modes, two photons — gives the post-selected map `diag(1, a, a, x)` with
-`a = √(1-η)` and `x` set by the reflectivity `η`:
+Reproducing the paper's CNOT is one option, not a requirement — QKS only needs a
+fixed non-linear feature map, so *any* photonic entangling element is admissible.
+And nothing forces post-selection: with threshold detectors on all four modes,
+a bunched event (two photons in one mode, one detector firing) is a perfectly
+good click pattern, not a failure. That gives a fully deterministic circuit.
 
-| η | normalised diagonal | herald on \|11> |
+Measured on (3,5)-MNIST, 4 modes / 2 photons, threshold detectors, **no
+post-selection**, E=2500, 3 seeds:
+
+| mixing layer after the MZI encoders | deterministic? | test error |
 |---|---|---|
-| 1/3 | (1, 0.577, 0.577, **−1/3**) | 1/9 |
-| 1/2 | (1, 0.707, 0.707, 0) | 0 |
-| 0.9 | (1, 0.949, 0.949, 0.8) | 0.64 |
+| none (photons stay in their rail pairs) | yes | **1.63 ± 0.34%** |
+| one 50:50 splitter on the inner rails | yes | 1.93 ± 0.12% |
+| Haar-random 4-mode mesh | yes | 4.67 ± 0.29% — *no lift* |
+| *LR baseline* | — | *4.40%* |
+| *gate model `cnot2`, for reference* | — | *1.77 ± 0.24%* |
 
-At `η = 1/3` this is `diag(1, a, a, −a²)`, i.e. **CZ up to local amplitude
-damping on each qubit** — an entangling gate, ancilla-free. The two balancing
-splitters in the full KLM gadget exist only to undo that local damping and make
-the map exactly unitary-on-the-subspace.
+Three conclusions:
 
-For QKS the damping is not obviously fatal, since the features are measured
-marginals fed to a linear model. Measured per-feature SNR of the native
-four-mode circuit (gate `cnot2` reference: 0.590):
+1. **A single 50:50 splitter is enough.** It is genuine photonic entanglement —
+   HOM interference, 24% of the output mass in bunched events — it needs no
+   ancillas, no CNOT and no heralding, and it lands within error of the gate
+   model's CNOT ansatz. This is the "last mile" of the photonic translation:
+   the paper's entangler is reproducible, but it is not *required*.
+2. **Entanglement does not help on this task.** No mixing at all is as good or
+   better. That is consistent with the gate model, where 1q (1.87%) and 2q
+   (1.77%) sit inside each other's error bars — the lift comes from the random
+   non-linear encoding, not from the two-qubit gate.
+3. **Too much mixing destroys it.** A Haar-random mesh falls back to the linear
+   baseline. This is the same failure as the `random_mesh` architecture, seen
+   from the other side: random mixing averages away the input dependence of
+   every single-mode marginal. There is a sweet spot — *structured, weak*
+   entanglement preserves the signal, unstructured mixing erases it.
 
-| native 4-mode circuit | SNR | locality ρ | herald |
-|---|---|---|---|
-| no entangler | **0.971** | +0.89 | 1.00 |
-| central splitter η=1/3 | 0.516 | +0.83 | 0.43 (input-dependent) |
-| central splitter η=2/3 | 0.762 | +0.88 | 0.60 (input-dependent) |
-
-So a native four-mode entangler is available and roughly matches the gate
-model's feature quality — but it is strictly worse than using no entangler at
-all, and its herald rate depends on the input (std 0.16), which means the
-post-selection leaks data-dependent information rather than merely heralding a
-gate. **The honest photonic translation of QKS on this task is the
-deterministic, ancilla-free, four-mode circuit.** KLM is the right tool only
-when the goal is bit-exact reproduction of the paper's circuit rather than
-equal performance.
+For completeness, the post-selected route: a bare central splitter between the
+logical-|1> rails, read out in dual rail, gives `diag(1, a, a, x)`; at
+reflectivity 1/3 that is `diag(1, a, a, -a²)`, i.e. CZ up to local amplitude
+damping — an ancilla-free entangling gate. But its heralding probability depends
+on the input (std 0.16 across samples), so the post-selection leaks
+data-dependent information rather than merely heralding a gate. KLM's flat 1/9
+does not have that problem. Neither is necessary given the deterministic result
+above, and this caveat applies *only* to the post-selected variants — the
+no-mixing and single-splitter circuits in the table need no herald at all.
 
 ## Where QKS is most useful
 

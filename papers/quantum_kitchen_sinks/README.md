@@ -350,8 +350,12 @@ equivalence check against the gate model distinguishes them.
   KLM gate (``architecture="dual_rail_klm_cnot"``), exact to 1.3e-07 against
   the gate code path at the textbook 1/9 success probability.  It costs 9× the
   shots and does **not** improve accuracy on this task: 1.87 ± 0.40% against
-  1.43 ± 0.24% for the deterministic, ancilla-free two-qubit circuit.  On
-  (3,5)-MNIST the entangler simply does not earn its keep.
+  1.43 ± 0.24% for the deterministic, ancilla-free two-qubit circuit.
+- Reproducing *that* gate is not required, though.  A fully deterministic
+  4-mode circuit with threshold detectors and no post-selection — one 50:50
+  splitter after the encoders, bunched events kept as ordinary click patterns —
+  reaches 1.93 ± 0.12%, within error of the gate ansatz.  See `INSIGHTS.md`;
+  entanglement is admissible but not what produces the lift here.
 - As with classical Random Kitchen Sinks, the benefit is not universal: it
   likely depends strongly on the dataset and on how well the chosen feature map
   matches the underlying structure.
