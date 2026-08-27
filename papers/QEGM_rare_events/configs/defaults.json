@@ -1,5 +1,5 @@
 {
-  "description": "Default smoke configuration: small GMM, short training, all variants.",
+  "description": "Default smoke configuration: small GMM, short training, all variants. Sized to finish well inside the 120 s smoke-test budget on modest CPUs.",
   "seed": 42,
   "dtype": "float32",
   "outdir": "outdir",
@@ -28,7 +28,7 @@
     }
   },
   "training": {
-    "epochs": 30,
+    "epochs": 15,
     "batch_size": 64,
     "lr": 0.005,
     "lambda_rec": 1.0,
@@ -38,7 +38,7 @@
     "models": "vae,qegm,qegm_merlin"
   },
   "evaluation": {
-    "n_generated": 4096,
+    "n_generated": 2048,
     "n_tail_bins": 20,
     "tail_kl_eps": 0.0001
   },

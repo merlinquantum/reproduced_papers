@@ -9,7 +9,7 @@ from pathlib import Path
 import numpy as np
 import torch
 
-from .data import build_gmm_dataset
+from .data import build_dataset
 from .metrics import (
     coverage_calibration,
     rare_event_recall,
@@ -49,7 +49,7 @@ def train_and_evaluate(cfg: dict, run_dir: Path) -> None:
     hw_settings: dict = {}
 
     dataset_seed = int(cfg.get("seed", 42))
-    dataset = build_gmm_dataset(cfg, seed=dataset_seed)
+    dataset = build_dataset(cfg, seed=dataset_seed)
     real_test = dataset.test.numpy().flatten()
     np.save(run_dir / "real_samples_test.npy", real_test)
 
@@ -97,12 +97,7 @@ def train_and_evaluate(cfg: dict, run_dir: Path) -> None:
     metrics_payload = {
         "per_seed": results,
         "summary": summary,
-        "config_dataset": {
-            "means": list(dataset.means),
-            "stds": list(dataset.stds),
-            "weights": list(dataset.weights),
-            "tail_threshold": dataset.tail_threshold,
-        },
+        "config_dataset": dataset.describe(),
         "hardware_settings": hw_settings,
     }
     (run_dir / "metrics.json").write_text(json.dumps(metrics_payload, indent=2))

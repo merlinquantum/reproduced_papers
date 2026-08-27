@@ -11,8 +11,17 @@ import argparse
 import json
 from pathlib import Path
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+
+
+def _newest_run(root: Path) -> str:
+    """Most recent timestamped run directory, or a placeholder if none exist."""
+    runs = sorted(root.glob("outdir/run_*"))
+    return str(runs[-1].relative_to(root)) if runs else "outdir/run_<STAMP>"
+
+
 DEFAULT_PATHS = {
-    "main (λ_tail=2, full VQC)": "outdir/run_20260527-123627",
+    "main (λ_tail=2, full VQC)": _newest_run(PROJECT_ROOT),
     "ablation: const r=0.5": "outdir/ablation_const",
     "ablation: λ_tail = 0": "outdir/ablation_no_tail",
 }
@@ -49,8 +58,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     parser.add_argument(
         "--root",
-        default="/reproduced_papers/papers/QEGM_rare_events",
-        help="Project root for resolving relative paths.",
+        default=str(PROJECT_ROOT),
+        help="Project root for resolving relative paths (default: the paper directory).",
     )
     parser.add_argument(
         "--json", action="store_true", help="Emit a single JSON payload."

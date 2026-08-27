@@ -2,8 +2,7 @@
 
 The paper itself is gate-based. To assess photonic feasibility we
 replace ``HardwareEfficientVQC`` with a MerLin ``QuantumLayer`` built
-on three-photon dual-rail-style mode pairs. Pattern A in
-``MERLIN_COOKBOOK.md`` matches the role we need: a small latent vector
+on three-photon dual-rail-style mode pairs: a small latent vector
 in -> a few probability outputs that modulate the variance of the
 encoder's Gaussian latent sampling (Eq. 7 of the paper).
 """
@@ -111,7 +110,12 @@ class MerlinPhotonicLayer(nn.Module):
         buckets = probs[:, : self.bucket_size * self.n_qubits].reshape(
             batch, self.n_qubits, self.bucket_size
         )
-        # Each bucket is a valid sub-distribution; pool to a single number in [0, 1].
+        # Each bucket is a valid sub-distribution; pool to a single number in
+        # [0, 1]. The n_qubits scaling means a bucket at (or above) uniform
+        # mass saturates at r = 1 after the clamp below — intentional, so r
+        # spans the full [0, 1] range Eq. 7 expects rather than clustering
+        # near 1/n_qubits. The const-r ablation shows downstream results are
+        # insensitive to this mapping (a fixed r matches the trained circuit).
         pooled = buckets.sum(dim=-1) * float(self.n_qubits)
         # Renormalize against the full output mass so values stay in [0, 1].
         denom = probs[:, : self.bucket_size * self.n_qubits].sum(dim=-1, keepdim=True)

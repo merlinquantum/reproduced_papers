@@ -45,7 +45,7 @@
     },
     {
       "flags": ["--models"],
-      "help": "Comma-separated list of models to train (vae, qegm, qegm_merlin).",
+      "help": "Comma-separated list of models to train (vae, qegm, qegm_merlin, qegm_const).",
       "type": "str",
       "default": null,
       "apply": {"kind": "config_path", "path": "training.models"}

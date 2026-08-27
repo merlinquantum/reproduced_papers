@@ -10,7 +10,7 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from .data import GMMDataset, iter_batches
+from .data import GMMDataset, SP500Dataset, iter_batches
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +60,7 @@ def hybrid_loss(
 
 def train_one(
     model: torch.nn.Module,
-    dataset: GMMDataset,
+    dataset: GMMDataset | SP500Dataset,
     cfg: dict,
     seed: int,
 ) -> TrainResult:

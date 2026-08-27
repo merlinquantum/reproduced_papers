@@ -79,6 +79,11 @@ def reevaluate(
             if use_rarity_score:
                 # Define the rarity threshold as the (1 - quantile) of NLL on real samples.
                 # thr = 0.05 means top-5% rarest by NLL.
+                if not 0.0 < thr < 1.0:
+                    raise ValueError(
+                        f"With --rarity-score, thresholds are tail-mass fractions "
+                        f"in (0, 1); got {thr}. Pass e.g. --thresholds 0.05,0.1,0.2"
+                    )
                 quantile = 1.0 - thr
                 tau = float(np.quantile(nll_real, quantile))
                 real_tail_mask = nll_real >= tau
