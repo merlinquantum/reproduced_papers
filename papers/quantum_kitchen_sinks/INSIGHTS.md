@@ -103,7 +103,8 @@ splitter.  Fringe visibility follows directly from the splitter:
 
 Visibility is what sets the feature quality: the click probability of a
 low-visibility interferometer barely moves with the input.  The equivalence
-tests in `tests/test_photonic_gate_equivalence.py` fix this by construction.
+tests in `tests/test_photonic_gate_equivalence.py` hold the balanced case to the
+gate model by construction.
 
 ### Results on (3,5)-MNIST
 
