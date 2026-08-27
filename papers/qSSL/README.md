@@ -94,6 +94,25 @@ Hilbert-Schmidt distance between positive and negative states increases.
 
 ![Qiskit Hilbert-Schmidt results reproducing Fig. 4 of the paper](assets/hilbert_schmidt_qiskit.png)
 
+### Regenerate the Hilbert-Schmidt plot from saved JSON
+
+When a run already contains `hilbert_schmidt_metrics.json`, the figure can be
+regenerated without retraining the model. The JSON stores the loss and all four
+Hilbert-Schmidt quantities for every tracked batch. From the repository root,
+run:
+
+```bash
+python papers/qSSL/utils/plot_hilbert_schmidt.py \
+  --metrics papers/qSSL/outdir/run_20260819-004212/hilbert_schmidt_metrics.json \
+  --output papers/qSSL/outdir/run_20260819-004212/hilbert_schmidt_tracking.png \
+  --backend qiskit
+```
+
+Use `--backend merlin` for a MerLin metrics file. The `--output` path may point
+to any PNG location; using the run directory replaces that run's existing
+figure. The plotting utility is `utils/plot_hilbert_schmidt.py`, and it uses
+the same layout as the training-generated figure.
+
 ## MerLin Hilbert-Schmidt experiment
 
 The MerLin experiment extends SSL training with the Hilbert-Schmidt analysis

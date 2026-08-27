@@ -593,36 +593,67 @@ def plot_loss_and_hilbert_schmidt(training_losses, dhs_history, args, results_di
     sigma_sq = [m["sigma_squared"] for m in dhs_history]
     rho_sigma = [m["rho_sigma"] for m in dhs_history]
 
-    fig, ax = plt.subplots(figsize=(8, 8))
+    # Match the paper's wide composition: the loss occupies the full figure
+    # and the four Hilbert-Schmidt metrics form a compact 2x2 block above it.
+    fig, ax = plt.subplots(figsize=(10, 6))
     ax.plot(batches, losses, color="tab:blue", linewidth=1.5)
     ax.set_xlabel("Training batches")
     ax.set_ylabel("Loss")
+    if not args.merlin:
+        # Qiskit's loss starts higher than MerLin's. Use the paper-like upper
+        # limit so the inset block does not hide the loss curve.
+        ax.set_ylim(top=max(12.0, max(losses) * 1.3))
 
     inset_specs = [
-        ((0.30, 0.62, 0.30, 0.30), d_hs, "tab:orange", r"$\bar{D}_{HS}$"),
-        ((0.62, 0.62, 0.30, 0.30), rho_sq, "tab:green", r"$\overline{tr(\rho^2)}$"),
+        ((0.27, 0.67, 0.29, 0.27), d_hs, "tab:orange", r"$\bar{D}_{HS}$"),
+        ((0.59, 0.67, 0.29, 0.27), rho_sq, "tab:green", r"$\overline{tr(\rho^2)}$"),
         (
-            (0.30, 0.30, 0.30, 0.30),
+            (0.27, 0.37, 0.29, 0.27),
             rho_sigma,
             "tab:red",
             r"$\overline{tr(\rho\sigma)}$",
         ),
         (
-            (0.62, 0.30, 0.30, 0.30),
+            (0.59, 0.37, 0.29, 0.27),
             sigma_sq,
             "tab:purple",
             r"$\overline{tr(\sigma^2)}$",
         ),
     ]
-    for bbox, values, color, label in inset_specs:
+    for inset_index, (bbox, values, color, label) in enumerate(inset_specs):
         inset = ax.inset_axes(bbox)
         inset.plot(batches, values, color=color, linewidth=1.2)
-        inset.set_title(label, fontsize=9)
-        inset.tick_params(labelsize=7)
+        # Put the metric name inside the plotting area, as in the original
+        # figure, so it cannot collide with a neighboring inset or the title.
+        inset.text(
+            0.94,
+            0.12,
+            label,
+            transform=inset.transAxes,
+            ha="right",
+            va="bottom",
+            fontsize=11,
+        )
+        is_right_column = inset_index % 2 == 1
+        is_top_row = inset_index < 2
+        inset.tick_params(
+            labelsize=8,
+            direction="in",
+            top=True,
+            right=True,
+            left=True,
+            labelleft=not is_right_column,
+            labelright=is_right_column,
+            labelbottom=not is_top_row,
+        )
 
     title = "Quantum_MerLin" if args.merlin else "Quantum_Qiskit"
-    fig.suptitle(f"SSL training with Hilbert-Schmidt tracking ({title})")
-    plt.tight_layout()
+    fig.suptitle(
+        f"SSL training with Hilbert-Schmidt tracking ({title})",
+        y=0.98,
+        fontsize=16,
+    )
+    fig.subplots_adjust(left=0.10, right=0.98, bottom=0.13, top=0.90)
     out_path = os.path.join(results_dir, "hilbert_schmidt_tracking.png")
     plt.savefig(out_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
