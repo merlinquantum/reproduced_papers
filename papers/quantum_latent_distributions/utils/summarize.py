@@ -53,6 +53,7 @@ def main() -> None:
         )
 
     if "target" in records[0]:  # synthetic datasets, paper Table I
+        grouped = defaultdict(list)
         for record in records:
             grouped[(record["target"], record["latent"])].append(
                 record["l1_nearest_int"]

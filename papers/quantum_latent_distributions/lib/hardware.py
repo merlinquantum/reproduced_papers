@@ -49,6 +49,7 @@ def sample_hardware(  # pragma: no cover - needs network
     post_select: bool = True,
     max_shots_per_call: int = 100_000,
     poll: float = 5.0,
+    max_empty_batches: int = 3,
 ) -> np.ndarray:
     """Draw a bank of photon-count patterns from a real QPU.
 
@@ -62,9 +63,16 @@ def sample_hardware(  # pragma: no cover - needs network
     token : str | None
         Quandela Cloud token; falls back to ``$QUANDELA_TOKEN``.
     post_select : bool
-        Keep only shots in which all ``n_photons`` photons were detected.
-        Default value is True, which is what the paper does. Set False to keep
-        lossy shots as well.
+        Follow the paper: populate every input mode and keep only shots with at
+        least ``n_photons`` detections. Default value is True. Set False to
+        inject exactly ``n_photons`` and keep lossy shots as well.
+
+        Note the two branches give ``n_photons`` different meanings -- a
+        detection threshold when True, an injection count when False. That is
+        deliberate; see the Notes below.
+    max_empty_batches : int
+        Abort after this many consecutive batches in which post-selection
+        rejected every shot. Default value is 3.
 
     Returns
     -------
@@ -101,16 +109,24 @@ def sample_hardware(  # pragma: no cover - needs network
     proc = pcvl.RemoteProcessor(platform)
     proc.set_circuit(to_circuit(u))
     if post_select:
-        # Paper recipe: fill every input time bin, then keep only the shots in
-        # which n_photons survived the loss.
+        # The paper's recipe, quoted in the docstring: populate EVERY input time
+        # bin and keep only the shots in which at least ``n_photons`` were
+        # detected. So in this branch ``n_photons`` is a *detection threshold*,
+        # not an injection count -- injecting n_photons instead would remove the
+        # input randomisation the authors rely on, and on a lossy device would
+        # make the acceptance rate collapse, since it would then require every
+        # injected photon to survive.
         proc.with_input(pcvl.BasicState([1] * n_modes))
         proc.min_detected_photons_filter(n_photons)
     else:
+        # Inject exactly n_photons and keep whatever survives, lossy shots
+        # included. Here n_photons *is* the injection count.
         proc.with_input(pcvl.BasicState([1] * n_photons + [0] * (n_modes - n_photons)))
         proc.min_detected_photons_filter(0)
 
     out = np.zeros((n_samples, n_modes), dtype=np.int16)
     done = 0
+    empty_batches = 0
     sampler = pcvl.algorithm.Sampler(proc, max_shots_per_call=max_shots_per_call)
     while done < n_samples:
         k = min(max_shots_per_call, n_samples - done)
@@ -119,6 +135,18 @@ def sample_hardware(  # pragma: no cover - needs network
             time.sleep(poll)
         res = job.get_results()["results"]
         take = min(k, len(res))
+        if take == 0:
+            # Post-selection can reject an entire batch on a lossy device. Give
+            # up rather than loop forever asking for shots that never arrive.
+            empty_batches += 1
+            if empty_batches >= max_empty_batches:
+                raise RuntimeError(
+                    f"{empty_batches} consecutive empty batches from {platform!r} "
+                    f"after {done}/{n_samples} samples; post-selection at "
+                    f"n_photons={n_photons} is rejecting every shot"
+                )
+            continue
+        empty_batches = 0
         out[done : done + take] = np.asarray(
             [list(s) for s in res[:take]], dtype=np.int16
         )
