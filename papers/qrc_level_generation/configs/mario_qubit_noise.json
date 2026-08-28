@@ -1,0 +1,24 @@
+{
+  "description": "Mario level 1-2 at T=1 with depolarising noise (paper Fig. 5).",
+  "seed": 42,
+  "qrc": {
+    "backend": "qubit",
+    "n_qubits": 6,
+    "n_random_gates": 30,
+    "leaking_rate": 0.3,
+    "shots": 0,
+    "depolarizing_p": 0.05,
+    "embedding_layers": 1,
+    "input_scale": 1.0,
+    "feedback_scale": 1.0
+  },
+  "training": {"epochs": 200, "lr": 0.05},
+  "generation": {
+    "temperatures_str": "1",
+    "n_samples": 30,
+    "length": 157,
+    "max_sequence_length_for_originality": 20
+  },
+  "baselines": {"n_samples": 200},
+  "evaluation": {"evaluate_reference_sequences": false}
+}

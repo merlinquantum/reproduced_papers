@@ -11,6 +11,8 @@ data/*
 !data/photonic_QCNN/**
 !data/QLSTM/
 !data/QLSTM/**
+!data/qrc_level_generation/
+!data/qrc_level_generation/**
 !data/QEGM_rare_events/
 !data/QEGM_rare_events/**
 !data/Bandwidth_tunning/
