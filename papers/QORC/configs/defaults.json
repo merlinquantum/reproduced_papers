@@ -8,14 +8,23 @@
     "run_seed"  : 42,
     "fold_index": 0,
 
-    "n_epochs": 100,
+    "n_epochs": 200,
     "batch_size": 100,
     "f_out_results_training_csv" : "f_out_results_training_qorc.csv",
     "device": "cpu",
     "qpu_device": "none",
+    "use_qpu": false,
     "qpu_device_nsample": 10000,
 
+    "noise_enabled": false,
+    "noise_indistinguishability": 1.0,
+    "noise_g2": 0.0,
+    "noise_g2_distinguishable": true,
+
     "dataset_name" : "mnist",
+    "dataset_sampling" : "full",
+    "dataset_sample_count" : null,
+    "dataset_samples_per_class" : null,
     "n_fold": 5,
     "dataset_truncate": 0,
 
@@ -28,6 +37,7 @@
     "pin_memory": false,
 
     "f_out_weights": "f_weights_out.pth",
+    "save_weights": false,
 
     "b_no_bunching" : false,
 
@@ -43,4 +53,3 @@
     "outdir" : "outdir"
 
 }
-

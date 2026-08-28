@@ -89,6 +89,7 @@ def run_qorc_lsvc_comparison(cfg, run_dir: Path, logger: logging.Logger) -> None
         num_workers=cfg["num_workers"],
         pin_memory=cfg["pin_memory"],
         f_out_weights="qorc_weights.pth",
+        save_weights=cfg["save_weights"],
         b_no_bunching=cfg["b_no_bunching"],
         b_use_tensorboard=cfg["b_use_tensorboard"],
         device_name=cfg["device"],

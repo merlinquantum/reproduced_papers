@@ -80,6 +80,7 @@ def run_noisy_qorc_indistinguishability(cfg, run_dir: Path, logger: logging.Logg
                 num_workers=cfg["num_workers"],
                 pin_memory=cfg["pin_memory"],
                 f_out_weights=f"noisy_qorc_m{n_modes}_{value_index}.pth",
+                save_weights=cfg["save_weights"],
                 b_no_bunching=cfg["b_no_bunching"],
                 b_use_tensorboard=False,
                 device_name=cfg["device"],

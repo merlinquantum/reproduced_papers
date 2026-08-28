@@ -7,6 +7,7 @@ from types import SimpleNamespace
 
 import pytest
 import torch
+from torch.utils.data import DataLoader, TensorDataset
 
 QORC_DIR = Path(__file__).resolve().parents[1]
 REPO_ROOT = QORC_DIR.parents[1]
@@ -18,6 +19,7 @@ pytest.importorskip("merlin")
 
 from lib import lib_qorc_encoding_and_linear_training as qorc_training
 from lib.comparison import plot_qorc_lsvc_comparison
+from lib.lib_learning import model_fit
 from lib.lib_remote_qorc import (
     _QORCProcessor,
     create_remote_qorc_processor,
@@ -92,6 +94,35 @@ def test_factory_selects_no_bunching_measurement(monkeypatch):
 
 def test_noise_factory_returns_none_when_disabled():
     assert qorc_training.create_perceval_noise_model(enabled=False) is None
+
+
+def test_model_fit_does_not_write_checkpoint_when_disabled(tmp_path):
+    model = torch.nn.Linear(2, 2)
+    inputs = torch.tensor([[1.0, 0.0], [0.0, 1.0]])
+    targets = torch.tensor([0, 1])
+    loader = DataLoader(TensorDataset(inputs, targets), batch_size=2)
+    checkpoint_path = tmp_path / "weights.pth"
+
+    result = model_fit(
+        model,
+        loader,
+        loader,
+        torch.nn.CrossEntropyLoss(),
+        torch.optim.Adagrad(model.parameters(), lr=0.1),
+        n_epochs=1,
+        filename_model_weights_out=str(checkpoint_path),
+        early_stop_patience=1,
+        early_stop_min_delta=0.0,
+        reduce_lr_patience=10,
+        reduce_lr_factor=0.5,
+        device=torch.device("cpu"),
+        logger=logging.getLogger("test_model_fit"),
+        calc_accuracy=True,
+        save_weights=False,
+    )
+
+    assert not checkpoint_path.exists()
+    assert result[-1] is not None
 
 
 def test_noise_factory_maps_perceval_source_parameters():

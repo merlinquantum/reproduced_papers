@@ -107,7 +107,8 @@ python ../implementation.py --paper QORC --config configs/xp_qorc.json --help
  | `--reduce-lr-factor FLOAT` | Factor by which the learning rate will be reduced.                  |
  | `--num-workers INT`  | Number of subprocesses for data loading.                                   |
  | `--pin-memory BOOL`  | Enable pin memory for faster data transfer to CUDA devices.                |
- | `--f-out-weights PATH` | Filepath to save the model checkpoint.                              |
+ | `--f-out-weights PATH` | Filename for the optional model checkpoint.                         |
+ | `--save-weights BOOL` | Save the best model checkpoint as a `.pth` file. Default: `false`.   |
  | `--b-no-bunching BOOL` | Disable bunching.                                                          |
  | `--b-use-tensorboard BOOL` | Enable TensorBoard logging.                                          |
  | `--device STR`       | Device string (e.g., `cpu`, `cuda:0`, `mps`).                              |
@@ -179,11 +180,15 @@ At each run, a timestamped folder is created under the base `outdir` (default: `
 ├── run.log                                 # Log output (stdout/stderr)
 ├── f_out_results_training_{qorc,rff}.csv   # Training metrics (accuracy, duration, etc.)
 │                                           # Example: `f_out_results_training_qorc.csv`
-└── f_weights_out.pth                       # Trained model weights (linear layer)
+└── f_weights_out.pth                       # Only present when save_weights=true
 ```
 
 Note:
 - Change the base output directory with `--outdir` or in `configs/example.json` (key `outdir`).
+- Checkpoint saving is disabled by default (`save_weights: false`) to prevent
+  memory and disk usage from accumulating during sweeps. Set `save_weights` to
+  `true` in a config, or pass `--save-weights true`, to write the best
+  validation checkpoint using `f_out_weights` as its filename.
 
 ## Configuration
 
@@ -253,6 +258,10 @@ test set. The default points are `[0, 25, 50, 75, 100]` percent for `M=12` and
 and solid regression lines; test points use squares and dotted regression
 lines. The fixed MLR references are 0.9397708177566528 for training and
 0.9269999861717224 for testing.
+
+The generated reproduction figure is included here:
+
+![Fig. 2(b): MNIST accuracy versus indistinguishability](assets/noisy_QORC_indistinguishability.png)
 
 Run it with:
 

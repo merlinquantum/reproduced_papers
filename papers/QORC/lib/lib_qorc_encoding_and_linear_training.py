@@ -372,6 +372,7 @@ def qorc_encoding_and_linear_training(
     run_dir,
     logger,
     return_history=False,
+    save_weights=False,
 ):
     compute_device = get_device(device_name)
 
@@ -573,6 +574,7 @@ def qorc_encoding_and_linear_training(
         best_val_epoch,
         test_loss_history,
         test_accuracy_history,
+        best_state_dict,
     ] = model_fit(
         model,
         train_loader,
@@ -592,6 +594,7 @@ def qorc_encoding_and_linear_training(
         tf_val_writer=tf_val_writer,
         calc_accuracy=calc_accuracy,
         test_loader=test_loader if return_history else None,
+        save_weights=save_weights,
     )
 
     logger.info("Training over.")
@@ -599,9 +602,12 @@ def qorc_encoding_and_linear_training(
     time_t4 = time.time()
 
     logger.info("Final evaluation (on test set)")
-    best_state_dict = torch.load(
-        os.path.join(run_dir, f_out_weights), map_location=compute_device
-    )
+    if save_weights:
+        best_state_dict = torch.load(
+            os.path.join(run_dir, f_out_weights), map_location=compute_device
+        )
+    if best_state_dict is None:
+        raise RuntimeError("Training did not produce a best model state.")
 
     try:
         model.load_state_dict(best_state_dict)

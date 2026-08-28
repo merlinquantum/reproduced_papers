@@ -26,6 +26,7 @@ def test_defaults_has_description_and_required_keys() -> None:
         "dataset_name",
         "noise_enabled",
         "use_qpu",
+        "save_weights",
     ):
         assert key in cfg, f"Missing '{key}' in defaults.json"
     assert cfg["n_photons"] == 3
@@ -34,6 +35,7 @@ def test_defaults_has_description_and_required_keys() -> None:
     assert cfg["dataset_name"] == "mnist"
     assert cfg["noise_enabled"] is False
     assert cfg["use_qpu"] is False
+    assert cfg["save_weights"] is False
 
 
 def test_cli_schema_matches_defaults_path() -> None:

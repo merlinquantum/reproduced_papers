@@ -171,6 +171,13 @@
       "apply": {"kind": "config_path", "path": "f_out_weights"}
     },
     {
+      "flags": ["--save-weights"],
+      "help": "Save the best model checkpoint as a .pth file",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "save_weights"}
+    },
+    {
       "flags": ["--b-no-bunching"],
       "help": "Disable bunching constraint",
       "type": "bool",

@@ -8,6 +8,7 @@ Original authors: Vincent Espitalier <vincent.espitalier@cirad.fr>
 Modified by: Vincent Espitalier <vincent.espitalier@quandela.com>
 """
 
+import copy
 import sys
 import time
 
@@ -231,6 +232,7 @@ def model_fit(
     tf_val_writer=None,
     calc_accuracy=False,
     test_loader=None,
+    save_weights=False,
 ):
     logger.info(
         "Call model_fit(), with {} parameters to train.".format(
@@ -259,6 +261,7 @@ def model_fit(
     reduce_lr_n_epoch = 0
 
     best_val_epoch = -1
+    best_state_dict = None
 
     if b_use_cosine_scheduler:
         curr_lr = optimizer.param_groups[0]["lr"]
@@ -348,15 +351,23 @@ def model_fit(
             )
 
         if val_epoch_loss < best_val_epoch_loss_checkpoint:
-            # val_loss decreased: Save model
-            filename_model_weights_out_checkpoint = filename_model_weights_out
-            torch.save(model.state_dict(), filename_model_weights_out_checkpoint)
-            logger.info(
-                "Epoch {:05d}: val_loss improved from {:.5f} to {:.5f}, saving model to ".format(
-                    epoch, best_val_epoch_loss_checkpoint, val_epoch_loss
+            best_state_dict = copy.deepcopy(model.state_dict())
+            if save_weights:
+                torch.save(best_state_dict, filename_model_weights_out)
+                logger.info(
+                    "Epoch {:05d}: val_loss improved from {:.5f} to {:.5f}, saving model to {}".format(
+                        epoch,
+                        best_val_epoch_loss_checkpoint,
+                        val_epoch_loss,
+                        filename_model_weights_out,
+                    )
                 )
-                + filename_model_weights_out_checkpoint
-            )
+            else:
+                logger.info(
+                    "Epoch {:05d}: val_loss improved from {:.5f} to {:.5f}; checkpoint saving is disabled".format(
+                        epoch, best_val_epoch_loss_checkpoint, val_epoch_loss
+                    )
+                )
             best_val_epoch_loss_checkpoint = val_epoch_loss
             best_val_epoch = epoch
             reduce_lr_n_epoch = 0
@@ -393,4 +404,5 @@ def model_fit(
         best_val_epoch,
         test_loss_history,
         test_accuracy_history,
+        best_state_dict,
     ]
