@@ -5,7 +5,7 @@
       "flags": ["--xp-type"],
       "help": "Experiment type (qorc or rff)",
       "type": "str",
-      "choices": ["qorc", "rff"],
+      "choices": ["qorc", "rff", "comparison_qorc_lsvc", "noisy_qorc_indistinguishability"],
       "default": null,
       "apply": {"kind": "config_path", "path": "xp_type"}
     },
@@ -31,11 +31,88 @@
       "apply": {"kind": "config_path", "path": "fold_index"}
     },
     {
+      "flags": ["--dataset-name"],
+      "help": "Dataset: mnist, oct, organs, organa, or derma",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_name"}
+    },
+    {
       "flags": ["--n-fold"],
       "help": "Number of folds",
       "type": "int",
       "default": null,
       "apply": {"kind": "config_path", "path": "n_fold"}
+    },
+    {
+      "flags": ["--dataset-sampling"],
+      "help": "Training sampling: full, balanced, gauss, or imbal",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_sampling"}
+    },
+    {
+      "flags": ["--dataset-sample-count"],
+      "help": "Total training examples for sampled datasets",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_sample_count"}
+    },
+    {
+      "flags": ["--dataset-samples-per-class"],
+      "help": "Training examples per class for balanced MNIST",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_samples_per_class"}
+    },
+    {
+      "flags": ["--use-qpu"],
+      "help": "Run the reservoir on a QPU backend",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "use_qpu"}
+    },
+    {
+      "flags": ["--qpu-device"],
+      "help": "Perceval backend, for example qpu:ascella",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qpu_device"}
+    },
+    {
+      "flags": ["--qpu-device-nsample"],
+      "help": "Samples requested per QPU input",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qpu_device_nsample"}
+    },
+    {
+      "flags": ["--noise-enabled"],
+      "help": "Enable the Perceval source noise model",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "noise_enabled"}
+    },
+    {
+      "flags": ["--noise-indistinguishability"],
+      "help": "Photon indistinguishability probability in [0, 1]",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "noise_indistinguishability"}
+    },
+    {
+      "flags": ["--noise-g2"],
+      "help": "Perceval g2 source parameter in [0, 1]",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "noise_g2"}
+    },
+    {
+      "flags": ["--noise-g2-distinguishable"],
+      "help": "Treat g2-generated photons as distinguishable",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "noise_g2_distinguishable"}
     },
     {
       "flags": ["--epochs"],

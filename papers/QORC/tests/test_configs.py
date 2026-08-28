@@ -51,8 +51,8 @@ def test_cli_schema_matches_defaults_path() -> None:
     )
 
 
-def test_qorc_lsvc_comparison_config_has_requested_settings() -> None:
-    comparison = load_config(CONFIG_DIR / "comparison_QORC_LSVC_mnist.json")
+def test_qorc_mlr_comparison_config_has_requested_settings() -> None:
+    comparison = load_config(CONFIG_DIR / "comparison_QORC_MLR_mnist.json")
 
     assert comparison["xp_type"] == "comparison_qorc_lsvc"
     assert comparison["dataset_name"] == "mnist"
@@ -61,3 +61,13 @@ def test_qorc_lsvc_comparison_config_has_requested_settings() -> None:
     assert comparison["n_epochs"] == 200
     assert comparison["noise_enabled"] is False
     assert comparison["use_qpu"] is False
+
+
+def test_noisy_indistinguishability_config_has_figure_2b_defaults() -> None:
+    config = load_config(CONFIG_DIR / "noisy_QORC_indistinguishability.json")
+
+    assert config["xp_type"] == "noisy_qorc_indistinguishability"
+    assert config["n_photons"] == 3
+    assert config["n_epochs"] == 200
+    assert config["indistinguishability_m12"] == [0, 25, 50, 75, 100]
+    assert config["indistinguishability_m20"] == [0, 20, 35, 50, 70, 85, 100]

@@ -243,6 +243,29 @@ The run writes the figure and its serialized metrics to
 `comparison_QORC_LSVC_mnist.png` and `comparison_QORC_LSVC_mnist.json` in the
 timestamped output directory.
 
+### Experiment 2: Fig. 2(b) indistinguishability sweep
+
+The Fig. 2(b) experiment evaluates MNIST classification with QORC using three
+photons while varying source indistinguishability. It runs both `M=12` and
+`M=20` configurations on the full 60,000-image training set and 10,000-image
+test set. The default points are `[0, 25, 50, 75, 100]` percent for `M=12` and
+`[0, 20, 35, 50, 70, 85, 100]` percent for `M=20`. Training points use circles
+and solid regression lines; test points use squares and dotted regression
+lines. The fixed MLR references are 0.9397708177566528 for training and
+0.9269999861717224 for testing.
+
+Run it with:
+
+```bash
+python implementation.py --paper QORC \
+  --config papers/QORC/configs/noisy_QORC_indistinguishability.json
+```
+
+The indistinguishability arrays can be edited directly in
+`configs/noisy_QORC_indistinguishability.json`. The run writes
+`noisy_QORC_indistinguishability.png`, `.csv`, and `.json` artifacts to the
+timestamped output directory.
+
 
 ## Extensions and Next Steps
 

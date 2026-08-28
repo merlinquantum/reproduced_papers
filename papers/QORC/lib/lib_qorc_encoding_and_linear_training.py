@@ -420,9 +420,13 @@ def qorc_encoding_and_linear_training(
         val_train_data.reshape(val_train_data.shape[0], -1).astype(np.float32) / 255.0
     )
 
-    val_label, val_data, train_label, train_data = split_fold_numpy(
-        val_train_label, val_train_data, n_fold, fold_index, split_seed=run_seed
-    )
+    if n_fold == 0:
+        train_label, train_data = val_train_label, val_train_data
+        val_label, val_data = val_train_label, val_train_data
+    else:
+        val_label, val_data, train_label, train_data = split_fold_numpy(
+            val_train_label, val_train_data, n_fold, fold_index, split_seed=run_seed
+        )
 
     test_data = test_data.reshape(test_data.shape[0], -1).astype(np.float32) / 255.0
 

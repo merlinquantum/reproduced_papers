@@ -22,6 +22,9 @@ from lib.lib_remote_qorc import (
     _QORCProcessor,
     create_remote_qorc_processor,
 )
+from lib.noisy_indistinguishability import (
+    plot_noisy_qorc_indistinguishability,
+)
 
 
 class FakeMeasurementStrategy:
@@ -159,6 +162,35 @@ def test_comparison_plot_writes_png(tmp_path):
     output_path = tmp_path / "comparison.png"
 
     plot_qorc_lsvc_comparison(metrics, output_path)
+
+    assert output_path.exists()
+    assert output_path.stat().st_size > 0
+
+
+def test_noisy_indistinguishability_plot_writes_png(tmp_path):
+    rows = [
+        {
+            "n_modes": n_modes,
+            "indistinguishability_percent": value,
+            "train_accuracy": 0.95 + value / 10000,
+            "test_accuracy": 0.94 + value / 10000,
+        }
+        for n_modes, values in (
+            (12, [0, 25, 50, 75, 100]),
+            (20, [0, 20, 35, 50, 70, 85, 100]),
+        )
+        for value in values
+    ]
+    output_path = tmp_path / "indistinguishability.png"
+
+    plot_noisy_qorc_indistinguishability(
+        {
+            "rows": rows,
+            "mlr_train_accuracy": 0.9397708177566528,
+            "mlr_test_accuracy": 0.9269999861717224,
+        },
+        output_path,
+    )
 
     assert output_path.exists()
     assert output_path.stat().st_size > 0
