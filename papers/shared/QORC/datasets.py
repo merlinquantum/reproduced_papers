@@ -183,6 +183,7 @@ def _load_medmnist(dataset_name):
 
     dataset_class = getattr(medmnist, dataset_class_name)
     dataset_root = _MERLIN_DATA_ROOT / "medmnist"
+    dataset_root.mkdir(parents=True, exist_ok=True)
     train_dataset = dataset_class(split="train", root=str(dataset_root), download=True)
     test_dataset = dataset_class(split="test", root=str(dataset_root), download=True)
     return (

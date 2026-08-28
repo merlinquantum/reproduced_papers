@@ -149,7 +149,17 @@ python implementation.py --paper QORC --config QORC/configs/defaults.json \
 # Noisy local reservoir simulation
 python implementation.py --paper QORC --config QORC/configs/defaults.json \
   --noise-enabled true --noise-indistinguishability 0.87 --noise-g2 0.04
+
+# Fig. 3: MedMNIST macro-F1 comparison, three runs per dataset
+python implementation.py --paper QORC --config QORC/configs/QORC_medmnist.json
 ```
+
+The Fig. 3 run compares QORC with M=20 and N=3 against the raw-pixel MLR
+baseline on OCT, OrganS, OrganA, and Derma for 200 epochs. It writes
+`fig3_qorc_mlr_medmnist.csv`, `fig3_qorc_mlr_medmnist.json`, and
+`fig3_qorc_mlr_medmnist.png` to the timestamped output directory. The plot
+shows mean test macro-F1 over the three configured seeds with standard
+deviation error bars; MLR is green and QORC is purple.
 
 
 To reproduce the graphs:
@@ -274,6 +284,36 @@ The indistinguishability arrays can be edited directly in
 `configs/noisy_QORC_indistinguishability.json`. The run writes
 `noisy_QORC_indistinguishability.png`, `.csv`, and `.json` artifacts to the
 timestamped output directory.
+
+### Experiment 3: Fig. 3 MedMNIST QORC versus MLR macro-F1
+
+This experiment reproduces Fig. 3 by comparing the QORC readout with
+`M=20` modes and `N=3` photons against a raw-pixel linear-softmax MLR
+classifier. Both models are trained for 200 epochs on the
+OCT, OrganS, OrganA, and Derma datasets from MedMNIST v2. Results are the
+test macro-F1 score averaged over three runs with seeds 42, 43, and 44; error
+bars show one standard deviation.
+
+| Dataset | MLR macro-F1 | QORC macro-F1 |
+| --- | ---: | ---: |
+| OCT | 0.247 ± 0.001 | 0.321 ± 0.010 |
+| OrganS | 0.405 ± 0.004 | 0.537 ± 0.003 |
+| OrganA | 0.604 ± 0.001 | 0.722 ± 0.000 |
+| Derma | 0.218 ± 0.039 | 0.400 ± 0.019 |
+
+![Fig. 3: MedMNIST test macro-F1 comparison](assets/fig3_qorc_mlr_medmnist.png)
+
+Run it from the repository root with:
+
+```bash
+python implementation.py --paper QORC \
+  --config papers/QORC/configs/QORC_medmnist.json
+```
+
+The run writes per-seed scores and the aggregate summary to
+`fig3_qorc_mlr_medmnist.csv` and `fig3_qorc_mlr_medmnist.json`, alongside the
+generated PNG in the timestamped output directory. The committed figure above
+is the curated result from the three-run experiment.
 
 
 ## Extensions and Next Steps

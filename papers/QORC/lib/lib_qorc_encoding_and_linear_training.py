@@ -236,6 +236,7 @@ def create_qorc_reservoir_classifier(
     device_name,
     b_no_bunching,
     input_features=28 * 28,
+    n_classes=10,
     noise=None,
 ):
     """Create the Merlin 0.4 reservoir classifier used by QORC.
@@ -257,6 +258,8 @@ def create_qorc_reservoir_classifier(
         Torch device used by the classifier.
     b_no_bunching : bool
         Whether the measurement output excludes photon bunching states.
+    n_classes : int
+        Number of output classes. Default value is 10.
 
     Returns
     -------
@@ -270,7 +273,7 @@ def create_qorc_reservoir_classifier(
     """
     reservoir = ML.ReservoirClassifier(
         in_features=input_features,
-        out_features=10,
+        out_features=n_classes,
         n_photons=n_photons,
         reduction=PCA(n_components=n_components),
         concatenate=True,
@@ -442,6 +445,7 @@ def qorc_encoding_and_linear_training(
         test_label = test_label[:dataset_truncate]
 
     n_pixels = train_data.shape[1]
+    n_classes = int(max(np.max(train_label), np.max(test_label))) + 1
 
     logger.info("Datasets sizes:")
     logger.info(train_label.shape)  # (48000,)
@@ -461,6 +465,7 @@ def qorc_encoding_and_linear_training(
         device_name=device_name,
         b_no_bunching=b_no_bunching,
         input_features=n_pixels,
+        n_classes=n_classes,
         noise=create_perceval_noise_model(
             enabled=noise_enabled,
             indistinguishability=noise_indistinguishability,
@@ -681,11 +686,20 @@ def qorc_encoding_and_linear_training(
         best_val_epoch,
     ]
     if return_history:
+        test_predictions = []
+        test_targets = []
+        model.eval()
+        with torch.no_grad():
+            for inputs, targets in test_loader:
+                test_predictions.extend(model(inputs).argmax(dim=1).cpu().tolist())
+                test_targets.extend(targets.cpu().tolist())
         return {
             "summary": result,
             "train_accuracy": [float(value) for value in train_accuracy_history],
             "train_loss": [float(value) for value in train_loss_history],
             "test_loss": [float(value) for value in test_loss_history],
             "test_accuracy": [float(value) for value in test_accuracy_history],
+            "test_predictions": test_predictions,
+            "test_targets": test_targets,
         }
     return result

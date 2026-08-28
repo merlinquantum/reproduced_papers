@@ -139,6 +139,7 @@ def train_linear_baseline(
     batch_size,
     learning_rate,
     seed,
+    n_classes=10,
 ):
     """Train a raw-pixel MLR classifier.
 
@@ -160,6 +161,8 @@ def train_linear_baseline(
         Adagrad learning rate.
     seed : int
         Random seed for model initialization and minibatch ordering.
+    n_classes : int
+        Number of output classes. Default value is 10.
 
     Returns
     -------
@@ -167,7 +170,7 @@ def train_linear_baseline(
         Epoch-wise train/test accuracy and cross-entropy loss.
     """
     torch.manual_seed(seed)
-    model = nn.Linear(train_data.shape[1], 10)
+    model = nn.Linear(train_data.shape[1], n_classes)
     optimizer = torch.optim.Adagrad(model.parameters(), lr=learning_rate)
     criterion = nn.CrossEntropyLoss()
     train_inputs = torch.from_numpy(train_data)
@@ -186,6 +189,7 @@ def train_linear_baseline(
         "test_accuracy": [],
         "train_loss": [],
         "test_loss": [],
+        "test_predictions": [],
     }
     for _ in range(n_epochs):
         model.train()
@@ -207,6 +211,7 @@ def train_linear_baseline(
             history["test_accuracy"].append(
                 float((test_logits.argmax(dim=1) == test_targets).float().mean())
             )
+            history["test_predictions"] = test_logits.argmax(dim=1).tolist()
     return history
 
 

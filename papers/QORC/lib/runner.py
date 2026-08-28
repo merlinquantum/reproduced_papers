@@ -9,6 +9,7 @@ import pandas as pd
 from lib.comparison import run_qorc_lsvc_comparison
 from lib.lib_qorc_encoding_and_linear_training import qorc_encoding_and_linear_training
 from lib.lib_rff_encoding_and_linear_training import rff_encoding_and_linear_training
+from lib.medmnist_fig3 import run_medmnist_fig3
 from lib.noisy_indistinguishability import run_noisy_qorc_indistinguishability
 
 
@@ -28,6 +29,8 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         run_qorc_lsvc_comparison(cfg, run_dir, logger)
     elif xp_type == "noisy_qorc_indistinguishability":
         run_noisy_qorc_indistinguishability(cfg, run_dir, logger)
+    elif xp_type == "fig3_qorc_mlr_medmnist":
+        run_medmnist_fig3(cfg, run_dir, logger)
     elif xp_type == "rff":
         _run_rff(cfg, run_dir, logger)
     else:

@@ -3,9 +3,9 @@
   "arguments": [
     {
       "flags": ["--xp-type"],
-      "help": "Experiment type (qorc or rff)",
+      "help": "Experiment type",
       "type": "str",
-      "choices": ["qorc", "rff", "comparison_qorc_lsvc", "noisy_qorc_indistinguishability"],
+      "choices": ["qorc", "rff", "comparison_qorc_lsvc", "noisy_qorc_indistinguishability", "fig3_qorc_mlr_medmnist"],
       "default": null,
       "apply": {"kind": "config_path", "path": "xp_type"}
     },

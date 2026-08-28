@@ -73,3 +73,14 @@ def test_noisy_indistinguishability_config_has_figure_2b_defaults() -> None:
     assert config["n_epochs"] == 200
     assert config["indistinguishability_m12"] == [0, 25, 50, 75, 100]
     assert config["indistinguishability_m20"] == [0, 20, 35, 50, 70, 85, 100]
+
+
+def test_medmnist_fig3_config_has_requested_settings() -> None:
+    config = load_config(CONFIG_DIR / "QORC_medmnist.json")
+
+    assert config["xp_type"] == "fig3_qorc_mlr_medmnist"
+    assert config["datasets"] == ["OCT", "OrganS", "OrganA", "Derma"]
+    assert config["seeds"] == [42, 43, 44]
+    assert config["n_photons"] == 3
+    assert config["n_modes"] == 20
+    assert config["n_epochs"] == 200
