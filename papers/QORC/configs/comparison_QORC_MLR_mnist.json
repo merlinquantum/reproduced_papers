@@ -1,0 +1,37 @@
+{
+    "description": "Compare QORC and a raw-pixel LinearSVC baseline on MNIST",
+    "xp_type": "comparison_qorc_lsvc",
+    "seed": 42,
+
+    "dataset_name": "mnist",
+    "dataset_sampling": "full",
+    "dataset_sample_count": null,
+    "dataset_samples_per_class": null,
+    "n_fold": 5,
+    "fold_index": 0,
+
+    "n_photons": 3,
+    "n_modes": 20,
+    "n_epochs": 200,
+    "batch_size": 100,
+    "learning_rate": 0.05,
+    "reduce_lr_patience": 10,
+    "reduce_lr_factor": 0.5,
+
+    "noise_enabled": false,
+    "noise_indistinguishability": 1.0,
+    "noise_g2": 0.0,
+    "noise_g2_distinguishable": true,
+    "use_qpu": false,
+    "qpu_device": "none",
+    "qpu_device_nsample": 10000,
+
+    "device": "cpu",
+    "num_workers": 0,
+    "pin_memory": false,
+    "b_no_bunching": false,
+    "b_use_tensorboard": false,
+    "dataset_truncate": 0,
+    "linear_learning_rate": 0.05,
+    "outdir": "outdir"
+}

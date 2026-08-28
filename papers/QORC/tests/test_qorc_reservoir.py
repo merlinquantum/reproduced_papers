@@ -17,6 +17,7 @@ for import_path in (REPO_ROOT, QORC_DIR):
 pytest.importorskip("merlin")
 
 from lib import lib_qorc_encoding_and_linear_training as qorc_training
+from lib.comparison import plot_qorc_lsvc_comparison
 from lib.lib_remote_qorc import (
     _QORCProcessor,
     create_remote_qorc_processor,
@@ -86,6 +87,32 @@ def test_factory_selects_no_bunching_measurement(monkeypatch):
     assert reservoir.layer.measurement_strategy == {}
 
 
+def test_noise_factory_returns_none_when_disabled():
+    assert qorc_training.create_perceval_noise_model(enabled=False) is None
+
+
+def test_noise_factory_maps_perceval_source_parameters():
+    noise = qorc_training.create_perceval_noise_model(
+        enabled=True,
+        indistinguishability=0.87,
+        g2=0.04,
+        g2_distinguishable=False,
+    )
+
+    assert noise.indistinguishability == 0.87
+    assert noise.g2 == 0.04
+    assert noise.g2_distinguishable is False
+
+
+@pytest.mark.parametrize("parameter_name", ["indistinguishability", "g2"])
+def test_noise_factory_rejects_invalid_probabilities(parameter_name):
+    with pytest.raises(ValueError, match="between 0 and 1"):
+        qorc_training.create_perceval_noise_model(
+            enabled=True,
+            **{parameter_name: 1.1},
+        )
+
+
 def test_remote_processor_adapter_forwards_sample_count():
     calls = []
 
@@ -115,3 +142,23 @@ def test_remote_processor_rejects_unknown_backend(monkeypatch):
             qpu_device_nsample=100,
             logger=logging.getLogger("test_qorc_reservoir"),
         )
+
+
+def test_comparison_plot_writes_png(tmp_path):
+    metrics = {
+        "epochs": [1, 2],
+        "qorc_train_accuracy": [0.4, 0.7],
+        "qorc_test_accuracy": [0.35, 0.65],
+        "qorc_train_loss": [1.2, 0.6],
+        "qorc_test_loss": [1.3, 0.8],
+        "linear_train_accuracy": [0.6, 0.8],
+        "linear_test_accuracy": [0.55, 0.75],
+        "linear_train_loss": [0.7, 0.4],
+        "linear_test_loss": [0.8, 0.5],
+    }
+    output_path = tmp_path / "comparison.png"
+
+    plot_qorc_lsvc_comparison(metrics, output_path)
+
+    assert output_path.exists()
+    assert output_path.stat().st_size > 0

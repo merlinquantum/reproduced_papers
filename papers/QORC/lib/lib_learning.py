@@ -230,6 +230,7 @@ def model_fit(
     tf_train_writer=None,
     tf_val_writer=None,
     calc_accuracy=False,
+    test_loader=None,
 ):
     logger.info(
         "Call model_fit(), with {} parameters to train.".format(
@@ -248,6 +249,8 @@ def model_fit(
     train_accuracy_history = []
     val_loss_history = []
     val_accuracy_history = []
+    test_loss_history = []
+    test_accuracy_history = []
 
     best_val_epoch_loss_checkpoint = float("inf")
     best_val_epoch_loss_earlystopping = float("inf")
@@ -286,6 +289,20 @@ def model_fit(
         [val_epoch_loss, val_epoch_acc, val_duree_epoch] = model_eval(
             model, val_loader, criterion, device, logger, calc_accuracy, printPerf=False
         )
+        if test_loader is not None:
+            [test_epoch_loss, test_epoch_acc, test_duree_epoch] = model_eval(
+                model,
+                test_loader,
+                criterion,
+                device,
+                logger,
+                calc_accuracy=True,
+                printPerf=False,
+            )
+            test_loss_history.append(test_epoch_loss)
+            test_accuracy_history.append(test_epoch_acc)
+        else:
+            test_duree_epoch = 0
 
         if tf_train_writer is not None:
             tf_train_writer.add_scalar("loss", train_epoch_loss, epoch)
@@ -300,7 +317,7 @@ def model_fit(
         val_loss_history.append(val_epoch_loss)
         val_accuracy_history.append(val_epoch_acc)
 
-        duration += train_duree_epoch + val_duree_epoch
+        duration += train_duree_epoch + val_duree_epoch + test_duree_epoch
 
         # Print results
         print_epoch_like_keras(epoch, n_epochs, logger)
@@ -374,4 +391,6 @@ def model_fit(
         val_accuracy_history,
         duration,
         best_val_epoch,
+        test_loss_history,
+        test_accuracy_history,
     ]

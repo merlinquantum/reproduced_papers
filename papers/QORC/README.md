@@ -1,4 +1,12 @@
-# Reproduction of [Quantum optical reservoir computing powered by boson sampling](https://opg.optica.org/opticaq/abstract.cfm?URI=opticaq-3-3-238)
+# QORC - Quantum Optical Reservoir Computing Reproductions
+
+This project contains reproductions based on two photonic reservoir-computing
+papers. The sections below keep the original QORC reproduction separate from
+the newer quantum-accelerated machine-learning experiments.
+
+## Paper 1: Quantum Optical Reservoir Computing Powered by Boson Sampling
+
+[Original paper](https://opg.optica.org/opticaq/abstract.cfm?URI=opticaq-3-3-238)
 
 ## Reference and Attribution
 
@@ -49,7 +57,7 @@ This repository provides a reproducible implementation of the **Quantum Optical 
 
 **Quantum Optical Reservoir Computing (QORC)** leverages the intrinsic non-linearity of photonic circuits to compute high-dimensional, untrained features. A trainable linear layer is then applied to these features to perform image classification.
 
-![Qorc scheme](qorc.png)
+![QORC reservoir scheme](assets/reservoir_scheme.png)
 
 In detail, an **M-mode random interferometer** (pre-circuit) with **N single-photon inputs** generates a complex photonic resource state. Each input image undergoes **dimensionality reduction via Principal Component Analysis (PCA)**, and the resulting feature vector modulates the phases of a column of phase shifters, encoding the data into the photonic state. The encoded state is subsequently processed through a second **M-mode random interferometer** (the reservoir), which may be identical to the pre-circuit. The output **Fock-state probabilities**, obtained via coincidence detection, serve as quantum-derived features for classification.
 
@@ -80,7 +88,10 @@ python ../implementation.py --paper QORC --config configs/xp_qorc.json --help
  |----------------------|-----------------------------------------------------------------------------|
  | `--config PATH`      | Load config from JSON (example files in `configs/`).                        |
  | `--outdir DIR`       | Base output directory. A timestamped run folder `run_YYYYMMDD-HHMMSS` is created inside. |
- | `--dataset_name DS`  | Dataset for the experiment. Choices: 'mnist' (digits), 'k-mnist' (Kuzushiji), or 'fashion-mnist' (clothing). Default: 'mnist'. |
+ | `--dataset-name DS`  | Dataset: `mnist`, `oct`, `organs`, `organa`, or `derma`. Default: `mnist`. |
+ | `--dataset-sampling MODE` | MNIST training sampling: `full`, `balanced`, `gauss`, or `imbal`. |
+ | `--dataset-sample-count INT` | Total training examples for a sampled MNIST experiment. |
+ | `--dataset-samples-per-class INT` | Training examples per class for balanced MNIST. |
 
 ### Qorc Options
  | Option               | Description                                                                 |
@@ -90,7 +101,6 @@ python ../implementation.py --paper QORC --config configs/xp_qorc.json --help
  | `--seed INT`         | Random seed for reproducibility.                                            |
  | `--fold-index INT`   | Split train/val fold index.                                                 |
  | `--n-fold INT`       | Number of folds for train/val split.                                        |
- | `--epochs INT`       | Number of training epochs.                                                  |
  | `--batch-size INT`   | Batch size.                                                                 |
  | `--lr FLOAT`         | Learning rate.                                                              |
  | `--reduce-lr-patience INT` | Patience for reducing learning rate on plateau.                     |
@@ -101,6 +111,13 @@ python ../implementation.py --paper QORC --config configs/xp_qorc.json --help
  | `--b-no-bunching BOOL` | Disable bunching.                                                          |
  | `--b-use-tensorboard BOOL` | Enable TensorBoard logging.                                          |
  | `--device STR`       | Device string (e.g., `cpu`, `cuda:0`, `mps`).                              |
+ | `--epochs INT`       | Number of readout-training epochs. Default: 200.                         |
+ | `--noise-enabled BOOL` | Enable Perceval source noise. Default: false.                         |
+ | `--noise-indistinguishability FLOAT` | Photon indistinguishability in `[0, 1]`. |
+ | `--noise-g2 FLOAT`   | Perceval `g2` source parameter in `[0, 1]`.                              |
+ | `--noise-g2-distinguishable BOOL` | Distinguishability of `g2`-generated photons. |
+ | `--use-qpu BOOL`     | Require a `qpu:*` backend instead of local simulation.                   |
+ | `--qpu-device NAME`  | Perceval backend, for example `qpu:ascella`.                             |
 
 ### RFF Options
  | Option               | Description                                                                 |
@@ -123,6 +140,14 @@ python implementation.py --paper QORC --config QORC/configs/xp_rff.json
 
 # Override some parameters inline
 python implementation.py --paper QORC --config QORC/configs/xp_qorc.json --epochs 50 --lr 1e-3
+
+# Gaussian-imbalanced MNIST from Table S4 of photonic_qml.pdf
+python implementation.py --paper QORC --config QORC/configs/defaults.json \
+  --dataset-name mnist --dataset-sampling gauss --dataset-sample-count 10000
+
+# Noisy local reservoir simulation
+python implementation.py --paper QORC --config QORC/configs/defaults.json \
+  --noise-enabled true --noise-indistinguishability 0.87 --noise-g2 0.04
 ```
 
 
@@ -173,7 +198,7 @@ Place configuration files in `configs/`.
 - **Looping Support**: Some parameters can be provided as lists (e.g., `n_photons`, `n_modes`, `seed`, `fold_index`, `n_rff_features`). In such cases, the script will automatically loop over all provided values **in a grid-search manner**.
 
 
-## Results
+## Results for Paper 1
 
 Main graph exposing quantum reservoir performances (test accuracy) on the classic MNIST dataset.
 
@@ -184,6 +209,39 @@ In the precedent graph, bunching was manually disabled when the condition `n_pho
 Graph comparing the quantum optical reservoir computing (QORC) method with the classical Random Fourier Features (RFF) method, a fast approximation of the Radial Basis Function (RBF) kernel, on the classic MNIST dataset. For the QORC, the number of photons is fixed at 3, as specified in the reference paper.
 
 ![MNIST quantum reservoir versus RFF](results/graph_qorc_vs_rff.png)
+
+## Paper 2: Photonic Quantum-Accelerated Machine Learning
+
+Reference: [Photonic Quantum-Accelerated Machine Learning](https://arxiv.org/abs/2512.08318),
+by Markus Rambach, Abhishek Roy, Alexei Gilchrist, Akitada Sakurai, William J.
+Munro, Kae Nemoto, and Andrew G. White.
+
+The second paper studies the same frozen boson-sampling reservoir approach as
+a quantum accelerator for classical machine learning. Its experiments extend
+the first reproduction to biomedical MedMNIST datasets, controlled MNIST class
+imbalance, sparse training data, imperfect photon sources, and photonic-QPU
+execution.
+
+### Experiment 1: MNIST QORC versus linear-softmax baseline
+
+The first implemented comparison trains the Merlin `ReservoirClassifier` QORC
+readout and a raw-pixel `torch.nn.Linear` softmax baseline for 200 epochs on
+the same MNIST train/validation split. The generated figure contains training
+and test accuracy in the left panel and cross-entropy loss in the right panel.
+QORC is orange and the linear baseline is dark blue.
+
+![QORC versus linear-softmax baseline on MNIST](assets/comparison_QORC_LSVC_mnist.png)
+
+Run this experiment from the repository root:
+
+```bash
+python implementation.py --paper QORC \
+  --config papers/QORC/configs/comparison_QORC_LSVC_mnist.json
+```
+
+The run writes the figure and its serialized metrics to
+`comparison_QORC_LSVC_mnist.png` and `comparison_QORC_LSVC_mnist.json` in the
+timestamped output directory.
 
 
 ## Extensions and Next Steps
@@ -210,4 +268,3 @@ torch==2.7.1
 perceval_quandela==0.13.2
 merlinquantum==0.1.0
 ```
-
