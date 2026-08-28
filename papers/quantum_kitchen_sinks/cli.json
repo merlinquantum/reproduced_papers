@@ -1,0 +1,96 @@
+{
+  "description": "Quantum Kitchen Sinks runner CLI",
+  "arguments": [
+    {
+      "flags": ["--experiment"],
+      "help": "Which experiment to run: picture_frames, mnist35, sigma_sweep, baselines",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiment"}
+    },
+    {
+      "flags": ["--circuit"],
+      "help": "Circuit ansatz: cnot2, cz2, cnot1, cnot4",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qks.circuit"}
+    },
+    {
+      "flags": ["--n-qubits"],
+      "help": "Number of qubits for the QKS circuit",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qks.n_qubits"}
+    },
+    {
+      "flags": ["--n-episodes"],
+      "help": "Number of QKS episodes E",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qks.n_episodes"}
+    },
+    {
+      "flags": ["--sigma"],
+      "help": "Encoding standard deviation sigma for the normal distribution",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qks.sigma"}
+    },
+    {
+      "flags": ["--shots-per-episode"],
+      "help": "Number of shots averaged per episode (paper uses 1)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qks.shots_per_episode"}
+    },
+    {
+      "flags": ["--n-layers"],
+      "help": "Number of repeated encoding layers per ansatz",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qks.n_layers"}
+    },
+    {
+      "flags": ["--dataset-name"],
+      "help": "Dataset name (picture_frames, mnist35)",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.name"}
+    },
+    {
+      "flags": ["--n-train"],
+      "help": "Training set size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.n_train"}
+    },
+    {
+      "flags": ["--n-test"],
+      "help": "Test set size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.n_test"}
+    },
+    {
+      "flags": ["--classifier-kind"],
+      "help": "Classifier: logistic_regression or svm_rbf or none",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "classifier.kind"}
+    },
+    {
+      "flags": ["--classifier-c"],
+      "help": "Classifier regularization strength",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "classifier.C"}
+    },
+    {
+      "flags": ["--backend"],
+      "help": "QKS backend: gate (default), photonic_merlin",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qks.backend"}
+    }
+  ]
+}
