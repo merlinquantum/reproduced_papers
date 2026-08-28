@@ -37,6 +37,7 @@ the paper `README.md` ("Results Obtained").
 | `sweep_tables.md` | mode / photon / iso-dim scaling sweep summaries (3 seeds) |
 | `sweep_*.png` | scaling-sweep figures |
 | `level_*.png` | rendered level strips (original, authors' reference at T=1, our QRC at T=1 and T=30) via `utils/render_level.py` |
+| `layers_ablation_post{1,2}.json`, `layers_ablation.png` | 1-vs-2 post-encoding entangling-layer comparison (photonic reservoir; depth is inert) via `utils/plot_layers_ablation.py` |
 
 ## Regenerating
 

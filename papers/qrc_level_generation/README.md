@@ -292,7 +292,11 @@ results and figures were produced with depth 2, which stays pinned via
 `"n_post_layers": 2` in `configs/mario_photonic.json` (the sweeps
 inherit it) so they remain reproducible. A controlled 1-vs-2 comparison
 (same seed, 30 epochs, 5 temperatures) confirms the equivalence
-empirically — every metric agrees to within single-seed noise:
+empirically — every metric agrees to within single-seed noise
+(curated data: `results/layers_ablation_post{1,2}.json`, figure via
+`utils/plot_layers_ablation.py`):
+
+![Post-encoding depth ablation](results/layers_ablation.png)
 
 | T | orig_L2 (1 layer / 2 layers) | broken_2 (1 layer / 2 layers) |
 |---:|---:|---:|
