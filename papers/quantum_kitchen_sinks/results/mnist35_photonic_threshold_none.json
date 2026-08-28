@@ -1,0 +1,59 @@
+{
+ "description": "Photonic MerLin QKS on (3,5)-MNIST: two dual-rail MZI encoders, no mixing, threshold detectors on all four modes, no post-selection. Deterministic control.",
+ "config": "configs/mnist35_merlin_2q_threshold_none.json",
+ "regenerate": "python implementation.py --paper quantum_kitchen_sinks --config mnist35_merlin_2q_threshold_none.json",
+ "note": "Curated copy of a run's metrics.json. Shares the 4000/1000 subsample with the other mnist35 artifacts, so comparisons against the LR baseline are paired.",
+ "results": [
+  {
+   "sigma": 0.1,
+   "n_episodes": 2500,
+   "seed": 42,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.98,
+   "train_error": 0.0,
+   "test_error": 0.020000000000000018,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 10000,
+   "n_modes": 4,
+   "n_photons": 2,
+   "computation_space": "FOCK",
+   "architecture": "mzi_threshold",
+   "mixing": "none"
+  },
+  {
+   "sigma": 0.1,
+   "n_episodes": 2500,
+   "seed": 43,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.985,
+   "train_error": 0.0,
+   "test_error": 0.015000000000000013,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 10000,
+   "n_modes": 4,
+   "n_photons": 2,
+   "computation_space": "FOCK",
+   "architecture": "mzi_threshold",
+   "mixing": "none"
+  },
+  {
+   "sigma": 0.1,
+   "n_episodes": 2500,
+   "seed": 44,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.983,
+   "train_error": 0.0,
+   "test_error": 0.017000000000000015,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 10000,
+   "n_modes": 4,
+   "n_photons": 2,
+   "computation_space": "FOCK",
+   "architecture": "mzi_threshold",
+   "mixing": "none"
+  }
+ ]
+}
