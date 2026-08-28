@@ -6,7 +6,6 @@ Quick validation tests for the quantum transfer learning reproduction.
 Run with: pytest -q (from project directory)
 """
 
-import json
 import sys
 from pathlib import Path
 
@@ -51,8 +50,8 @@ class TestDatasets:
 
         dataset = SpiralDataset(n_samples=100, seed=42)
 
-        assert hasattr(dataset, 'X')
-        assert hasattr(dataset, 'y')
+        assert hasattr(dataset, "X")
+        assert hasattr(dataset, "y")
         assert dataset.X.shape == (100, 2)
         assert dataset.y.shape == (100,)
 
@@ -65,10 +64,7 @@ class TestClassicalModels:
         from lib.models import ClassicalBaseline
 
         model = ClassicalBaseline(
-            n_inputs=2,
-            n_outputs=2,
-            hidden_sizes=[4],
-            activation="tanh"
+            n_inputs=2, n_outputs=2, hidden_sizes=[4], activation="tanh"
         )
 
         x = torch.randn(5, 2)
@@ -81,10 +77,7 @@ class TestClassicalModels:
         from lib.models import ClassicalBaseline
 
         model = ClassicalBaseline(
-            n_inputs=2,
-            n_outputs=2,
-            hidden_sizes=[8, 4],
-            activation="relu"
+            n_inputs=2, n_outputs=2, hidden_sizes=[8, 4], activation="relu"
         )
 
         x = torch.randn(3, 2)
@@ -124,7 +117,7 @@ class TestMerLinCircuits:
     def test_merlin_import(self):
         """Test MerLin can be imported."""
         import merlin as ML
-        from merlin import QuantumLayer, ComputationSpace
+        from merlin import ComputationSpace, QuantumLayer
 
         assert ML is not None
         assert QuantumLayer is not None
@@ -160,7 +153,9 @@ class TestMerLinCircuits:
         # Verify parameter names are unique (the bug was duplicate x0, x1 names)
         params = circuit.get_parameters()
         param_names = [p.name for p in params]
-        assert len(param_names) == len(set(param_names)), "Parameter names must be unique"
+        assert len(param_names) == len(set(param_names)), (
+            "Parameter names must be unique"
+        )
 
     def test_merlin_quantum_layer(self):
         """Test MerLinQuantumLayer."""
@@ -172,7 +167,7 @@ class TestMerLinCircuits:
             n_photons=2,
             q_depth=1,
             computation_space="unbunched",
-            measurement_strategy="probabilities"
+            measurement_strategy="probabilities",
         )
 
         x = torch.randn(3, 2)
@@ -190,7 +185,7 @@ class TestMerLinCircuits:
             n_features=2,
             n_photons=2,
             q_depth=2,
-            computation_space="unbunched"
+            computation_space="unbunched",
         )
 
         x = torch.randn(2, 2)
@@ -209,7 +204,7 @@ class TestMerLinCircuits:
             n_photons=2,
             q_depth=1,
             computation_space="unbunched",
-            scale_type="learned"
+            scale_type="learned",
         )
 
         x = torch.randn(2, 2)
@@ -263,10 +258,7 @@ class TestPennyLaneCircuits:
         from lib.circuits import PennyLaneDressedCircuit
 
         circuit = PennyLaneDressedCircuit(
-            n_inputs=2,
-            n_outputs=2,
-            n_qubits=4,
-            q_depth=2
+            n_inputs=2, n_outputs=2, n_qubits=4, q_depth=2
         )
 
         x = torch.randn(2, 2)
@@ -291,7 +283,7 @@ class TestUnifiedInterface:
             n_photons=2,
             computation_space="unbunched",
             merlin_depth=1,
-            scale_type="learned"
+            scale_type="learned",
         )
 
         x = torch.randn(2, 2)
@@ -304,11 +296,7 @@ class TestUnifiedInterface:
         from lib.circuits import DressedQuantumCircuit
 
         circuit = DressedQuantumCircuit(
-            n_inputs=2,
-            n_outputs=2,
-            n_qubits=4,
-            q_depth=2,
-            backend="pennylane"
+            n_inputs=2, n_outputs=2, n_qubits=4, q_depth=2, backend="pennylane"
         )
 
         x = torch.randn(2, 2)
@@ -325,7 +313,7 @@ class TestUnifiedInterface:
             q_depth=2,
             backend="merlin",
             n_photons=2,
-            computation_space="unbunched"
+            computation_space="unbunched",
         )
 
         x = torch.randn(2, 4)
@@ -338,11 +326,7 @@ class TestUnifiedInterface:
         """Test VariationalCircuit with PennyLane backend."""
         from lib.circuits import VariationalCircuit
 
-        circuit = VariationalCircuit(
-            n_qubits=4,
-            q_depth=2,
-            backend="pennylane"
-        )
+        circuit = VariationalCircuit(n_qubits=4, q_depth=2, backend="pennylane")
 
         x = torch.randn(2, 4)
         output = circuit(x)
@@ -364,7 +348,7 @@ class TestHybridModels:
             q_depth=2,
             backend="merlin",
             n_photons=2,
-            computation_space="unbunched"
+            computation_space="unbunched",
         )
 
         x = torch.randn(2, 2)
@@ -377,11 +361,7 @@ class TestHybridModels:
         from lib.models import HybridModel
 
         model = HybridModel(
-            n_inputs=2,
-            n_outputs=2,
-            n_qubits=4,
-            q_depth=2,
-            backend="pennylane"
+            n_inputs=2, n_outputs=2, n_qubits=4, q_depth=2, backend="pennylane"
         )
 
         x = torch.randn(2, 2)
@@ -399,7 +379,7 @@ class TestHybridModels:
             n_modes=4,
             n_photons=2,
             computation_space="unbunched",
-            scale_type="learned"
+            scale_type="learned",
         )
 
         x = torch.randn(2, 2)
@@ -418,7 +398,7 @@ class TestHybridModels:
             "n_qubits": 4,
             "q_depth": 2,
             "n_photons": 2,
-            "computation_space": "unbunched"
+            "computation_space": "unbunched",
         }
 
         model = create_model(config, backend="merlin")
@@ -439,7 +419,7 @@ class TestHybridModels:
             "n_modes": 4,
             "n_photons": 2,
             "computation_space": "unbunched",
-            "scale_type": "learned"
+            "scale_type": "learned",
         }
 
         model = create_model(config, backend="merlin")
@@ -458,7 +438,7 @@ class TestHybridModels:
             "n_inputs": 2,
             "n_outputs": 2,
             "hidden_sizes": [4, 4],
-            "activation": "tanh"
+            "activation": "tanh",
         }
 
         model = create_model(config, backend="merlin")
@@ -481,11 +461,7 @@ class TestTraining:
         from lib.training import evaluate, train_epoch
 
         # Minimal config
-        config = {
-            "n_samples": 100,
-            "n_train": 80,
-            "batch_size": 10
-        }
+        config = {"n_samples": 100, "n_train": 80, "batch_size": 10}
 
         train_loader, test_loader = create_dataloaders("spiral", config, seed=42)
 
@@ -511,21 +487,14 @@ class TestTraining:
         from lib.models import ClassicalBaseline
         from lib.training import Trainer
 
-        config = {
-            "n_samples": 100,
-            "n_train": 80,
-            "batch_size": 10
-        }
+        config = {"n_samples": 100, "n_train": 80, "batch_size": 10}
 
         train_loader, test_loader = create_dataloaders("spiral", config, seed=42)
 
         model = ClassicalBaseline(n_inputs=2, n_outputs=2, hidden_sizes=[4])
         device = torch.device("cpu")
 
-        training_config = {
-            "learning_rate": 0.01,
-            "optimizer": "adam"
-        }
+        training_config = {"learning_rate": 0.01, "optimizer": "adam"}
 
         trainer = Trainer(model, train_loader, test_loader, training_config, device)
         results = trainer.train(epochs=2, verbose=False, save_best=False)
@@ -542,21 +511,14 @@ class TestTraining:
         from lib.models import ClassicalBaseline
         from lib.training import train_model
 
-        config = {
-            "n_samples": 100,
-            "n_train": 80,
-            "batch_size": 10
-        }
+        config = {"n_samples": 100, "n_train": 80, "batch_size": 10}
 
         train_loader, test_loader = create_dataloaders("spiral", config, seed=42)
 
         model = ClassicalBaseline(n_inputs=2, n_outputs=2, hidden_sizes=[4])
         device = torch.device("cpu")
 
-        training_config = {
-            "epochs": 2,
-            "learning_rate": 0.01
-        }
+        training_config = {"epochs": 2, "learning_rate": 0.01}
 
         results = train_model(model, train_loader, test_loader, training_config, device)
 
@@ -599,16 +561,12 @@ class TestIntegration:
         """Test full spiral classification with quantum model."""
         from lib.datasets import create_dataloaders
         from lib.models import HybridModel
-        from lib.training import train_model
         from lib.runner import set_seed
+        from lib.training import train_model
 
         set_seed(42)
 
-        config = {
-            "n_samples": 50,
-            "n_train": 40,
-            "batch_size": 10
-        }
+        config = {"n_samples": 50, "n_train": 40, "batch_size": 10}
 
         train_loader, test_loader = create_dataloaders("spiral", config, seed=42)
 
@@ -619,17 +577,13 @@ class TestIntegration:
             q_depth=2,
             backend="merlin",
             n_photons=2,
-            computation_space="unbunched"
+            computation_space="unbunched",
         )
 
-        training_config = {
-            "epochs": 2,
-            "learning_rate": 0.01
-        }
+        training_config = {"epochs": 2, "learning_rate": 0.01}
 
         results = train_model(
-            model, train_loader, test_loader,
-            training_config, torch.device("cpu")
+            model, train_loader, test_loader, training_config, torch.device("cpu")
         )
 
         assert "best_accuracy" in results
@@ -639,35 +593,23 @@ class TestIntegration:
         """Test full spiral classification with PennyLane model."""
         from lib.datasets import create_dataloaders
         from lib.models import HybridModel
-        from lib.training import train_model
         from lib.runner import set_seed
+        from lib.training import train_model
 
         set_seed(42)
 
-        config = {
-            "n_samples": 50,
-            "n_train": 40,
-            "batch_size": 10
-        }
+        config = {"n_samples": 50, "n_train": 40, "batch_size": 10}
 
         train_loader, test_loader = create_dataloaders("spiral", config, seed=42)
 
         model = HybridModel(
-            n_inputs=2,
-            n_outputs=2,
-            n_qubits=4,
-            q_depth=2,
-            backend="pennylane"
+            n_inputs=2, n_outputs=2, n_qubits=4, q_depth=2, backend="pennylane"
         )
 
-        training_config = {
-            "epochs": 2,
-            "learning_rate": 0.01
-        }
+        training_config = {"epochs": 2, "learning_rate": 0.01}
 
         results = train_model(
-            model, train_loader, test_loader,
-            training_config, torch.device("cpu")
+            model, train_loader, test_loader, training_config, torch.device("cpu")
         )
 
         assert "best_accuracy" in results
@@ -696,10 +638,7 @@ class TestComputationSpaces:
         from lib.circuits import MerLinQuantumLayer
 
         layer = MerLinQuantumLayer(
-            n_modes=4,
-            n_features=2,
-            n_photons=2,
-            computation_space="fock"
+            n_modes=4, n_features=2, n_photons=2, computation_space="fock"
         )
 
         x = torch.randn(2, 2)

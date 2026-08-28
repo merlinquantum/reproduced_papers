@@ -12,7 +12,7 @@ Supports both:
 - PennyLane (qubit): Reference implementation for comparison
 """
 
-from typing import Any, Dict
+from typing import Any
 
 import torch
 import torch.nn as nn
@@ -27,7 +27,7 @@ from .circuits import (
 
 class ClassicalBaseline(nn.Module):
     """Classical neural network baseline for comparison.
-    
+
     A simple MLP with configurable hidden layers, matching
     the parameter count of the quantum model approximately.
     """
@@ -36,17 +36,19 @@ class ClassicalBaseline(nn.Module):
         self,
         n_inputs: int,
         n_outputs: int,
-        hidden_sizes: list = [4],
-        activation: str = "tanh"
+        hidden_sizes: list = None,
+        activation: str = "tanh",
     ):
         """Initialize classical baseline.
-        
+
         Args:
             n_inputs: Number of input features
             n_outputs: Number of output classes
             hidden_sizes: List of hidden layer sizes
             activation: Activation function ('tanh', 'relu')
         """
+        if hidden_sizes is None:
+            hidden_sizes = [4]
         super().__init__()
 
         activation_fn = nn.Tanh() if activation == "tanh" else nn.ReLU()
@@ -55,10 +57,7 @@ class ClassicalBaseline(nn.Module):
         prev_size = n_inputs
 
         for hidden_size in hidden_sizes:
-            layers.extend([
-                nn.Linear(prev_size, hidden_size),
-                activation_fn
-            ])
+            layers.extend([nn.Linear(prev_size, hidden_size), activation_fn])
             prev_size = hidden_size
 
         layers.append(nn.Linear(prev_size, n_outputs))
@@ -72,10 +71,10 @@ class ClassicalBaseline(nn.Module):
 
 class HybridModel(nn.Module):
     """Base hybrid classical-quantum model.
-    
+
     Wraps a dressed quantum circuit and handles the interface
     between classical data and quantum processing.
-    
+
     Supports both MerLin (photonic) and PennyLane (qubit) backends.
     """
 
@@ -86,10 +85,10 @@ class HybridModel(nn.Module):
         n_qubits: int = 4,
         q_depth: int = 5,
         backend: str = "merlin",
-        **kwargs
+        **kwargs,
     ):
         """Initialize hybrid model.
-        
+
         Args:
             n_inputs: Number of input features
             n_outputs: Number of output classes
@@ -112,7 +111,7 @@ class HybridModel(nn.Module):
             n_qubits=n_qubits,
             q_depth=q_depth,
             backend=backend,
-            **kwargs
+            **kwargs,
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -122,19 +121,16 @@ class HybridModel(nn.Module):
 
 class FeatureExtractor(nn.Module):
     """Pre-trained CNN feature extractor.
-    
+
     Uses a pre-trained model (e.g., ResNet18) with the final
     classification layer removed to extract features.
     """
 
     def __init__(
-        self,
-        model_name: str = "resnet18",
-        pretrained: bool = True,
-        freeze: bool = True
+        self, model_name: str = "resnet18", pretrained: bool = True, freeze: bool = True
     ):
         """Initialize feature extractor.
-        
+
         Args:
             model_name: Name of the pretrained model
             pretrained: Use pretrained weights
@@ -176,15 +172,15 @@ class FeatureExtractor(nn.Module):
 
 class CQTransferModel(nn.Module):
     """Classical-to-Quantum Transfer Learning Model.
-    
+
     Implements the CQ transfer learning scheme from the paper:
     1. Pre-trained CNN extracts features (512-dim for ResNet18)
     2. Dressed quantum circuit processes features
     3. Outputs class logits
-    
+
     Architecture:
         [Image] → [ResNet18] → [512 features] → [L_512→n] → [VQC] → [L_n→2] → [2 classes]
-    
+
     Supports both MerLin (photonic) and PennyLane (qubit) backends.
     """
 
@@ -197,10 +193,10 @@ class CQTransferModel(nn.Module):
         pretrained: bool = True,
         freeze_extractor: bool = True,
         backend: str = "merlin",
-        **kwargs
+        **kwargs,
     ):
         """Initialize CQ transfer learning model.
-        
+
         Args:
             n_outputs: Number of output classes
             n_qubits: Number of qubits/modes
@@ -217,9 +213,7 @@ class CQTransferModel(nn.Module):
 
         # Feature extractor (classical pre-trained)
         self.feature_extractor = FeatureExtractor(
-            model_name=feature_extractor,
-            pretrained=pretrained,
-            freeze=freeze_extractor
+            model_name=feature_extractor, pretrained=pretrained, freeze=freeze_extractor
         )
 
         n_features = self.feature_extractor.n_features
@@ -231,15 +225,15 @@ class CQTransferModel(nn.Module):
             n_qubits=n_qubits,
             q_depth=q_depth,
             backend=backend,
-            **kwargs
+            **kwargs,
         )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """Forward pass: image → features → quantum → logits.
-        
+
         Args:
             x: Input images of shape (batch_size, 3, H, W)
-            
+
         Returns:
             Class logits of shape (batch_size, n_outputs)
         """
@@ -258,7 +252,7 @@ class CQTransferModel(nn.Module):
 
 class MerLinCQTransferModel(nn.Module):
     """MerLin-specific CQ Transfer Learning Model.
-    
+
     Uses MerLin's QuantumLayer.simple() for a quick-start photonic circuit.
     """
 
@@ -267,10 +261,10 @@ class MerLinCQTransferModel(nn.Module):
         n_outputs: int = 2,
         n_params: int = 90,
         feature_extractor: str = "resnet18",
-        computation_space: str = "unbunched"
+        computation_space: str = "unbunched",
     ):
         """Initialize MerLin-specific CQ model.
-        
+
         Args:
             n_outputs: Number of output classes
             n_params: Number of trainable quantum parameters
@@ -281,24 +275,17 @@ class MerLinCQTransferModel(nn.Module):
 
         # Feature extractor
         self.feature_extractor = FeatureExtractor(
-            model_name=feature_extractor,
-            pretrained=True,
-            freeze=True
+            model_name=feature_extractor, pretrained=True, freeze=True
         )
 
         n_features = self.feature_extractor.n_features
 
         # Dimensionality reduction to match quantum layer input
-        self.pre_quantum = nn.Sequential(
-            nn.Linear(n_features, 6),
-            nn.Tanh()
-        )
+        self.pre_quantum = nn.Sequential(nn.Linear(n_features, 6), nn.Tanh())
 
         # MerLin quantum layer using simple() factory
         self.quantum_layer = MerLinSimpleLayer(
-            input_size=6,
-            n_params=n_params,
-            computation_space=computation_space
+            input_size=6, n_params=n_params, computation_space=computation_space
         )
 
         # Post-processing
@@ -315,10 +302,10 @@ class MerLinCQTransferModel(nn.Module):
 
 class MerLinVQCModel(nn.Module):
     """MerLin VQC model following the paper reproduction pattern.
-    
+
     Architecture:
         [ScaleLayer] → [MerLin QuantumLayer] → [Linear] → [output]
-    
+
     Similar to the VQC example in MerLin documentation.
     """
 
@@ -330,10 +317,10 @@ class MerLinVQCModel(nn.Module):
         n_photons: int = 2,
         computation_space: str = "unbunched",
         scale_type: str = "learned",
-        activation: str = "none"
+        activation: str = "none",
     ):
         """Initialize MerLin VQC model.
-        
+
         Args:
             n_inputs: Number of input features
             n_outputs: Number of output classes
@@ -359,7 +346,7 @@ class MerLinVQCModel(nn.Module):
             n_modes=n_modes,
             n_features=n_modes,
             n_photons=n_photons,
-            computation_space=computation_space
+            computation_space=computation_space,
         )
 
         # Output layer
@@ -367,13 +354,11 @@ class MerLinVQCModel(nn.Module):
             self.output_layer = nn.Linear(self.quantum_layer.output_size, n_outputs)
         elif activation == "sigmoid":
             self.output_layer = nn.Sequential(
-                nn.Linear(self.quantum_layer.output_size, n_outputs),
-                nn.Sigmoid()
+                nn.Linear(self.quantum_layer.output_size, n_outputs), nn.Sigmoid()
             )
         elif activation == "softmax":
             self.output_layer = nn.Sequential(
-                nn.Linear(self.quantum_layer.output_size, n_outputs),
-                nn.Softmax(dim=1)
+                nn.Linear(self.quantum_layer.output_size, n_outputs), nn.Softmax(dim=1)
             )
         else:
             self.output_layer = nn.Linear(self.quantum_layer.output_size, n_outputs)
@@ -388,13 +373,13 @@ class MerLinVQCModel(nn.Module):
         return x
 
 
-def create_model(config: Dict[str, Any], backend: str = "merlin") -> nn.Module:
+def create_model(config: dict[str, Any], backend: str = "merlin") -> nn.Module:
     """Factory function to create models from config.
-    
+
     Args:
         config: Model configuration dictionary
         backend: 'merlin' or 'pennylane'
-        
+
     Returns:
         Initialized model
     """
@@ -408,7 +393,7 @@ def create_model(config: Dict[str, Any], backend: str = "merlin") -> nn.Module:
             q_depth=config.get("q_depth", 5),
             backend=backend,
             n_photons=config.get("n_photons", 2),
-            computation_space=config.get("computation_space", "unbunched")
+            computation_space=config.get("computation_space", "unbunched"),
         )
 
     elif model_type == "cq_transfer":
@@ -419,7 +404,7 @@ def create_model(config: Dict[str, Any], backend: str = "merlin") -> nn.Module:
             feature_extractor=config.get("feature_extractor", "resnet18"),
             backend=backend,
             n_photons=config.get("n_photons", 2),
-            computation_space=config.get("computation_space", "unbunched")
+            computation_space=config.get("computation_space", "unbunched"),
         )
 
     elif model_type == "merlin_vqc":
@@ -430,7 +415,7 @@ def create_model(config: Dict[str, Any], backend: str = "merlin") -> nn.Module:
             n_photons=config.get("n_photons", 2),
             computation_space=config.get("computation_space", "unbunched"),
             scale_type=config.get("scale_type", "learned"),
-            activation=config.get("activation", "none")
+            activation=config.get("activation", "none"),
         )
 
     elif model_type == "merlin_simple_cq":
@@ -438,7 +423,7 @@ def create_model(config: Dict[str, Any], backend: str = "merlin") -> nn.Module:
             n_outputs=config.get("n_outputs", 2),
             n_params=config.get("n_params", 90),
             feature_extractor=config.get("feature_extractor", "resnet18"),
-            computation_space=config.get("computation_space", "unbunched")
+            computation_space=config.get("computation_space", "unbunched"),
         )
 
     elif model_type == "classical":
@@ -446,7 +431,7 @@ def create_model(config: Dict[str, Any], backend: str = "merlin") -> nn.Module:
             n_inputs=config.get("n_inputs", 2),
             n_outputs=config.get("n_outputs", 2),
             hidden_sizes=config.get("hidden_sizes", [4]),
-            activation=config.get("activation", "tanh")
+            activation=config.get("activation", "tanh"),
         )
 
     else:

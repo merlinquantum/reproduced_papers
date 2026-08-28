@@ -12,7 +12,7 @@ import logging
 import urllib.request
 import zipfile
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import Optional
 
 import numpy as np
 import torch
@@ -25,20 +25,18 @@ logger = logging.getLogger(__name__)
 
 
 def generate_spiral_data(
-    n_samples: int,
-    noise: float = 0.0,
-    seed: Optional[int] = None
-) -> Tuple[np.ndarray, np.ndarray]:
+    n_samples: int, noise: float = 0.0, seed: Optional[int] = None
+) -> tuple[np.ndarray, np.ndarray]:
     """Generate 2D spiral dataset.
-    
+
     Creates two interleaved spirals for binary classification,
     matching the dataset in Figure 2 of the paper.
-    
+
     Args:
         n_samples: Total number of samples (split evenly between classes)
         noise: Standard deviation of Gaussian noise
         seed: Random seed
-        
+
     Returns:
         X: Features of shape (n_samples, 2)
         y: Labels of shape (n_samples,)
@@ -62,14 +60,8 @@ def generate_spiral_data(
     y1 = r1 * np.sin(theta)
 
     # Combine
-    X = np.vstack([
-        np.column_stack([x0, y0]),
-        np.column_stack([x1, y1])
-    ])
-    y = np.hstack([
-        np.zeros(n_per_class),
-        np.ones(n_per_class)
-    ])
+    X = np.vstack([np.column_stack([x0, y0]), np.column_stack([x1, y1])])
+    y = np.hstack([np.zeros(n_per_class), np.ones(n_per_class)])
 
     # Add noise
     if noise > 0:
@@ -90,13 +82,10 @@ class SpiralDataset(Dataset):
     """PyTorch Dataset for 2D spiral data."""
 
     def __init__(
-        self,
-        n_samples: int = 2200,
-        noise: float = 0.0,
-        seed: Optional[int] = None
+        self, n_samples: int = 2200, noise: float = 0.0, seed: Optional[int] = None
     ):
         """Initialize spiral dataset.
-        
+
         Args:
             n_samples: Number of samples
             noise: Gaussian noise std
@@ -107,13 +96,13 @@ class SpiralDataset(Dataset):
     def __len__(self) -> int:
         return len(self.y)
 
-    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, torch.Tensor]:
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, torch.Tensor]:
         return torch.tensor(self.X[idx]), torch.tensor(self.y[idx])
 
 
 class HymenopteraDataset(Dataset):
     """Hymenoptera dataset (ants vs bees) for transfer learning.
-    
+
     Downloads and prepares the dataset used in Example 2 of the paper.
     """
 
@@ -124,10 +113,10 @@ class HymenopteraDataset(Dataset):
         root: str = "data",
         train: bool = True,
         download: bool = True,
-        image_size: int = 224
+        image_size: int = 224,
     ):
         """Initialize Hymenoptera dataset.
-        
+
         Args:
             root: Root directory for data
             train: If True, use training split; else test split
@@ -149,19 +138,23 @@ class HymenopteraDataset(Dataset):
 
         # Define transforms (matching ResNet preprocessing)
         if train:
-            self.transform = transforms.Compose([
-                transforms.RandomResizedCrop(image_size),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-            ])
+            self.transform = transforms.Compose(
+                [
+                    transforms.RandomResizedCrop(image_size),
+                    transforms.RandomHorizontalFlip(),
+                    transforms.ToTensor(),
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+                ]
+            )
         else:
-            self.transform = transforms.Compose([
-                transforms.Resize(256),
-                transforms.CenterCrop(image_size),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-            ])
+            self.transform = transforms.Compose(
+                [
+                    transforms.Resize(256),
+                    transforms.CenterCrop(image_size),
+                    transforms.ToTensor(),
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+                ]
+            )
 
         # Load image paths and labels
         self.classes = ["ants", "bees"]
@@ -174,7 +167,9 @@ class HymenopteraDataset(Dataset):
                 for img_path in class_dir.glob("*.jpg"):
                     self.samples.append((img_path, self.class_to_idx[class_name]))
 
-        logger.info(f"Loaded {len(self.samples)} images for {'train' if train else 'test'}")
+        logger.info(
+            f"Loaded {len(self.samples)} images for {'train' if train else 'test'}"
+        )
 
     def _download(self):
         """Download and extract the dataset."""
@@ -186,7 +181,7 @@ class HymenopteraDataset(Dataset):
         urllib.request.urlretrieve(self.DOWNLOAD_URL, zip_path)
 
         logger.info("Extracting...")
-        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        with zipfile.ZipFile(zip_path, "r") as zip_ref:
             zip_ref.extractall(self.root)
 
         zip_path.unlink()
@@ -195,7 +190,7 @@ class HymenopteraDataset(Dataset):
     def __len__(self) -> int:
         return len(self.samples)
 
-    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, int]:
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, int]:
         img_path, label = self.samples[idx]
         image = Image.open(img_path).convert("RGB")
         image = self.transform(image)
@@ -204,7 +199,7 @@ class HymenopteraDataset(Dataset):
 
 class CIFAR10Binary(Dataset):
     """Binary subset of CIFAR-10 for transfer learning experiments.
-    
+
     Filters CIFAR-10 to only include two specified classes,
     as done in Example 3 of the paper.
     """
@@ -214,11 +209,11 @@ class CIFAR10Binary(Dataset):
         root: str = "data",
         train: bool = True,
         download: bool = True,
-        classes: List[int] = [3, 5],  # Default: cat, dog
-        image_size: int = 224
+        classes: list[int] = None,  # Default: cat, dog
+        image_size: int = 224,
     ):
         """Initialize CIFAR-10 binary dataset.
-        
+
         Args:
             root: Root directory for data
             train: If True, use training split
@@ -226,29 +221,43 @@ class CIFAR10Binary(Dataset):
             classes: Two class indices to include
             image_size: Size to resize images
         """
+        if classes is None:
+            classes = [3, 5]
         self.classes = classes
         self.image_size = image_size
 
         # CIFAR class names for reference
         self.cifar_classes = [
-            'airplane', 'automobile', 'bird', 'cat', 'deer',
-            'dog', 'frog', 'horse', 'ship', 'truck'
+            "airplane",
+            "automobile",
+            "bird",
+            "cat",
+            "deer",
+            "dog",
+            "frog",
+            "horse",
+            "ship",
+            "truck",
         ]
 
         # Define transforms
         if train:
-            self.transform = transforms.Compose([
-                transforms.Resize((image_size, image_size)),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-            ])
+            self.transform = transforms.Compose(
+                [
+                    transforms.Resize((image_size, image_size)),
+                    transforms.RandomHorizontalFlip(),
+                    transforms.ToTensor(),
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+                ]
+            )
         else:
-            self.transform = transforms.Compose([
-                transforms.Resize((image_size, image_size)),
-                transforms.ToTensor(),
-                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
-            ])
+            self.transform = transforms.Compose(
+                [
+                    transforms.Resize((image_size, image_size)),
+                    transforms.ToTensor(),
+                    transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]),
+                ]
+            )
 
         # Load full CIFAR-10
         full_dataset = torchvision.datasets.CIFAR10(
@@ -273,24 +282,22 @@ class CIFAR10Binary(Dataset):
     def __len__(self) -> int:
         return len(self.dataset)
 
-    def __getitem__(self, idx: int) -> Tuple[torch.Tensor, int]:
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, int]:
         image, orig_label = self.dataset[idx]
         binary_label = self.label_map[orig_label]
         return image, binary_label
 
 
 def create_dataloaders(
-    dataset_name: str,
-    config: dict,
-    seed: int = 42
-) -> Tuple[DataLoader, DataLoader]:
+    dataset_name: str, config: dict, seed: int = 42
+) -> tuple[DataLoader, DataLoader]:
     """Create train and test dataloaders from config.
-    
+
     Args:
         dataset_name: Name of dataset ('spiral', 'hymenoptera', 'cifar10')
         config: Dataset configuration
         seed: Random seed
-        
+
     Returns:
         train_loader, test_loader
     """
@@ -301,7 +308,7 @@ def create_dataloaders(
         dataset = SpiralDataset(
             n_samples=config.get("n_samples", 2200),
             noise=config.get("noise", 0.0),
-            seed=seed
+            seed=seed,
         )
 
         n_train = config.get("n_train", 2000)
@@ -318,13 +325,13 @@ def create_dataloaders(
             root=config.get("root", "data"),
             train=True,
             download=config.get("download", True),
-            image_size=config.get("image_size", 224)
+            image_size=config.get("image_size", 224),
         )
         test_dataset = HymenopteraDataset(
             root=config.get("root", "data"),
             train=False,
             download=config.get("download", True),
-            image_size=config.get("image_size", 224)
+            image_size=config.get("image_size", 224),
         )
         batch_size = config.get("batch_size", 4)
 
@@ -334,14 +341,14 @@ def create_dataloaders(
             train=True,
             download=config.get("download", True),
             classes=config.get("classes", [3, 5]),
-            image_size=config.get("image_size", 224)
+            image_size=config.get("image_size", 224),
         )
         test_dataset = CIFAR10Binary(
             root=config.get("root", "data"),
             train=False,
             download=config.get("download", True),
             classes=config.get("classes", [3, 5]),
-            image_size=config.get("image_size", 224)
+            image_size=config.get("image_size", 224),
         )
         batch_size = config.get("batch_size", 8)
 
@@ -352,14 +359,11 @@ def create_dataloaders(
         train_dataset,
         batch_size=batch_size,
         shuffle=True,
-        num_workers=0  # Avoid multiprocessing issues with quantum
+        num_workers=0,  # Avoid multiprocessing issues with quantum
     )
 
     test_loader = DataLoader(
-        test_dataset,
-        batch_size=batch_size,
-        shuffle=False,
-        num_workers=0
+        test_dataset, batch_size=batch_size, shuffle=False, num_workers=0
     )
 
     return train_loader, test_loader

@@ -18,7 +18,7 @@ PennyLane uses qubit circuits with:
 """
 
 import random
-from typing import List, Optional
+from typing import Optional
 
 # MerLin imports
 import numpy as np
@@ -34,6 +34,7 @@ from merlin.measurement import MeasurementStrategy
 # =============================================================================
 # MerLin Photonic Implementation (Primary)
 # =============================================================================
+
 
 def create_merlin_vqc_circuit(n_modes: int, n_features: int) -> pcvl.Circuit:
     """Create a variational quantum circuit using Perceval.
@@ -51,8 +52,10 @@ def create_merlin_vqc_circuit(n_modes: int, n_features: int) -> pcvl.Circuit:
     # Left beam splitter mesh (trainable)
     bs_left = pcvl.GenericInterferometer(
         n_modes,
-        lambda idx: pcvl.BS(theta=pcvl.P(f"theta_l{idx}"))
-                    // (0, pcvl.PS(phi=np.pi * 2 * random.random())),
+        lambda idx: (
+            pcvl.BS(theta=pcvl.P(f"theta_l{idx}"))
+            // (0, pcvl.PS(phi=np.pi * 2 * random.random()))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
         depth=2 * n_modes,
         phase_shifter_fun_gen=lambda idx: pcvl.PS(phi=np.pi * 2 * random.random()),
@@ -69,8 +72,10 @@ def create_merlin_vqc_circuit(n_modes: int, n_features: int) -> pcvl.Circuit:
     # Right beam splitter mesh (trainable)
     bs_right = pcvl.GenericInterferometer(
         n_modes,
-        lambda idx: pcvl.BS(theta=pcvl.P(f"theta_r{idx}"))
-                    // (0, pcvl.PS(phi=np.pi * 2 * random.random())),
+        lambda idx: (
+            pcvl.BS(theta=pcvl.P(f"theta_r{idx}"))
+            // (0, pcvl.PS(phi=np.pi * 2 * random.random()))
+        ),
         shape=pcvl.InterferometerShape.RECTANGLE,
         depth=2 * n_modes,
         phase_shifter_fun_gen=lambda idx: pcvl.PS(phi=np.pi * 2 * random.random()),
@@ -85,7 +90,9 @@ def create_merlin_vqc_circuit(n_modes: int, n_features: int) -> pcvl.Circuit:
     return circuit
 
 
-def create_merlin_deep_circuit(n_modes: int, n_features: int, depth: int) -> pcvl.Circuit:
+def create_merlin_deep_circuit(
+    n_modes: int, n_features: int, depth: int
+) -> pcvl.Circuit:
     """Create a deeper variational circuit with multiple encoding layers.
 
     Architecture: [BS Mesh] → [Encode] → [BS Mesh] → [Encode] → ... → [BS Mesh]
@@ -104,8 +111,10 @@ def create_merlin_deep_circuit(n_modes: int, n_features: int, depth: int) -> pcv
         # Trainable beam splitter mesh
         bs_mesh = pcvl.GenericInterferometer(
             n_modes,
-            lambda idx, l=layer: pcvl.BS(theta=pcvl.P(f"theta_{l}_{idx}"))
-                                 // (0, pcvl.PS(phi=np.pi * 2 * random.random())),
+            lambda idx, lyr=layer: (
+                pcvl.BS(theta=pcvl.P(f"theta_{lyr}_{idx}"))
+                // (0, pcvl.PS(phi=np.pi * 2 * random.random()))
+            ),
             shape=pcvl.InterferometerShape.RECTANGLE,
             depth=n_modes,
             phase_shifter_fun_gen=lambda idx: pcvl.PS(phi=np.pi * 2 * random.random()),
@@ -131,13 +140,13 @@ class MerLinQuantumLayer(nn.Module):
     """
 
     def __init__(
-            self,
-            n_modes: int = 4,
-            n_features: int = 2,
-            n_photons: int = 2,
-            q_depth: int = 1,
-            computation_space: str = "unbunched",
-            measurement_strategy: str = "probabilities"
+        self,
+        n_modes: int = 4,
+        n_features: int = 2,
+        n_photons: int = 2,
+        q_depth: int = 1,
+        computation_space: str = "unbunched",
+        measurement_strategy: str = "probabilities",
     ):
         """Initialize MerLin quantum layer.
 
@@ -167,7 +176,7 @@ class MerLinQuantumLayer(nn.Module):
 
         # Determine trainable vs input parameters
         all_params = [p.name for p in circuit.get_parameters()]
-        input_params = [p for p in all_params if p.startswith("x")]
+        [p for p in all_params if p.startswith("x")]
         trainable_params = [p for p in all_params if not p.startswith("x")]
 
         # Create initial state (dual-rail style)
@@ -194,7 +203,7 @@ class MerLinQuantumLayer(nn.Module):
 
         self._output_size = self.quantum_layer.output_size
 
-    def _create_input_state(self, n_modes: int, n_photons: int) -> List[int]:
+    def _create_input_state(self, n_modes: int, n_photons: int) -> list[int]:
         """Create initial Fock state (dual-rail style: [1,0,1,0,...])."""
         state = [0] * n_modes
         for i in range(min(n_photons, n_modes)):
@@ -245,14 +254,14 @@ class MerLinDressedCircuit(nn.Module):
     """
 
     def __init__(
-            self,
-            n_inputs: int,
-            n_outputs: int,
-            n_modes: int = 4,
-            n_photons: int = 2,
-            q_depth: int = 1,
-            computation_space: str = "unbunched",
-            scale_type: str = "learned"
+        self,
+        n_inputs: int,
+        n_outputs: int,
+        n_modes: int = 4,
+        n_photons: int = 2,
+        q_depth: int = 1,
+        computation_space: str = "unbunched",
+        scale_type: str = "learned",
     ):
         """Initialize dressed MerLin circuit.
 
@@ -273,10 +282,7 @@ class MerLinDressedCircuit(nn.Module):
 
         # Pre-processing: scale and project to n_modes features
         self.scale_layer = ScaleLayer(n_inputs, scale_type=scale_type)
-        self.pre_layer = nn.Sequential(
-            nn.Linear(n_inputs, n_modes),
-            nn.Tanh()
-        )
+        self.pre_layer = nn.Sequential(nn.Linear(n_inputs, n_modes), nn.Tanh())
 
         # Quantum layer
         self.quantum_layer = MerLinQuantumLayer(
@@ -284,7 +290,7 @@ class MerLinDressedCircuit(nn.Module):
             n_features=n_modes,  # After pre-processing
             n_photons=n_photons,
             q_depth=q_depth,
-            computation_space=computation_space
+            computation_space=computation_space,
         )
 
         # Post-processing
@@ -302,10 +308,9 @@ class MerLinDressedCircuit(nn.Module):
         x = self.quantum_layer(x)
 
         # Ensure we're on the right device before post-processing
-        #x = x.to(input_device)
+        # x = x.to(input_device)
         x = x.float().to(input_device)
         x = self.post_layer(x)
-
 
         return x
 
@@ -348,11 +353,11 @@ class MerLinSimpleLayer(nn.Module):
     """
 
     def __init__(
-            self,
-            input_size: int,
-            n_params: int = 90,
-            output_size: Optional[int] = None,
-            computation_space: str = "unbunched"
+        self,
+        input_size: int,
+        n_params: int = 90,
+        output_size: Optional[int] = None,
+        computation_space: str = "unbunched",
     ):
         """Initialize simple MerLin layer.
 
@@ -389,19 +394,20 @@ class MerLinSimpleLayer(nn.Module):
 # PennyLane Qubit Implementation (Reference/Comparison)
 # =============================================================================
 
+
 def create_pennylane_device(n_qubits: int, shots: Optional[int] = None):
     """Create a PennyLane quantum device."""
     return qml.device("default.qubit", wires=n_qubits, shots=shots)
 
 
-def pennylane_embedding(x: torch.Tensor, wires: List[int]):
+def pennylane_embedding(x: torch.Tensor, wires: list[int]):
     """Angle embedding for PennyLane (H + RY encoding)."""
     for i, wire in enumerate(wires):
         qml.Hadamard(wires=wire)
         qml.RY(x[i] * np.pi / 2, wires=wire)
 
 
-def pennylane_variational_layer(weights: torch.Tensor, wires: List[int]):
+def pennylane_variational_layer(weights: torch.Tensor, wires: list[int]):
     """Variational layer: RY rotations + CNOT ladder."""
     n_qubits = len(wires)
 
@@ -419,10 +425,7 @@ class PennyLaneQuantumLayer(nn.Module):
     """
 
     def __init__(
-            self,
-            n_qubits: int = 4,
-            q_depth: int = 5,
-            shots: Optional[int] = None
+        self, n_qubits: int = 4, q_depth: int = 5, shots: Optional[int] = None
     ):
         """Initialize PennyLane circuit.
 
@@ -462,7 +465,6 @@ class PennyLaneQuantumLayer(nn.Module):
         # Save input device
         input_device = x.device
 
-
         batch_size = x.shape[0]
         outputs = []
 
@@ -480,24 +482,14 @@ class PennyLaneDressedCircuit(nn.Module):
     """Dressed quantum circuit using PennyLane (qubit-based)."""
 
     def __init__(
-            self,
-            n_inputs: int,
-            n_outputs: int,
-            n_qubits: int = 4,
-            q_depth: int = 5
+        self, n_inputs: int, n_outputs: int, n_qubits: int = 4, q_depth: int = 5
     ):
         """Initialize PennyLane dressed circuit."""
         super().__init__()
 
-        self.pre_layer = nn.Sequential(
-            nn.Linear(n_inputs, n_qubits),
-            nn.Tanh()
-        )
+        self.pre_layer = nn.Sequential(nn.Linear(n_inputs, n_qubits), nn.Tanh())
 
-        self.quantum_layer = PennyLaneQuantumLayer(
-            n_qubits=n_qubits,
-            q_depth=q_depth
-        )
+        self.quantum_layer = PennyLaneQuantumLayer(n_qubits=n_qubits, q_depth=q_depth)
 
         self.post_layer = nn.Linear(n_qubits, n_outputs)
 
@@ -520,6 +512,7 @@ class PennyLaneDressedCircuit(nn.Module):
 # Unified Interface
 # =============================================================================
 
+
 class DressedQuantumCircuit(nn.Module):
     """Unified dressed quantum circuit supporting both backends.
 
@@ -528,13 +521,13 @@ class DressedQuantumCircuit(nn.Module):
     """
 
     def __init__(
-            self,
-            n_inputs: int,
-            n_outputs: int,
-            n_qubits: int = 4,
-            q_depth: int = 5,
-            backend: str = "merlin",
-            **kwargs
+        self,
+        n_inputs: int,
+        n_outputs: int,
+        n_qubits: int = 4,
+        q_depth: int = 5,
+        backend: str = "merlin",
+        **kwargs,
     ):
         """Initialize dressed circuit with specified backend."""
         super().__init__()
@@ -549,14 +542,14 @@ class DressedQuantumCircuit(nn.Module):
                 n_photons=kwargs.get("n_photons", 2),
                 q_depth=kwargs.get("merlin_depth", 1),
                 computation_space=kwargs.get("computation_space", "unbunched"),
-                scale_type=kwargs.get("scale_type", "learned")
+                scale_type=kwargs.get("scale_type", "learned"),
             )
         else:  # pennylane
             self.circuit = PennyLaneDressedCircuit(
                 n_inputs=n_inputs,
                 n_outputs=n_outputs,
                 n_qubits=n_qubits,
-                q_depth=q_depth
+                q_depth=q_depth,
             )
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -567,11 +560,7 @@ class VariationalCircuit(nn.Module):
     """Unified variational circuit supporting both backends."""
 
     def __init__(
-            self,
-            n_qubits: int = 4,
-            q_depth: int = 5,
-            backend: str = "merlin",
-            **kwargs
+        self, n_qubits: int = 4, q_depth: int = 5, backend: str = "merlin", **kwargs
     ):
         """Initialize variational circuit."""
         super().__init__()
@@ -586,16 +575,13 @@ class VariationalCircuit(nn.Module):
                 n_features=n_qubits,
                 n_photons=kwargs.get("n_photons", 2),
                 q_depth=kwargs.get("merlin_depth", 1),
-                computation_space=kwargs.get("computation_space", "unbunched")
+                computation_space=kwargs.get("computation_space", "unbunched"),
             )
         else:
-            self.circuit = PennyLaneQuantumLayer(
-                n_qubits=n_qubits,
-                q_depth=q_depth
-            )
+            self.circuit = PennyLaneQuantumLayer(n_qubits=n_qubits, q_depth=q_depth)
 
         # For compatibility
-        if hasattr(self.circuit, 'weights'):
+        if hasattr(self.circuit, "weights"):
             self.weights = self.circuit.weights
 
     @property

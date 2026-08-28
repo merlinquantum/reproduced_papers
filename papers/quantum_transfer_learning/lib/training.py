@@ -7,7 +7,7 @@ Training loops, optimization, and evaluation for hybrid models.
 
 import logging
 import time
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Optional
 
 import torch
 import torch.nn as nn
@@ -23,17 +23,17 @@ def train_epoch(
     train_loader: DataLoader,
     optimizer: optim.Optimizer,
     criterion: nn.Module,
-    device: torch.device
-) -> Tuple[float, float]:
+    device: torch.device,
+) -> tuple[float, float]:
     """Train for one epoch.
-    
+
     Args:
         model: Model to train
         train_loader: Training data loader
         optimizer: Optimizer
         criterion: Loss function
         device: Torch device
-        
+
     Returns:
         avg_loss: Average loss over epoch
         accuracy: Training accuracy
@@ -44,7 +44,7 @@ def train_epoch(
     correct = 0
     total = 0
 
-    for batch_idx, (data, target) in enumerate(train_loader):
+    for _batch_idx, (data, target) in enumerate(train_loader):
         data, target = data.to(device), target.to(device)
 
         optimizer.zero_grad()
@@ -68,16 +68,16 @@ def evaluate(
     model: nn.Module,
     test_loader: DataLoader,
     criterion: nn.Module,
-    device: torch.device
-) -> Tuple[float, float]:
+    device: torch.device,
+) -> tuple[float, float]:
     """Evaluate model on test set.
-    
+
     Args:
         model: Model to evaluate
         test_loader: Test data loader
         criterion: Loss function
         device: Torch device
-        
+
     Returns:
         avg_loss: Average test loss
         accuracy: Test accuracy
@@ -114,11 +114,13 @@ class Trainer:
         model: nn.Module,
         train_loader: DataLoader,
         test_loader: DataLoader,
-        config: Dict[str, Any],
-        device: torch.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        config: dict[str, Any],
+        device: torch.device = torch.device(
+            "cuda" if torch.cuda.is_available() else "cpu"
+        ),
     ):
         """Initialize trainer.
-        
+
         Args:
             model: Model to train
             train_loader: Training data
@@ -131,7 +133,6 @@ class Trainer:
         self.test_loader = test_loader
         self.config = config
         self.device = device
-
 
         # Loss function
         self.criterion = nn.CrossEntropyLoss()
@@ -154,7 +155,7 @@ class Trainer:
                 self.scheduler = optim.lr_scheduler.StepLR(
                     self.optimizer,
                     step_size=lr_config.get("step_size", 10),
-                    gamma=lr_config.get("gamma", 0.1)
+                    gamma=lr_config.get("gamma", 0.1),
                 )
             else:
                 self.scheduler = None
@@ -167,7 +168,7 @@ class Trainer:
             "train_acc": [],
             "test_loss": [],
             "test_acc": [],
-            "epoch_times": []
+            "epoch_times": [],
         }
 
     def train(
@@ -175,16 +176,16 @@ class Trainer:
         epochs: int,
         verbose: bool = True,
         save_best: bool = True,
-        save_path: Optional[str] = None
-    ) -> Dict[str, Any]:
+        save_path: Optional[str] = None,
+    ) -> dict[str, Any]:
         """Train the model.
-        
+
         Args:
             epochs: Number of epochs
             verbose: Print progress
             save_best: Save best model
             save_path: Path to save model
-            
+
         Returns:
             Training history and best accuracy
         """
@@ -193,13 +194,16 @@ class Trainer:
 
         pbar = tqdm(range(epochs), disable=not verbose)
 
-        for epoch in pbar:
+        for _epoch in pbar:
             start_time = time.time()
 
             # Train
             train_loss, train_acc = train_epoch(
-                self.model, self.train_loader, self.optimizer,
-                self.criterion, self.device
+                self.model,
+                self.train_loader,
+                self.optimizer,
+                self.criterion,
+                self.device,
             )
 
             # Evaluate
@@ -241,7 +245,7 @@ class Trainer:
             "history": self.history,
             "best_accuracy": best_acc,
             "final_accuracy": self.history["test_acc"][-1],
-            "total_time": sum(self.history["epoch_times"])
+            "total_time": sum(self.history["epoch_times"]),
         }
 
         return results
@@ -251,12 +255,12 @@ def train_model(
     model: nn.Module,
     train_loader: DataLoader,
     test_loader: DataLoader,
-    config: Dict[str, Any],
+    config: dict[str, Any],
     device: torch.device = torch.device("cpu"),
-    save_path: Optional[str] = None
-) -> Dict[str, Any]:
+    save_path: Optional[str] = None,
+) -> dict[str, Any]:
     """Convenience function to train a model.
-    
+
     Args:
         model: Model to train
         train_loader: Training data
@@ -264,7 +268,7 @@ def train_model(
         config: Training configuration
         device: Torch device
         save_path: Path to save model
-        
+
     Returns:
         Training results
     """
@@ -272,10 +276,7 @@ def train_model(
 
     epochs = config.get("epochs", 30)
     results = trainer.train(
-        epochs=epochs,
-        verbose=True,
-        save_best=True,
-        save_path=save_path
+        epochs=epochs, verbose=True, save_best=True, save_path=save_path
     )
 
     return results

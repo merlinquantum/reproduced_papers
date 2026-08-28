@@ -15,7 +15,7 @@ import logging
 import random
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 import numpy as np
 import torch
@@ -33,7 +33,9 @@ from .visualization import (
 logger = logging.getLogger(__name__)
 
 
-def _save_training_artifacts(results: Dict[str, Any], run_dir: Path, experiment: str) -> None:
+def _save_training_artifacts(
+    results: dict[str, Any], run_dir: Path, experiment: str
+) -> None:
     """Save training artifacts (losses CSV, best epoch info).
 
     Args:
@@ -60,11 +62,13 @@ def _save_training_artifacts(results: Dict[str, Any], run_dir: Path, experiment:
                 with csv_path.open("w") as f:
                     f.write("epoch,train_loss,train_acc,test_loss,test_acc\n")
                     for i in range(len(train_losses)):
-                        f.write(f"{i + 1},"
-                                f"{train_losses[i]:.6f},"
-                                f"{train_accs[i] if i < len(train_accs) else 0:.4f},"
-                                f"{test_losses[i] if i < len(test_losses) else 0:.6f},"
-                                f"{test_accs[i] if i < len(test_accs) else 0:.4f}\n")
+                        f.write(
+                            f"{i + 1},"
+                            f"{train_losses[i]:.6f},"
+                            f"{train_accs[i] if i < len(train_accs) else 0:.4f},"
+                            f"{test_losses[i] if i < len(test_losses) else 0:.6f},"
+                            f"{test_accs[i] if i < len(test_accs) else 0:.4f}\n"
+                        )
                 logger.info(f"Saved losses CSV: {csv_path}")
     except Exception as e:
         logger.warning(f"Failed to write losses.csv: {e}")
@@ -111,7 +115,7 @@ def make_json_serializable(obj: Any) -> Any:
         return str(obj)
 
 
-def get_device(config: Dict[str, Any]) -> torch.device:
+def get_device(config: dict[str, Any]) -> torch.device:
     """Get torch device with proper CUDA detection and diagnostics.
 
     Args:
@@ -138,7 +142,7 @@ def get_device(config: Dict[str, Any]) -> torch.device:
         logger.info(f"CUDA available: {gpu_name} ({gpu_memory:.1f} GB)")
         logger.info(f"CUDA version: {torch.version.cuda}")
         logger.info(f"cuDNN version: {torch.backends.cudnn.version()}")
-    elif hasattr(torch.backends, 'mps') and torch.backends.mps.is_available():
+    elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
         # Apple Silicon GPU support
         device = torch.device("mps")
         logger.info("Using Apple MPS (Metal Performance Shaders)")
@@ -150,7 +154,9 @@ def get_device(config: Dict[str, Any]) -> torch.device:
         logger.warning(f"  PyTorch CUDA version: {torch.version.cuda}")
         if torch.version.cuda is None:
             logger.warning("  PyTorch was built WITHOUT CUDA support!")
-            logger.warning("  Reinstall with: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121")
+            logger.warning(
+                "  Reinstall with: pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121"
+            )
         else:
             logger.warning("  CUDA runtime may not be installed or GPU not detected")
             logger.warning("  Check: nvidia-smi")
@@ -187,12 +193,12 @@ def setup_logging(level: str = "info"):
         "debug": logging.DEBUG,
         "info": logging.INFO,
         "warning": logging.WARNING,
-        "error": logging.ERROR
+        "error": logging.ERROR,
     }
 
     logging.basicConfig(
         level=level_map.get(level.lower(), logging.INFO),
-        format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+        format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
 
 
@@ -212,10 +218,8 @@ def create_run_dir(base_dir: str = "outdir") -> Path:
 
 
 def run_spiral_experiment(
-        config: Dict[str, Any],
-        run_dir: Path,
-        device: torch.device
-) -> Dict[str, Any]:
+    config: dict[str, Any], run_dir: Path, device: torch.device
+) -> dict[str, Any]:
     """Run Example 1: 2D spiral classification.
 
     Args:
@@ -241,13 +245,12 @@ def run_spiral_experiment(
     train_loader, test_loader = create_dataloaders(
         "spiral",
         {**dataset_config, "batch_size": training_config.get("batch_size", 10)},
-        seed=config.get("seed", 42)
+        seed=config.get("seed", 42),
     )
 
     # Get raw data for visualization
     spiral_data = SpiralDataset(
-        n_samples=dataset_config.get("n_samples", 2200),
-        seed=config.get("seed", 42)
+        n_samples=dataset_config.get("n_samples", 2200), seed=config.get("seed", 42)
     )
     X_all, y_all = spiral_data.X, spiral_data.y
     n_train = dataset_config.get("n_train", 2000)
@@ -267,30 +270,39 @@ def run_spiral_experiment(
         n_photons=model_config.get("n_photons", 2),
         computation_space=model_config.get("computation_space", "unbunched"),
         merlin_depth=model_config.get("merlin_depth", 1),
-        scale_type=model_config.get("scale_type", "learned")
+        scale_type=model_config.get("scale_type", "learned"),
     ).to(device)
 
     quantum_results = train_model(
-        quantum_model, train_loader, test_loader,
-        training_config, device,
-        save_path=str(run_dir / "quantum_model.pt") if options.get("save_model") else None
+        quantum_model,
+        train_loader,
+        test_loader,
+        training_config,
+        device,
+        save_path=str(run_dir / "quantum_model.pt")
+        if options.get("save_model")
+        else None,
     )
     results["quantum"] = quantum_results
 
     # Generate figures
     if options.get("generate_figures", True):
         plot_spiral_classification(
-            quantum_model, X_train, y_train, X_test, y_test,
+            quantum_model,
+            X_train,
+            y_train,
+            X_test,
+            y_test,
             quantum_results["best_accuracy"],
             title="Dressed Quantum Circuit",
             save_path=str(run_dir / "fig2_spiral_quantum.png"),
-            device=device
+            device=device,
         )
 
         plot_training_curves(
             quantum_results["history"],
             title="Spiral - Quantum",
-            save_path=str(run_dir / "training_curves_quantum.png")
+            save_path=str(run_dir / "training_curves_quantum.png"),
         )
 
     # Train classical baseline if requested
@@ -302,28 +314,32 @@ def run_spiral_experiment(
             n_inputs=model_config.get("n_inputs", 2),
             n_outputs=model_config.get("n_outputs", 2),
             hidden_sizes=classical_config.get("hidden_sizes", [4]),
-            activation=classical_config.get("activation", "tanh")
+            activation=classical_config.get("activation", "tanh"),
         ).to(device)
 
         classical_results = train_model(
-            classical_model, train_loader, test_loader,
-            training_config, device
+            classical_model, train_loader, test_loader, training_config, device
         )
         results["classical"] = classical_results
 
         if options.get("generate_figures", True):
             plot_spiral_classification(
-                classical_model, X_train, y_train, X_test, y_test,
+                classical_model,
+                X_train,
+                y_train,
+                X_test,
+                y_test,
                 classical_results["best_accuracy"],
                 title="Classical Network",
                 save_path=str(run_dir / "fig2_spiral_classical.png"),
-                device=device
+                device=device,
             )
 
             plot_comparison(
-                results["quantum"], results["classical"],
+                results["quantum"],
+                results["classical"],
                 title="Spiral: Quantum vs Classical",
-                save_path=str(run_dir / "comparison.png")
+                save_path=str(run_dir / "comparison.png"),
             )
 
     logger.info(f"Quantum accuracy: {quantum_results['best_accuracy']:.3f}")
@@ -334,11 +350,8 @@ def run_spiral_experiment(
 
 
 def run_transfer_experiment(
-        config: Dict[str, Any],
-        run_dir: Path,
-        device: torch.device,
-        experiment_name: str
-) -> Dict[str, Any]:
+    config: dict[str, Any], run_dir: Path, device: torch.device, experiment_name: str
+) -> dict[str, Any]:
     """Run CQ transfer learning experiment (Examples 2 & 3).
 
     Args:
@@ -373,7 +386,7 @@ def run_transfer_experiment(
     train_loader, test_loader = create_dataloaders(
         dataset_key,
         {**dataset_config, "batch_size": training_config.get("batch_size", 4)},
-        seed=config.get("seed", 42)
+        seed=config.get("seed", 42),
     )
 
     # Create CQ transfer model
@@ -389,15 +402,20 @@ def run_transfer_experiment(
         n_photons=model_config.get("n_photons", 2),
         computation_space=model_config.get("computation_space", "unbunched"),
         merlin_depth=model_config.get("merlin_depth", 1),
-        scale_type=model_config.get("scale_type", "learned")
+        scale_type=model_config.get("scale_type", "learned"),
     ).to(device)
 
     # Train
     logger.info("Training CQ model...")
     results = train_model(
-        model, train_loader, test_loader,
-        training_config, device,
-        save_path=str(run_dir / f"{experiment_name}_model.pt") if options.get("save_model") else None
+        model,
+        train_loader,
+        test_loader,
+        training_config,
+        device,
+        save_path=str(run_dir / f"{experiment_name}_model.pt")
+        if options.get("save_model")
+        else None,
     )
 
     # Generate figures
@@ -405,24 +423,36 @@ def run_transfer_experiment(
         plot_training_curves(
             results["history"],
             title=f"{experiment_name} - CQ Transfer Learning",
-            save_path=str(run_dir / f"{experiment_name}_training.png")
+            save_path=str(run_dir / f"{experiment_name}_training.png"),
         )
 
         # Get class names
         if dataset_key == "hymenoptera":
             class_names = ["ants", "bees"]
         else:
-            cifar_classes = ['airplane', 'automobile', 'bird', 'cat', 'deer',
-                             'dog', 'frog', 'horse', 'ship', 'truck']
+            cifar_classes = [
+                "airplane",
+                "automobile",
+                "bird",
+                "cat",
+                "deer",
+                "dog",
+                "frog",
+                "horse",
+                "ship",
+                "truck",
+            ]
             classes = dataset_config.get("classes", [3, 5])
             class_names = [cifar_classes[c] for c in classes]
 
         plot_image_predictions(
-            model, test_loader, class_names,
+            model,
+            test_loader,
+            class_names,
             n_images=4,
             title=f"{experiment_name} Predictions",
             save_path=str(run_dir / f"{experiment_name}_predictions.png"),
-            device=device
+            device=device,
         )
 
     logger.info(f"Best accuracy: {results['best_accuracy']:.3f}")
@@ -430,7 +460,7 @@ def run_transfer_experiment(
     return results
 
 
-def main(config: Dict[str, Any]) -> str:
+def main(config: dict[str, Any]) -> str:
     """Main entry point for the runner.
 
     Args:
@@ -478,12 +508,15 @@ def main(config: Dict[str, Any]) -> str:
 
     # Save summary results
     summary = {
-        "best_accuracy": results.get("quantum", results).get("best_accuracy",
-                                                             results.get("best_accuracy", 0)),
-        "final_accuracy": results.get("quantum", results).get("final_accuracy",
-                                                              results.get("final_accuracy", 0)),
-        "total_time": results.get("quantum", results).get("total_time",
-                                                          results.get("total_time", 0))
+        "best_accuracy": results.get("quantum", results).get(
+            "best_accuracy", results.get("best_accuracy", 0)
+        ),
+        "final_accuracy": results.get("quantum", results).get(
+            "final_accuracy", results.get("final_accuracy", 0)
+        ),
+        "total_time": results.get("quantum", results).get(
+            "total_time", results.get("total_time", 0)
+        ),
     }
 
     with open(run_dir / "summary_results.json", "w") as f:
@@ -500,7 +533,7 @@ def main(config: Dict[str, Any]) -> str:
     return str(run_dir)
 
 
-def train_and_evaluate(config: Dict[str, Any], run_dir: Path) -> None:
+def train_and_evaluate(config: dict[str, Any], run_dir: Path) -> None:
     """Entry point for the shared MerLin CLI runner.
 
     This wrapper adapts the main() function to the signature expected
@@ -536,12 +569,15 @@ def train_and_evaluate(config: Dict[str, Any], run_dir: Path) -> None:
 
     # Save summary results
     summary = {
-        "best_accuracy": results.get("quantum", results).get("best_accuracy",
-                                                             results.get("best_accuracy", 0)),
-        "final_accuracy": results.get("quantum", results).get("final_accuracy",
-                                                              results.get("final_accuracy", 0)),
-        "total_time": results.get("quantum", results).get("total_time",
-                                                          results.get("total_time", 0))
+        "best_accuracy": results.get("quantum", results).get(
+            "best_accuracy", results.get("best_accuracy", 0)
+        ),
+        "final_accuracy": results.get("quantum", results).get(
+            "final_accuracy", results.get("final_accuracy", 0)
+        ),
+        "total_time": results.get("quantum", results).get(
+            "total_time", results.get("total_time", 0)
+        ),
     }
 
     with open(run_dir / "summary_results.json", "w") as f:
@@ -573,6 +609,6 @@ if __name__ == "__main__":
             "dataset": {"n_samples": 220},
             "model": {"n_qubits": 4, "q_depth": 2},
             "training": {"epochs": 5, "batch_size": 10},
-            "options": {"compare_classical": False, "generate_figures": False}
+            "options": {"compare_classical": False, "generate_figures": False},
         }
         main(example_config)
