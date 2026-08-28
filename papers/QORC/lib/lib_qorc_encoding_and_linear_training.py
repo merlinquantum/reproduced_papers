@@ -238,6 +238,7 @@ def create_qorc_reservoir_classifier(
     b_no_bunching,
     input_features=28 * 28,
     n_classes=10,
+    cache=True,
     noise=None,
 ):
     """Create the Merlin 0.4 reservoir classifier used by QORC.
@@ -261,6 +262,8 @@ def create_qorc_reservoir_classifier(
         Whether the measurement output excludes photon bunching states.
     n_classes : int
         Number of output classes. Default value is 10.
+    cache : bool
+        Whether to cache all fitted training features. Default value is True.
 
     Returns
     -------
@@ -278,7 +281,7 @@ def create_qorc_reservoir_classifier(
         n_photons=n_photons,
         reduction=PCA(n_components=n_components),
         concatenate=True,
-        cache=True,
+        cache=cache,
         seed=seed,
         device=torch.device(device_name),
         dtype=torch.float32,
@@ -380,6 +383,55 @@ def make_reservoir_dataset_in_batches(
     features = torch.cat(feature_batches, dim=0)
     targets = torch.as_tensor(labels, dtype=torch.long)
     return TensorDataset(features, targets)
+
+
+def initialize_reservoir_normalization_in_batches(reservoir, data, batch_size):
+    """Initialize train-only quantum normalization without caching all features.
+
+    Parameters
+    ----------
+    reservoir : merlin.ReservoirClassifier
+        Fitted reservoir with ``cache=False``.
+    data : numpy.ndarray
+        Training inputs used to estimate feature statistics.
+    batch_size : int
+        Number of images encoded per quantum pass.
+
+    Returns
+    -------
+    None
+        Stores the training feature mean and standard deviation on ``reservoir``.
+    """
+    if batch_size <= 0:
+        raise ValueError("batch_size must be positive when initializing normalization.")
+    sample_count = 0
+    feature_mean = None
+    feature_m2 = None
+    for start in range(0, len(data), batch_size):
+        batch = data[start : start + batch_size]
+        reduced = reservoir._transform_and_normalize_input(batch)
+        quantum_features = reservoir._encode_quantum(reduced)
+        batch_count = quantum_features.shape[0]
+        batch_mean = quantum_features.mean(dim=0).double()
+        batch_m2 = ((quantum_features.double() - batch_mean) ** 2).sum(dim=0)
+        if feature_mean is None:
+            feature_mean = batch_mean
+            feature_m2 = batch_m2
+            sample_count = batch_count
+            continue
+        delta = batch_mean - feature_mean
+        total_count = sample_count + batch_count
+        feature_mean += delta * batch_count / total_count
+        feature_m2 += (
+            batch_m2 + delta.square() * sample_count * batch_count / total_count
+        )
+        sample_count = total_count
+    if feature_mean is None or feature_m2 is None:
+        raise ValueError("data must contain at least one sample.")
+    reservoir._quantum_mean = feature_mean.to(dtype=torch.float32)
+    reservoir._quantum_std = torch.sqrt(feature_m2 / sample_count).to(
+        dtype=torch.float32
+    )
 
 
 def qorc_encoding_and_linear_training(

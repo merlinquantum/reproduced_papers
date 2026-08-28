@@ -8,6 +8,7 @@ import pandas as pd
 
 from lib.comparison import run_qorc_lsvc_comparison
 from lib.fig4_dataset_size import run_fig4_dataset_size
+from lib.fig6_architectures import run_fig6_architectures
 from lib.lib_qorc_encoding_and_linear_training import qorc_encoding_and_linear_training
 from lib.lib_rff_encoding_and_linear_training import rff_encoding_and_linear_training
 from lib.medmnist_fig3 import run_medmnist_fig3
@@ -34,6 +35,8 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         run_medmnist_fig3(cfg, run_dir, logger)
     elif xp_type == "fig4_dataset_size_comparison":
         run_fig4_dataset_size(cfg, run_dir, logger)
+    elif xp_type == "fig6_mnist_different_architectures":
+        run_fig6_architectures(cfg, run_dir, logger)
     elif xp_type == "rff":
         _run_rff(cfg, run_dir, logger)
     else:

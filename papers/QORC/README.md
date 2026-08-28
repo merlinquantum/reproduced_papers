@@ -354,6 +354,36 @@ The default training sizes are `[100, 300, 500, 700, 900, 1000, 1500, 2000,
 The 50-subset sweep is computationally intensive even with the QPU branch
 disabled; use a temporary config with fewer sizes or subsets for a smoke run.
 
+### Experiment 5: Fig. 6 MNIST architectures
+
+This experiment compares baseline pixel-only readouts with QORC-augmented
+readouts on full MNIST. The QORC reservoir uses `N=3`, `M=20`, no bunching,
+and therefore `D=C(20,3)=1140` reservoir features. Reservoir features are
+standardized using the training set and concatenated with the 784 normalized
+pixel features. Linear, ShallowF, Shallow, and Deep readouts use the Table S9
+optimizer, learning-rate, batch-size, width, activation, and dropout settings
+stored in the configuration. Training runs for 30 epochs.
+
+The default configuration uses 100 runs for error bars. Set `n_runs` to 1 for
+a faster mean-only check. It writes
+`fig6_mnist_different_architectures.png`, `.csv`, and `.json` to the timestamped
+output directory. The JSON also records the paper's target test accuracies:
+Linear 92.7%→96.5%, ShallowF 95.3%→96.4%, Shallow 97.0%→97.5%, and Deep
+98.3%→97.9%.
+
+The reproduced test-accuracy plot labels the pixel-only baseline as
+**Classical** in dark blue and the reservoir readout as **Quantum** in orange;
+mean values are annotated above the bars.
+
+![Fig. 6: MNIST accuracy across readout architectures](assets/fig6_mnist_different_architectures.png)
+
+Run it with:
+
+```bash
+python implementation.py --paper QORC \
+  --config papers/QORC/configs/fig6_MNIST_different_architectures.json
+```
+
 
 ## Extensions and Next Steps
 

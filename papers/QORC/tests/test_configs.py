@@ -97,3 +97,16 @@ def test_fig4_dataset_size_config_has_requested_settings() -> None:
     assert config["training_sizes"][0] == 100
     assert config["training_sizes"][-1] == 60000
     assert config["enable_qpu"] is False
+
+
+def test_fig6_architecture_config_has_requested_settings() -> None:
+    config = load_config(CONFIG_DIR / "fig6_MNIST_different_architectures.json")
+
+    assert config["xp_type"] == "fig6_mnist_different_architectures"
+    assert config["n_photons"] == 3
+    assert config["n_modes"] == 20
+    assert config["b_no_bunching"] is True
+    assert config["epochs"] == 30
+    assert config["n_runs"] == 100
+    assert config["models"]["Linear"]["accelerated"]["batch_size"] == 32
+    assert config["models"]["Deep"]["accelerated"]["learning_rate"] == 2.2e-4
