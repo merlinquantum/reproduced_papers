@@ -1,0 +1,42 @@
+{
+  "description": "Default QVT smoke config (fast, CPU-friendly).",
+  "seed": 42,
+  "dtype": "float32",
+  "device": "cpu",
+  "outdir": "outdir",
+  "logging": {
+    "level": "info"
+  },
+  "dataset": "retinamnist",
+  "model_type": "A",
+  "profile": "lite",
+  "circuit_family": "generic",
+  "precision_mode": "gpu_friendly",
+  "img_size": 28,
+  "patch_size": 7,
+  "embed_dim": 16,
+  "n_layers": 1,
+  "use_cls_token": true,
+  "use_pos_embed": true,
+  "image_embed_grayscale": false,
+  "compound_readout": "cross_only",
+  "n_regions_per_side": 2,
+  "n_patches_per_side": 2,
+  "use_rpp_attention": true,
+  "epochs": 1,
+  "batch_size": 8,
+  "lr": 0.001,
+  "weight_decay": 0.0,
+  "lr_milestones": [
+    50,
+    75
+  ],
+  "lr_gamma": 0.1,
+  "num_workers": 0,
+  "train_subset_size": 64,
+  "train_subset_seed": 0,
+  "train_subset_mode": "random",
+  "resume": "auto",
+  "list_models": false,
+  "count_params": false
+}

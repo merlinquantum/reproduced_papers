@@ -1,0 +1,49 @@
+{
+  "description": "Template for one ideal setup/input-state run. Change ideal.setup and ideal.input_state.",
+  "seed": 0,
+  "dtype": "float32",
+  "device": "cpu",
+  "outdir": "results",
+  "logging": { "level": "info", "save_config_snapshot": true },
+  "run": {
+    "mode": "ideal",
+    "write_to_disk": true,
+    "runs": 1,
+    "progress": true,
+    "log_every": 100
+  },
+  "dataset": {
+    "csv_path": "photonic_QGAN/optdigits_csv.csv"
+  },
+  "model": {
+    "image_size": 8,
+    "batch_size": 4,
+    "lossy": false,
+    "use_clements": false,
+    "sim": false,
+    "remote_token": null
+  },
+  "training": {
+    "ideal": {
+      "opt_iter_num": 1500,
+      "lrD": 0.0002,
+      "lrG": 0.002,
+      "adam_beta1": 0.5,
+      "adam_beta2": 0.999,
+      "real_label": 0.9,
+      "fake_label": 0.0,
+      "gen_target": 0.9,
+      "d_steps": 1,
+      "g_steps": 3
+    }
+  },
+  "ideal": {
+    "use_default_grid": false,
+    "config_grid_path": null,
+    "digit": 0,
+    "setup": "setup_c",
+    "input_state": "01010",
+    "gen_count": 4,
+    "pnr": false
+  }
+}

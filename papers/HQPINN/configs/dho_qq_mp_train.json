@@ -1,0 +1,12 @@
+{
+  "experiment": "dho-qq-mp",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_layers": null,
+    "n_nodes": null,
+    "n_qubits": null,
+    "n_photons": null
+  },
+  "description": "HQPINN dho qq mp train configuration."
+}

@@ -1,0 +1,14 @@
+{
+  "description": "Lightweight HQPINN DHO inference smoke configuration.",
+  "experiment": "dho-cc",
+  "mode": "run",
+  "backend": "local",
+  "dtype": "float64",
+  "model": {
+    "n_layers": 2,
+    "n_nodes": 16,
+    "n_qubits": null,
+    "n_photons": null,
+    "q_layers": null
+  }
+}

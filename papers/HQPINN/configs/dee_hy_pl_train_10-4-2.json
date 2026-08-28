@@ -1,0 +1,11 @@
+{
+  "experiment": "dee-hy-pl",
+  "mode": "train",
+  "backend": "local",
+  "model": {
+    "n_layers": 4,
+    "n_nodes": 10,
+    "q_layers": 2
+  },
+  "description": "HQPINN dee hy pl train 10-4-2 configuration."
+}

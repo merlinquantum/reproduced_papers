@@ -1,0 +1,33 @@
+{
+  "description": "Current short three-family comparison used for README/notebook results: 1000 ICU rows, PCA-8, 10 epochs, seed 42",
+  "data_dir": "QCNN_ID",
+  "subset_size": 1000,
+  "test_size": 0.3,
+  "n_components": 8,
+  "batch_size": 128,
+  "epochs": 10,
+  "lr_cnn": 0.001,
+  "lr_qcnn": 0.01,
+  "lr_photonic": 0.05,
+  "models": [
+    "cnn_classifier",
+    "qcnn_classifier",
+    "photonic_classifier"
+  ],
+  "n_qubits": 8,
+  "ansatz_reps": 1,
+  "seeds": [
+    42
+  ],
+  "device": "cpu",
+  "roc_zoom": {
+    "xlim": [
+      0.0,
+      0.2
+    ],
+    "ylim": [
+      0.8,
+      1.0
+    ]
+  }
+}

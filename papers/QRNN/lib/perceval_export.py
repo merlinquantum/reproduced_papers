@@ -9,7 +9,6 @@ logger = logging.getLogger(__name__)
 
 
 def _build_qrb_circuit(*, kd: int, kh: int):
-
     kd = int(kd)
     kh = int(kh)
     m = kd + kh

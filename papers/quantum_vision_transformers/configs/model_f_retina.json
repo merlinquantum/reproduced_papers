@@ -1,0 +1,28 @@
+{
+    "model_type": "F",
+    "circuit_family": "generic",
+    "dataset": "retinamnist",
+    "seed": 42,
+    "device": "cuda",
+    "dtype": "float64",
+    "img_size": 28,
+    "embed_dim": 16,
+    "n_layers": 4,
+    "use_cls_token": false,
+    "use_pos_embed": true,
+    "n_regions_per_side": 2,
+    "n_patches_per_side": 2,
+    "use_rpp_attention": true,
+    "epochs": 100,
+    "batch_size": 32,
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "lr_milestones": [
+        50,
+        75
+    ],
+    "lr_gamma": 0.1,
+    "data_root": "data/QVT",
+    "description": "Model F: 3-photon hierarchical compound. 4 regions \u00d7 4 patches/region \u00d7 16 features = 24 modes, 3 photons, C(26,3)=2600 Fock states. V^(3) jointly mixes region, patch, and feature hierarchies. Region-patch-patch sector provides hierarchical attention.",
+    "lr_quantum": 0.05
+}

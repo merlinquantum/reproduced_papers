@@ -1,0 +1,11 @@
+{
+  "experiment": "dee-hy-m",
+  "mode": "run",
+  "backend": "local",
+  "model": {
+    "n_layers": 4,
+    "n_nodes": 10,
+    "n_photons": 1
+  },
+  "description": "HQPINN dee hy m run 10-4-1 configuration."
+}
