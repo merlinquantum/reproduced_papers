@@ -56,7 +56,9 @@ def _run_epoch(
     }
 
 
-def fit_model(*, model, train_loader, val_loader, test_loader, cfg: dict, run_dir: Path):
+def fit_model(
+    *, model, train_loader, val_loader, test_loader, cfg: dict, run_dir: Path
+):
     device = _device_from_cfg(cfg)
     model = model.to(device)
     training_cfg = cfg.get("training", {})
