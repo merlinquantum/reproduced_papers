@@ -2,7 +2,6 @@
 
 ## About this repository
 
-
 This repository contains implementations and resources for reproducing key quantum machine learning papers, with a focus on photonic and optical quantum computing.
 
 It is part of the main MerLin project: [https://github.com/merlinquantum/merlin](https://github.com/merlinquantum/merlin)
@@ -22,7 +21,6 @@ derived from upstream projects keep their original license headers and remain
 subject to those terms. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
 and any per-file or per-directory notices for details.
 
-
 ## Papers reproduced:
 | Paper | Reproduction |
 | --- | --- |
@@ -37,6 +35,7 @@ and any per-file or per-directory notices for details.
 | [Quantum Convolutional Neural Networks](papers/QCNN_data_classification/). Source [hur_2022](http://arxiv.org/abs/2108.00661) | The source paper reports that under similar training budgets, the QCNN outperforms the CNN. For linear optics, the interferometer constrains the number of trainable parameters therefore, we use more parameters as in the original work. However, our results show that our photonic QCNN outperforms the same CNNs as in the original paper, as well as CNN with similar number of kernels and kernel sizes. |
 | [QCNN-ID: A Quantum-Classical Hybrid Model for IoT Intrusion Detection](papers/QCNN_ID/). Source: [amara_2025](https://hal.science/hal-05080861v1) | The paper reports comparable ~99% CNN/QCNN accuracy and fewer QCNN false negatives on healthcare-IoT intrusion detection. Our reproduction confirms the QCNN low-parameter structure, but not the headline metrics: the CNN remains strongest, while the MerLin photonic adaptation is the strongest quantum-side local baseline. On the 10k all-model run, MerLin uses 71 parameters and trains in 3.46 s, versus 1427.61 s for the gate-model QCNN; over a 20k-row 3-seed check it reaches 98.87% ± 0.34% accuracy. |
 | [Encrypted Network Traffic Analysis Using Quantum Machine Learning](papers/qSVM_qKNN/). Source: [sodar_2026](https://doi.org/10.1140/epjqt/s40507-025-00459-7) | The paper reports that quantum and hybrid SVM/KNN models are broadly comparable to classical baselines, with hybrid amplitude variants sometimes matching or slightly exceeding them; our reproduction structurally confirms the workflows and partially confirms the comparability claim. Local runs show KNN is generally the most stable classifier; QORC photonic models are competitive and the fastest quantum-side variants. On the fast IDS2012 run, `photonic_hybrid_svm_angle` reaches 99.08% ± 0.13% accuracy, while the best KNN models reach about 99.37% accuracy. |
+| [RF Spectrogram Anomaly Detection with Quantum Random Kitchen Sinks](papers/RF-RQKS/) | We reproduced the paper's RF anomaly-detection pipeline, including the five-stage ablation and direct-versus-quantum readout comparison, with both a photonic backend and a Qiskit gate-based simulator. The reported local results use a very small single-band `36_LTE_1` dataset rather than the paper's full WASD collection, so they validate the workflow and trends but are not a full-scale reproduction of the paper's headline metrics. |
 | [Quantum Relational Knowledge Distillation](papers/QRKD/). Source: [liu_2025](https://arxiv.org/abs/2508.13054) | In both the reference paper and in our reproduction, we see that the improvement of the student model due to the distillation is superior in the quantum relational knowledge distillation scheme compared to in its classical counterpart. |
 | [QTRL: Toward Practical Quantum Reinforcement Learning via Quantum-Train](papers/QTRL/). Source: [liu_2024](https://arxiv.org/abs/2407.06103) | The Merlin and TorchQuantum Figure 1-style reproductions produce CartPole and MiniGrid reward curves for mode/photon and circuit-depth comparisons. Curated results are available in [the Merlin figure](papers/QTRL/assets/figure_1-merlin.png) and [the TorchQuantum figure](papers/QTRL/assets/figure_1-tq.png); results are preliminary because the local policy topology and MiniGrid action handling differ from the paper. |
 | Quantum Recurrent Neural Networks for Sequential Learning. Source: [li_2023](https://arxiv.org/abs/2302.03244) | *Analysis to be done* |
@@ -53,7 +52,10 @@ and any per-file or per-directory notices for details.
 | [Limitations of Amplitude Encoding on Quantum Classification](papers/AA_study/). Source: [Wang_2025](https://arxiv.org/abs/2503.01545) | The authors proved and showed numerically the main limitations of amplitude encoding. We observe the same results with a photonic architecture for the simple synthetic datasets and popular image-based datasets. We used the [Photonic Quantum Convolutional Neural Networks with Adaptive State Injection](papers/photonic_QCNN/)'s QCNN architecture for our tests. Our Merlin model seems more stable over the iterations. By just replacing the amplitude encoder by an angle encoder on the simple synthetic datasets, we are able to correctly distinguish both classes. This result show that a user guide for an encoding choice depending on the dataset could be quite useful.|
 | [Distributed QML via Classical Communication](papers/distributed_qml_cc/). Source: [hwang_2024](https://arxiv.org/abs/2408.16327) | Reduced reproduction (3 seeds, 1000 iter, L ∈ {3,5,7,9}) of the 8D synthetic binary classification benchmark with non/NC/CC/QC schemes. The paper's qualitative ordering and the central claim that **CC-DQML closely matches QC-DQML** are reproduced both in a gate-model PyTorch simulator and in a **faithful photonic MerLin translation**. Gate model at L=9: NC 87.6 ± 0.7%, CC 99.2 ± 0.4%, QC 99.8 ± 0.3%. Photonic MerLin (angle encoding, `m=8/n=3` per chip; CC adds a classical-feedforward channel; QC = one doubled `m=16/n=6` chip): NC 88.2 ± 2.9%, CC 95.2 ± 2.5%, QC 98.5 ± 0.3%. An iso-parameter classical MLP baseline (98.5 ± 0.7%) is also included.|
 | [Neural Quantum Embedding: Pushing the Limits of Quantum Supervised Learning](papers/nn_embedding/). Source: [Hur_2024](https://arxiv.org/abs/2311.11412v2) | The authors introduce a novel way to encode classical data on quantum computers using. Indeed, a QML model is separated into two parts: an embedding and classifying circuit. We optimize both of those sections one after the other. The embedding is optimized by training a classical model that takes the classical features as inputs and generates the parameters for the quantum embedding circuit in order to create maximally distant average encoded states. The MerLin implementation is faster and has the same or better performance across all reproduced figures.  |
+| [Quantum-Enhanced Generative Models for Rare Event Prediction](papers/QEGM_rare_events/). Source: [Haider_2025](https://arxiv.org/abs/2511.02042) | The paper claims a hybrid VAE + variational quantum circuit improves rare-event tail KL by ~50% over GAN/VAE/Diffusion baselines. Under two controlled ablations our reproduction **refutes** both proposed mechanisms: (1) pinning the VQC output to a constant `r = 0.5` is statistically indistinguishable from the trained gate VQC on the paper's synthetic benchmark (tail KL 0.177 ± 0.048 vs 0.208 ± 0.033) — Eq. 7 is provably inert; (2) removing the hybrid tail-aware loss term *improves* tail KL for every variant (−10% to −41%) — Eq. 5 is counterproductive. **Both refutations transfer to real data**: on 8314 standardized S&P 500 daily log-returns (1990–2022, packaged in `data/QEGM_rare_events/`), the trained VQC (1.599 ± 0.057) again matches the constant (1.606 ± 0.064) and the plain VAE (1.611 ± 0.119) at ~240× the compute, and dropping the tail-aware loss improves tail KL by 59–68%. The paper's own real-world numbers remain unverifiable — its baselines and hyperparameters are described only narratively — and it carries structural red flags (Index Terms copy-pasted from the lead author's blockchain paper, mislabelled architecture figure, internal inconsistency between Eqs. 12 and 13, no released code). Verdict: do not pursue.|
 | [Barren Plateaus in Quantum Neural Network Training Landscapes](papers/BP_QNN/). Source: [McClean_2018](https://doi.org/10.1038/s41467-018-07090-4) | Formalized reproductions of Fig. 3 (gradient-variance decay versus qubits, with fitted slope) and Fig. 4 (variance versus 1D circuit layers), plus a MerLin computation-space analogue of Fig. 3. |
+| [ObliQ: Solving Quadratic Unconstrained Binary Optimization Problems on Real Photonic Quantum Machines](papers/ObliQ_photonic_QUBO/). Source: [Ranjan_2025](https://dl.acm.org/doi/10.1145/3771573)                                                                                                                                                                           | The paper introduces a zero-shot QUBO solver called static ObliQ, which uses beam-splitter gate parameters calculated directly from the QUBO matrix being solved. It further combines the static ObliQ circuit with a VQC, using the static circuit's output as the hybrid ObliQ's input photon state. In this repo, we implement the execution with MerLin, enabling a gradient-descent implementation. The original paper implements only constant-diagonal QUBO matrices; the current implementation extends it to non-constant matrices such as Max-Cut by augmenting an ancilla mode. The repo also implements competing QUBO quantum solvers, such as a CVaR-based photonic VQC, QAOA, and D-Wave-based solvers. Simulation over 100 random Max-Clique problems shows that ObliQ achieves better performance than CVaR-VQE and QAOA (with more compute). |
+| [Potential of quantum scientific machine learning applied to weather modelling](papers/bve_qnn/). Source: [jaderberg_2024](https://arxiv.org/abs/2404.08737) | Photonic dual-rail MerLin reproduction of Experiment 1 (supervised stream-function regression). Paper neutral-atom baseline reports median MRE 7.1–10.9% and PPMCC 0.870; this MerLin dual-rail model with trainable photonic mixing reaches median MRE 14.85% and PPMCC 0.754 (1006 params), consistent with a weaker native entangling resource than CNOT. Full neutral-atom-side work: [qml_PINN_pasqal](https://github.com/CyrilDeloince/qml_PINN_pasqal). |
 
 
 ## Running existing reproductions
@@ -64,11 +66,6 @@ You can also list available reproductions with `python implementation.py --list-
 
 - `cd` into `papers/<NAME>` and install its dependencies: `pip install -r requirements.txt` (each reproduction keeps its own list).
 - Launch training/eval runs through the shared CLI from the repo root (the runner will `cd` into the project automatically):
-
-	```bash
-	python implementation.py --paper <NAME> --config configs/<config>.json
-	```
-
 - If you prefer running from inside `papers/<NAME>`, reference the repo-level runner: `python ../../implementation.py --config configs/<config>.json` (no `--paper` flag needed when executed from within the project).
 
 All logs, checkpoints, and figures land in `papers/<NAME>/outdir/run_YYYYMMDD-HHMMSS/` unless the configs specify a different base path.
@@ -81,15 +78,19 @@ Need a quick tour of a project’s knobs? Run `python implementation.py --paper 
 - Override with `DATA_DIR=/abs/path` or `python implementation.py --data-root /abs/path ...` (applies to the current run and is exported to downstream loaders).
 
 Shared data helpers:
+
 - Common dataset-generation code lives under `papers/shared/<paper>/` when multiple reproductions reuse the same logic. Each paper exposes a thin `lib/data.py` (or equivalent) that simply imports from the shared module.
 - If you add new shared data utilities, place them in `papers/shared/<paper>/` and have paper-local `lib/` importers forward to them so tests and runners stay stable.
 
 Universal CLI flags provided by the shared runner:
+
 - `--seed INT` Reproducibility seed propagated to Python/NumPy/PyTorch backends.
 - `--dtype STR` Force a global tensor dtype before model-specific overrides.
 - `--device STR` Torch device string (`cpu`, `cuda:0`, `mps`, ...).
 - `--log-level LEVEL` Runtime logging verbosity (`INFO` by default).
 Project-specific `cli.json` files only declare the extra paper knobs; the runner injects the global options automatically.
+
+
 
 ### Smoke-test all papers quickly
 
@@ -97,11 +98,15 @@ Project-specific `cli.json` files only declare the extra paper knobs; the runner
 - Pass an optional substring to target specific papers (faster dev loop): `scripts/smoke_test_all_papers.sh QRKD` only runs papers whose names contain `QRKD`.
 - Timeout markers appear in logs when a run or test exceeds the limit; rerun after adjusting configs or deps as needed.
 
+
+
 ### Precision control (`dtype`)
 
 - Every reproduction accepts an optional top-level `"dtype"` entry in its configs, just like `"seed"`. When present, the shared runner casts input tensors and initializes models in that dtype.
 - Individual models can still override via `model.dtype`; if omitted, each reproduction picks a sensible default (e.g., `float64` for photonic MerLin layers).
 - Use this to downgrade to `float32` for speed, experiment with `bfloat16`, or enforce `float64` reproducibility across classical/quantum variants.
+
+
 
 ## How to contribute a reproduced paper
 
