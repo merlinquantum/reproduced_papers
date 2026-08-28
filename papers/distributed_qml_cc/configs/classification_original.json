@@ -1,0 +1,35 @@
+{
+  "description": "Paper-accurate full-run protocol (Table I / Fig 4d). 1000 iterations per (scheme, L), single seed per config; sweep via the helper in utils/run_sweep.py to reproduce all 16 cells.",
+  "pipeline": "quantum",
+  "seed": 42,
+  "seeds": [42],
+  "dtype": "float32",
+  "outdir": "outdir",
+  "dataset": {
+    "name": "synthetic_8d",
+    "params": {
+      "n_dim": 8,
+      "n_samples": 2048,
+      "n_clusters": 32,
+      "samples_per_cluster": 64,
+      "sphere_radius": 0.7853981633974483,
+      "train_fraction": 0.75,
+      "seed": 42
+    }
+  },
+  "model": {
+    "name": "DQML",
+    "params": {
+      "scheme": "cc",
+      "n_layers": 9,
+      "qubits_per_qpu": 4
+    }
+  },
+  "training": {
+    "n_iterations": 1000,
+    "lr": 0.05,
+    "batch_size": 512,
+    "eval_every": 50
+  },
+  "logging": {"level": "info", "save_config_snapshot": true}
+}

@@ -1,0 +1,15 @@
+{
+  "description": "ObliQ Q-score sweep, run through the repository's shared runner. Use the global --config flag to point at a config file, and the global --seed flag as a fallback sweep seed for configs that don't pin their own (e.g. configs/defaults.json) -- it never overrides a config's explicit sweep.seed. For the single-instance mode and the full flag set (including --solver-options), use `python -m lib.benchmark run` instead.",
+  "arguments": [
+    {"flags": ["--problem"], "help": "Problem type: max-cut or max-clique", "type": "str", "choices": ["max-cut", "max-clique"], "apply": {"kind": "config_path", "path": "problem_type"}},
+    {"flags": ["--solver"], "help": "Solver name (obliq-*, Photonic_CVARVQE, QAOA, Simulated_Annealing, tabu, ...)", "type": "str", "apply": {"kind": "config_path", "path": "solver"}},
+    {"flags": ["--sizes"], "help": "Comma-separated list of graph sizes to sweep", "type": "csv_int_list", "apply": {"kind": "config_path", "path": "sweep.size_range"}},
+    {"flags": ["--instances"], "help": "Number of instances per graph size", "type": "int", "apply": {"kind": "config_path", "path": "sweep.nb_instances_per_size"}},
+    {"flags": ["--timeout"], "help": "Per-instance solver timeout (seconds)", "type": "int", "apply": {"kind": "config_path", "path": "sweep.timeout"}},
+    {"flags": ["--num-reads"], "help": "Reads/samples for QPU / Simulated Annealing solvers", "type": "int", "apply": {"kind": "config_path", "path": "sweep.num_reads"}},
+    {"flags": ["--workers"], "help": "Parallel worker processes (1 = sequential)", "type": "int", "apply": {"kind": "config_path", "path": "sweep.parallel_workers"}},
+    {"flags": ["--exact"], "help": "Store each instance's exact optimum alongside the results", "action": "store_true", "apply": {"kind": "config_path", "path": "sweep.include_exact_results"}},
+    {"flags": ["--provider"], "help": "Hardware provider (QAOA): local simulator, ibm, qi", "type": "str", "apply": {"kind": "config_path", "path": "provider"}},
+    {"flags": ["--backend"], "help": "Backend name (QAOA) or Quandela platform (photonic), e.g. sim:ascella, qpu:ascella", "type": "str", "apply": {"kind": "config_path", "path": "backend"}}
+  ]
+}
