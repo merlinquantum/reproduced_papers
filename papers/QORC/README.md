@@ -315,6 +315,45 @@ The run writes per-seed scores and the aggregate summary to
 generated PNG in the timestamped output directory. The committed figure above
 is the curated result from the three-run experiment.
 
+### Experiment 4: Fig. 4 MNIST accuracy versus training-set size
+
+This experiment measures MNIST accuracy as a function of the balanced training
+set size `n_tr`, using 50 independently sampled subsets at each configured
+size from 100 through 60,000 images. The local curves use QORC with `N=3` and
+`M=12`: ideal QORC has no source noise, while noisy QORC uses `g(2)=1.95%`
+and indistinguishability `I=0`. The MLR baseline is shown in blue; ideal,
+noisy, and QPU QORC are teal, purple, and orange, respectively. Error bars
+are one standard deviation across subsets.
+
+The QPU branch is optional and disabled by default because it is expensive.
+When enabled, it uses `g(2)=1.95%`, `I=86.36%`, tests on
+`n_te = 4669 - n_tr`, and omits QPU points above `n_tr=3900`. The grey
+reference lines and configured Hill-function parameters reproduce the paper's
+best-MLR references and fits. The inset displays one-standard-deviation bands
+around the measured test accuracies.
+
+Because the `g(2)=1.95%` simulation has a higher transient memory cost, the
+default noisy quantum feature batch is limited to 25 images
+(`noisy_feature_batch_size`). The ideal and QPU feature batches use 250 images;
+these settings do not change the training subset sizes or epoch count.
+
+Run the default local experiment from the repository root with:
+
+```bash
+python implementation.py --paper QORC \
+  --config papers/QORC/configs/fig4_dataset_size_comparison.json
+```
+
+Set `enable_qpu` to `true` and provide the required Perceval credentials to
+include the QPU series. The run writes
+`fig4_dataset_size_comparison.png`, `.csv`, and `.json` to the timestamped
+output directory.
+
+The default training sizes are `[100, 300, 500, 700, 900, 1000, 1500, 2000,
+2500, 3000, 3500, 4000, 5000, 7500, 10000, 20000, 30000, 40000, 50000, 60000]`.
+The 50-subset sweep is computationally intensive even with the QPU branch
+disabled; use a temporary config with fewer sizes or subsets for a smoke run.
+
 
 ## Extensions and Next Steps
 

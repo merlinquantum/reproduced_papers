@@ -84,3 +84,16 @@ def test_medmnist_fig3_config_has_requested_settings() -> None:
     assert config["n_photons"] == 3
     assert config["n_modes"] == 20
     assert config["n_epochs"] == 200
+
+
+def test_fig4_dataset_size_config_has_requested_settings() -> None:
+    config = load_config(CONFIG_DIR / "fig4_dataset_size_comparison.json")
+
+    assert config["xp_type"] == "fig4_dataset_size_comparison"
+    assert config["n_photons"] == 3
+    assert config["n_modes"] == 12
+    assert config["n_epochs"] == 100
+    assert config["n_subsets"] == 50
+    assert config["training_sizes"][0] == 100
+    assert config["training_sizes"][-1] == 60000
+    assert config["enable_qpu"] is False

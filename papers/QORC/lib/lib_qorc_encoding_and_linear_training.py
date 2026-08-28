@@ -13,6 +13,7 @@ from perceval.runtime import RemoteConfig
 from perceval.utils import NoiseModel
 from sklearn.decomposition import PCA
 from torch import nn
+from torch.utils.data import TensorDataset
 
 from lib.lib_datasets import (
     get_dataloader,
@@ -340,6 +341,47 @@ def create_perceval_noise_model(
     )
 
 
+def make_reservoir_dataset_in_batches(
+    reservoir,
+    data,
+    labels,
+    batch_size,
+    processor=None,
+):
+    """Encode a reservoir dataset in bounded-size batches.
+
+    Parameters
+    ----------
+    reservoir : merlin.ReservoirClassifier
+        Fitted frozen reservoir classifier.
+    data : numpy.ndarray
+        Normalized flattened input images.
+    labels : numpy.ndarray
+        Integer labels aligned with ``data``.
+    batch_size : int
+        Maximum number of images encoded per quantum pass.
+    processor : merlin.core.merlin_processor.MerlinProcessor|None
+        Optional local or remote processor.
+
+    Returns
+    -------
+    torch.utils.data.TensorDataset
+        CPU readout features and labels.
+    """
+    if batch_size <= 0:
+        return reservoir.make_dataset(data, labels, processor=processor)
+    feature_batches = []
+    for start in range(0, len(data), batch_size):
+        end = start + batch_size
+        batch_dataset = reservoir.make_dataset(
+            data[start:end], labels[start:end], processor=processor
+        )
+        feature_batches.append(batch_dataset.tensors[0])
+    features = torch.cat(feature_batches, dim=0)
+    targets = torch.as_tensor(labels, dtype=torch.long)
+    return TensorDataset(features, targets)
+
+
 def qorc_encoding_and_linear_training(
     # Main parameters
     n_photons,
@@ -376,6 +418,8 @@ def qorc_encoding_and_linear_training(
     logger,
     return_history=False,
     save_weights=False,
+    test_dataset_truncate=0,
+    feature_batch_size=0,
 ):
     compute_device = get_device(device_name)
 
@@ -443,6 +487,9 @@ def qorc_encoding_and_linear_training(
         val_label = val_label[:dataset_truncate]
         test_data = test_data[:dataset_truncate]
         test_label = test_label[:dataset_truncate]
+    if test_dataset_truncate > 0:
+        test_data = test_data[:test_dataset_truncate]
+        test_label = test_label[:test_dataset_truncate]
 
     n_pixels = train_data.shape[1]
     n_classes = int(max(np.max(train_label), np.max(test_label))) + 1
@@ -486,11 +533,19 @@ def qorc_encoding_and_linear_training(
 
     reservoir.fit_reservoir(train_data, processor=remote_processor)
     train_dataset = reservoir.make_dataset(train_data, train_label)
-    val_dataset = reservoir.make_dataset(
-        val_data, val_label, processor=remote_processor
+    val_dataset = make_reservoir_dataset_in_batches(
+        reservoir,
+        val_data,
+        val_label,
+        feature_batch_size,
+        processor=remote_processor,
     )
-    test_dataset = reservoir.make_dataset(
-        test_data, test_label, processor=remote_processor
+    test_dataset = make_reservoir_dataset_in_batches(
+        reservoir,
+        test_data,
+        test_label,
+        feature_batch_size,
+        processor=remote_processor,
     )
     qorc_output_size = reservoir.layer.output_size
     logger.info("Quantum features size: {}".format(qorc_output_size))
