@@ -56,7 +56,12 @@ def train_dqml(
     result = TrainingResult()
 
     for it in range(1, n_iterations + 1):
-        idx = torch.randint(0, n_train, (batch_size,), generator=torch.Generator().manual_seed(seed + it))
+        idx = torch.randint(
+            0,
+            n_train,
+            (batch_size,),
+            generator=torch.Generator().manual_seed(seed + it),
+        )
         xb = x_train[idx]
         yb = y_train[idx]
         fint = model(xb)
@@ -78,11 +83,14 @@ def train_dqml(
             result.train_acc.append(train_acc)
             result.val_acc.append(val_acc)
             if progress_callback is not None:
-                progress_callback(it, {
-                    "loss": float(loss.item()),
-                    "train_acc": train_acc,
-                    "val_acc": val_acc,
-                })
+                progress_callback(
+                    it,
+                    {
+                        "loss": float(loss.item()),
+                        "train_acc": train_acc,
+                        "val_acc": val_acc,
+                    },
+                )
 
     result.final_val_acc = result.val_acc[-1] if result.val_acc else 0.0
     result.final_train_acc = result.train_acc[-1] if result.train_acc else 0.0

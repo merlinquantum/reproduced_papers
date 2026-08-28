@@ -56,7 +56,9 @@ class DQMLModel(nn.Module):
         # Use double precision complex if the model dtype is double.
         self.cdtype = torch.complex128 if dtype == torch.float64 else torch.complex64
 
-        self.layout = qc.ParamLayout.for_scheme(scheme, cfg.n_layers, cfg.qubits_per_qpu)
+        self.layout = qc.ParamLayout.for_scheme(
+            scheme, cfg.n_layers, cfg.qubits_per_qpu
+        )
 
         # Layout flags.
         self.n_qpus = 1 if scheme == "non" else 2
@@ -65,14 +67,20 @@ class DQMLModel(nn.Module):
         # Trainable parameters.
         # Initial values: uniform in [0, 2*pi) for circuit params; uniform [-1, 1] for w.
         self.conv_params = nn.Parameter(
-            torch.empty(self.n_qpus, cfg.n_layers, cfg.qubits_per_qpu, dtype=dtype).uniform_(0.0, 2 * torch.pi)
+            torch.empty(
+                self.n_qpus, cfg.n_layers, cfg.qubits_per_qpu, dtype=dtype
+            ).uniform_(0.0, 2 * torch.pi)
         )
         self.pool_params = nn.Parameter(
-            torch.empty(self.n_qpus, self.layout.pool_per_qpu, dtype=dtype).uniform_(0.0, 2 * torch.pi)
+            torch.empty(self.n_qpus, self.layout.pool_per_qpu, dtype=dtype).uniform_(
+                0.0, 2 * torch.pi
+            )
         )
         if self.layout.cross_qpu > 0:
             self.cross_params = nn.Parameter(
-                torch.empty(cfg.n_layers, self.layout.cross_qpu // cfg.n_layers, dtype=dtype).uniform_(0.0, 2 * torch.pi)
+                torch.empty(
+                    cfg.n_layers, self.layout.cross_qpu // cfg.n_layers, dtype=dtype
+                ).uniform_(0.0, 2 * torch.pi)
             )
         else:
             self.register_parameter("cross_params", None)
@@ -86,8 +94,12 @@ class DQMLModel(nn.Module):
 
     # ------------------------------------------------------------------
     def _qpu_qubits(self, qpu_idx: int) -> list[int]:
-        return list(range(qpu_idx * self.cfg.qubits_per_qpu,
-                          (qpu_idx + 1) * self.cfg.qubits_per_qpu))
+        return list(
+            range(
+                qpu_idx * self.cfg.qubits_per_qpu,
+                (qpu_idx + 1) * self.cfg.qubits_per_qpu,
+            )
+        )
 
     # ------------------------------------------------------------------
     def forward(self, x: torch.Tensor) -> torch.Tensor:
@@ -98,28 +110,42 @@ class DQMLModel(nn.Module):
         batch = x.shape[0]
         device = x.device
         # Initialise |0...0>.
-        state = sim.init_state(self.n_total_qubits, batch, dtype=self.cdtype, device=device)
+        state = sim.init_state(
+            self.n_total_qubits, batch, dtype=self.cdtype, device=device
+        )
 
         # Embedding -------------------------------------------------------
         qpb = self.cfg.qubits_per_qpu
         if self.scheme == "non":
             # First half on qubits 0..3, then second half repeats the embedding.
-            state = qc.embed_attributes(state, x[:, :qpb], self._qpu_qubits(0), self.cdtype)
-            state = qc.embed_attributes(state, x[:, qpb:], self._qpu_qubits(0), self.cdtype)
+            state = qc.embed_attributes(
+                state, x[:, :qpb], self._qpu_qubits(0), self.cdtype
+            )
+            state = qc.embed_attributes(
+                state, x[:, qpb:], self._qpu_qubits(0), self.cdtype
+            )
         else:
-            state = qc.embed_attributes(state, x[:, :qpb], self._qpu_qubits(0), self.cdtype)
-            state = qc.embed_attributes(state, x[:, qpb:], self._qpu_qubits(1), self.cdtype)
+            state = qc.embed_attributes(
+                state, x[:, :qpb], self._qpu_qubits(0), self.cdtype
+            )
+            state = qc.embed_attributes(
+                state, x[:, qpb:], self._qpu_qubits(1), self.cdtype
+            )
 
         # Convolutional sub-layers + cross-QPU edges ----------------------
         boundary_a = self._qpu_qubits(0)[-1] if self.n_qpus > 1 else None
         boundary_b = self._qpu_qubits(1)[0] if self.n_qpus > 1 else None
-        cross_per_layer = self.layout.cross_qpu // self.cfg.n_layers if self.layout.cross_qpu else 0
+        cross_per_layer = (
+            self.layout.cross_qpu // self.cfg.n_layers if self.layout.cross_qpu else 0
+        )
 
         for layer_idx in range(self.cfg.n_layers):
             parity = layer_idx % 2
             for qpu_idx in range(self.n_qpus):
                 params = self.conv_params[qpu_idx, layer_idx]
-                state = qc.conv_sublayer(state, params, self._qpu_qubits(qpu_idx), parity, self.cdtype)
+                state = qc.conv_sublayer(
+                    state, params, self._qpu_qubits(qpu_idx), parity, self.cdtype
+                )
             if cross_per_layer > 0:
                 state = qc.cross_qpu_edge(
                     state,
@@ -138,7 +164,7 @@ class DQMLModel(nn.Module):
             pool_cursor = 0
             while len(active) > 1:
                 n_blocks = len(active) // 2
-                seg = pool[pool_cursor:pool_cursor + 4 * n_blocks]
+                seg = pool[pool_cursor : pool_cursor + 4 * n_blocks]
                 state, active = qc.pooling_layer(state, seg, active, self.cdtype)
                 pool_cursor += 4 * n_blocks
             readout_qubits.extend(active)

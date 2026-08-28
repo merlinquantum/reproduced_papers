@@ -15,11 +15,16 @@ def test_quantum_smoke_run(tmp_path):
         run_dir = run_from_project(
             PROJECT_DIR,
             [
-                "--scheme", "cc",
-                "--n-layers", "2",
-                "--iterations", "10",
-                "--batch-size", "64",
-                "--outdir", str(tmp_path),
+                "--scheme",
+                "cc",
+                "--n-layers",
+                "2",
+                "--iterations",
+                "10",
+                "--batch-size",
+                "64",
+                "--outdir",
+                str(tmp_path),
             ],
         )
     finally:

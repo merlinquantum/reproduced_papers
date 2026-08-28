@@ -9,12 +9,15 @@ from lib.model import DQMLConfig, DQMLModel
 
 
 def test_classical_param_count():
-    assert num_mlp_parameters(8, 8) == TinyMLP(8, 8).net[0].weight.numel() \
-        + TinyMLP(8, 8).net[0].bias.numel() \
-        + TinyMLP(8, 8).net[2].weight.numel() \
-        + TinyMLP(8, 8).net[2].bias.numel() \
-        + TinyMLP(8, 8).net[4].weight.numel() \
+    assert (
+        num_mlp_parameters(8, 8)
+        == TinyMLP(8, 8).net[0].weight.numel()
+        + TinyMLP(8, 8).net[0].bias.numel()
+        + TinyMLP(8, 8).net[2].weight.numel()
+        + TinyMLP(8, 8).net[2].bias.numel()
+        + TinyMLP(8, 8).net[4].weight.numel()
         + TinyMLP(8, 8).net[4].bias.numel()
+    )
 
 
 def test_tinymlp_forward_shape():

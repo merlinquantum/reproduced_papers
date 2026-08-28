@@ -52,7 +52,11 @@ def plot_fig4c(sweep: dict, outdir: Path) -> Path:
     target_L = max(layers_available)
     fig, ax = plt.subplots(figsize=(7, 4.5))
     for scheme in SCHEME_ORDER:
-        entries = [r for r in sweep["results"] if r["scheme"] == scheme and r["n_layers"] == target_L]
+        entries = [
+            r
+            for r in sweep["results"]
+            if r["scheme"] == scheme and r["n_layers"] == target_L
+        ]
         if not entries:
             continue
         entry = entries[0]
@@ -62,8 +66,12 @@ def plot_fig4c(sweep: dict, outdir: Path) -> Path:
         accs = np.stack([np.array(s["history"]["val_acc"]) for s in seeds], axis=0)
         mean = accs.mean(0)
         std = accs.std(0)
-        ax.plot(iters, mean, label=SCHEME_LABELS[scheme], color=SCHEME_COLORS[scheme], lw=2)
-        ax.fill_between(iters, mean - std, mean + std, color=SCHEME_COLORS[scheme], alpha=0.18)
+        ax.plot(
+            iters, mean, label=SCHEME_LABELS[scheme], color=SCHEME_COLORS[scheme], lw=2
+        )
+        ax.fill_between(
+            iters, mean - std, mean + std, color=SCHEME_COLORS[scheme], alpha=0.18
+        )
     ax.set_xlabel("Training iteration")
     ax.set_ylabel("Validation accuracy")
     ax.set_ylim(0.45, 1.02)
@@ -85,7 +93,11 @@ def plot_fig4d(sweep: dict, outdir: Path) -> Path:
         stds = []
         layers_for_scheme = []
         for L in layers_available:
-            entries = [r for r in sweep["results"] if r["scheme"] == scheme and r["n_layers"] == L]
+            entries = [
+                r
+                for r in sweep["results"]
+                if r["scheme"] == scheme and r["n_layers"] == L
+            ]
             if not entries:
                 continue
             entry = entries[0]
@@ -95,9 +107,16 @@ def plot_fig4d(sweep: dict, outdir: Path) -> Path:
             layers_for_scheme.append(L)
         if not means:
             continue
-        ax.errorbar(layers_for_scheme, means, yerr=stds, marker="o",
-                    label=SCHEME_LABELS[scheme], color=SCHEME_COLORS[scheme],
-                    capsize=4, lw=2)
+        ax.errorbar(
+            layers_for_scheme,
+            means,
+            yerr=stds,
+            marker="o",
+            label=SCHEME_LABELS[scheme],
+            color=SCHEME_COLORS[scheme],
+            capsize=4,
+            lw=2,
+        )
     ax.set_xlabel("Convolutional sub-layers (L)")
     ax.set_ylabel("Validation accuracy")
     ax.set_ylim(0.55, 1.02)
@@ -121,12 +140,16 @@ def write_table1(sweep: dict, outdir: Path) -> Path:
     for L in layers_available:
         row = [f"| {L}"]
         for scheme in SCHEME_ORDER:
-            entries = [r for r in sweep["results"] if r["scheme"] == scheme and r["n_layers"] == L]
+            entries = [
+                r
+                for r in sweep["results"]
+                if r["scheme"] == scheme and r["n_layers"] == L
+            ]
             if not entries:
                 row.append("| n/a")
                 continue
             accs = np.array([s["final_val_acc"] for s in entries[0]["runs"]])
-            row.append(f"| {accs.mean()*100:.2f} ± {accs.std()*100:.2f}")
+            row.append(f"| {accs.mean() * 100:.2f} ± {accs.std() * 100:.2f}")
         row.append("|")
         lines.append(" ".join(row))
     text = "\n".join(lines) + "\n"

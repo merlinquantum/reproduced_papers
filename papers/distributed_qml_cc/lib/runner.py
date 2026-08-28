@@ -45,7 +45,9 @@ def _resolve_dtype(cfg: dict) -> torch.dtype:
         return raw[1]
     if isinstance(raw, torch.dtype):
         return raw
-    return {"float32": torch.float32, "float64": torch.float64}.get(str(raw), torch.float32)
+    return {"float32": torch.float32, "float64": torch.float64}.get(
+        str(raw), torch.float32
+    )
 
 
 def _run_quantum(cfg: dict, run_dir: Path, dtype: torch.dtype) -> dict[str, Any]:
@@ -123,7 +125,11 @@ def _run_quantum(cfg: dict, run_dir: Path, dtype: torch.dtype) -> dict[str, Any]
         summary["runs"].append(run_entry)
         LOGGER.info(
             "  seed %d val_acc=%.4f train_acc=%.4f loss=%.4f time=%.1fs",
-            seed, result.final_val_acc, result.final_train_acc, result.final_loss, elapsed,
+            seed,
+            result.final_val_acc,
+            result.final_train_acc,
+            result.final_loss,
+            elapsed,
         )
 
     val_accs = np.array([r["final_val_acc"] for r in summary["runs"]])
@@ -150,7 +156,9 @@ def _run_merlin(cfg: dict, run_dir: Path, dtype: torch.dtype) -> dict[str, Any]:
     return train_merlin_dqml(cfg, run_dir, dtype)
 
 
-def _run_merlin_distributed(cfg: dict, run_dir: Path, dtype: torch.dtype) -> dict[str, Any]:
+def _run_merlin_distributed(
+    cfg: dict, run_dir: Path, dtype: torch.dtype
+) -> dict[str, Any]:
     """Train the photonic distributed (two-chip) NC/CC variant."""
     from .merlin_distributed import train_merlin_distributed
 

@@ -53,7 +53,9 @@ def _accuracy(pred: torch.Tensor, y: torch.Tensor) -> float:
     return ((pred >= 0).float() * 2 - 1 == y).float().mean().item()
 
 
-def train_classical_baseline(cfg: dict, run_dir: Path, dtype: torch.dtype) -> dict[str, Any]:
+def train_classical_baseline(
+    cfg: dict, run_dir: Path, dtype: torch.dtype
+) -> dict[str, Any]:
     dataset_cfg = SyntheticDatasetConfig(**cfg.get("dataset", {}).get("params", {}))
     model_cfg = cfg.get("model", {}).get("params", {})
     hidden = int(model_cfg.get("hidden", 6))
@@ -92,8 +94,16 @@ def train_classical_baseline(cfg: dict, run_dir: Path, dtype: torch.dtype) -> di
         torch.manual_seed(int(seed))
         model = TinyMLP(n_in=dataset_cfg.n_dim, hidden=hidden).to(dtype=dtype)
         optim = torch.optim.Adam(model.parameters(), lr=lr)
-        run = {"seed": int(seed), "n_params": n_params, "history": {
-            "iteration": [], "train_loss": [], "train_acc": [], "val_acc": []}}
+        run = {
+            "seed": int(seed),
+            "n_params": n_params,
+            "history": {
+                "iteration": [],
+                "train_loss": [],
+                "train_acc": [],
+                "val_acc": [],
+            },
+        }
         t0 = time.time()
         for it in range(1, n_iterations + 1):
             gen = torch.Generator().manual_seed(seed + it)
@@ -121,7 +131,10 @@ def train_classical_baseline(cfg: dict, run_dir: Path, dtype: torch.dtype) -> di
         summary["runs"].append(run)
         LOGGER.info(
             "  MLP hidden=%d seed=%d val_acc=%.4f time=%.1fs",
-            hidden, seed, run["final_val_acc"], run["wall_clock_seconds"],
+            hidden,
+            seed,
+            run["final_val_acc"],
+            run["wall_clock_seconds"],
         )
 
     val_accs = np.array([r["final_val_acc"] for r in summary["runs"]])

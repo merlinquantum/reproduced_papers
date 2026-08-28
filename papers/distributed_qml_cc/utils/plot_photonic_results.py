@@ -59,15 +59,19 @@ def plot_training_curves(data: dict[str, dict], outdir: Path) -> Path:
         accs = np.stack([np.array(h) for h in seed_hists], axis=0)
         mean = accs.mean(0)
         std = accs.std(0)
-        ax.plot(iters, mean, label=SCHEME_LABELS[scheme],
-                color=SCHEME_COLORS[scheme], lw=2)
-        ax.fill_between(iters, mean - std, mean + std,
-                        color=SCHEME_COLORS[scheme], alpha=0.18)
+        ax.plot(
+            iters, mean, label=SCHEME_LABELS[scheme], color=SCHEME_COLORS[scheme], lw=2
+        )
+        ax.fill_between(
+            iters, mean - std, mean + std, color=SCHEME_COLORS[scheme], alpha=0.18
+        )
     ax.set_xlabel("Training iteration")
     ax.set_ylabel("Validation accuracy")
     ax.set_ylim(0.45, 1.02)
-    ax.set_title("Photonic MerLin reproduction — training curves\n"
-                 "(analogous to Fig. 4c of arXiv:2408.16327)")
+    ax.set_title(
+        "Photonic MerLin reproduction — training curves\n"
+        "(analogous to Fig. 4c of arXiv:2408.16327)"
+    )
     ax.grid(True, alpha=0.3)
     ax.legend(loc="lower right")
     fig.tight_layout()
@@ -91,17 +95,24 @@ def plot_accuracy_bar(data: dict[str, dict], outdir: Path) -> Path:
         labels.append(SCHEME_LABELS[scheme])
         colors.append(SCHEME_COLORS[scheme])
     x = np.arange(len(means))
-    ax.bar(x, means, yerr=stds, color=colors, edgecolor="black",
-           capsize=6, width=0.55)
+    ax.bar(x, means, yerr=stds, color=colors, edgecolor="black", capsize=6, width=0.55)
     for xi, mu, sd in zip(x, means, stds):
-        ax.text(xi, mu + sd + 0.012, f"{mu * 100:.1f}%",
-                ha="center", va="bottom", fontsize=9)
+        ax.text(
+            xi,
+            mu + sd + 0.012,
+            f"{mu * 100:.1f}%",
+            ha="center",
+            va="bottom",
+            fontsize=9,
+        )
     ax.set_xticks(x)
     ax.set_xticklabels(labels, rotation=10, ha="right")
     ax.set_ylim(0.45, 1.02)
     ax.set_ylabel("Validation accuracy (mean ± std, 3 seeds)")
-    ax.set_title("Photonic MerLin reproduction — scheme comparison\n"
-                 "(analogous to Fig. 4d of arXiv:2408.16327)")
+    ax.set_title(
+        "Photonic MerLin reproduction — scheme comparison\n"
+        "(analogous to Fig. 4d of arXiv:2408.16327)"
+    )
     ax.grid(True, alpha=0.3, axis="y")
     fig.tight_layout()
     path = outdir / "fig_photonic_acc_bar.png"
@@ -123,12 +134,10 @@ def write_table(data: dict[str, dict], outdir: Path) -> Path:
         if scheme == "baseline":
             geom = f"1 × m={d['n_modes']}, n={d['n_photons']}"
         elif scheme == "qc":
-            geom = (f"1 × m={2 * d['n_modes_per_chip']}, "
-                    f"n={2 * d['n_photons_per_chip']}")
+            geom = f"1 × m={2 * d['n_modes_per_chip']}, n={2 * d['n_photons_per_chip']}"
         else:
             extra = " + classical FF" if scheme == "cc" else ""
-            geom = (f"2 × m={d['n_modes_per_chip']}, "
-                    f"n={d['n_photons_per_chip']}{extra}")
+            geom = f"2 × m={d['n_modes_per_chip']}, n={d['n_photons_per_chip']}{extra}"
         lines.append(
             f"| {SCHEME_LABELS[scheme]} | {geom} | {params} | "
             f"{finals.mean() * 100:.2f} ± {finals.std() * 100:.2f} | "

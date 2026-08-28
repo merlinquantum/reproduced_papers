@@ -132,7 +132,9 @@ def _accuracy(pred: torch.Tensor, y: torch.Tensor) -> float:
     return ((pred >= 0).float() * 2 - 1 == y).float().mean().item()
 
 
-def _normalise(x_train: torch.Tensor, *others: torch.Tensor) -> tuple[torch.Tensor, ...]:
+def _normalise(
+    x_train: torch.Tensor, *others: torch.Tensor
+) -> tuple[torch.Tensor, ...]:
     mean = x_train.mean(dim=0)
     std = x_train.std(dim=0).clamp_min(1e-6)
     return tuple((t - mean) / std for t in (x_train, *others))
@@ -202,7 +204,12 @@ def train_merlin_dqml(cfg: dict, run_dir: Path, dtype: torch.dtype) -> dict[str,
             "seed": int(seed),
             "n_params": int(n_params),
             "output_size": int(model.output_size),
-            "history": {"iteration": [], "train_loss": [], "train_acc": [], "val_acc": []},
+            "history": {
+                "iteration": [],
+                "train_loss": [],
+                "train_acc": [],
+                "val_acc": [],
+            },
         }
         best_val = 0.0
         t0 = time.time()
@@ -235,8 +242,13 @@ def train_merlin_dqml(cfg: dict, run_dir: Path, dtype: torch.dtype) -> dict[str,
         LOGGER.info(
             "  MerLin n_modes=%d n_photons=%d seed=%d val_acc=%.4f best=%.4f "
             "params=%d time=%.1fs",
-            n_modes, n_photons, seed, run["final_val_acc"], best_val,
-            n_params, run["wall_clock_seconds"],
+            n_modes,
+            n_photons,
+            seed,
+            run["final_val_acc"],
+            best_val,
+            n_params,
+            run["wall_clock_seconds"],
         )
 
     val_accs = np.array([r["final_val_acc"] for r in summary["runs"]])

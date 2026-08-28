@@ -27,8 +27,12 @@ def _ascomplex(t: torch.Tensor, dtype: torch.dtype) -> torch.Tensor:
     return t
 
 
-def init_state(n_qubits: int, batch_size: int, dtype: torch.dtype = torch.complex64,
-               device: torch.device | str | None = None) -> torch.Tensor:
+def init_state(
+    n_qubits: int,
+    batch_size: int,
+    dtype: torch.dtype = torch.complex64,
+    device: torch.device | str | None = None,
+) -> torch.Tensor:
     """Return the all-zero state ``|0...0>`` broadcast over a batch."""
     shape = (batch_size,) + (2,) * n_qubits
     state = torch.zeros(shape, dtype=dtype, device=device)
@@ -71,7 +75,9 @@ def rz_matrix(theta: torch.Tensor, dtype: torch.dtype) -> torch.Tensor:
 # ---------------------------------------------------------------------------
 # Gate application helpers.
 # ---------------------------------------------------------------------------
-def apply_single_qubit_gate(state: torch.Tensor, gate: torch.Tensor, qubit: int) -> torch.Tensor:
+def apply_single_qubit_gate(
+    state: torch.Tensor, gate: torch.Tensor, qubit: int
+) -> torch.Tensor:
     """Apply a single-qubit gate to the given qubit axis.
 
     ``state`` has shape ``(batch, 2, 2, ..., 2)``. ``gate`` is either an
@@ -90,7 +96,9 @@ def apply_single_qubit_gate(state: torch.Tensor, gate: torch.Tensor, qubit: int)
     return state
 
 
-def apply_two_qubit_gate(state: torch.Tensor, gate: torch.Tensor, q1: int, q2: int) -> torch.Tensor:
+def apply_two_qubit_gate(
+    state: torch.Tensor, gate: torch.Tensor, q1: int, q2: int
+) -> torch.Tensor:
     """Apply a two-qubit gate to the qubit pair (q1, q2).
 
     The basis ordering is row-major ``|q1 q2>`` in
@@ -144,9 +152,13 @@ def controlled_rotation_gate(rot: torch.Tensor, dtype: torch.dtype) -> torch.Ten
     return g
 
 
-def feedforward_pooling_gate(theta0: torch.Tensor, theta1: torch.Tensor,
-                             phi0: torch.Tensor, phi1: torch.Tensor,
-                             dtype: torch.dtype) -> torch.Tensor:
+def feedforward_pooling_gate(
+    theta0: torch.Tensor,
+    theta1: torch.Tensor,
+    phi0: torch.Tensor,
+    phi1: torch.Tensor,
+    dtype: torch.dtype,
+) -> torch.Tensor:
     """Build the QCNN pooling block as a deferred-measurement 2-qubit gate.
 
     The classical pooling block of the paper is
@@ -179,16 +191,21 @@ def apply_h(state: torch.Tensor, qubit: int, dtype: torch.dtype) -> torch.Tensor
     return apply_single_qubit_gate(state, _h_matrix(dtype, state.device), qubit)
 
 
-def apply_rz(state: torch.Tensor, theta: torch.Tensor, qubit: int, dtype: torch.dtype) -> torch.Tensor:
+def apply_rz(
+    state: torch.Tensor, theta: torch.Tensor, qubit: int, dtype: torch.dtype
+) -> torch.Tensor:
     return apply_single_qubit_gate(state, rz_matrix(theta, dtype), qubit)
 
 
-def apply_rx(state: torch.Tensor, theta: torch.Tensor, qubit: int, dtype: torch.dtype) -> torch.Tensor:
+def apply_rx(
+    state: torch.Tensor, theta: torch.Tensor, qubit: int, dtype: torch.dtype
+) -> torch.Tensor:
     return apply_single_qubit_gate(state, rx_matrix(theta, dtype), qubit)
 
 
-def apply_zz_phase(state: torch.Tensor, theta: torch.Tensor, q1: int, q2: int,
-                   dtype: torch.dtype) -> torch.Tensor:
+def apply_zz_phase(
+    state: torch.Tensor, theta: torch.Tensor, q1: int, q2: int, dtype: torch.dtype
+) -> torch.Tensor:
     """Apply exp(-i theta/2 Z_q1 Z_q2). Diagonal in computational basis.
 
     ``theta`` may be a scalar tensor or a per-sample batched tensor of shape
@@ -216,45 +233,70 @@ def apply_zz_phase(state: torch.Tensor, theta: torch.Tensor, q1: int, q2: int,
     return apply_two_qubit_gate(state, g, q1, q2)
 
 
-def apply_cnot(state: torch.Tensor, control: int, target: int, dtype: torch.dtype) -> torch.Tensor:
+def apply_cnot(
+    state: torch.Tensor, control: int, target: int, dtype: torch.dtype
+) -> torch.Tensor:
     return apply_two_qubit_gate(state, cnot_gate(dtype, state.device), control, target)
 
 
-def apply_crx(state: torch.Tensor, theta: torch.Tensor, control: int, target: int,
-              dtype: torch.dtype) -> torch.Tensor:
+def apply_crx(
+    state: torch.Tensor,
+    theta: torch.Tensor,
+    control: int,
+    target: int,
+    dtype: torch.dtype,
+) -> torch.Tensor:
     rot = rx_matrix(theta, dtype)
-    return apply_two_qubit_gate(state, controlled_rotation_gate(rot, dtype), control, target)
+    return apply_two_qubit_gate(
+        state, controlled_rotation_gate(rot, dtype), control, target
+    )
 
 
-def apply_crz(state: torch.Tensor, theta: torch.Tensor, control: int, target: int,
-              dtype: torch.dtype) -> torch.Tensor:
+def apply_crz(
+    state: torch.Tensor,
+    theta: torch.Tensor,
+    control: int,
+    target: int,
+    dtype: torch.dtype,
+) -> torch.Tensor:
     rot = rz_matrix(theta, dtype)
-    return apply_two_qubit_gate(state, controlled_rotation_gate(rot, dtype), control, target)
+    return apply_two_qubit_gate(
+        state, controlled_rotation_gate(rot, dtype), control, target
+    )
 
 
-def apply_pooling_block(state: torch.Tensor, params4: torch.Tensor, control: int,
-                        target: int, dtype: torch.dtype) -> torch.Tensor:
+def apply_pooling_block(
+    state: torch.Tensor,
+    params4: torch.Tensor,
+    control: int,
+    target: int,
+    dtype: torch.dtype,
+) -> torch.Tensor:
     """Apply the deferred-measurement pooling block on (control, target).
 
     ``params4`` has shape ``(4,)`` and is interpreted as
     ``(theta0, phi0, theta1, phi1)``: outcome-0 RZ/RX angles and outcome-1
     RZ/RX angles applied to the target qubit.
     """
-    gate = feedforward_pooling_gate(params4[0], params4[2], params4[1], params4[3], dtype)
+    gate = feedforward_pooling_gate(
+        params4[0], params4[2], params4[1], params4[3], dtype
+    )
     return apply_two_qubit_gate(state, gate, control, target)
 
 
 # ---------------------------------------------------------------------------
 # Probabilities and partial measurement.
 # ---------------------------------------------------------------------------
-def marginal_probabilities(state: torch.Tensor, kept_qubits: Sequence[int]) -> torch.Tensor:
+def marginal_probabilities(
+    state: torch.Tensor, kept_qubits: Sequence[int]
+) -> torch.Tensor:
     """Return the marginal probability distribution over ``kept_qubits``.
 
     The remaining qubits are traced out by summing |amplitude|^2 over their
     indices. Output shape is ``(batch, 2, 2, ..., 2)`` with one axis per kept
     qubit, in the order given by ``kept_qubits``.
     """
-    probs = (state.real**2 + state.imag**2)
+    probs = state.real**2 + state.imag**2
     n_qubits = state.ndim - 1
     all_qubits = list(range(n_qubits))
     kept = list(kept_qubits)

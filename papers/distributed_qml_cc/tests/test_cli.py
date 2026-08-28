@@ -17,13 +17,9 @@ def test_cli_help_exits_cleanly():
 
 def test_cli_overrides_apply(tmp_path):
     parser, arg_defs = build_project_cli_parser()
-    ns = parser.parse_args(
-        ["--scheme", "cc", "--n-layers", "3", "--iterations", "10"]
-    )
+    ns = parser.parse_args(["--scheme", "cc", "--n-layers", "3", "--iterations", "10"])
     cfg = {"model": {"params": {}}, "training": {}}
-    cfg = apply_cli_overrides(
-        cfg, ns, arg_defs, PROJECT_DIR, Path(tmp_path)
-    )
+    cfg = apply_cli_overrides(cfg, ns, arg_defs, PROJECT_DIR, Path(tmp_path))
     assert cfg["model"]["params"]["scheme"] == "cc"
     assert cfg["model"]["params"]["n_layers"] == 3
     assert cfg["training"]["n_iterations"] == 10

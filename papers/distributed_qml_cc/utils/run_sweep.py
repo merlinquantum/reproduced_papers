@@ -78,7 +78,9 @@ def main() -> None:
                 "dtype": args.dtype,
                 "seeds": seeds,
                 "dataset": {"params": {"seed": args.dataset_seed}},
-                "model": {"params": {"scheme": scheme, "n_layers": L, "qubits_per_qpu": 4}},
+                "model": {
+                    "params": {"scheme": scheme, "n_layers": L, "qubits_per_qpu": 4}
+                },
                 "training": {
                     "n_iterations": args.iterations,
                     "lr": args.lr,
@@ -92,15 +94,17 @@ def main() -> None:
             print(
                 f"[{scheme} L={L}] mean_val_acc={summary['mean_val_acc']:.4f} "
                 f"± {summary['std_val_acc']:.4f} ({len(seeds)} seeds, "
-                f"{time.time()-t0:.1f}s)"
+                f"{time.time() - t0:.1f}s)"
             )
-            sweep["results"].append({
-                "scheme": scheme,
-                "n_layers": L,
-                "mean_val_acc": summary["mean_val_acc"],
-                "std_val_acc": summary["std_val_acc"],
-                "runs": summary["runs"],
-            })
+            sweep["results"].append(
+                {
+                    "scheme": scheme,
+                    "n_layers": L,
+                    "mean_val_acc": summary["mean_val_acc"],
+                    "std_val_acc": summary["std_val_acc"],
+                    "runs": summary["runs"],
+                }
+            )
     sweep["total_seconds"] = time.time() - started
     out_path = base_outdir / "sweep.json"
     out_path.write_text(json.dumps(sweep, indent=2))

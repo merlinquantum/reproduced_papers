@@ -26,7 +26,9 @@ class SyntheticDatasetConfig:
     seed: int = 42
 
 
-def _sample_in_ball(rng: np.random.Generator, n_samples: int, n_dim: int, radius: float) -> np.ndarray:
+def _sample_in_ball(
+    rng: np.random.Generator, n_samples: int, n_dim: int, radius: float
+) -> np.ndarray:
     """Uniformly sample n_samples points inside an n_dim ball of given radius.
 
     Uses the standard exponential / normalize trick: a uniform direction is the
@@ -78,8 +80,12 @@ def build_synthetic_dataset(
             f"n_clusters={cfg.n_clusters} exceeds the available {n_corners} corners"
         )
     chosen = rng.choice(n_corners, size=cfg.n_clusters, replace=False)
-    bit_patterns = ((chosen[:, None] >> np.arange(cfg.n_dim)[None, :]) & 1).astype(np.float64)
-    corner_vectors = (2.0 * bit_patterns - 1.0) * cfg.sphere_radius  # shape (n_clusters, n_dim)
+    bit_patterns = ((chosen[:, None] >> np.arange(cfg.n_dim)[None, :]) & 1).astype(
+        np.float64
+    )
+    corner_vectors = (
+        2.0 * bit_patterns - 1.0
+    ) * cfg.sphere_radius  # shape (n_clusters, n_dim)
 
     # Assign balanced labels to clusters: half +1 and half -1.
     label_pool = np.array([+1] * (cfg.n_clusters // 2) + [-1] * (cfg.n_clusters // 2))
@@ -94,9 +100,7 @@ def build_synthetic_dataset(
         y_all[start:end] = label_pool[c]
 
     # Per-attribute Pearson correlation with the label.
-    rho = np.array([
-        np.corrcoef(x_all[:, i], y_all)[0, 1] for i in range(cfg.n_dim)
-    ])
+    rho = np.array([np.corrcoef(x_all[:, i], y_all)[0, 1] for i in range(cfg.n_dim)])
     info = {
         "n_samples": cfg.n_samples,
         "n_dim": cfg.n_dim,

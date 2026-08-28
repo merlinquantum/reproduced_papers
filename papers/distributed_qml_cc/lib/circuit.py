@@ -30,8 +30,9 @@ from . import simulator as sim
 # ---------------------------------------------------------------------------
 # Embedding (Havlicek ZZ feature map with cyclic couplings).
 # ---------------------------------------------------------------------------
-def embed_attributes(state: torch.Tensor, x: torch.Tensor, qubits: Sequence[int],
-                     dtype: torch.dtype) -> torch.Tensor:
+def embed_attributes(
+    state: torch.Tensor, x: torch.Tensor, qubits: Sequence[int], dtype: torch.dtype
+) -> torch.Tensor:
     """Apply the H / RZ(x_i) / cyclic ZZ(x_i, x_{i+1}) embedding.
 
     Parameters
@@ -61,8 +62,13 @@ def embed_attributes(state: torch.Tensor, x: torch.Tensor, qubits: Sequence[int]
 # ---------------------------------------------------------------------------
 # Convolutional sub-layer (one parameter per qubit, brick-wall entanglers).
 # ---------------------------------------------------------------------------
-def conv_sublayer(state: torch.Tensor, params: torch.Tensor, qubits: Sequence[int],
-                  parity: int, dtype: torch.dtype) -> torch.Tensor:
+def conv_sublayer(
+    state: torch.Tensor,
+    params: torch.Tensor,
+    qubits: Sequence[int],
+    parity: int,
+    dtype: torch.dtype,
+) -> torch.Tensor:
     """Apply one brick-wall convolutional sub-layer.
 
     ``params`` has shape ``(len(qubits),)`` and provides one rotation angle
@@ -89,8 +95,14 @@ def conv_sublayer(state: torch.Tensor, params: torch.Tensor, qubits: Sequence[in
 # ---------------------------------------------------------------------------
 # Cross-QPU "communication" edge (used by CC and QC).
 # ---------------------------------------------------------------------------
-def cross_qpu_edge(state: torch.Tensor, params: torch.Tensor, qpu_a_boundary: int,
-                   qpu_b_boundary: int, scheme: str, dtype: torch.dtype) -> torch.Tensor:
+def cross_qpu_edge(
+    state: torch.Tensor,
+    params: torch.Tensor,
+    qpu_a_boundary: int,
+    qpu_b_boundary: int,
+    scheme: str,
+    dtype: torch.dtype,
+) -> torch.Tensor:
     """Apply the cross-QPU communication red block.
 
     * ``scheme='cc'``: one controlled-RX gate, controlled by the QPU-A
@@ -112,8 +124,12 @@ def cross_qpu_edge(state: torch.Tensor, params: torch.Tensor, qpu_a_boundary: in
 # ---------------------------------------------------------------------------
 # Pooling layer: tree of pooling blocks reducing qubits in half each stage.
 # ---------------------------------------------------------------------------
-def pooling_layer(state: torch.Tensor, params: torch.Tensor, active_qubits: Sequence[int],
-                  dtype: torch.dtype) -> tuple[torch.Tensor, list[int]]:
+def pooling_layer(
+    state: torch.Tensor,
+    params: torch.Tensor,
+    active_qubits: Sequence[int],
+    dtype: torch.dtype,
+) -> tuple[torch.Tensor, list[int]]:
     """Apply one pooling layer on ``active_qubits`` and return the new active list.
 
     ``active_qubits`` must have even length; pairs ``(active[2k], active[2k+1])``
@@ -125,12 +141,14 @@ def pooling_layer(state: torch.Tensor, params: torch.Tensor, active_qubits: Sequ
         raise ValueError("pooling_layer requires an even number of active qubits")
     n_blocks = len(active_qubits) // 2
     if params.numel() != 4 * n_blocks:
-        raise ValueError(f"pooling_layer expects {4 * n_blocks} params, got {params.numel()}")
+        raise ValueError(
+            f"pooling_layer expects {4 * n_blocks} params, got {params.numel()}"
+        )
     new_active: list[int] = []
     for k in range(n_blocks):
         target = active_qubits[2 * k]
         control = active_qubits[2 * k + 1]
-        block_params = params[4 * k:4 * (k + 1)]
+        block_params = params[4 * k : 4 * (k + 1)]
         state = sim.apply_pooling_block(state, block_params, control, target, dtype)
         new_active.append(target)
     return state, new_active
@@ -142,6 +160,7 @@ def pooling_layer(state: torch.Tensor, params: torch.Tensor, active_qubits: Sequ
 @dataclass(frozen=True)
 class ParamLayout:
     """Number of trainable parameters in each block of the DQML circuit."""
+
     conv_per_qpu: int
     cross_qpu: int
     pool_per_qpu: int
@@ -149,7 +168,9 @@ class ParamLayout:
     total: int
 
     @classmethod
-    def for_scheme(cls, scheme: str, n_layers: int, qubits_per_qpu: int = 4) -> ParamLayout:
+    def for_scheme(
+        cls, scheme: str, n_layers: int, qubits_per_qpu: int = 4
+    ) -> ParamLayout:
         scheme = scheme.lower()
         if scheme not in {"non", "nc", "cc", "qc"}:
             raise ValueError(f"unknown scheme '{scheme}'")
