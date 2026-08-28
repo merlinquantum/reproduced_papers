@@ -208,7 +208,9 @@ def _compute_shift_scale(values: torch.Tensor) -> tuple[torch.Tensor, torch.Tens
     return shift, scale
 
 
-def _resolve_columns(frame: pd.DataFrame, cfg: dict) -> tuple[list[str], list[str], str]:
+def _resolve_columns(
+    frame: pd.DataFrame, cfg: dict
+) -> tuple[list[str], list[str], str]:
     dataset_cfg = cfg.get("dataset", {})
     time_column = str(dataset_cfg.get("time_column", "date"))
     target = str(dataset_cfg.get("target", "OT"))
@@ -307,7 +309,9 @@ def build_dataloaders(cfg: dict):
     }
     metadata["features_mode"] = features_mode
     metadata["target"] = str(dataset_cfg.get("target", "OT"))
-    metadata["dataset_path"] = str(_resolve_dataset_path(dataset_cfg.get("path"), cfg=cfg))
+    metadata["dataset_path"] = str(
+        _resolve_dataset_path(dataset_cfg.get("path"), cfg=cfg)
+    )
     return train_loader, val_loader, test_loader, metadata
 
 
