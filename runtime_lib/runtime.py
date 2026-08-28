@@ -9,8 +9,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-import perceval as pcvl
 import merlin as ML
+import perceval as pcvl
 
 from .cli import apply_cli_overrides, build_cli_parser
 from .config import deep_update, load_config
