@@ -11,6 +11,8 @@ data/*
 !data/photonic_QCNN/**
 !data/QLSTM/
 !data/QLSTM/**
+!data/QEGM_rare_events/
+!data/QEGM_rare_events/**
 !data/Bandwidth_tunning/
 !data/Bandwidth_tunning/**
 !data/generative_quantum_embeddings/
