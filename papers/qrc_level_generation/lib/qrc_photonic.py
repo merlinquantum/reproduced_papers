@@ -37,9 +37,12 @@ class PhotonicQRC:
         input_scale: float = 1.0,
         feedback_scale: float = 1.0,
         seed: int = 0,
+        n_post_layers: int = 2,
     ):
         if n_modes <= 1:
             raise ValueError("Need at least 2 modes for an entangling mesh")
+        if n_post_layers < 1:
+            raise ValueError("Need at least one post-encoding entangling layer")
         self.num_features = int(num_features)
         self.n_modes = int(n_modes)
         self.n_photons = int(n_photons)
@@ -70,8 +73,14 @@ class PhotonicQRC:
         builder = ml.CircuitBuilder(n_modes=n_modes)
         builder.add_entangling_layer()
         builder.add_angle_encoding(scale=float(np.pi))
-        builder.add_entangling_layer()
-        builder.add_entangling_layer()
+        # Post-encoding mesh depth is configurable. For a frozen reservoir
+        # this is not an expressivity knob: consecutive passive meshes with
+        # no data injection between them compose into a single equivalent
+        # interferometer, so n_post_layers only changes the random draw.
+        # The default of 2 matches the committed results; a 1-vs-2
+        # comparison (see README) confirms metrics agree within seed noise.
+        for _ in range(int(n_post_layers)):
+            builder.add_entangling_layer()
 
         # merlin >= 0.4: the computation space is owned by the measurement
         # strategy factory and the photon count is inferred from input_state.

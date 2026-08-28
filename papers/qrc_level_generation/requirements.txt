@@ -3,3 +3,4 @@ torch
 matplotlib
 pytest
 merlinquantum>=0.4
+pillow

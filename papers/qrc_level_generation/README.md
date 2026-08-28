@@ -279,6 +279,70 @@ temperature-tunable behaviour, demonstrating that the paper's headline claim
 (originality/broken-rate is a tunable knob through *T*) survives translation
 to a near-term linear-optical platform.
 
+### Photonic reservoir design notes
+
+**Why two entangling layers after the encoding?** For a *frozen* linear-
+optical reservoir this is not an expressivity choice: two consecutive
+passive meshes with no data injection or nonlinearity between them
+compose into a single equivalent interferometer, so the post-encoding
+depth only changes which random unitary is drawn. `n_post_layers` is now
+a config knob (default 2, matching the committed results), and a
+controlled 1-vs-2 comparison (same seed, 30 epochs, 5 temperatures)
+confirms the equivalence empirically — every metric agrees to within
+single-seed noise:
+
+| T | orig_L2 (1 layer / 2 layers) | broken_2 (1 layer / 2 layers) |
+|---:|---:|---:|
+| 0.7 | 0.248 / 0.250 | 0.649 / 0.655 |
+| 1.0 | 0.533 / 0.525 | 0.683 / 0.652 |
+| 2.0 | 0.804 / 0.797 | 0.809 / 0.806 |
+| 5.0 | 0.892 / 0.887 | 0.827 / 0.804 |
+| 30.0 | 0.918 / 0.917 | 0.840 / 0.839 |
+
+**Why not `merlin.models.ReservoirClassifier`?** Not because of the
+readout — both designs end in a trainable linear layer (our readout runs
+with `hidden_dim: 0`), and both the RC's `transform_reservoir` and our
+`PhotonicQRC.step` are stateless per call, so the Fig. 1b recurrence
+could in principle wrap either. The actual mismatches are: (i) *output
+semantics* — `transform_reservoir` returns embeddings standardized with
+dataset-level statistics, while our feedback path and temperature
+sampler consume the raw outcome-probability distribution that gets
+scaled into the next step's phases; (ii) *the `fit_reservoir` stage* —
+its preprocessing must be fitted on a dataset of inputs, but in a
+recurrent generator the inputs are functions of the reservoir's own
+outputs, so there is nothing to fit before the loop exists; and (iii)
+*encoding control* — our step maps `[one-hot ⊕ hidden]` through fixed
+random projections to phases (the paper-matched design), whereas the RC
+owns its input encoding internally. If a future MerLin release exposes
+raw, unstandardized per-step reservoir features, it would be a natural
+replacement for the hand-rolled frozen `QuantumLayer`.
+
+### Generated levels, rendered (paper Fig. 2 style)
+
+Each feature index corresponds to a unique 16-px column of the original
+level image, so any sequence renders as a playable-looking level strip
+(`utils/render_level.py`; the tile atlas is rebuilt from the packaged
+level image + sequence and verified against every column, replacing the
+authors' private `archeo` encoder).
+
+Original Super Mario Bros level 1-2:
+
+![Original level 1-2](results/level_original.png)
+
+Authors' released QRC sequence (Aer, T = 1):
+
+![Reference QRC level, T=1](results/level_reference_T1.png)
+
+Our trained 6-qubit QRC at T = 1 — coherent structures, continuous
+ground, sensible pipe placement:
+
+![Our QRC level, T=1](results/level_qrc_T1.png)
+
+The same model at T = 30 — the broken-transition regime made visible
+(fragmented ground, floating debris):
+
+![Our QRC level, T=30](results/level_qrc_T30.png)
+
 ### Save-point separation (paper § IV.A, Roblox)
 
 The paper's save-point table is for the **Roblox** obby, not Mario - we

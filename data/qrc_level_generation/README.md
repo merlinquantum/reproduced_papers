@@ -15,6 +15,7 @@ Only the files the reproduction actually consumes are committed:
 | `mario_level_1-2.json` | all training configs (`defaults`, `mario_qubit_*`, `mario_photonic`) |
 | `reference_data/SMB/6_qubits/Aer/` (11 temperatures) | `configs/reference_eval.json` — metrics on the paper-published sequences |
 | `reference_data/Roblox/{4..8}_qubits/Aer/...beta_1...` | `utils/investigate_save_point.py` — save-point separation check |
+| `reference_data/SMB/original_levels/1-2-moth.png` | `utils/render_level.py` — tile atlas for rendering sequences as level images |
 
 The full dump additionally contains noisy-backend variants
 (`FakeJames`, `FakeGarnet`, `Aer_matrixnoise`), Roblox feature encodings,

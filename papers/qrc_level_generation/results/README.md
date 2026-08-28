@@ -36,6 +36,7 @@ the paper `README.md` ("Results Obtained").
 | `*_originality.png`, `originality_combined.png` | originality-vs-temperature curves |
 | `sweep_tables.md` | mode / photon / iso-dim scaling sweep summaries (3 seeds) |
 | `sweep_*.png` | scaling-sweep figures |
+| `level_*.png` | rendered level strips (original, authors' reference at T=1, our QRC at T=1 and T=30) via `utils/render_level.py` |
 
 ## Regenerating
 
@@ -52,4 +53,7 @@ python utils/sweep.py --sweep photons --out-root sweeps/photons
 python utils/sweep.py --sweep isodim --out-root sweeps/isodim
 # then one-shot tables + Pareto + scaling figures into results/
 python utils/finalise_sweeps.py
+# level renderings (original / reference pickle / a run's generated sequences)
+python utils/render_level.py --original --out results/level_original.png
+python utils/render_level.py --npz outdir/<RUN>/generated_sequences.npz --temperature 1 --out results/level_qrc_T1.png
 ```
