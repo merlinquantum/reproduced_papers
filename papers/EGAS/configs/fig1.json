@@ -1,0 +1,8 @@
+{
+  "description": "Fig 1: trace distance vs input W1 for ZZ feature map (single/double layer)",
+  "seed": 0, "dtype": "float64", "outdir": "outdir", "device": "cpu",
+  "task": "fig1",
+  "dataset": {"name": "synthetic", "root": "data", "n_qubits": 4},
+  "fig1": {"n_qubits": 4, "n_per_class": 80, "layers": [1, 2]},
+  "logging": {"level": "info", "save_config_snapshot": true}
+}

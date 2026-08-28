@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
-import time
 import random
+import time
 
 import numpy as np
-from sklearn.preprocessing import StandardScaler
 from sklearn.kernel_approximation import RBFSampler
-from sklearn.svm import LinearSVC
 from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import LinearSVC
 
 from lib.lib_datasets import get_mnist_variant
 

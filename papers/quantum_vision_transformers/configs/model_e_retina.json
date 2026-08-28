@@ -1,0 +1,26 @@
+{
+    "model_type": "E",
+    "circuit_family": "generic",
+    "dataset": "retinamnist",
+    "seed": 42,
+    "device": "cuda",
+    "dtype": "float64",
+    "img_size": 28,
+    "patch_size": 7,
+    "embed_dim": 16,
+    "n_layers": 4,
+    "use_cls_token": true,
+    "use_pos_embed": true,
+    "epochs": 100,
+    "batch_size": 32,
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "lr_milestones": [
+        50,
+        75
+    ],
+    "lr_gamma": 0.1,
+    "data_root": "data/QVT",
+    "description": "Model E: Multi-sector attention. One shared (n+d)-mode interferometer. 1-photon path gives feature transform (replaces V), 2-photon patch-patch sector gives emergent attention (replaces W). Single set of trainable angles serves both roles.",
+    "lr_quantum": 0.05
+}
