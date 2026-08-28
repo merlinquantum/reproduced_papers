@@ -1,0 +1,9 @@
+{
+  "frequency_coefficients": 128,
+  "time_coefficients": 128,
+  "dct_type": 2,
+  "normalization": "ortho",
+  "batch_size": 16,
+  "output_dtype": "float32",
+  "workers": -1
+}
