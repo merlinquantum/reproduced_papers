@@ -5,6 +5,7 @@
     "backend": "photonic",
     "n_modes": 6,
     "n_photons": 3,
+    "n_post_layers": 2,
     "leaking_rate": 0.3,
     "shots": 0,
     "input_scale": 1.0,

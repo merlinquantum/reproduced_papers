@@ -37,7 +37,7 @@ class PhotonicQRC:
         input_scale: float = 1.0,
         feedback_scale: float = 1.0,
         seed: int = 0,
-        n_post_layers: int = 2,
+        n_post_layers: int = 1,
     ):
         if n_modes <= 1:
             raise ValueError("Need at least 2 modes for an entangling mesh")
@@ -73,12 +73,13 @@ class PhotonicQRC:
         builder = ml.CircuitBuilder(n_modes=n_modes)
         builder.add_entangling_layer()
         builder.add_angle_encoding(scale=float(np.pi))
-        # Post-encoding mesh depth is configurable. For a frozen reservoir
-        # this is not an expressivity knob: consecutive passive meshes with
-        # no data injection between them compose into a single equivalent
-        # interferometer, so n_post_layers only changes the random draw.
-        # The default of 2 matches the committed results; a 1-vs-2
-        # comparison (see README) confirms metrics agree within seed noise.
+        # Post-encoding mesh depth is configurable but is not an expressivity
+        # knob: consecutive passive meshes with no data injection between
+        # them compose into a single equivalent interferometer, so
+        # n_post_layers only changes the random draw (a 1-vs-2 comparison in
+        # the README confirms metrics agree within seed noise). Default is 1;
+        # the committed results/figures used depth 2, pinned in
+        # configs/mario_photonic.json for reproducibility.
         for _ in range(int(n_post_layers)):
             builder.add_entangling_layer()
 

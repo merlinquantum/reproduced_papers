@@ -62,7 +62,7 @@ def _build_reservoir(cfg: dict, num_features: int, seed: int):
             input_scale=float(qrc_cfg.get("input_scale", 1.0)),
             feedback_scale=float(qrc_cfg.get("feedback_scale", 1.0)),
             seed=seed,
-            n_post_layers=int(qrc_cfg.get("n_post_layers", 2)),
+            n_post_layers=int(qrc_cfg.get("n_post_layers", 1)),
         )
     raise ValueError(f"Unknown reservoir backend: {backend}")
 

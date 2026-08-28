@@ -285,11 +285,14 @@ to a near-term linear-optical platform.
 optical reservoir this is not an expressivity choice: two consecutive
 passive meshes with no data injection or nonlinearity between them
 compose into a single equivalent interferometer, so the post-encoding
-depth only changes which random unitary is drawn. `n_post_layers` is now
-a config knob (default 2, matching the committed results), and a
-controlled 1-vs-2 comparison (same seed, 30 epochs, 5 temperatures)
-confirms the equivalence empirically — every metric agrees to within
-single-seed noise:
+depth only changes which random unitary is drawn. `n_post_layers` is a
+config knob and **defaults to 1**, since the extra mesh makes little
+difference and one layer is simpler to run; the committed photonic
+results and figures were produced with depth 2, which stays pinned via
+`"n_post_layers": 2` in `configs/mario_photonic.json` (the sweeps
+inherit it) so they remain reproducible. A controlled 1-vs-2 comparison
+(same seed, 30 epochs, 5 temperatures) confirms the equivalence
+empirically — every metric agrees to within single-seed noise:
 
 | T | orig_L2 (1 layer / 2 layers) | broken_2 (1 layer / 2 layers) |
 |---:|---:|---:|
