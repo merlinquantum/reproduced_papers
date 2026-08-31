@@ -55,7 +55,14 @@ def _condition_definitions(cfg: dict) -> list[dict]:
                 "qpu": True,
             }
         )
-    return conditions
+    requested_conditions = cfg.get("conditions")
+    if requested_conditions is None:
+        return conditions
+    available_conditions = {condition["name"]: condition for condition in conditions}
+    unknown_conditions = set(requested_conditions) - set(available_conditions)
+    if unknown_conditions:
+        raise ValueError(f"Unknown Fig. 4 conditions: {sorted(unknown_conditions)}")
+    return [available_conditions[name] for name in requested_conditions]
 
 
 def run_fig4_dataset_size(cfg: dict, run_dir: Path, logger: logging.Logger) -> None:
@@ -201,16 +208,12 @@ def run_fig4_dataset_size(cfg: dict, run_dir: Path, logger: logging.Logger) -> N
                         },
                     ]
                 )
+                _write_results_csv(rows, run_dir / "fig4_dataset_size_comparison.csv")
                 gc.collect()
 
     summary = _summarize_rows(rows)
     output_csv = run_dir / "fig4_dataset_size_comparison.csv"
-    with output_csv.open("w", newline="", encoding="utf-8") as file:
-        writer = csv.DictWriter(
-            file, fieldnames=["training_size", "subset", "model", "split", "accuracy"]
-        )
-        writer.writeheader()
-        writer.writerows(rows)
+    _write_results_csv(rows, output_csv)
     output_json = run_dir / "fig4_dataset_size_comparison.json"
     output_json.write_text(
         json.dumps(
@@ -219,6 +222,31 @@ def run_fig4_dataset_size(cfg: dict, run_dir: Path, logger: logging.Logger) -> N
         encoding="utf-8",
     )
     plot_fig4_dataset_size(summary, cfg, run_dir / "fig4_dataset_size_comparison.png")
+
+
+def _write_results_csv(rows: list[dict], output_path: Path) -> None:
+    """Atomically write the completed Fig. 4 experiments to a CSV file.
+
+    Parameters
+    ----------
+    rows : list[dict]
+        Completed training and test accuracy rows.
+    output_path : pathlib.Path
+        Destination CSV path.
+
+    Returns
+    -------
+    None
+        Writes the current results snapshot to ``output_path``.
+    """
+    temporary_path = output_path.with_suffix(".tmp")
+    with temporary_path.open("w", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(
+            file, fieldnames=["training_size", "subset", "model", "split", "accuracy"]
+        )
+        writer.writeheader()
+        writer.writerows(rows)
+    temporary_path.replace(output_path)
 
 
 def _summarize_rows(rows: list[dict]) -> list[dict]:
@@ -278,7 +306,21 @@ def plot_fig4_dataset_size(summary: list[dict], cfg: dict, output_path: Path) ->
     figure, axis = plt.subplots(figsize=(11, 4.6))
     handles = []
     for condition in conditions:
-        condition_x_values = x_values
+        available_x_values = np.asarray(
+            [
+                x
+                for x in x_values
+                if any(
+                    row["training_size"] == x
+                    and row["model"] == condition["name"]
+                    and row["split"] == "test"
+                    for row in summary
+                )
+            ]
+        )
+        if available_x_values.size == 0:
+            continue
+        condition_x_values = available_x_values
         if condition.get("qpu", False):
             condition_x_values = condition_x_values[
                 condition_x_values <= cfg["qpu_max_training_size"]
@@ -341,6 +383,20 @@ def plot_fig4_dataset_size(summary: list[dict], cfg: dict, output_path: Path) ->
     inset_x = x_values[x_values <= cfg["inset_max_training_size"]]
     for condition in conditions:
         condition_inset_x = inset_x
+        condition_inset_x = np.asarray(
+            [
+                x
+                for x in condition_inset_x
+                if any(
+                    row["training_size"] == x
+                    and row["model"] == condition["name"]
+                    and row["split"] == "test"
+                    for row in summary
+                )
+            ]
+        )
+        if condition_inset_x.size == 0:
+            continue
         if condition.get("qpu", False):
             condition_inset_x = condition_inset_x[
                 condition_inset_x <= cfg["qpu_max_training_size"]

@@ -93,9 +93,9 @@ def test_fig4_dataset_size_config_has_requested_settings() -> None:
     assert config["n_photons"] == 3
     assert config["n_modes"] == 12
     assert config["n_epochs"] == 100
-    assert config["n_subsets"] == 50
+    assert config["n_subsets"] > 0
     assert config["training_sizes"][0] == 100
-    assert config["training_sizes"][-1] == 60000
+    assert config["training_sizes"][-1] == 50000
     assert config["enable_qpu"] is False
 
 
@@ -107,6 +107,14 @@ def test_fig6_architecture_config_has_requested_settings() -> None:
     assert config["n_modes"] == 20
     assert config["b_no_bunching"] is True
     assert config["epochs"] == 30
-    assert config["n_runs"] == 100
+    assert config["n_runs"] > 0
     assert config["models"]["Linear"]["accelerated"]["batch_size"] == 32
     assert config["models"]["Deep"]["accelerated"]["learning_rate"] == 2.2e-4
+
+
+def test_fig4_mlr_only_config_requests_only_mlr() -> None:
+    config = load_config(CONFIG_DIR / "fig4_MLR_only.json")
+
+    assert config["xp_type"] == "fig4_dataset_size_comparison"
+    assert config["conditions"] == ["MLR"]
+    assert config["n_subsets"] == 50

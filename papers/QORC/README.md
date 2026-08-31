@@ -337,6 +337,8 @@ default noisy quantum feature batch is limited to 25 images
 (`noisy_feature_batch_size`). The ideal and QPU feature batches use 250 images;
 these settings do not change the training subset sizes or epoch count.
 
+![Fig. 4: MNIST accuracy versus training-set size](assets/fig4_dataset_size_comparison_recovered.png)
+
 Run the default local experiment from the repository root with:
 
 ```bash
