@@ -38,7 +38,7 @@ grid-search results over all 27 forecasting tasks:
 The mean rank is **2.90 for the classical models** and **5.46 for the quantum
 models**. The ordering matches the paper's Figure 5 exactly.
 
-![Model ranking across all 27 tasks](results/ranking_all_models.png)
+![Model ranking across all 27 tasks](assets/ranking_all_models.png)
 
 The independent live implementation gives the same qualitative result. The
 400-epoch runs are useful as implementation checks, but not as the primary
@@ -55,7 +55,7 @@ is used.
 The apparent photonic lead at 400 epochs is therefore a training-budget effect.
 Under the paper's stopping rule, LSTM ranks first.
 
-![Effect of training budget on ranking](results/budget_effect.png)
+![Effect of training budget on ranking](assets/budget_effect.png)
 
 ### Photonic reservoir result
 
@@ -90,7 +90,7 @@ The reservoir result is an extension of the paper, not evidence of quantum
 advantage. It covers six tasks, three evaluation seeds, and one selected optical
 configuration.
 
-![Tuned reservoir comparison](results/reservoir_search.png)
+![Tuned reservoir comparison](assets/reservoir_search.png)
 
 ## Original Paper
 
@@ -150,8 +150,8 @@ affects all compared models and does not alter the rank-based headline result.
 | `utils/search_reservoirs.py` | Reservoir selection and final evaluation |
 | `utils/report_search.py` | Reservoir tables and figure |
 | `utils/compare_all_models.py` | Combined comparison and coverage report |
-| `original_results/` | Authors' released result CSVs |
-| `results/` | Curated metrics, tables, models, and figures |
+| `original_assets/` | Authors' released result CSVs |
+| `assets/` | Curated metrics, tables, models, and figures |
 
 ## Installation and Quick Start
 
@@ -281,11 +281,11 @@ outdir/run_YYYYMMDD-HHMMSS/
 
 The main curated outputs are:
 
-- `results/claim_summary.md`: complete 27-task paper ranking.
-- `results/sweep_table.md`: reduced live experiment.
-- `results/reservoir_table.md`: six-task, two-budget comparison.
-- `results/reservoir_search.md`: selected reservoir comparison.
-- `results/all_models_comparison.md`: combined results and coverage matrix.
+- `assets/claim_summary.md`: complete 27-task paper ranking.
+- `assets/sweep_table.md`: reduced live experiment.
+- `assets/reservoir_table.md`: six-task, two-budget comparison.
+- `assets/reservoir_search.md`: selected reservoir comparison.
+- `assets/all_models_comparison.md`: combined results and coverage matrix.
 
 ## Data
 
