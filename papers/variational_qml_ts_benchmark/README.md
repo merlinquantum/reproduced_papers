@@ -164,6 +164,10 @@ python implementation.py --paper variational_qml_ts_benchmark \
     --config configs/defaults.json
 ```
 
+The environment is tested with Python 3.14, PennyLane 0.45.1, MerLin 0.4.1,
+and NumPy 2.5. PennyLane and MerLin share the same NumPy environment; no
+separate Autoray pin is required.
+
 To regenerate the main result tables and figures without training:
 
 ```bash
