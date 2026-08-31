@@ -1,9 +1,10 @@
 """Core QARIMA pipeline: differencing, quantum ACF/PACF, AR/MA loss, fit, forecast.
 
-The forecast function is a standard Box--Jenkins ARIMA(p,d,q) one-step predictor;
-the AR and MA *coefficients* are produced by a pluggable refiner (classical / gate
-VQC / photonic MerLin VQC) that minimises the paper's quantum-inspired loss
-(Sec. 4.5 / 4.7).  See LOG.md (D1--D4) for the modelling decisions.
+The forecast function recursively forecasts the entire OOS horizon from a single
+origin (multi-step dynamic forecast), while the AR and MA *coefficients* are
+produced by a pluggable refiner (classical / gate VQC / photonic MerLin VQC)
+that minimises the paper's quantum-inspired loss (Sec. 4.5 / 4.7). See LOG.md
+(D1--D4) for the modelling decisions.
 """
 
 from __future__ import annotations
@@ -186,7 +187,7 @@ def fit_ma(resid: np.ndarray, q: int, refiner, weights: LossWeights, seed: int):
 
 
 # --------------------------------------------------------------------------- #
-# Rolling one-step forecast (coefficients fixed from training)
+# Dynamic multi-step OOS forecast (coefficients fixed from training)
 # --------------------------------------------------------------------------- #
 def forecast_oos(
     y_full: np.ndarray,

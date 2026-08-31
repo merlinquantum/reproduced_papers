@@ -4,10 +4,14 @@ For one dataset config this:
   1. loads the series and applies the paper's train/OOS split;
   2. builds classical baselines (pmdarima auto non-seasonal = paper comparator;
      the paper's fixed order; optionally a *fair* seasonal ARIMA);
-  3. fits every candidate ``(p,d,q)`` with each refiner
+  3. fits every hard-coded candidate ``(p,d,q)`` with each refiner
      (classical OLS / gate VQC / photonic MerLin VQC), multi-seed for the VQCs;
+     NOTE: quantum_acf/quantum_pacf are library functions available for order
+     selection but the runner currently uses pre-configured candidate lists;
   4. runs a classical AR-order sweep (the "quantum gain is an order effect" probe);
-  5. computes OOS MSE/MAPE + Diebold--Mariano tests vs the classical baseline;
+  5. computes OOS MSE/MAPE vs the classical baseline (Diebold--Mariano p-values
+     omitted for multi-step forecasts with mixed lead times, where they are
+     undefined; see metrics.py for details);
   6. writes ``results.json``, ``metrics.csv``, ``forecasts.npz`` and figures.
 """
 
@@ -26,7 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from lib.classical import auto_order, dynamic_forecast  # noqa: E402
 from lib.data import load_series, split_series  # noqa: E402
-from lib.metrics import diebold_mariano, mape, mse  # noqa: E402
+from lib.metrics import mape, mse  # noqa: E402
 from lib.qarima import LossWeights, fit_and_forecast  # noqa: E402
 from lib.refiners import make_refiner  # noqa: E402
 from utils import plot_qarima  # noqa: E402
@@ -98,7 +102,9 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                 "mape": mape(y_true, cpred_paper),
             }
         except Exception as e:  # noqa: BLE001
-            log.warning("paper baseline order %s failed: %s", pbo, e)
+            raise RuntimeError(
+                f"paper baseline order {pbo} failed and is required by config: {e}"
+            ) from e
 
     sb = cfg.get("seasonal_baseline", {})
     if sb.get("enabled"):
@@ -119,7 +125,11 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                 results["seasonal"]["mape"],
             )
         except Exception as e:  # noqa: BLE001
-            log.warning("seasonal baseline failed: %s", e)
+            raise RuntimeError(
+                f"seasonal baseline (order={sb.get('order')}, "
+                f"seasonal_order={sb.get('seasonal_order')}) failed and is "
+                f"enabled in config: {e}"
+            ) from e
 
     # ---- candidate (p,d,q) x refiner ----------------------------------------
     best = {"gate": (np.inf, None), "merlin": (np.inf, None)}
@@ -142,14 +152,14 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                 mses.append(mse(y_true, fr.y_pred))
                 mapes.append(mape(y_true, fr.y_pred))
             mean_pred = np.mean(preds_seeds, axis=0)
-            dm_mse = diebold_mariano(y_true, cpred_auto, mean_pred, "mse")
-            dm_mae = diebold_mariano(y_true, cpred_auto, mean_pred, "mae")
+            # NOTE: DM p-values are omitted here. The averaged predictions mix
+            # lead times 1..n_oos, making a fixed-horizon DM test undefined.
+            # A proper multi-step test would require rolling-origin fixed-horizon
+            # errors; see metrics.py comments for details.
             entry = {
                 "mse_mean": float(np.mean(mses)),
                 "mse_std": float(np.std(mses)),
                 "mape_mean": float(np.mean(mapes)),
-                "dm_mse_p": dm_mse[1],
-                "dm_mae_p": dm_mae[1],
                 "n_seeds": len(use_seeds),
             }
             row["refiners"][rname] = entry
@@ -199,15 +209,13 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
     np.savez(run_dir / "forecasts.npz", **forecasts)
     with (run_dir / "metrics.csv").open("w", newline="") as fh:
         wri = csv.writer(fh)
-        wri.writerow(["model", "p", "d", "q", "mse", "mape", "dm_mse_p", "dm_mae_p"])
+        wri.writerow(["model", "p", "d", "q", "mse", "mape"])
         wri.writerow(
             [
                 "classical_auto",
                 *order_auto,
                 results["classical_auto"]["mse"],
                 results["classical_auto"]["mape"],
-                "",
-                "",
             ]
         )
         if "seasonal" in results:
@@ -219,8 +227,6 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                     "",
                     results["seasonal"]["mse"],
                     results["seasonal"]["mape"],
-                    "",
-                    "",
                 ]
             )
         for r in cand_rows:
@@ -233,8 +239,6 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
                         r["q"],
                         f"{e['mse_mean']:.4f}",
                         f"{e['mape_mean']:.5f}",
-                        f"{e['dm_mse_p']:.4f}",
-                        f"{e['dm_mae_p']:.4f}",
                     ]
                 )
 

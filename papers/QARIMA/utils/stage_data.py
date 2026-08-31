@@ -8,8 +8,9 @@ offline. Idempotent: skips files that already exist. Run from anywhere::
 
     python papers/QARIMA/utils/stage_data.py [--data-root /reproduced_papers/data]
 
-See LOG.md "Data Acquisition Log" and VISITED_URLS.md for provenance. The paper's
-Sydney station 95768099999 (North Head) has no temperature data, so we stage the
+See LOG.md (data acquisition and design decisions) and VISITED_URLS.md (download
+URLs and timestamps) in the paper directory for provenance. The paper's Sydney
+station 95768099999 (North Head) has no temperature data, so we stage the
 substitute station 94768099999 (Sydney Observatory Hill).
 """
 

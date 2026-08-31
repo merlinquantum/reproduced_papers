@@ -1,9 +1,10 @@
 """Classical ARIMA baselines (paper's ``pmdarima`` comparator).
 
 Provides the paper's fair reference: a non-seasonal ``auto_arima`` order selected
-on the training set, evaluated with the *same* rolling one-step OOS protocol as
-QARIMA (fixed parameters, realised past).  Also exposes a seasonal auto_arima for
-the baseline-fairness probe on seasonal series (LOG.md C3/F6).
+on the training set, evaluated with the same multi-step dynamic forecast protocol as
+QARIMA (coefficients fixed on training, whole OOS horizon forecast recursively from
+a single origin). Also exposes a seasonal auto_arima for the baseline-fairness probe
+on seasonal series (LOG.md C3/F6).
 """
 
 from __future__ import annotations

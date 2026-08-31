@@ -194,7 +194,7 @@ class MerlinVQCRefiner:
             "input_state": input_state,
             "encoding": "none (no-input trainable interferometer)",
             "measurement_strategy": "PROBABILITIES",
-            "postselection": "none",
+            "postselection": "collision-free (implicit in UNBUNCHED space)",
             "backend": "MerLin CPU simulator (analytic, shots=0)",
             "output_size": int(layer.output_size),
         }

@@ -47,10 +47,28 @@ def _ensure_sunspots(raw: Path) -> Path:
 
 
 def _ensure_downloaded(raw: Path, filename: str) -> Path:
-    """Download ``filename`` into ``raw`` on first use, then reuse the cached copy."""
+    """Download ``filename`` into ``raw`` on first use, then reuse the cached copy.
+
+    Downloads to a temporary sibling file and atomically replaces the cache only
+    after successful completion, preventing partial files from being treated as
+    valid cache entries.
+    """
     dest = raw / filename
     if not dest.exists() or dest.stat().st_size == 0:
-        urllib.request.urlretrieve(_DOWNLOAD_URLS[filename], dest)  # noqa: S310
+        # Download to a temporary file in the same directory for atomic replacement.
+        temp_file = raw / (filename + ".tmp")
+        try:
+            urllib.request.urlretrieve(_DOWNLOAD_URLS[filename], temp_file)  # noqa: S310
+            # Atomic replace: only move if download succeeded and temp file is nonempty.
+            if temp_file.stat().st_size > 0:
+                temp_file.replace(dest)
+            else:
+                raise RuntimeError(f"Downloaded file {temp_file} is empty")
+        except Exception:
+            # Clean up temp file on failure so it doesn't interfere with retries.
+            if temp_file.exists():
+                temp_file.unlink()
+            raise
     return dest
 
 

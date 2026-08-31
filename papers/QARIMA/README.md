@@ -73,22 +73,24 @@ papers/QARIMA/
 ├── configs/            # defaults.json + one config per dataset
 ├── tests/              # unit tests (numeric core, CLI) — 14 tests
 ├── results/            # key figures per dataset
-└── notebook.ipynb      # end-to-end walkthrough
+└── QARIMA.ipynb        # end-to-end walkthrough
 ```
 
 ## Install and How to Run
 ```bash
-pip install statsmodels pmdarima          # added this session; rest is in the base image
-# Data staging (Sunspots+CO2 offline via statsmodels/Rdatasets, others downloaded once)
-# already staged under data/QARIMA/raw/ ; see LOG.md "Data Acquisition Log".
+pip install -r requirements.txt
 
 # Run one dataset (all three refiners + baselines + figures):
-python implementation.py --paper QARIMA --config configs/co2.json \
-    --seed 42 --data-root /reproduced_papers/data
+python implementation.py --paper QARIMA --config configs/co2.json --seed 42
 # Datasets: sunspots.json co2.json ausbeer.json woolyarn.json sydney.json
 # Handy flags: --reps --max-iter --step-frac --shots
 cd papers/QARIMA && pytest -q
 ```
+
+**Note on data staging:** Sunspots is generated offline from `statsmodels` on first run.
+The other four datasets (CO2, Australian Beer, Australian Woollen Yarn, Sydney) are
+downloaded from Rdatasets/NOAA on first run and then cached locally under
+`data/QARIMA/raw/`. No pre-staging is required; all datasets are lazily fetched.
 Artifacts land in `outdir/run_<timestamp>/`: `results.json`, `metrics.csv`,
 `forecasts.npz`, `run.log`, and three PNGs (also copied into `results/`).
 
@@ -217,7 +219,7 @@ add expressivity here).
 | Input state | `[1,0,1,0,...]` (m/2 photons) |
 | Encoding | none (no-input trainable interferometer; coefficients from readout) |
 | Measurement strategy | PROBABILITIES |
-| Postselection | none |
+| Postselection | collision-free (implicit in UNBUNCHED probability space) |
 | Simulator / QPU | MerLin CPU simulator (analytic, shots=0) |
 | Shot count | n/a (analytic) |
 | Trainable params | parameter-matched to gate VQC (`reps·p`) |

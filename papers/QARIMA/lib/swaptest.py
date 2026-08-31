@@ -2,11 +2,14 @@
 
 The compact swap test estimates the cosine similarity between two real vectors
 via the control-qubit measurement of a Fredkin (CSWAP) circuit:
-``cos(x, theta) ~ sqrt(2 p0 - 1)`` up to sign.  In the noiseless / infinite-shot
-limit the estimate equals the exact classical cosine similarity
-``x . theta / (||x|| ||theta||)`` (this equivalence is documented in LOG.md, D1).
+``cos(x, theta) ~ sqrt(2 p0 - 1)`` where ``p0`` is the control-qubit measurement
+probability. In the noiseless / infinite-shot limit the magnitude estimate equals
+the exact classical cosine similarity ``x . theta / (||x|| ||theta||)``, but the
+measurement yields no sign information. The sign is recovered from the exact
+classical dot product ``np.sign(x . theta)``, so this is not a pure quantum
+estimator (hybrid classical-quantum; see swap_test_cosine below).
 
-We therefore compute the cosine analytically and optionally add Gaussian
+We compute the cosine magnitude analytically and optionally add Gaussian
 measurement noise whose scale follows the shot count (the paper's ``sigma`` /
 ``shots`` knobs), so the forward pass matches the paper's infinite-shot limit
 exactly while still allowing a finite-shot robustness study.
@@ -31,12 +34,14 @@ def swap_test_cosine(
     shots: int | None = None,
     rng: np.random.Generator | None = None,
 ) -> float:
-    """Compact swap-test cosine estimate (analytic; optional finite-shot noise).
+    """Compact swap-test cosine estimate (analytic magnitude; sign from classical dot product).
 
     With ``shots is None`` returns the exact cosine.  With a finite ``shots`` the
     control-qubit probability ``p0 = (1 + cos^2)/2`` is sampled from a binomial
-    over ``shots`` measurements and inverted, reproducing shot noise on the
-    ``sqrt(2 p0 - 1)`` estimator.
+    over ``shots`` measurements and inverted to estimate ``|cos|``. The sign
+    ``np.sign(x . theta)`` comes from the exact classical dot product, not from
+    the quantum measurement (which provides no sign information). This is a
+    hybrid classical-quantum estimator, not a pure finite-shot swap-test.
     """
     c = cosine_similarity(x, theta)
     if shots is None or shots <= 0:

@@ -30,6 +30,9 @@ def diebold_mariano(
     Returns ``(dm_stat, p_value)`` for the two-sided test of equal accuracy.  A
     positive statistic means ``a`` has larger loss (i.e. ``b`` is better).  Uses
     the Harvey--Leybourne--Newbold small-sample correction.
+
+    Returns ``(NaN, NaN)`` if the long-run variance is zero or non-positive
+    (degenerate case where the test is undefined), or if sample size < 2.
     """
     y_true = np.asarray(y_true, dtype=np.float64)
     ea = y_true - np.asarray(pred_a, dtype=np.float64)
@@ -50,7 +53,8 @@ def diebold_mariano(
         cov = float(np.mean((d[k:] - d_bar) * (d[:-k] - d_bar)))
         var += 2.0 * (1.0 - k / h) * cov
     if var <= 0 or n < 2:
-        return 0.0, 1.0
+        # Degenerate case: return NaNs to indicate the test is undefined.
+        return float("nan"), float("nan")
     dm = d_bar / np.sqrt(var / n)
     # Harvey-Leybourne-Newbold correction.
     correction = np.sqrt((n + 1 - 2 * h + h * (h - 1) / n) / n)
