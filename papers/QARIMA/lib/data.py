@@ -97,7 +97,9 @@ def load_sydney(raw: Path) -> tuple[np.ndarray, dict]:
     build a daily-mean temperature series for calendar 2024.  Labeled as a
     substitute-station reproduction.
     """
-    df = pd.read_csv(_ensure_downloaded(raw, "sydney_observatory_hill_2024.csv"), low_memory=False)
+    df = pd.read_csv(
+        _ensure_downloaded(raw, "sydney_observatory_hill_2024.csv"), low_memory=False
+    )
     df["DATE"] = pd.to_datetime(df["DATE"])
     df["tempC"] = df["TMP"].map(_parse_noaa_tmp)
     daily = df.set_index("DATE")["tempC"].resample("D").mean()
