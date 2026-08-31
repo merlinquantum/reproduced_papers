@@ -1,0 +1,32 @@
+{
+    "description": "Photonic MerLin QKS on (3,5)-MNIST, two dual-rail qubits with a post-selected KLM CNOT. Exactly equivalent to the gate-model cnot2 ansatz (mnist35_cnot2.json).",
+    "experiment": "mnist35_merlin",
+    "seeds": [
+        42,
+        43,
+        44
+    ],
+    "dataset": {
+        "name": "mnist35",
+        "n_train": 4000,
+        "n_test": 1000,
+        "standardize": true
+    },
+    "qks": {
+        "backend": "photonic_merlin",
+        "n_modes": 6,
+        "n_photons": 2,
+        "encoding": "tile",
+        "n_episodes": 5000,
+        "sigma": 0.1,
+        "shots_per_episode": 1,
+        "n_layers": 1,
+        "angle_scale": 1.0,
+        "architecture": "dual_rail_klm_cnot"
+    },
+    "classifier": {
+        "kind": "logistic_regression",
+        "C": 1.0,
+        "max_iter": 4000
+    }
+}

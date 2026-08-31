@@ -79,6 +79,36 @@ def initialize_resnet_kaiming(model):
                 nn.init.constant_(m.bias, 0)
 
 
+class QuantumInputPreprocessor(nn.Module):
+    """Apply the feature scaling expected by the representation network.
+
+    Parameters
+    ----------
+    merlin : bool
+        Select the MerLin scaling convention. Qiskit and classical networks
+        use a factor of pi; MerLin uses a factor of 1/pi.
+    """
+
+    def __init__(self, merlin):
+        super().__init__()
+        self.scale_factor = 1 / math.pi if merlin else math.pi
+
+    def forward(self, features):
+        """Scale compressed features into the representation input range.
+
+        Parameters
+        ----------
+        features : torch.Tensor
+            Compressed backbone features.
+
+        Returns
+        -------
+        torch.Tensor
+            Sigmoid-bounded and backend-scaled features.
+        """
+        return torch.sigmoid(features) * self.scale_factor
+
+
 class QSSL(nn.Module):
     """
     Quantum Self-Supervised Learning model that supports both quantum and classical
@@ -123,6 +153,8 @@ class QSSL(nn.Module):
         # ========== Representation Network Configuration ==========
         self.merlin = args.merlin  # Use MerLin quantum framework
         self.qiskit = args.qiskit  # Use Qiskit quantum framework
+        self.save_dhs = getattr(args, "save_dhs", False)
+        self.quantum_input_preprocessor = QuantumInputPreprocessor(self.merlin)
         self.batch_norm = args.batch_norm  # Apply batch norm after compression
         self.bn = nn.BatchNorm2d(self.width)  # Batch normalization layer
 
@@ -161,11 +193,13 @@ class QSSL(nn.Module):
                 ],
                 input_parameters=["feature"],
                 input_state=input_state,
-                computation_space=ComputationSpace.UNBUNCHED,
-                measurement_strategy=MeasurementStrategy.PROBABILITIES,
+                measurement_strategy=MeasurementStrategy.probs(
+                    ComputationSpace.UNBUNCHED
+                ),
             )
 
             self.rep_net_output_size = self.representation_network.output_size
+            self.photonic_probability_vectors = []
 
         # ========== Quantum Representation Network (Qiskit) ==========
         elif self.qiskit:
@@ -248,17 +282,18 @@ class QSSL(nn.Module):
                 self.rep_net_output_size = args.width  # Output dimension matches input
         # ========== Contrastive Learning Components ==========
         self.loss_dim = args.loss_dim  # Dimension of contrastive loss space
+        self.projection_head = getattr(args, "projection_head", True)
 
-        # Projection head: maps representations to contrastive loss space
-        # This is a key component in contrastive learning (SimCLR, MoCo, etc.)
-        self.proj = nn.Sequential(
-            nn.Linear(
-                self.rep_net_output_size, self.width
-            ),  # Project to intermediate dim
-            nn.BatchNorm1d(self.width),  # Normalize features
-            nn.ReLU(),  # Non-linear activation
-            nn.Linear(self.width, self.loss_dim),  # Final projection to loss space
-        )
+        if self.projection_head:
+            # Projection head: maps representations to contrastive loss space.
+            self.proj = nn.Sequential(
+                nn.Linear(self.rep_net_output_size, self.width),
+                nn.BatchNorm1d(self.width),
+                nn.ReLU(),
+                nn.Linear(self.width, self.loss_dim),
+            )
+        else:
+            self.proj = nn.Identity()
 
         self.normalize = nn.Sigmoid()  # Normalization function (if needed)
         self.temperature = args.temperature  # Temperature parameter for InfoNCE loss
@@ -289,15 +324,20 @@ class QSSL(nn.Module):
         # ========== Feature Preprocessing ==========
         # Apply sigmoid activation before quantum/classical representation network
         # This ensures features are in [0,1] range, suitable for quantum encoding
-        factor = torch.pi if not self.merlin else 1 / torch.pi
-        x1 = torch.sigmoid(x1) * factor
-        x2 = torch.sigmoid(x2) * factor
-        # Note: Original implementation scales by π for phase encoding
-        # print(f"\n ---x1 = {torch.min(x1)} to {torch.max(x1)} with factor = {factor}")
+        x1 = self.quantum_input_preprocessor(x1)
+        x2 = self.quantum_input_preprocessor(x2)
+        # Note: Original implementation scales by π for phase encoding.
+        # print(f"\n ---x1 = {torch.min(x1)} to {torch.max(x1)}")
         # ========== Representation Learning ==========
         # Process through quantum or classical representation network
         z1 = self.representation_network(x1)
         z2 = self.representation_network(x2)
+
+        if self.merlin and getattr(self, "save_dhs", False):
+            self.photonic_probability_vectors = [
+                z1.detach().cpu(),
+                z2.detach().cpu(),
+            ]
 
         # ========== Contrastive Loss Computation ==========
         # Project representations to contrastive loss space

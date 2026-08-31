@@ -1,0 +1,44 @@
+{
+ "description": "Logistic regression on raw (3,5)-MNIST pixels - the paper's Linear Baseline reference.",
+ "config": "configs/baseline_lr_mnist35.json",
+ "regenerate": "python implementation.py --paper quantum_kitchen_sinks --config baseline_lr_mnist35.json",
+ "note": "Curated copy of a run's metrics.json, committed so the notebook and README do not depend on the git-ignored outdir/. All (3,5)-MNIST runs here share one 4000/1000 subsample (the dataset is loaded once per run at the config seed), so the comparison against the LR baseline is paired.",
+ "results": [
+  {
+   "sigma": 0.05,
+   "n_episodes": 1,
+   "seed": 42,
+   "train_accuracy": 0.9925,
+   "test_accuracy": 0.956,
+   "train_error": 0.007499999999999951,
+   "test_error": 0.04400000000000004,
+   "name": "logistic_regression",
+   "backend": "none",
+   "n_features": 784
+  },
+  {
+   "sigma": 0.05,
+   "n_episodes": 1,
+   "seed": 43,
+   "train_accuracy": 0.9925,
+   "test_accuracy": 0.956,
+   "train_error": 0.007499999999999951,
+   "test_error": 0.04400000000000004,
+   "name": "logistic_regression",
+   "backend": "none",
+   "n_features": 784
+  },
+  {
+   "sigma": 0.05,
+   "n_episodes": 1,
+   "seed": 44,
+   "train_accuracy": 0.9925,
+   "test_accuracy": 0.956,
+   "train_error": 0.007499999999999951,
+   "test_error": 0.04400000000000004,
+   "name": "logistic_regression",
+   "backend": "none",
+   "n_features": 784
+  }
+ ]
+}

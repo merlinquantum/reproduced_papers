@@ -1,0 +1,53 @@
+{
+ "description": "Photonic MerLin QKS on (3,5)-MNIST, 6 modes / 3 photons, DUAL_RAIL, random-mesh architecture, sigma=0.05, E=10000. Run after the dual-rail outcome-mapping fix.",
+ "config": "configs/mnist35_merlin_6m3k_dual_rail.json",
+ "regenerate": "python implementation.py --paper quantum_kitchen_sinks --config mnist35_merlin_6m3k_dual_rail.json",
+ "note": "Curated copy of a run's metrics.json. Shares the 4000/1000 subsample with the other mnist35 artifacts, so the comparison against the LR baseline is paired.",
+ "results": [
+  {
+   "sigma": 0.05,
+   "n_episodes": 10000,
+   "seed": 42,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.951,
+   "train_error": 0.0,
+   "test_error": 0.049000000000000044,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 60000,
+   "n_modes": 6,
+   "n_photons": 3,
+   "computation_space": "DUAL_RAIL"
+  },
+  {
+   "sigma": 0.05,
+   "n_episodes": 10000,
+   "seed": 43,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.957,
+   "train_error": 0.0,
+   "test_error": 0.04300000000000004,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 60000,
+   "n_modes": 6,
+   "n_photons": 3,
+   "computation_space": "DUAL_RAIL"
+  },
+  {
+   "sigma": 0.05,
+   "n_episodes": 10000,
+   "seed": 44,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.959,
+   "train_error": 0.0,
+   "test_error": 0.041000000000000036,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 60000,
+   "n_modes": 6,
+   "n_photons": 3,
+   "computation_space": "DUAL_RAIL"
+  }
+ ]
+}
