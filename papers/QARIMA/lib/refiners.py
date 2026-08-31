@@ -210,7 +210,7 @@ class MerlinVQCRefiner:
 
         torch.manual_seed(seed)
         layer = self._build_layer(p, seed)
-        params = [q for q in layer.parameters()]
+        params = list(layer.parameters())
         flat0 = torch.cat([q.detach().reshape(-1) for q in params]).clone()
         n_total = flat0.numel()
         n_train = min(self.n_train or (self.reps * p), n_total)
