@@ -378,6 +378,8 @@ This runs all 500 noisy simulation repetitions and omits the orange QPU bars.
 To include the experimental bars later, set `use_qpu` back to `true` and
 provide a valid `QUANDELA_TOKEN`. The full QPU-enabled command is:
 
+![Fig. 5: simulation-only noisy distribution comparison](assets/fig5_distributions_simulation_only.png)
+
 ```bash
 python implementation.py --paper QORC \
   --config configs/fig5_distribution.json
