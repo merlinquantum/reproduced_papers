@@ -1,0 +1,7 @@
+PennyLane==0.39.0
+merlinquantum
+autoray==0.6.12
+pandas>=2.0
+matplotlib>=3.7
+tabulate>=0.9
+scikit-learn
