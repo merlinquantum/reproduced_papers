@@ -5,28 +5,53 @@ small metadata dict.  Train/OOS splitting is handled by :func:`split_series` so
 the same protocol is used for every dataset.
 
 Data files live under ``<data_root>/QARIMA/raw`` (default ``data`` at the repo
-root).  Sunspots and CO2 are staged as CSV during setup; the other three are the
-downloaded raw files (AusBeer, Woolyarn, NOAA Sydney).
+root) and are staged lazily on first use: Sunspots is generated offline from the
+bundled ``statsmodels`` dataset (no network needed); CO2/AusBeer/Woolyarn/Sydney
+are downloaded once from Rdatasets/NOAA and then cached on disk.
 """
 
 from __future__ import annotations
 
 import os
+import urllib.request
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 
+_RDATASETS = "https://vincentarelbundock.github.io/Rdatasets/csv"
+_NOAA = "https://www.ncei.noaa.gov/data/global-hourly/access/2024"
+_DOWNLOAD_URLS = {
+    "ausbeer.csv": f"{_RDATASETS}/fpp2/ausbeer.csv",
+    "woolyrnq.csv": f"{_RDATASETS}/forecast/woolyrnq.csv",
+    "co2_R_datasets.csv": f"{_RDATASETS}/timeSeriesDataSets/co2_ts.csv",
+    "sydney_observatory_hill_2024.csv": f"{_NOAA}/94768099999.csv",
+}
+
 
 def _raw_dir(data_root: str | os.PathLike | None) -> Path:
     root = Path(data_root) if data_root else Path(os.environ.get("DATA_DIR", "data"))
     raw = root / "QARIMA" / "raw"
-    if not raw.exists():
-        raise FileNotFoundError(
-            f"QARIMA raw data directory not found: {raw}. "
-            "Run the data-staging step (see README/LOG) first."
-        )
+    raw.mkdir(parents=True, exist_ok=True)
     return raw
+
+
+def _ensure_sunspots(raw: Path) -> Path:
+    """Materialize sunspots.csv offline from the bundled statsmodels dataset."""
+    dest = raw / "sunspots.csv"
+    if not dest.exists():
+        import statsmodels.api as sm
+
+        sm.datasets.sunspots.load_pandas().data.to_csv(dest, index=False)
+    return dest
+
+
+def _ensure_downloaded(raw: Path, filename: str) -> Path:
+    """Download ``filename`` into ``raw`` on first use, then reuse the cached copy."""
+    dest = raw / filename
+    if not dest.exists() or dest.stat().st_size == 0:
+        urllib.request.urlretrieve(_DOWNLOAD_URLS[filename], dest)  # noqa: S310
+    return dest
 
 
 def _parse_noaa_tmp(value: str) -> float:
@@ -40,26 +65,26 @@ def _parse_noaa_tmp(value: str) -> float:
 
 
 def load_sunspots(raw: Path) -> tuple[np.ndarray, dict]:
-    df = pd.read_csv(raw / "sunspots.csv")
+    df = pd.read_csv(_ensure_sunspots(raw))
     y = df["SUNACTIVITY"].to_numpy(dtype=np.float64)
     return y, {"name": "sunspots", "freq": "annual", "unit": "sunspot number"}
 
 
 def load_co2(raw: Path) -> tuple[np.ndarray, dict]:
-    df = pd.read_csv(raw / "co2_R_datasets.csv")
+    df = pd.read_csv(_ensure_downloaded(raw, "co2_R_datasets.csv"))
     y = df["value"].to_numpy(dtype=np.float64)
     return y, {"name": "co2", "freq": "monthly", "season": 12, "unit": "ppm"}
 
 
 def load_ausbeer(raw: Path) -> tuple[np.ndarray, dict]:
-    df = pd.read_csv(raw / "ausbeer.csv")
+    df = pd.read_csv(_ensure_downloaded(raw, "ausbeer.csv"))
     y = df["value"].to_numpy(dtype=np.float64)
     y = y[~np.isnan(y)]
     return y, {"name": "ausbeer", "freq": "quarterly", "season": 4, "unit": "ML"}
 
 
 def load_woolyarn(raw: Path) -> tuple[np.ndarray, dict]:
-    df = pd.read_csv(raw / "woolyrnq.csv")
+    df = pd.read_csv(_ensure_downloaded(raw, "woolyrnq.csv"))
     y = df["value"].to_numpy(dtype=np.float64)
     return y, {"name": "woolyarn", "freq": "quarterly", "season": 4, "unit": "tonnes"}
 
@@ -72,7 +97,7 @@ def load_sydney(raw: Path) -> tuple[np.ndarray, dict]:
     build a daily-mean temperature series for calendar 2024.  Labeled as a
     substitute-station reproduction.
     """
-    df = pd.read_csv(raw / "sydney_observatory_hill_2024.csv", low_memory=False)
+    df = pd.read_csv(_ensure_downloaded(raw, "sydney_observatory_hill_2024.csv"), low_memory=False)
     df["DATE"] = pd.to_datetime(df["DATE"])
     df["tempC"] = df["TMP"].map(_parse_noaa_tmp)
     daily = df.set_index("DATE")["tempC"].resample("D").mean()

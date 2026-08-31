@@ -1,8 +1,10 @@
-"""Stage the five QARIMA datasets into ``<repo>/data/QARIMA/raw/``.
+"""Pre-stage the five QARIMA datasets into ``<repo>/data/QARIMA/raw/``.
 
-Idempotent: skips files that already exist. Sunspots + CO2 need no download beyond
-statsmodels / a small Rdatasets CSV; AusBeer, Woolyarn and the Sydney NOAA feed are
-fetched once. Run from anywhere::
+This is optional: ``lib.data.load_series`` now stages each dataset lazily (offline
+for Sunspots via statsmodels; downloaded-and-cached for the rest) the first time
+it is requested, so ``implementation.py`` runs end-to-end without this script.
+Use it to pre-warm the cache for all five datasets at once, e.g. before running
+offline. Idempotent: skips files that already exist. Run from anywhere::
 
     python papers/QARIMA/utils/stage_data.py [--data-root /reproduced_papers/data]
 
@@ -14,25 +16,12 @@ substitute station 94768099999 (Sydney Observatory Hill).
 from __future__ import annotations
 
 import argparse
-import urllib.request
+import sys
 from pathlib import Path
 
-_RDATASETS = "https://vincentarelbundock.github.io/Rdatasets/csv"
-_NOAA = "https://www.ncei.noaa.gov/data/global-hourly/access/2024"
-_FILES = {
-    "ausbeer.csv": f"{_RDATASETS}/fpp2/ausbeer.csv",
-    "woolyrnq.csv": f"{_RDATASETS}/forecast/woolyrnq.csv",
-    "co2_R_datasets.csv": f"{_RDATASETS}/timeSeriesDataSets/co2_ts.csv",
-    "sydney_observatory_hill_2024.csv": f"{_NOAA}/94768099999.csv",
-}
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-
-def _get(url: str, dest: Path) -> None:
-    if dest.exists() and dest.stat().st_size > 0:
-        print(f"  skip {dest.name} (exists)")
-        return
-    print(f"  download {dest.name} <- {url}")
-    urllib.request.urlretrieve(url, dest)  # noqa: S310
+from lib.data import _DOWNLOAD_URLS, _ensure_downloaded, _ensure_sunspots  # noqa: E402
 
 
 def main() -> None:
@@ -44,18 +33,10 @@ def main() -> None:
     raw.mkdir(parents=True, exist_ok=True)
     print(f"Staging QARIMA data into {raw}")
 
-    # Sunspots via statsmodels (bundled, offline)
-    ss = raw / "sunspots.csv"
-    if not ss.exists():
-        import statsmodels.api as sm
-
-        sm.datasets.sunspots.load_pandas().data.to_csv(ss, index=False)
-        print(f"  wrote {ss.name} (statsmodels, offline)")
-    else:
-        print(f"  skip {ss.name} (exists)")
-
-    for name, url in _FILES.items():
-        _get(url, raw / name)
+    print(f"  {_ensure_sunspots(raw).name} (statsmodels, offline)")
+    for name, url in _DOWNLOAD_URLS.items():
+        print(f"  {name} <- {url}")
+        _ensure_downloaded(raw, name)
     print("Done. NOTE: Sydney uses substitute station 94768099999 (Observatory Hill).")
 
 
