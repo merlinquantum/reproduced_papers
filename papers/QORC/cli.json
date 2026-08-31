@@ -5,7 +5,7 @@
       "flags": ["--xp-type"],
       "help": "Experiment type",
       "type": "str",
-      "choices": ["qorc", "rff", "comparison_qorc_lsvc", "noisy_qorc_indistinguishability", "fig3_qorc_mlr_medmnist", "fig4_dataset_size_comparison", "fig6_mnist_different_architectures"],
+      "choices": ["qorc", "rff", "comparison_qorc_lsvc", "noisy_qorc_indistinguishability", "fig3_qorc_mlr_medmnist", "fig4_dataset_size_comparison", "fig5_distribution", "fig6_mnist_different_architectures"],
       "default": null,
       "apply": {"kind": "config_path", "path": "xp_type"}
     },

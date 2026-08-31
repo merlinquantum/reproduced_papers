@@ -356,7 +356,31 @@ The default training sizes are `[100, 300, 500, 700, 900, 1000, 1500, 2000,
 The 50-subset sweep is computationally intensive even with the QPU branch
 disabled; use a temporary config with fewer sizes or subsets for a smoke run.
 
-### Experiment 5: Fig. 6 MNIST architectures
+### Experiment 5: Fig. 5 noisy distribution comparison
+
+This experiment compares one randomly selected MNIST image encoded with
+`N=3` photons and `M=12` modes. It standardizes the full 220-entry,
+no-bunching distribution independently for each 30,000-shot run, then plots
+entries 170–209. Orange bars show one experimental measurement from Quandela
+Ascella at `g²=1.95%` and `I=86.36%`; blue dots show the mean of 500 independent
+noisy simulations. Dark-blue min/max ranges use line widths proportional to
+the simulated occurrence histogram.
+
+This reproduction requires a valid `QUANDELA_TOKEN` and a QPU-enabled config.
+Run it from the repository root with:
+
+```bash
+python implementation.py --paper QORC \
+  --config papers/QORC/configs/fig5_distribution.json
+```
+
+The run writes `fig5_distribution.png`, `.csv`, and `.json` to the timestamped
+output directory. The JSON records the selected MNIST image index and the
+standardized QPU/simulation values used for the figure. The exact QPU image and
+entry ordering are not specified by the paper, so the image is selected using
+the configured seed and the repository's lexicographic no-bunching entry order.
+
+### Experiment 6: Fig. 6 MNIST architectures
 
 This experiment compares baseline pixel-only readouts with QORC-augmented
 readouts on full MNIST. The QORC reservoir uses `N=3`, `M=20`, no bunching,

@@ -112,6 +112,21 @@ def test_fig6_architecture_config_has_requested_settings() -> None:
     assert config["models"]["Deep"]["accelerated"]["learning_rate"] == 2.2e-4
 
 
+def test_fig5_distribution_config_has_requested_settings() -> None:
+    config = load_config(CONFIG_DIR / "fig5_distribution.json")
+
+    assert config["xp_type"] == "fig5_distribution"
+    assert config["n_photons"] == 3
+    assert config["n_modes"] == 12
+    assert config["distribution_start"] == 170
+    assert config["distribution_end"] == 210
+    assert config["n_simulation_runs"] == 500
+    assert config["shots"] == 30000
+    assert config["noise_g2"] == 0.0195
+    assert config["noise_indistinguishability"] == 0.8636
+    assert config["use_qpu"] is True
+
+
 def test_fig4_mlr_only_config_requests_only_mlr() -> None:
     config = load_config(CONFIG_DIR / "fig4_MLR_only.json")
 
