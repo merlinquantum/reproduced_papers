@@ -52,7 +52,50 @@ def _encode_distribution(reservoir, image: np.ndarray, shots: int) -> np.ndarray
         torch.as_tensor(inputs),
         shots=shots,
     )
-    return distribution.detach().cpu().numpy()[0]
+    return _select_three_photon_unbunched_entries(
+        reservoir, distribution.detach().cpu().numpy()[0]
+    )
+
+
+def _select_three_photon_unbunched_entries(
+    reservoir, distribution: np.ndarray
+) -> np.ndarray:
+    """Select and lexicographically order the 220 three-photon outcomes.
+
+    Parameters
+    ----------
+    reservoir : merlin.ReservoirClassifier
+        Reservoir whose detector keys describe the distribution ordering.
+    distribution : numpy.ndarray
+        Sampled distribution returned by the quantum layer.
+
+    Returns
+    -------
+    numpy.ndarray
+        Values for the 220 outcomes with total photon number three and no
+        bunching.
+
+    Raises
+    ------
+    ValueError
+        If the layer does not expose exactly 220 matching outcomes.
+    """
+    detector_keys = reservoir.layer._detector_keys
+    if detector_keys and isinstance(detector_keys[0], list):
+        detector_keys = [key for sector in detector_keys for key in sector]
+    selected_indices_and_keys = [
+        (index, tuple(key))
+        for index, key in enumerate(detector_keys)
+        if sum(key) == 3 and max(key) <= 1
+    ]
+    if len(selected_indices_and_keys) != 220:
+        raise ValueError(
+            "Fig. 5 requires exactly 220 three-photon unbunched detector keys; "
+            f"found {len(selected_indices_and_keys)}."
+        )
+    selected_indices_and_keys.sort(key=lambda item: item[1])
+    selected_indices = [index for index, _ in selected_indices_and_keys]
+    return distribution[selected_indices]
 
 
 def _validate_config(cfg: dict) -> None:
@@ -64,9 +107,7 @@ def _validate_config(cfg: dict) -> None:
         raise ValueError("distribution_end must be greater than distribution_start.")
     if cfg["n_simulation_runs"] <= 0 or cfg["shots"] <= 0:
         raise ValueError("n_simulation_runs and shots must be positive.")
-    if not cfg["use_qpu"]:
-        raise ValueError("Fig. 5 requires use_qpu=true to produce experimental bars.")
-    if not cfg["qpu_device"].startswith("qpu:"):
+    if cfg["use_qpu"] and not cfg["qpu_device"].startswith("qpu:"):
         raise ValueError("Fig. 5 requires a qpu:* qpu_device.")
 
 
@@ -112,28 +153,32 @@ def run_fig5_distribution(cfg: dict, run_dir: Path, logger: logging.Logger) -> N
             g2_distinguishable=cfg["noise_g2_distinguishable"],
         ),
     )
-    qpu_reservoir = _prepare_reservoir(cfg, training_data, noise=None)
-    qpu_processor = create_remote_qorc_processor(
-        cfg["qpu_device"],
-        qpu_reservoir.layer,
-        cfg["shots"],
-        logger,
-    )
-
-    qpu_input = np.asarray(
-        qpu_reservoir._transform_and_normalize_input(image.reshape(1, -1)),
-        dtype=np.float32,
-    )
-    qpu_distribution = (
-        qpu_processor.forward(
+    standardized_qpu = None
+    if cfg["use_qpu"]:
+        qpu_reservoir = _prepare_reservoir(cfg, training_data, noise=None)
+        qpu_processor = create_remote_qorc_processor(
+            cfg["qpu_device"],
             qpu_reservoir.layer,
-            torch.as_tensor(qpu_input),
+            cfg["shots"],
+            logger,
         )
-        .detach()
-        .cpu()
-        .numpy()[0]
-    )
-    standardized_qpu = _standardize_distribution(qpu_distribution)
+        qpu_input = np.asarray(
+            qpu_reservoir._transform_and_normalize_input(image.reshape(1, -1)),
+            dtype=np.float32,
+        )
+        qpu_distribution = (
+            qpu_processor.forward(
+                qpu_reservoir.layer,
+                torch.as_tensor(qpu_input),
+            )
+            .detach()
+            .cpu()
+            .numpy()[0]
+        )
+        qpu_distribution = _select_three_photon_unbunched_entries(
+            qpu_reservoir, qpu_distribution
+        )
+        standardized_qpu = _standardize_distribution(qpu_distribution)
 
     simulation_values = np.empty((cfg["n_simulation_runs"], 220), dtype=np.float64)
     for run_index in range(cfg["n_simulation_runs"]):
@@ -151,7 +196,11 @@ def run_fig5_distribution(cfg: dict, run_dir: Path, logger: logging.Logger) -> N
     summary = {
         "image_index": image_index,
         "distribution_indices": list(range(start, end)),
-        "qpu_standardized": standardized_qpu[start:end].tolist(),
+        "qpu_standardized": (
+            standardized_qpu[start:end].tolist()
+            if standardized_qpu is not None
+            else None
+        ),
         "simulation_mean": selected_simulation_values.mean(axis=0).tolist(),
         "simulation_min": selected_simulation_values.min(axis=0).tolist(),
         "simulation_max": selected_simulation_values.max(axis=0).tolist(),
@@ -177,10 +226,13 @@ def run_fig5_distribution(cfg: dict, run_dir: Path, logger: logging.Logger) -> N
                 "simulation_max",
             ]
         )
+        qpu_values = summary["qpu_standardized"] or [None] * len(
+            summary["distribution_indices"]
+        )
         writer.writerows(
             zip(
                 summary["distribution_indices"],
-                summary["qpu_standardized"],
+                qpu_values,
                 summary["simulation_mean"],
                 summary["simulation_min"],
                 summary["simulation_max"],
@@ -191,7 +243,6 @@ def run_fig5_distribution(cfg: dict, run_dir: Path, logger: logging.Logger) -> N
 
 def _plot_fig5(summary: dict, output_path: Path) -> None:
     distribution_indices = np.asarray(summary["distribution_indices"])
-    qpu_values = np.asarray(summary["qpu_standardized"])
     simulation_mean = np.asarray(summary["simulation_mean"])
     simulation_min = np.asarray(summary["simulation_min"])
     simulation_max = np.asarray(summary["simulation_max"])
@@ -199,7 +250,15 @@ def _plot_fig5(summary: dict, output_path: Path) -> None:
     line_widths = 0.8 + 2.4 * histogram_peak / histogram_peak.max()
 
     figure, axis = plt.subplots(figsize=(12, 4.8))
-    axis.bar(distribution_indices, qpu_values, color=QPU_COLOR, alpha=0.55, label="QPU")
+    if summary["qpu_standardized"] is not None:
+        qpu_values = np.asarray(summary["qpu_standardized"])
+        axis.bar(
+            distribution_indices,
+            qpu_values,
+            color=QPU_COLOR,
+            alpha=0.55,
+            label="QPU",
+        )
     axis.vlines(
         distribution_indices,
         simulation_min,

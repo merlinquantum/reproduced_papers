@@ -77,7 +77,7 @@ All runs go through the repository root runner so the CLI definition in `cli.jso
 
 ```bash
 # From the repo root
-python implementation.py --paper QORC --config QORC/configs/xp_qorc.json --help
+python implementation.py --paper QORC --config configs/xp_qorc.json --help
 
 # From inside this folder
 python ../implementation.py --paper QORC --config configs/xp_qorc.json --help
@@ -134,24 +134,24 @@ Example runs:
 
 ```bash
 # To run the default qorc experiment
-python implementation.py --paper QORC --config QORC/configs/xp_qorc.json
+python implementation.py --paper QORC --config configs/xp_qorc.json
 
 # To run the default RFF experiment
-python implementation.py --paper QORC --config QORC/configs/xp_rff.json
+python implementation.py --paper QORC --config configs/xp_rff.json
 
 # Override some parameters inline
-python implementation.py --paper QORC --config QORC/configs/xp_qorc.json --epochs 50 --lr 1e-3
+python implementation.py --paper QORC --config configs/xp_qorc.json --epochs 50 --lr 1e-3
 
 # Gaussian-imbalanced MNIST from Table S4 of photonic_qml.pdf
-python implementation.py --paper QORC --config QORC/configs/defaults.json \
+python implementation.py --paper QORC --config configs/defaults.json \
   --dataset-name mnist --dataset-sampling gauss --dataset-sample-count 10000
 
 # Noisy local reservoir simulation
-python implementation.py --paper QORC --config QORC/configs/defaults.json \
+python implementation.py --paper QORC --config configs/defaults.json \
   --noise-enabled true --noise-indistinguishability 0.87 --noise-g2 0.04
 
 # Fig. 3: MedMNIST macro-F1 comparison, three runs per dataset
-python implementation.py --paper QORC --config QORC/configs/QORC_medmnist.json
+python implementation.py --paper QORC --config configs/QORC_medmnist.json
 ```
 
 The Fig. 3 run compares QORC with M=20 and N=3 against the raw-pixel MLR
@@ -251,7 +251,7 @@ Run this experiment from the repository root:
 
 ```bash
 python implementation.py --paper QORC \
-  --config papers/QORC/configs/comparison_QORC_LSVC_mnist.json
+  --config configs/comparison_QORC_LSVC_mnist.json
 ```
 
 The run writes the figure and its serialized metrics to
@@ -277,7 +277,7 @@ Run it with:
 
 ```bash
 python implementation.py --paper QORC \
-  --config papers/QORC/configs/noisy_QORC_indistinguishability.json
+  --config configs/noisy_QORC_indistinguishability.json
 ```
 
 The indistinguishability arrays can be edited directly in
@@ -307,7 +307,7 @@ Run it from the repository root with:
 
 ```bash
 python implementation.py --paper QORC \
-  --config papers/QORC/configs/QORC_medmnist.json
+  --config configs/QORC_medmnist.json
 ```
 
 The run writes per-seed scores and the aggregate summary to
@@ -343,7 +343,7 @@ Run the default local experiment from the repository root with:
 
 ```bash
 python implementation.py --paper QORC \
-  --config papers/QORC/configs/fig4_dataset_size_comparison.json
+  --config configs/fig4_dataset_size_comparison.json
 ```
 
 Set `enable_qpu` to `true` and provide the required Perceval credentials to
@@ -366,12 +366,21 @@ Ascella at `g²=1.95%` and `I=86.36%`; blue dots show the mean of 500 independen
 noisy simulations. Dark-blue min/max ranges use line widths proportional to
 the simulated occurrence histogram.
 
-This reproduction requires a valid `QUANDELA_TOKEN` and a QPU-enabled config.
-Run it from the repository root with:
+For the simulation-only version, disable the QPU branch from the command line:
 
 ```bash
 python implementation.py --paper QORC \
-  --config papers/QORC/configs/fig5_distribution.json
+  --config configs/fig5_distribution.json \
+  --use-qpu false
+```
+
+This runs all 500 noisy simulation repetitions and omits the orange QPU bars.
+To include the experimental bars later, set `use_qpu` back to `true` and
+provide a valid `QUANDELA_TOKEN`. The full QPU-enabled command is:
+
+```bash
+python implementation.py --paper QORC \
+  --config configs/fig5_distribution.json
 ```
 
 The run writes `fig5_distribution.png`, `.csv`, and `.json` to the timestamped
@@ -407,7 +416,7 @@ Run it with:
 
 ```bash
 python implementation.py --paper QORC \
-  --config papers/QORC/configs/fig6_MNIST_different_architectures.json
+  --config configs/fig6_MNIST_different_architectures.json
 ```
 
 
