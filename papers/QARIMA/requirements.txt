@@ -1,0 +1,6 @@
+merlinquantum>=0.4
+pandas>=2.0
+matplotlib>=3.7
+statsmodels>=0.14
+pmdarima>=2.0
+pytest
