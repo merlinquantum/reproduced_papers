@@ -6,8 +6,14 @@ from pathlib import Path
 
 import pandas as pd
 
+from lib.comparison import run_qorc_lsvc_comparison
+from lib.fig4_dataset_size import run_fig4_dataset_size
+from lib.fig5_distribution import run_fig5_distribution
+from lib.fig6_architectures import run_fig6_architectures
 from lib.lib_qorc_encoding_and_linear_training import qorc_encoding_and_linear_training
 from lib.lib_rff_encoding_and_linear_training import rff_encoding_and_linear_training
+from lib.medmnist_fig3 import run_medmnist_fig3
+from lib.noisy_indistinguishability import run_noisy_qorc_indistinguishability
 
 
 def _as_list(value):
@@ -22,6 +28,18 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
     xp_type = cfg["xp_type"].lower()
     if xp_type == "qorc":
         _run_qorc(cfg, run_dir, logger)
+    elif xp_type == "comparison_qorc_lsvc":
+        run_qorc_lsvc_comparison(cfg, run_dir, logger)
+    elif xp_type == "noisy_qorc_indistinguishability":
+        run_noisy_qorc_indistinguishability(cfg, run_dir, logger)
+    elif xp_type == "fig3_qorc_mlr_medmnist":
+        run_medmnist_fig3(cfg, run_dir, logger)
+    elif xp_type == "fig4_dataset_size_comparison":
+        run_fig4_dataset_size(cfg, run_dir, logger)
+    elif xp_type == "fig5_distribution":
+        run_fig5_distribution(cfg, run_dir, logger)
+    elif xp_type == "fig6_mnist_different_architectures":
+        run_fig6_architectures(cfg, run_dir, logger)
     elif xp_type == "rff":
         _run_rff(cfg, run_dir, logger)
     else:
@@ -34,9 +52,19 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
     seeds = cfg["seed"]
     fold_index = cfg["fold_index"]
     dataset_name = cfg.get("dataset_name", "mnist")
+    dataset_sampling = cfg.get("dataset_sampling", "full")
+    dataset_sample_count = cfg.get("dataset_sample_count")
+    dataset_samples_per_class = cfg.get("dataset_samples_per_class")
     dataset_truncate = cfg.get("dataset_truncate", 0)
     qpu_device_name = cfg.get("qpu_device_name", cfg.get("qpu_device", "none"))
     qpu_device_nsample = cfg.get("qpu_device_nsample", 10000)
+    use_qpu = cfg.get("use_qpu", qpu_device_name.startswith("qpu:"))
+    if use_qpu and not qpu_device_name.startswith("qpu:"):
+        raise ValueError("use_qpu=True requires qpu_device to start with 'qpu:'.")
+    noise_enabled = cfg.get("noise_enabled", False)
+    noise_indistinguishability = cfg.get("noise_indistinguishability", 1.0)
+    noise_g2 = cfg.get("noise_g2", 0.0)
+    noise_g2_distinguishable = cfg.get("noise_g2_distinguishable", True)
 
     if any(
         isinstance(val, Sequence) and not isinstance(val, (str, bytes))
@@ -88,6 +116,13 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
                             n_modes=modes,
                             seed=seed,
                             dataset_name=dataset_name,
+                            dataset_sampling=dataset_sampling,
+                            dataset_sample_count=dataset_sample_count,
+                            dataset_samples_per_class=dataset_samples_per_class,
+                            noise_enabled=noise_enabled,
+                            noise_indistinguishability=noise_indistinguishability,
+                            noise_g2=noise_g2,
+                            noise_g2_distinguishable=noise_g2_distinguishable,
                             fold_index=fold,
                             n_fold=cfg["n_fold"],
                             dataset_truncate=dataset_truncate,
@@ -99,6 +134,7 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
                             num_workers=cfg["num_workers"],
                             pin_memory=cfg["pin_memory"],
                             f_out_weights=cfg["f_out_weights"],
+                            save_weights=cfg["save_weights"],
                             b_no_bunching=cfg["b_no_bunching"],
                             b_use_tensorboard=cfg["b_use_tensorboard"],
                             device_name=cfg["device"],
@@ -135,6 +171,13 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
         n_modes=n_modes,
         seed=seeds,
         dataset_name=dataset_name,
+        dataset_sampling=dataset_sampling,
+        dataset_sample_count=dataset_sample_count,
+        dataset_samples_per_class=dataset_samples_per_class,
+        noise_enabled=noise_enabled,
+        noise_indistinguishability=noise_indistinguishability,
+        noise_g2=noise_g2,
+        noise_g2_distinguishable=noise_g2_distinguishable,
         fold_index=fold_index,
         n_fold=cfg["n_fold"],
         dataset_truncate=dataset_truncate,
@@ -146,6 +189,7 @@ def _run_qorc(cfg, run_dir: Path, logger: logging.Logger) -> None:
         num_workers=cfg["num_workers"],
         pin_memory=cfg["pin_memory"],
         f_out_weights=cfg["f_out_weights"],
+        save_weights=cfg["save_weights"],
         b_no_bunching=cfg["b_no_bunching"],
         b_use_tensorboard=cfg["b_use_tensorboard"],
         device_name=cfg["device"],
