@@ -48,6 +48,7 @@ equal epoch budget in the smoke regime. Write-up:
 | File | Kind | Source |
 |---|---|---|
 | `poisson_*.json`, `heat_*.json` | compact per-run metrics | `utils/curate_results.py` on an `outdir/` run |
+| `runs/<label>.json` | same record plus loss history and prediction arrays (plotted by `notebook.ipynb`) | `utils/curate_results.py --with-arrays` |
 | `seed_aggregate.json` | per-group mean ± std across seeds | `utils/aggregate_seeds.py` |
 | `*.png` | figures | `utils/plot_poisson.py` / `utils/plot_heat.py` |
 | `heat_seed_sweep.md`, `nested_vs_consistency_benchmark.md` | findings write-ups | hand-written |
@@ -63,7 +64,7 @@ Runs always write raw artefacts to `outdir/run_*/`. Promote a run into
 
 ```bash
 # from the paper directory
-python utils/curate_results.py outdir/run_<STAMP> --label <label> [--plot]
+python utils/curate_results.py outdir/run_<STAMP> --label <label> [--plot] [--with-arrays]
 python utils/aggregate_seeds.py          # refresh seed_aggregate.json
 python utils/plot_poisson.py outdir/run_<A> outdir/run_<B> ... --out results/poisson_compare.png
 ```

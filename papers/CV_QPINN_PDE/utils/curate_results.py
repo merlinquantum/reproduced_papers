@@ -80,6 +80,28 @@ def compact_summary(summary: dict, label: str, source_run: str) -> dict:
     return out
 
 
+def _round_floats(obj, ndigits: int = 6):
+    """Recursively round floats to ``ndigits`` significant digits."""
+    if isinstance(obj, float):
+        return float(f"{obj:.{ndigits}g}")
+    if isinstance(obj, list):
+        return [_round_floats(v, ndigits) for v in obj]
+    if isinstance(obj, dict):
+        return {k: _round_floats(v, ndigits) for k, v in obj.items()}
+    return obj
+
+
+def run_record(run_dir: Path, compact: dict) -> dict:
+    """Compact summary plus loss history and prediction arrays."""
+    history = json.loads((run_dir / "history.json").read_text())
+    predictions = json.loads((run_dir / "predictions.json").read_text())
+    return {
+        **compact,
+        "history": _round_floats(history),
+        "predictions": _round_floats(predictions),
+    }
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("run_dir", type=Path)
@@ -93,6 +115,11 @@ def main() -> None:
         action="store_true",
         help="also render results/<label>.png from the run predictions",
     )
+    ap.add_argument(
+        "--with-arrays",
+        action="store_true",
+        help="also write results/runs/<label>.json with loss history and predictions",
+    )
     ap.add_argument("--results-dir", type=Path, default=PROJECT / "results")
     args = ap.parse_args()
 
@@ -104,6 +131,13 @@ def main() -> None:
     out_json = args.results_dir / f"{args.label}.json"
     out_json.write_text(json.dumps(compact, indent=2) + "\n")
     print(f"wrote {out_json}")
+
+    if args.with_arrays:
+        runs_dir = args.results_dir / "runs"
+        runs_dir.mkdir(parents=True, exist_ok=True)
+        out_record = runs_dir / f"{args.label}.json"
+        out_record.write_text(json.dumps(run_record(run_dir, compact)) + "\n")
+        print(f"wrote {out_record}")
 
     if args.plot:
         experiment = str(compact.get("experiment", ""))

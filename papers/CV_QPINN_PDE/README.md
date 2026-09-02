@@ -89,9 +89,16 @@ papers/CV_QPINN_PDE/
 │   ├── metrics.py            # RMSE / MAE / L∞ / NMSE
 │   └── runner.py             # Shared-runtime entry point (train_and_evaluate)
 ├── tests/                    # Smoke tests for the runner and CLI
-├── results/                  # Curated artefacts (predictions, figures)
+├── results/                  # Curated artefacts (metrics, figures, write-ups)
+│   └── runs/                 # Loss histories + predictions of the headline runs (used by the notebook)
+├── notebook.ipynb            # Guided walkthrough: theory, live smoke training, plots of the full runs
 └── outdir/                   # Raw timestamped runs (gitignored)
 ```
+
+`notebook.ipynb` is the recommended entry point for readers: it builds up the
+CV simulator, the QPINN and the consistency loss step by step, trains the smoke
+configurations live (a few minutes on CPU), and re-plots every headline run
+from `results/runs/`. Run it from this directory.
 
 ## Install and How to Run
 
@@ -135,9 +142,12 @@ records — per-run metrics JSONs, figures, findings write-ups. Promote a
 run with:
 
 ```bash
-python utils/curate_results.py outdir/run_<STAMP> --label <label> [--plot]
+python utils/curate_results.py outdir/run_<STAMP> --label <label> [--plot] [--with-arrays]
 python utils/aggregate_seeds.py   # refresh results/seed_aggregate.json
 ```
+
+`--with-arrays` additionally stores the loss history and prediction arrays
+under `results/runs/<label>.json` so the notebook can plot the run.
 
 See `results/README.md` for the findings index and the exact provenance
 of every curated artefact.

@@ -34,7 +34,7 @@ def make_run_dir(tmp_path, name="run_19990101-000000"):
     return run_dir
 
 
-def curate(run_dir, results_dir, label):
+def curate(run_dir, results_dir, label, *extra):
     return subprocess.run(
         [
             sys.executable,
@@ -44,6 +44,7 @@ def curate(run_dir, results_dir, label):
             label,
             "--results-dir",
             str(results_dir),
+            *extra,
         ],
         capture_output=True,
         text=True,
@@ -85,3 +86,23 @@ def test_curate_rejects_ambiguous_parent(tmp_path):
     proc = curate(parent, tmp_path / "results", "ambiguous")
     assert proc.returncode != 0
     assert "contains 2 runs" in proc.stderr
+
+
+def test_curate_with_arrays_writes_run_record(tmp_path):
+    run_dir = make_run_dir(tmp_path)
+    history = [{"epoch": 0, "total": 0.123456789}, {"epoch": 1, "total": 0.01}]
+    predictions = {"x": [0.0, 1.0], "u_pred": [0.1234567891, 0.2], "u_ref": [0.1, 0.2]}
+    (run_dir / "history.json").write_text(json.dumps(history))
+    (run_dir / "predictions.json").write_text(json.dumps(predictions))
+    results_dir = tmp_path / "results"
+    proc = curate(run_dir, results_dir, "with_arrays", "--with-arrays")
+    assert proc.returncode == 0, proc.stderr
+
+    compact = json.loads((results_dir / "with_arrays.json").read_text())
+    assert "history" not in compact
+    record = json.loads((results_dir / "runs" / "with_arrays.json").read_text())
+    assert record["label"] == "with_arrays"
+    assert record["metrics"]["rmse"] == 1e-3
+    assert [h["epoch"] for h in record["history"]] == [0, 1]
+    assert record["history"][0]["total"] == 0.123457  # 6 significant digits
+    assert record["predictions"]["u_pred"][0] == 0.123457
