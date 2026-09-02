@@ -1,0 +1,9 @@
+{
+  "description": "Quantum Transfer Learning paper reproduction runtime descriptor",
+  "defaults_path": "configs/example.json",
+  "cli_schema_path": "configs/cli.json",
+  "runner_callable": "lib.runner.train_and_evaluate",
+  "seed_callable": "lib.runner.set_seed",
+  "timestamp_format": "%Y%m%d-%H%M%S",
+  "run_dir_pattern": "run_{timestamp}"
+}

@@ -1,0 +1,47 @@
+{
+  "description": "BVE photonic dual-rail QNN reproduction runner",
+  "arguments": [
+    {
+      "flags": ["--total-steps"],
+      "help": "Override the total number of training steps (resumable)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.total_steps"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Override dataset batch size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.batch_size"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Override learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lr"}
+    },
+    {
+      "flags": ["--checkpoint"],
+      "help": "Checkpoint filename to resume from, relative to models/ (omit to train from scratch)",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.checkpoint"}
+    },
+    {
+      "flags": ["--n-qubits"],
+      "help": "Number of logical qubits (dual-rail encoded)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.params.n_qubits"}
+    },
+    {
+      "flags": ["--depth"],
+      "help": "Number of HEA layers",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.params.depth"}
+    }
+  ]
+}

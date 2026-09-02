@@ -1,0 +1,56 @@
+{
+ "description": "Photonic MerLin QKS, two independent dual-rail qubits with balanced 50:50 MZIs (no entangler).",
+ "config": "configs/mnist35_merlin_2q_exact.json",
+ "regenerate": "python implementation.py --paper quantum_kitchen_sinks --config mnist35_merlin_2q_exact.json",
+ "note": "Curated copy of a run's metrics.json, committed so the notebook and README do not depend on the git-ignored outdir/. All (3,5)-MNIST runs here share one 4000/1000 subsample (the dataset is loaded once per run at the config seed), so the comparison against the LR baseline is paired.",
+ "results": [
+  {
+   "sigma": 0.1,
+   "n_episodes": 2500,
+   "seed": 42,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.984,
+   "train_error": 0.0,
+   "test_error": 0.016000000000000014,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 10000,
+   "n_modes": 4,
+   "n_photons": 2,
+   "computation_space": "DUAL_RAIL",
+   "architecture": "dual_rail_mzi"
+  },
+  {
+   "sigma": 0.1,
+   "n_episodes": 2500,
+   "seed": 43,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.989,
+   "train_error": 0.0,
+   "test_error": 0.01100000000000001,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 10000,
+   "n_modes": 4,
+   "n_photons": 2,
+   "computation_space": "DUAL_RAIL",
+   "architecture": "dual_rail_mzi"
+  },
+  {
+   "sigma": 0.1,
+   "n_episodes": 2500,
+   "seed": 44,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.984,
+   "train_error": 0.0,
+   "test_error": 0.016000000000000014,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 10000,
+   "n_modes": 4,
+   "n_photons": 2,
+   "computation_space": "DUAL_RAIL",
+   "architecture": "dual_rail_mzi"
+  }
+ ]
+}

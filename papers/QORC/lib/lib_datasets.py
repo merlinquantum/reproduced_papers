@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-# -*- coding: utf-8 -*-
 
 from __future__ import annotations
 
@@ -10,6 +9,7 @@ try:
     from papers.shared.QORC.datasets import (  # type: ignore
         get_dataloader,
         get_mnist_variant,
+        get_qorc_dataset,
         seed_worker,
         split_fold_numpy,
         tensor_dataset,
@@ -21,15 +21,17 @@ except ModuleNotFoundError:
     from papers.shared.QORC.datasets import (  # type: ignore
         get_dataloader,
         get_mnist_variant,
+        get_qorc_dataset,
         seed_worker,
         split_fold_numpy,
         tensor_dataset,
     )
 
 __all__ = [
-    "tensor_dataset",
-    "seed_worker",
     "get_dataloader",
-    "split_fold_numpy",
     "get_mnist_variant",
+    "get_qorc_dataset",
+    "seed_worker",
+    "split_fold_numpy",
+    "tensor_dataset",
 ]

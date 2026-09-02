@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
-import time
 import random
+import time
 
 import numpy as np
-from sklearn.preprocessing import StandardScaler
 from sklearn.kernel_approximation import RBFSampler
-from sklearn.svm import LinearSVC
 from sklearn.linear_model import SGDClassifier
 from sklearn.metrics import accuracy_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import LinearSVC
 
 from lib.lib_datasets import get_mnist_variant
 
@@ -110,6 +109,8 @@ def rff_encoding_and_linear_training(
 
     train_acc = int(10000.0 * accuracy_score(train_label, train_model_pred)) / 10000.0
     test_acc = int(10000.0 * accuracy_score(test_label, test_model_pred)) / 10000.0
+    logger.info("train accuracy: {}".format(train_acc))
+    logger.info("test accuracy: {}".format(test_acc))
 
     duration_calcul_rff_features = int(100.0 * (time_t3 - time_t2)) / 100.0
     logger.info(

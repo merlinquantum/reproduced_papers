@@ -1,0 +1,9 @@
+{
+  "description": "QARIMA reproduction runner (quantum-inspired ARIMA vs classical vs MerLin photonic).",
+  "arguments": [
+    {"flags": ["--reps"], "help": "VQC entangling-layer repetitions", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "vqc.reps"}},
+    {"flags": ["--max-iter"], "help": "COBYLA max iterations for VQC refinement", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "vqc.max_iter"}},
+    {"flags": ["--step-frac"], "help": "VQC refinement step fraction of ||b_ols||", "type": "float", "default": null, "apply": {"kind": "config_path", "path": "vqc.step_frac"}},
+    {"flags": ["--shots"], "help": "Swap-test shots (null=analytic infinite-shot limit)", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "loss.shots"}}
+  ]
+}

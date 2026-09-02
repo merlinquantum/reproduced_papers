@@ -26,7 +26,8 @@
     "activation": "null",
     "shots": 100,
     "q_backend": "qasm_simulator",
-    "save_dhs": false
+    "save_dhs": false,
+    "dhs_freq": 1
   },
   "training": {
     "epochs": 2,
