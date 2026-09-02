@@ -1,0 +1,22 @@
+{
+  "description": "Graph regression proxy for ZINC (Sec. 5.1). Long-running version (200 epochs). Use graphreg_reduced.json for smoke.",
+  "feasibility": {"status": "resource_intensive"},
+  "dataset": "graph_reg",
+  "dataset_kwargs": {"num_graphs": 1000, "n_range": [8, 16], "p": 0.4, "seed": 0},
+  "model": "grit_lite",
+  "encoding": "rrwp+qirw2",
+  "rrwp_dim": 8,
+  "qpe_dim": 8,
+  "qpe_initial_distribution": "adjacency",
+  "node_dim": 32,
+  "depth": 4,
+  "num_heads": 4,
+  "head": "graph_reg",
+  "epochs": 200,
+  "batch_size": 32,
+  "lr": 5e-4,
+  "weight_decay": 1e-5,
+  "train_frac": 0.8,
+  "val_frac": 0.1,
+  "device": "cpu"
+}

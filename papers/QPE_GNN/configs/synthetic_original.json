@@ -1,0 +1,24 @@
+{
+  "description": "Reference-only paper-scale synthetic settings. This config cannot run with the dense Ising solver; use synthetic_reduced.json.",
+  "feasibility": {
+    "status": "infeasible",
+    "reason": "length_range can generate up to 1602 nodes, exceeding the dense Ising solver limit of 18 nodes"
+  },
+  "dataset": "ladder_concat",
+  "dataset_kwargs": {"per_class": 400, "length_range": [100, 400], "seed": 0},
+  "model": "grit_lite",
+  "encoding": "ground_state_corr",
+  "pe_dim": 20,
+  "node_dim": 32,
+  "depth": 2,
+  "num_heads": 4,
+  "num_classes": 2,
+  "head": "graph_class",
+  "epochs": 200,
+  "batch_size": 16,
+  "lr": 1e-3,
+  "weight_decay": 0.0,
+  "train_frac": 0.8,
+  "val_frac": 0.1,
+  "device": "cpu"
+}
