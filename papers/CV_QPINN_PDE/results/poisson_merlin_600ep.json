@@ -1,0 +1,71 @@
+{
+  "label": "poisson_merlin_600ep",
+  "experiment": "poisson_merlin",
+  "source_run": "run_20260723-143630",
+  "seed": 42,
+  "n_params": 162,
+  "metrics": {
+    "rmse": 0.00023727793230874132,
+    "mae": 0.00020448640499035503,
+    "l_inf": 0.0004406881569785359,
+    "nmse": 2.8970872750034523e-05
+  },
+  "best": {
+    "epoch": 599,
+    "loss": 1.8638305535774883e-05
+  },
+  "wall_time_sec": 132.549635887146,
+  "model": {
+    "n_qumodes": 2,
+    "n_multi_layers": 2,
+    "n_single_layers": 2,
+    "cutoff": 8,
+    "active_sd": 0.001,
+    "passive_sd": 0.1,
+    "n_modes": 6,
+    "input_modes": [
+      0,
+      1,
+      2
+    ],
+    "entangling_layers": 3,
+    "n_photons": 3,
+    "encoding_scale": 1.5707963267948966
+  },
+  "training": {
+    "epochs": 600,
+    "lr": 0.02,
+    "collocation_points": 64,
+    "lambdas": {
+      "pde": 0.34,
+      "bc": 0.34,
+      "consistency": 0.32,
+      "trace": 0.0
+    }
+  },
+  "qlayer_output_size": 20,
+  "merlin_hardware": {
+    "computation_space": "UNBUNCHED",
+    "detector_model": "threshold",
+    "n_photons": 3,
+    "n_modes": 6,
+    "input_state": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      0
+    ],
+    "encoding": "angle",
+    "encoding_modes": [
+      0,
+      1,
+      2
+    ],
+    "encoding_scale": 1.5707963267948966,
+    "measurement_strategy": "MeasurementStrategy.probs(UNBUNCHED)",
+    "postselection": "none",
+    "simulator": "MerLin CPU simulator (analytic, shots=0)"
+  }
+}
