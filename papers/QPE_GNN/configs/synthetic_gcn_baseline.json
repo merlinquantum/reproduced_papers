@@ -1,0 +1,18 @@
+{
+  "description": "GCN baseline (Sec. 5.2): plain GCN over the synthetic dataset with no positional encoding. Expected ~chance accuracy.",
+  "dataset": "ladder_concat",
+  "dataset_kwargs": {"per_class": 32, "length_range": [3, 6], "seed": 0, "node_encoding": "none", "pe_dim": 20},
+  "split_seed": 1729,
+  "model": "gcn",
+  "encoding": "none",
+  "hidden_dim": 32,
+  "depth": 2,
+  "num_classes": 2,
+  "head": "graph_class",
+  "epochs": 15,
+  "batch_size": 8,
+  "lr": 1e-3,
+  "train_frac": 0.8,
+  "val_frac": 0.1,
+  "device": "cpu"
+}
