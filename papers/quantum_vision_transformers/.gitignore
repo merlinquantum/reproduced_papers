@@ -1,0 +1,27 @@
+# Paper-local ignore rules (keeps `git status` clean when running experiments).
+
+# Virtualenvs / caches
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.ipynb_checkpoints/
+
+# Runtime artifacts (the shared runner writes to `outdir/` by default)
+outdir/
+data/
+
+# Trained weights and large dumps (keep the folder, ignore heavy artifacts)
+models/*.pt
+models/*.pth
+models/*.ckpt
+models/*.npz
+models/*.npy
+models/*.pkl
+models/*.joblib
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+

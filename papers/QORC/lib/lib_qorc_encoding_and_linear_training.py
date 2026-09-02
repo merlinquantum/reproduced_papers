@@ -1,26 +1,24 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 
-import os
-import time
 import math
+import os
 import random
+import time
 
-import numpy as np
-from sklearn.decomposition import PCA
-import torch
-import torch.nn as nn
-
-import perceval as pcvl
 import merlin as ML
-
+import numpy as np
+import perceval as pcvl
+import torch
 from perceval.runtime import RemoteConfig
+from perceval.utils import NoiseModel
+from sklearn.decomposition import PCA
+from torch import nn
+from torch.utils.data import TensorDataset
 
 from lib.lib_datasets import (
-    tensor_dataset,
     get_dataloader,
+    get_qorc_dataset,
     split_fold_numpy,
-    get_mnist_variant,
 )
 from lib.lib_learning import get_device, model_eval, model_fit
 
@@ -77,11 +75,13 @@ def get_PS_name_for_mode_and_depth(circuit: pcvl.Circuit, mode: int, depth: int)
         for m in modes:
             depths[m] = d_current + add_depth
 
-        if isinstance(comp, pcvl.components.PS):
-            if mode in modes:
-                if depths[mode] >= depth:
-                    ps_name = comp.get_variables()["phi"]
-                    return ps_name, depths[mode]
+        if (
+            isinstance(comp, pcvl.components.PS)
+            and mode in modes
+            and depths[mode] >= depth
+        ):
+            ps_name = comp.get_variables()["phi"]
+            return ps_name, depths[mode]
 
     # Pas de Phaseshifter trouvé avec une profondeur en BS suffisante (la depth demandée est trop élevée pour le circuit)
     return None, None
@@ -128,13 +128,13 @@ def create_quantum_layer_for_ascella(n_photons, logger):
     logger.info("MerLin QuantumLayer creation:")
     qorc_output_size = math.comb(n_photons + n_modes - 1, n_photons)
 
-    assert (
-        n_photons <= n_modes
-    ), "Error with photons_input_mode: Bunching not possible for input state."
+    assert n_photons <= n_modes, (
+        "Error with photons_input_mode: Bunching not possible for input state."
+    )
     step = (n_modes - 1) / (n_photons - 1) if n_photons > 1 else 0
     qorc_input_state = [0] * n_modes
     for k in range(n_photons):
-        index = int(round(k * step))
+        index = round(k * step)
         qorc_input_state[index] = 1
 
     device_name = "cpu"
@@ -188,13 +188,13 @@ def create_qorc_quantum_layer(
 
     qorc_circuit = interferometer_1 // c_var // interferometer_2
 
-    assert (
-        n_photons <= n_modes
-    ), "Error with photons_input_mode: Bunching not possible for input state."
+    assert n_photons <= n_modes, (
+        "Error with photons_input_mode: Bunching not possible for input state."
+    )
     step = (n_modes - 1) / (n_photons - 1) if n_photons > 1 else 0
     qorc_input_state = [0] * n_modes
     for k in range(n_photons):
-        index = int(round(k * step))
+        index = round(k * step)
         qorc_input_state[index] = 1
 
     params_prefix = ["px"]
@@ -230,6 +230,210 @@ def create_qorc_quantum_layer(
     return [qorc_quantum_layer, qorc_output_size]
 
 
+def create_qorc_reservoir_classifier(
+    n_photons,
+    n_components,
+    seed,
+    device_name,
+    b_no_bunching,
+    input_features=28 * 28,
+    n_classes=10,
+    cache=True,
+    noise=None,
+):
+    """Create the Merlin 0.4 reservoir classifier used by QORC.
+
+    Parameters
+    ----------
+    n_photons : int
+        Number of photons injected into the frozen reservoir.
+    n_components : int
+        Number of PCA components encoded by the reservoir.
+    input_features : int
+        Number of flattened input features in each image. Default value is 784.
+    noise : perceval.utils.NoiseModel|None
+        Perceval source noise model. If omitted, the reservoir is ideal.
+        Default value is None.
+    seed : int
+        Seed used for the reservoir unitary and readout initialization.
+    device_name : str
+        Torch device used by the classifier.
+    b_no_bunching : bool
+        Whether the measurement output excludes photon bunching states.
+    n_classes : int
+        Number of output classes. Default value is 10.
+    cache : bool
+        Whether to cache all fitted training features. Default value is True.
+
+    Returns
+    -------
+    merlin.ReservoirClassifier
+        Frozen reservoir with a trainable linear readout.
+
+    Raises
+    ------
+    ValueError
+        If the classifier configuration is invalid.
+    """
+    reservoir = ML.ReservoirClassifier(
+        in_features=input_features,
+        out_features=n_classes,
+        n_photons=n_photons,
+        reduction=PCA(n_components=n_components),
+        concatenate=True,
+        cache=cache,
+        seed=seed,
+        device=torch.device(device_name),
+        dtype=torch.float32,
+    )
+    if b_no_bunching:
+        reservoir.layer.measurement_strategy = ML.MeasurementStrategy.probs()
+    else:
+        reservoir.layer.measurement_strategy = ML.MeasurementStrategy.probs(
+            computation_space=ML.ComputationSpace.FOCK
+        )
+    if noise is not None:
+        reservoir.layer.noise = noise
+    return reservoir
+
+
+def create_perceval_noise_model(
+    enabled,
+    indistinguishability=1.0,
+    g2=0.0,
+    g2_distinguishable=True,
+):
+    """Create the Perceval source noise model for a reservoir experiment.
+
+    Parameters
+    ----------
+    enabled : bool
+        Whether to enable Perceval noise. Default value is False.
+    indistinguishability : float
+        Probability that photons are indistinguishable, in [0, 1].
+        Default value is 1.0.
+    g2 : float
+        Second-order intensity correlation at zero delay, in [0, 1].
+        Default value is 0.0.
+    g2_distinguishable : bool
+        Whether photons generated by the g2 process are distinguishable.
+        Default value is True.
+
+    Returns
+    -------
+    perceval.utils.NoiseModel|None
+        Configured Perceval noise model, or None when disabled.
+
+    Raises
+    ------
+    ValueError
+        If a noise probability is outside [0, 1].
+    """
+    if not enabled:
+        return None
+    for parameter_name, parameter_value in (
+        ("indistinguishability", indistinguishability),
+        ("g2", g2),
+    ):
+        if not 0 <= parameter_value <= 1:
+            raise ValueError(f"{parameter_name} must be between 0 and 1.")
+    return NoiseModel(
+        indistinguishability=indistinguishability,
+        g2=g2,
+        g2_distinguishable=g2_distinguishable,
+    )
+
+
+def make_reservoir_dataset_in_batches(
+    reservoir,
+    data,
+    labels,
+    batch_size,
+    processor=None,
+):
+    """Encode a reservoir dataset in bounded-size batches.
+
+    Parameters
+    ----------
+    reservoir : merlin.ReservoirClassifier
+        Fitted frozen reservoir classifier.
+    data : numpy.ndarray
+        Normalized flattened input images.
+    labels : numpy.ndarray
+        Integer labels aligned with ``data``.
+    batch_size : int
+        Maximum number of images encoded per quantum pass.
+    processor : merlin.core.merlin_processor.MerlinProcessor|None
+        Optional local or remote processor.
+
+    Returns
+    -------
+    torch.utils.data.TensorDataset
+        CPU readout features and labels.
+    """
+    if batch_size <= 0:
+        return reservoir.make_dataset(data, labels, processor=processor)
+    feature_batches = []
+    for start in range(0, len(data), batch_size):
+        end = start + batch_size
+        batch_dataset = reservoir.make_dataset(
+            data[start:end], labels[start:end], processor=processor
+        )
+        feature_batches.append(batch_dataset.tensors[0])
+    features = torch.cat(feature_batches, dim=0)
+    targets = torch.as_tensor(labels, dtype=torch.long)
+    return TensorDataset(features, targets)
+
+
+def initialize_reservoir_normalization_in_batches(reservoir, data, batch_size):
+    """Initialize train-only quantum normalization without caching all features.
+
+    Parameters
+    ----------
+    reservoir : merlin.ReservoirClassifier
+        Fitted reservoir with ``cache=False``.
+    data : numpy.ndarray
+        Training inputs used to estimate feature statistics.
+    batch_size : int
+        Number of images encoded per quantum pass.
+
+    Returns
+    -------
+    None
+        Stores the training feature mean and standard deviation on ``reservoir``.
+    """
+    if batch_size <= 0:
+        raise ValueError("batch_size must be positive when initializing normalization.")
+    sample_count = 0
+    feature_mean = None
+    feature_m2 = None
+    for start in range(0, len(data), batch_size):
+        batch = data[start : start + batch_size]
+        reduced = reservoir._transform_and_normalize_input(batch)
+        quantum_features = reservoir._encode_quantum(reduced)
+        batch_count = quantum_features.shape[0]
+        batch_mean = quantum_features.mean(dim=0).double()
+        batch_m2 = ((quantum_features.double() - batch_mean) ** 2).sum(dim=0)
+        if feature_mean is None:
+            feature_mean = batch_mean
+            feature_m2 = batch_m2
+            sample_count = batch_count
+            continue
+        delta = batch_mean - feature_mean
+        total_count = sample_count + batch_count
+        feature_mean += delta * batch_count / total_count
+        feature_m2 += (
+            batch_m2 + delta.square() * sample_count * batch_count / total_count
+        )
+        sample_count = total_count
+    if feature_mean is None or feature_m2 is None:
+        raise ValueError("data must contain at least one sample.")
+    reservoir._quantum_mean = feature_mean.to(dtype=torch.float32)
+    reservoir._quantum_std = torch.sqrt(feature_m2 / sample_count).to(
+        dtype=torch.float32
+    )
+
+
 def qorc_encoding_and_linear_training(
     # Main parameters
     n_photons,
@@ -237,6 +441,9 @@ def qorc_encoding_and_linear_training(
     seed,
     # Dataset parameters
     dataset_name,
+    dataset_sampling,
+    dataset_sample_count,
+    dataset_samples_per_class,
     fold_index,
     n_fold,
     dataset_truncate,
@@ -252,13 +459,20 @@ def qorc_encoding_and_linear_training(
     # Other parameters
     b_no_bunching,
     b_use_tensorboard,
+    noise_enabled,
+    noise_indistinguishability,
+    noise_g2,
+    noise_g2_distinguishable,
     device_name,
     qpu_device_name,
     qpu_device_nsample,
     run_dir,
     logger,
+    return_history=False,
+    save_weights=False,
+    test_dataset_truncate=0,
+    feature_batch_size=0,
 ):
-    storage_device = torch.device("cpu")
     compute_device = get_device(device_name)
 
     n_components = n_modes
@@ -294,17 +508,25 @@ def qorc_encoding_and_linear_training(
     )
     time_t1 = time.time()
 
-    logger.info("Loading MNIST-variant data ({})".format(dataset_name))
-    val_train_data, val_train_label, test_data, test_label = get_mnist_variant(
-        dataset_name
+    logger.info("Loading QORC data ({})".format(dataset_name))
+    val_train_data, val_train_label, test_data, test_label = get_qorc_dataset(
+        dataset_name,
+        sampling=dataset_sampling,
+        sample_count=dataset_sample_count,
+        samples_per_class=dataset_samples_per_class,
+        seed=run_seed,
     )
     val_train_data = (
         val_train_data.reshape(val_train_data.shape[0], -1).astype(np.float32) / 255.0
     )
 
-    val_label, val_data, train_label, train_data = split_fold_numpy(
-        val_train_label, val_train_data, n_fold, fold_index, split_seed=run_seed
-    )
+    if n_fold == 0:
+        train_label, train_data = val_train_label, val_train_data
+        val_label, val_data = val_train_label, val_train_data
+    else:
+        val_label, val_data, train_label, train_data = split_fold_numpy(
+            val_train_label, val_train_data, n_fold, fold_index, split_seed=run_seed
+        )
 
     test_data = test_data.reshape(test_data.shape[0], -1).astype(np.float32) / 255.0
 
@@ -317,9 +539,12 @@ def qorc_encoding_and_linear_training(
         val_label = val_label[:dataset_truncate]
         test_data = test_data[:dataset_truncate]
         test_label = test_label[:dataset_truncate]
+    if test_dataset_truncate > 0:
+        test_data = test_data[:test_dataset_truncate]
+        test_label = test_label[:test_dataset_truncate]
 
-    n_pixels = 28 * 28  # MNIST images size
-    n_classes = 10  # 10 classes, one for each figure
+    n_pixels = train_data.shape[1]
+    n_classes = int(max(np.max(train_label), np.max(test_label))) + 1
 
     logger.info("Datasets sizes:")
     logger.info(train_label.shape)  # (48000,)
@@ -330,140 +555,61 @@ def qorc_encoding_and_linear_training(
     logger.info(test_data.shape)  # (10000, 784)
 
     ####################################################
-    # Quantum features computation
-    logger.info("Creation of the encoder of the quantum reservoir...")
-
-    # 1) PCA Components computation
-    pca = PCA(n_components=n_components)
-    train_data_pca = pca.fit_transform(train_data)
-    val_data_pca = pca.transform(val_data)
-    test_data_pca = pca.transform(test_data)
-
-    # 2) PCA comp normalization (to [0, 1] (global min/max) )
-    pca_train_global_min = train_data_pca.min()
-    pca_train_global_max = train_data_pca.max()
-
-    def normalize_global_min_max(data, global_min, global_max):
-        epsilon = 1e-8  # Avoid zero division
-        return (data - global_min) / (global_max - global_min + epsilon)
-
-    train_data_pca_norm = normalize_global_min_max(
-        train_data_pca, pca_train_global_min, pca_train_global_max
-    )
-    val_data_pca_norm = normalize_global_min_max(
-        val_data_pca, pca_train_global_min, pca_train_global_max
-    )
-    test_data_pca_norm = normalize_global_min_max(
-        test_data_pca, pca_train_global_min, pca_train_global_max
+    # Quantum reservoir feature computation
+    logger.info("Creation of the Merlin ReservoirClassifier...")
+    reservoir = create_qorc_reservoir_classifier(
+        n_photons=n_photons,
+        n_components=n_components,
+        seed=run_seed,
+        device_name=device_name,
+        b_no_bunching=b_no_bunching,
+        input_features=n_pixels,
+        n_classes=n_classes,
+        noise=create_perceval_noise_model(
+            enabled=noise_enabled,
+            indistinguishability=noise_indistinguishability,
+            g2=noise_g2,
+            g2_distinguishable=noise_g2_distinguishable,
+        ),
     )
 
-    # 3) Qorc quantum layer creation
-    if "ascella" in qpu_device_name:
-        [qorc_quantum_layer, qorc_output_size] = create_quantum_layer_for_ascella(
-            n_photons, logger
-        )
-    else:
-        [qorc_quantum_layer, qorc_output_size] = create_qorc_quantum_layer(
-            n_photons,  # Nb photons
-            n_modes,  # Nb modes
-            b_no_bunching,
-            device_name,
-            logger,
-        )
-
-    logger.info("Quantum features size: {}".format(qorc_output_size))
     logger.info("Computation of the quantum features...")
     time_t2 = time.time()
-    train_tensor = torch.tensor(
-        train_data_pca_norm, dtype=torch.float32, device=compute_device
-    )
-    val_tensor = torch.tensor(
-        val_data_pca_norm, dtype=torch.float32, device=compute_device
-    )
-    test_tensor = torch.tensor(
-        test_data_pca_norm, dtype=torch.float32, device=compute_device
-    )
+    remote_processor = None
+    if qpu_device_name not in ("none", ""):
+        from lib.lib_remote_qorc import create_remote_qorc_processor
 
-    if qpu_device_name == "none" or qpu_device_name == "":
-        train_data_qorc = qorc_quantum_layer(train_tensor)
-        val_data_qorc = qorc_quantum_layer(val_tensor)
-        test_data_qorc = qorc_quantum_layer(test_tensor)
-    else:
-        from lib.lib_remote_qorc import forward_remote_qorc_quantum_layer
-
-        train_data_qorc, val_data_qorc, test_data_qorc = (
-            forward_remote_qorc_quantum_layer(
-                train_tensor,
-                val_tensor,
-                test_tensor,
-                qorc_quantum_layer,
-                qpu_device_name,
-                qpu_device_nsample,
-                logger,
-            )
+        remote_processor = create_remote_qorc_processor(
+            qpu_device_name, reservoir.layer, qpu_device_nsample, logger
         )
 
+    reservoir.fit_reservoir(train_data, processor=remote_processor)
+    train_dataset = reservoir.make_dataset(train_data, train_label)
+    val_dataset = make_reservoir_dataset_in_batches(
+        reservoir,
+        val_data,
+        val_label,
+        feature_batch_size,
+        processor=remote_processor,
+    )
+    test_dataset = make_reservoir_dataset_in_batches(
+        reservoir,
+        test_data,
+        test_label,
+        feature_batch_size,
+        processor=remote_processor,
+    )
+    qorc_output_size = reservoir.layer.output_size
+    logger.info("Quantum features size: {}".format(qorc_output_size))
     logger.info("Computation over.")
     time_t3 = time.time()
-
-    # 4) Quantum features normalization (standard_scaler)
-    qorc_train_mean = train_data_qorc.detach().mean(dim=0)
-    qorc_train_std = train_data_qorc.detach().std(dim=0)
-
-    def normalize_standard_scaler(data, mean, std):
-        epsilon = 1e-8  # Avoid zero division
-        return (data - mean) / (std + epsilon)
-
-    train_data_qorc_norm = normalize_standard_scaler(
-        train_data_qorc, qorc_train_mean, qorc_train_std
-    )
-    val_data_qorc_norm = normalize_standard_scaler(
-        val_data_qorc, qorc_train_mean, qorc_train_std
-    )
-    test_data_qorc_norm = normalize_standard_scaler(
-        test_data_qorc, qorc_train_mean, qorc_train_std
-    )
-
-    dtype = torch.float32
-    all_train_data = torch.cat(
-        (
-            torch.tensor(train_data, dtype=dtype, device=compute_device),
-            train_data_qorc_norm,
-        ),
-        dim=1,
-    )
-    all_val_data = torch.cat(
-        (
-            torch.tensor(val_data, dtype=dtype, device=compute_device),
-            val_data_qorc_norm,
-        ),
-        dim=1,
-    )
-    all_test_data = torch.cat(
-        (
-            torch.tensor(test_data, dtype=dtype, device=compute_device),
-            test_data_qorc_norm,
-        ),
-        dim=1,
-    )
 
     ####################################################
     # Prepare structures (Dataset, DataLoader)
     # Datasets
-    ds_train = tensor_dataset(
-        all_train_data,
-        train_label,
-        storage_device,
-        dtype=torch.float32,
-        transform=None,
-        n_side_pixels=28,
-    )
-    ds_val = tensor_dataset(
-        all_val_data, val_label, storage_device, dtype=torch.float32
-    )
-    ds_test = tensor_dataset(
-        all_test_data, test_label, storage_device, dtype=torch.float32
-    )
+    ds_train = train_dataset
+    ds_val = val_dataset
+    ds_test = test_dataset
 
     logger.info("train dataset len: {}".format(len(ds_train)))
     logger.info("val dataset len  : {}".format(len(ds_val)))
@@ -492,16 +638,8 @@ def qorc_encoding_and_linear_training(
 
     n_model_input_features = n_pixels + qorc_output_size
     logger.info("n_model_input_features: {}".format(n_model_input_features))
-    linear = nn.Linear(
-        n_model_input_features, n_classes, bias=True, device=compute_device
-    )
-
-    nn.init.xavier_uniform_(linear.weight)  # Xavier uniforme init (Glorot)
-    nn.init.zeros_(linear.bias)
-    model = linear
-    model.to(compute_device)
+    model = reservoir
     model.train()
-    torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
 
     criterion = nn.CrossEntropyLoss(reduction="sum")
 
@@ -542,10 +680,13 @@ def qorc_encoding_and_linear_training(
     [
         train_loss_history,
         train_accuracy_history,
-        val_loss_history,
-        val_accuracy_history,
-        duree_totale,
+        _val_loss_history,
+        _val_accuracy_history,
+        _duree_totale,
         best_val_epoch,
+        test_loss_history,
+        test_accuracy_history,
+        best_state_dict,
     ] = model_fit(
         model,
         train_loader,
@@ -564,6 +705,8 @@ def qorc_encoding_and_linear_training(
         tf_train_writer=tf_train_writer,
         tf_val_writer=tf_val_writer,
         calc_accuracy=calc_accuracy,
+        test_loader=test_loader if return_history else None,
+        save_weights=save_weights,
     )
 
     logger.info("Training over.")
@@ -571,9 +714,12 @@ def qorc_encoding_and_linear_training(
     time_t4 = time.time()
 
     logger.info("Final evaluation (on test set)")
-    best_state_dict = torch.load(
-        os.path.join(run_dir, f_out_weights), map_location=compute_device
-    )
+    if save_weights:
+        best_state_dict = torch.load(
+            os.path.join(run_dir, f_out_weights), map_location=compute_device
+        )
+    if best_state_dict is None:
+        raise RuntimeError("Training did not produce a best model state.")
 
     try:
         model.load_state_dict(best_state_dict)
@@ -636,7 +782,7 @@ def qorc_encoding_and_linear_training(
     logger.info("Duration - total: {}s".format(duration_totale))
     logger.info("Best val epoch: {}".format(best_val_epoch))
 
-    return [
+    result = [
         train_acc,
         val_acc,
         test_acc,
@@ -646,3 +792,21 @@ def qorc_encoding_and_linear_training(
         duration_train,
         best_val_epoch,
     ]
+    if return_history:
+        test_predictions = []
+        test_targets = []
+        model.eval()
+        with torch.no_grad():
+            for inputs, targets in test_loader:
+                test_predictions.extend(model(inputs).argmax(dim=1).cpu().tolist())
+                test_targets.extend(targets.cpu().tolist())
+        return {
+            "summary": result,
+            "train_accuracy": [float(value) for value in train_accuracy_history],
+            "train_loss": [float(value) for value in train_loss_history],
+            "test_loss": [float(value) for value in test_loss_history],
+            "test_accuracy": [float(value) for value in test_accuracy_history],
+            "test_predictions": test_predictions,
+            "test_targets": test_targets,
+        }
+    return result

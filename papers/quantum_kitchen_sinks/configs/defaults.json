@@ -1,0 +1,32 @@
+{
+    "description": "Defaults: tiny picture-frames smoke run for the 2-qubit CNOT QKS ansatz.",
+    "seed": 42,
+    "dtype": "float32",
+    "outdir": "outdir",
+    "device": "cpu",
+    "experiment": "picture_frames",
+    "dataset": {
+        "name": "picture_frames",
+        "n_train": 400,
+        "n_test": 200,
+        "inner_radius": 0.4,
+        "outer_radius": 0.7,
+        "noise": 0.02
+    },
+    "qks": {
+        "backend": "gate",
+        "circuit": "cnot2",
+        "n_qubits": 2,
+        "encoding": "split",
+        "n_episodes": 100,
+        "sigma": 1.0,
+        "shots_per_episode": 1,
+        "n_layers": 1
+    },
+    "classifier": {
+        "kind": "logistic_regression",
+        "C": 1.0,
+        "max_iter": 2000
+    },
+    "logging": {"level": "info", "save_config_snapshot": true}
+}

@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-# -*- coding: utf-8 -*-
 
 """
 This module provides standard code for deep learning: train deep learning models, compute predictions over a given dataset.
@@ -9,8 +8,10 @@ Original authors: Vincent Espitalier <vincent.espitalier@cirad.fr>
 Modified by: Vincent Espitalier <vincent.espitalier@quandela.com>
 """
 
+import copy
 import sys
 import time
+
 import torch
 from torch.optim.lr_scheduler import CosineAnnealingLR
 
@@ -20,10 +21,10 @@ def get_device(device_name):
 
 
 def affiche_tag_heure(logger):
-    from datetime import datetime
     import time
+    from datetime import datetime, timezone
 
-    now = datetime.now()
+    now = datetime.now(timezone.utc)
     logger.info(
         "tag heure: {} ({})".format(now.strftime("%Y-%m-%d_%H:%M:%S"), time.time())
     )
@@ -230,6 +231,8 @@ def model_fit(
     tf_train_writer=None,
     tf_val_writer=None,
     calc_accuracy=False,
+    test_loader=None,
+    save_weights=False,
 ):
     logger.info(
         "Call model_fit(), with {} parameters to train.".format(
@@ -248,6 +251,8 @@ def model_fit(
     train_accuracy_history = []
     val_loss_history = []
     val_accuracy_history = []
+    test_loss_history = []
+    test_accuracy_history = []
 
     best_val_epoch_loss_checkpoint = float("inf")
     best_val_epoch_loss_earlystopping = float("inf")
@@ -256,6 +261,7 @@ def model_fit(
     reduce_lr_n_epoch = 0
 
     best_val_epoch = -1
+    best_state_dict = None
 
     if b_use_cosine_scheduler:
         curr_lr = optimizer.param_groups[0]["lr"]
@@ -286,6 +292,20 @@ def model_fit(
         [val_epoch_loss, val_epoch_acc, val_duree_epoch] = model_eval(
             model, val_loader, criterion, device, logger, calc_accuracy, printPerf=False
         )
+        if test_loader is not None:
+            [test_epoch_loss, test_epoch_acc, test_duree_epoch] = model_eval(
+                model,
+                test_loader,
+                criterion,
+                device,
+                logger,
+                calc_accuracy=True,
+                printPerf=False,
+            )
+            test_loss_history.append(test_epoch_loss)
+            test_accuracy_history.append(test_epoch_acc)
+        else:
+            test_duree_epoch = 0
 
         if tf_train_writer is not None:
             tf_train_writer.add_scalar("loss", train_epoch_loss, epoch)
@@ -300,7 +320,7 @@ def model_fit(
         val_loss_history.append(val_epoch_loss)
         val_accuracy_history.append(val_epoch_acc)
 
-        duration += train_duree_epoch + val_duree_epoch
+        duration += train_duree_epoch + val_duree_epoch + test_duree_epoch
 
         # Print results
         print_epoch_like_keras(epoch, n_epochs, logger)
@@ -331,15 +351,23 @@ def model_fit(
             )
 
         if val_epoch_loss < best_val_epoch_loss_checkpoint:
-            # val_loss decreased: Save model
-            filename_model_weights_out_checkpoint = filename_model_weights_out
-            torch.save(model.state_dict(), filename_model_weights_out_checkpoint)
-            logger.info(
-                "Epoch {:05d}: val_loss improved from {:.5f} to {:.5f}, saving model to ".format(
-                    epoch, best_val_epoch_loss_checkpoint, val_epoch_loss
+            best_state_dict = copy.deepcopy(model.state_dict())
+            if save_weights:
+                torch.save(best_state_dict, filename_model_weights_out)
+                logger.info(
+                    "Epoch {:05d}: val_loss improved from {:.5f} to {:.5f}, saving model to {}".format(
+                        epoch,
+                        best_val_epoch_loss_checkpoint,
+                        val_epoch_loss,
+                        filename_model_weights_out,
+                    )
                 )
-                + filename_model_weights_out_checkpoint
-            )
+            else:
+                logger.info(
+                    "Epoch {:05d}: val_loss improved from {:.5f} to {:.5f}; checkpoint saving is disabled".format(
+                        epoch, best_val_epoch_loss_checkpoint, val_epoch_loss
+                    )
+                )
             best_val_epoch_loss_checkpoint = val_epoch_loss
             best_val_epoch = epoch
             reduce_lr_n_epoch = 0
@@ -374,4 +402,7 @@ def model_fit(
         val_accuracy_history,
         duration,
         best_val_epoch,
+        test_loss_history,
+        test_accuracy_history,
+        best_state_dict,
     ]

@@ -2,14 +2,6 @@
   "description": "Global CLI schema shared by every reproduction.",
   "arguments": [
     {
-      "flags": ["-c", "--config"],
-      "help": "Path to JSON config file to merge with defaults",
-      "type": "path",
-      "dest": "config",
-      "default": null,
-      "apply": {"kind": "config_file"}
-    },
-    {
       "flags": ["--outdir"],
       "help": "Base output directory",
       "type": "path",
@@ -51,6 +43,14 @@
       "type": "path",
       "default": null,
       "apply": {"kind": "config_path", "path": "data_root"}
+    },
+    {
+      "flags": ["-c", "--config"],
+      "help": "Path to JSON config file to merge with defaults",
+      "type": "path",
+      "dest": "config",
+      "default": null,
+      "apply": {"kind": "config_file"}
     }
   ]
 }

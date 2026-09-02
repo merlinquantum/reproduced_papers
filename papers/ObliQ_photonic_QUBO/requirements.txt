@@ -1,0 +1,25 @@
+# Core: problems, QUBO, plotting
+networkx>=3
+scipy>=1.11
+matplotlib>=3.5
+
+# Photonic solvers (ObliQ + CVaR-VQE): MerLin on top of Perceval, differentiated
+# by torch. `merlinquantum` is the PyPI name of the `merlin` package; it already
+# pulls in numpy, perceval-quandela, and torch, so they're not pinned separately
+# here to avoid a second, possibly conflicting version constraint.
+merlinquantum>=0.4
+
+# Gate-model baseline (QAOA)
+qiskit>=1
+qiskit-algorithms>=0.3
+qiskit-optimization>=0.6
+qiskit-ibm-runtime>=0.22
+
+# Annealing / classical baselines: dimod, neal, tabu, minorminer, dwave-system
+dwave-ocean-sdk>=6.7
+
+# Optional: only needed for the QAOA `qi` (Quantum Inspire) provider
+quantuminspire>=2
+
+# Tests
+pytest>=7

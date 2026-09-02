@@ -1,0 +1,8 @@
+{
+    "description": "Photonic (MerLin) dressed QNN, Henon k=1. Reduced 400-epoch budget.",
+    "seed": 0, "dtype": "float32", "outdir": "outdir", "device": "cpu",
+    "dataset": {"name": "henon_1000", "root": "data/variational_qml_ts_benchmark",
+                "sequence_length": 4, "prediction_step": 1, "batch_size": 64},
+    "model": {"name": "photonic", "params": {"ansatz": "photonic", "num_qubits": 6, "hidden_size": 3, "bugfix": true}},
+    "training": {"epochs": 400, "lr": 0.001, "use_convergence": false, "min_epochs": 400, "window": 200}
+}

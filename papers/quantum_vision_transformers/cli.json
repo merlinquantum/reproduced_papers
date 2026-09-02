@@ -1,0 +1,88 @@
+{
+  "description": "QVT reproduction runner",
+  "arguments": [
+    {
+      "flags": ["--model-type"],
+      "help": "Model family to execute",
+      "type": "str",
+      "choices": ["A", "B", "C", "D", "E", "F", "VisionTransformer", "OrthoFNN"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model_type"}
+    },
+    {
+      "flags": ["--profile"],
+      "help": "Capacity profile",
+      "type": "str",
+      "choices": ["full", "lite"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "profile"}
+    },
+    {
+      "flags": ["--circuit-family"],
+      "help": "Circuit family",
+      "type": "str",
+      "choices": ["generic", "butterfly"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "circuit_family"}
+    },
+    {
+      "flags": ["--precision-mode"],
+      "help": "Precision policy",
+      "type": "str",
+      "choices": ["baseline", "gpu_friendly"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "precision_mode"}
+    },
+    {
+      "flags": ["--resume"],
+      "help": "Checkpoint resume policy",
+      "type": "str",
+      "choices": ["auto", "never", "must"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "resume"}
+    },
+    {
+      "flags": ["--train-subset-size"],
+      "help": "Cap the training split to this many samples",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "train_subset_size"}
+    },
+    {
+      "flags": ["--train-subset-seed"],
+      "help": "Seed used for train subset sampling",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "train_subset_seed"}
+    },
+    {
+      "flags": ["--train-subset-mode"],
+      "help": "Train subset selection mode",
+      "type": "str",
+      "choices": ["random", "stratified"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "train_subset_mode"}
+    },
+    {
+      "flags": ["--image-embed-grayscale"],
+      "help": "Use grayscale embedding for OrthoFNN",
+      "action": "store_true",
+      "default": false,
+      "apply": {"kind": "config_path", "path": "image_embed_grayscale", "value": true}
+    },
+    {
+      "flags": ["--list-models"],
+      "help": "Print available model types and exit",
+      "action": "store_true",
+      "default": false,
+      "apply": {"kind": "config_path", "path": "list_models", "value": true}
+    },
+    {
+      "flags": ["--count-params"],
+      "help": "Build the model, print parameter counts, and exit",
+      "action": "store_true",
+      "default": false,
+      "apply": {"kind": "config_path", "path": "count_params", "value": true}
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+model,variant_label,base_model,family,profile,data_regime,dataset,seed,test_acc,test_auc,best_val_auc,best_epoch,attn_params,total_params,time_s
+A|generic|lite|standard,"A: OrthoPatch [generic, lite]",A,generic,lite,standard,retinamnist,42,0.51,0.7364,0.8311,38,56,1725,159.7
+B|generic|lite|standard,"B: OrthoTransformer [generic, lite]",B,generic,lite,standard,retinamnist,42,0.5275,0.7338,0.8371,19,112,1797,255.7
+C|generic|lite|standard,"C: DirectAttn [generic, lite]",C,generic,lite,standard,retinamnist,42,0.525,0.7433,0.8308,69,112,1797,280.4
+D|generic|lite|standard,"D: Compound [generic, lite]",D,generic,lite,standard,retinamnist,42,0.545,0.7411,0.8199,31,552,2221,11627.3
+D_full|generic|lite|standard,"D: Compound (full sector) [generic, lite]",D_full,generic,lite,standard,retinamnist,42,0.535,0.7419,0.8304,64,616,2285,978.4
+E|generic|lite|standard,"E: Multi-sector [generic, lite]",E,generic,lite,standard,retinamnist,42,0.51,0.7329,0.8325,17,552,2221,1934.6
+F|generic|lite|standard,"F: Hierarchical (3ph) [generic, lite]",F,generic,lite,standard,retinamnist,42,0.5325,0.7442,0.8296,49,240,1909,480.4

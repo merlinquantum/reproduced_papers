@@ -1,0 +1,36 @@
+{
+  "description": "Smoke-test defaults: short CC-DQML run at L=3 on the synthetic dataset",
+  "pipeline": "quantum",
+  "seed": 42,
+  "seeds": [42],
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "dataset": {
+    "name": "synthetic_8d",
+    "params": {
+      "n_dim": 8,
+      "n_samples": 2048,
+      "n_clusters": 32,
+      "samples_per_cluster": 64,
+      "sphere_radius": 0.7853981633974483,
+      "train_fraction": 0.75,
+      "seed": 42
+    }
+  },
+  "model": {
+    "name": "DQML",
+    "params": {
+      "scheme": "cc",
+      "n_layers": 3,
+      "qubits_per_qpu": 4
+    }
+  },
+  "training": {
+    "n_iterations": 80,
+    "lr": 0.05,
+    "batch_size": 256,
+    "eval_every": 20
+  },
+  "logging": {"level": "info", "save_config_snapshot": true}
+}

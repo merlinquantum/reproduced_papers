@@ -1,0 +1,25 @@
+{
+    "description": "Default parameters (fast smoke-test settings, trains from scratch)",
+
+    "seed": 42,
+    "dtype": "float64",
+    "outdir": "outdir",
+    "device": "cpu",
+    "dataset": {
+        "filename": "sem_supervised_subset.npz",
+        "batch_size": 64
+    },
+    "model": {
+        "name": "merlin_dualrail_photonic",
+        "params": {
+            "n_qubits": 6,
+            "depth": 32
+        },
+        "checkpoint": null
+    },
+    "training": {
+        "total_steps": 5,
+        "lr": 1e-2
+    },
+    "logging": {"level": "info", "save_config_snapshot": true}
+}
