@@ -343,7 +343,7 @@ def train_and_evaluate(cfg: dict, run_dir: Path) -> dict:
     experiment = cfg.get("experiment", "poisson_qpinn")
     if experiment not in _EXPERIMENTS:
         raise ValueError(
-            f"Unknown experiment '{experiment}'. " f"Available: {sorted(_EXPERIMENTS)}"
+            f"Unknown experiment '{experiment}'. Available: {sorted(_EXPERIMENTS)}"
         )
     _LOG.info("Running experiment '%s' in %s", experiment, run_dir)
     return _EXPERIMENTS[experiment](cfg, run_dir)

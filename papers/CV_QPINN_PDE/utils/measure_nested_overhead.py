@@ -88,7 +88,7 @@ def main() -> None:
             r = _bench(fn, cutoff=cutoff, n_collocation=n_coll, repeats=5)
             print(
                 f"{cutoff:>6} | {name:>11} | {r['time_per_step_sec']:>9.3f} | "
-                f"{r['max_rss_delta_kb']/1024:>14.1f} | {r['final_loss']:>10.3e}"
+                f"{r['max_rss_delta_kb'] / 1024:>14.1f} | {r['final_loss']:>10.3e}"
             )
 
 
