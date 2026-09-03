@@ -1,0 +1,6 @@
+{
+  "description": "Same forward selection as feature_selection.json but scored on the 245-month out-of-sample window, reproducing the paper's protocol. This involves test-set selection and its results must be labelled accordingly.",
+  "experiment": "feature_selection_sweep",
+  "evaluation": {"horizons": [1]},
+  "feature_selection": {"selection_split": "test", "max_features": 10}
+}

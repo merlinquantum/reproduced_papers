@@ -1,0 +1,11 @@
+{
+  "description": "Fast smoke overlay: 24 forecasts, horizon 1 only, no LSTM refits, 3 ESN control draws, 200 MCS bootstrap replications. NOT paper-accurate - use only to check that the pipeline runs.",
+  "evaluation": {
+    "n_out_of_sample": 24,
+    "n_validation": 24,
+    "horizons": [1],
+    "mcs": {"size": 0.05, "reps": 200}
+  },
+  "baselines": {"enabled": ["har", "harx", "ar1", "ar3", "rc", "rcx"]},
+  "controls": {"enabled": true, "esn_iso": {"readout_dims": [10], "n_instances": 3, "leak_rate": 0.6, "spectral_radius": 0.9, "input_scaling": 0.1}}
+}

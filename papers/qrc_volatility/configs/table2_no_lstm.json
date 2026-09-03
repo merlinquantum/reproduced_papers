@@ -1,0 +1,4 @@
+{
+  "description": "Paper Table II / III reproduction without the 245 rolling LSTM refits. Everything else is paper-accurate; the two LSTM rows are omitted and reported as not-run.",
+  "baselines": {"enabled": ["har", "harx", "ar1", "ar3", "armax", "rc", "rcx"]}
+}
