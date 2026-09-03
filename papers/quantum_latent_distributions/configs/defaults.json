@@ -1,0 +1,82 @@
+{
+  "description": "Defaults for the quantum latent distributions reproduction. Fast enough to be runnable as-is; use the named configs for paper settings.",
+  "seed": 42,
+  "dtype": "float32",
+  "device": "cpu",
+  "outdir": "outdir",
+  "torch_threads": null,
+  "experiment": "sampler_validation",
+  "latent": {
+    "dim": 16,
+    "n_photons": null,
+    "architecture": "haar",
+    "normalize": "center",
+    "bank_size": 50000,
+    "kinds": [
+      "gaussian",
+      "bernoulli",
+      "distinguishable",
+      "boson"
+    ],
+    "source": "simulation",
+    "hardware": {
+      "platform": "qpu:belenos"
+    }
+  },
+  "dataset": {
+    "name": "synthetic",
+    "size": 20000,
+    "batch_size": 128,
+    "reference_smiles": 20000,
+    "targets": [
+      "quantum"
+    ]
+  },
+  "model": {
+    "generator_hidden": [
+      512,
+      512
+    ],
+    "critic_hidden": [
+      512,
+      512
+    ],
+    "latent_reinjection": false,
+    "activation": "leaky_relu"
+  },
+  "training": {
+    "iterations": 500,
+    "optimizer": "adam",
+    "lr": 0.0002,
+    "betas": [
+      0.0,
+      0.9
+    ],
+    "n_critic": 5,
+    "gp_weight": 10.0
+  },
+  "evaluation": {
+    "repeats": 1,
+    "n_samples": 10000
+  },
+  "mixture": {
+    "n_components": 7,
+    "radius": 5.0,
+    "radial_std": 0.2,
+    "tangential_std": 0.05,
+    "capture_sigmas": 3.0
+  },
+  "sampler_validation": {
+    "modes": 6,
+    "photons": 3,
+    "sample_counts": [
+      12500,
+      50000,
+      200000
+    ]
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}
