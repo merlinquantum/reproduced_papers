@@ -1,0 +1,19 @@
+{
+    "description": "This is the Exponential encoding configuration file for Fourier Fingerprints in 1 dimension.",
+    "seed": 42,
+    "outdir": "outdir",
+    "device": "cpu",
+    "logging": {
+        "level": "INFO",
+        "save_config_snapshot": true
+    },
+    "graph_name":"Fig 2(a) - Exponential encoding in 1D",
+    "circuits" : [
+            "circuit_0",
+            "circuit_1",
+            "circuit_2",
+            "circuit_3"
+        ],
+    "encoding": "exponential",
+    "dimension": 1
+}
