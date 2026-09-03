@@ -1,0 +1,46 @@
+{
+    "description": "STATISTICALLY-POWERED run: classical-ablation GQC + MoE (parameter-matched dense layer replacing the VQC). n_repeats=20 (100 folds) -- gives ~80% power to detect effects down to ~0.019 AUCPR at this backend's observed variance.",
+
+    "seed": 42,
+    "dtype": "float32",
+    "outdir": "outdir",
+    "device": "cpu",
+    "dataset": {
+        "batch_size": 32
+    },
+    "cv": {
+        "n_repeats": 20,
+        "max_splits": null
+    },
+    "model": {
+        "backend": "classical",
+        "n_qubits": 6,
+        "lambda_recon": 0.5,
+        "router_split": "analysis",
+        "autoencoder": {
+            "hidden_dims": [256, 128, 64]
+        },
+        "vqc": {
+            "n_layers": 6
+        },
+        "head": {
+            "hidden_dim": 8
+        },
+        "xgboost": {
+            "n_estimators": 200,
+            "max_depth": 4,
+            "n_jobs": 2
+        }
+    },
+    "training": {
+        "epochs": 30,
+        "lr": 1e-3
+    },
+    "evaluation": {
+        "router_thresholds": [0.5, 0.6, 0.7, 0.8, 0.9]
+    },
+    "logging": {
+        "level": "info",
+        "save_config_snapshot": true
+    }
+}

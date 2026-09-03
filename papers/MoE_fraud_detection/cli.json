@@ -1,0 +1,41 @@
+{
+  "description": "MoE fraud detection (GQC) reproduction runner",
+  "arguments": [
+    {
+      "flags": ["--backend"],
+      "help": "Quantum/classical block backend: gate (PennyLane VQC), photonic (MerLin), or classical (fair-baseline ablation)",
+      "type": "str",
+      "default": null,
+      "choices": ["gate", "photonic", "classical"],
+      "apply": {"kind": "config_path", "path": "model.backend"}
+    },
+    {
+      "flags": ["--epochs"],
+      "help": "Override number of GQC joint-training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.epochs"}
+    },
+    {
+      "flags": ["--repeats"],
+      "help": "Override number of repeated-stratified-CV repeats",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "cv.n_repeats"}
+    },
+    {
+      "flags": ["--router-thresholds"],
+      "help": "Comma-separated list of router thresholds to sweep, e.g. 0.5,0.6,0.7",
+      "type": "csv_float_list",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "evaluation.router_thresholds"}
+    },
+    {
+      "flags": ["--lambda-recon"],
+      "help": "Override the reconstruction-vs-classification loss weight lambda",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.lambda_recon"}
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+# Paper-specific dependencies for the MoE fraud detection (gate-model) reproduction
+pennylane
+xgboost
+scikit-learn
+numpy
+torch
+pandas
+pytest
