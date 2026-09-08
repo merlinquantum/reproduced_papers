@@ -51,3 +51,25 @@ __pycache__/
 HQPINN/**/results/**/
 HQPINN/doc/
 HQPINN_*
+# Private keys and other credentials. Never commit these: id_scaleway sat
+# untracked at the repository root for days, one `git add -A` from being public.
+id_*
+!id_*.md
+*.pem
+*.key
+!**/*.key.example
+*_rsa
+*_ed25519
+.ssh/
+
+# Exploratory work kept beside the repository but deliberately not part of it.
+notes/
+
+# Files delivered into this folder by the Claude desktop app. Not repository
+# content: they land here because the repository is the connected folder.
+Claude outputs/
+
+# Transfer artifacts used to move files onto this machine
+_*.tgz
+_template_leftovers/
+_package_note.txt
