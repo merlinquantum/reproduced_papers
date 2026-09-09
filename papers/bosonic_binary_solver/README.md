@@ -48,7 +48,6 @@ paper's own SA and HC baselines, plus baselines and controls the paper does not 
 | Circuit topology is the **pairwise chain** | The paper's own parameter count (`sum_i (m - l_i)` = 77 at m=30) requires it. ORCA's released simulator instead models the loop as a rail with memory, which needs `m` beamsplitters per loop. Both are implemented; the disagreement is recorded. |
 | Parameter-shift denominator | The paper prints `1/sin(phi)`; ORCA's code uses `1/sin(2 phi)`. The two are consistent with different beamsplitter conventions. Under this package's `R = cos^2(theta/2)` the paper's expression is twice the true derivative — a constant factor, equivalent to doubling the learning rate. `shift_scale` selects it; the default reproduces the paper as printed. |
 | Shift magnitude `phi = pi/2` | Not given in the paper's main text. ORCA's code defaults to `pi/6`. |
-| RED-tier sizes run with fewer instances | m=25 and m=30 cost 9 h and 43 h per 100-instance row on the available 2-core machine. The paper-accurate configs are kept unchanged as artifacts; `_reduced` configs are what is actually run. |
 
 ## Install and How to Run
 
@@ -81,7 +80,7 @@ python utils/run_configs.py configs/knapsack_m10_original.json configs/tsp_m10_o
 | Pattern | Meaning |
 |---|---|
 | `<family>_m<size>_original.json` | Paper-accurate: N=200, S=50, lr 0.01/0.05, delays 1-3-9, 100 instances. Kept exact; `tests/test_configs.py` enforces it. |
-| `<family>_m<size>_reduced.json` | Same hyperparameters, fewer instances, for the RED-tier sizes. |
+| `<family>_m<size>_reduced.json` | Same hyperparameters, fewer instances. Not used for any number reported here — every row above is a full 100-instance `_original` run — but kept so the expensive sizes stay reachable on a CPU-only machine. |
 | `knapsack_m<size>_{simulated_annealing,hill_climbing,random_search}.json` | Baselines at the solver's Appendix B budget. |
 | `knapsack_m<size>_source_<source>.json` | The control the paper does not run: same algorithm, different click source. |
 | `knapsack_m<size>_merlin.json` | MerLin exact-gradient variant. |
