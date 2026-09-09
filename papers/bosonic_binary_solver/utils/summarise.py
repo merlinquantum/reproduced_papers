@@ -100,6 +100,22 @@ COMPARISONS = [
     ("tsp_m29_original.json", "tsp_m29_source_shuffled_boson.json"),
     ("tsp_m29_original.json", "tsp_m29_source_distinguishable.json"),
     ("tsp_m29_original.json", "tsp_m29_source_bernoulli.json"),
+    # extension beyond the paper: does the density result survive as coverage collapses?
+    ("scaling_m34_source_boson.json", "scaling_m34_source_distinguishable.json"),
+    ("scaling_m34_source_boson.json", "scaling_m34_source_bernoulli.json"),
+    ("scaling_m34_source_boson.json", "scaling_m34_source_bernoulli_dense.json"),
+    ("scaling_m38_source_boson.json", "scaling_m38_source_distinguishable.json"),
+    ("scaling_m38_source_boson.json", "scaling_m38_source_bernoulli.json"),
+    ("scaling_m38_source_boson.json", "scaling_m38_source_bernoulli_dense.json"),
+    ("scaling_m42_source_boson.json", "scaling_m42_source_distinguishable.json"),
+    ("scaling_m42_source_boson.json", "scaling_m42_source_bernoulli.json"),
+    ("scaling_m42_source_boson.json", "scaling_m42_source_bernoulli_dense.json"),
+    ("scaling_m34_source_bernoulli.json", "scaling_m34_source_bernoulli_dense.json"),
+    ("scaling_m38_source_bernoulli.json", "scaling_m38_source_bernoulli_dense.json"),
+    ("scaling_m42_source_bernoulli.json", "scaling_m42_source_bernoulli_dense.json"),
+    ("scaling_m48_source_bernoulli.json", "scaling_m48_source_bernoulli_dense.json"),
+    ("scaling_m54_source_bernoulli.json", "scaling_m54_source_bernoulli_dense.json"),
+    ("scaling_m60_source_bernoulli.json", "scaling_m60_source_bernoulli_dense.json"),
 ]
 
 

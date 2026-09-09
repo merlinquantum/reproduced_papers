@@ -242,6 +242,69 @@ discourages. Recorded as unresolved, with confidence in the implementation HIGH
 loop unitary matches ORCA's simulator to 1e-12, and the GPU sampler matches
 Perceval).
 
+## Extension beyond the paper: scaling
+
+The paper's largest simulated size is m=30, where the Appendix B budget already covers only
+0.2% of the space. This extension goes to m=42 with a boson arm and to m=60 without one, to
+ask whether the click-density result **survives when the search is a vanishing fraction of the
+space, or was an artifact of the regime where the budget is still appreciable**. 30 instances
+per arm, paper hyperparameters throughout, 540 runs; run with `scripts/run_scaling_gpu.sh`.
+
+Found-optimum falls towards zero out here, so mean relative error carries the comparison — the
+same shift the paper's own TSP m=29 row shows.
+
+| m | coverage | arm | clicks/m | % optimal | mean error % |
+|---|---|---|---|---|---|
+| 34 | 1.4e-4 | boson | 37.9% | 30.0 | 0.566 |
+| | | distinguishable | 42.5% | 50.0 | 0.285 |
+| | | bernoulli@1.0 | 42.3% | 63.3 | 0.179 |
+| | | **bernoulli@1.15** | 47.8% | **90.0** | **0.067** |
+| 38 | 1.0e-5 | boson | 37.9% | 23.3 | 0.609 |
+| | | distinguishable | 42.3% | 36.7 | 0.480 |
+| | | bernoulli@1.0 | 42.5% | 50.0 | 0.261 |
+| | | **bernoulli@1.15** | 47.9% | **83.3** | **0.065** |
+| 42 | 7.1e-7 | boson | 37.7% | 16.7 | 1.177 |
+| | | distinguishable | 42.6% | 20.0 | 0.673 |
+| | | bernoulli@1.0 | 42.4% | 23.3 | 0.680 |
+| | | **bernoulli@1.15** | 47.8% | **53.3** | **0.183** |
+| 48 | 1.3e-8 | bernoulli@1.0 | 42.3% | 10.0 | 1.212 |
+| | | bernoulli@1.15 | 48.0% | 30.0 | 0.444 |
+| 54 | 2.3e-10 | bernoulli@1.0 | 42.4% | 3.3 | 2.152 |
+| | | bernoulli@1.15 | 48.1% | 13.3 | 0.908 |
+| 60 | 3.9e-12 | bernoulli@1.0 | 42.1% | 0.0 | 2.978 |
+| | | bernoulli@1.15 | 48.4% | 3.3 | 1.580 |
+
+**The result survives, and strengthens.** Boson against the dense Bernoulli arm, paired by
+instance: z = 4.01, 3.80, 2.29 at m = 34, 38, 42, with the error gap *widening* — −0.50%,
+−0.54%, −0.99%. And density in isolation, scaling only the Bernoulli click rate from 1.0 to
+1.15 with everything else fixed, gets monotonically stronger as the space grows:
+
+| m | 34 | 38 | 42 | 48 | 54 | 60 |
+|---|---|---|---|---|---|---|
+| paired t | −2.08 | −2.98 | −4.01 | −5.23 | −6.26 | **−8.24** |
+
+At m=60, where the budget covers 4e-12 of the space and the sparser arm has stopped finding
+optima entirely, a 15% higher click rate still halves the mean error (2.978% → 1.580%). So
+this is not a property of the middle regime the paper tests: click density governs performance
+across five orders of magnitude of coverage, and the boson sampler's bunching leaves it at the
+wrong end of that axis at every size measured.
+
+The one place the ordering blurs is exactly where the metric demands it: at m=42 boson and
+distinguishable tie on found-optimum (discordant 3/4, z = 0.00) while the error metric still
+separates them (t = −2.87), which is why relative error is the right measure once the space
+outruns the budget.
+
+### Cost
+
+Measured boson wall-clock: 19.9 s/instance at m=34, 125.2 at m=38, 526.5 at m=42 — about
+4.2x per +4 modes once past m=34, i.e. 2.05x per photon, Clifford & Clifford's scaling. The
+whole extension took roughly five hours on an H100, half again my 3.8 h estimate. The
+interference-free arms cost ~0.5 s/instance and are flat in m, which is why they reach m=60
+while the boson arm stops at 42.
+
+This is an extension, not a reproduction: no number in this section corresponds to anything in
+the paper.
+
 ## Fair Baselines
 
 The paper reports SA and HC but does not say what budget they were given. Here every
