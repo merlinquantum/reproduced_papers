@@ -1,0 +1,50 @@
+{
+  "description": "Smoke-test defaults for QRC level generation (small q, few epochs, few samples).",
+  "seed": 42,
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "data": {
+    "level_file": "../../data/qrc_level_generation/mario_level_1-2.json",
+    "reference_root": "../../data/qrc_level_generation/reference_data"
+  },
+  "qrc": {
+    "backend": "qubit",
+    "n_qubits": 6,
+    "n_random_gates": 30,
+    "leaking_rate": 0.3,
+    "input_scale": 1.0,
+    "feedback_scale": 1.0,
+    "shots": 0,
+    "depolarizing_p": 0.0,
+    "embedding_layers": 1,
+    "n_modes": 6,
+    "n_photons": 3
+  },
+  "fnn": {
+    "hidden_dim": 0,
+    "output_dim": 32
+  },
+  "training": {
+    "epochs": 5,
+    "optimizer": "adam",
+    "lr": 0.01,
+    "weight_decay": 0.0,
+    "batch_size": 1
+  },
+  "generation": {
+    "temperatures_str": "1.0",
+    "n_samples": 5,
+    "length": 157,
+    "max_sequence_length_for_originality": 20
+  },
+  "baselines": {
+    "n_samples": 200
+  },
+  "evaluation": {
+    "reference_only": false,
+    "evaluate_reference_sequences": true,
+    "reference_beta_for_eval": "1"
+  },
+  "logging": {"level": "info", "save_config_snapshot": true}
+}

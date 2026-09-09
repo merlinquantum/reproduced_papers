@@ -1,0 +1,30 @@
+{
+    "description": "Photonic MerLin QKS sigma sweep on (3,5)-MNIST in dual-rail mode for the 6-mode, 3-photon setting.",
+    "experiment": "mnist35_merlin",
+    "seeds": [42, 43, 44],
+    "sigma_sweep": [0.03, 0.05, 0.07],
+    "dataset": {
+        "name": "mnist35",
+        "n_train": 4000,
+        "n_test": 1000,
+        "standardize": true
+    },
+    "qks": {
+        "backend": "photonic_merlin",
+        "n_modes": 6,
+        "n_photons": 3,
+        "encoding": "tile",
+        "n_episodes": 10000,
+        "sigma": 0.05,
+        "shots_per_episode": 1,
+        "n_layers": 1,
+        "input_modes": [0, 2, 4],
+        "angle_scale": 1.0,
+        "computation_space": "DUAL_RAIL"
+    },
+    "classifier": {
+        "kind": "logistic_regression",
+        "C": 1.0,
+        "max_iter": 4000
+    }
+}

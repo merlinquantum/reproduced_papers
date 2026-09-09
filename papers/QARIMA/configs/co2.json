@@ -1,0 +1,9 @@
+{
+  "description": "QARIMA — Mauna Loa CO2 (monthly, 348 train / 120 OOS; paper Table 13)",
+  "dataset": {"name": "co2"},
+  "candidates": [[3,1,1],[4,1,1],[5,1,1],[6,1,1],[7,1,1],[8,1,1],[9,1,1],[10,1,1]],
+  "paper_baseline_order": [5,1,0],
+  "paper_best_quantum_mse": 10.03,
+  "order_sweep": {"enabled": true, "p_max": 16, "d": 1, "q": 0},
+  "seasonal_baseline": {"enabled": true, "order": [1,1,1], "seasonal_order": [1,1,1,12]}
+}

@@ -1,0 +1,29 @@
+{
+    "description": "Photonic MerLin QKS on (3,5)-MNIST in dual-rail mode for the 8-mode, 4-photon setting.",
+    "experiment": "mnist35_merlin",
+    "seeds": [42, 43, 44],
+    "dataset": {
+        "name": "mnist35",
+        "n_train": 4000,
+        "n_test": 1000,
+        "standardize": true
+    },
+    "qks": {
+        "backend": "photonic_merlin",
+        "n_modes": 8,
+        "n_photons": 4,
+        "encoding": "tile",
+        "n_episodes": 5000,
+        "sigma": 0.05,
+        "shots_per_episode": 1,
+        "n_layers": 1,
+        "input_modes": [0, 2, 4, 6],
+        "angle_scale": 1.0,
+        "computation_space": "DUAL_RAIL"
+    },
+    "classifier": {
+        "kind": "logistic_regression",
+        "C": 1.0,
+        "max_iter": 4000
+    }
+}

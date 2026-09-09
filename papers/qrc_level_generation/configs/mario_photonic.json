@@ -1,0 +1,23 @@
+{
+  "description": "MerLin photonic QRC reservoir on Mario level 1-2.",
+  "seed": 42,
+  "qrc": {
+    "backend": "photonic",
+    "n_modes": 6,
+    "n_photons": 3,
+    "n_post_layers": 2,
+    "leaking_rate": 0.3,
+    "shots": 0,
+    "input_scale": 1.0,
+    "feedback_scale": 1.0
+  },
+  "training": {"epochs": 200, "lr": 0.05},
+  "generation": {
+    "temperatures_str": "0.1,0.7,1,1.5,2,3,5,10,30",
+    "n_samples": 20,
+    "length": 157,
+    "max_sequence_length_for_originality": 20
+  },
+  "baselines": {"n_samples": 300},
+  "evaluation": {"evaluate_reference_sequences": false}
+}

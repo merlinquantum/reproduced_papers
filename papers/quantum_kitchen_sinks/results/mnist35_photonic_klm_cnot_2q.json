@@ -1,0 +1,56 @@
+{
+ "description": "Photonic MerLin QKS on (3,5)-MNIST, two dual-rail qubits with a post-selected KLM CNOT (three R=1/3 splitters, two vacuum ancillas, success 1/9). Exactly equivalent to the gate cnot2 ansatz.",
+ "config": "configs/mnist35_merlin_2q_cnot.json",
+ "regenerate": "python implementation.py --paper quantum_kitchen_sinks --config mnist35_merlin_2q_cnot.json",
+ "note": "Curated copy of a run's metrics.json. Shares the 4000/1000 subsample with the other mnist35 artifacts.",
+ "results": [
+  {
+   "sigma": 0.1,
+   "n_episodes": 5000,
+   "seed": 42,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.979,
+   "train_error": 0.0,
+   "test_error": 0.02100000000000002,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 20000,
+   "n_modes": 6,
+   "n_photons": 2,
+   "computation_space": "UNBUNCHED",
+   "architecture": "dual_rail_klm_cnot"
+  },
+  {
+   "sigma": 0.1,
+   "n_episodes": 5000,
+   "seed": 43,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.987,
+   "train_error": 0.0,
+   "test_error": 0.013000000000000012,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 20000,
+   "n_modes": 6,
+   "n_photons": 2,
+   "computation_space": "UNBUNCHED",
+   "architecture": "dual_rail_klm_cnot"
+  },
+  {
+   "sigma": 0.1,
+   "n_episodes": 5000,
+   "seed": 44,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.978,
+   "train_error": 0.0,
+   "test_error": 0.02200000000000002,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 20000,
+   "n_modes": 6,
+   "n_photons": 2,
+   "computation_space": "UNBUNCHED",
+   "architecture": "dual_rail_klm_cnot"
+  }
+ ]
+}

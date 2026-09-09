@@ -1,0 +1,29 @@
+{
+    "description": "Photonic MerLin QKS sigma sweep on (3,5)-MNIST with aligned input-state placement.",
+    "experiment": "mnist35_merlin",
+    "seeds": [42, 43, 44],
+    "sigma_sweep": [0.01, 0.03, 0.05, 0.08, 0.1, 0.15],
+    "dataset": {
+        "name": "mnist35",
+        "n_train": 4000,
+        "n_test": 1000,
+        "standardize": true
+    },
+    "qks": {
+        "backend": "photonic_merlin",
+        "n_modes": 4,
+        "n_photons": 2,
+        "encoding": "tile",
+        "n_episodes": 2000,
+        "sigma": 0.05,
+        "shots_per_episode": 1,
+        "n_layers": 1,
+        "input_modes": [0, 1],
+        "angle_scale": 1.0
+    },
+    "classifier": {
+        "kind": "logistic_regression",
+        "C": 1.0,
+        "max_iter": 4000
+    }
+}

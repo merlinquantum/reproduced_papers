@@ -1,0 +1,9 @@
+{
+  "description": "QARIMA — Sydney 2024 temperature (SUBSTITUTE station Observatory Hill; paper Table 16)",
+  "dataset": {"name": "sydney"},
+  "candidates": [[3,1,1],[4,1,1],[5,1,1],[6,1,1],[7,1,1],[8,1,1],[9,1,1],[10,1,1]],
+  "paper_baseline_order": [2,0,1],
+  "paper_best_quantum_mse": 11.36,
+  "order_sweep": {"enabled": true, "p_max": 14, "d": 1, "q": 0},
+  "seasonal_baseline": {"enabled": true, "order": [1,0,1], "seasonal_order": [1,0,1,7]}
+}

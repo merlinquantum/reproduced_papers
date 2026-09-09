@@ -1,0 +1,37 @@
+{
+    "description": "Fig. 6: MNIST QORC acceleration across readout architectures",
+    "xp_type": "fig6_mnist_different_architectures",
+    "n_runs": 5,
+    "seed": 42,
+    "n_photons": 3,
+    "n_modes": 20,
+    "b_no_bunching": true,
+    "feature_batch_size": 250,
+    "epochs": 30,
+    "device": "cpu",
+    "models": {
+        "Linear": {
+            "baseline": {"optimizer": "Adam", "learning_rate": 0.00065, "batch_size": 256},
+            "accelerated": {"optimizer": "Adam", "learning_rate": 0.00022, "batch_size": 32}
+        },
+        "ShallowF": {
+            "baseline": {"optimizer": "Adam", "learning_rate": 0.00037, "batch_size": 32},
+            "accelerated": {"optimizer": "Adagrad", "learning_rate": 0.02, "batch_size": 256}
+        },
+        "Shallow": {
+            "baseline": {"optimizer": "RMSprop", "learning_rate": 0.002, "batch_size": 256},
+            "accelerated": {"optimizer": "RMSprop", "learning_rate": 0.0005, "batch_size": 256}
+        },
+        "Deep": {
+            "baseline": {"optimizer": "Adam", "learning_rate": 0.00042, "batch_size": 256},
+            "accelerated": {"optimizer": "Adam", "learning_rate": 0.00022, "batch_size": 256}
+        }
+    },
+    "target_test_accuracies_percent": {
+        "Linear": [92.7, 96.5],
+        "ShallowF": [95.3, 96.4],
+        "Shallow": [97.0, 97.5],
+        "Deep": [98.3, 97.9]
+    },
+    "outdir": "outdir"
+}
