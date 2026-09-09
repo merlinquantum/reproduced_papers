@@ -3,7 +3,6 @@
 import itertools
 
 import numpy as np
-
 from lib.problems import (
     build_problem,
     knapsack_cost,
@@ -35,7 +34,11 @@ def test_knapsack_batch_matches_scalar():
 
 def test_tsp_sizes_invert_to_the_paper_locations():
     # The paper's TSP sizes are numbers of binary variables, m = ceil(log2((n-1)!)).
-    assert (locations_for_modes(10), locations_for_modes(19), locations_for_modes(29)) == (7, 10, 13)
+    assert (
+        locations_for_modes(10),
+        locations_for_modes(19),
+        locations_for_modes(29),
+    ) == (7, 10, 13)
 
 
 def test_tsp_optimum_is_reachable_and_batch_matches_scalar():

@@ -19,7 +19,6 @@ import time
 from pathlib import Path
 
 import numpy as np
-
 from lib.baselines import BASELINES
 from lib.bbs import BosonicBinarySolver
 from lib.metrics import relative_error
@@ -91,7 +90,9 @@ def solve_instance(cfg, seed):
     elif method["name"] in BASELINES:
         # every baseline gets exactly the solver's candidate budget, which is the
         # only way the comparison tests the paper's claim rather than its compute
-        result = BASELINES[method["name"]](cost_batch, m, budget, np.random.default_rng(seed))
+        result = BASELINES[method["name"]](
+            cost_batch, m, budget, np.random.default_rng(seed)
+        )
         result.setdefault("mean_clicks", float("nan"))
     else:
         raise ValueError(f"unknown method {method['name']!r}")
@@ -102,7 +103,9 @@ def solve_instance(cfg, seed):
         "m": m,
         "method": method["name"],
         "source": method.get("source") if method["name"] == "bbs" else None,
-        "rate_scale": method.get("rate_scale", 1.0) if method["name"] == "bbs" else None,
+        "rate_scale": method.get("rate_scale", 1.0)
+        if method["name"] == "bbs"
+        else None,
         "best_cost": result["best_cost"],
         "optimum": float(optimum),
         "found_optimum": bool(abs(result["best_cost"] - optimum) < 1e-9),
@@ -127,12 +130,19 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
     instances = problem["instances"]
     base = problem.get("instance_seed_base", 0)
     delays = tuple(cfg["circuit"]["delays"])
-    budget = candidate_budget(problem["m"], delays, cfg["training"]["updates"], cfg["training"]["samples"])
+    budget = candidate_budget(
+        problem["m"], delays, cfg["training"]["updates"], cfg["training"]["samples"]
+    )
 
     logger.info(
         "%s m=%d, %d instances, method=%s, budget %d candidates = %.3g of the 2^%d space",
-        problem["family"], problem["m"], instances, cfg["method"]["name"],
-        budget, budget / 2 ** problem["m"], problem["m"],
+        problem["family"],
+        problem["m"],
+        instances,
+        cfg["method"]["name"],
+        budget,
+        budget / 2 ** problem["m"],
+        problem["m"],
     )
 
     metrics_path = run_dir / "metrics.json"
@@ -140,10 +150,16 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
     # it finished, because the file is rewritten after every one. Long runs get
     # killed here (a cloud container reclaims background processes when the
     # session idles), so resuming is not a nicety.
-    rows = json.loads(metrics_path.read_text(encoding="utf-8")) if metrics_path.exists() else []
+    rows = (
+        json.loads(metrics_path.read_text(encoding="utf-8"))
+        if metrics_path.exists()
+        else []
+    )
     done = {row["instance_seed"] for row in rows}
     if done:
-        logger.info("resuming: %d of %d instances already recorded", len(done), instances)
+        logger.info(
+            "resuming: %d of %d instances already recorded", len(done), instances
+        )
     for index in range(instances):
         if base + index in done:
             continue
@@ -153,8 +169,14 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         metrics_path.write_text(json.dumps(rows, indent=2), encoding="utf-8")
         logger.info(
             "instance %d/%d seed=%d best=%.4f optimum=%.4f %s (%.1fs)",
-            index + 1, instances, row["instance_seed"], row["best_cost"], row["optimum"],
-            "OPTIMAL" if row["found_optimum"] else f"err {row['relative_error_percent']:.2f}%",
+            index + 1,
+            instances,
+            row["instance_seed"],
+            row["best_cost"],
+            row["optimum"],
+            "OPTIMAL"
+            if row["found_optimum"]
+            else f"err {row['relative_error_percent']:.2f}%",
             row["seconds"],
         )
 
@@ -163,8 +185,12 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         "family": problem["family"],
         "m": problem["m"],
         "method": cfg["method"]["name"],
-        "source": cfg["method"].get("source") if cfg["method"]["name"] == "bbs" else None,
-        "rate_scale": cfg["method"].get("rate_scale", 1.0) if cfg["method"]["name"] == "bbs" else None,
+        "source": cfg["method"].get("source")
+        if cfg["method"]["name"] == "bbs"
+        else None,
+        "rate_scale": cfg["method"].get("rate_scale", 1.0)
+        if cfg["method"]["name"] == "bbs"
+        else None,
         "instances": len(rows),
         "percent_optimal": 100.0 * float(np.mean([r["found_optimum"] for r in rows])),
         "mean_percent_error": float(np.nanmean(errors)),
@@ -176,9 +202,15 @@ def train_and_evaluate(cfg, run_dir: Path) -> None:
         "training": cfg["training"],
         "circuit": cfg["circuit"],
     }
-    (run_dir / "summary.json").write_text(json.dumps(summary, indent=2), encoding="utf-8")
+    (run_dir / "summary.json").write_text(
+        json.dumps(summary, indent=2), encoding="utf-8"
+    )
     logger.info(
         "SUMMARY %s m=%d %s: %.1f%% optimal, mean error %.3f%% over %d instances",
-        summary["family"], summary["m"], summary["method"],
-        summary["percent_optimal"], summary["mean_percent_error"], summary["instances"],
+        summary["family"],
+        summary["m"],
+        summary["method"],
+        summary["percent_optimal"],
+        summary["mean_percent_error"],
+        summary["instances"],
     )

@@ -117,7 +117,11 @@ def unitary(theta, m, delays, topology="chain"):
     angles = theta if batched else theta.unsqueeze(0)
     batch = angles.shape[0]
 
-    current = torch.eye(n, dtype=angles.dtype, device=angles.device).expand(batch, n, n).clone()
+    current = (
+        torch.eye(n, dtype=angles.dtype, device=angles.device)
+        .expand(batch, n, n)
+        .clone()
+    )
     half = angles / 2
     cos, sin = torch.cos(half), torch.sin(half)
     for k, (a, b) in enumerate(pairs):
@@ -164,7 +168,9 @@ def candidate_budget(m, delays, updates, samples):
 def perceval_unitary(theta, m, delays, topology="chain"):
     """Same unitary as :func:`unitary`, as a plain numpy array for Perceval."""
     with torch.no_grad():
-        return unitary(torch.as_tensor(theta, dtype=torch.float64), m, delays, topology).numpy()
+        return unitary(
+            torch.as_tensor(theta, dtype=torch.float64), m, delays, topology
+        ).numpy()
 
 
 def orca_single_loop_distribution(input_state, thetas):
@@ -194,19 +200,31 @@ def orca_single_loop_distribution(input_state, thetas):
 
     def step_probabilities(n_loop, incoming, theta):
         if incoming > 1:
-            raise ValueError("ORCA's single-loop sampler allows at most one photon per input bin")
+            raise ValueError(
+                "ORCA's single-loop sampler allows at most one photon per input bin"
+            )
         half = theta / 2
         amplitudes = {}
         for k in range(n_loop + 1):
             for p in range(incoming + 1):
                 prefactor = (
-                    sqrt(factorial(k + p)) * sqrt(factorial(n_loop + incoming - p - k))
+                    sqrt(factorial(k + p))
+                    * sqrt(factorial(n_loop + incoming - p - k))
                     / (sqrt(factorial(n_loop)) * sqrt(factorial(incoming)))
-                    * factorial(n_loop) * factorial(incoming)
-                    / (factorial(k) * factorial(n_loop - k) * factorial(p) * factorial(incoming - p))
+                    * factorial(n_loop)
+                    * factorial(incoming)
+                    / (
+                        factorial(k)
+                        * factorial(n_loop - k)
+                        * factorial(p)
+                        * factorial(incoming - p)
+                    )
                 )
                 amplitudes[k + p] = amplitudes.get(k + p, 0.0) + (
-                    prefactor * ((-1) ** p) * (np.cos(half) ** (incoming - p + k)) * (np.sin(half) ** (n_loop - k + p))
+                    prefactor
+                    * ((-1) ** p)
+                    * (np.cos(half) ** (incoming - p + k))
+                    * (np.sin(half) ** (n_loop - k + p))
                 )
         outputs = sorted(amplitudes)
         probabilities = np.array([amplitudes[o] ** 2 for o in outputs])
@@ -223,7 +241,9 @@ def orca_single_loop_distribution(input_state, thetas):
         states = nxt
     distribution = {}
     for (prefix, loop), probability in states.items():
-        distribution[prefix + (loop,)] = distribution.get(prefix + (loop,), 0.0) + probability
+        distribution[prefix + (loop,)] = (
+            distribution.get(prefix + (loop,), 0.0) + probability
+        )
     return distribution
 
 

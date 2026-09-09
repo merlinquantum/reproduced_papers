@@ -29,29 +29,49 @@ def arm_of(row):
     source = row.get("source") or "boson"
     if source == "bernoulli" and row.get("rate_scale", 1.0) != 1.0:
         return f"bernoulli@{row['rate_scale']}"
-    return {"boson": "boson", "shuffled_boson": "shuffled boson",
-            "distinguishable": "distinguishable", "bernoulli": "bernoulli@1.0"}[source]
+    return {
+        "boson": "boson",
+        "shuffled_boson": "shuffled boson",
+        "distinguishable": "distinguishable",
+        "bernoulli": "bernoulli@1.0",
+    }[source]
 
 
 def summarise(rows):
     groups = collections.defaultdict(list)
     for row in rows:
-        groups[(row["family"], row["m"], row.get("topology", "chain"), row["config"])].append(row)
+        groups[
+            (row["family"], row["m"], row.get("topology", "chain"), row["config"])
+        ].append(row)
 
     arms = []
     for (family, m, topology, config), members in sorted(groups.items()):
         errors = [r["relative_error_percent"] for r in members]
-        arms.append({
-            "config": config, "family": family, "m": m, "topology": topology,
-            "arm": arm_of(members[0]), "instances": len(members),
-            "percent_optimal": round(100 * sum(r["found_optimum"] for r in members) / len(members), 2),
-            "mean_percent_error": round(st.mean(errors), 5),
-            "std_percent_error": round(st.stdev(errors), 5) if len(members) > 1 else 0.0,
-            "mean_click_density": round(st.mean(r["mean_clicks"] for r in members) / m, 4),
-            "candidate_budget": members[0]["budget"],
-            "space_coverage": members[0]["space_coverage"],
-            "median_seconds_per_instance": round(st.median(r["seconds"] for r in members), 3),
-        })
+        arms.append(
+            {
+                "config": config,
+                "family": family,
+                "m": m,
+                "topology": topology,
+                "arm": arm_of(members[0]),
+                "instances": len(members),
+                "percent_optimal": round(
+                    100 * sum(r["found_optimum"] for r in members) / len(members), 2
+                ),
+                "mean_percent_error": round(st.mean(errors), 5),
+                "std_percent_error": round(st.stdev(errors), 5)
+                if len(members) > 1
+                else 0.0,
+                "mean_click_density": round(
+                    st.mean(r["mean_clicks"] for r in members) / m, 4
+                ),
+                "candidate_budget": members[0]["budget"],
+                "space_coverage": members[0]["space_coverage"],
+                "median_seconds_per_instance": round(
+                    st.median(r["seconds"] for r in members), 3
+                ),
+            }
+        )
     return arms
 
 
@@ -64,20 +84,32 @@ def paired(rows, config_a, config_b):
     shared = sorted(set(left) & set(right))
     if len(shared) < 2:
         return None
-    only_a = sum(1 for i in shared if left[i]["found_optimum"] and not right[i]["found_optimum"])
-    only_b = sum(1 for i in shared if right[i]["found_optimum"] and not left[i]["found_optimum"])
+    only_a = sum(
+        1 for i in shared if left[i]["found_optimum"] and not right[i]["found_optimum"]
+    )
+    only_b = sum(
+        1 for i in shared if right[i]["found_optimum"] and not left[i]["found_optimum"]
+    )
     discordant = only_a + only_b
     z = (abs(only_a - only_b) - 1) / math.sqrt(discordant) if discordant else 0.0
     if only_a > only_b:
         z = -z
-    gaps = [right[i]["relative_error_percent"] - left[i]["relative_error_percent"] for i in shared]
+    gaps = [
+        right[i]["relative_error_percent"] - left[i]["relative_error_percent"]
+        for i in shared
+    ]
     spread = st.stdev(gaps)
     return {
-        "a": config_a, "b": config_b, "instances": len(shared),
-        "a_only_optimal": only_a, "b_only_optimal": only_b,
+        "a": config_a,
+        "b": config_b,
+        "instances": len(shared),
+        "a_only_optimal": only_a,
+        "b_only_optimal": only_b,
         "mcnemar_z": round(z, 3),
         "mean_error_gap_percent": round(st.mean(gaps), 5),
-        "paired_t": round(st.mean(gaps) / (spread / math.sqrt(len(gaps))), 3) if spread else None,
+        "paired_t": round(st.mean(gaps) / (spread / math.sqrt(len(gaps))), 3)
+        if spread
+        else None,
         "reading": "positive z and negative gap favour b",
     }
 
@@ -140,14 +172,18 @@ def main():
         "generated_from": sources,
         "unique_runs": len(rows),
         "note": "Raw rows are not committed; regenerate with utils/summarise.py. "
-                "Every number quoted in README.md comes from this file.",
+        "Every number quoted in README.md comes from this file.",
         "arms": summarise(rows),
-        "paired_comparisons": [c for c in (paired(rows, a, b) for a, b in COMPARISONS) if c],
+        "paired_comparisons": [
+            c for c in (paired(rows, a, b) for a, b in COMPARISONS) if c
+        ],
     }
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
     Path(args.out).write_text(json.dumps(summary, indent=2), encoding="utf-8")
-    print(f"{len(rows)} unique runs -> {len(summary['arms'])} arms, "
-          f"{len(summary['paired_comparisons'])} paired comparisons -> {args.out}")
+    print(
+        f"{len(rows)} unique runs -> {len(summary['arms'])} arms, "
+        f"{len(summary['paired_comparisons'])} paired comparisons -> {args.out}"
+    )
 
 
 if __name__ == "__main__":

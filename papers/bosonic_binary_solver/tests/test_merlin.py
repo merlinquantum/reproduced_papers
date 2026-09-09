@@ -1,10 +1,8 @@
 """Anchors for the MerLin photonic variant."""
 
 import numpy as np
-import perceval as pcvl
 import pytest
 import torch
-
 from lib.bbs_merlin import MerlinBinarySolver, build_circuit
 from lib.problems import build_problem
 from lib.tbi import unitary
@@ -31,7 +29,7 @@ def test_perceval_circuit_matches_the_torch_unitary(m, delays):
 def test_click_distribution_is_normalised():
     solver = MerlinBinarySolver(8, delays=(1, 3), updates=1, seed=0)
     probabilities = solver.click_probabilities()
-    assert probabilities.shape == (2 ** 8,)
+    assert probabilities.shape == (2**8,)
     assert float(probabilities.sum()) == pytest.approx(1.0, abs=1e-10)
 
 

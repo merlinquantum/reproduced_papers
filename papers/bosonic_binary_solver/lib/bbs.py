@@ -32,7 +32,6 @@ gives the true gradient in this package's convention.
 from __future__ import annotations
 
 import numpy as np
-
 from lib.sampler import ClickSource
 from lib.tbi import alternating_input, beamsplitter_layout, candidate_budget
 
@@ -103,7 +102,12 @@ class BosonicBinarySolver:
         self.theta = self.rng.random(self.n_angles) * 2 * np.pi
         self.alpha = np.zeros(m)
         self.source = ClickSource(
-            m, self.delays, self.input_state, source=source, rate_scale=rate_scale, topology=topology
+            m,
+            self.delays,
+            self.input_state,
+            source=source,
+            rate_scale=rate_scale,
+            topology=topology,
         )
 
     @property
@@ -137,11 +141,16 @@ class BosonicBinarySolver:
         for _ in range(self.updates):
             clicks = self.source.draw(self.theta, self.samples, self.rng)
             clicks_seen.append(clicks.sum(axis=1).mean())
-            flips = (self.rng.random((self.samples, self.m)) < self.flip_probabilities[None, :]).astype(np.int8)
+            flips = (
+                self.rng.random((self.samples, self.m))
+                < self.flip_probabilities[None, :]
+            ).astype(np.int8)
             candidates = clicks ^ flips
             costs = cost_batch(candidates)
             evaluations += len(costs)
-            best_cost, best_bits = self._keep_best(candidates, costs, best_cost, best_bits)
+            best_cost, best_bits = self._keep_best(
+                candidates, costs, best_cost, best_bits
+            )
             history.append(float(costs.mean()))
 
             theta_gradient = np.zeros(self.n_angles)
@@ -153,7 +162,8 @@ class BosonicBinarySolver:
                 for angles in (plus, minus):
                     shifted_clicks = self.source.draw(angles, self.samples, self.rng)
                     shifted_flips = (
-                        self.rng.random((self.samples, self.m)) < self.flip_probabilities[None, :]
+                        self.rng.random((self.samples, self.m))
+                        < self.flip_probabilities[None, :]
                     ).astype(np.int8)
                     shifted_candidates = shifted_clicks ^ shifted_flips
                     shifted_costs = cost_batch(shifted_candidates)
@@ -162,7 +172,9 @@ class BosonicBinarySolver:
                         shifted_candidates, shifted_costs, best_cost, best_bits
                     )
                     energies.append(shifted_costs.mean())
-                theta_gradient[k] = self.shift_scale * (energies[0] - energies[1]) / np.sin(self.shift)
+                theta_gradient[k] = (
+                    self.shift_scale * (energies[0] - energies[1]) / np.sin(self.shift)
+                )
 
             # Analytic gradient for the bit-flip logits: forcing bit i to flipped
             # and to unflipped, holding every other draw fixed, gives
@@ -182,7 +194,9 @@ class BosonicBinarySolver:
                         forced_candidates, forced_costs, best_cost, best_bits
                     )
                     forced.append(forced_costs.mean())
-                alpha_gradient[i] = (forced[0] - forced[1]) * probabilities[i] * (1 - probabilities[i])
+                alpha_gradient[i] = (
+                    (forced[0] - forced[1]) * probabilities[i] * (1 - probabilities[i])
+                )
 
             # plain SGD, no momentum, as stated in the paper
             self.theta = self.theta - self.lr_theta * theta_gradient

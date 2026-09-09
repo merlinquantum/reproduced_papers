@@ -20,9 +20,14 @@ import math
 
 import numpy as np
 import torch
-
 from lib.sampler_torch import draw_clicks
-from lib.tbi import alternating_input, beamsplitter_layout, candidate_budget, shifted_angles, unitary
+from lib.tbi import (
+    alternating_input,
+    beamsplitter_layout,
+    candidate_budget,
+    shifted_angles,
+    unitary,
+)
 
 
 def solve_batch(
@@ -75,8 +80,11 @@ def solve_batch(
     circuits = 1 + 2 * n_angles
 
     theta = torch.tensor(
-        np.stack([np.random.default_rng(seed).random(n_angles) * 2 * np.pi for seed in seeds]),
-        dtype=torch.float64, device=device,
+        np.stack(
+            [np.random.default_rng(seed).random(n_angles) * 2 * np.pi for seed in seeds]
+        ),
+        dtype=torch.float64,
+        device=device,
     )
     alpha = torch.zeros(instances, m, dtype=torch.float64, device=device)
     generator = torch.Generator(device=device).manual_seed(int(seeds[0]) + 1000)
@@ -88,22 +96,37 @@ def solve_batch(
 
     def apply_flips(clicks, probability):
         """XOR ``clicks`` (I, Q, m) with independent Bernoulli(probability)."""
-        draw = torch.rand(clicks.shape, generator=generator, device=device, dtype=torch.float64)
-        return torch.bitwise_xor(clicks, (draw < probability[:, None, :]).to(clicks.dtype))
+        draw = torch.rand(
+            clicks.shape, generator=generator, device=device, dtype=torch.float64
+        )
+        return torch.bitwise_xor(
+            clicks, (draw < probability[:, None, :]).to(clicks.dtype)
+        )
 
     for _ in range(updates):
-        batched_theta = shifted_angles(theta, shift).reshape(instances * circuits, n_angles)
+        batched_theta = shifted_angles(theta, shift).reshape(
+            instances * circuits, n_angles
+        )
         unitaries = unitary(batched_theta, m, delays, topology)
         clicks = draw_clicks(
-            unitaries, input_modes, samples, generator, source, m,
-            rate_scale=rate_scale, sampler_backend=sampler_backend, sampler_algo=sampler_algo,
+            unitaries,
+            input_modes,
+            samples,
+            generator,
+            source,
+            m,
+            rate_scale=rate_scale,
+            sampler_backend=sampler_backend,
+            sampler_algo=sampler_algo,
         ).reshape(instances, circuits, samples, m)
 
         click_sum += clicks[:, 0].to(torch.float64).sum(-1).mean(-1)
         probability = torch.sigmoid(alpha)
 
         flat = clicks.reshape(instances, circuits * samples, m)
-        draw = torch.rand(flat.shape, generator=generator, device=device, dtype=torch.float64)
+        draw = torch.rand(
+            flat.shape, generator=generator, device=device, dtype=torch.float64
+        )
         flips = (draw < probability[:, None, :]).to(flat.dtype)
         candidates = torch.bitwise_xor(flat, flips)
         costs = cost_batch(candidates).reshape(instances, circuits, samples)
@@ -111,7 +134,7 @@ def solve_batch(
         best = torch.minimum(best, costs.reshape(instances, -1).min(dim=1).values)
         history.append(float(costs[:, 0].mean()))
 
-        plus, minus = costs[:, 1::2].mean(-1), costs[:, 2::2].mean(-1)          # (I, K)
+        plus, minus = costs[:, 1::2].mean(-1), costs[:, 2::2].mean(-1)  # (I, K)
         theta_gradient = shift_scale * (plus - minus) / math.sin(shift)
 
         # Bit-flip gradient, paired with the base circuit's own draws: forcing
@@ -132,7 +155,9 @@ def solve_batch(
                 best = torch.minimum(best, scored.min(dim=1).values)
                 forced_costs.append(scored.mean(-1))
             alpha_gradient[:, index] = (
-                (forced_costs[0] - forced_costs[1]) * probability[:, index] * (1 - probability[:, index])
+                (forced_costs[0] - forced_costs[1])
+                * probability[:, index]
+                * (1 - probability[:, index])
             )
 
         if not freeze_theta:

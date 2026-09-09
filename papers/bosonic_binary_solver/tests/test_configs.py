@@ -26,10 +26,14 @@ def test_config_has_required_keys(path):
         for key in keys:
             assert key in cfg[section], f"{path.name} lacks {section}.{key}"
     assert cfg["problem"]["family"] in ("knapsack", "tsp")
-    assert "<<" not in path.read_text(encoding="utf-8"), "runnable configs must not carry placeholders"
+    assert "<<" not in path.read_text(encoding="utf-8"), (
+        "runnable configs must not carry placeholders"
+    )
 
 
-@pytest.mark.parametrize("path", [p for p in CONFIGS if p.stem.endswith("_original")], ids=lambda p: p.stem)
+@pytest.mark.parametrize(
+    "path", [p for p in CONFIGS if p.stem.endswith("_original")], ids=lambda p: p.stem
+)
 def test_paper_accurate_configs_use_paper_hyperparameters(path):
     """The `_original` configs are the reproducibility artifact and must stay exact.
 

@@ -22,8 +22,17 @@ def _threshold(occupations):
     return (occupations > 0).to(torch.int8)
 
 
-def draw_clicks(unitaries, input_modes, shots, generator, source, m, rate_scale=1.0,
-                sampler_backend="triton", sampler_algo="auto"):
+def draw_clicks(
+    unitaries,
+    input_modes,
+    shots,
+    generator,
+    source,
+    m,
+    rate_scale=1.0,
+    sampler_backend="triton",
+    sampler_algo="auto",
+):
     """Draw threshold patterns for a batch of circuits.
 
     Parameters
@@ -62,37 +71,65 @@ def draw_clicks(unitaries, input_modes, shots, generator, source, m, rate_scale=
             ) from error
 
         occupations = clifford_sample(
-            unitaries, list(input_modes), shots, generator=generator,
-            algo=sampler_algo, backend=sampler_backend,
+            unitaries,
+            list(input_modes),
+            shots,
+            generator=generator,
+            algo=sampler_algo,
+            backend=sampler_backend,
         )
         clicks = _threshold(occupations).reshape(batch, shots, -1)[:, :, :m]
         if source == "shuffled_boson":
             # permute each mode's column within its own circuit's block of shots:
             # every per-mode marginal is preserved exactly, the joint is destroyed
             order = torch.argsort(
-                torch.rand(clicks.shape, generator=generator, device=clicks.device), dim=1
+                torch.rand(clicks.shape, generator=generator, device=clicks.device),
+                dim=1,
             )
             clicks = torch.gather(clicks, 1, order)
         return clicks
 
-    probabilities = (unitaries[:, :m, list(input_modes)] ** 2).to(torch.float64)   # (B, m, n_photons)
+    probabilities = (unitaries[:, :m, list(input_modes)] ** 2).to(
+        torch.float64
+    )  # (B, m, n_photons)
 
     if source == "distinguishable":
         # each photon lands independently in a mode drawn from its own column of
         # |U|^2: photon number is conserved, multi-photon interference is not
         normalised = probabilities / probabilities.sum(dim=1, keepdim=True)
-        cumulative = torch.cumsum(normalised, dim=1)                              # (B, m, n)
-        draw = torch.rand(batch, shots, probabilities.shape[2], generator=generator,
-                          device=unitaries.device, dtype=torch.float64)
-        landed = (draw[:, :, None, :] > cumulative[:, None, :, :]).sum(dim=2).clamp(max=m - 1)
+        cumulative = torch.cumsum(normalised, dim=1)  # (B, m, n)
+        draw = torch.rand(
+            batch,
+            shots,
+            probabilities.shape[2],
+            generator=generator,
+            device=unitaries.device,
+            dtype=torch.float64,
+        )
+        landed = (
+            (draw[:, :, None, :] > cumulative[:, None, :, :])
+            .sum(dim=2)
+            .clamp(max=m - 1)
+        )
         clicks = torch.zeros(batch, shots, m, dtype=torch.int8, device=unitaries.device)
         return clicks.scatter_(2, landed, 1)
 
     if source == "bernoulli":
         # keep only the per-mode click rate and drop every correlation; rate_scale
         # moves the mean click density without touching anything else
-        rate = (1.0 - torch.prod(1.0 - probabilities, dim=2)).mul(rate_scale).clamp(0.0, 1.0)
-        draw = torch.rand(batch, shots, m, generator=generator, device=unitaries.device, dtype=torch.float64)
+        rate = (
+            (1.0 - torch.prod(1.0 - probabilities, dim=2))
+            .mul(rate_scale)
+            .clamp(0.0, 1.0)
+        )
+        draw = torch.rand(
+            batch,
+            shots,
+            m,
+            generator=generator,
+            device=unitaries.device,
+            dtype=torch.float64,
+        )
         return (draw < rate[:, None, :]).to(torch.int8)
 
     raise ValueError(f"unknown click source {source!r}; available: {SOURCES}")

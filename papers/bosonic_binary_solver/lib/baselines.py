@@ -24,7 +24,9 @@ def _cost_scale(cost_batch, m, rng, probes=256):
     return spread if spread > 0 else 1.0
 
 
-def simulated_annealing(cost_batch, m, budget, rng, initial_temperature=None, final_temperature=None):
+def simulated_annealing(
+    cost_batch, m, budget, rng, initial_temperature=None, final_temperature=None
+):
     """Single-flip Metropolis annealing with a geometric temperature schedule.
 
     Parameters
@@ -63,7 +65,9 @@ def simulated_annealing(cost_batch, m, budget, rng, initial_temperature=None, fi
         current[index] ^= 1
         candidate_cost = float(cost_batch(current[None, :])[0])
         evaluations += 1
-        if candidate_cost <= current_cost or rng.random() < np.exp(-(candidate_cost - current_cost) / temperature):
+        if candidate_cost <= current_cost or rng.random() < np.exp(
+            -(candidate_cost - current_cost) / temperature
+        ):
             current_cost = candidate_cost
             if candidate_cost < best_cost:
                 best_cost, best_bits = candidate_cost, current.copy()
@@ -71,7 +75,11 @@ def simulated_annealing(cost_batch, m, budget, rng, initial_temperature=None, fi
             current[index] ^= 1
         temperature *= decay
 
-    return {"best_cost": best_cost, "best_bits": best_bits.tolist(), "evaluations": evaluations}
+    return {
+        "best_cost": best_cost,
+        "best_bits": best_bits.tolist(),
+        "evaluations": evaluations,
+    }
 
 
 def hill_climbing(cost_batch, m, budget, rng):
@@ -108,7 +116,11 @@ def hill_climbing(cost_batch, m, budget, rng):
             if current_cost < best_cost:
                 best_cost, best_bits = current_cost, current.copy()
 
-    return {"best_cost": float(best_cost), "best_bits": best_bits.tolist(), "evaluations": int(evaluations)}
+    return {
+        "best_cost": float(best_cost),
+        "best_bits": best_bits.tolist(),
+        "evaluations": int(evaluations),
+    }
 
 
 def random_search(cost_batch, m, budget, rng, block=8192):
@@ -126,7 +138,11 @@ def random_search(cost_batch, m, budget, rng, block=8192):
         index = int(np.argmin(costs))
         if costs[index] < best_cost:
             best_cost, best_bits = float(costs[index]), candidates[index].copy()
-    return {"best_cost": float(best_cost), "best_bits": best_bits.tolist(), "evaluations": int(evaluations)}
+    return {
+        "best_cost": float(best_cost),
+        "best_bits": best_bits.tolist(),
+        "evaluations": int(evaluations),
+    }
 
 
 BASELINES = {

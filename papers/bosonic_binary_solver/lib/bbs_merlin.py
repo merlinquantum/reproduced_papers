@@ -18,11 +18,10 @@ construction: m = 12 has 12 376 states, m = 16 has 490 314.
 
 from __future__ import annotations
 
+import merlin
 import numpy as np
 import perceval as pcvl
 import torch
-
-import merlin
 from lib.tbi import alternating_input, beamsplitter_layout, mode_count
 
 
@@ -111,14 +110,22 @@ class MerlinBinarySolver(torch.nn.Module):
             circuit=circuit,
             input_state=list(input_state),
             trainable_parameters=names,
-            measurement_strategy=merlin.MeasurementStrategy.probs(merlin.ComputationSpace.FOCK),
+            measurement_strategy=merlin.MeasurementStrategy.probs(
+                merlin.ComputationSpace.FOCK
+            ),
             dtype=torch.float64,
         )
 
         generator = torch.Generator().manual_seed(seed)
         with torch.no_grad():
             for parameter in self.layer.parameters():
-                parameter.copy_(torch.rand(parameter.shape, generator=generator, dtype=torch.float64) * 2 * np.pi)
+                parameter.copy_(
+                    torch.rand(
+                        parameter.shape, generator=generator, dtype=torch.float64
+                    )
+                    * 2
+                    * np.pi
+                )
         self.alpha = torch.nn.Parameter(torch.zeros(m, dtype=torch.float64))
         self.rng = np.random.default_rng(seed)
         self._click_index = None
@@ -134,9 +141,12 @@ class MerlinBinarySolver(torch.nn.Module):
         if self._click_index is None:
             keys = self.layer.computation_process.simulation_graph.final_keys
             weights = (1 << np.arange(self.m - 1, -1, -1)).astype(np.int64)
-            index = [int(((np.asarray(key)[: self.m] > 0).astype(np.int64) * weights).sum()) for key in keys]
+            index = [
+                int(((np.asarray(key)[: self.m] > 0).astype(np.int64) * weights).sum())
+                for key in keys
+            ]
             self._click_index = torch.tensor(index, dtype=torch.long)
-        out = torch.zeros(2 ** self.m, dtype=probabilities.dtype)
+        out = torch.zeros(2**self.m, dtype=probabilities.dtype)
         return out.index_add(0, self._click_index, probabilities)
 
     def solve(self, cost_batch, all_bits=None):
@@ -170,7 +180,9 @@ class MerlinBinarySolver(torch.nn.Module):
             per-update ``history``.
         """
         if all_bits is None:
-            all_bits = ((np.arange(2 ** self.m)[:, None] >> np.arange(self.m - 1, -1, -1)) & 1).astype(np.int8)
+            all_bits = (
+                (np.arange(2**self.m)[:, None] >> np.arange(self.m - 1, -1, -1)) & 1
+            ).astype(np.int8)
         costs = torch.tensor(cost_batch(all_bits), dtype=torch.float64)
 
         optimizer = torch.optim.SGD(
@@ -194,8 +206,10 @@ class MerlinBinarySolver(torch.nn.Module):
                 probability = probability.movedim(axis, 0)
                 kept, flipped = probability[0], probability[1]
                 probability = torch.stack(
-                    [(1 - flip[axis]) * kept + flip[axis] * flipped,
-                     flip[axis] * kept + (1 - flip[axis]) * flipped]
+                    [
+                        (1 - flip[axis]) * kept + flip[axis] * flipped,
+                        flip[axis] * kept + (1 - flip[axis]) * flipped,
+                    ]
                 ).movedim(0, axis)
             flat = probability.reshape(-1)
             energy = (flat * costs).sum()
@@ -206,7 +220,9 @@ class MerlinBinarySolver(torch.nn.Module):
             # candidates: draw from the trained distribution and keep the best,
             # so the reported metric is comparable with the sampled path
             with torch.no_grad():
-                drawn = torch.multinomial(flat.detach().clamp_min(0), self.flip_samples, replacement=True)
+                drawn = torch.multinomial(
+                    flat.detach().clamp_min(0), self.flip_samples, replacement=True
+                )
             batch = costs[drawn]
             index = int(batch.argmin())
             if float(batch[index]) < best_cost:
@@ -218,7 +234,7 @@ class MerlinBinarySolver(torch.nn.Module):
             "evaluations": self.updates * self.flip_samples,
             "budget": self.updates * self.flip_samples,
             "candidates_sampled": self.updates * self.flip_samples,
-            "simulator_cost_evaluations": self.updates * 2 ** self.m,
+            "simulator_cost_evaluations": self.updates * 2**self.m,
             "circuit_evaluations": self.updates,
             "mean_clicks": float("nan"),
             "history": history,

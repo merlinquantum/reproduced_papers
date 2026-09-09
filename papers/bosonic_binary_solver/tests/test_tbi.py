@@ -5,14 +5,10 @@ equivalence with ORCA's released simulator: both failures would silently change
 every number this package produces rather than raise an error.
 """
 
-import itertools
-
 import numpy as np
 import perceval as pcvl
 import pytest
 import torch
-from perceval.backends import SLOSBackend
-
 from lib.tbi import (
     alternating_input,
     beamsplitter_layout,
@@ -22,6 +18,7 @@ from lib.tbi import (
     perceval_unitary,
     unitary,
 )
+from perceval.backends import SLOSBackend
 
 
 def test_beamsplitter_count_matches_appendix_b():
@@ -69,12 +66,19 @@ def test_loop_topology_matches_orca_simulator(n_bins):
     reference = orca_single_loop_distribution(input_state, thetas)
 
     backend = SLOSBackend()
-    backend.set_circuit(pcvl.Unitary(pcvl.Matrix(perceval_unitary(thetas, n_bins, (1,), "loop"))))
+    backend.set_circuit(
+        pcvl.Unitary(pcvl.Matrix(perceval_unitary(thetas, n_bins, (1,), "loop")))
+    )
     backend.set_input_state(pcvl.BasicState(list(input_state) + [0]))
-    ours = {tuple(state): float(p) for state, p in backend.prob_distribution().items() if p > 1e-12}
+    ours = {
+        tuple(state): float(p)
+        for state, p in backend.prob_distribution().items()
+        if p > 1e-12
+    }
 
     total_variation = 0.5 * sum(
-        abs(reference.get(k, 0.0) - ours.get(k, 0.0)) for k in set(reference) | set(ours)
+        abs(reference.get(k, 0.0) - ours.get(k, 0.0))
+        for k in set(reference) | set(ours)
     )
     assert total_variation < 1e-12
 

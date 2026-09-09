@@ -17,9 +17,8 @@ from __future__ import annotations
 
 import numpy as np
 import perceval as pcvl
-from perceval.backends import Clifford2017Backend
-
 from lib.tbi import mode_count, perceval_unitary
+from perceval.backends import Clifford2017Backend
 
 SOURCES = ("boson", "shuffled_boson", "distinguishable", "bernoulli")
 
@@ -32,7 +31,7 @@ def threshold(occupations):
 def _column_probabilities(theta, m, delays, input_modes, topology):
     """|U(theta)|^2 restricted to the occupied input columns and detected rows."""
     u = perceval_unitary(theta, m, delays, topology)
-    return (u[:m, list(input_modes)] ** 2)
+    return u[:m, list(input_modes)] ** 2
 
 
 class ClickSource:
@@ -58,7 +57,9 @@ class ClickSource:
         the density control is run. Default value is 1.0.
     """
 
-    def __init__(self, m, delays, input_state, source="boson", rate_scale=1.0, topology="chain"):
+    def __init__(
+        self, m, delays, input_state, source="boson", rate_scale=1.0, topology="chain"
+    ):
         if source not in SOURCES:
             raise ValueError(f"unknown click source {source!r}; available: {SOURCES}")
         self.m = m
@@ -69,7 +70,9 @@ class ClickSource:
         self.input_modes = [i for i, n in enumerate(self.input_state) if n]
         self.source = source
         self.rate_scale = rate_scale
-        self._backend = Clifford2017Backend() if source in ("boson", "shuffled_boson") else None
+        self._backend = (
+            Clifford2017Backend() if source in ("boson", "shuffled_boson") else None
+        )
         self._pcvl_input = pcvl.BasicState(list(self.input_state))
 
     def draw(self, theta, shots, rng):
@@ -81,15 +84,21 @@ class ClickSource:
                 # is preserved exactly and the joint distribution is destroyed. This
                 # separates "the marginals of |U|^2 matter" from "the multi-photon
                 # correlations matter".
-                clicks = np.stack([rng.permutation(clicks[:, j]) for j in range(self.m)], axis=1)
+                clicks = np.stack(
+                    [rng.permutation(clicks[:, j]) for j in range(self.m)], axis=1
+                )
             return clicks
 
-        probabilities = _column_probabilities(theta, self.m, self.delays, self.input_modes, self.topology)
+        probabilities = _column_probabilities(
+            theta, self.m, self.delays, self.input_modes, self.topology
+        )
 
         if self.source == "distinguishable":
             # Each photon lands independently in a mode drawn from its own column of
             # |U|^2: photon number is conserved, multi-photon interference is not.
-            cumulative = np.cumsum(probabilities / probabilities.sum(axis=0, keepdims=True), axis=0)
+            cumulative = np.cumsum(
+                probabilities / probabilities.sum(axis=0, keepdims=True), axis=0
+            )
             draws = rng.random((shots, probabilities.shape[1]))
             landed = (draws[:, None, :] > cumulative[None, :, :]).sum(axis=1)
             clicks = np.zeros((shots, self.m), dtype=np.int8)
@@ -102,7 +111,9 @@ class ClickSource:
         return (rng.random((shots, self.m)) < rate[None, :]).astype(np.int8)
 
     def _boson(self, theta, shots):
-        matrix = pcvl.Matrix(perceval_unitary(theta, self.m, self.delays, self.topology))
+        matrix = pcvl.Matrix(
+            perceval_unitary(theta, self.m, self.delays, self.topology)
+        )
         self._backend.set_circuit(pcvl.Unitary(matrix))
         self._backend.set_input_state(self._pcvl_input)
         drawn = self._backend.samples(shots)

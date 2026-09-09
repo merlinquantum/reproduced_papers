@@ -28,5 +28,7 @@ print("clean")
 
 def test_gpu_modules_import_without_perceval_or_merlin():
     code = PROBE.format(root=str(ROOT), runner=str(ROOT / "utils" / "run_gpu.py"))
-    result = subprocess.run([sys.executable, "-c", code], capture_output=True, text=True)
+    result = subprocess.run(
+        [sys.executable, "-c", code], capture_output=True, text=True
+    )
     assert "clean" in result.stdout, result.stderr

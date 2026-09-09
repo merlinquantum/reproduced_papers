@@ -186,7 +186,11 @@ def tsp_optimum(instance):
                     nxt[key] = candidate
         best.update(nxt)
     full = (1 << size) - 1
-    return min(cost + distance[others[last], 0] for (mask, last), cost in best.items() if mask == full)
+    return min(
+        cost + distance[others[last], 0]
+        for (mask, last), cost in best.items()
+        if mask == full
+    )
 
 
 # ------------------------------------------------------------------ dispatch
@@ -196,8 +200,16 @@ def build_problem(family, m, seed, **kwargs):
     """Return ``(instance, cost_function, optimum)`` for one problem instance."""
     if family == "knapsack":
         instance = knapsack_instance(m, seed, **kwargs)
-        return instance, (lambda bits: knapsack_cost_batch(instance, bits)), knapsack_optimum(instance)
+        return (
+            instance,
+            (lambda bits: knapsack_cost_batch(instance, bits)),
+            knapsack_optimum(instance),
+        )
     if family == "tsp":
         instance = tsp_instance(m, seed, **kwargs)
-        return instance, (lambda bits: tsp_cost_batch(instance, bits)), tsp_optimum(instance)
+        return (
+            instance,
+            (lambda bits: tsp_cost_batch(instance, bits)),
+            tsp_optimum(instance),
+        )
     raise ValueError(f"unknown problem family: {family!r}")

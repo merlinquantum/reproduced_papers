@@ -14,7 +14,6 @@ is exercised through it.
 import numpy as np
 import pytest
 import torch
-
 from lib.problems_torch import build_batch
 
 INTEGER_DTYPES = (torch.int8, torch.int16, torch.int32, torch.int64, torch.bool)
@@ -37,11 +36,15 @@ def cuda_like_einsum(monkeypatch):
     monkeypatch.setattr(torch, "einsum", guarded)
 
 
-@pytest.mark.parametrize("family,m", [("knapsack", 30), ("tsp", 29), ("tsp", 19), ("tsp", 10)])
+@pytest.mark.parametrize(
+    "family,m", [("knapsack", 30), ("tsp", 29), ("tsp", 19), ("tsp", 10)]
+)
 def test_batched_costs_avoid_integer_einsum(cuda_like_einsum, family, m):
     seeds = [0, 1]
     cost_batch, _ = build_batch(family, m, seeds, torch.device("cpu"))
-    bits = torch.tensor(np.random.default_rng(0).integers(0, 2, (2, 64, m)), dtype=torch.int8)
+    bits = torch.tensor(
+        np.random.default_rng(0).integers(0, 2, (2, 64, m)), dtype=torch.int8
+    )
     costs = cost_batch(bits)
     assert costs.shape == (2, 64)
     assert torch.isfinite(costs).all()
@@ -55,8 +58,8 @@ def test_tsp_index_stays_exact_at_the_largest_size():
     """
     seeds = [0]
     cost_batch, _ = build_batch("tsp", 29, seeds, torch.device("cpu"))
-    bits = torch.ones(1, 1, 29, dtype=torch.int8)   # index = 2^29 - 1
+    bits = torch.ones(1, 1, 29, dtype=torch.int8)  # index = 2^29 - 1
     powers = cost_batch.powers
     assert powers.dtype == torch.int64
     index = (bits.to(torch.int64) * powers).sum(dim=-1)
-    assert int(index[0, 0]) == 2 ** 29 - 1
+    assert int(index[0, 0]) == 2**29 - 1

@@ -3,7 +3,7 @@
 The scalar implementations in :mod:`lib.problems` are the readable definition and
 stay the reference; these evaluate ``(instances, candidates, m)`` at once so that
 one update step of every instance can be scored in a single kernel. Both are
-checked against each other in tests/test_problems_torch.py.
+checked against each other in tests/test_problems.py.
 """
 
 from __future__ import annotations
@@ -12,8 +12,7 @@ import math
 
 import numpy as np
 import torch
-
-from lib.problems import knapsack_instance, locations_for_modes, tsp_instance
+from lib.problems import knapsack_instance, tsp_instance
 
 
 class KnapsackBatch:
@@ -28,9 +27,19 @@ class KnapsackBatch:
     """
 
     def __init__(self, instances, device):
-        self.weights = torch.tensor(np.stack([i["weights"] for i in instances]), dtype=torch.float64, device=device)
-        self.values = torch.tensor(np.stack([i["values"] for i in instances]), dtype=torch.float64, device=device)
-        self.capacity = torch.tensor([i["capacity"] for i in instances], dtype=torch.float64, device=device)
+        self.weights = torch.tensor(
+            np.stack([i["weights"] for i in instances]),
+            dtype=torch.float64,
+            device=device,
+        )
+        self.values = torch.tensor(
+            np.stack([i["values"] for i in instances]),
+            dtype=torch.float64,
+            device=device,
+        )
+        self.capacity = torch.tensor(
+            [i["capacity"] for i in instances], dtype=torch.float64, device=device
+        )
 
     def __call__(self, bits):
         """``bits`` ``(I, Q, m)`` -> costs ``(I, Q)``; infeasible packings cost 0.
@@ -41,7 +50,9 @@ class KnapsackBatch:
         bits = bits.to(torch.float64)
         weight = torch.einsum("iqm,im->iq", bits, self.weights)
         value = torch.einsum("iqm,im->iq", bits, self.values)
-        return torch.where(weight > self.capacity[:, None], torch.zeros_like(value), -value)
+        return torch.where(
+            weight > self.capacity[:, None], torch.zeros_like(value), -value
+        )
 
 
 class TSPBatch:
@@ -59,10 +70,11 @@ class TSPBatch:
         self.device = device
         self.distance = torch.tensor(
             np.linalg.norm(points[:, :, None, :] - points[:, None, :, :], axis=-1),
-            dtype=torch.float64, device=device,
+            dtype=torch.float64,
+            device=device,
         )
         self.block = math.factorial(self.n - 1)
-        self.powers = (2 ** torch.arange(m - 1, -1, -1, dtype=torch.int64, device=device))
+        self.powers = 2 ** torch.arange(m - 1, -1, -1, dtype=torch.int64, device=device)
 
     def __call__(self, bits):
         # Elementwise multiply and sum, not einsum: torch.einsum dispatches to
@@ -71,9 +83,15 @@ class TSPBatch:
         # m can be 29, and the index must be exact before the modulo.
         index = (bits.to(torch.int64) * self.powers).sum(dim=-1) % self.block
         instances, candidates = index.shape
-        remaining = torch.arange(self.n - 1, device=self.device).expand(instances, candidates, self.n - 1).clone()
+        remaining = (
+            torch.arange(self.n - 1, device=self.device)
+            .expand(instances, candidates, self.n - 1)
+            .clone()
+        )
         alive = torch.ones_like(remaining, dtype=torch.bool)
-        order = torch.empty(instances, candidates, self.n - 1, dtype=torch.int64, device=self.device)
+        order = torch.empty(
+            instances, candidates, self.n - 1, dtype=torch.int64, device=self.device
+        )
         current = index.clone()
         for position in range(self.n - 1, 0, -1):
             block = math.factorial(position - 1)
@@ -83,11 +101,23 @@ class TSPBatch:
             ranks = torch.cumsum(alive.to(torch.int64), dim=-1) - 1
             hit = (ranks == which[..., None]) & alive
             picked = torch.argmax(hit.to(torch.int64), dim=-1)
-            order[..., self.n - 1 - position] = remaining.gather(-1, picked[..., None]).squeeze(-1)
+            order[..., self.n - 1 - position] = remaining.gather(
+                -1, picked[..., None]
+            ).squeeze(-1)
             alive.scatter_(-1, picked[..., None], False)
-        tour = torch.cat([torch.zeros(instances, candidates, 1, dtype=torch.int64, device=self.device), order + 1], dim=-1)
+        tour = torch.cat(
+            [
+                torch.zeros(
+                    instances, candidates, 1, dtype=torch.int64, device=self.device
+                ),
+                order + 1,
+            ],
+            dim=-1,
+        )
         nxt = torch.roll(tour, -1, dims=-1)
-        edges = self.distance.reshape(instances, -1).gather(1, (tour * self.n + nxt).reshape(instances, -1))
+        edges = self.distance.reshape(instances, -1).gather(
+            1, (tour * self.n + nxt).reshape(instances, -1)
+        )
         return edges.reshape(instances, candidates, self.n).sum(-1)
 
 
@@ -97,7 +127,9 @@ def build_batch(family, m, seeds, device, **kwargs):
 
     if family == "knapsack":
         instances = [knapsack_instance(m, seed, **kwargs) for seed in seeds]
-        return KnapsackBatch(instances, device), [knapsack_optimum(i) for i in instances]
+        return KnapsackBatch(instances, device), [
+            knapsack_optimum(i) for i in instances
+        ]
     if family == "tsp":
         instances = [tsp_instance(m, seed, **kwargs) for seed in seeds]
         return TSPBatch(instances, m, device), [tsp_optimum(i) for i in instances]

@@ -2,7 +2,6 @@
 
 import numpy as np
 import pytest
-
 from lib.bbs import BosonicBinarySolver
 from lib.problems import build_problem
 from lib.sampler import SOURCES, ClickSource
@@ -49,10 +48,14 @@ def test_every_source_returns_valid_threshold_patterns(source):
 def test_bernoulli_rate_scale_raises_click_density():
     """The density control must actually move density and nothing else."""
     m, delays = 12, (1, 3, 9)
-    theta = np.random.default_rng(0).random(len(beamsplitter_layout(m, delays))) * 2 * np.pi
+    theta = (
+        np.random.default_rng(0).random(len(beamsplitter_layout(m, delays))) * 2 * np.pi
+    )
     densities = []
     for scale in (0.8, 1.0, 1.3):
-        source = ClickSource(m, delays, alternating_input(m), source="bernoulli", rate_scale=scale)
+        source = ClickSource(
+            m, delays, alternating_input(m), source="bernoulli", rate_scale=scale
+        )
         clicks = source.draw(theta, 400, np.random.default_rng(1))
         densities.append(clicks.mean())
     assert densities[0] < densities[1] < densities[2]

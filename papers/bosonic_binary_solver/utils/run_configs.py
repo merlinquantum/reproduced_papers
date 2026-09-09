@@ -27,11 +27,15 @@ def main():
     parser.add_argument("configs", nargs="+")
     parser.add_argument("--outdir", default=str(ROOT / "outdir"))
     parser.add_argument("--tag", default="")
-    parser.add_argument("--instances", type=int, default=None, help="override problem.instances")
+    parser.add_argument(
+        "--instances", type=int, default=None, help="override problem.instances"
+    )
     args = parser.parse_args()
 
     logging.basicConfig(
-        level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s", stream=sys.stdout
+        level=logging.INFO,
+        format="%(asctime)s %(levelname)s %(message)s",
+        stream=sys.stdout,
     )
     for config_path in args.configs:
         cfg = json.loads(Path(config_path).read_text(encoding="utf-8"))
@@ -44,9 +48,14 @@ def main():
         if existing:
             run_dir = existing[-1]
         else:
-            run_dir = Path(args.outdir) / f"run_{time.strftime('%Y%m%d-%H%M%S')}_{args.tag}{name}"
+            run_dir = (
+                Path(args.outdir)
+                / f"run_{time.strftime('%Y%m%d-%H%M%S')}_{args.tag}{name}"
+            )
         run_dir.mkdir(parents=True, exist_ok=True)
-        (run_dir / "config_snapshot.json").write_text(json.dumps(cfg, indent=2), encoding="utf-8")
+        (run_dir / "config_snapshot.json").write_text(
+            json.dumps(cfg, indent=2), encoding="utf-8"
+        )
         logging.info("=== %s -> %s", config_path, run_dir)
         train_and_evaluate(cfg, run_dir)
 
