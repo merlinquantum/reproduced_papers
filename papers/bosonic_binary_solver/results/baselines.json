@@ -1,0 +1,73 @@
+{
+  "paper": "arXiv:2510.08274",
+  "note": "Classical baselines at the solver's Appendix B candidate budget, on the same instance seeds (0-99) as the BBS runs in summary.json. Produced by utils/run_baselines.py from lib/baselines.py; per-instance rows are not committed, as for the BBS runs.",
+  "generated_at": "2026-09-09",
+  "arms": [
+    {
+      "method": "simulated_annealing",
+      "family": "knapsack",
+      "m": 20,
+      "instances": 100,
+      "budget": 1350000,
+      "percent_optimal": 100.0,
+      "mean_percent_error": 0.0,
+      "std_percent_error": 0.0,
+      "median_seconds_per_instance": 10.89
+    },
+    {
+      "method": "hill_climbing",
+      "family": "knapsack",
+      "m": 20,
+      "instances": 100,
+      "budget": 1350000,
+      "percent_optimal": 100.0,
+      "mean_percent_error": 0.0,
+      "std_percent_error": 0.0,
+      "median_seconds_per_instance": 1.27
+    },
+    {
+      "method": "random_search",
+      "family": "knapsack",
+      "m": 20,
+      "instances": 100,
+      "budget": 1350000,
+      "percent_optimal": 83.0,
+      "mean_percent_error": 0.26057,
+      "std_percent_error": 0.69221,
+      "median_seconds_per_instance": 0.335
+    },
+    {
+      "method": "simulated_annealing",
+      "family": "knapsack",
+      "m": 30,
+      "instances": 100,
+      "budget": 2150000,
+      "percent_optimal": 100.0,
+      "mean_percent_error": 0.0,
+      "std_percent_error": 0.0,
+      "median_seconds_per_instance": 17.03
+    },
+    {
+      "method": "hill_climbing",
+      "family": "knapsack",
+      "m": 30,
+      "instances": 100,
+      "budget": 2150000,
+      "percent_optimal": 74.0,
+      "mean_percent_error": 0.24173,
+      "std_percent_error": 0.48445,
+      "median_seconds_per_instance": 1.215
+    },
+    {
+      "method": "random_search",
+      "family": "knapsack",
+      "m": 30,
+      "instances": 100,
+      "budget": 2150000,
+      "percent_optimal": 2.0,
+      "mean_percent_error": 3.97176,
+      "std_percent_error": 1.50676,
+      "median_seconds_per_instance": 0.38
+    }
+  ]
+}

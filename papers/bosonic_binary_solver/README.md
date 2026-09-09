@@ -85,6 +85,10 @@ python utils/run_configs.py configs/knapsack_m10_original.json configs/tsp_m10_o
 | `knapsack_m<size>_source_<source>.json` | The control the paper does not run: same algorithm, different click source. |
 | `knapsack_m<size>_merlin.json` | MerLin exact-gradient variant. |
 
+`utils/run_baselines.py` runs the classical baselines and writes
+`results/baselines.json`; `utils/plot_density.py` redraws
+`results/click_density_m30.png` from `results/summary.json` and that file.
+
 ## Data
 
 No dataset. Instances are generated deterministically from the instance seed; exact optima
@@ -134,20 +138,32 @@ This bounds the knapsack conclusion precisely. Click density governs performance
 the problem, not a universal property of the algorithm -- and on the family where
 it does not apply, no source beats any other.
 
-### Fair baselines at the same budget (m=20, 100 instances)
+### Fair baselines at the same budget (100 instances, same instance seeds)
 
-| method | % optimal | paper |
-|---|---|---|
-| simulated annealing | 100% | 100% |
-| hill climbing | 100% | 84% |
-| uniform random search | 81% | not run |
-| BBS | 99% | 98% |
+Every method receives exactly the Appendix B candidate budget. Produced by
+`utils/run_baselines.py`; aggregates in `results/baselines.json`.
 
-The budget at m=20 is 1.29x the entire solution space, so this row cannot separate
-a search strategy from none: uniform sampling alone reaches 81%. The paper's hill
-climbing at 84% sits **below** random sampling at the solver's own budget, which
-indicates its baselines were not given that budget. The paper does not state what
-budget they had.
+| m | budget | SA | hill climbing | uniform random | BBS | paper's SA / HC |
+|---|---|---|---|---|---|---|
+| 20 | 1,350,000 | **100%** | **100%** | 83% | 99% | 100% / 84% |
+| 30 | 2,150,000 | **100%** | 74% | 2% | 73% | not reported |
+
+Two separate readings, and the sizes disagree about which one applies.
+
+**At m=20 the row is uninformative.** The budget is 1.29x the entire solution space,
+so it cannot separate a search strategy from none -- uniform sampling alone reaches
+83%. Note also that the paper's own hill climbing (84%) is barely above uniform
+random sampling at this budget, while hill climbing given the budget reaches 100%.
+That gap indicates the paper's baselines were not given the solver's budget; the
+paper does not state what budget they had.
+
+**At m=30 the budget covers 0.2% of the space and the comparison bites.** Simulated
+annealing solves every instance; BBS solves 73% and ties hill climbing (74%); uniform
+random collapses to 2%, which confirms the budget is genuinely scarce here and that
+BBS and HC are both searching rather than enumerating. So the solver is a real search
+method, and at the size where the comparison is meaningful a single-flip Metropolis
+annealer at the same budget is strictly better. The paper reports no SA or HC figure
+at m=30.
 
 ### C7 -- the paper's ablation reproduces, strongly
 
@@ -195,6 +211,8 @@ m=30, 200 instances:
 | bernoulli@1.15 | 48.0% | **98.5%** | 0.006% |
 | bernoulli@1.3 | 51.6% | 97.0% | 0.017% |
 | bernoulli@1.5 | 54.4% | 95.0% | 0.031% |
+
+![Instances solved to optimality against mean click density at m=30](results/click_density_m30.png)
 
 Monotone up to a peak near 48% density (0.87 to 1.0: z = 4.29; 1.0 to 1.15:
 z = 3.60; 0.87 to 1.5: z = 5.66; 1.15 to 1.5 turns back down, z = -1.81). And at

@@ -15,7 +15,7 @@
     }
   ],
   "unique_runs": 4340,
-  "note": "Raw rows are not committed; regenerate with utils/summarise.py. Every number quoted in README.md comes from this file.",
+  "note": "Raw rows are not committed; regenerate with utils/summarise.py. Every BBS number quoted in README.md comes from this file; the classical baselines are in baselines.json.",
   "arms": [
     {
       "config": "knapsack_m20_original.json",

@@ -172,7 +172,8 @@ def main():
         "generated_from": sources,
         "unique_runs": len(rows),
         "note": "Raw rows are not committed; regenerate with utils/summarise.py. "
-        "Every number quoted in README.md comes from this file.",
+        "Every BBS number quoted in README.md comes from this file; the classical "
+        "baselines are in baselines.json.",
         "arms": summarise(rows),
         "paired_comparisons": [
             c for c in (paired(rows, a, b) for a, b in COMPARISONS) if c
