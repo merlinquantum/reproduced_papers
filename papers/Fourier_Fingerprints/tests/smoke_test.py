@@ -19,6 +19,11 @@ from lib.fourier import (  # noqa: E402
     PhotonicSpectralModel,
     compute_fingerprint,
 )
+from lib.learning import (  # noqa: E402
+    SpectralRegressor,
+    random_fourier_target,
+    train_regressor,
+)
 
 
 def test_configs_have_required_keys() -> None:
@@ -142,3 +147,47 @@ def test_invalid_inputs_are_rejected() -> None:
         PhotonicSpectralModel(dimension=1, encoding="not_an_encoding")
     with pytest.raises(ValueError):
         PhotonicSpectralModel(dimension=1, circuit_index=99)
+
+
+def test_random_fourier_target_is_real_and_standardised() -> None:
+    """Targets are real, standardised, and carry only the requested frequencies."""
+    target = random_fourier_target(max_frequency=6, n_points=64, seed=0)
+
+    assert target.y.shape == (64,)
+    assert torch.isfinite(target.y).all()
+    assert float(target.y.mean()) == pytest.approx(0.0, abs=1e-5)
+    assert float(target.y.std(unbiased=False)) == pytest.approx(1.0, abs=1e-5)
+
+    spectrum = np.abs(np.fft.rfft(target.y.numpy()))
+    assert spectrum[:7].sum() > 0
+    # Nothing above the requested maximum frequency.
+    assert spectrum[7:].max() < 1e-6 * max(spectrum.max(), 1.0)
+
+
+def test_random_fourier_target_rejects_undersampling() -> None:
+    """A grid below the Nyquist rate for the requested spectrum is refused."""
+    with pytest.raises(ValueError, match="Nyquist"):
+        random_fourier_target(max_frequency=40, n_points=64, seed=0)
+
+
+def test_random_fourier_target_is_seed_reproducible() -> None:
+    a = random_fourier_target(max_frequency=4, n_points=32, seed=3)
+    b = random_fourier_target(max_frequency=4, n_points=32, seed=3)
+    c = random_fourier_target(max_frequency=4, n_points=32, seed=4)
+    assert torch.allclose(a.y, b.y)
+    assert not torch.allclose(a.y, c.y)
+
+
+def test_regressor_head_is_affine_and_trains() -> None:
+    """The head adds exactly two parameters and training reduces the loss."""
+    torch.manual_seed(0)
+    model = SpectralRegressor(encoding="linear", circuit_index=3)
+    core_params = sum(p.numel() for p in model.core.parameters() if p.requires_grad)
+    total = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    assert total == core_params + 2
+
+    target = random_fourier_target(max_frequency=3, n_points=32, seed=0)
+    best, history = train_regressor(model, target, epochs=25, lr=0.1)
+    assert len(history) == 25
+    assert best <= history[0]
+    assert np.isfinite(history).all()

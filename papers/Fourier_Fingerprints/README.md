@@ -64,14 +64,17 @@ values are not expected to match any specific number in the paper.
 - Three input encodings, so the effect of the encoding scale factors on the
   accessible frequency set can be read off directly.
 
+- The Section 3.1 experiment, learning random Fourier series, is implemented and
+  run. The relationship between FCC and error that the paper reports does not
+  appear here, but the circuit set is not matched on capacity, so the test is
+  confounded rather than conclusive. See "Results Obtained".
+
 **Not reproduced:**
 
-- The paper's central predictive claim, that lower FCC implies lower MSE when
-  learning random Fourier series (Section 3.1). Testing it requires training the
-  models against random Fourier targets and correlating the resulting error with
-  FCC. Nothing in this reproduction is trained; parameters are only sampled.
 - The high-energy-physics jet reconstruction of Section 3.2.
 - The paper's specific ansatzes, which have no linear-optical counterpart here.
+- A capacity-matched circuit set, which is what a clean test of the FCC claim
+  would need.
 
 **Deviations:**
 
@@ -93,9 +96,13 @@ values are not expected to match any specific number in the paper.
 - `configs/`: JSON configurations, one file per experiment.
 - `lib/fourier.py`: model, Fourier analysis, and fingerprint plots for both
   dimensions.
+- `lib/learning.py`: random Fourier targets, the trainable regressor, and the
+  training loop used for the Section 3.1 study.
 - `lib/runner.py`: dispatches a configuration to the shared implementation.
 - `utils/summarize_fcc.py`: sweeps every dimension, encoding and circuit and
   curates the FCC table and figures into `results/`.
+- `utils/fcc_vs_mse.py`: trains every circuit on random Fourier series and
+  compares the resulting error against FCC.
 - `results/`: curated schematics and experiment outputs.
 - `outdir/`: timestamped figures produced by the experiment runner.
 - `tests/`: validation tests for the model, metric, configs, and runner.
@@ -184,16 +191,78 @@ Each run writes its fingerprint figure to a timestamped folder under `outdir/`.
 
 ## Results Obtained
 
-Not yet recorded. `utils/summarize_fcc.py` sweeps every dimension, encoding and
-circuit and writes the FCC table and figures into `results/`; the table and its
-discussion belong here once that sweep and the Section 3.1 study below have been
-run together.
+All figures below come from `utils/summarize_fcc.py` and `utils/fcc_vs_mse.py`,
+which write `results/fcc_summary.json` and `results/fcc_vs_mse.json`.
 
-The open question this reproduction is set up to answer is whether the paper's
-relationship between FCC and model error survives the move to linear optics. The
-fingerprint machinery is in place; what is missing is training the same four
-circuits against random Fourier targets and checking whether the ansatz with the
-lowest FCC also achieves the lowest MSE.
+### Fingerprints and FCC
+
+The construction transfers to linear optics without difficulty. Every
+combination of dimension, encoding and circuit produces a well-formed
+fingerprint and an FCC in the range 0.14 to 0.32.
+
+![FCC by encoding](results/fcc_by_encoding.png)
+
+The encoding controls the accessible spectrum, as expected. In 1D the
+exponential factors reach frequencies up to 31 against 15 for the linear ramp,
+and `circuit_2` reaches more frequencies than the others under every encoding
+because it applies the encoding twice.
+
+![Accessible frequencies](results/active_frequencies.png)
+
+The 2D panel is omitted from the second figure because the active count there is
+fixed at 25 by the |ω1| + |ω2| ≤ `n_omega` cutoff, so it carries no information.
+
+### Does FCC predict learning error?
+
+This is the paper's Section 3.1 claim. Each circuit was trained on five random
+Fourier targets per encoding, with all four circuits seeing the same targets so
+the comparison is paired. Targets use the frequency set the circuits can reach
+and are standardised to unit variance, so an MSE of 1.0 is what a constant
+predictor would achieve.
+
+| Encoding | Circuit | FCC | MSE | Params | Active freqs |
+|---|---|---:|---:|---:|---:|
+| linear | circuit_0 | 0.2152 | 0.677 ± 0.059 | 40 | 9 |
+| linear | circuit_1 | 0.1894 | 0.895 ± 0.064 | 12 | 7 |
+| linear | circuit_2 | 0.2609 | **0.287 ± 0.126** | 60 | 16 |
+| linear | circuit_3 | 0.2752 | 0.891 ± 0.062 | 8 | 9 |
+| exponential | circuit_0 | 0.1792 | 0.720 ± 0.015 | 40 | 17 |
+| exponential | circuit_1 | 0.1723 | 0.917 ± 0.023 | 12 | 12 |
+| exponential | circuit_2 | 0.2366 | **0.421 ± 0.053** | 60 | 31 |
+| exponential | circuit_3 | 0.2448 | 0.919 ± 0.040 | 8 | 17 |
+| balanced | circuit_0 | 0.1864 | 0.665 ± 0.062 | 40 | 9 |
+| balanced | circuit_1 | 0.1958 | 0.882 ± 0.052 | 12 | 8 |
+| balanced | circuit_2 | 0.2240 | **0.373 ± 0.087** | 60 | 16 |
+| balanced | circuit_3 | 0.1968 | 0.886 ± 0.057 | 8 | 8 |
+
+![FCC against learning error](results/fcc_vs_mse.png)
+
+**The relationship does not reproduce here.** The paper reports that lower FCC
+goes with lower MSE, which would appear as a positive rank correlation. The
+measured Spearman coefficients are −0.40 (linear), +0.20 (exponential) and −0.20
+(balanced), and −0.22 pooled across all twelve points. The circuit with the
+highest FCC under every encoding, `circuit_2`, achieves the lowest error by a
+wide margin, which is the opposite of the predicted ordering.
+
+**This is not a refutation of the paper's claim, because the comparison is
+confounded.** The four topologies carry between 8 and 60 trainable parameters, a
+factor of 7.5, whereas the paper compares ansatzes of comparable size on a fixed
+qubit count. Ranking the same twelve points by parameter count instead of FCC
+gives a Spearman coefficient of **−0.881** against **−0.224** for FCC: capacity
+accounts for almost the entire ordering and FCC adds essentially nothing on top
+of it.
+
+Two capacity-comparable pairs point the same way. The two smallest circuits,
+`circuit_1` (12 parameters) and `circuit_3` (8 parameters), reach almost
+identical error, 0.898 and 0.899 averaged over encodings, although their FCC
+differs by 28 %. Between the two largest, `circuit_0` (40) and `circuit_2` (60),
+the one with the higher FCC has the lower error. Within this circuit set, FCC has
+no visible predictive power in either direction.
+
+The honest conclusion is that this reproduction cannot test the paper's claim
+with the circuits it has. Doing so needs a set of photonic ansatzes matched on
+parameter count and on the reachable frequency set, so that FCC is the only thing
+varying. That is the natural next step and is not attempted here.
 
 ## Configuration
 
@@ -262,11 +331,23 @@ reproducibility, runner dispatch, and rejection of invalid inputs.
 
 ## Limitations
 
-- The predictive claim that motivates the FCC metric is not tested here. Without
-  it, the reproduction demonstrates that fingerprints can be computed for
-  photonic circuits but not that they are useful for choosing one.
+- The four circuit topologies carry between 8 and 60 trainable parameters, so the
+  FCC study compares circuits of very different capacity. Parameter count ranks
+  the learning error far better than FCC does, which means this circuit set
+  cannot isolate the effect the paper describes. A capacity-matched set is needed
+  before the claim can be called reproduced or refuted.
+- Four circuits per encoding is a small basis for a rank correlation. The paper
+  compares eight ansatzes. Individual Spearman coefficients over four points
+  carry little weight, and the pooled figure mixes encodings whose targets differ
+  in difficulty.
 - The four circuit topologies are photonic and do not correspond to the paper's
   gate-model ansatzes, so no individual FCC value has a counterpart in the paper.
+- The regressor adds a trainable affine head so the circuit's probability output
+  can reach the target's range. The head cannot introduce frequencies, but it is
+  a departure from the paper, which trains the model output directly.
+- Under exponential encoding the reachable frequencies run to 31 against a
+  Nyquist limit of 32 for the 64-point grid, so that setting sits close to the
+  resolution of the analysis.
 - Only four active modes and a single reference mode are used, so the accessible
   frequency set is small compared with the six-qubit models of the paper.
 - The active frequencies are identified from the empirical variance of the

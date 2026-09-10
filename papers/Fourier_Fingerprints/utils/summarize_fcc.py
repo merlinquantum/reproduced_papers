@@ -152,8 +152,10 @@ def main(argv: list[str] | None = None) -> int:
         "Fourier coefficient correlation",
         args.results_dir / "fcc_by_encoding.png",
     )
+    # 1D only: in 2D the active count is fixed at 25 by the |w1|+|w2| <= n_omega
+    # cutoff, so every bar would be identical by construction.
     _grouped_bar(
-        records,
+        [r for r in records if r["dimension"] == 1],
         "n_active_frequencies",
         "active frequencies",
         "Accessible frequencies",
