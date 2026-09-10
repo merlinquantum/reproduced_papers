@@ -1,87 +1,18 @@
-#!/usr/bin/env python
-"""
-Local convenience CLI for the Fourier Fingerprints reproduction.
-
-This can be run standalone:
-    python implementation.py --config configs/example.json
-
-This delegates experiment execution to the local Fourier Fingerprints runner.
-"""
+#!/usr/bin/env python3
+"""Thin wrapper that delegates to the repository-wide runner."""
 
 from __future__ import annotations
 
-import argparse
-import json
-from datetime import datetime
+import sys
 from pathlib import Path
-from typing import Any
 
-from lib.runner import train_and_evaluate
-
-
-def _here() -> Path:
-    """Return the project directory (folder containing this file)."""
-    return Path(__file__).resolve().parent
-
-
-def build_arg_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(
-        description="Fourier Fingerprints paper reproduction (local runner)"
-    )
-    parser.add_argument(
-        "--config",
-        type=str,
-        default="configs/default.json",
-        help=(
-            "Path to JSON config, relative to this folder. "
-            "Defaults to configs/default.json"
-        ),
-    )
-    parser.add_argument(
-        "--seed",
-        type=int,
-        default=None,
-        help="Override the random seed from config",
-    )
-    return parser
-
-
-def load_config(path: Path) -> dict[str, Any]:
-    """Load a JSON config file into a dict."""
-    if not path.is_file():
-        raise FileNotFoundError(f"Config file not found: {path}")
-    with path.open("r", encoding="utf-8") as f:
-        return json.load(f)
+from runtime_lib import run_from_project
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = build_arg_parser()
-    args = parser.parse_args(argv)
-
-    project_root = _here()
-
-    # Resolve config path relative to this file if not absolute
-    cfg_path = Path(args.config)
-    if not cfg_path.is_absolute():
-        cfg_path = project_root / cfg_path
-
-    cfg = load_config(cfg_path)
-
-    # Override seed if provided via CLI
-    if args.seed is not None:
-        cfg["seed"] = args.seed
-
-    results_dir = project_root / cfg["outdir"]
-    results_dir.mkdir(parents=True, exist_ok=True)
-    run_dir = results_dir / f"run_{datetime.now().strftime('%Y%m%d-%H%M%S')}"
-    run_dir.mkdir(parents=False, exist_ok=False)
-    cfg["run_dir"] = str(run_dir)
-
-    # Delegate to the MerLin-style runner
-    train_and_evaluate(cfg, run_dir)
-
+    run_from_project(Path(__file__).resolve().parent, argv)
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(main(sys.argv[1:]))

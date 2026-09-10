@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from lib.fourier_1D import PhotonicSpectralModel
+from lib.fourier import PhotonicSpectralModel
 from perceval.rendering.pdisplay import pdisplay_to_file
 
 results_dir = Path(__file__).resolve().parent / "results"
