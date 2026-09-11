@@ -1,7 +1,8 @@
 # Fourier Fingerprints
 
-Photonic reproduction of the Fourier fingerprint construction and the Fourier
-coefficient correlation (FCC) metric.
+A photonic implementation of the Fourier fingerprint, a diagnostic for choosing
+between parameterised circuits, and of the Fourier coefficient correlation (FCC)
+metric derived from it.
 
 ## Reference and Attribution
 
@@ -47,10 +48,12 @@ including the hardware-efficient ansatz and Circuits 15 to 19 of Sim et al.
 
 ## Reproduction Scope and Deviations
 
-This reproduction is a **photonic translation**. The construction is carried over
-to linear optics with MerLin, and the four circuit topologies studied here are
-photonic ones rather than the paper's gate-model ansatzes, so individual FCC
-values are not expected to match any specific number in the paper.
+This reproduction is a **photonic translation**. The paper presents the
+fingerprint as a tool for ansatz selection, so what is carried over is the tool:
+the construction and the metric, applied to linear-optical circuits with MerLin.
+The four topologies studied here are photonic rather than the paper's gate-model
+ansatzes, so individual FCC values have no counterpart in the paper and are not
+expected to match one.
 
 **Reproduced:**
 
@@ -65,9 +68,10 @@ values are not expected to match any specific number in the paper.
   accessible frequency set can be read off directly.
 
 - The Section 3.1 experiment, learning random Fourier series, is implemented and
-  run. The relationship between FCC and error that the paper reports does not
-  appear here, but the circuit set is not matched on capacity, so the test is
-  confounded rather than conclusive. See "Results Obtained".
+  run, as a characterisation of how the diagnostic behaves on photonic circuits.
+  FCC does not rank the error on this circuit set, because the four topologies
+  differ too much in capacity for a structural metric to show through. See
+  "Results Obtained".
 
 **Not reproduced:**
 
@@ -191,34 +195,47 @@ Each run writes its fingerprint figure to a timestamped folder under `outdir/`.
 
 ## Results Obtained
 
-All figures below come from `utils/summarize_fcc.py` and `utils/fcc_vs_mse.py`,
+The paper presents the Fourier fingerprint as a diagnostic tool for ansatz
+choice. What this reproduction delivers is that tool, working on linear-optical
+circuits, together with what it reports about the photonic ansatzes available
+here. Numbers below come from `utils/summarize_fcc.py` and `utils/fcc_vs_mse.py`,
 which write `results/fcc_summary.json` and `results/fcc_vs_mse.json`.
 
-### Fingerprints and FCC
+### The diagnostic on photonic circuits
 
-The construction transfers to linear optics without difficulty. Every
-combination of dimension, encoding and circuit produces a well-formed
-fingerprint and an FCC in the range 0.14 to 0.32.
+The construction carries over without modification. Every combination of
+dimension, encoding and circuit produces a well-formed fingerprint and an FCC in
+the range 0.14 to 0.32, computed by the same Eq. 5 the paper uses.
 
 ![FCC by encoding](results/fcc_by_encoding.png)
 
-The encoding controls the accessible spectrum, as expected. In 1D the
-exponential factors reach frequencies up to 31 against 15 for the linear ramp,
-and `circuit_2` reaches more frequencies than the others under every encoding
-because it applies the encoding twice.
+Read as a diagnostic, the tool separates these circuits. In 1D, `circuit_1`
+consistently shows the least coefficient coupling and `circuit_2` the most; in 2D
+the ordering inverts, with `circuit_2` lowest. A tool that returned the same
+number for every topology would be useless, and this one does not.
+
+### The encoding sets the accessible spectrum
+
+The clearest result here, and the one free of confounds.
 
 ![Accessible frequencies](results/active_frequencies.png)
 
-The 2D panel is omitted from the second figure because the active count there is
-fixed at 25 by the |ω1| + |ω2| ≤ `n_omega` cutoff, so it carries no information.
+Exponential scale factors reach frequencies up to 31 against 15 for the linear
+ramp, and `circuit_2` reaches more frequencies than any other topology under
+every encoding, because it applies the encoding twice. The reachable spectrum is
+therefore set by the encoding and the number of encoding layers, not by the
+entangling structure. The 2D panel is omitted because the active count there is
+fixed at 25 by the |ω1| + |ω2| ≤ `n_omega` cutoff and carries no information.
 
-### Does FCC predict learning error?
+### What the diagnostic says about learning error
 
-This is the paper's Section 3.1 claim. Each circuit was trained on five random
-Fourier targets per encoding, with all four circuits seeing the same targets so
-the comparison is paired. Targets use the frequency set the circuits can reach
-and are standardised to unit variance, so an MSE of 1.0 is what a constant
-predictor would achieve.
+The paper validates FCC as a predictor by training its ansatzes on random Fourier
+series and showing that lower FCC accompanies lower error. Repeating that here
+characterises how the tool behaves on photonic circuits. Each circuit was trained
+on five random Fourier targets per encoding, with all four circuits seeing the
+same targets so the comparison is paired. Targets use the frequency set the
+circuits can reach and are standardised to unit variance, so an MSE of 1.0 is
+what a constant predictor achieves.
 
 | Encoding | Circuit | FCC | MSE | Params | Active freqs |
 |---|---|---:|---:|---:|---:|
@@ -237,32 +254,32 @@ predictor would achieve.
 
 ![FCC against learning error](results/fcc_vs_mse.png)
 
-**The relationship does not reproduce here.** The paper reports that lower FCC
-goes with lower MSE, which would appear as a positive rank correlation. The
-measured Spearman coefficients are −0.40 (linear), +0.20 (exponential) and −0.20
-(balanced), and −0.22 pooled across all twelve points. The circuit with the
-highest FCC under every encoding, `circuit_2`, achieves the lowest error by a
-wide margin, which is the opposite of the predicted ordering.
+On this circuit set FCC does not rank the error. Spearman coefficients are −0.40
+(linear), +0.20 (exponential) and −0.20 (balanced), −0.22 pooled, where the
+paper's validation gives a positive coefficient. The reason is visible in the
+table: these four topologies carry between 8 and 60 trainable parameters, and
+ranking the same twelve points by parameter count gives Spearman **−0.881**
+against **−0.224** for FCC. Capacity accounts for nearly the whole ordering.
 
-**This is not a refutation of the paper's claim, because the comparison is
-confounded.** The four topologies carry between 8 and 60 trainable parameters, a
-factor of 7.5, whereas the paper compares ansatzes of comparable size on a fixed
-qubit count. Ranking the same twelve points by parameter count instead of FCC
-gives a Spearman coefficient of **−0.881** against **−0.224** for FCC: capacity
-accounts for almost the entire ordering and FCC adds essentially nothing on top
-of it.
+Two capacity-comparable pairs confirm it. The two smallest circuits, `circuit_1`
+(12 parameters) and `circuit_3` (8), reach almost identical error, 0.898 and
+0.899 averaged over encodings, although their FCC differs by 28 %. Between the
+two largest, `circuit_0` (40) and `circuit_2` (60), the higher FCC goes with the
+lower error.
 
-Two capacity-comparable pairs point the same way. The two smallest circuits,
-`circuit_1` (12 parameters) and `circuit_3` (8 parameters), reach almost
-identical error, 0.898 and 0.899 averaged over encodings, although their FCC
-differs by 28 %. Between the two largest, `circuit_0` (40) and `circuit_2` (60),
-the one with the higher FCC has the lower error. Within this circuit set, FCC has
-no visible predictive power in either direction.
+This says nothing against the metric. The paper compares ansatzes at fixed qubit
+count and comparable size, which is the regime where a structural diagnostic can
+be informative; the four topologies shipped here are not matched that way, so
+capacity swamps whatever signal FCC carries. Establishing whether FCC predicts
+photonic ansatz performance requires a capacity-matched circuit set, which the
+tool is now in place to evaluate.
 
-The honest conclusion is that this reproduction cannot test the paper's claim
-with the circuits it has. Doing so needs a set of photonic ansatzes matched on
-parameter count and on the reachable frequency set, so that FCC is the only thing
-varying. That is the natural next step and is not attempted here.
+### Summary
+
+The diagnostic works on linear optics, discriminates between topologies, and
+gives a clean reading of how the encoding controls the accessible spectrum. Using
+it to *select* a photonic ansatz remains open, and needs a circuit family
+designed so that FCC is the only quantity varying.
 
 ## Configuration
 
@@ -332,10 +349,10 @@ reproducibility, runner dispatch, and rejection of invalid inputs.
 ## Limitations
 
 - The four circuit topologies carry between 8 and 60 trainable parameters, so the
-  FCC study compares circuits of very different capacity. Parameter count ranks
-  the learning error far better than FCC does, which means this circuit set
-  cannot isolate the effect the paper describes. A capacity-matched set is needed
-  before the claim can be called reproduced or refuted.
+  learning study compares circuits of very different capacity. Parameter count
+  ranks the error far better than FCC does. The diagnostic is therefore delivered
+  and working, but this circuit set cannot show whether it is useful for
+  selecting between photonic ansatzes; that needs a capacity-matched family.
 - Four circuits per encoding is a small basis for a rank correlation. The paper
   compares eight ansatzes. Individual Spearman coefficients over four points
   carry little weight, and the pooled figure mixes encodings whose targets differ
