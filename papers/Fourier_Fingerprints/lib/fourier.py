@@ -81,8 +81,7 @@ class PhotonicSpectralModel(nn.Module):
         super().__init__()
         if dimension not in SCALE_FACTORS:
             raise ValueError(
-                f"Invalid dimension: {dimension!r}. Choose from "
-                f"{sorted(SCALE_FACTORS)}"
+                f"Invalid dimension: {dimension!r}. Choose from {sorted(SCALE_FACTORS)}"
             )
         scales_for_dim = SCALE_FACTORS[dimension]
         if encoding not in scales_for_dim:
