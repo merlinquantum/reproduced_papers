@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pytest
 import torch
+from lib.autoencoder import Decoder, Encoder
 from lib.gqc_model import GQCModel
 from lib.vqc_classical import matched_hidden_dim
 from lib.vqc_photonic import spread_input_state
@@ -65,3 +66,35 @@ def test_matched_hidden_dim_meets_or_exceeds_target():
     assert actual_params >= target
     # Should be the smallest such hidden dim (not wastefully larger).
     assert (hidden - 1) * (n_qubits + 2) + 1 < target
+
+
+def test_encoder_rejects_latent_not_smaller_than_input():
+    """The latent must compress: the paper specifies a lower latent dimension."""
+    with pytest.raises(ValueError, match="strictly smaller"):
+        Encoder(input_dim=6, hidden_dims=[32], latent_dim=6)
+    with pytest.raises(ValueError, match="strictly smaller"):
+        Encoder(input_dim=6, hidden_dims=[32], latent_dim=8)
+
+
+def test_decoder_rejects_latent_not_smaller_than_output():
+    with pytest.raises(ValueError, match="strictly smaller"):
+        Decoder(output_dim=6, hidden_dims=[32], latent_dim=6)
+
+
+@pytest.mark.parametrize("bad_latent", [0, -1])
+def test_autoencoder_rejects_nonpositive_latent(bad_latent):
+    with pytest.raises(ValueError, match="latent_dim must be >= 1"):
+        Encoder(input_dim=29, hidden_dims=[32], latent_dim=bad_latent)
+
+
+def test_autoencoder_accepts_the_papers_architecture():
+    """29 -> 256 -> 128 -> 64 -> 6 must still build.
+
+    The hidden layers are wider than the 29-feature input, so the check must
+    constrain the latent against the input only, not require a funnel.
+    """
+    encoder = Encoder(input_dim=29, hidden_dims=[256, 128, 64], latent_dim=6)
+    decoder = Decoder(output_dim=29, hidden_dims=[256, 128, 64], latent_dim=6)
+    z = encoder(torch.rand(4, 29))
+    assert z.shape == (4, 6)
+    assert decoder(z).shape == (4, 29)
