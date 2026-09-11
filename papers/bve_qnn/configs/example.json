@@ -1,0 +1,25 @@
+{
+    "description": "Paper-faithful Experiment 1 reproduction (N=6 qubits, l=32 HEA layers, 5000 steps). Loads the committed checkpoint under models/ and evaluates directly since it was already trained to the target step.",
+
+    "seed": 42,
+    "dtype": "float64",
+    "outdir": "results",
+    "device": "cpu",
+    "dataset": {
+        "filename": "sem_supervised_dataset.npz",
+        "batch_size": 1602
+    },
+    "model": {
+        "name": "merlin_dualrail_photonic",
+        "params": {
+            "n_qubits": 6,
+            "depth": 32
+        },
+        "checkpoint": "qnn_exp1_merlin_dualrail_depth32_step5000.pt"
+    },
+    "training": {
+        "total_steps": 5000,
+        "lr": 1e-2
+    },
+    "logging": {"level": "info", "save_config_snapshot": true}
+}

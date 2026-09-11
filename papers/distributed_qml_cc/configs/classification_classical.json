@@ -1,0 +1,33 @@
+{
+  "description": "Iso-parameter classical MLP baseline (hidden=8 -> 137 params, in the same range as CC-DQML at L=9).",
+  "pipeline": "classical",
+  "seed": 42,
+  "seeds": [42, 1, 2],
+  "dtype": "float32",
+  "outdir": "outdir",
+  "dataset": {
+    "name": "synthetic_8d",
+    "params": {
+      "n_dim": 8,
+      "n_samples": 2048,
+      "n_clusters": 32,
+      "samples_per_cluster": 64,
+      "sphere_radius": 0.7853981633974483,
+      "train_fraction": 0.75,
+      "seed": 42
+    }
+  },
+  "model": {
+    "name": "TinyMLP",
+    "params": {
+      "hidden": 8
+    }
+  },
+  "training": {
+    "n_iterations": 1000,
+    "lr": 0.05,
+    "batch_size": 512,
+    "eval_every": 50
+  },
+  "logging": {"level": "info", "save_config_snapshot": true}
+}

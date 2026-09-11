@@ -1,0 +1,41 @@
+{
+  "description": "MerLin photonic configuration with probability-space Hilbert-Schmidt tracking, mapped from qiskit_dhs.json.",
+  "seed": 42,
+  "device": "cpu",
+  "outdir": "outdir",
+  "logging": {
+    "level": "info"
+  },
+  "dataset": {
+    "root": null,
+    "classes": 2,
+    "batch_size": 256
+  },
+  "model": {
+    "backend": "merlin",
+    "width": 8,
+    "loss_dim": 128,
+    "projection_head": false,
+    "batch_norm": false,
+    "temperature": 0.07,
+    "modes": 10,
+    "no_bunching": false,
+    "layers": 2,
+    "encoding": "vector",
+    "q_ansatz": "sim_circ_14_half",
+    "q_sweeps": 1,
+    "activation": "null",
+    "shots": 100,
+    "q_backend": "qasm_simulator",
+    "save_dhs": true,
+    "dhs_freq": 1
+  },
+  "training": {
+    "epochs": 3,
+    "ckpt_step": 1,
+    "le_epochs": 100,
+    "max_steps": null,
+    "total_steps": 100,
+    "le_max_steps": null
+  }
+}

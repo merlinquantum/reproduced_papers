@@ -1,0 +1,48 @@
+{
+  "label": "heat_pinn_1000ep",
+  "experiment": "heat_pinn",
+  "source_run": "run_20260528-120934",
+  "seed": 42,
+  "n_params": 42,
+  "metrics": {
+    "rmse": 0.008930889507093346,
+    "mae": 0.007324777457262101,
+    "l_inf": 0.027835185387720007,
+    "nmse": 0.0016972856894524073
+  },
+  "best": {
+    "epoch": 999,
+    "loss": 0.0006079156103455855
+  },
+  "wall_time_sec": 35.067044258117676,
+  "model": {
+    "n_qumodes": 2,
+    "n_multi_layers": 2,
+    "n_single_layers": 2,
+    "cutoff": 8,
+    "active_sd": 0.001,
+    "passive_sd": 0.1,
+    "name": "FCNN",
+    "target_param_count": 44
+  },
+  "training": {
+    "pretrain_epochs": 300,
+    "epochs": 1000,
+    "lr": 0.01,
+    "collocation_points": 64,
+    "nx": 18,
+    "nt": 10,
+    "n_ic": 258,
+    "n_bc": 16,
+    "lambdas": {
+      "pde": 0.1,
+      "bc": 0.1,
+      "consistency": 0.1,
+      "trace": 0.0,
+      "ic": 0.6
+    }
+  },
+  "hidden_layers": [
+    8
+  ]
+}

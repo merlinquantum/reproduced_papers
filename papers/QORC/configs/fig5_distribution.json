@@ -1,0 +1,18 @@
+{
+    "description": "Fig. 5: noisy simulation versus experimental QPU distribution",
+    "xp_type": "fig5_distribution",
+    "seed": 42,
+    "n_photons": 3,
+    "n_modes": 12,
+    "distribution_start": 170,
+    "distribution_end": 210,
+    "n_simulation_runs": 500,
+    "shots": 30000,
+    "noise_g2": 0.0195,
+    "noise_indistinguishability": 0.8636,
+    "noise_g2_distinguishable": true,
+    "device": "cpu",
+    "use_qpu": true,
+    "qpu_device": "qpu:ascella",
+    "outdir": "outdir"
+}

@@ -1,0 +1,44 @@
+{
+ "description": "Logistic regression on the raw 2-D picture-frames inputs (the paper's Linear Baseline reference).",
+ "config": "configs/baseline_lr_picture_frames.json",
+ "regenerate": "python implementation.py --paper quantum_kitchen_sinks --config baseline_lr_picture_frames.json",
+ "note": "Curated copy of a run's metrics.json, committed so the notebook and README do not depend on the git-ignored outdir/. Gate-model rows are deterministic given the seeds; photonic rows depend on the torch RNG and so on the torch/merlin versions installed.",
+ "results": [
+  {
+   "sigma": 1.0,
+   "n_episodes": 1,
+   "seed": 42,
+   "train_accuracy": 0.5125,
+   "test_accuracy": 0.4925,
+   "train_error": 0.48750000000000004,
+   "test_error": 0.5075000000000001,
+   "name": "logistic_regression",
+   "backend": "none",
+   "n_features": 2
+  },
+  {
+   "sigma": 1.0,
+   "n_episodes": 1,
+   "seed": 43,
+   "train_accuracy": 0.5125,
+   "test_accuracy": 0.4925,
+   "train_error": 0.48750000000000004,
+   "test_error": 0.5075000000000001,
+   "name": "logistic_regression",
+   "backend": "none",
+   "n_features": 2
+  },
+  {
+   "sigma": 1.0,
+   "n_episodes": 1,
+   "seed": 44,
+   "train_accuracy": 0.5125,
+   "test_accuracy": 0.4925,
+   "train_error": 0.48750000000000004,
+   "test_error": 0.5075000000000001,
+   "name": "logistic_regression",
+   "backend": "none",
+   "n_features": 2
+  }
+ ]
+}

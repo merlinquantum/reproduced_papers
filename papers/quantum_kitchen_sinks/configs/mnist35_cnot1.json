@@ -1,0 +1,26 @@
+{
+    "description": "QKS on (3,5)-MNIST, 1-qubit ansatz.  Reproduces the 1q point in Fig. 5.",
+    "experiment": "mnist35",
+    "seeds": [42, 43, 44],
+    "dataset": {
+        "name": "mnist35",
+        "n_train": 4000,
+        "n_test": 1000,
+        "standardize": true
+    },
+    "qks": {
+        "backend": "gate",
+        "circuit": "cnot1",
+        "n_qubits": 1,
+        "encoding": "tile",
+        "n_episodes": 5000,
+        "sigma": 0.05,
+        "shots_per_episode": 1,
+        "n_layers": 1
+    },
+    "classifier": {
+        "kind": "logistic_regression",
+        "C": 1.0,
+        "max_iter": 4000
+    }
+}

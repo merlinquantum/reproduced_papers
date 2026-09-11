@@ -1,0 +1,59 @@
+{
+ "description": "As above with a shallow random mesh instead of the single splitter: control showing unstructured mixing degrades the feature map.",
+ "config": "configs/mnist35_merlin_2q_threshold_mesh.json",
+ "regenerate": "python implementation.py --paper quantum_kitchen_sinks --config mnist35_merlin_2q_threshold_mesh.json",
+ "note": "Curated copy of a run's metrics.json. Shares the 4000/1000 subsample with the other mnist35 artifacts, so comparisons against the LR baseline are paired.",
+ "results": [
+  {
+   "sigma": 0.1,
+   "n_episodes": 2500,
+   "seed": 42,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.972,
+   "train_error": 0.0,
+   "test_error": 0.028000000000000025,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 10000,
+   "n_modes": 4,
+   "n_photons": 2,
+   "computation_space": "FOCK",
+   "architecture": "mzi_threshold",
+   "mixing": "mesh"
+  },
+  {
+   "sigma": 0.1,
+   "n_episodes": 2500,
+   "seed": 43,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.976,
+   "train_error": 0.0,
+   "test_error": 0.02400000000000002,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 10000,
+   "n_modes": 4,
+   "n_photons": 2,
+   "computation_space": "FOCK",
+   "architecture": "mzi_threshold",
+   "mixing": "mesh"
+  },
+  {
+   "sigma": 0.1,
+   "n_episodes": 2500,
+   "seed": 44,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.975,
+   "train_error": 0.0,
+   "test_error": 0.025000000000000022,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 10000,
+   "n_modes": 4,
+   "n_photons": 2,
+   "computation_space": "FOCK",
+   "architecture": "mzi_threshold",
+   "mixing": "mesh"
+  }
+ ]
+}

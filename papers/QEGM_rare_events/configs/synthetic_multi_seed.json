@@ -1,0 +1,12 @@
+{
+  "description": "Synthetic Gaussian-mixture experiment over 3 seeds, all 3 model variants.",
+  "training": {
+    "seeds": "0,1,2",
+    "epochs": 60,
+    "lambda_tail": 2.0,
+    "models": "vae,qegm,qegm_merlin"
+  },
+  "dataset": {
+    "n_samples": 2048
+  }
+}

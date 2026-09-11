@@ -1,0 +1,36 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Python virtual environments
+venv/
+.env/
+
+# Secrets / credentials (never commit real tokens)
+.env
+configuration/_QUANDELA_API_KEY
+
+# Jupyter/IPython
+.ipynb_checkpoints/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Logs
+*.log
+
+# Coverage / testing
+.coverage
+htmlcov/
+.pytest_cache/
+.ruff_cache/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+

@@ -1,0 +1,14 @@
+{
+  "description": "Real-data extension: standardized S&P 500 daily log-returns (1990-2022), all variants incl. const-r ablation. Tests whether the synthetic-benchmark refutations transfer to real heavy-tailed data.",
+  "training": {
+    "seeds": "0,1,2",
+    "epochs": 60,
+    "lambda_tail": 2.0,
+    "models": "vae,qegm,qegm_merlin,qegm_const"
+  },
+  "dataset": {
+    "name": "sp500",
+    "csv_path": "../../data/QEGM_rare_events/sp500_daily_logreturns_1990_2022.csv",
+    "tail_quantile": 0.05
+  }
+}

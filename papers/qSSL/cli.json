@@ -165,10 +165,17 @@
     },
     {
       "flags": ["--save-dhs"],
-      "help": "Store Hilbert-Schmidt distances for analysis (Qiskit)",
+      "help": "Track the average Hilbert-Schmidt distance between positive and negative pairs after each batch. Qiskit uses statevectors; MerLin uses a probability-space diagonal-density-matrix surrogate.",
       "action": "store_true",
       "default": false,
       "apply": {"kind": "config_path", "path": "model.save_dhs", "value": true}
+    },
+    {
+      "flags": ["--dhs-freq"],
+      "help": "Compute the Hilbert-Schmidt metrics every N batches when --save-dhs is set (default: 1, i.e. every batch as in Fig. 4)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.dhs_freq"}
     }
   ]
 }

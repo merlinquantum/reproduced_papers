@@ -1,0 +1,29 @@
+{
+    "description": "Photonic MerLin QKS episode sweep on (3,5)-MNIST for 8 modes and 4 photons.",
+    "experiment": "mnist35_merlin",
+    "seeds": [42, 43, 44],
+    "episodes_sweep": [1000, 2000, 5000, 10000, 20000],
+    "dataset": {
+        "name": "mnist35",
+        "n_train": 4000,
+        "n_test": 1000,
+        "standardize": true
+    },
+    "qks": {
+        "backend": "photonic_merlin",
+        "n_modes": 8,
+        "n_photons": 4,
+        "encoding": "tile",
+        "n_episodes": 1000,
+        "sigma": 0.05,
+        "shots_per_episode": 1,
+        "n_layers": 1,
+        "input_modes": [0, 1, 2, 3],
+        "angle_scale": 1.0
+    },
+    "classifier": {
+        "kind": "logistic_regression",
+        "C": 1.0,
+        "max_iter": 4000
+    }
+}
