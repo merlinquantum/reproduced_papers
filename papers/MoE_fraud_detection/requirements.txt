@@ -1,0 +1,11 @@
+# Paper-specific dependencies for the MoE fraud detection reproduction.
+# Covers all three VQC backends: gate (PennyLane), photonic (MerLin), and the
+# parameter-matched classical ablation.
+pennylane
+merlinquantum==0.4.1
+xgboost
+scikit-learn
+numpy
+torch
+pandas
+pytest

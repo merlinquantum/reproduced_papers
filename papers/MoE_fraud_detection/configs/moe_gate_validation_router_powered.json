@@ -1,0 +1,46 @@
+{
+    "description": "STATISTICALLY-POWERED robustness check: gate-model GQC + MoE with router_split='validation' -- trains the router literally on 'the validation features' as the paper's PROSE states (Section 3.3), rather than the analysis split (this reproduction's default reading of the paper's own described procedure). n_repeats=20 (100 folds). Tests whether the paper's internal validation-vs-analysis terminology inconsistency materially changes router behavior.",
+
+    "seed": 42,
+    "dtype": "float32",
+    "outdir": "outdir",
+    "device": "cpu",
+    "dataset": {
+        "batch_size": 32
+    },
+    "cv": {
+        "n_repeats": 20,
+        "max_splits": null
+    },
+    "model": {
+        "backend": "gate",
+        "n_qubits": 6,
+        "lambda_recon": 0.5,
+        "router_split": "validation",
+        "autoencoder": {
+            "hidden_dims": [256, 128, 64]
+        },
+        "vqc": {
+            "n_layers": 6
+        },
+        "head": {
+            "hidden_dim": 8
+        },
+        "xgboost": {
+            "n_estimators": 200,
+            "max_depth": 4,
+            "n_jobs": 2
+        }
+    },
+    "training": {
+        "epochs": 30,
+        "lr": 1e-3
+    },
+    "evaluation": {
+        "router_thresholds": [0.5, 0.6, 0.7, 0.8, 0.9]
+    },
+    "logging": {
+        "level": "info",
+        "save_config_snapshot": true
+    }
+}

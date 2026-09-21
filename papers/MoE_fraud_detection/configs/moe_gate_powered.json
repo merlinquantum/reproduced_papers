@@ -1,0 +1,46 @@
+{
+    "description": "STATISTICALLY-POWERED run: gate-model GQC + MoE, default settings, n_repeats=20 (100 folds) to give ~80% power to detect an effect the size the paper itself claims (~0.01 AUCPR), per the MDE analysis in LOG.md. Primary test of 'the premise' (paper's headline claim).",
+
+    "seed": 42,
+    "dtype": "float32",
+    "outdir": "outdir",
+    "device": "cpu",
+    "dataset": {
+        "batch_size": 32
+    },
+    "cv": {
+        "n_repeats": 20,
+        "max_splits": null
+    },
+    "model": {
+        "backend": "gate",
+        "n_qubits": 6,
+        "lambda_recon": 0.5,
+        "router_split": "analysis",
+        "autoencoder": {
+            "hidden_dims": [256, 128, 64]
+        },
+        "vqc": {
+            "n_layers": 6
+        },
+        "head": {
+            "hidden_dim": 8
+        },
+        "xgboost": {
+            "n_estimators": 200,
+            "max_depth": 4,
+            "n_jobs": 2
+        }
+    },
+    "training": {
+        "epochs": 30,
+        "lr": 1e-3
+    },
+    "evaluation": {
+        "router_thresholds": [0.5, 0.6, 0.7, 0.8, 0.9]
+    },
+    "logging": {
+        "level": "info",
+        "save_config_snapshot": true
+    }
+}

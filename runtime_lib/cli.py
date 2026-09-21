@@ -19,6 +19,14 @@ def _register_default_types() -> None:
             return []
         return [int(chunk.strip()) for chunk in text.split(",") if chunk.strip()]
 
+    def _csv_float_list(value: Any) -> list[float]:
+        if isinstance(value, list):
+            return [float(v) for v in value]
+        text = str(value).strip()
+        if not text:
+            return []
+        return [float(chunk.strip()) for chunk in text.split(",") if chunk.strip()]
+
     def _csv_int_matrix(value: Any) -> list[list[int]]:
         if isinstance(value, list):
             return [[int(cell) for cell in row] for row in value]
@@ -61,6 +69,7 @@ def _register_default_types() -> None:
             "str": str,
             "path": _path_type,
             "csv_int_list": _csv_int_list,
+            "csv_float_list": _csv_float_list,
             "csv_int_matrix": _csv_int_matrix,
             "int_or_none": _int_or_none,
             "bool": _bool_type,

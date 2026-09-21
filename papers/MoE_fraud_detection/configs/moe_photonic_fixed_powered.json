@@ -1,0 +1,47 @@
+{
+    "description": "STATISTICALLY-POWERED run: MerLin photonic GQC + MoE, FIXED (non-trainable) LexGrouping readout (the original Phase-4 design). n_repeats=20 (100 folds) -- gives ~80% power to detect this backend's own observed effect size (~0.035 AUCPR vs XGBoost at n=15), though not the paper's much smaller ~0.01 claim (would need ~776 folds for that).",
+
+    "seed": 42,
+    "dtype": "float32",
+    "outdir": "outdir",
+    "device": "cpu",
+    "dataset": {
+        "batch_size": 32
+    },
+    "cv": {
+        "n_repeats": 20,
+        "max_splits": null
+    },
+    "model": {
+        "backend": "photonic",
+        "n_qubits": 6,
+        "lambda_recon": 0.5,
+        "router_split": "analysis",
+        "autoencoder": {
+            "hidden_dims": [256, 128, 64]
+        },
+        "photonic": {
+            "n_photons": 3,
+            "readout": "fixed"
+        },
+        "head": {
+            "hidden_dim": 8
+        },
+        "xgboost": {
+            "n_estimators": 200,
+            "max_depth": 4,
+            "n_jobs": 2
+        }
+    },
+    "training": {
+        "epochs": 30,
+        "lr": 1e-3
+    },
+    "evaluation": {
+        "router_thresholds": [0.5, 0.6, 0.7, 0.8, 0.9]
+    },
+    "logging": {
+        "level": "info",
+        "save_config_snapshot": true
+    }
+}
