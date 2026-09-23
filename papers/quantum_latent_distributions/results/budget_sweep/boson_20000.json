@@ -1,0 +1,23 @@
+[
+  {
+    "target": "quantum",
+    "latent": "boson",
+    "seed": 0,
+    "l1_nearest_int": 0.048028312623500824,
+    "mean_total": 8.154153823852539
+  },
+  {
+    "target": "quantum",
+    "latent": "boson",
+    "seed": 1,
+    "l1_nearest_int": 0.055454857647418976,
+    "mean_total": 8.18163776397705
+  },
+  {
+    "target": "quantum",
+    "latent": "boson",
+    "seed": 2,
+    "l1_nearest_int": 0.04814169928431511,
+    "mean_total": 7.9122490882873535
+  }
+]

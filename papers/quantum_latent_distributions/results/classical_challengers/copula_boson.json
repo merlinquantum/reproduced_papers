@@ -1,0 +1,23 @@
+[
+  {
+    "target": "quantum",
+    "latent": "copula_boson",
+    "seed": 0,
+    "l1_nearest_int": 0.08081696927547455,
+    "mean_total": 7.774396896362305
+  },
+  {
+    "target": "quantum",
+    "latent": "copula_boson",
+    "seed": 1,
+    "l1_nearest_int": 0.07926510274410248,
+    "mean_total": 8.317269325256348
+  },
+  {
+    "target": "quantum",
+    "latent": "copula_boson",
+    "seed": 2,
+    "l1_nearest_int": 0.08899492025375366,
+    "mean_total": 7.816746234893799
+  }
+]
