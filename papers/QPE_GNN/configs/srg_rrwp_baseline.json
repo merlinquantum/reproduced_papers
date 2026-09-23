@@ -1,0 +1,20 @@
+{
+  "description": "Fair classical baseline for the SRG distinguishability test: GRIT-lite with RRWP. Expected: cannot distinguish the SRG pair (chance acc, prop. 4.6).",
+  "dataset": "srg_pair",
+  "srg_index": 0,
+  "dataset_kwargs": {"n_per_class": 32},
+  "model": "grit_lite",
+  "encoding": "rrwp",
+  "pe_dim": 8,
+  "node_dim": 16,
+  "depth": 2,
+  "num_heads": 2,
+  "num_classes": 2,
+  "head": "graph_class",
+  "epochs": 12,
+  "batch_size": 8,
+  "lr": 1e-3,
+  "train_frac": 0.8,
+  "val_frac": 0.1,
+  "device": "cpu"
+}

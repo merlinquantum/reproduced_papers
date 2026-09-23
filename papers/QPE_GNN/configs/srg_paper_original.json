@@ -1,0 +1,10 @@
+{
+  "description": "Section 4.3 experiment on all 25 paper SRGs with five isomorphic controls per graph.",
+  "experiment": "srg_paper",
+  "srg_data_directory": "data",
+  "evolution_time": 1.0,
+  "rrwp_steps": 20,
+  "isomorphic_permutations": 5,
+  "tolerance": 1e-9,
+  "seed": 0
+}

@@ -1,0 +1,36 @@
+{
+  "description": "Appendix C PATTERN controlled comparison: RRWP plus 2-QiRW, four seeds.",
+  "feasibility": {
+    "status": "resource_intensive"
+  },
+  "dataset": "pattern",
+  "dataset_kwargs": {},
+  "model": "grit",
+  "encoding": "rrwp+qirw2",
+  "rrwp_dim": 21,
+  "qpe_dim": 20,
+  "qpe_initial_distribution": "adjacency",
+  "seeds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "seed": 0,
+  "node_dim": 64,
+  "depth": 10,
+  "num_heads": 8,
+  "num_classes": 2,
+  "head": "node_class",
+  "pooling": "none",
+  "dropout": 0,
+  "attention_dropout": 0.2,
+  "epochs": 100,
+  "batch_size": 32,
+  "lr": 0.0005,
+  "weight_decay": 0.00001,
+  "warmup_epochs": 5,
+  "minimum_lr": 0.000001,
+  "parameter_budget": 500000,
+  "device": "cpu"
+}
