@@ -1,0 +1,54 @@
+{
+  "description": "Paper Table II -- MolGAN-style QM9 generation. Appendix E settings: batch size 256, Adam at 1e-4, 20000 iterations, generator widths 64/176/288/400/512. Needs a GPU and the optional extras in requirements.txt.",
+  "experiment": "qm9",
+  "seed": 0,
+  "device": "cuda",
+  "latent": {
+    "dim": 16,
+    "architecture": "haar",
+    "normalize": "center",
+    "bank_size": 1000000,
+    "kinds": [
+      "gaussian",
+      "bernoulli",
+      "distinguishable",
+      "boson"
+    ]
+  },
+  "dataset": {
+    "name": "qm9",
+    "size": 0,
+    "batch_size": 256,
+    "reference_smiles": 20000
+  },
+  "training": {
+    "iterations": 20000,
+    "lr": 0.0001,
+    "n_critic": 5,
+    "optimizer": "adam",
+    "betas": [
+      0.0,
+      0.9
+    ],
+    "permutation_probability": 0.3
+  },
+  "evaluation": {
+    "repeats": 5,
+    "n_samples": 10000
+  },
+  "model": {
+    "generator_hidden": [
+      64,
+      176,
+      288,
+      400,
+      512
+    ],
+    "critic_hidden": [
+      128,
+      64
+    ],
+    "activation": "leaky_relu",
+    "latent_reinjection": true
+  }
+}
