@@ -1,0 +1,6 @@
+{
+  "description": "Evaluate all 100 of the authors' saved reservoir instances for QR1 and QR2. Predeclared selection rule: minimise MSE on the leakage-free validation window (the last 120 months of the initial training sample); the out-of-sample MSE of the best-on-test instance is also reported to quantify the paper's selection protocol.",
+  "experiment": "reservoir_instance_sweep",
+  "evaluation": {"horizons": [1]},
+  "instance_sweep": {"variants": ["QR1", "QR2"], "n_instances": 100, "coupling_source": "authors"}
+}

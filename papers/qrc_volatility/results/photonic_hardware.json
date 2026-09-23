@@ -1,0 +1,78 @@
+{
+  "PQR1": {
+    "computation_space": "UNBUNCHED",
+    "detector_model": "threshold (unbunched subspace)",
+    "encoding": "angle encoding on modes 0..6, scale=0.392699 rad (pi/8), 3 sequential lag blocks",
+    "encoding_scale_radians": 0.39269908169872414,
+    "ensemble": false,
+    "framework": "MerLin 0.4.0",
+    "input_state": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    "measurement_strategy": "MeasurementStrategy.mode_expectations",
+    "mesh_seed": 8,
+    "n_frozen_circuit_parameters": 360,
+    "n_modes": 10,
+    "n_photons": 3,
+    "n_trainable_parameters": 10,
+    "postselection": "none",
+    "readout_width": 10,
+    "shots": null,
+    "simulator": "MerLin CPU simulator (analytic statevector, shots=0)",
+    "sweep_encoding_scale_divisors": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "sweep_n_instances": 25,
+    "wall_clock_seconds": 0.2
+  },
+  "PQR2": {
+    "computation_space": "UNBUNCHED",
+    "detector_model": "threshold (unbunched subspace)",
+    "encoding": "angle encoding on modes 0..6, scale=0.785398 rad (pi/4), 3 sequential lag blocks",
+    "encoding_scale_radians": 0.7853981633974483,
+    "ensemble": true,
+    "framework": "MerLin 0.4.0",
+    "input_state": [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    "measurement_strategy": "MeasurementStrategy.mode_expectations",
+    "mesh_seed": 17,
+    "n_frozen_circuit_parameters": 720,
+    "n_modes": 10,
+    "n_photons": 3,
+    "n_trainable_parameters": 20,
+    "postselection": "none",
+    "readout_width": 20,
+    "shots": null,
+    "simulator": "MerLin CPU simulator (analytic statevector, shots=0)",
+    "sweep_encoding_scale_divisors": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "sweep_n_instances": 25,
+    "wall_clock_seconds": 0.451
+  }
+}
