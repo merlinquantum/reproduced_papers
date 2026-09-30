@@ -1,0 +1,2 @@
+outdir/run_20260914-182320
+run_id=iris-photonic-7040a79c

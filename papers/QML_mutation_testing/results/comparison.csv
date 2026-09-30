@@ -1,0 +1,14 @@
+quantity,reproduction (photonic MerLin),paper (Iris / ZFM / RA)
+"mutants generated, new operators",303,1584
+"mutants generated, prior operators",697,13448
+mutant reduction factor (prior / new),2.30,8.49
+"mutation score, new operators (analytic)",0.9384,0.7159
+"mutation score, prior operators (analytic)",0.8833,0.3592
+"mutation score, new operators (1024 shots)",0.9516,n/a (paper reports one shot-based number)
+"mutation score, prior operators (1024 shots)",0.9330,n/a
+false-kill rate of the null control (1024 shots),0.2500,not reported
+false-kill rate of the null control (analytic),0.0000,not reported
+test-suite size,15.67,not reported (20 candidate samples)
+"generation time per mutant, new operators (s)",0.000574,0.000250
+"generation time per mutant, prior operators (s)",0.000447,0.000320
+"evaluation time per mutant, new operators (s)",0.238808,not directly comparable

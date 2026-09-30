@@ -1,0 +1,14 @@
+2026-09-14T13:51:34Z [INFO] REPORT_STARTED | run_dir=/reproduced_papers/papers/QML_mutation_testing/outdir/run_20260914-134110 | run_id=iris-photonic-967b01f4
+2026-09-14T13:51:34Z [INFO] KILL_STRENGTH_READ | operators=10 | seeds={'ADD': 3, 'DELETE': 3, 'CHANGE': 3, 'APC': 3, 'DFC': 3, 'APGC': 3, 'LS': 3, 'ILS': 3, 'ALA': 3, 'ALD': 3}
+2026-09-14T13:51:34Z [INFO] ARTIFACT_WRITTEN | path=mutation_scores.csv | rows=10
+2026-09-14T13:51:34Z [INFO] ARTIFACT_WRITTEN | path=comparison.csv | rows=13
+2026-09-14T13:51:34Z [INFO] ARTIFACT_WRITTEN | path=accuracy.csv | rows=4
+2026-09-14T13:51:35Z [INFO] ARTIFACT_WRITTEN | path=mutation_scores.png
+2026-09-14T13:51:35Z [INFO] REPORT_COMPLETED | results_dir=/reproduced_papers/papers/QML_mutation_testing/results
+2026-09-14T18:34:31Z [INFO] REPORT_STARTED | run_dir=/reproduced_papers/papers/QML_mutation_testing/outdir/run_20260914-182320 | run_id=iris-photonic-7040a79c
+2026-09-14T18:34:32Z [INFO] KILL_STRENGTH_READ | operators=10 | seeds={'ADD': 3, 'DELETE': 3, 'CHANGE': 3, 'APC': 3, 'DFC': 3, 'APGC': 3, 'LS': 3, 'ILS': 3, 'ALA': 3, 'ALD': 3}
+2026-09-14T18:34:32Z [INFO] ARTIFACT_WRITTEN | path=mutation_scores.csv | rows=10
+2026-09-14T18:34:32Z [INFO] ARTIFACT_WRITTEN | path=comparison.csv | rows=13
+2026-09-14T18:34:32Z [INFO] ARTIFACT_WRITTEN | path=accuracy.csv | rows=4
+2026-09-14T18:34:32Z [INFO] ARTIFACT_WRITTEN | path=mutation_scores.png
+2026-09-14T18:34:32Z [INFO] REPORT_COMPLETED | results_dir=/reproduced_papers/papers/QML_mutation_testing/results

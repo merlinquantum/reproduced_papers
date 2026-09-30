@@ -1,0 +1,101 @@
+{
+  "description": "Photonic mutation-testing reproduction runner (original model)",
+  "arguments": [
+    {
+      "flags": [
+        "--epochs"
+      ],
+      "help": "Override number of full-batch training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.epochs"
+      }
+    },
+    {
+      "flags": [
+        "--lr"
+      ],
+      "help": "Override the Adam learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.lr"
+      }
+    },
+    {
+      "flags": [
+        "--layers"
+      ],
+      "help": "Override the number of photonic ansatz layers",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.params.n_layers"
+      }
+    },
+    {
+      "flags": [
+        "--photons"
+      ],
+      "help": "Override the input photon number (minimum 2)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.params.n_photons"
+      }
+    },
+    {
+      "flags": [
+        "--shots"
+      ],
+      "help": "Shot budget used for suite predictions (0 = analytic)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.shots"
+      }
+    },
+    {
+      "flags": [
+        "--mutations"
+      ],
+      "help": "Enable mutation testing (the seven operators + baseline)",
+      "type": "bool",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "mutation_testing.enabled"
+      }
+    },
+    {
+      "flags": [
+        "--apc-granularity"
+      ],
+      "help": "APC granularity: gate (Table I counts) or layer (paper prose)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "mutation_testing.apc_granularity"
+      }
+    },
+    {
+      "flags": [
+        "--dataset"
+      ],
+      "help": "Nom du dataset à utiliser (iris, wine, breast_cancer)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.name"
+      }
+    }
+  ]
+}

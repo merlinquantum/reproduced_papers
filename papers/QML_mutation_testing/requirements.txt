@@ -1,0 +1,10 @@
+# Photonic (MerLin) adaptation of "Efficient Mutation Testing of Quantum
+# Machine Learning Models". Qiskit is intentionally absent: the reproduction
+# is carried out entirely with MerLin / Perceval.
+merlinquantum==0.4.1
+perceval-quandela>=1.2.1
+torch>=2.3
+scikit-learn>=1.4
+numpy>=1.26
+pytest
+torchvision

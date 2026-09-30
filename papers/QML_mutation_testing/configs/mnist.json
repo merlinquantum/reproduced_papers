@@ -1,0 +1,56 @@
+{
+  "description": "Photonic (MerLin) adaptation for MNIST classification with 16 modes and 10 classes.",
+  "seed": 42,
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "experiment": {
+    "seeds": [
+      42,
+      43,
+      44
+    ]
+  },
+  "dataset": {
+    "name": "mnist",
+    "test_size": 0.2,
+    "val_size": 0.2,
+    "n_suite_samples": 20,
+    "feature_max": 1.0
+  },
+  "model": {
+    "name": "photonic_zfm_realamplitudes",
+    "params": {
+      "n_modes": 16,
+      "n_photons": 8,
+      "n_layers": 6,
+      "n_classes": 10,
+      "encoding_scale": 3.141592653589793,
+      "computation_space": "unbunched",
+      "input_state": [
+        1, 0, 1, 0, 1, 0, 1, 0,
+        1, 0, 1, 0, 1, 0, 1, 0
+      ]
+    }
+  },
+  "training": {
+    "epochs": 200,
+    "optimizer": "adam",
+    "lr": 0.05,
+    "log_every": 25
+  },
+  "evaluation": {
+    "shots": 1024
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  },
+  "mutation_testing": {
+    "enabled": true,
+    "include_baseline": true,
+    "apc_granularity": "gate",
+    "log_every": 100,
+    "control_replicates": 12
+  }
+}

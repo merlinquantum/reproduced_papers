@@ -1,0 +1,11 @@
+Changement de cap critique : La reproduction du papier doit se faire exclusivement avec le framework Merlin (merlinquantum), et non avec Qiskit.
+
+Objectif immédiat :
+
+    Mets à jour ton plan d'implémentation pour utiliser merlinquantum 0.4.1 pour toutes les itérations, en traduisant les concepts du papier (ZFeatureMap, RealAmplitudes) vers leurs équivalents photoniques MerLin (déphaseurs, beam splitters, etc.).
+
+    Exécute ensuite l'Itération 0 (Scaffolding) et l'Itération 1 (Entraînement du modèle original minimal avec Merlin).
+
+    Trace explicitement tes choix d'équivalences matérielles et d'hyperparamètres dans LOG.md.
+
+    Arrête-toi strictement dès que le modèle original Merlin réussit son entraînement (fin de l'Itération 1) et affiche un résumé des métriques. N'entame sous aucun prétexte l'Itération 2.
