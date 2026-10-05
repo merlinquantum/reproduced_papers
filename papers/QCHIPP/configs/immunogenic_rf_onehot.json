@@ -1,0 +1,15 @@
+{
+    "description": "Binder-only immunogenicity: random forest on 80 one-hot residue columns.",
+    "dataset": {
+        "task": "immunogenic",
+        "positions": [
+            3,
+            5,
+            6,
+            7
+        ]
+    },
+    "model": {
+        "name": "rf_onehot"
+    }
+}

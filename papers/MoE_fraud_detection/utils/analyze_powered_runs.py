@@ -1,8 +1,7 @@
 """Paired statistical analysis of the powered (n=100) CV runs.
 
 Recreates, as committed and re-runnable code, the paired-fold analysis
-behind the README/LOG statistical tables (previously computed in
-throwaway container scratch): for each router threshold, the paired
+behind the statistical tables in README.md and REPRODUCTION_NOTES.md: for each router threshold, the paired
 AUCPR difference (MoE - XGBoost baseline) across CV folds with mean,
 95% CI, paired t-test, Wilcoxon signed-rank, win-rate, and worst folds.
 

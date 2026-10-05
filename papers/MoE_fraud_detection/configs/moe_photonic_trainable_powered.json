@@ -1,5 +1,5 @@
 {
-    "description": "STATISTICALLY-POWERED run: MerLin photonic GQC + MoE, TRAINABLE readout (nn.Linear(output_size,1)+sigmoid replacing the fixed LexGrouping) -- tests whether a trainable pooling head closes the gap to the gate model, per MERLIN_COOKBOOK.md's photonic debugging checklist. n_repeats=20 (100 folds).",
+    "description": "STATISTICALLY-POWERED run: MerLin photonic GQC + MoE, TRAINABLE readout (nn.Linear(output_size,1)+sigmoid replacing the fixed LexGrouping) -- tests whether a trainable pooling head closes the gap to the gate model. n_repeats=20 (100 folds).",
 
     "seed": 42,
     "dtype": "float32",

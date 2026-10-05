@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "sources": [
+    {
+      "id": 1,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC13398535",
+      "title": "",
+      "accessed": "2026-09-30",
+      "quotes": [
+        {
+          "text": "Among all tested combinations, the model using positions 3, 5, 6, and 7 achieved the highest F1 score of 0.67.",
+          "added": "2026-10-02"
+        },
+        {
+          "text": "Implementing this model on the noiseless simulator resulted in an F1 score of 0.73 when mapped to the quantum states using QRAC 2:1 (10-qubit experiment).",
+          "added": "2026-10-02"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "url": "https://pmc.ncbi.nlm.nih.gov/articles/instance/13398535/bin/sciadv.aec3824_sm.pdf",
+      "title": "",
+      "accessed": "2026-10-02",
+      "quotes": [
+        {
+          "text": "MHC binding labels were assigned from quantitative or qualitative binding assay outcomes; immunogenicity labels required a positive functional T-cell readout",
+          "added": "2026-10-02"
+        }
+      ]
+    }
+  ]
+}

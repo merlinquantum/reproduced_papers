@@ -1,0 +1,25 @@
+{
+    "description": "Binder-only immunogenicity: seven-mode MerLin adaptation with an unencoded phase-reference mode (primary photonic model); 1000 full-batch updates; not executed for the reported results.",
+    "dataset": {
+        "task": "immunogenic",
+        "positions": [
+            3,
+            5,
+            6,
+            7
+        ]
+    },
+    "model": {
+        "name": "merlin_reference"
+    },
+    "training": {
+        "epochs": 1000,
+        "lr": 0.01
+    },
+    "evaluation": {
+        "shots": [
+            0,
+            1000
+        ]
+    }
+}

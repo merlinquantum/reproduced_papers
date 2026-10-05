@@ -12,7 +12,7 @@ Circuit (PennyLane, ``default.qubit``):
 
 Wrapped with ``qml.qnn.TorchLayer`` so it behaves as a plain ``nn.Module``.
 
-PennyLane batching note (see LOG.md "PennyLane API pitfalls"): TorchLayer
+PennyLane batching note: TorchLayer
 passes the *whole* batched input tensor straight through to the QNode as the
 ``inputs`` argument (no per-sample Python loop). PennyLane's own parameter
 broadcasting then requires the batch dimension to be axis 0 of each gate

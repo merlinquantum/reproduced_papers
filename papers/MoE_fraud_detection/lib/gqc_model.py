@@ -5,8 +5,7 @@ time.
 The "quantum block" is selected via ``cfg["model"]["backend"]``:
 
 - ``"gate"`` (default): the paper's 6-qubit PennyLane VQC (:mod:`.vqc_gate`).
-- ``"photonic"``: the MerLin photonic adaptation (:mod:`.vqc_photonic`,
-  Phase 4 of the reproduction workflow).
+- ``"photonic"``: the MerLin photonic adaptation (:mod:`.vqc_photonic`).
 - ``"classical"``: a parameter-matched classical dense block
   (:mod:`.vqc_classical`), used as the C5 fair-baseline ablation to isolate
   whether the quantum block contributes beyond a same-shaped classical layer.

@@ -1,12 +1,10 @@
-"""Classical stand-in for the VQC block (Phase 5 fair-baseline ablation, C5
-in LOG.md's claim inventory).
+"""Classical stand-in for the VQC block (fair-baseline ablation, claim C5 in
+REPRODUCTION_NOTES.md).
 
 Purpose: isolate whether the quantum block (gate or photonic) contributes
 anything beyond what a similarly-sized classical block would inside the same
 GQC+MoE pipeline. This is NOT part of the paper - it is an additional fair
-baseline required by PAPER_REPRODUCTION_INSTRUCTIONS.md Section 4 (Baseline
-Philosophy) whenever a quantum block's contribution is not otherwise
-isolated.
+baseline that isolates the quantum block's contribution.
 
 Architecture: ``n_qubits -> hidden -> 1`` (ReLU hidden, tanh output rescaled
 to roughly the gate VQC's [-1, 1] PauliZ-expectation range so the shared
@@ -15,7 +13,7 @@ total parameter count is close to the gate-model VQC's
 ``n_layers * n_qubits * 2`` trainable rotation angles (see
 ``matched_hidden_dim``), documented exactly (not claimed to be an exact
 match - the two architectures are not directly parameter-comparable, see
-LOG.md C5 caveats).
+"C5 caveats" in REPRODUCTION_NOTES.md).
 """
 
 from __future__ import annotations

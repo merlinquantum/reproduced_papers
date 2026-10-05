@@ -1,0 +1,30 @@
+{
+  "rows": [
+    {
+      "accuracy_rank_lt2": 0.8778778778778779,
+      "auroc": 0.9560480961923847,
+      "average_precision": 0.9600301208895666,
+      "f1_rank_lt2": 0.8671023965141612,
+      "task": "binding",
+      "test_count": 999
+    },
+    {
+      "accuracy_rank_lt2": 0.699,
+      "auroc": 0.761068,
+      "average_precision": 0.703960422468366,
+      "f1_rank_lt2": 0.6841552990556139,
+      "task": "mixed",
+      "test_count": 1000
+    },
+    {
+      "accuracy_rank_lt2": 0.375,
+      "auroc": 0.33422999999999997,
+      "average_precision": 0.43606750866213084,
+      "f1_rank_lt2": 0.5059288537549407,
+      "task": "immunogenic",
+      "test_count": 1000
+    }
+  ],
+  "scope": "supplied affinity-rank diagnostic on the released test splits; no fitting or test-set selection",
+  "source_sha256": "2b91dde1046d46f9ec0bd64ae1d2bc0d148da09b065287aef44a1238c0bb3b07"
+}

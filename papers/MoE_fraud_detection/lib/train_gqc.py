@@ -11,7 +11,8 @@ Per minibatch:
 
 Optimizer: Adam. All hyperparameters (``lambda_recon``, ``lr``, epochs,
 batch size) come from ``cfg``; see ``configs/defaults.json`` for defaults and
-LOG.md for the epoch-count assumption (the paper does not specify one).
+REPRODUCTION_NOTES.md ("Protocol assumptions") for the epoch-count assumption (the
+paper does not specify one).
 """
 
 from __future__ import annotations

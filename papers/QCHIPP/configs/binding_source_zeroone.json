@@ -1,0 +1,26 @@
+{
+    "description": "Binding: label-convention sensitivity, source gate QCNN with release-default 0/1 labels (reported for seed 49 only); 100 full-batch updates.",
+    "dataset": {
+        "task": "binding",
+        "positions": [
+            2,
+            4,
+            5,
+            9
+        ]
+    },
+    "model": {
+        "name": "gate_source",
+        "source_labels": "zero_one"
+    },
+    "training": {
+        "epochs": 100,
+        "spsa_a": 0.06,
+        "spsa_c": 0.2
+    },
+    "evaluation": {
+        "shots": [
+            0
+        ]
+    }
+}

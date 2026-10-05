@@ -1,0 +1,15 @@
+{
+    "description": "Binder-only immunogenicity: logistic regression on 80 one-hot residue columns (81 parameters, as the source QCNN).",
+    "dataset": {
+        "task": "immunogenic",
+        "positions": [
+            3,
+            5,
+            6,
+            7
+        ]
+    },
+    "model": {
+        "name": "logistic_onehot"
+    }
+}

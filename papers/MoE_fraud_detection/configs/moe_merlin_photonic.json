@@ -1,5 +1,5 @@
 {
-    "description": "MoE fraud detection - MerLin photonic adaptation (Phase 4): same GQC+MoE pipeline as moe_gate_original.json, VQC block replaced by a MerLin QuantumLayer (6 modes, 3 photons, UNBUNCHED/threshold detection, one trainable entangling layer either side of a single angle-encoding pass). See LOG.md 'MerLin API Notes' and lib/vqc_photonic.py for the full hardware-aware record.",
+    "description": "MoE fraud detection - MerLin photonic adaptation: same GQC+MoE pipeline as moe_gate_original.json, VQC block replaced by a MerLin QuantumLayer (6 modes, 3 photons, UNBUNCHED/threshold detection, one trainable entangling layer either side of a single angle-encoding pass). See REPRODUCTION_NOTES.md 'MerLin API Notes' and lib/vqc_photonic.py for the full hardware-aware record.",
 
     "seed": 42,
     "dtype": "float32",

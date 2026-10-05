@@ -1,0 +1,25 @@
+{
+    "description": "Binding: seven-mode MerLin adaptation with an unencoded phase-reference mode (primary photonic model); 1000 full-batch updates; not executed for the reported results.",
+    "dataset": {
+        "task": "binding",
+        "positions": [
+            2,
+            4,
+            5,
+            9
+        ]
+    },
+    "model": {
+        "name": "merlin_reference"
+    },
+    "training": {
+        "epochs": 1000,
+        "lr": 0.01
+    },
+    "evaluation": {
+        "shots": [
+            0,
+            1000
+        ]
+    }
+}

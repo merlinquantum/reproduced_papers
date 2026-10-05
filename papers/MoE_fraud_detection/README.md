@@ -33,8 +33,8 @@ CV protocol (repeated 3x stratified 5-fold CV), evaluated with the paper's
 own metrics (AUCPR, AP, precision, recall) at the paper's router-threshold
 sweep {0.5, ..., 0.9}. In addition (beyond the paper, required by this
 repository's reproduction workflow): a MerLin **photonic** adaptation of the
-VQC (Phase 4) and a parameter-matched **classical** ablation of the VQC
-(Phase 5, fair-baseline isolation of the quantum contribution).
+VQC and a parameter-matched **classical** ablation of the VQC
+(fair-baseline isolation of the quantum contribution).
 
 **What was NOT reproduced**: the OQC Toshiko hardware-latency benchmark
 (Table 6, requires QPU access we do not have — verified against the paper
@@ -45,7 +45,7 @@ environment"): the speedup *ranking* holds (QMKL slowest, GQC fastest) but
 the claimed *magnitude* (GQC 500-1400x faster) does not — measured only
 3-10x here. See "Latency Benchmark (Table 1)" below.
 
-**Key deviations/assumptions** (full detail in `LOG.md`):
+**Key deviations/assumptions** (full detail in [REPRODUCTION_NOTES.md](REPRODUCTION_NOTES.md)):
 - Dataset: OpenML mirror (`data_id=1597`) of the paper's Kaggle
   `mlg-ulb/creditcardfraud` dataset — identical data (284,807 rows, 492
   fraud, same 30 features), fetched without a login requirement.
@@ -58,7 +58,7 @@ the claimed *magnitude* (GQC 500-1400x faster) does not — measured only
   (Section 3.3, Fig. 2) rather than its prose, which we read as a
   terminology inconsistency in the paper itself (see `lib/moe.py`
   docstring).
-- Hardware/software environment: CPU-only container (14 cores, ~7.8 GB RAM),
+- Hardware/software environment: CPU-only machine (14 cores, ~7.8 GB RAM),
   PennyLane (gate model), MerLin 0.4.1 (photonic model), XGBoost, PyTorch,
   scikit-learn.
 
@@ -76,8 +76,7 @@ generation), `results/` (curated statistics + figures, tracked — see
 ## Install and How to Run
 
 ```bash
-source /opt/venv/bin/activate  # or your own venv; see requirements.txt
-pip install -r requirements.txt
+pip install -r papers/MoE_fraud_detection/requirements.txt
 ```
 
 ```bash
@@ -124,9 +123,15 @@ ULB European Credit Card Fraud dataset (284,807 transactions, 492 fraud /
 requires a login/API key; we instead fetched the identical dataset from
 OpenML (`sklearn.datasets.fetch_openml(data_id=1597)`, no login required)
 and verified the instance/class counts match the paper's reported 0.172%
-fraud rate exactly. Stored at `data/MoE_fraud_detection/creditcard.csv`
-(~142 MB). See `LOG.md`'s "Data Acquisition Log" for the exact re-download
-command.
+fraud rate exactly. The file is not committed (~142 MB). Download it once,
+from the repository root:
+
+```bash
+python -c "from sklearn.datasets import fetch_openml; fetch_openml(data_id=1597, as_frame=True).frame.to_csv('data/MoE_fraud_detection/creditcard.csv', index=False)"
+```
+
+The runner reads `data/MoE_fraud_detection/creditcard.csv` (or the same path
+under `--data-root` / `DATA_DIR`).
 
 Preprocessing (per paper Section 3.2): drop `Time` (not present in this
 mirror), `MinMaxScaler` fit on each fold's training pool only, 50/50
@@ -209,7 +214,7 @@ effect the size the paper itself claims (~0.01 AUCPR at γ=0.6) at 80%
 power — meaning both this reproduction AND, very plausibly, the paper's own
 identical 15-fold protocol are underpowered to make a confident claim
 either way. The correct read is **"underpowered / inconclusive," not
-"refuted."** Full numbers in `LOG.md`'s "Statistical Significance" section.
+"refuted."** Full numbers in [REPRODUCTION_NOTES.md](REPRODUCTION_NOTES.md#statistical-significance).
 
 **Reproduction gap diagnosis**: our absolute AUCPR/AP levels sit ~0.08 below
 the paper's for *both* XGBoost and MoE (i.e. the classical baseline itself
@@ -273,8 +278,8 @@ XGBoost hyperparameters). At n=100:
   0.05 at γ=0.5-0.8 in both configs, and `moe_gate_tuned_xgboost_powered`'s
   worst-fold severity is essentially unchanged (-0.47 to -0.49 either way)
   — evidence the temperature floor was not that config's dominant problem.
-  This points at the still-unfixed Youden's-J bug as the more consequential
-  of the two known issues.
+  (An interim reading that the Youden's-J bug was therefore the dominant
+  driver was ruled out by the exact impact bound above.)
 - **Bottom line**: with both implementation issues resolved (calibration
   floor fixed; Youden's-J bug fixed and its influence exactly bounded to
   ≤0.003 AUCPR with no verdict change), the honest read at n=100 is:
@@ -287,8 +292,8 @@ XGBoost hyperparameters). At n=100:
   absolute baseline sits ~0.08 below the paper's and several training
   hyper-parameters are paper-unspecified. Per-config, per-threshold
   statistics live in `results/analysis_*.json` (regenerable via
-  `utils/analyze_powered_runs.py`); the historical derivation is in
-  `LOG.md`.
+  `utils/analyze_powered_runs.py`); the derivation is in
+  [REPRODUCTION_NOTES.md](REPRODUCTION_NOTES.md#powered-re-run-write-up).
 
 ### MerLin photonic adaptation vs. classical ablation vs. gate model
 
@@ -301,8 +306,8 @@ XGBoost hyperparameters). At n=100:
 
 Ranking by point estimate: gate ⪆ XGBoost > classical > photonic — **but a
 paired significance test across the 15 folds finds none of these pairwise
-differences statistically significant** (all p > 0.18; see `LOG.md`
-"Statistical Significance"). The photonic branch's underperformance is
+differences statistically significant** (all p > 0.18; see
+[REPRODUCTION_NOTES.md](REPRODUCTION_NOTES.md#statistical-significance)). The photonic branch's underperformance is
 directionally consistent across all 5 thresholds (a mildly more convincing
 pattern than any single threshold's p-value alone) but should be read as a
 **suggestive trend, not a confirmed negative result** at n=15 — an earlier
@@ -310,14 +315,15 @@ draft of this document overstated this as a "clear negative result," which
 the paired test does not support at n=15.
 
 At n=100 (see the powered-re-run subsection above), the ranking changes:
-**the trainable photonic readout that `INSIGHTS.md` flagged as the most
-promising untried variant turned out to be the worst-performing backend**
+**the trainable photonic readout, which had looked like the most
+promising untried variant, turned out to be the worst-performing backend**
 (mean AUCPR diff vs. XGBoost -0.048 to -0.060, significant at every
 threshold, p<0.001) — worse than the original fixed-`LexGrouping` photonic
 design (-0.008 to -0.020). This reverses the earlier "trainable readout
-should close the gap" hypothesis; see `LOG.md`'s "Powered Re-Run Write-Up"
-section for the full numbers. See `LOG.md`'s "Photonic and
-Classical-Ablation Results" section for the n=15 per-threshold tables.
+should close the gap" hypothesis; see
+[REPRODUCTION_NOTES.md](REPRODUCTION_NOTES.md#powered-re-run-write-up) for the full numbers and
+[Photonic and Classical-Ablation Results](REPRODUCTION_NOTES.md#photonic-and-classical-ablation-results)
+for the n=15 per-threshold tables.
 
 ## MerLin Photonic Extension (Hardware-Aware Fields)
 
@@ -358,8 +364,8 @@ faster than GFM/QMKL; we measure only 3.0x/9.9x — off by roughly two
 orders of magnitude on the ratio. Notably the gap isn't a uniform hardware
 offset: our QMKL/GFM run ~9-12x *faster* than the paper's, while our GQC
 runs ~15x *slower* — GQC specifically underperforms its paper counterpart
-in this reproduction. Not root-caused this session (see `LOG.md`'s
-"Latency Benchmark (C4/Table 1) Results" for candidate explanations —
+in this reproduction. Not root-caused (see
+[REPRODUCTION_NOTES.md](REPRODUCTION_NOTES.md#latency-benchmark-c4table-1-results) for candidate explanations —
 possible backend/version differences, none confirmed). Run:
 `python implementation.py --paper MoE_fraud_detection --config configs/latency_benchmark.json`.
 
@@ -385,7 +391,7 @@ possible backend/version differences, none confirmed). Run:
 - Several hyperparameters (epoch count, optimizer settings beyond Adam,
   XGBoost tree depth/estimator count, router XGBoost settings) are not
   specified by the paper; our choices are documented as assumptions in
-  `LOG.md` and are a plausible (though not the only) explanation for the
+  [REPRODUCTION_NOTES.md](REPRODUCTION_NOTES.md#protocol-assumptions) and are a plausible (though not the only) explanation for the
   ~0.08 absolute AUCPR/AP gap versus the paper.
 - The tiny (~786-row) balanced training pool per fold produces high
   fold-to-fold variance (std ~0.09, similar magnitude to the paper's own
@@ -399,31 +405,26 @@ possible backend/version differences, none confirmed). Run:
   not a general claim that no photonic circuit could preserve the MoE
   benefit. A trainable-readout variant was tried at n=100 and performed
   worse, not better (see the powered-re-run subsection above).
-- The n=100 statistically-powered re-run's significantly-negative headline
-  result is entangled with two implementation issues (a partially-mitigated
-  calibration-floor instability and an unfixed Youden's-J degenerate-
-  threshold bug — see `LOG.md`) and should not yet be read as a clean,
-  bug-free refutation of the paper's claim.
-- No notebook was built for this reproduction (Phase 7 in
-  `PAPER_REPRODUCTION_INSTRUCTIONS.md` marks notebooks as optional for
-  "low-confidence partial reproductions," which this is) — an intentional
-  scope decision, not an oversight; `notebook.ipynb` remains the unmodified
-  template stub.
+- The n=100 significantly-negative headline result was checked against two
+  implementation issues. The Youden's-J degenerate-threshold bug is fixed and
+  its effect is bounded exactly (at most 0.003 AUCPR, no verdict change). The
+  calibration-floor instability is mitigated (floor `1e-3` → `0.1`) but not
+  eliminated, and rare calibration-collapse folds still drive the negative
+  mean. See
+  [Known Issues and Open Bugs](REPRODUCTION_NOTES.md#known-issues-and-open-bugs).
 
 ## Tests
 
 ```bash
 cd papers/MoE_fraud_detection
-pytest -q -s   # -s avoids a pre-existing pytest-capture teardown quirk in this container
+pytest -q -s   # -s avoids a pytest-capture teardown quirk seen in some environments
 ```
 
-26 tests covering the data pipeline, MoE router math (Youden's J, router
-targets, hard mixture, evaluation metrics), and the `GQCModel` forward pass
-across all three backends (gate/photonic/classical). Note: these tests do
-not currently catch the Youden's-J degenerate-threshold bug described above
-(it only manifests on specific data distributions at CV scale, not in the
-small synthetic fixtures used here) — a regression test for it is a good
-addition alongside the fix.
+29 tests covering the data pipeline, MoE router math (Youden's J, router
+targets, hard mixture, evaluation metrics), the `GQCModel` forward pass
+across all three backends (gate/photonic/classical), the CLI and the latency
+benchmark. Two regression tests in `tests/test_moe.py` cover the Youden's-J
+degenerate-threshold fix.
 
 ## Citation and License
 

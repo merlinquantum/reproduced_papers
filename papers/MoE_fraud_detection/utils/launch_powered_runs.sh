@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Launches the 6 statistically-powered CV runs (100 folds each) in THREE
 # memory-safe batches of 2 (revised 2026-09-01 after a 3-concurrent attempt
-# caused severe swap thrashing on this 7.5GB container -- 3x ~1.7-2GB RSS
+# caused severe swap thrashing on a 7.5 GB machine -- 3x ~1.7-2GB RSS
 # processes pushed the machine into swap, slowing splits from ~55-65s to
 # ~180s each and risking another OOM kill). 2 concurrent gate/photonic-scale
 # jobs (~1.5-2GB RSS each once warmed up, front-loaded during the first

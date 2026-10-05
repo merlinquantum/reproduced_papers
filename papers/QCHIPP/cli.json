@@ -1,0 +1,65 @@
+{
+  "description": "Q-CHIPP reproduction runner",
+  "arguments": [
+    {
+      "flags": [
+        "--sweep-id"
+      ],
+      "help": "Comparison coordinator identity",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "sweep_id"
+      }
+    },
+    {
+      "flags": [
+        "--run-id"
+      ],
+      "help": "Unique candidate identity within a comparison",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "run_id"
+      }
+    },
+    {
+      "flags": [
+        "--repetition"
+      ],
+      "help": "Initialization repetition index",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "repetition"
+      }
+    },
+    {
+      "flags": [
+        "--epochs"
+      ],
+      "help": "Override number of training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.epochs"
+      }
+    },
+    {
+      "flags": [
+        "--lr"
+      ],
+      "help": "Override learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.lr"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+    "description": "Binding: random forest on 80 one-hot residue columns.",
+    "dataset": {
+        "task": "binding",
+        "positions": [
+            2,
+            4,
+            5,
+            9
+        ]
+    },
+    "model": {
+        "name": "rf_onehot"
+    }
+}

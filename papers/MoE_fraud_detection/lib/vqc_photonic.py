@@ -1,15 +1,14 @@
-"""MerLin photonic adaptation of the gate-model VQC (Phase 4 photonic
-translation, see MERLIN_COOKBOOK.md and PAPER_REPRODUCTION_INSTRUCTIONS.md
-Section 5).
+"""MerLin photonic adaptation of the gate-model VQC.
 
 Translation principle: preserve the *role* the VQC plays in the GQC pipeline
 (angle-encode the 6-dimensional autoencoder latent, apply one trainable
 entangling block, produce a single scalar fed to the classification head) —
 not a literal gate-for-gate mapping of the 6-qubit Alternating Layered Ansatz.
-Per the photonic-translation policy this reproduction is scoped under, the
-photonic circuit uses >=2 photons (never a single-photon trivial baseline).
+The photonic circuit uses >=2 photons: a single-photon circuit is a
+trivial linear-optical baseline.
 
-Design (see LOG.md "MerLin API Notes" for the full hardware-aware record):
+Design (see REPRODUCTION_NOTES.md, "MerLin API Notes", for the full hardware-aware
+record):
 
 - ``n_modes = n_qubits`` (default 6) - one photonic mode per latent feature,
   mirroring the gate model's one-qubit-per-feature layout.
@@ -31,9 +30,8 @@ Design (see LOG.md "MerLin API Notes" for the full hardware-aware record):
   the rest of the GQC pipeline (autoencoder, head, calibration, MoE router)
   is byte-for-byte shared between the gate and photonic branches.
 
-MerLin API note: this reproduction runs against merlinquantum==0.4.1,
-installed in this container. Two calls used by MERLIN_COOKBOOK.md's Pattern A
-(written against 0.3.2) are deprecated in 0.4.x:
+MerLin API note: this module targets merlinquantum 0.4.x. Two calls common in
+MerLin 0.3.x examples are deprecated in 0.4.x:
 ``ml.MeasurementStrategy.PROBABILITIES`` -> use
 ``ml.MeasurementStrategy.probs(computation_space)``; and
 ``ml.LexGrouping(output_size, num_classes)`` -> use
@@ -64,7 +62,7 @@ def spread_input_state(n_modes: int, n_photons: int) -> list[int]:
         raise ValueError(
             f"n_photons={n_photons} < 2: a single-photon circuit is a trivial "
             "linear-optical baseline and must not be used as the photonic "
-            "implementation (see PAPER_REPRODUCTION_INSTRUCTIONS.md Sec 5)."
+            "implementation."
         )
     if n_photons > n_modes:
         raise ValueError(f"n_photons={n_photons} cannot exceed n_modes={n_modes}")
@@ -94,10 +92,10 @@ class PhotonicVQCLayer(nn.Module):
     - ``"fixed"`` (default): ``merlin.LexGrouping`` down to 2 buckets, a
       fixed (non-trainable) lexicographic grouping rule.
     - ``"trainable"``: a single trainable ``nn.Linear(output_size, 1)`` +
-      sigmoid directly on the probability vector -- addresses the "fixed
-      grouping versus trainable readout" pitfall in MERLIN_COOKBOOK.md's
-      photonic debugging checklist (fixed grouping can discard exactly the
-      class-discriminative structure the circuit learns to produce).
+      sigmoid directly on the probability vector -- addresses the fixed-
+      grouping versus trainable-readout trade-off (fixed grouping can discard
+      exactly the class-discriminative structure the circuit learns to
+      produce).
     """
 
     def __init__(

@@ -1,0 +1,27 @@
+{
+    "description": "Binder-only immunogenicity: source gate QCNN with the released signed-label objective and SPSA (paper protocol); 100 full-batch updates.",
+    "dataset": {
+        "task": "immunogenic",
+        "positions": [
+            3,
+            5,
+            6,
+            7
+        ]
+    },
+    "model": {
+        "name": "gate_source",
+        "source_labels": "signed"
+    },
+    "training": {
+        "epochs": 100,
+        "lr": 0.01,
+        "spsa_a": 0.06,
+        "spsa_c": 0.2
+    },
+    "evaluation": {
+        "shots": [
+            0
+        ]
+    }
+}

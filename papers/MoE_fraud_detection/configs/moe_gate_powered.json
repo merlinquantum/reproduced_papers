@@ -1,5 +1,5 @@
 {
-    "description": "STATISTICALLY-POWERED run: gate-model GQC + MoE, default settings, n_repeats=20 (100 folds) to give ~80% power to detect an effect the size the paper itself claims (~0.01 AUCPR), per the MDE analysis in LOG.md. Primary test of 'the premise' (paper's headline claim).",
+    "description": "STATISTICALLY-POWERED run: gate-model GQC + MoE, default settings, n_repeats=20 (100 folds) to give ~80% power to detect an effect the size the paper itself claims (~0.01 AUCPR), per the MDE analysis in REPRODUCTION_NOTES.md. Primary test of 'the premise' (paper's headline claim).",
 
     "seed": 42,
     "dtype": "float32",

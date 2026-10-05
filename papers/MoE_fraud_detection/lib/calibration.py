@@ -11,11 +11,10 @@ Given raw probabilities ``p_hat`` and labels ``y`` on a validation set:
 We use Adam rather than LBFGS here purely for simplicity/consistency with
 the rest of the training code in this reproduction (LBFGS is the more common
 choice for 1-D temperature scaling in the literature, e.g. Guo et al. 2017,
-and would also work fine) — documented per the architecture spec.
+and would also work fine).
 
-KNOWN ISSUE (found 2026-09-01 in the n=100-fold statistically-powered runs,
-NOT yet re-validated with the fix below -- see LOG.md "Calibration
-Instability Finding"): with ``temperature.clamp_(min=1e-3)`` (the value used
+KNOWN ISSUE (found 2026-09-01 in the n=100-fold statistically-powered runs;
+see REPRODUCTION_NOTES.md, "Calibration Instability Finding"): with ``temperature.clamp_(min=1e-3)`` (the value used
 for ALL results reported before this fix), Adam occasionally drives ``t``
 toward that floor on folds where the secondary (GQC) expert's raw validation
 predictions are separable-ish on a tiny (~28k-row) validation set --

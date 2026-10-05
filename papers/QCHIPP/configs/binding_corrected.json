@@ -1,0 +1,24 @@
+{
+    "description": "Binding: source gate QCNN trained with a corrected Bernoulli BCE and Adam; 100 full-batch updates.",
+    "dataset": {
+        "task": "binding",
+        "positions": [
+            2,
+            4,
+            5,
+            9
+        ]
+    },
+    "model": {
+        "name": "gate_corrected"
+    },
+    "training": {
+        "epochs": 100,
+        "lr": 0.01
+    },
+    "evaluation": {
+        "shots": [
+            0
+        ]
+    }
+}

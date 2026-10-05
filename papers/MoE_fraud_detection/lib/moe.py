@@ -1,8 +1,8 @@
 """Mixture-of-Experts router: thresholding, router-target construction, and
 hard-mixture prediction combination (paper Section 3.3, Eq. 15-16).
 
-NOTE on router training features (documented per task spec / to be folded
-into LOG.md's "Paper vs Reference Code Disagreements" table): the paper's
+NOTE on router training features (also listed in REPRODUCTION_NOTES.md,
+"Paper vs Reference Code Disagreements"): the paper's
 prose says the router is "trained on the validation features and these
 router targets", but its own procedure (Section 3.3) computes the router
 targets from predictions made on the ANALYSIS split (using tau1/tau2 that

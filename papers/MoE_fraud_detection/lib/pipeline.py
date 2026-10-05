@@ -51,9 +51,9 @@ def _make_xgb_classifier(
     """Build an XGBoost classifier from ``cfg["model"]["xgboost"]``.
 
     ``n_jobs`` defaults to 2 (not -1/all-cores) so multiple experiment
-    configs can be run as separate OS processes in parallel on this
-    container's cores without oversubscription -- see LOG.md "Parallel
-    Statistically-Powered Runs" for the reasoning. Override via
+    configs can be run as separate OS processes in parallel on one
+    machine without oversubscription -- see REPRODUCTION_NOTES.md, "Parallel
+    Statistically-Powered Runs". Override via
     ``cfg["model"]["xgboost"]["n_jobs"]``.
 
     ``early_stopping`` is only honored for the PRIMARY expert (never the

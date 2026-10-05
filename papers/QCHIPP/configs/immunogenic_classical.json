@@ -1,0 +1,25 @@
+{
+    "description": "Binder-only immunogenicity: hierarchical MLP control sized to the legacy six-mode MerLin model (250 parameters); 100 full-batch updates.",
+    "dataset": {
+        "task": "immunogenic",
+        "positions": [
+            3,
+            5,
+            6,
+            7
+        ]
+    },
+    "model": {
+        "name": "classical",
+        "hidden": 12
+    },
+    "training": {
+        "epochs": 100,
+        "lr": 0.01
+    },
+    "evaluation": {
+        "shots": [
+            0
+        ]
+    }
+}
