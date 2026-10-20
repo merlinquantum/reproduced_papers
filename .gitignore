@@ -23,6 +23,15 @@ data/*
 data/bve_qnn/*
 !data/bve_qnn/.gitkeep
 !data/bve_qnn/sem_supervised_subset.npz
+# power_of_data_qml: keep only the journal Source Data CSVs (paper reference values, CC BY 4.0)
+!data/power_of_data_qml/
+data/power_of_data_qml/*
+!data/power_of_data_qml/sources/
+data/power_of_data_qml/sources/*
+!data/power_of_data_qml/sources/natcommun_esm/
+data/power_of_data_qml/sources/natcommun_esm/*
+!data/power_of_data_qml/sources/natcommun_esm/source_data_csv/
+!data/power_of_data_qml/sources/natcommun_esm/source_data_csv/**
 models/
 !models/.gitkeep
 !papers/**/models/
