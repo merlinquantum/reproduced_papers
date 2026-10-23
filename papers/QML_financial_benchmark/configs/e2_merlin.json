@@ -1,0 +1,11 @@
+{
+  "description": "Phase 4 MerLin adaptation of E2 (not the paper's method): photonic QNN (4 families: non-hybrid/hybrid x SQ'/MQ' readout) on m = 7 modes, n in {2, 3} photons, L in {1, 2} re-uploads between trainable MZI meshes, UNBUNCHED probabilities; paired with the Phase 3 ANN grid. Same data, folds, training and selection as e2_original.",
+  "directional": {
+    "dataset": {"feature_set": "7d", "ticker": "^GSPC"},
+    "models": {
+      "qnn": {"backend": "merlin", "families": ["SQ", "MQ", "Hybrid-SQ", "Hybrid-MQ"], "n_modes": [7], "n_photons": [2, 3], "layers": [1, 2], "angle_scale": 3.141592653589793},
+      "ann": {"hidden_layer_options": [[4], [8], [11], [16], [32], [64], [8, 4], [16, 8], [32, 16], [64, 32]], "minmax_inputs": true}
+    },
+    "training": {"max_epochs": 300}
+  }
+}

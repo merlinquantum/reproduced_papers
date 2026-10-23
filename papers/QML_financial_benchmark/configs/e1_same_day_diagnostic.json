@@ -1,0 +1,11 @@
+{
+  "description": "E1 leakage diagnostic (R7): same as e1_original but the 3-D indicators include day t's price, which the label y_t = 1[P_t > P_{t-1}] also uses.",
+  "directional": {
+    "dataset": {"feature_timing": "same_day"},
+    "models": {
+      "qnn": {"families": ["SQ", "MQ", "Hybrid-SQ", "Hybrid-MQ"], "n_qubits": [3], "layers": [1, 2, 3, 4, 5, 6]},
+      "ann": {"hidden_layer_options": [[4], [8], [11], [16], [32], [64], [8, 4], [16, 8], [32, 16], [64, 32]], "minmax_inputs": false}
+    },
+    "training": {"max_epochs": 300}
+  }
+}
