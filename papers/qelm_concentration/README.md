@@ -4,6 +4,8 @@ Status: **Phase 3 (experiments) complete; audit passed 2026-10-28.** Every plann
 experiment that can run without a QPU has run (E9, energy forecasting, is blocked: no data source).
 **Phase 4 (MerLin photonic adaptation): `PARTIAL_MERLIN_TRANSLATION`**, simulated; see
 "MerLin Photonic Adaptation" below. It is an adaptation, not part of the reproduction.
+**Phase 5 (fair comparison): done**; see "Fair Comparison with Matched Classical Baselines".
+No quantum or photonic advantage is found or claimed.
 All numbers are `partial` (reduced qubit counts, simulation instead of hardware) unless
 stated otherwise. See `LOG.md` for the run records, ledgers and diagnoses.
 
@@ -92,6 +94,7 @@ Reproduction runs (from the repo root; the n20/n24 configs expect a CUDA GPU):
 ```bash
 python implementation.py --paper qelm_concentration --config configs/landsat_readouts_reduced_n16.json
 python implementation.py --paper qelm_concentration --config configs/landsat_classical.json
+python implementation.py --paper qelm_concentration --config configs/landsat_classical_standard.json  # Phase 5, z-score inputs
 python implementation.py --paper qelm_concentration --config configs/narma_scaling_reduced_n12.json
 python implementation.py --paper qelm_concentration --config configs/pareto_search_n8.json
 python implementation.py --paper qelm_concentration --config configs/concentration.json
@@ -328,6 +331,58 @@ finite shots and a ridge readout) and drops what has no photonic counterpart.
 - Full numbers, paired differences and hardware fields: `results/merlin_summary.md` and
   `LOG.md` ("Phase 4 MerLin results").
 
+### Fair Comparison with Matched Classical Baselines (Phase 5) — `partial`, simulated
+
+The protocol was frozen in `LOG.md` ("Phase 5 Comparison Plan") before the one new run.
+- **Baseline state: `MISSING_OR_UNFAIR`.** The paper's Landsat baselines are untuned and
+  see 36 raw features against the QELM's 372–930. The paper reports no NARMA baseline.
+- **Fair baseline (planned in Phase 1):** a random-feature map (random Fourier or tanh
+  features, feature noise 0.01) with the **same readout dimension**, the same ridge, alpha
+  grid, splits and input scaling as each QELM.
+- **New in Phase 5:** the same baseline on z-score inputs and at the MerLin dimensions
+  16/24/36 (`configs/landsat_classical_standard.json`).
+- **NARMA:** the baselines already ran in every QELM run (same sequences and window).
+- **Decision rule:** "clearly above" means a paired difference over the 5 splits or
+  sequences that is > 0.01 F1 (or 1 % of the baseline's R²) and > 2 standard errors.
+
+![Phase 5 comparison](results/phase5_comparison.png)
+
+| System (Landsat, F1 macro) | w1: QELM vs matched RFF | w2: QELM vs matched RFF | vs matched tanh ELM (w1 / w2) |
+|---|---|---|---|
+| qubit N=16, min-max | 0.719 vs 0.787 (48 features), baseline above | 0.720 vs 0.816 (120), baseline above | tie / baseline above |
+| qubit N=24, min-max | 0.737 vs 0.801 (72), baseline above | 0.741 vs 0.831 (180), baseline above | baseline above / above |
+| qubit N=16, z-score | 0.776 vs 0.750 (48), QELM above | 0.791 vs 0.813 (120), no clear separation | tie / baseline above |
+| qubit N=24, z-score | 0.788 vs 0.783 (72), no clear separation | 0.804 vs 0.825 (180), baseline above | baseline above / above |
+| MerLin 16/4 (adaptation) | 0.736 vs 0.601 (16), QELM above | 0.749 vs 0.663 (24), QELM above | QELM above / tie |
+| MerLin 24/6 (adaptation) | 0.755 vs 0.663 (24), QELM above | 0.777 vs 0.723 (36), QELM above | tie / QELM above |
+
+- **References** (same splits, not dimension-matched):
+  - ridge on raw features: 0.588;
+  - tuned RF 0.862, SVM 0.843;
+  - untuned MLP 0.835.
+
+  Every QELM beats raw ridge and trails the tuned models.
+- **NARMA** (cumulative R² at 1e5 shots):
+  - every QELM is clearly above ridge on the raw window, except MerLin 24/6, which ties it;
+  - every QELM is clearly below a matched tanh ELM, degree-2 window ridge and ESN-400.
+- **Shots:** the photonic reservoir beats the qubit QELM at 1e2–1e4 shots and trails it at
+  1e5. This is not a matched-capacity comparison.
+- **Claim outcomes:**
+  - C4 partially supported: it beats raw ridge but is not above a matched random-feature
+    map.
+  - C2/C7 supported, with no classical advantage.
+  - C3/C6 unsupported at N ≤ 24.
+  - C1, C5 and C8 supported.
+  - C9 unresolved.
+- **Small-dimension caveat:**
+  - The MerLin margins at 16–36 features (0.01–0.05 against the stronger, tanh, family)
+    are measured against random features with fixed, untuned hyperparameters.
+  - The tanh family was found to be stronger at small dimensions only after the protocol
+    was frozen, so the primary rule is unchanged.
+- Full table, paired differences, wall-clock and commensurability:
+  `results/phase5_comparison.md`. Regenerate with `python utils/compare_phase5.py ...`
+  (exact command in `LOG.md`, "Phase 5 comparison results").
+
 ### Not reproduced
 
 - 72- and 124-qubit hardware runs: no QPU, and not exactly simulable.
@@ -354,6 +409,9 @@ finite shots and a ridge readout) and drops what has no photonic counterpart.
   - The Table I values come through a single-particle correspondence and are not tuned for
     photons.
   - The Landsat criterion is met by a 0.003 margin at 16 modes.
+- **Fair comparison:** the random-feature baselines keep the E10 hyperparameters
+  (`fourier_bandwidth = 2.0`, `tanh_input_scale = 1.0`) on z-score inputs. A
+  validation-tuned bandwidth could narrow the small-dimension MerLin margins.
 - **E1 search setup is ours:** the search ranges, the trial budget (500) and the sampler
   (NSGA-II) are our choices, with one search seed per size.
 
@@ -375,7 +433,9 @@ The tests cover:
 - every named config resolving, a tiny run of every task, and CLI wiring;
 - MerLin: photonic click marginals against an independent permanent calculation (1e-9),
   threshold detection without postselection, seeding and frozen parameters, readout shapes,
-  and tiny runs of the three MerLin tasks.
+  and tiny runs of the three MerLin tasks;
+- Phase 5: matched baseline dimensions for every compared readout, the z-score split
+  matching the MerLin split, and seeded random features.
 
 ## Citation and License
 

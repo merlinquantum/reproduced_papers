@@ -1,0 +1,90 @@
+{
+  "description": "Phase 5 fair baseline on z-score inputs: the E10 baselines (same 5 splits, same settings) with input_scaling = standard, the scaling used by the qubit z-score E5 runs and every MerLin run, and matched-dimension random-feature ELMs at the MerLin readout sizes (16, 24, 36: w1 = n_modes, w2 = 3 n_modes / 2) and the qubit sizes (48, 120 at N = 16; 72, 180 at N = 24).",
+  "task": "landsat_classical",
+  "landsat_classical": {
+    "split_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "paper_baselines": [
+      "ridge",
+      "knn",
+      "svm_rbf",
+      "decision_tree",
+      "random_forest",
+      "mlp",
+      "adaboost",
+      "naive_bayes",
+      "qda"
+    ],
+    "n_inits": 100,
+    "matched_elm": {
+      "n_features": [
+        16,
+        24,
+        36,
+        48,
+        72,
+        120,
+        180
+      ],
+      "families": [
+        "tanh",
+        "fourier"
+      ],
+      "feature_noise_std": [
+        0.0,
+        0.01
+      ],
+      "n_inits": 3,
+      "tanh_input_scale": 1.0,
+      "fourier_bandwidth": 2.0
+    },
+    "tuned_baselines": {
+      "validation_fraction": 0.2,
+      "grids": {
+        "random_forest": {
+          "n_estimators": [
+            100,
+            300
+          ],
+          "max_depth": [
+            null,
+            10,
+            20
+          ]
+        },
+        "knn": {
+          "n_neighbors": [
+            3,
+            5,
+            7,
+            11,
+            15
+          ]
+        },
+        "svm_rbf": {
+          "C": [
+            0.1,
+            1.0,
+            10.0,
+            100.0
+          ],
+          "gamma": [
+            "scale",
+            0.01,
+            0.1
+          ]
+        }
+      }
+    }
+  },
+  "dataset": {
+    "landsat": {
+      "input_scaling": "standard"
+    }
+  }
+}
