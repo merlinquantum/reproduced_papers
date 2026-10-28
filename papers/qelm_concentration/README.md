@@ -1,7 +1,7 @@
 # Breaking Concentration Barriers for Quantum Extreme Learning on Digital Quantum Processors - Reproduction
 
-Status: **Phase 3 (experiments) nearly complete.** Every planned experiment has run except two
-remote runs still in progress (E5 at 24 qubits with z-score inputs; E2 at 20/24 qubits).
+Status: **Phase 3 (experiments) complete; audit passed 2026-10-28.** Every planned
+experiment that can run without a QPU has run (E9, energy forecasting, is blocked: no data source).
 All numbers are `partial` (reduced qubit counts, simulation instead of hardware) unless
 stated otherwise. See `LOG.md` for the run records, ledgers and diagnoses.
 
