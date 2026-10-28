@@ -2,7 +2,8 @@
 
 > Status: gate-model reproduction complete (Phase 3): all paper experiments run with
 > the paper's settings and multiple seeds, plus fairness controls. Photonic (MerLin)
-> adaptation not started. Full evidence, decisions and ledgers: `LOG.md`.
+> adaptation complete (Phase 4, status `MERLIN_IMPLEMENTATION`, simulation only).
+> Full evidence, decisions and ledgers: `LOG.md`.
 
 ## Reference and Attribution
 
@@ -57,7 +58,8 @@ Updates and deviations:
   Navier–Stokes inputs are raw physical coordinates by default (the paper does not say;
   min–max variant run); App. C layout inferred from its 804-parameter count; the paper's
   cost factor 1.07 is 1.033 when counted consistently.
-- Photonic (MerLin) adaptation: not started (Phase 4).
+- Photonic (MerLin) adaptation: see "Photonic (MerLin) Adaptation" below; it is an
+  adaptation, not part of the paper.
 
 ## Install and How to Run
 
@@ -115,6 +117,7 @@ shared runtime.
 | `ns_table1_mlp_classical.json` | E6 classical PINN context reference |
 | `ns_table1_tf_smoke_reduced.json` | Navier–Stokes smoke (3 iterations) |
 | `ns_appc_{ff,tf}_original.json` | E7, App. C / Table II |
+| `*_merlin.json` (17 + smoke) | MerLin photonic adaptation of E1, E2 (+ UNBUNCHED ablation), E4, E5, E6 (Phase 4) |
 
 Main model keys: `model.family` (`qnn`, `mlp`, `fourier`), `model.layout`
 (`toy`, `ns_parallel`, `ns_serial`), `model.entangler` (`cnot`, `cz`),
@@ -227,6 +230,49 @@ paper; the advantage over FF shrinks to a small but consistent margin once input
 scaled). C6 overhead — supported (C_f = 1.033, +4 % wall-clock). C7 "sensible default" —
 partially supported.
 
+## Photonic (MerLin) Adaptation
+
+Status **`MERLIN_IMPLEMENTATION`**: a MerLin **adaptation** of the paper's FF / TF models,
+simulated only (no QPU). Model: `lib/qnn_merlin.py`; configs `configs/*_merlin.json`; sweeps
+`configs/sweeps/m*.json` (320 runs, all validated).
+
+Mapping: trainable MZI mesh → phase-shifter encoding `φ = γ·w·x` on the encoding modes → mesh
+(Navier–Stokes: plus a re-upload block). `w` fixed at 1 (FF), trainable per mode (TF) or one
+trainable scale per input (FF+S). A phase shifter `exp(iφn̂)` makes the output a Fourier
+series whose frequencies are photon-number differences weighted by `γ·w` — integers for FF,
+learnable for TF. Readout: threshold detectors without post-selection, as a fixed click
+observable (#clicks on even modes − #clicks on odd modes), simulated from `FOCK`
+probabilities. MerLin's default `UNBUNCHED` space post-selects collision-free outcomes, which
+breaks the finite spectrum, so it is only run as an ablation. 3 photons in 6 modes (E1, E2,
+E4, E6 per network), 4 photons in 8 modes (E5); input state `[1, 0, 1, 0, …]`; exact
+probabilities, exact autograd gradients. Full hardware-aware table:
+`results/merlin_hardware_report.md`.
+
+| Experiment | Photonic result (mean over seeds) | Same as the qubit reproduction? |
+|---|---|---|
+| E1, FF on {1, 2, 3} | train MSE 0.093 | No: the ω = 3 coefficient is capped near 0.05 |
+| E2, {1, 1.2, 3} | TF 0.057 < FF+S 0.067 < FF 0.101 (10/10 seeds) | Ranking yes; TF/FF 0.56 vs 0.02 for qubits |
+| E4 / E4b, {1.5, 3, 4.5} | init 1 ≈ 0.16; init 1.5 ≈ 0.065 | Pattern yes; no near-perfect fit |
+| E5, Fig. 3 | tower FF best (mean 0.024, worst 0.064); TF 0.059 / 0.117 | **No, inverted** |
+| E6, Table I (MAERM %, u / v / p) | TF 21.7 / 94.9 / 81.2; FF 96.8 / 90.8 / 125; FF+S 22.6 / 113 / 105 | Partly: TF < FF on u and p 10/10, not on v (3/10) |
+
+![Photonic Fig. 3](results/m5_fig3_spectral_richness_merlin.png)
+
+What carries over and what does not:
+
+- The FF-vs-TF mechanism carries over directly (integer vs learnable photonic spectra), and
+  TF beats FF on irregular frequencies as in the paper.
+- Linear optics with single-photon inputs caps the coefficients of frequencies that need
+  several photons in the encoding modes (a NOON-like term), so the photonic "simple" map
+  cannot express its own highest frequency. A tower or exponential map carries the same
+  frequency on one photon through a high-γ mode and avoids the cap. TF starts as the simple
+  map and only moves its multipliers locally, so it inherits the bottleneck: the paper's
+  "TF as a sensible default" argument does not transfer to this photonic setting.
+- On Navier–Stokes, photonic FF does not train with raw coordinates; most TF seeds (and all
+  FF+S seeds) shrink the x multipliers and switch off the time encoding, so TF's gain over FF
+  is mostly input rescaling; 2/10 TF seeds learn a richer spectrum (u 13–15, v 43,
+  p 52–60). All photonic errors are well above the qubit models'.
+
 ## Limitations
 
 - Noiseless statevector simulation only, as in the paper; no shot noise or hardware.
@@ -237,7 +283,10 @@ partially supported.
 - Ansatz initialisation (uniform [0, 2π)) and the FF+S control are our choices.
 - Remote runs used 4 parallel workers on an 8-vCPU L4 host; wall-clock numbers are not
   comparable to single-process timings.
-- No photonic (MerLin) results yet.
+- Photonic results are noiseless, lossless simulations with indistinguishable photons and
+  exact probabilities; one architecture (mesh–encode–mesh, 3–4 photons, spread input state)
+  was tested, so the photonic limits found may depend on that choice. E3 (depth) and E7
+  (App. C) were not translated.
 
 ## Tests
 

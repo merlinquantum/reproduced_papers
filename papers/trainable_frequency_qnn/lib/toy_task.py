@@ -13,7 +13,6 @@ import torch
 
 from .data import build_dataloader, nyquist_point_count, resolve_torch_dtype
 from .models import build_network, parameter_summary
-from .qnn import TrainableFrequencyQNN
 from .spectrum import accessible_frequencies, dominant_frequencies, prediction_spectrum
 from .training import build_optimizer, endless_batches
 
@@ -162,10 +161,15 @@ def run_toy_regression(cfg: dict[str, Any], run_dir: Path) -> dict[str, Any]:
         "seconds_per_iteration": training_seconds / iterations,
     }
 
-    if isinstance(model, TrainableFrequencyQNN):
+    if hasattr(model, "encoding_frequencies"):
         multipliers = [float(w) for w in model.encoding_frequencies().detach().cpu()]
         metrics["encoding_multipliers"] = multipliers
-        metrics["accessible_frequencies"] = accessible_frequencies(multipliers)
+        # Photonic models define their own gap set (photon-number differences).
+        metrics["accessible_frequencies"] = (
+            model.accessible_frequencies()
+            if hasattr(model, "accessible_frequencies")
+            else accessible_frequencies(multipliers)
+        )
         spectrum_cfg = evaluation_cfg["spectrum"]
         angular, magnitudes = prediction_spectrum(
             model,

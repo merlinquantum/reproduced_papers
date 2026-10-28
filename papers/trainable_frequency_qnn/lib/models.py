@@ -9,6 +9,7 @@ import torch
 from torch import nn
 
 from .qnn import TrainableFrequencyQNN
+from .qnn_merlin import PhotonicFrequencyModel
 
 
 class MLP(nn.Module):
@@ -100,7 +101,8 @@ def build_network(
     Parameters
     ----------
     model_cfg : dict
-        Block with ``family`` in ``{"qnn", "mlp", "fourier"}`` and its keys.
+        Block with ``family`` in ``{"qnn", "merlin_qnn", "mlp", "fourier"}`` and
+        its keys. ``merlin_qnn`` is the MerLin photonic adaptation (Phase 4).
     n_inputs : int
         Number of input coordinates.
     dtype : torch.dtype
@@ -127,6 +129,20 @@ def build_network(
             dtype=dtype,
             generator=generator,
         )
+    if family == "merlin_qnn":
+        return PhotonicFrequencyModel(
+            n_modes=model_cfg["n_modes"],
+            n_photons=model_cfg["n_photons"],
+            n_inputs=n_inputs,
+            layout=model_cfg["layout"],
+            encoding_modes_per_input=model_cfg["encoding_modes_per_input"],
+            feature_map=model_cfg["feature_map"],
+            frequency_mode=model_cfg["frequency_mode"],
+            frequency_init=float(model_cfg["frequency_init"]),
+            readout=model_cfg["readout"],
+            dtype=dtype,
+            generator=generator,
+        )
     if family == "mlp":
         return MLP(n_inputs, list(model_cfg["hidden_sizes"]), dtype, generator)
     if family == "fourier":
@@ -139,14 +155,14 @@ def build_network(
             generator,
         )
     raise ValueError(
-        f"Unknown model family {family!r}; expected 'qnn', 'mlp' or 'fourier'."
+        f"Unknown model family {family!r}; expected 'qnn', 'merlin_qnn', 'mlp' or 'fourier'."
     )
 
 
 def parameter_summary(network: nn.Module) -> dict[str, int]:
     """Count trainable parameters, split into ansatz and frequency parts for QNNs."""
     total = sum(p.numel() for p in network.parameters() if p.requires_grad)
-    if isinstance(network, TrainableFrequencyQNN):
+    if isinstance(network, (TrainableFrequencyQNN, PhotonicFrequencyModel)):
         return {
             "total": total,
             "ansatz": network.n_ansatz_parameters(),
