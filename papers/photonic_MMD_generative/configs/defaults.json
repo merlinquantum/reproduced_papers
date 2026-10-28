@@ -1,0 +1,68 @@
+{
+    "description": "Lightweight runnable default: synthetic uniform fixed-weight data (m=8, n=2), Haar ansatz, Gaussian kernel, 20 Adam steps. Exercises the full pipeline in about a minute; not a paper setting.",
+    "experiment": {
+        "name": "defaults_synthetic",
+        "paper_reference": "none (pipeline check)"
+    },
+    "seed": 0,
+    "dtype": "float64",
+    "outdir": "outdir",
+    "device": "cpu",
+    "dataset": {
+        "name": "random_fixed_weight",
+        "m": 8,
+        "n": 2,
+        "n_train": 400,
+        "n_test": 400,
+        "seed": 0
+    },
+    "model": {
+        "ansatz": "haar",
+        "butterfly_variant": "reference",
+        "input_state": "middle_alternating",
+        "photon_model": "indistinguishable",
+        "backend": "jax"
+    },
+    "kernel": {
+        "type": "gaussian",
+        "sigma": 1.0
+    },
+    "init": {
+        "strategy": "identity",
+        "perturbation": 0.01
+    },
+    "training": {
+        "steps": 20,
+        "learning_rate": 0.01,
+        "n_operators": 200,
+        "n_gurvits": 200,
+        "convergence_interval": null,
+        "log_every": 1
+    },
+    "evaluation": {
+        "n_operators": 200,
+        "n_gurvits": 200,
+        "sample_metrics": true,
+        "num_model_samples": 400,
+        "baselines": [
+            "random",
+            "marginal",
+            "test_to_test"
+        ],
+        "rbm": {
+            "n_components": 64,
+            "learning_rate": 0.01,
+            "batch_size": 64,
+            "n_iter": 2000,
+            "mmd_samples": 1000,
+            "gibbs_steps": 10,
+            "score_sigma": 1.0
+        },
+        "sampler": "perceval",
+        "noise_study": null
+    },
+    "logging": {
+        "level": "info",
+        "save_config_snapshot": true
+    }
+}

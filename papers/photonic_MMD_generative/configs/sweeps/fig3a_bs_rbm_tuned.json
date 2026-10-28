@@ -1,0 +1,19 @@
+{
+    "sweep_id": "fig3a_bs_rbm_tuned",
+    "description": "Phase 5 B6: tuned RBM on Fig. 3a BS data (m=256, n=16), seeds 0-4; each run tunes on a validation split and reports test metrics for sigma 2.0, 3.0, 4.5. Protocol frozen in LOG.md 'Phase 5 Comparison Plan' (2026-10-15T18:10:33Z).",
+    "seeds": [0, 1, 2, 3, 4],
+    "candidates": [
+        {
+            "label": "rbm_tuned",
+            "config": "configs/fig3a_bs_rbm_tuned_classical.json",
+            "overrides": {}
+        }
+    ],
+    "metric": "primary: rbm_tuned_sigma<s>.gaussian_mmd_binarized (test); secondary walsh_mmd, gaussian_mmd_raw",
+    "direction": "minimize",
+    "split": "test (selection inside each run on a validation split of train)",
+    "checkpoint": "refit model after 2000 epochs",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "|delta| <= 2 SE: not separated",
+    "selection": "inside each run, per sigma, on validation (see config); no selection across runs"
+}
