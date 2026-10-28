@@ -30,6 +30,7 @@ from .baselines import (
 )
 from .data import LANDSAT_N_FEATURES, make_landsat_split
 from .eigentasks import (
+    EigentaskBasis,
     fit_local_eigentasks,
     nsr_cutoff_mask,
     nsr_scale,
@@ -210,26 +211,46 @@ def readout_features(
             train, test = signal_scale(train, test)
     else:
         basis = fit_local_eigentasks(train_sets, shots, weight)
-        train, test = basis.transform(train_sets), basis.transform(test_sets)
-        nsr = basis.nsr
-        info["n_eigentasks_total"] = int(nsr.size)
-        info["rec_total"] = resolvable_expressive_capacity(nsr, shots)
-        if kind == "etcut":
-            keep = nsr_cutoff_mask(nsr, shots, nsr_cutoff)
-            train, test, nsr = train[:, keep], test[:, keep], nsr[keep]
-            info["nsr_cutoff"] = float(nsr_cutoff)
-            info["rec_cut"] = resolvable_expressive_capacity(
-                basis.nsr, shots, nsr_cutoff
-            )
-        info["n_eigentasks_retained"] = int(nsr.size)
-        if nsr.size == 0:
-            # A cutoff below every beta^2 / S leaves no feature (paper Fig. A3, small lambda).
-            pass
-        elif scaling == "unit":
-            train, test, _ = unit_scale(train, test)
-        else:
-            train, test = nsr_scale(train, test, nsr)
+        train, test, info = eigentask_readout(
+            basis, train_sets, test_sets, shots, kind, scaling, nsr_cutoff
+        )
     info["n_features"] = int(train.shape[1])
+    return train, test, info
+
+
+def eigentask_readout(
+    basis: EigentaskBasis,
+    train_sets: np.ndarray,
+    test_sets: np.ndarray,
+    shots: int,
+    kind: str,
+    scaling: str,
+    nsr_cutoff: float,
+) -> tuple[np.ndarray, np.ndarray, dict]:
+    """Eigentask (``et``) or NSR-cut (``etcut``) features with unit or NSR-aware scaling.
+
+    Shared by the qubit readouts and the MerLin click readouts; ``basis`` already holds
+    the eigentasks fitted on the training frequencies ``train_sets``.
+    """
+    train, test = basis.transform(train_sets), basis.transform(test_sets)
+    nsr = basis.nsr
+    info: dict = {
+        "n_eigentasks_total": int(nsr.size),
+        "rec_total": resolvable_expressive_capacity(nsr, shots),
+    }
+    if kind == "etcut":
+        keep = nsr_cutoff_mask(nsr, shots, nsr_cutoff)
+        train, test, nsr = train[:, keep], test[:, keep], nsr[keep]
+        info["nsr_cutoff"] = float(nsr_cutoff)
+        info["rec_cut"] = resolvable_expressive_capacity(basis.nsr, shots, nsr_cutoff)
+    info["n_eigentasks_retained"] = int(nsr.size)
+    if nsr.size == 0:
+        # A cutoff below every beta^2 / S leaves no feature (paper Fig. A3, small lambda).
+        pass
+    elif scaling == "unit":
+        train, test, _ = unit_scale(train, test)
+    else:
+        train, test = nsr_scale(train, test, nsr)
     return train, test, info
 
 
@@ -254,9 +275,17 @@ def _simulate_probabilities(
 
 
 def _evaluate_readout(
-    name, train_freq, test_freq, train_y, test_y, shots, cutoff, alphas
+    name,
+    train_freq,
+    test_freq,
+    train_y,
+    test_y,
+    shots,
+    cutoff,
+    alphas,
+    features=readout_features,
 ) -> dict:
-    train, test, info = readout_features(name, train_freq, test_freq, shots, cutoff)
+    train, test, info = features(name, train_freq, test_freq, shots, cutoff)
     if train.shape[1] == 0:
         # With no features the ridge readout reduces to its intercept: every test sample
         # gets the training-majority class.
@@ -275,8 +304,28 @@ def _evaluate_readout(
     return {**metrics, **info, "empty_readout": False}
 
 
-def run_landsat_readouts(cfg: dict, run_dir: Path) -> dict:
+def run_landsat_readouts(
+    cfg: dict,
+    run_dir: Path,
+    simulate=_simulate_probabilities,
+    features=readout_features,
+) -> dict:
     """QELM readout study on Landsat (E5 headline, E7/E8 cutoff sweep, E3 shots, E4 sizes).
+
+    Parameters
+    ----------
+    cfg : dict
+        Resolved configuration.
+    run_dir : pathlib.Path
+        Run directory for optional probability files.
+    simulate : callable
+        ``simulate(cfg, data, reservoir_seed) -> (train_probs, test_probs)`` with
+        per-subset outcome probabilities of shape ``(n_samples, n_subsets, n_effects)``.
+        Default value is the qubit reservoir (`_simulate_probabilities`); the MerLin
+        adaptation passes its photonic reservoir.
+    features : callable
+        ``features(name, train_freq, test_freq, shots, cutoff)`` as `readout_features`.
+        Default value is `readout_features`.
 
     Returns
     -------
@@ -321,9 +370,7 @@ def run_landsat_readouts(cfg: dict, run_dir: Path) -> dict:
                     split_seed,
                     reservoir_seed,
                 )
-                train_probs, test_probs = _simulate_probabilities(
-                    cfg, data, int(reservoir_seed)
-                )
+                train_probs, test_probs = simulate(cfg, data, int(reservoir_seed))
             else:
                 train_probs, test_probs, source = load_saved_probabilities(
                     cfg,
@@ -374,6 +421,7 @@ def run_landsat_readouts(cfg: dict, run_dir: Path) -> dict:
                         headline_shots,
                         cutoff,
                         alphas,
+                        features=features,
                     )
                     records.append(
                         {"analysis": "readouts", "readout": name, **base, **result}
@@ -396,6 +444,7 @@ def run_landsat_readouts(cfg: dict, run_dir: Path) -> dict:
                             headline_shots,
                             float(sweep_cutoff),
                             alphas,
+                            features=features,
                         )
                         records.append(
                             {
@@ -429,6 +478,7 @@ def run_landsat_readouts(cfg: dict, run_dir: Path) -> dict:
                             headline_shots,
                             cutoff,
                             alphas,
+                            features=features,
                         )
                         records.append(
                             {
@@ -468,6 +518,7 @@ def run_landsat_readouts(cfg: dict, run_dir: Path) -> dict:
                         int(shots),
                         cutoff,
                         alphas,
+                        features=features,
                     )
                     records.append(
                         {

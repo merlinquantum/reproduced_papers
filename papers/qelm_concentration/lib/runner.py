@@ -6,7 +6,9 @@
 - ``landsat_classical``: classical baselines on the same splits (E10, fair baselines);
 - ``narma_scaling``: NARMA-n R^2 versus order at one qubit count (E2);
 - ``pareto_search``: multi-objective hyperparameter search (E1);
-- ``concentration``: variability versus size and depth (E1b).
+- ``concentration``: variability versus size and depth (E1b);
+- ``landsat_readouts_merlin``, ``narma_scaling_merlin``, ``concentration_merlin``: the
+  Phase 4 MerLin photonic adaptation of the same tasks (`lib.merlin_tasks`).
 
 Every run writes the evidence files of the logging contract next to the task artifacts:
 ``run.log``, ``run_status.json``, ``config_snapshot.json`` and ``metrics.json``.
@@ -34,6 +36,11 @@ from .landsat_task import (
     run_landsat_gap_diagnostics,
     run_landsat_readouts,
 )
+from .merlin_tasks import (
+    run_concentration_merlin,
+    run_landsat_readouts_merlin,
+    run_narma_scaling_merlin,
+)
 from .narma_task import run_narma_scaling
 from .pareto_task import run_pareto_search
 
@@ -47,6 +54,14 @@ TASKS = {
     "narma_scaling": run_narma_scaling,
     "pareto_search": run_pareto_search,
     "concentration": run_concentration,
+    "landsat_readouts_merlin": run_landsat_readouts_merlin,
+    "narma_scaling_merlin": run_narma_scaling_merlin,
+    "concentration_merlin": run_concentration_merlin,
+}
+# Config section holding a task's seeds and sample counts (MerLin tasks reuse Phase 3 ones).
+TASK_SECTIONS = {
+    "landsat_readouts_merlin": "landsat_readouts",
+    "narma_scaling_merlin": "narma_scaling",
 }
 SELECTION = {
     "landsat_readouts": ("test_f1_macro_per_readout", "maximize", "test"),
@@ -56,6 +71,9 @@ SELECTION = {
     "pareto_search": ("pareto_rank_of_table_I", "minimize", "train_and_test_narma"),
     # Higher variability means weaker concentration; nothing is selected from it.
     "concentration": ("mean_variability", "maximize", "uniform_inputs"),
+    "landsat_readouts_merlin": ("test_f1_macro_per_readout", "maximize", "test"),
+    "narma_scaling_merlin": ("test_r2_per_order", "maximize", "test"),
+    "concentration_merlin": ("mean_variability", "maximize", "uniform_inputs"),
 }
 STATUS_SCHEMA_VERSION = 1
 
@@ -93,7 +111,9 @@ def _dataset_identity(cfg: dict[str, Any]) -> dict[str, Any]:
             "subset": {
                 "n_subsample": dataset_cfg["n_subsample"],
                 "test_fraction": dataset_cfg["test_fraction"],
-                "split_seeds": cfg[cfg["task"]]["split_seeds"],
+                "split_seeds": cfg[TASK_SECTIONS.get(cfg["task"], cfg["task"])][
+                    "split_seeds"
+                ],
             },
         }
     if dataset_name == "narma":
@@ -117,7 +137,7 @@ def _dataset_identity(cfg: dict[str, Any]) -> dict[str, Any]:
             "name": "uniform_inputs",
             "splits": ["evaluation"],
             "preprocessing": "u ~ Unif(-1, 1)^(N/2)",
-            "subset": {"n_samples": cfg["concentration"]["n_samples"]},
+            "subset": {"n_samples": cfg[cfg["task"]]["n_samples"]},
         }
     raise ValueError(f"Unknown dataset name {dataset_name!r}")
 

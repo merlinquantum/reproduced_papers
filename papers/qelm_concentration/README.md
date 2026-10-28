@@ -2,6 +2,8 @@
 
 Status: **Phase 3 (experiments) complete; audit passed 2026-10-28.** Every planned
 experiment that can run without a QPU has run (E9, energy forecasting, is blocked: no data source).
+**Phase 4 (MerLin photonic adaptation): `PARTIAL_MERLIN_TRANSLATION`**, simulated; see
+"MerLin Photonic Adaptation" below. It is an adaptation, not part of the reproduction.
 All numbers are `partial` (reduced qubit counts, simulation instead of hardware) unless
 stated otherwise. See `LOG.md` for the run records, ledgers and diagnoses.
 
@@ -95,6 +97,17 @@ python implementation.py --paper qelm_concentration --config configs/pareto_sear
 python implementation.py --paper qelm_concentration --config configs/concentration.json
 ```
 
+MerLin photonic adaptation (Phase 4; local CPU, 1 to 45 minutes each):
+
+```bash
+python implementation.py --paper qelm_concentration --config configs/smoke_merlin.json
+python implementation.py --paper qelm_concentration --config configs/concentration_merlin.json
+python implementation.py --paper qelm_concentration --config configs/landsat_readouts_merlin_m16.json
+python implementation.py --paper qelm_concentration --config configs/landsat_readouts_merlin_m24.json
+python implementation.py --paper qelm_concentration --config configs/narma_scaling_merlin_m16.json
+python implementation.py --paper qelm_concentration --config configs/narma_scaling_merlin_m24.json
+```
+
 From inside `papers/qelm_concentration`, use `python ../../implementation.py --config configs/<name>.json`.
 
 Each run writes `outdir/run_YYYYMMDD-HHMMSS/` with `config_snapshot.json`, `run.log`,
@@ -109,7 +122,11 @@ for Landsat.
   Named configs overlay it.
 - Settings are grouped by task: `task` selects one of `landsat_readouts`,
   `landsat_classical`, `narma_scaling`, `pareto_search` or `concentration`, and that task
-  reads its own section (`cfg[task]`). Dataset settings live under `dataset.landsat` and
+  reads its own section (`cfg[task]`). The MerLin tasks `landsat_readouts_merlin` and
+  `narma_scaling_merlin` reuse the `landsat_readouts` and `narma_scaling` sections;
+  `concentration_merlin` reads its own. Each MerLin task also reads `merlin_reservoir`
+  (`n_modes`, `n_photons`, `n_layers`, `encoding_period`, `input_shift`, `angle_scale`,
+  `chunk_size`). Dataset settings live under `dataset.landsat` and
   `dataset.narma`.
 - Key reservoir settings: `n_qubits`, `n_layers`, `encoding_period` (4 = 1 encoding : 3
   dynamics layers), `input_shift`, `angle_scale`, `brickwall_offset`, `block_order`,
@@ -266,6 +283,51 @@ Values are cumulative test R^2 over n = 1..L, at Table I with no retuning.
 - **This qualitatively supports the paper's concentration argument.** It covers N <= 16
   only.
 
+### MerLin Photonic Adaptation (Phase 4) — adaptation, `partial`, simulated
+
+**Status: `PARTIAL_MERLIN_TRANSLATION`.** The photonic version keeps the paper's central
+idea (a fixed reservoir in a structured, non-concentrating regime, read out locally with
+finite shots and a ridge readout) and drops what has no photonic counterpart.
+
+- **Mapping** (`lib/qelm_merlin.py`):
+  - The kicked-Ising brickwall becomes a fixed brickwall of beam splitters and phase
+    shifters on `m` modes holding `m / 4` photons. For one photon in a mode pair, BS(θ) acts
+    like RX(θ) and the phase shifter like RZ, so Table I's b, h and a_in carry over (θ = 2b,
+    or 2 · a_in · u on every 4th, encoding layer).
+  - The ZZ interaction has no linear-optical counterpart and is dropped. The chain is open,
+    and there are no Bell pairs.
+  - Readouts are click probabilities of disjoint mode pairs (w1: per mode; w2: n_a, n_b,
+    n_a·n_b per pair), local eigentasks, and the NSR cutoff.
+- **Detection:** FOCK space with ideal threshold detectors on every mode, no postselection.
+  MerLin's default `UNBUNCHED` space renormalises on collision-free outcomes (it kept only
+  20 % of the probability in a probe), which would distort shot-budget comparisons.
+- **Simulation:** MerLin 0.4.1 analytic simulation, lossless and indistinguishable photons,
+  multinomial shots. Not hardware.
+
+![MerLin Landsat](results/merlin_landsat.png)
+
+| Pre-declared criterion | 16 modes / 4 photons | 24 modes / 6 photons | Result |
+|---|---|---|---|
+| Landsat best w2 ET F1 within 0.05 of qubit | 0.749 vs 0.795 (−0.047) | 0.777 vs 0.810 (−0.033) | preserved (narrowly at 16/4) |
+| NARMA 1e5-shot cumulative R² within 10 % of qubit; edge at n = L | 7.00 vs 7.58 (−7.7 %); 0.83 → 0.25 | 9.87 vs 10.86 (−9.1 %); 0.63 → 0.17 | preserved |
+| Concentration: Table I > balanced, Haar; Haar falls with modes | all seeds and weights at 24 modes, 16 layers; Haar 1.2e-3 → 3.8e-4 from 8 to 24 modes | | preserved |
+
+- **Readouts:** on Landsat, eigentasks ≈ click probabilities (−0.002 to −0.003, n = 45),
+  and the NSR cutoff removes nothing at 1e5 shots.
+- **Shots:** photonic click features are cheap to estimate, giving F1 0.65 at 100 shots
+  against the qubit's 0.24, but they plateau lower (0.74 vs 0.77).
+- **NARMA:** the photonic reservoir is no better than ridge on the raw window, and it
+  collapses under the paper's additive Gaussian noise of 10^-1.5 (cumulative 3.5 / 4.0),
+  because its outputs vary by only a few percent across inputs.
+- **Concentration:** see `results/merlin_concentration.png`. Unlike the qubit case,
+  variability rises with depth, because deeper circuits re-encode the input more often.
+- **Not translated:**
+  - E1 (no photonic bond-dimension analogue; Table I is transferred, not re-optimised);
+  - E10 (classical baselines are unchanged);
+  - hardware, E9, and min-max inputs.
+- Full numbers, paired differences and hardware fields: `results/merlin_summary.md` and
+  `LOG.md` ("Phase 4 MerLin results").
+
 ### Not reproduced
 
 - 72- and 124-qubit hardware runs: no QPU, and not exactly simulable.
@@ -287,6 +349,11 @@ Values are cumulative test R^2 over n = 1..L, at Table I with no retuning.
     hardware noise.
   - The paper's margins (0.01–0.03 F1) come from a single hardware run on one split, while
     our per-evaluation std is about 0.03.
+- **MerLin adaptation:**
+  - It assumes ideal photonics (no loss, distinguishability or detector inefficiency).
+  - The Table I values come through a single-particle correspondence and are not tuned for
+    photons.
+  - The Landsat criterion is met by a 0.003 margin at 16 modes.
 - **E1 search setup is ours:** the search ranges, the trial budget (500) and the sampler
   (NSGA-II) are our choices, with one search seed per size.
 
@@ -305,7 +372,10 @@ The tests cover:
 - the MPS bond-dimension search;
 - the NARMA recursion and windows, and the Landsat split (skipped when the data is
   missing);
-- every named config resolving, a tiny run of every task, and CLI wiring.
+- every named config resolving, a tiny run of every task, and CLI wiring;
+- MerLin: photonic click marginals against an independent permanent calculation (1e-9),
+  threshold detection without postselection, seeding and frozen parameters, readout shapes,
+  and tiny runs of the three MerLin tasks.
 
 ## Citation and License
 

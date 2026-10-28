@@ -7,6 +7,8 @@ task order and noise condition reuses those features. Baselines see the same seq
 from __future__ import annotations
 
 import logging
+from collections.abc import Callable
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
@@ -24,6 +26,53 @@ from .readout import alpha_grid, fit_ridge_regression
 from .reservoir import ReservoirHyperparameters
 
 logger = logging.getLogger(__name__)
+
+# ``noisy(condition, rng)`` returns the reservoir features under one configured noise condition.
+NoisyFeatures = Callable[[dict, np.random.Generator], np.ndarray]
+
+
+@dataclass(frozen=True)
+class ReservoirFeatureSource:
+    """Reservoir features of NARMA windows, independent of the simulated platform.
+
+    Attributes
+    ----------
+    window : int
+        Window length ``L`` the reservoir encodes.
+    metadata : dict
+        Size fields written to ``metrics.json`` (qubits or modes/photons, layers).
+    compute : callable
+        ``compute(reservoir_seed, windows) -> (exact_features, noisy)`` for windows of
+        shape ``(n_windows, window)``.
+    """
+
+    window: int
+    metadata: dict
+    compute: Callable[[int, np.ndarray], tuple[np.ndarray, NoisyFeatures]]
+
+
+def qubit_feature_source(cfg: dict) -> ReservoirFeatureSource:
+    """Kicked-Ising QELM features (``cfg["reservoir"]``, Table I hyperparameters)."""
+    exp = cfg["narma_scaling"]
+    arch = architecture_from_config(cfg["reservoir"])
+    hyper = ReservoirHyperparameters.from_config(cfg["hyperparameters"])
+    real_dtype = real_dtype_from_config(cfg)
+    chunk = int(cfg["reservoir"]["chunk_size"])
+
+    def compute(reservoir_seed: int, windows: np.ndarray):
+        reservoir = build_reservoir(
+            arch, hyper, int(reservoir_seed), cfg["device"], real_dtype
+        )
+        features, weights = ring_features(reservoir, windows, exp["feature_set"], chunk)
+        return features, lambda condition, rng: apply_feature_noise(
+            features, weights, condition, rng
+        )
+
+    return ReservoirFeatureSource(
+        window=arch.n_blocks,
+        metadata={"n_qubits": arch.n_qubits, "n_layers": arch.n_layers},
+        compute=compute,
+    )
 
 
 def orders_r2(train_x, test_x, sequence, alphas) -> list[float]:
@@ -99,23 +148,33 @@ def cumulative_r2(
     )
 
 
-def run_narma_scaling(cfg: dict, run_dir: Path) -> dict:
-    """QELM and baselines on NARMA-n for one qubit count (E2)."""
+def run_narma_scaling(
+    cfg: dict, run_dir: Path, source: ReservoirFeatureSource | None = None
+) -> dict:
+    """QELM and baselines on NARMA-n for one reservoir size (E2).
+
+    Parameters
+    ----------
+    cfg : dict
+        Resolved configuration.
+    run_dir : pathlib.Path
+        Run directory (unused; kept for the task signature).
+    source : ReservoirFeatureSource | None
+        Reservoir features. If omitted, the kicked-Ising qubit QELM of
+        `qubit_feature_source` is used. Default value is None.
+    """
     exp = cfg["narma_scaling"]
-    arch = architecture_from_config(cfg["reservoir"])
-    hyper = ReservoirHyperparameters.from_config(cfg["hyperparameters"])
+    if source is None:
+        source = qubit_feature_source(cfg)
     alphas = alpha_grid(cfg["readout"])
-    window = arch.n_blocks
-    real_dtype = real_dtype_from_config(cfg)
-    chunk = int(cfg["reservoir"]["chunk_size"])
+    window = source.window
     records = []
 
     n_realisations = len(exp["sequence_seeds"]) * len(exp["reservoir_seeds"])
     completed_realisations = 0
     logger.info(
-        "TRAINING_STARTED | readout=closed_form_ridge | n_qubits=%d | layers=%d | realisations=%d | orders=%d",
-        arch.n_qubits,
-        arch.n_layers,
+        "TRAINING_STARTED | readout=closed_form_ridge | %s | realisations=%d | orders=%d",
+        " | ".join(f"{key}={value}" for key, value in source.metadata.items()),
         n_realisations,
         len(cfg["dataset"]["narma"]["orders"]),
     )
@@ -143,19 +202,14 @@ def run_narma_scaling(cfg: dict, run_dir: Path) -> dict:
                 sequence_seed,
                 reservoir_seed,
             )
-            reservoir = build_reservoir(
-                arch, hyper, int(reservoir_seed), cfg["device"], real_dtype
-            )
             windows = np.concatenate([sequence.train_windows, sequence.test_windows])
-            features, weights = ring_features(
-                reservoir, windows, exp["feature_set"], chunk
-            )
+            features, noisy_features = source.compute(int(reservoir_seed), windows)
             n_train = len(sequence.train_windows)
             for condition in exp["noise_conditions"]:
                 noise_rng = np.random.default_rng(
                     [int(sequence_seed), int(reservoir_seed), 11]
                 )
-                noisy = apply_feature_noise(features, weights, condition, noise_rng)
+                noisy = noisy_features(condition, noise_rng)
                 r2_values = orders_r2(
                     noisy[:n_train], noisy[n_train:], sequence, alphas
                 )
@@ -247,8 +301,7 @@ def run_narma_scaling(cfg: dict, run_dir: Path) -> dict:
 
     orders = [int(order) for order in cfg["dataset"]["narma"]["orders"]]
     return {
-        "n_qubits": arch.n_qubits,
-        "n_layers": arch.n_layers,
+        **source.metadata,
         "window": window,
         "orders": orders,
         "records": records,

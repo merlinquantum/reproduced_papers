@@ -58,7 +58,8 @@ def test_cli_help_exits_cleanly():
 def test_named_configs_resolve(name):
     cfg = _config(name)
     assert cfg["task"] in paper_runner.TASKS
-    assert cfg[cfg["task"]], f"{name} has no section for task {cfg['task']}"
+    section = paper_runner.TASK_SECTIONS.get(cfg["task"], cfg["task"])
+    assert cfg[section], f"{name} has no section {section!r} for task {cfg['task']}"
 
 
 def test_landsat_readouts_smoke(tmp_path):
