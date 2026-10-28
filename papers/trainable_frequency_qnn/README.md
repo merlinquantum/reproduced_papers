@@ -273,6 +273,47 @@ What carries over and what does not:
   is mostly input rescaling; 2/10 TF seeds learn a richer spectrum (u 13–15, v 43,
   p 52–60). All photonic errors are well above the qubit models'.
 
+## Fair Comparison
+
+The paper claims an advantage of TF over FF quantum models: better expressivity / accuracy at
+the same circuit, at a small training-cost overhead. It makes no quantum-vs-classical claim.
+The paper's FF baseline is the identical circuit with θ_F frozen at 1, so it differs from TF
+only in the claimed mechanism. TF has 3–12 more parameters per QNN (≤ 8.3 %). This baseline
+is fair and reproduced (`FAIR_AND_REPRODUCED`), so no new baseline was implemented. Phase 1
+also planned controls for the obvious confounders, and Phase 3 ran them under the same
+protocol: FF with trainable input scales (FF+S, +1 or +3 per QNN), deeper FF (up to 32× the
+parameters) and min–max-normalised inputs. Classical models (MLP, Fourier regressor, MLP PINN)
+are context only: they are not matched in circuit resources.
+
+Protocol (frozen in `LOG.md` before the table was generated): same data, optimiser, lr,
+iterations and paired initialisation. Metric: final-iteration train MSE (toy), box mean and
+worst case over 7 datasets (Fig. 3), mean MAERM u / v / p (NS). Tie tolerance: 5 % relative.
+A paired "lower" verdict needs ≥ 80 % of seeds and Wilcoxon p < 0.05. With 5 seeds a 5/5 sign
+is reported as *consistent* (the minimum attainable p is 0.0625).
+
+```bash
+python utils/compare_fair.py   # results/p5_comparison.{json,md}; 817 / 817 expected runs, all COMPLETE
+python utils/plot_p5_comparison.py --input results/p5_comparison.json --output results/p5_comparison_forest.png
+```
+
+| Claim | Fair comparison (local runs) | r = (TF − B) / B | Outcome |
+|---|---|---|---|
+| C1 irregular frequencies | TF vs FF / FF+S / FF L = 128, 10 seeds | −98 % / −98 % / −98 %, TF lower 10/10, p = 0.002 | **SUPPORTED** |
+| C3 spectral richness | TF vs simple / tower / exp. FF / FF+S, box over 7 datasets | mean −21…−23 %, worst −23 % | **PARTIALLY SUPPORTED** — FF with a prior-knowledge input scale beats TF (exp. FF mean 3e-5); at lr 1e-2 TF has the worst worst-case |
+| C4 Table I | TF vs FF (10 seeds); vs FF+S (5); min–max both (5) | u/v/p −55/−50/−40 % (p = 0.002); −19/−15/−9 % (5/5); −48/−68/−52 % (5/5) | **PARTIALLY SUPPORTED** — TF lower against every control, but against FF+S only as a consistent 5/5 sign |
+| C5 Table II | TF vs FF (10); vs FF+S (5); min–max both (5) | −79/−73/−72 % (p = 0.002); +4/−2/+6 % (no separation); −10/−14/−21 % (5/5) | **PARTIALLY SUPPORTED** — the raw-coordinate gap is an input-scaling effect; a smaller consistent gap remains with min–max inputs |
+| C6 overhead | TF vs FF s/iter, same E6 launch, L4 host, 4 workers | 0.243 vs 0.233 s/iter (+4.3 %); C_f = 1.033 | **SUPPORTED** (paper's C_f = 1.07 is a miscount) |
+| C7 sensible default | All TF vs FF rows + lr robustness | TF never significantly worse at the paper's lr | **PARTIALLY SUPPORTED** |
+
+Classical context (partially commensurable, not a test of any paper claim): on Navier–Stokes
+a small MLP PINN beats TF on u, v and p in 5/5 seeds (+130 / +76 / +48 % TF error). No
+quantum advantage is claimed or supported. MerLin adaptation (simulation, compared only with
+photonic FF / FF+S): photonic TF beats photonic FF on E2 and on E6 u and p (10/10). It ties
+the simple map and FF+S on Fig. 3 and loses to the tower and exponential maps. Photonic and
+qubit results are shown side by side but not ranked.
+
+![Phase 5 forest plot](results/p5_comparison_forest.png)
+
 ## Limitations
 
 - Noiseless statevector simulation only, as in the paper; no shot noise or hardware.
@@ -294,6 +335,9 @@ What carries over and what does not:
 cd papers/trainable_frequency_qnn
 pytest -q
 ```
+
+`tests/test_compare_fair.py` checks the frozen Phase 5 decision rule (paired, 5-seed and
+unpaired cases).
 
 ## Citation and License
 
