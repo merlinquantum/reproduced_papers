@@ -89,9 +89,10 @@ papers/trainable_frequency_qnn/
 |   `-- models.py, training.py, plotting.py, experiment_logging.py
 |-- utils/                        run_sweep.py, aggregate_results.py, verify_results.py,
 |                                 analyze_lr_robustness.py, compare_fair.py, plot_*.py,
-|                                 merlin_hardware_report.py, sweep_ledger.py
+|                                 merlin_hardware_report.py, sweep_ledger.py, export_per_seed_metrics.py
 |-- tests/                        pytest suite (simulator, QNN, MerLin, NS, CLI, smoke, decision rule)
-|-- results/                      curated tables (*_results.{json,md}), figures, ledgers/
+|-- notebook.ipynb                scientific walkthrough (runs in ~3 min on CPU)
+|-- results/                      curated tables (*_results.{json,md}), per_seed_metrics.json, figures, ledgers/
 `-- outdir/                       raw runs and sweeps (disposable, not committed)
 ```
 
@@ -123,6 +124,13 @@ python implementation.py --paper trainable_frequency_qnn --config configs/fig2b_
 python implementation.py --paper trainable_frequency_qnn --config configs/fig2b_ff_original.json   # E2 FF
 python implementation.py --paper trainable_frequency_qnn --config configs/ns_table1_tf_original.json  # E6 TF, ~13 min on CPU
 python implementation.py --paper trainable_frequency_qnn --config configs/ns_table1_ff_original.json  # E6 FF, ~17 min on CPU
+```
+
+Notebook (entry point for readers; ~3 min on CPU, from the paper folder):
+
+```bash
+python utils/export_per_seed_metrics.py   # refresh results/per_seed_metrics.json from outdir/sweeps (optional)
+jupyter nbconvert --to notebook --execute --inplace notebook.ipynb
 ```
 
 Each run writes `papers/trainable_frequency_qnn/outdir/run_YYYYMMDD-HHMMSS/` with

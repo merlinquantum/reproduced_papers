@@ -5,3 +5,6 @@ numpy
 scipy
 matplotlib>=3.8
 pytest
+# notebook.ipynb execution
+ipykernel
+nbconvert
