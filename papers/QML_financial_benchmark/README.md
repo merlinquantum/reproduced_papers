@@ -89,7 +89,7 @@ The paper benchmarks simulated gate-based quantum models against classical model
   - The paper does not state its test window (R15).
   - The paper's GARCH forecasts the 5-day realized variance from its one-day σ² alone. We run that version (`garch_sigma2`) and a completed GARCH that adds the 4 squared returns already known at t (`garch`).
 - **Fair baselines added** (not in the paper):
-  - a parameter-matched ANN (±10% parameters) and LSTM (closest count);
+  - a parameter-matched ANN (one hidden layer, closest achievable count: within ±10% in 62 of 67 pairs, up to +24% where no one-hidden-layer width gets closer) and LSTM (closest count, within 9%);
   - logistic regression and majority class;
   - buy-and-hold and always-flat;
   - HAR-RV and persistence;
@@ -376,7 +376,7 @@ The paper's baselines are not fair for its claims (`MISSING_OR_UNFAIR` for all t
 - the GARCH ignores the 4/5 of the 5-day realized variance already known at t.
 
 Every claim is therefore judged against the fair controls planned in Phase 1, run in the same runs as the quantum models:
-- **Task 1:** a parameter-matched ANN (±10% parameters) and logistic regression.
+- **Task 1:** a parameter-matched ANN (closest achievable count: within ±10% in 62 of 67 pairs, up to +24% where no one-hidden-layer width gets closer) and logistic regression.
 - **Task 2:** a closest-parameter LSTM, buy-and-hold and always-flat.
 - **Task 3:**
   - an RBF SVR with γ searched widely under the same Optuna budget;
