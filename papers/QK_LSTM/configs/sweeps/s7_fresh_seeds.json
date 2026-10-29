@@ -1,0 +1,46 @@
+{
+  "sweep_name": "s7_fresh_seeds",
+  "description": "S7 (post-handoff independent check, user-requested 2026-10-29): decisive comparisons re-run on fresh seeds 5-9, never used before. QK-LSTM Q-B at paper hp vs paper LSTM(16) and size-matched LSTM(3) at paper hp (lr 1e-3) and tuned (lr 1e-2). 80/20 split, 20 epochs, batch 1. Comparison only; no selection.",
+  "seeds": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "candidates": [
+    {
+      "label": "QB_quantum_209",
+      "config": "configs/aqi_qklstm_count209_original.json"
+    },
+    {
+      "label": "B1_lstm_1873",
+      "config": "configs/aqi_lstm_classical.json"
+    },
+    {
+      "label": "B2_lstm_matched_196",
+      "config": "configs/aqi_lstm_matched_classical.json"
+    },
+    {
+      "label": "B1_lstm16_lr0.01",
+      "config": "configs/aqi_lstm_classical.json",
+      "args": [
+        "--lr",
+        "0.01"
+      ]
+    },
+    {
+      "label": "B2_lstm3_lr0.01",
+      "config": "configs/aqi_lstm_matched_classical.json",
+      "args": [
+        "--lr",
+        "0.01"
+      ]
+    }
+  ],
+  "selection": {
+    "metric": null,
+    "direction": "minimize",
+    "tie_tolerance_relative": 0.01
+  }
+}

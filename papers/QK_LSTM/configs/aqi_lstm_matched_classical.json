@@ -1,0 +1,4 @@
+{
+  "description": "B2: parameter-matched LSTM, nn.LSTM(11,3) + Linear(3,1) = 196 params (closest to 209). Paper hyperparameters.",
+  "model": {"type": "lstm", "params": {"hidden_size": 3}}
+}

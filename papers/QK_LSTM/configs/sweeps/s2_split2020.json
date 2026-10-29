@@ -1,0 +1,98 @@
+{
+  "sweep_name": "s2_split2020",
+  "description": "S2: split sensitivity (D3). Same 8 candidates and paper hyperparameters as S1, but the test set is calendar 2020 (2020-01-01..2020-07-01, 183 days) as the paper's text states. 5 seeds. Comparison sweep; no selection.",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "candidates": [
+    {
+      "label": "QB_quantum_209",
+      "config": "configs/aqi_qklstm_count209_original.json",
+      "args": [
+        "--split-scheme",
+        "date",
+        "--test-start",
+        "2020-01-01"
+      ]
+    },
+    {
+      "label": "QA_quantum_eq6_N4",
+      "config": "configs/aqi_qklstm_eq6_original.json",
+      "args": [
+        "--split-scheme",
+        "date",
+        "--test-start",
+        "2020-01-01"
+      ]
+    },
+    {
+      "label": "B1_lstm_1873",
+      "config": "configs/aqi_lstm_classical.json",
+      "args": [
+        "--split-scheme",
+        "date",
+        "--test-start",
+        "2020-01-01"
+      ]
+    },
+    {
+      "label": "B2_lstm_matched_196",
+      "config": "configs/aqi_lstm_matched_classical.json",
+      "args": [
+        "--split-scheme",
+        "date",
+        "--test-start",
+        "2020-01-01"
+      ]
+    },
+    {
+      "label": "B3B_rbf_209",
+      "config": "configs/aqi_rbfkernel_count209_classical.json",
+      "args": [
+        "--split-scheme",
+        "date",
+        "--test-start",
+        "2020-01-01"
+      ]
+    },
+    {
+      "label": "B3A_rbf_eq6_N4",
+      "config": "configs/aqi_rbfkernel_eq6_classical.json",
+      "args": [
+        "--split-scheme",
+        "date",
+        "--test-start",
+        "2020-01-01"
+      ]
+    },
+    {
+      "label": "B0_persistence",
+      "config": "configs/aqi_persistence_classical.json",
+      "args": [
+        "--split-scheme",
+        "date",
+        "--test-start",
+        "2020-01-01"
+      ]
+    },
+    {
+      "label": "B0b_ridge",
+      "config": "configs/aqi_ridge_classical.json",
+      "args": [
+        "--split-scheme",
+        "date",
+        "--test-start",
+        "2020-01-01"
+      ]
+    }
+  ],
+  "selection": {
+    "metric": null,
+    "direction": "minimize",
+    "tie_tolerance_relative": 0.01
+  }
+}

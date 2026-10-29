@@ -1,0 +1,14 @@
+{
+  "description": "Clean known-answer diagnostic (no outlier filtering, so target == last input on every day) (lstm16): target = same-day PM2.5, which is an input feature (horizon 0). A correct pipeline should fit it almost perfectly. NOT a reproduction result.",
+  "model": {
+    "type": "lstm",
+    "params": {
+      "hidden_size": 16
+    }
+  },
+  "dataset": {
+    "target": "PM2.5",
+    "horizon": 0,
+    "outlier_z": 1000000000.0
+  }
+}

@@ -1,0 +1,4 @@
+{
+  "description": "E2 (B1): paper LSTM baseline, nn.LSTM(11,16) + Linear(16,1) = 1,873 params. Paper hyperparameters.",
+  "model": {"type": "lstm", "params": {"hidden_size": 16}}
+}

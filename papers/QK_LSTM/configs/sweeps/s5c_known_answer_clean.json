@@ -1,0 +1,28 @@
+{
+  "sweep_name": "s5c_known_answer_clean",
+  "description": "S5c (plan amendment, recorded before launch): clean known-answer test. Target = same-day PM2.5 = last input exactly (outlier_z 1e9 disables the input-only outlier filter that confounded S5b). Each model at its S3-selected lr (QK-LSTM Q-B 1e-3, LSTM(16) 1e-2). 3 seeds.",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "candidates": [
+    {
+      "label": "KAc_pm25_QB_quantum_lr0.001",
+      "config": "configs/sweeps/diag_known_answer_pm25_clean_qb.json"
+    },
+    {
+      "label": "KAc_pm25_B1_lstm16_lr0.01",
+      "config": "configs/sweeps/diag_known_answer_pm25_clean_lstm16.json",
+      "args": [
+        "--lr",
+        "0.01"
+      ]
+    }
+  ],
+  "selection": {
+    "metric": null,
+    "direction": "minimize",
+    "tie_tolerance_relative": 0.01
+  }
+}

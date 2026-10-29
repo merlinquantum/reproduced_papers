@@ -1,0 +1,66 @@
+{
+  "description": "QK-LSTM count-matched variant (Q-B, 209 params) at the paper's Table II settings on CPCB Bengaluru AQI, chronological 80/20 split (LOG.md, Fair Baseline Plan).",
+  "seed": 0,
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "num_threads": 1,
+  "dataset": {
+    "name": "cpcb_bengaluru_aqi",
+    "subdir": "QK_LSTM/cpcb_aqi_india_2015_2020",
+    "file": "city_day.csv",
+    "city": "Bengaluru",
+    "features": [
+      "PM2.5",
+      "PM10",
+      "NO",
+      "NO2",
+      "NOx",
+      "NH3",
+      "CO",
+      "SO2",
+      "O3",
+      "Benzene",
+      "Toluene"
+    ],
+    "target": "AQI",
+    "sequence_length": 3,
+    "horizon": 1,
+    "outlier_z": 3.0,
+    "fill": "interpolate",
+    "split": {
+      "scheme": "ratio",
+      "test_fraction": 0.2,
+      "validation_fraction": 0.0,
+      "test_start": null
+    },
+    "batch_size": 1,
+    "shuffle_train": true,
+    "max_train_windows": null
+  },
+  "model": {
+    "type": "qk_lstm",
+    "params": {
+      "gate_mode": "shared",
+      "hidden_size": 16,
+      "n_qubits": 4,
+      "n_references": 4,
+      "circuit_layout": "text",
+      "angle_map": "identity"
+    }
+  },
+  "training": {
+    "epochs": 20,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "weight_decay": 0.0
+  },
+  "run": {
+    "sweep_id": null,
+    "candidate": null,
+    "repetition": 0
+  },
+  "logging": {
+    "level": "info"
+  }
+}

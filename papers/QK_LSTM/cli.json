@@ -1,0 +1,202 @@
+{
+  "description": "QK-LSTM (arXiv:2412.08851) reproduction runner",
+  "arguments": [
+    {
+      "flags": [
+        "--epochs"
+      ],
+      "help": "Override number of training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.epochs"
+      }
+    },
+    {
+      "flags": [
+        "--batch-size"
+      ],
+      "help": "Override training batch size",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.batch_size"
+      }
+    },
+    {
+      "flags": [
+        "--lr"
+      ],
+      "help": "Override learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.lr"
+      }
+    },
+    {
+      "flags": [
+        "--optimizer"
+      ],
+      "help": "Optimizer (paper: 'SGD or Adam')",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.optimizer"
+      },
+      "choices": [
+        "adam",
+        "sgd"
+      ]
+    },
+    {
+      "flags": [
+        "--split-scheme"
+      ],
+      "help": "Split scheme: chronological ratio or test start date",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.split.scheme"
+      },
+      "choices": [
+        "ratio",
+        "date"
+      ]
+    },
+    {
+      "flags": [
+        "--test-start"
+      ],
+      "help": "First test target date for --split-scheme date (e.g. 2020-01-01)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.split.test_start"
+      }
+    },
+    {
+      "flags": [
+        "--validation-fraction"
+      ],
+      "help": "Fraction of the pre-test block held out for validation (0 = paper-accurate training on the full 80%%)",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.split.validation_fraction"
+      }
+    },
+    {
+      "flags": [
+        "--max-train-windows"
+      ],
+      "help": "Use only the most recent N training windows (smoke runs only)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.max_train_windows"
+      }
+    },
+    {
+      "flags": [
+        "--n-references"
+      ],
+      "help": "Number of fixed kernel reference vectors N",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.params.n_references"
+      }
+    },
+    {
+      "flags": [
+        "--angle-map"
+      ],
+      "help": "Quantum angle map",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.params.angle_map"
+      },
+      "choices": [
+        "identity",
+        "arctan",
+        "tanh_pi"
+      ]
+    },
+    {
+      "flags": [
+        "--circuit-layout"
+      ],
+      "help": "Quantum circuit layout (paper text vs Fig. 2(d))",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.params.circuit_layout"
+      },
+      "choices": [
+        "text",
+        "figure"
+      ]
+    },
+    {
+      "flags": [
+        "--sweep-id"
+      ],
+      "help": "Sweep identifier recorded in run_status.json",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "run.sweep_id"
+      }
+    },
+    {
+      "flags": [
+        "--candidate"
+      ],
+      "help": "Candidate label recorded in run_status.json",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "run.candidate"
+      }
+    },
+    {
+      "flags": [
+        "--repetition"
+      ],
+      "help": "Repetition index recorded in run_status.json",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "run.repetition"
+      }
+    },
+    {
+      "flags": [
+        "--num-threads"
+      ],
+      "help": "torch intra-op threads per run",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "num_threads"
+      }
+    }
+  ]
+}

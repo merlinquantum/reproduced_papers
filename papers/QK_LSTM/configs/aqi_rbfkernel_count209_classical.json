@@ -1,0 +1,4 @@
+{
+  "description": "B3-B: classical-kernel ablation of Q-B, RBF exp(-gamma||z-z_j||^2) with gamma=1 on the same 4-dim compression and references (209 params).",
+  "model": {"type": "rbf_lstm", "params": {"gate_mode": "shared", "hidden_size": 16, "n_qubits": 4, "n_references": 4, "rbf_gamma": 1.0}}
+}

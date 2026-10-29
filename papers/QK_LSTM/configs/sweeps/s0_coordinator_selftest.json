@@ -1,0 +1,10 @@
+{
+  "sweep_name": "s0_coordinator_selftest",
+  "description": "Coordinator self-test (infrastructure only, NOT a result): closed-form baselines, 2 seeds.",
+  "seeds": [0, 1],
+  "candidates": [
+    {"label": "B0_persistence", "config": "configs/aqi_persistence_classical.json"},
+    {"label": "B0b_ridge", "config": "configs/aqi_ridge_classical.json"}
+  ],
+  "selection": {"metric": "test.observed_targets.rmse", "direction": "minimize", "tie_tolerance_relative": 0.01}
+}

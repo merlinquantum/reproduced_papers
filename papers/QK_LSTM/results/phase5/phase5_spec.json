@@ -1,0 +1,406 @@
+{
+  "title": "Phase 5 fair comparison (generated after the frozen Phase 5 Comparison Plan)",
+  "note": "Metric: test RMSE in AQI units on observed targets; lower is better. Paper-reported values are reference only (INCOMPARABLE for ranking). Wall-clock is from run_status timestamps on a local Apple M4 CPU, 1 torch thread per run; S1-S3 ran under CPU contention, so it is descriptive only.",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "tables": {
+    "Primary: 80/20 split, paper hyperparameters (S1)": {
+      "scope": "Scope: paper-accurate (paper hp, 5 seeds); test 2019-05-27..2020-07-01 (402 days).",
+      "systems": {
+        "Q-B QK-LSTM (qubit)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "QB_quantum_209",
+          "role": "reproduced method",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "reference (209 params)"
+        },
+        "Q-A QK-LSTM (qubit)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "QA_quantum_eq6_N4",
+          "role": "reproduced method (Eq. 6 reading)",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "reference (449 params)"
+        },
+        "B1 LSTM(16)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "B1_lstm_1873",
+          "role": "paper baseline (reproduced)",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "paper architecture (1,873 params)"
+        },
+        "B2 LSTM(3)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "B2_lstm_matched_196",
+          "role": "fair baseline: iso-parameter",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "params within \u00b110% of Q-B (196/209)"
+        },
+        "B3-B RBF-kernel LSTM": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "B3B_rbf_209",
+          "role": "fair baseline: kernel ablation",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "identical to Q-B except kernel"
+        },
+        "B3-A RBF-kernel LSTM": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "B3A_rbf_eq6_N4",
+          "role": "fair baseline: kernel ablation",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "identical to Q-A except kernel"
+        },
+        "B0 persistence": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "B0_persistence",
+          "role": "naive floor (uses past AQI)",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "0 params; PARTIALLY_COMMENSURABLE"
+        },
+        "B0b ridge": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "B0b_ridge",
+          "role": "linear baseline",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "34 params"
+        }
+      },
+      "comparisons": [
+        {
+          "claim": "C1 accuracy vs paper baseline",
+          "a": "Q-B QK-LSTM (qubit)",
+          "b": "B1 LSTM(16)",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C1 accuracy vs paper baseline",
+          "a": "Q-A QK-LSTM (qubit)",
+          "b": "B1 LSTM(16)",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C2 iso-parameter accuracy",
+          "a": "Q-B QK-LSTM (qubit)",
+          "b": "B2 LSTM(3)",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C4 quantum vs classical kernel",
+          "a": "Q-B QK-LSTM (qubit)",
+          "b": "B3-B RBF-kernel LSTM",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C4 quantum vs classical kernel",
+          "a": "Q-A QK-LSTM (qubit)",
+          "b": "B3-A RBF-kernel LSTM",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "naive floor",
+          "a": "Q-B QK-LSTM (qubit)",
+          "b": "B0 persistence",
+          "commensurability": "PARTIALLY_COMMENSURABLE"
+        }
+      ]
+    },
+    "Primary: 80/20 split, validation-tuned (S1 kernel/naive runs + S4 LSTM runs)": {
+      "scope": "Scope: validation-tuned (S3 rule), 5 seeds; kernel models and ridge selected the S1 configuration; LSTMs lr 0.01 (S4).",
+      "systems": {
+        "Q-B QK-LSTM (qubit)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "QB_quantum_209",
+          "role": "reproduced method",
+          "scope": "validation-tuned (S3 rule), 5 seeds",
+          "matching": "reference (209 params)"
+        },
+        "Q-A QK-LSTM (qubit)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "QA_quantum_eq6_N4",
+          "role": "reproduced method (Eq. 6 reading)",
+          "scope": "validation-tuned (S3 rule), 5 seeds",
+          "matching": "reference (449 params)"
+        },
+        "B1 LSTM(16)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s4_tuned_test_20261021-152814",
+          "candidate": "B1_lstm16_lr0.01",
+          "role": "paper baseline (reproduced)",
+          "scope": "validation-tuned (S3 rule), 5 seeds",
+          "matching": "paper architecture (1,873 params)"
+        },
+        "B2 LSTM(3)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s4_tuned_test_20261021-152814",
+          "candidate": "B2_lstm3_lr0.01",
+          "role": "fair baseline: iso-parameter",
+          "scope": "validation-tuned (S3 rule), 5 seeds",
+          "matching": "params within \u00b110% of Q-B (196/209)"
+        },
+        "B3-B RBF-kernel LSTM": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "B3B_rbf_209",
+          "role": "fair baseline: kernel ablation",
+          "scope": "validation-tuned (S3 rule), 5 seeds",
+          "matching": "identical to Q-B except kernel"
+        },
+        "B3-A RBF-kernel LSTM": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "B3A_rbf_eq6_N4",
+          "role": "fair baseline: kernel ablation",
+          "scope": "validation-tuned (S3 rule), 5 seeds",
+          "matching": "identical to Q-A except kernel"
+        },
+        "B0 persistence": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "B0_persistence",
+          "role": "naive floor (uses past AQI)",
+          "scope": "validation-tuned (S3 rule), 5 seeds",
+          "matching": "0 params; PARTIALLY_COMMENSURABLE"
+        },
+        "B0b ridge": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "B0b_ridge",
+          "role": "linear baseline",
+          "scope": "validation-tuned (S3 rule), 5 seeds",
+          "matching": "34 params"
+        }
+      },
+      "comparisons": [
+        {
+          "claim": "C1 accuracy vs paper baseline",
+          "a": "Q-B QK-LSTM (qubit)",
+          "b": "B1 LSTM(16)",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C1 accuracy vs paper baseline",
+          "a": "Q-A QK-LSTM (qubit)",
+          "b": "B1 LSTM(16)",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C2 iso-parameter accuracy",
+          "a": "Q-B QK-LSTM (qubit)",
+          "b": "B2 LSTM(3)",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C4 quantum vs classical kernel",
+          "a": "Q-B QK-LSTM (qubit)",
+          "b": "B3-B RBF-kernel LSTM",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C4 quantum vs classical kernel",
+          "a": "Q-A QK-LSTM (qubit)",
+          "b": "B3-A RBF-kernel LSTM",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "naive floor",
+          "a": "Q-B QK-LSTM (qubit)",
+          "b": "B0 persistence",
+          "commensurability": "PARTIALLY_COMMENSURABLE"
+        }
+      ]
+    },
+    "Sensitivity: calendar-2020 test, paper hyperparameters (S2)": {
+      "scope": "Scope: paper-accurate (paper hp, 5 seeds); test 2020-01-01..2020-07-01 (183 days).",
+      "systems": {
+        "Q-B QK-LSTM (qubit)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s2_split2020_20261021-142942",
+          "candidate": "QB_quantum_209",
+          "role": "reproduced method",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "reference (209 params)"
+        },
+        "Q-A QK-LSTM (qubit)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s2_split2020_20261021-142942",
+          "candidate": "QA_quantum_eq6_N4",
+          "role": "reproduced method (Eq. 6 reading)",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "reference (449 params)"
+        },
+        "B1 LSTM(16)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s2_split2020_20261021-142942",
+          "candidate": "B1_lstm_1873",
+          "role": "paper baseline (reproduced)",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "paper architecture (1,873 params)"
+        },
+        "B2 LSTM(3)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s2_split2020_20261021-142942",
+          "candidate": "B2_lstm_matched_196",
+          "role": "fair baseline: iso-parameter",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "params within \u00b110% of Q-B (196/209)"
+        },
+        "B3-B RBF-kernel LSTM": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s2_split2020_20261021-142942",
+          "candidate": "B3B_rbf_209",
+          "role": "fair baseline: kernel ablation",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "identical to Q-B except kernel"
+        },
+        "B3-A RBF-kernel LSTM": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s2_split2020_20261021-142942",
+          "candidate": "B3A_rbf_eq6_N4",
+          "role": "fair baseline: kernel ablation",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "identical to Q-A except kernel"
+        },
+        "B0 persistence": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s2_split2020_20261021-142942",
+          "candidate": "B0_persistence",
+          "role": "naive floor (uses past AQI)",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "0 params; PARTIALLY_COMMENSURABLE"
+        },
+        "B0b ridge": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s2_split2020_20261021-142942",
+          "candidate": "B0b_ridge",
+          "role": "linear baseline",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "34 params"
+        }
+      },
+      "comparisons": [
+        {
+          "claim": "C1 accuracy vs paper baseline",
+          "a": "Q-B QK-LSTM (qubit)",
+          "b": "B1 LSTM(16)",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C1 accuracy vs paper baseline",
+          "a": "Q-A QK-LSTM (qubit)",
+          "b": "B1 LSTM(16)",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C2 iso-parameter accuracy",
+          "a": "Q-B QK-LSTM (qubit)",
+          "b": "B2 LSTM(3)",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C4 quantum vs classical kernel",
+          "a": "Q-B QK-LSTM (qubit)",
+          "b": "B3-B RBF-kernel LSTM",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C4 quantum vs classical kernel",
+          "a": "Q-A QK-LSTM (qubit)",
+          "b": "B3-A RBF-kernel LSTM",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "naive floor",
+          "a": "Q-B QK-LSTM (qubit)",
+          "b": "B0 persistence",
+          "commensurability": "PARTIALLY_COMMENSURABLE"
+        }
+      ]
+    },
+    "MerLin adaptation (simulation) vs Phase 3, 80/20, paper hyperparameters (S6 + S1)": {
+      "scope": "Scope: MerLin adaptation (ideal simulation: FOCK computation, threshold-equivalent detection, 2 photons / 4 modes, shots 0), paired by seed with S1. Wall-clock PARTIALLY_COMMENSURABLE (S1 contended CPU, S6 not).",
+      "systems": {
+        "Q-B QK-LSTM photonic (2 ph)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s6_merlin_20261021-183822",
+          "candidate": "QB_photonic_2ph_209",
+          "role": "MerLin adaptation",
+          "scope": "MerLin simulation, 5 seeds",
+          "matching": "same as Q-B; kernel photonic (0 circuit params)"
+        },
+        "Q-A QK-LSTM photonic (2 ph)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s6_merlin_20261021-183822",
+          "candidate": "QA_photonic_2ph_eq6_N4",
+          "role": "MerLin adaptation",
+          "scope": "MerLin simulation, 5 seeds",
+          "matching": "same as Q-A; kernel photonic"
+        },
+        "Q-B photonic 1-photon": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s6_merlin_20261021-183822",
+          "candidate": "QB_photonic_1ph_ablation",
+          "role": "ablation (not the photonic implementation)",
+          "scope": "MerLin simulation, 5 seeds",
+          "matching": "same as Q-B; 1 photon"
+        },
+        "Q-B QK-LSTM (qubit)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "QB_quantum_209",
+          "role": "reproduced method",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "reference"
+        },
+        "B1 LSTM(16)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "B1_lstm_1873",
+          "role": "paper baseline (reproduced)",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "paper architecture"
+        },
+        "B2 LSTM(3)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "B2_lstm_matched_196",
+          "role": "fair baseline: iso-parameter",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "196/209 params"
+        },
+        "B3-B RBF-kernel LSTM": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301",
+          "candidate": "B3B_rbf_209",
+          "role": "fair baseline: kernel ablation",
+          "scope": "paper-accurate (paper hp, 5 seeds)",
+          "matching": "identical except kernel"
+        }
+      },
+      "comparisons": [
+        {
+          "claim": "MerLin preserves behaviour (tol \u00b11.0)",
+          "a": "Q-B QK-LSTM photonic (2 ph)",
+          "b": "Q-B QK-LSTM (qubit)",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C1 (photonic) vs paper baseline",
+          "a": "Q-B QK-LSTM photonic (2 ph)",
+          "b": "B1 LSTM(16)",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C2 (photonic) iso-parameter",
+          "a": "Q-B QK-LSTM photonic (2 ph)",
+          "b": "B2 LSTM(3)",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "C4 photonic vs classical kernel",
+          "a": "Q-B QK-LSTM photonic (2 ph)",
+          "b": "B3-B RBF-kernel LSTM",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "multi-photon interference",
+          "a": "Q-B QK-LSTM photonic (2 ph)",
+          "b": "Q-B photonic 1-photon",
+          "commensurability": "COMMENSURABLE"
+        }
+      ]
+    }
+  },
+  "paper": {
+    "QK-LSTM (paper)": {
+      "rmse": 9.2,
+      "params": 209
+    },
+    "LSTM (paper)": {
+      "rmse": 15.94,
+      "params": 1873
+    }
+  }
+}

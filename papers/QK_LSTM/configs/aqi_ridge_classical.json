@@ -1,0 +1,4 @@
+{
+  "description": "B0b: ridge regression on the flattened 3x11 window (34 params), alpha=1.0 on scaled data.",
+  "model": {"type": "ridge", "params": {"alpha": 1.0}}
+}

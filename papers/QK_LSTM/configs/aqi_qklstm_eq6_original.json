@@ -1,0 +1,4 @@
+{
+  "description": "E1 (Q-A): QK-LSTM following Eq. 6 (per-gate kernel sums, alpha in R^{N x 16}), N=4 fixed references (449 params). Paper hyperparameters.",
+  "model": {"type": "qk_lstm", "params": {"gate_mode": "per_gate", "hidden_size": 16, "n_qubits": 4, "n_references": 4, "circuit_layout": "text", "angle_map": "identity"}}
+}

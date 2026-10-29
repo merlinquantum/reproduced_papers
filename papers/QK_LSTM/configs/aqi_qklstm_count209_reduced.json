@@ -1,0 +1,5 @@
+{
+  "description": "Smoke run (reduced, NOT a reproduction result): Q-B with 1 epoch on the 64 most recent training windows, with a 10% validation block.",
+  "dataset": {"max_train_windows": 64, "split": {"scheme": "ratio", "test_fraction": 0.2, "validation_fraction": 0.1, "test_start": null}},
+  "training": {"epochs": 1}
+}

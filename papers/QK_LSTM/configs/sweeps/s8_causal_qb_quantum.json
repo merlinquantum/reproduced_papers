@@ -1,0 +1,17 @@
+{
+  "description": "S8 (post-handoff check): Q-B QK-LSTM at paper hyperparameters with causal preprocessing (dataset.fill = causal).",
+  "model": {
+    "type": "qk_lstm",
+    "params": {
+      "gate_mode": "shared",
+      "hidden_size": 16,
+      "n_qubits": 4,
+      "n_references": 4,
+      "circuit_layout": "text",
+      "angle_map": "identity"
+    }
+  },
+  "dataset": {
+    "fill": "causal"
+  }
+}

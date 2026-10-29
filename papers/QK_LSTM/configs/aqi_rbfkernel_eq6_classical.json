@@ -1,0 +1,4 @@
+{
+  "description": "B3-A: classical-kernel ablation of Q-A, RBF kernel with gamma=1, N=4 references (449 params).",
+  "model": {"type": "rbf_lstm", "params": {"gate_mode": "per_gate", "hidden_size": 16, "n_qubits": 4, "n_references": 4, "rbf_gamma": 1.0}}
+}

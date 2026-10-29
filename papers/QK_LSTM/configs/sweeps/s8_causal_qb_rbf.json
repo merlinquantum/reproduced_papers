@@ -1,0 +1,16 @@
+{
+  "description": "S8 (post-handoff check): Q-B RBF control at paper hyperparameters with causal preprocessing (dataset.fill = causal).",
+  "model": {
+    "type": "rbf_lstm",
+    "params": {
+      "gate_mode": "shared",
+      "hidden_size": 16,
+      "n_qubits": 4,
+      "n_references": 4,
+      "rbf_gamma": 1.0
+    }
+  },
+  "dataset": {
+    "fill": "causal"
+  }
+}
