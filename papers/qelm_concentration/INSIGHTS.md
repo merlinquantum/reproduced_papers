@@ -81,8 +81,9 @@ each point is in `LOG.md` and `results/`.
   feature noise at the paper's 10^-1.5 swamps them, while true 1e5-shot noise costs only
   2–3 %. Model readout noise as sampling, not additive Gaussian, for photonic reservoirs.
 - **Concentration has a photonic signature.** Haar-random interferometers lose variability
-  as modes grow (1.2e-3 → 3.8e-4 from 8 to 24 modes); a structured, weakly mixing brickwall
-  does not. Unlike the qubit case, variability rises with depth, because deeper circuits
+  as modes grow: 3–6x from 8 to 24 modes at every depth (1.2e-3 → 3.8e-4 at 16 layers). A
+  structured, weakly mixing brickwall loses only 1.2–1.5x at 4–8 layers, but 2.3x at 16 layers,
+  and stays 3–15x above Haar. Unlike the qubit case, variability rises with depth, because deeper circuits
   re-encode the input more often.
 - **Validate MerLin outputs independently.** Pair click marginals checked against a
   permanent calculation from the circuit unitary (to 1e-9) also catch input-parameter

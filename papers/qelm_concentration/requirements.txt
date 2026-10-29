@@ -9,3 +9,8 @@ scikit-learn>=1.6
 optuna>=4.0
 matplotlib>=3.8
 pytest
+# Notebook (notebook.ipynb): pandas for tables; ipykernel/nbclient to run it headlessly.
+pandas>=2.0
+ipykernel
+nbformat
+nbclient

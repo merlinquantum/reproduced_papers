@@ -166,6 +166,15 @@ python implementation.py --paper qelm_concentration --config configs/landsat_cla
 
 From inside `papers/qelm_concentration`, use `python ../../implementation.py --config configs/<name>.json`.
 
+Reproduction notebook (`notebook.ipynb`): the main walkthrough of claims, evidence, baselines,
+controls and the MerLin assessment. Start Jupyter from `papers/qelm_concentration`. Its live
+cells take about 4 minutes on a laptop CPU and reproduce stored runs exactly for the same seeds.
+The other cells load `results/notebook_evidence.json`, the per-seed records exported by:
+
+```bash
+python utils/export_notebook_evidence.py --output results/notebook_evidence.json
+```
+
 Each run writes `outdir/run_YYYYMMDD-HHMMSS/` with `config_snapshot.json`, `run.log`,
 `run_status.json`, `metrics.json` and task artifacts: `trials.csv` for the Pareto search,
 and `probabilities_split*_res*.npz` (exact pair POVM probabilities, for re-sampling shots)
