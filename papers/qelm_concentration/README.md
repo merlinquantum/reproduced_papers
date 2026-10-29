@@ -1,12 +1,14 @@
 # Breaking Concentration Barriers for Quantum Extreme Learning on Digital Quantum Processors — Reproduction
 
-Status (2026-10-28):
+Status (2026-10-29):
 
 - **Phase 3 (experiments): complete.** Every planned experiment that can run without a QPU
   has run. E9 (energy forecasting) is blocked because the paper does not name its data.
 - **Phase 4 (MerLin photonic adaptation): `PARTIAL_MERLIN_TRANSLATION`**, simulated. It
   is an adaptation, not part of the reproduction.
 - **Phase 5 (fair comparison): done.** No quantum or photonic advantage is found or claimed.
+- **Phases 6–7 (documentation, notebook): done.** `notebook.ipynb` is the executed walkthrough
+  of claims, evidence and verdicts.
 
 All numbers are `partial` (reduced qubit counts, simulation instead of hardware) unless
 stated otherwise. `LOG.md` holds the run records, ledgers and diagnoses; `INSIGHTS.md`
