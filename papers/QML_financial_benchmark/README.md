@@ -216,7 +216,7 @@ The shared runtime adds `--config`, `--seed`, `--dtype`, `--device`, `--outdir`,
 **Transformations:**
 - Turkish zero-volume rows that repeat the previous close are Yahoo exchange-holiday placeholders, and are dropped.
 - Returns are log returns of adjusted closes.
-- The Task 3 target is the next-day 5-day realized variance RV_{t+1} = r²_{t−3} + … + r²_{t+1}. Four of its five terms are known at t, which is why the completed GARCH matters.
+- The Task 3 target is the next-day 5-day realized variance RV_{t+1} = (r²_{t−3} + … + r²_{t+1}) / 5, the mean of five squared daily log returns. Four of its five terms are known at t, which is why the completed GARCH matters.
 - The 3-D indicators (RSI-14, %K-14 and the 3-day SMA of %K) follow the paper's formulas. They are shifted to t−1 unless the diagnostic config is used.
 
 **Known limitations:**
