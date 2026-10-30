@@ -1,0 +1,13 @@
+{
+  "data": {
+    "num_windows": 10000,
+    "check_release": true
+  },
+  "description": "Baseline: untuned echo state network (315 units, spectral radius 0.9, leak 1, input scale 1) with the Mat\u00e9rn readout.",
+  "model": {
+    "kind": "esn_kernel",
+    "esn": {
+      "mode": "default"
+    }
+  }
+}

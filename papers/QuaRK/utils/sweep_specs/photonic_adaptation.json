@@ -1,0 +1,42 @@
+{
+  "sweep_id": "photonic_adaptation",
+  "reference": "quark_merlin",
+  "description": "Photonic MerLin adaptation of QuaRK (not the paper): click sampling at 1000 (reference), 100 and 10000 shots, exact click marginals, and the distinguishable-photon control; 5 seeds.",
+  "seeds": [
+    12345,
+    1,
+    2,
+    3,
+    4
+  ],
+  "candidates": [
+    {
+      "name": "quark_merlin",
+      "config": "configs/quark_merlin.json"
+    },
+    {
+      "name": "quark_merlin_shots_100",
+      "config": "configs/quark_merlin.json",
+      "args": [
+        "--merlin-shots",
+        "100"
+      ]
+    },
+    {
+      "name": "quark_merlin_shots_10000",
+      "config": "configs/quark_merlin.json",
+      "args": [
+        "--merlin-shots",
+        "10000"
+      ]
+    },
+    {
+      "name": "quark_exact_merlin",
+      "config": "configs/quark_exact_merlin.json"
+    },
+    {
+      "name": "quark_distinguishable_merlin",
+      "config": "configs/quark_distinguishable_merlin.json"
+    }
+  ]
+}

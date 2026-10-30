@@ -1,0 +1,13 @@
+{
+  "data": {
+    "num_windows": 10000,
+    "check_release": true
+  },
+  "description": "Baseline: echo state network (315 units) tuned per task on validation over 18 configurations, then the Mat\u00e9rn readout.",
+  "model": {
+    "kind": "esn_kernel",
+    "esn": {
+      "mode": "tuned"
+    }
+  }
+}

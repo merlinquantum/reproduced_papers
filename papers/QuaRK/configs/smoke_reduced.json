@@ -1,0 +1,20 @@
+{
+  "description": "Smoke run: 300 windows, two tasks, short tuning search. Checks the pipeline end to end; not evidence.",
+  "data": {
+    "num_windows": 300,
+    "tasks": [
+      "current_point_readout",
+      "exp_fading"
+    ]
+  },
+  "readout": {
+    "tuning": {
+      "xi_maxiter": 10
+    },
+    "train_sizes": [
+      100,
+      200,
+      240
+    ]
+  }
+}

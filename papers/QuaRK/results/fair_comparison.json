@@ -1,0 +1,3778 @@
+{
+  "sweeps": [
+    "main_comparison",
+    "photonic_adaptation"
+  ],
+  "coverage": "complete: 50/50 planned runs of the compared systems completed and validated",
+  "commensurability": {
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      12345
+    ],
+    "same_seeds": true,
+    "same_dataset_meta_per_seed": true,
+    "same_data_and_readout_settings": true,
+    "differing_settings": [],
+    "finite_metrics": true,
+    "status": "COMMENSURABLE"
+  },
+  "systems": [
+    {
+      "candidate": "quark",
+      "label": "QuaRK, paper settings",
+      "role": "method, reproduced",
+      "scope": "paper-accurate settings, 5 seeds",
+      "provenance": "local run",
+      "runs": 5,
+      "expected_runs": 5,
+      "normalized": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 0.018973370725127926,
+          "std": 0.013287195250233572,
+          "ci95": [
+            0.002475138745808847,
+            0.035471602704447006
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.4796594603935948,
+          "std": 0.03469950261408432,
+          "ci95": [
+            0.4365743372421089,
+            0.5227445835450807
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.5082628361350371,
+          "std": 0.10317498199580076,
+          "ci95": [
+            0.38015417547552977,
+            0.6363714967945444
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.8818352786693258,
+          "std": 0.06535467558653388,
+          "ci95": [
+            0.8006867308792401,
+            0.9629838264594114
+          ]
+        }
+      },
+      "mse": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 0.008341546822458492,
+          "std": 0.006172954650710922,
+          "ci95": [
+            0.0006768112701262489,
+            0.016006282374790737
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.46360296589130234,
+          "std": 0.14283877106067114,
+          "ci95": [
+            0.2862452063175973,
+            0.6409607254650074
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.7509897866275625,
+          "std": 0.1800153062945747,
+          "ci95": [
+            0.5274712616759657,
+            0.9745083115791594
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.3787898140095355,
+          "std": 0.026087951225481423,
+          "ci95": [
+            0.34639734418595947,
+            0.4111822838331115
+          ]
+        }
+      },
+      "resources": {
+        "features": 315,
+        "measurement": "1000 per observable (authors' model)",
+        "readout": "Mat\u00e9rn kernel ridge",
+        "reservoir_settings_searched": 0
+      },
+      "seconds": {
+        "min": 593.5173405419919,
+        "mean": 606.4114497084054,
+        "max": 615.2093632920296
+      },
+      "feature_seconds": {
+        "min": 11.0,
+        "mean": 11.8,
+        "max": 12.0
+      }
+    },
+    {
+      "candidate": "quark_exact",
+      "label": "QuaRK, exact expectations",
+      "role": "method variant: no shot noise",
+      "scope": "paper-accurate settings, 5 seeds",
+      "provenance": "local run",
+      "runs": 5,
+      "expected_runs": 5,
+      "normalized": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 0.0001156705268512953,
+          "std": 0.0001813297629584517,
+          "ci95": [
+            -0.00010948011161703663,
+            0.00034082116531962723
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.3284177294609824,
+          "std": 0.043788855891308015,
+          "ci95": [
+            0.27404668357821244,
+            0.3827887753437524
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.390627084101404,
+          "std": 0.10818927761464764,
+          "ci95": [
+            0.2562923530956236,
+            0.5249618151071844
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.8911028092032491,
+          "std": 0.07614835191963724,
+          "ci95": [
+            0.7965521421020851,
+            0.9856534763044131
+          ]
+        }
+      },
+      "mse": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 5.334563594399344e-05,
+          "std": 8.499507603937466e-05,
+          "ci95": [
+            -5.218968999868945e-05,
+            0.00015888096188667634
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.31946265203363067,
+          "std": 0.1188405229653981,
+          "ci95": [
+            0.1719026531397882,
+            0.46702265092747314
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.576301448817101,
+          "std": 0.17989466013061214,
+          "ci95": [
+            0.35293272586381785,
+            0.7996701717703841
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.3827108113812464,
+          "std": 0.030376405091541575,
+          "ci95": [
+            0.34499352278422574,
+            0.4204280999782671
+          ]
+        }
+      },
+      "resources": {
+        "features": 315,
+        "measurement": "exact",
+        "readout": "Mat\u00e9rn kernel ridge",
+        "reservoir_settings_searched": 0
+      },
+      "seconds": {
+        "min": 617.9102804159629,
+        "mean": 639.3643207834102,
+        "max": 679.8198102920433
+      },
+      "feature_seconds": {
+        "min": 7.0,
+        "mean": 8.0,
+        "max": 9.0
+      }
+    },
+    {
+      "candidate": "quark_shadows",
+      "label": "QuaRK, random-Pauli shadows",
+      "role": "method variant: the paper text's estimator",
+      "scope": "paper-accurate settings, 5 seeds",
+      "provenance": "local run",
+      "runs": 5,
+      "expected_runs": 5,
+      "normalized": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 0.08814613681683825,
+          "std": 0.042400771169409324,
+          "ci95": [
+            0.03549862575970658,
+            0.14079364787396992
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.6197804472419127,
+          "std": 0.025951602391874825,
+          "ci95": [
+            0.587557276856223,
+            0.6520036176276024
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.63436935113849,
+          "std": 0.09847819609489455,
+          "ci95": [
+            0.5120925204394089,
+            0.7566461818375712
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.913942775588979,
+          "std": 0.045601889742636625,
+          "ci95": [
+            0.8573205508454895,
+            0.9705650003324684
+          ]
+        }
+      },
+      "mse": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 0.03861204561898872,
+          "std": 0.01930320283059429,
+          "ci95": [
+            0.014643953614214798,
+            0.06258013762376263
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.6125340642996651,
+          "std": 0.24294072118695825,
+          "ci95": [
+            0.31088331710416056,
+            0.9141848114951696
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.9441176446615204,
+          "std": 0.22776953680052064,
+          "ci95": [
+            0.6613044109287665,
+            1.2269308783942743
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.39325731564785604,
+          "std": 0.03052772674947149,
+          "ci95": [
+            0.35535213639603525,
+            0.43116249489967684
+          ]
+        }
+      },
+      "resources": {
+        "features": 315,
+        "measurement": "1000 snapshots, shared (random-Pauli shadows)",
+        "readout": "Mat\u00e9rn kernel ridge",
+        "reservoir_settings_searched": 0
+      },
+      "seconds": {
+        "min": 618.59040645801,
+        "mean": 640.6050558332121,
+        "max": 658.9743785000173
+      },
+      "feature_seconds": {
+        "min": 33.0,
+        "mean": 33.4,
+        "max": 34.0
+      }
+    },
+    {
+      "candidate": "quark_merlin",
+      "label": "Photonic, 1000 shots",
+      "role": "MerLin adaptation",
+      "scope": "adaptation, simulated, 5 seeds",
+      "provenance": "local run",
+      "runs": 5,
+      "expected_runs": 5,
+      "normalized": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 0.05651002596704641,
+          "std": 0.031045927113507392,
+          "ci95": [
+            0.017961415979346175,
+            0.09505863595474665
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.49161672127677375,
+          "std": 0.08764622016032528,
+          "ci95": [
+            0.3827895651250569,
+            0.6004438774284906
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.5893352129350593,
+          "std": 0.07960043592419341,
+          "ci95": [
+            0.4904982174066628,
+            0.6881722084634558
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.9014379692193693,
+          "std": 0.053023005762710254,
+          "ci95": [
+            0.8356012118872612,
+            0.9672747265514773
+          ]
+        }
+      },
+      "mse": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 0.024927797724473604,
+          "std": 0.014270913878924934,
+          "ci95": [
+            0.007208117739546084,
+            0.042647477709401124
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.46442802537761113,
+          "std": 0.11168919080944588,
+          "ci95": [
+            0.32574757816101146,
+            0.6031084725942109
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.8696692505201227,
+          "std": 0.12575581709532657,
+          "ci95": [
+            0.7135227798681583,
+            1.025815721172087
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.38758790356257444,
+          "std": 0.02781861190576906,
+          "ci95": [
+            0.3530465346791784,
+            0.4221292724459705
+          ]
+        }
+      },
+      "resources": {
+        "features": 315,
+        "measurement": "1000 click patterns, shared",
+        "readout": "Mat\u00e9rn kernel ridge",
+        "reservoir_settings_searched": 0
+      },
+      "seconds": {
+        "min": 614.4350291669834,
+        "mean": 632.6301989332308,
+        "max": 650.6227327920496
+      },
+      "feature_seconds": {
+        "min": 39.0,
+        "mean": 40.2,
+        "max": 42.0
+      }
+    },
+    {
+      "candidate": "quark_exact_merlin",
+      "label": "Photonic, exact",
+      "role": "MerLin adaptation, no shot noise",
+      "scope": "adaptation, simulated, 5 seeds",
+      "provenance": "local run",
+      "runs": 5,
+      "expected_runs": 5,
+      "normalized": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 0.0001430750045821455,
+          "std": 0.00017099154363157048,
+          "ci95": [
+            -6.923903914246368e-05,
+            0.00035538904830675466
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.30748853947096316,
+          "std": 0.06219098251521472,
+          "ci95": [
+            0.23026823546890127,
+            0.38470884347302503
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.38766886712636267,
+          "std": 0.06499464128627544,
+          "ci95": [
+            0.30696736096502647,
+            0.46837037328769887
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.8895598586548596,
+          "std": 0.07358722859941565,
+          "ci95": [
+            0.7981892461753748,
+            0.9809304711343445
+          ]
+        }
+      },
+      "mse": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 6.335755840916324e-05,
+          "std": 8.002285264421883e-05,
+          "ci95": [
+            -3.6003936752728176e-05,
+            0.00016271905357105465
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.2874003838126571,
+          "std": 0.05918013083564205,
+          "ci95": [
+            0.2139185459450519,
+            0.3608822216802623
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.5724334252279879,
+          "std": 0.09354081165341724,
+          "ci95": [
+            0.4562871670351806,
+            0.6885796834207952
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.3818543691652929,
+          "std": 0.02520711580412901,
+          "ci95": [
+            0.3505556009727528,
+            0.41315313735783304
+          ]
+        }
+      },
+      "resources": {
+        "features": 315,
+        "measurement": "exact",
+        "readout": "Mat\u00e9rn kernel ridge",
+        "reservoir_settings_searched": 0
+      },
+      "seconds": {
+        "min": 629.3712814589962,
+        "mean": 644.7746968249791,
+        "max": 675.4481828749413
+      },
+      "feature_seconds": {
+        "min": 38.0,
+        "mean": 40.2,
+        "max": 46.0
+      }
+    },
+    {
+      "candidate": "quark_distinguishable_merlin",
+      "label": "Photonic, exact, distinguishable photons",
+      "role": "control: no interference",
+      "scope": "adaptation, simulated, 5 seeds",
+      "provenance": "local run",
+      "runs": 5,
+      "expected_runs": 5,
+      "normalized": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 0.00013955112638971198,
+          "std": 0.00016489609251697736,
+          "ci95": [
+            -6.519441513309592e-05,
+            0.0003442966679125199
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.30674943714357605,
+          "std": 0.06183484708235395,
+          "ci95": [
+            0.22997133368698208,
+            0.38352754060017
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.3866479514381346,
+          "std": 0.0655723126327408,
+          "ci95": [
+            0.3052291715630985,
+            0.46806673131317067
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.8900337411032814,
+          "std": 0.07280510114506268,
+          "ci95": [
+            0.7996342681258735,
+            0.9804332140806893
+          ]
+        }
+      },
+      "mse": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 6.157285205241785e-05,
+          "std": 7.687186259159409e-05,
+          "ci95": [
+            -3.387617220243123e-05,
+            0.00015702187630726693
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.28671831730256236,
+          "std": 0.05902239514601153,
+          "ci95": [
+            0.21343233416200325,
+            0.3600043004431215
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.572073168873273,
+          "std": 0.10146087011845877,
+          "ci95": [
+            0.44609285922075465,
+            0.6980534785257912
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.3820500895372114,
+          "std": 0.0245720918059875,
+          "ci95": [
+            0.351539807781159,
+            0.41256037129326384
+          ]
+        }
+      },
+      "resources": {
+        "features": 315,
+        "measurement": "exact",
+        "readout": "Mat\u00e9rn kernel ridge",
+        "reservoir_settings_searched": 0
+      },
+      "seconds": {
+        "min": 629.3662405420328,
+        "mean": 665.6891772500239,
+        "max": 696.8783984580077
+      },
+      "feature_seconds": {
+        "min": 49.0,
+        "mean": 49.6,
+        "max": 50.0
+      }
+    },
+    {
+      "candidate": "raw_window_kernel",
+      "label": "Mat\u00e9rn kernel on the raw window",
+      "role": "fair baseline (ours)",
+      "scope": "5 seeds",
+      "provenance": "local run",
+      "runs": 5,
+      "expected_runs": 5,
+      "normalized": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 7.39509945862652e-10,
+          "std": 2.4477648761883724e-10,
+          "ci95": [
+            4.355797935795724e-10,
+            1.0434400981457317e-09
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 1.2970897657551106e-09,
+          "std": 5.832773599925504e-10,
+          "ci95": [
+            5.728552668850243e-10,
+            2.021324264625197e-09
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 7.36975944938731e-05,
+          "std": 3.827051073482128e-05,
+          "ci95": [
+            2.617847912157483e-05,
+            0.00012121670986617136
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.8429092270472569,
+          "std": 0.09026481657497992,
+          "ci95": [
+            0.7308306540016379,
+            0.9549878000928759
+          ]
+        }
+      },
+      "mse": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 3.193378704976637e-10,
+          "std": 7.591962644223724e-11,
+          "ci95": [
+            2.2507120358725918e-10,
+            4.136045374080682e-10
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 1.110577119913003e-09,
+          "std": 1.6349318105620133e-10,
+          "ci95": [
+            9.075735230437082e-10,
+            1.3135807167822978e-09
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.00010740477749005841,
+          "std": 5.526109702228672e-05,
+          "ci95": [
+            3.8789062816239756e-05,
+            0.00017602049216387707
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.36072132832883597,
+          "std": 0.012178392153708922,
+          "ci95": [
+            0.3455998572355684,
+            0.3758427994221035
+          ]
+        }
+      },
+      "resources": {
+        "features": 75,
+        "measurement": "none (classical)",
+        "readout": "Mat\u00e9rn kernel ridge",
+        "reservoir_settings_searched": 0
+      },
+      "seconds": {
+        "min": 655.9940828749677,
+        "mean": 666.5308898832067,
+        "max": 685.6622931660386
+      },
+      "feature_seconds": {
+        "min": 0.0,
+        "mean": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "candidate": "raw_window_linear",
+      "label": "Linear ridge on the raw window",
+      "role": "fair baseline (ours)",
+      "scope": "5 seeds",
+      "provenance": "local run",
+      "runs": 5,
+      "expected_runs": 5,
+      "normalized": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 5.030657494853555e-13,
+          "std": 1.1248892130011347e-12,
+          "ci95": [
+            -8.93668688265919e-13,
+            1.89980018723663e-12
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 5.504580626768059e-13,
+          "std": 1.2308616469081778e-12,
+          "ci95": [
+            -9.778585310588718e-13,
+            2.0787746564124837e-12
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.2811406011352337,
+          "std": 0.1329194583861819,
+          "ci95": [
+            0.11609929499636823,
+            0.4461819072740992
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.8262617407965065,
+          "std": 0.09336031695433723,
+          "ci95": [
+            0.7103395963734135,
+            0.9421838852195995
+          ]
+        }
+      },
+      "mse": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 1.9274801381739824e-13,
+          "std": 4.3099766142377117e-13,
+          "ci95": [
+            -3.424062656825136e-13,
+            7.279022933173101e-13
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 6.290137348184293e-13,
+          "std": 1.4065174698350345e-12,
+          "ci95": [
+            -1.1174083703203816e-12,
+            2.3754358399572404e-12
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.4192717659792427,
+          "std": 0.24379601408772963,
+          "ci95": [
+            0.11655903238093113,
+            0.7219844995775543
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.35341218987673717,
+          "std": 0.011507466189991539,
+          "ci95": [
+            0.33912378339807764,
+            0.3677005963553967
+          ]
+        }
+      },
+      "resources": {
+        "features": 75,
+        "measurement": "none (classical)",
+        "readout": "linear ridge",
+        "reservoir_settings_searched": 0
+      },
+      "seconds": {
+        "min": 4.182274374994449,
+        "mean": 4.248300549993291,
+        "max": 4.298562540963758
+      },
+      "feature_seconds": {
+        "min": 0.0,
+        "mean": 0.0,
+        "max": 0.0
+      }
+    },
+    {
+      "candidate": "esn_default",
+      "label": "Echo state network, default",
+      "role": "fair baseline (ours)",
+      "scope": "5 seeds",
+      "provenance": "local run",
+      "runs": 5,
+      "expected_runs": 5,
+      "normalized": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 0.00015768790918388315,
+          "std": 1.603162503094554e-05,
+          "ci95": [
+            0.00013778201755025577,
+            0.00017759380081751054
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.06342760069271339,
+          "std": 0.011007761741028915,
+          "ci95": [
+            0.049759659238073,
+            0.07709554214735378
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.08953251829750879,
+          "std": 0.014563142070648048,
+          "ci95": [
+            0.07144998908765848,
+            0.10761504750735909
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.8478285948358106,
+          "std": 0.09193943895176662,
+          "ci95": [
+            0.7336707034743492,
+            0.9619864861972721
+          ]
+        }
+      },
+      "mse": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 6.892018639378947e-05,
+          "std": 2.984476048519226e-06,
+          "ci95": [
+            6.52144699308417e-05,
+            7.262590285673722e-05
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 0.06006224576806783,
+          "std": 0.015926207028909064,
+          "ci95": [
+            0.04028724787233171,
+            0.07983724366380396
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 0.13276910316381849,
+          "std": 0.029092787006498127,
+          "ci95": [
+            0.09664563693043951,
+            0.16889256939719746
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.3627956113262287,
+          "std": 0.01222921835284801,
+          "ci95": [
+            0.3476110311713246,
+            0.37798019148113277
+          ]
+        }
+      },
+      "resources": {
+        "features": 315,
+        "measurement": "none (classical)",
+        "readout": "Mat\u00e9rn kernel ridge",
+        "reservoir_settings_searched": 0
+      },
+      "seconds": {
+        "min": 623.0887513339985,
+        "mean": 644.1296587168123,
+        "max": 662.4274922080222
+      },
+      "feature_seconds": {
+        "min": 0.0,
+        "mean": 0.6,
+        "max": 1.0
+      }
+    },
+    {
+      "candidate": "esn_tuned",
+      "label": "Echo state network, tuned",
+      "role": "fair baseline (ours)",
+      "scope": "5 seeds",
+      "provenance": "local run",
+      "runs": 5,
+      "expected_runs": 5,
+      "normalized": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 2.0728804484608331e-07,
+          "std": 4.2548557644761156e-08,
+          "ci95": [
+            1.5445703264308584e-07,
+            2.601190570490808e-07
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 4.2036666715431675e-06,
+          "std": 3.0198664369145015e-06,
+          "ci95": [
+            4.540072374425528e-07,
+            7.953326105643782e-06
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 1.7956955131175952e-05,
+          "std": 1.6039908451403052e-05,
+          "ci95": [
+            -1.9592217274155073e-06,
+            3.787313198976741e-05
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.8544667652775961,
+          "std": 0.08181817811613748,
+          "ci95": [
+            0.7528760791121651,
+            0.9560574514430271
+          ]
+        }
+      },
+      "mse": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": 9.012966701505609e-08,
+          "std": 1.19452399363086e-08,
+          "ci95": [
+            7.529769263623587e-08,
+            1.0496164139387631e-07
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": 3.4342374950577594e-06,
+          "std": 1.5472590114444681e-06,
+          "ci95": [
+            1.5130616846508172e-06,
+            5.355413305464702e-06
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": 2.6472107616622434e-05,
+          "std": 2.2616537671506166e-05,
+          "ci95": [
+            -1.6100329741059624e-06,
+            5.455424820735083e-05
+          ]
+        },
+        "one_step_forecast": {
+          "n": 5,
+          "mean": 0.3659674978612754,
+          "std": 0.010978485282696706,
+          "ci95": [
+            0.35233590793094105,
+            0.3795990877916098
+          ]
+        }
+      },
+      "resources": {
+        "features": 315,
+        "measurement": "none (classical)",
+        "readout": "Mat\u00e9rn kernel ridge",
+        "reservoir_settings_searched": 18
+      },
+      "seconds": {
+        "min": 710.0945507090073,
+        "mean": 747.0470370583935,
+        "max": 792.76282295899
+      },
+      "feature_seconds": {
+        "min": 38.0,
+        "mean": 39.0,
+        "max": 40.0
+      }
+    }
+  ],
+  "paper_reported": {
+    "current_point_readout": {
+      "release": 0.0043057762029478945,
+      "ours": 0.004305776202947178
+    },
+    "exp_fading": {
+      "release": 0.4491027773903661,
+      "ours": 0.4491027773907614
+    },
+    "volterra": {
+      "release": 0.6508254216940561,
+      "ours": 0.6508254216863348
+    }
+  },
+  "pairs": [
+    {
+      "a": "quark",
+      "b": "raw_window_kernel",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.008341546503120623,
+        "se_delta": 0.002760629238645703,
+        "label": "raw_window_kernel lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.0006768109662168495,
+          0.016006282040024397
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "raw_window_kernel",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.4636029647807252,
+        "se_delta": 0.0638794404532982,
+        "label": "raw_window_kernel lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.2862452050113915,
+          0.6409607245500589
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "raw_window_kernel",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.7508823818500725,
+        "se_delta": 0.08052048601747469,
+        "label": "raw_window_kernel lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.5273216725787075,
+          0.9744430911214375
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "raw_window_kernel",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.018068485680699475,
+        "se_delta": 0.012052151673638776,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.015393651840676297,
+          0.05153062320207524
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "raw_window_linear",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.008341546822265743,
+        "se_delta": 0.0027606292441921102,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.0006768112699626749,
+          0.01600628237456881
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "raw_window_linear",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.46360296589067335,
+        "se_delta": 0.06387944038266004,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.28624520631746264,
+          0.640960725463884
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "raw_window_linear",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.3317180206483198,
+        "se_delta": 0.03786120872892924,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.22659845299601222,
+          0.43683758830062736
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "raw_window_linear",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.02537762413279835,
+        "se_delta": 0.012587577735976066,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.009571094458549118,
+          0.06032634272414582
+        ],
+        "flag_interval_contains_zero": true
+      }
+    },
+    {
+      "a": "quark",
+      "b": "esn_default",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.008272626636064703,
+        "se_delta": 0.0027618578055102682,
+        "label": "esn_default lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.0006044800507033991,
+          0.015940773221426008
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "esn_default",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.40354072012323455,
+        "se_delta": 0.05751145148162683,
+        "label": "esn_default lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.24386333216425138,
+          0.5632181080822177
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "esn_default",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.618220683463744,
+        "se_delta": 0.06774522260812356,
+        "label": "esn_default lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.43012979175288446,
+          0.8063115751746036
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "esn_default",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.015994202683306848,
+        "se_delta": 0.011554603154404515,
+        "label": "no clear separation",
+        "a_lower_seeds": 1,
+        "ci95_delta": [
+          -0.016086518687242556,
+          0.04807492405385625
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "esn_tuned",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.008341456692791478,
+        "se_delta": 0.002760629450844679,
+        "label": "esn_tuned lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.000676720566728896,
+          0.01600619281885406
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "esn_tuned",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.46359953165380724,
+        "se_delta": 0.06387993381051198,
+        "label": "esn_tuned lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.28624040210525226,
+          0.6409586612023622
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "esn_tuned",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.750963314519946,
+        "se_delta": 0.08049712714715244,
+        "label": "esn_tuned lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.5274674598697502,
+          0.9744591691701419
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark",
+      "b": "esn_tuned",
+      "origin": "frozen in the Fair Baseline Plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.012822316148260116,
+        "se_delta": 0.01073555888630699,
+        "label": "no clear separation",
+        "a_lower_seeds": 1,
+        "ci95_delta": [
+          -0.016984373773189603,
+          0.04262900606970983
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "raw_window_kernel",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 5.3345316606122936e-05,
+        "se_delta": 3.801095810923971e-05,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -5.2190021980154025e-05,
+          0.0001588806551923999
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "raw_window_kernel",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.31946265092305365,
+        "se_delta": 0.05314709762587641,
+        "label": "raw_window_kernel lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.17190265186421982,
+          0.46702264998188747
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "raw_window_kernel",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.5761940440396109,
+        "se_delta": 0.08047031128067256,
+        "label": "raw_window_kernel lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.35277264217064486,
+          0.799615445908577
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "raw_window_kernel",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.02198948305241035,
+        "se_delta": 0.01370417441513868,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.016059404923278273,
+          0.060038371028098975
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "raw_window_linear",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 5.3345635751245415e-05,
+        "se_delta": 3.801095360828633e-05,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -5.2189690338381563e-05,
+          0.00015888096184087238
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "raw_window_linear",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.31946265203300167,
+        "se_delta": 0.053147097566540076,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.17190265313891193,
+          0.4670226509270914
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "raw_window_linear",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.1570296828378583,
+        "se_delta": 0.03421121108192081,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.062044133286570755,
+          0.2520152323891458
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "raw_window_linear",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.029298621504509226,
+        "se_delta": 0.014176980581899649,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.010062986838590218,
+          0.06866022984760867
+        ],
+        "flag_interval_contains_zero": true
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "esn_default",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": -1.557455044979603e-05,
+        "se_delta": 3.909178499635953e-05,
+        "label": "no clear separation",
+        "a_lower_seeds": 4,
+        "ci95_delta": [
+          -0.000124110745556383,
+          9.296164465679091e-05
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "esn_default",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.25940040626556293,
+        "se_delta": 0.048765295681429975,
+        "label": "esn_default lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.12400623976733358,
+          0.39479457276379226
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "esn_default",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.44353234565328253,
+        "se_delta": 0.06843054026776453,
+        "label": "esn_default lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.25353870708080717,
+          0.6335259842257579
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "esn_default",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.019915200055017724,
+        "se_delta": 0.013027149542121624,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.016253965525885535,
+          0.05608436563592098
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "esn_tuned",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 5.325550627697838e-05,
+        "se_delta": 3.80121440466905e-05,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -5.228312499952889e-05,
+          0.00015879413755348566
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "esn_tuned",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.3194592177961356,
+        "se_delta": 0.05314750620134687,
+        "label": "esn_tuned lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.17189808434993675,
+          0.4670203512423345
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "esn_tuned",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.5762749767094844,
+        "se_delta": 0.08044299564581904,
+        "label": "esn_tuned lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.3529294152012027,
+          0.799620538217766
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact",
+      "b": "esn_tuned",
+      "origin": "added after the main sweep (phase 03)",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.016743313519970993,
+        "se_delta": 0.012584301949394921,
+        "label": "no clear separation",
+        "a_lower_seeds": 1,
+        "ci95_delta": [
+          -0.018196310029757586,
+          0.05168293706969957
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "raw_window_kernel",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.024927797405135732,
+        "se_delta": 0.006382146719144467,
+        "label": "raw_window_kernel lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.007208117386112919,
+          0.042647477424158545
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "raw_window_kernel",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.4644280242670339,
+        "se_delta": 0.04994892466156286,
+        "label": "raw_window_kernel lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.32574757688054434,
+          0.6031084716535234
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "raw_window_kernel",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.8695618457426327,
+        "se_delta": 0.05624817505134508,
+        "label": "raw_window_kernel lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.713391875445017,
+          1.0257318160402484
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "raw_window_kernel",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.0268665752337384,
+        "se_delta": 0.013065549651868652,
+        "label": "raw_window_kernel lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.009409206143911053,
+          0.06314235661138785
+        ],
+        "flag_interval_contains_zero": true
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "raw_window_linear",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.02492779772428086,
+        "se_delta": 0.006382146706935362,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.007208117739155959,
+          0.04264747770940576
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "raw_window_linear",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.464428025376982,
+        "se_delta": 0.049948924600246955,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.32574757816073274,
+          0.6031084725932313
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "raw_window_linear",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.45039748454088013,
+        "se_delta": 0.07841426880152816,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.23268457174921323,
+          0.6681103973325471
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "raw_window_linear",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.03417571368583727,
+        "se_delta": 0.013692696497571419,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.0038413064818038634,
+          0.07219273385347841
+        ],
+        "flag_interval_contains_zero": true
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "esn_default",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.024858877538079815,
+        "se_delta": 0.006383002394344351,
+        "label": "esn_default lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.007136821783836646,
+          0.04258093329232299
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "esn_default",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.4043657796095433,
+        "se_delta": 0.04489793171512862,
+        "label": "esn_default lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.27970913686556964,
+          0.5290224223535169
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "esn_default",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.7369001473563042,
+        "se_delta": 0.044117444176786806,
+        "label": "esn_default lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.6144104854178275,
+          0.8593898092947808
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "esn_default",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.02479229223634577,
+        "se_delta": 0.012657149699525557,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.010349589092657686,
+          0.059934173565349226
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "esn_tuned",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.024927707594806586,
+        "se_delta": 0.006382150342285312,
+        "label": "esn_tuned lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.00720801751633211,
+          0.04264739767328106
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "esn_tuned",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.464424591140116,
+        "se_delta": 0.04994954929781342,
+        "label": "esn_tuned lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.32574240948536604,
+          0.603106772794866
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "esn_tuned",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.8696427784125061,
+        "se_delta": 0.05623355891313839,
+        "label": "esn_tuned lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.7135133890202713,
+          1.025772167804741
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "esn_tuned",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.02162040570129904,
+        "se_delta": 0.011460459215853185,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.01019893019187548,
+          0.05343974159447355
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "raw_window_kernel",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 6.335723907129276e-05,
+        "se_delta": 3.5787304640070556e-05,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -3.600424772485341e-05,
+          0.00016271872586743892
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "raw_window_kernel",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.28740038270207996,
+        "se_delta": 0.026466159161619793,
+        "label": "raw_window_kernel lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.21391854464441495,
+          0.36088222075974496
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "raw_window_kernel",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.5723260204504979,
+        "se_delta": 0.041833897462378186,
+        "label": "raw_window_kernel lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.45617650060973153,
+          0.6884755402912641
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "raw_window_kernel",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.021133040836456885,
+        "se_delta": 0.011550074658594827,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.010935107414067797,
+          0.05320118908698157
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "raw_window_linear",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 6.335755821641523e-05,
+        "se_delta": 3.578730765543739e-05,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -3.600393695173144e-05,
+          0.00016271905338456188
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "raw_window_linear",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.2874003838120281,
+        "se_delta": 0.026466159092844912,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.21391854594531276,
+          0.3608822216787434
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "raw_window_linear",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.15316165924874525,
+        "se_delta": 0.09495452434985202,
+        "label": "no clear separation",
+        "a_lower_seeds": 1,
+        "ci95_delta": [
+          -0.11047436509878605,
+          0.41679768359627656
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "raw_window_linear",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.028442179288555757,
+        "se_delta": 0.012019043283993723,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.004928034606449024,
+          0.061812393183560535
+        ],
+        "flag_interval_contains_zero": true
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "esn_default",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": -5.562627984626213e-06,
+        "se_delta": 3.694420450798914e-05,
+        "label": "no clear separation",
+        "a_lower_seeds": 4,
+        "ci95_delta": [
+          -0.00010813618375625892,
+          9.701092778700649e-05
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "esn_default",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.22733813804458927,
+        "se_delta": 0.020018562900202035,
+        "label": "esn_default lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.17175769706722918,
+          0.28291857902194933
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "esn_default",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.43966432206416944,
+        "se_delta": 0.0335112065492339,
+        "label": "esn_default lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.34662229667127675,
+          0.5327063474570621
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "esn_default",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.019058757839064255,
+        "se_delta": 0.010901574002022983,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.011208863937803976,
+          0.04932637961593249
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "esn_tuned",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 6.326742874214819e-05,
+        "se_delta": 3.578737480680349e-05,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -3.609425286808018e-05,
+          0.00016262911035237656
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "esn_tuned",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.28739694957516204,
+        "se_delta": 0.026466723434073,
+        "label": "esn_tuned lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.21391354484600633,
+          0.36088035430431775
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "esn_tuned",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.5724069531203714,
+        "se_delta": 0.04182669784565265,
+        "label": "esn_tuned lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.456277422620222,
+          0.6885364836205208
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "esn_tuned",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.015886871304017523,
+        "se_delta": 0.010351583200825036,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.012853731204960857,
+          0.04462747381299591
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "raw_window_kernel",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 6.157253271454737e-05,
+        "se_delta": 3.437813766892377e-05,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -3.387647934215191e-05,
+          0.00015702154477124664
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "raw_window_kernel",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.2867183161919853,
+        "se_delta": 0.026395617616320415,
+        "label": "raw_window_kernel lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.2134323328624798,
+          0.36000429952149077
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "raw_window_kernel",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.5719657640957829,
+        "se_delta": 0.04537596249963082,
+        "label": "raw_window_kernel lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.44598189512004427,
+          0.6979496330715216
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "raw_window_kernel",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.021328761208375367,
+        "se_delta": 0.011277402255529315,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.009982327083335553,
+          0.05263984950008629
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "raw_window_linear",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 6.157285185966984e-05,
+        "se_delta": 3.437814205644118e-05,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -3.387617237873067e-05,
+          0.00015702187609807037
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "raw_window_linear",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.2867183173019334,
+        "se_delta": 0.026395617547939957,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.21343233416228255,
+          0.36000430044158427
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "raw_window_linear",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.15280140289403027,
+        "se_delta": 0.09420328546901786,
+        "label": "no clear separation",
+        "a_lower_seeds": 1,
+        "ci95_delta": [
+          -0.1087488479399748,
+          0.41435165372803534
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "raw_window_linear",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.028637899660474243,
+        "se_delta": 0.011753513411927968,
+        "label": "raw_window_linear lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.003995085120949777,
+          0.061270884441898266
+        ],
+        "flag_interval_contains_zero": true
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "esn_default",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": -7.347334341371603e-06,
+        "se_delta": 3.555154618498068e-05,
+        "label": "no clear separation",
+        "a_lower_seeds": 4,
+        "ci95_delta": [
+          -0.0001060542507288745,
+          9.13595820461313e-05
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "esn_default",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.2266560715344946,
+        "se_delta": 0.019965314936096195,
+        "label": "esn_default lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.17122347060643792,
+          0.28208867246255126
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "esn_default",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.4393040657094545,
+        "se_delta": 0.03688597482323706,
+        "label": "esn_default lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.33689218146102895,
+          0.5417159499578801
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "esn_default",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.01925447821098274,
+        "se_delta": 0.010645383192256379,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.010301843846112345,
+          0.048810800268077825
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "esn_tuned",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 6.14827223854028e-05,
+        "se_delta": 3.437808499110995e-05,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -3.396614341423815e-05,
+          0.00015693158818504377
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "esn_tuned",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.28671488306506737,
+        "se_delta": 0.02639618303057123,
+        "label": "esn_tuned lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.21342732989393282,
+          0.36000243623620193
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "esn_tuned",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.5720466967656563,
+        "se_delta": 0.045368601437204524,
+        "label": "esn_tuned lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.44608326537566023,
+          0.6980101281556524
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_distinguishable_merlin",
+      "b": "esn_tuned",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.01608259167593601,
+        "se_delta": 0.010057853121029784,
+        "label": "no clear separation",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          -0.011842485390745484,
+          0.0440076687426175
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "quark_exact",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 1.0011922465169815e-05,
+        "se_delta": 1.2022263315450683e-05,
+        "label": "no clear separation",
+        "a_lower_seeds": 2,
+        "ci95_delta": [
+          -2.336723167041223e-05,
+          4.3391076600751856e-05
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "quark_exact",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": -0.032062268220973626,
+        "se_delta": 0.039410936969145875,
+        "label": "no clear separation",
+        "a_lower_seeds": 3,
+        "ci95_delta": [
+          -0.14148457126021746,
+          0.0773600348182702
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "quark_exact",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": -0.0038680235891130456,
+        "se_delta": 0.06938736103714564,
+        "label": "no clear separation",
+        "a_lower_seeds": 3,
+        "ci95_delta": [
+          -0.19651822250328813,
+          0.18878217532506206
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_exact_merlin",
+      "b": "quark_exact",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": -0.0008564422159534679,
+        "se_delta": 0.002363926471945523,
+        "label": "no clear separation",
+        "a_lower_seeds": 2,
+        "ci95_delta": [
+          -0.007419754298034104,
+          0.005706869866127169
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "quark_shadows",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": -0.013684247894515111,
+        "se_delta": 0.0061674965494937384,
+        "label": "quark_merlin lower",
+        "a_lower_seeds": 4,
+        "ci95_delta": [
+          -0.030807963500681282,
+          0.003439467711651059
+        ],
+        "flag_interval_contains_zero": true
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "quark_shadows",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": -0.14810603892205398,
+        "se_delta": 0.06921290366955891,
+        "label": "quark_merlin lower",
+        "a_lower_seeds": 5,
+        "ci95_delta": [
+          -0.3402718665319272,
+          0.04405978868781926
+        ],
+        "flag_interval_contains_zero": true
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "quark_shadows",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": -0.07444839414139752,
+        "se_delta": 0.053477369593720334,
+        "label": "no clear separation",
+        "a_lower_seeds": 4,
+        "ci95_delta": [
+          -0.22292537518873567,
+          0.07402858690594062
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "quark_shadows",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": -0.005669412085281611,
+        "se_delta": 0.0038013757886943876,
+        "label": "no clear separation",
+        "a_lower_seeds": 3,
+        "ci95_delta": [
+          -0.016223723286819546,
+          0.004884899116256323
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "quark",
+      "origin": "Phase 4 plan",
+      "task": "current_point_readout",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.016586250902015112,
+        "se_delta": 0.004923989108042454,
+        "label": "quark lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.0029150654449433926,
+          0.030257436359086832
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "quark",
+      "origin": "Phase 4 plan",
+      "task": "exp_fading",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.0008250594863087213,
+        "se_delta": 0.025538836331921777,
+        "label": "no clear separation",
+        "a_lower_seeds": 3,
+        "ci95_delta": [
+          -0.07008211763990307,
+          0.07173223661252051
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "quark",
+      "origin": "Phase 4 plan",
+      "task": "volterra",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.11867946389256027,
+        "se_delta": 0.041143135818251755,
+        "label": "quark lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.004447805837487176,
+          0.23291112194763336
+        ],
+        "flag_interval_contains_zero": false
+      }
+    },
+    {
+      "a": "quark_merlin",
+      "b": "quark",
+      "origin": "Phase 4 plan",
+      "task": "one_step_forecast",
+      "status": "COMMENSURABLE",
+      "paired": {
+        "seeds": [
+          1,
+          2,
+          3,
+          4,
+          12345
+        ],
+        "mean_delta": 0.008798089553038924,
+        "se_delta": 0.002999027697695423,
+        "label": "quark lower",
+        "a_lower_seeds": 0,
+        "ci95_delta": [
+          0.0004714537814198578,
+          0.01712472532465799
+        ],
+        "flag_interval_contains_zero": false
+      }
+    }
+  ],
+  "claim_evidence": {
+    "quark": {
+      "max_train_mse_at_smallest_ridge": 5.630015228911767e-21,
+      "decay_slope": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": -0.4583035471058096,
+          "std": 0.07468100025120067,
+          "ci95": [
+            -0.5510322564675717,
+            -0.3655748377440475
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": -0.09179623749602447,
+          "std": 0.020823933510627144,
+          "ci95": [
+            -0.11765256603715912,
+            -0.06593990895488983
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": -0.08545848403490153,
+          "std": 0.023482235257409112,
+          "ci95": [
+            -0.11461553015137751,
+            -0.05630143791842553
+          ]
+        }
+      },
+      "seeds_with_lower_mse_at_8000_than_100": {
+        "current_point_readout": 5,
+        "exp_fading": 5,
+        "volterra": 5
+      },
+      "paper_order_raw": 5,
+      "paper_order_normalized": 3,
+      "seeds": 5
+    },
+    "quark_exact": {
+      "max_train_mse_at_smallest_ridge": 1.0852066413001226e-11,
+      "decay_slope": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": -1.3593646241670287,
+          "std": 0.2886078296630043,
+          "ci95": [
+            -1.7177185758593057,
+            -1.0010106724747518
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": -0.16197087613889125,
+          "std": 0.07031592473708707,
+          "ci95": [
+            -0.24927962838533774,
+            -0.07466212389244475
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": -0.16006107696165256,
+          "std": 0.06846910041499966,
+          "ci95": [
+            -0.24507669393635606,
+            -0.07504545998694907
+          ]
+        }
+      },
+      "seeds_with_lower_mse_at_8000_than_100": {
+        "current_point_readout": 5,
+        "exp_fading": 5,
+        "volterra": 5
+      },
+      "paper_order_raw": 5,
+      "paper_order_normalized": 4,
+      "seeds": 5
+    },
+    "quark_shadows": {
+      "max_train_mse_at_smallest_ridge": 5.5926744329220715e-21,
+      "decay_slope": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": -0.2874550472137199,
+          "std": 0.04178161540472842,
+          "ci95": [
+            -0.33933377484856697,
+            -0.23557631957887282
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": -0.06811686374247337,
+          "std": 0.009498031209613263,
+          "ci95": [
+            -0.0799102271492659,
+            -0.056323500335680836
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": -0.0652210304471639,
+          "std": 0.029679433607090827,
+          "ci95": [
+            -0.10207291464416746,
+            -0.02836914625016034
+          ]
+        }
+      },
+      "seeds_with_lower_mse_at_8000_than_100": {
+        "current_point_readout": 5,
+        "exp_fading": 5,
+        "volterra": 5
+      },
+      "paper_order_raw": 5,
+      "paper_order_normalized": 3,
+      "seeds": 5
+    },
+    "quark_merlin": {
+      "max_train_mse_at_smallest_ridge": 2.9201326483990112e-24,
+      "decay_slope": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": -0.30562840147732023,
+          "std": 0.06342876979813973,
+          "ci95": [
+            -0.38438562138602456,
+            -0.2268711815686159
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": -0.07110928724701963,
+          "std": 0.016942062468733626,
+          "ci95": [
+            -0.09214563626976535,
+            -0.05007293822427391
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": -0.058891001469694414,
+          "std": 0.015417195072681718,
+          "ci95": [
+            -0.07803397754472777,
+            -0.03974802539466106
+          ]
+        }
+      },
+      "seeds_with_lower_mse_at_8000_than_100": {
+        "current_point_readout": 5,
+        "exp_fading": 5,
+        "volterra": 5
+      },
+      "paper_order_raw": 5,
+      "paper_order_normalized": 5,
+      "seeds": 5
+    },
+    "quark_exact_merlin": {
+      "max_train_mse_at_smallest_ridge": 4.6088589186818894e-20,
+      "decay_slope": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": -1.1834063801592787,
+          "std": 0.20111501473674598,
+          "ci95": [
+            -1.4331236534561156,
+            -0.9336891068624418
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": -0.12789511677762241,
+          "std": 0.01767823000741229,
+          "ci95": [
+            -0.1498455385297917,
+            -0.10594469502545312
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": -0.12100793700507055,
+          "std": 0.0234223921505307,
+          "ci95": [
+            -0.15009067809019497,
+            -0.09192519591994615
+          ]
+        }
+      },
+      "seeds_with_lower_mse_at_8000_than_100": {
+        "current_point_readout": 5,
+        "exp_fading": 5,
+        "volterra": 5
+      },
+      "paper_order_raw": 5,
+      "paper_order_normalized": 5,
+      "seeds": 5
+    },
+    "quark_distinguishable_merlin": {
+      "max_train_mse_at_smallest_ridge": 3.713671081514528e-17,
+      "decay_slope": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": -1.2074454103363648,
+          "std": 0.23735309553594394,
+          "ci95": [
+            -1.502158203925565,
+            -0.9127326167471647
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": -0.12210113042241813,
+          "std": 0.016230122908591042,
+          "ci95": [
+            -0.1422534897244378,
+            -0.10194877112039846
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": -0.11761581663127814,
+          "std": 0.018346315742939278,
+          "ci95": [
+            -0.14039577638896478,
+            -0.0948358568735915
+          ]
+        }
+      },
+      "seeds_with_lower_mse_at_8000_than_100": {
+        "current_point_readout": 5,
+        "exp_fading": 5,
+        "volterra": 5
+      },
+      "paper_order_raw": 5,
+      "paper_order_normalized": 5,
+      "seeds": 5
+    },
+    "raw_window_kernel": {
+      "max_train_mse_at_smallest_ridge": 4.3299624969066785e-13,
+      "decay_slope": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": -0.5264419944920677,
+          "std": 0.21287428070091652,
+          "ci95": [
+            -0.7907603249819182,
+            -0.26212366400221737
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": -0.7604040604141311,
+          "std": 0.3482869027680377,
+          "ci95": [
+            -1.1928593686270985,
+            -0.3279487522011638
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": -3.2604291485823964,
+          "std": 0.3740514427882352,
+          "ci95": [
+            -3.724875358568723,
+            -2.7959829385960697
+          ]
+        }
+      },
+      "seeds_with_lower_mse_at_8000_than_100": {
+        "current_point_readout": 5,
+        "exp_fading": 5,
+        "volterra": 5
+      },
+      "paper_order_raw": 5,
+      "paper_order_normalized": 3,
+      "seeds": 5
+    },
+    "raw_window_linear": {
+      "max_train_mse_at_smallest_ridge": 0.7964058971657062,
+      "decay_slope": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": -11.656213151103817,
+          "std": 3.3649870978305967,
+          "ci95": [
+            -15.834396484900235,
+            -7.478029817307398
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": -10.012433285647038,
+          "std": 3.912115976234421,
+          "ci95": [
+            -14.869966850135091,
+            -5.154899721158985
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": -0.049096156411051264,
+          "std": 0.011127727398901308,
+          "ci95": [
+            -0.06291305490409263,
+            -0.03527925791800989
+          ]
+        }
+      },
+      "seeds_with_lower_mse_at_8000_than_100": {
+        "current_point_readout": 5,
+        "exp_fading": 5,
+        "volterra": 5
+      },
+      "paper_order_raw": 5,
+      "paper_order_normalized": 5,
+      "seeds": 5
+    },
+    "esn_default": {
+      "max_train_mse_at_smallest_ridge": 4.013178082659001e-13,
+      "decay_slope": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": -0.8870266873294128,
+          "std": 0.059649987096970815,
+          "ci95": [
+            -0.9610919288010406,
+            -0.8129614458577851
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": -0.23642101110027217,
+          "std": 0.010541906449700076,
+          "ci95": [
+            -0.24951051681129682,
+            -0.2233315053892475
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": -0.3862250328000115,
+          "std": 0.0888555511799679,
+          "ci95": [
+            -0.4965537717407297,
+            -0.2758962938592934
+          ]
+        }
+      },
+      "seeds_with_lower_mse_at_8000_than_100": {
+        "current_point_readout": 5,
+        "exp_fading": 5,
+        "volterra": 5
+      },
+      "paper_order_raw": 5,
+      "paper_order_normalized": 5,
+      "seeds": 5
+    },
+    "esn_tuned": {
+      "max_train_mse_at_smallest_ridge": 8.888490014893052e-13,
+      "decay_slope": {
+        "current_point_readout": {
+          "n": 5,
+          "mean": -1.8527802670623241,
+          "std": 0.025900377792157196,
+          "ci95": [
+            -1.884939833706722,
+            -1.8206207004179262
+          ]
+        },
+        "exp_fading": {
+          "n": 5,
+          "mean": -0.9610672431190961,
+          "std": 0.2114969128962658,
+          "ci95": [
+            -1.2236753455936267,
+            -0.6984591406445655
+          ]
+        },
+        "volterra": {
+          "n": 5,
+          "mean": -1.3358101007733858,
+          "std": 0.11037420828916042,
+          "ci95": [
+            -1.4728577815362798,
+            -1.1987624200104918
+          ]
+        }
+      },
+      "seeds_with_lower_mse_at_8000_than_100": {
+        "current_point_readout": 5,
+        "exp_fading": 5,
+        "volterra": 5
+      },
+      "paper_order_raw": 5,
+      "paper_order_normalized": 4,
+      "seeds": 5
+    }
+  },
+  "extensions": [
+    {
+      "extension": "shot_noise",
+      "what": "QuaRK at 100 and 10000 shots, both estimators",
+      "label": "characterization",
+      "table": "results/statistics.md (shot budget)",
+      "runs": 20,
+      "expected_runs": 20
+    },
+    {
+      "extension": "scaling",
+      "what": "QuaRK at n = 3, 7 (R = 3) and R = 1, 6 (n = 5)",
+      "label": "characterization",
+      "table": "results/statistics.md (n and R)",
+      "runs": 20,
+      "expected_runs": 20
+    },
+    {
+      "extension": "photonic_shots",
+      "what": "Photonic at 100 and 10000 shots",
+      "label": "characterization; compared only with QuaRK at the same budget",
+      "table": "results/photonic_comparison.md",
+      "runs": 10,
+      "expected_runs": 10
+    }
+  ]
+}

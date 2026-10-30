@@ -1,0 +1,12 @@
+{
+  "data": {
+    "num_windows": 10000,
+    "check_release": true
+  },
+  "description": "QuaRK with exact (noise-free) Pauli expectations; ablation of the measurement noise.",
+  "model": {
+    "quark": {
+      "estimator": "exact"
+    }
+  }
+}
