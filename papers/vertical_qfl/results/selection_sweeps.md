@@ -72,6 +72,28 @@ Status COMPLETED (COMPLETE SWEEP), 8/8 runs. Selected: [{'n_photons': 8, 'server
 | {"n_photons": 4, "server_head": 0} | 2 / 2 | 0.7686 | 0.0388 |
 | {"n_photons": 8, "server_head": 0} | 2 / 2 | 0.5373 | 0.1886 |
 
+## D4: `e1_8clients_merlin_diagnostic_d4_20261030-152709_d4`
+
+Status COMPLETED (COMPLETE SWEEP), 8/8 runs. Selected: [{'circuit': {'client_feature_maps': ['identity', 'square', 'cos'], 'message_width': 8, 'server_photons': 4}, 'n_client_stages': 8, 'n_modes': 12}]; tied within tolerance: [{'circuit': {'client_feature_maps': ['identity', 'square', 'cos'], 'message_width': 8, 'server_photons': 4}, 'n_client_stages': 8, 'n_modes': 12}, {'circuit': {'client_feature_maps': ['identity', 'square', 'cos'], 'first_layer': 'superposition', 'message_width': 8, 'server_photons': 4}, 'n_client_stages': 8, 'n_modes': 12}].
+
+| Candidate | Successful / expected | Mean | Std |
+|---|---:|---:|---:|
+| {"circuit": {"client_feature_maps": ["identity", "square", "cos"], "first_layer": "superposition", "message_width": 8, "server_photons": 4}, "n_client_stages": 8, "n_modes": 12} | 2 / 2 | 0.8353 | 0.0111 |
+| {"circuit": {"client_feature_maps": ["identity", "square", "cos"], "message_width": 8, "server_photons": 4}, "n_client_stages": 8, "n_modes": 12} | 2 / 2 | 0.8333 | 0.0083 |
+| {"circuit": {"client_feature_maps": ["identity", "square", "cos"], "first_layer": "superposition", "message_width": 8, "server_feature_maps": ["identity", "square", "cos"], "server_photons": 4}, "n_client_stages": 8, "n_modes": 12, "server_modes": 12} | 2 / 2 | 0.7765 | 0.0555 |
+| {"circuit": {"first_layer": "superposition"}} | 2 / 2 | 0.7275 | 0.0360 |
+
+## D5: `e1_8clients_merlin_diagnostic_d5_20261030-172715_d5`
+
+Status COMPLETED (COMPLETE SWEEP), 8/8 runs. Selected: [{'circuit': {'client_feature_maps': ['identity', 'square', 'cos'], 'client_mixer': 'superposition', 'message_width': 8, 'mixer_depth': 2, 'server_photons': 4}, 'n_client_stages': 8, 'n_modes': 12}]; tied within tolerance: [{'circuit': {'client_feature_maps': ['identity', 'square', 'cos'], 'client_mixer': 'superposition', 'message_width': 8, 'mixer_depth': 2, 'server_photons': 4}, 'n_client_stages': 8, 'n_modes': 12}].
+
+| Candidate | Successful / expected | Mean | Std |
+|---|---:|---:|---:|
+| {"circuit": {"client_feature_maps": ["identity", "square", "cos"], "client_mixer": "superposition", "message_width": 8, "mixer_depth": 2, "server_photons": 4}, "n_client_stages": 8, "n_modes": 12} | 2 / 2 | 0.8039 | 0.0333 |
+| {"circuit": {"client_feature_maps": ["identity", "identity", "identity"], "client_mixer": "superposition", "message_width": 8, "mixer_depth": 1, "server_photons": 4}, "n_client_stages": 8, "n_modes": 12} | 2 / 2 | 0.7882 | 0.0111 |
+| {"circuit": {"client_feature_maps": ["identity", "identity", "identity"], "client_mixer": "superposition", "message_width": 8, "mixer_depth": 2, "server_photons": 4}, "n_client_stages": 8, "n_modes": 12} | 2 / 2 | 0.7745 | 0.0083 |
+| {"circuit": {"client_feature_maps": ["identity", "square", "cos"], "client_mixer": "superposition", "message_width": 8, "mixer_depth": 1, "server_photons": 4}, "n_client_stages": 8, "n_modes": 12} | 2 / 2 | 0.7647 | 0.0388 |
+
 ## C-T: `classical_tuning_20261020-144439_ct`
 
 Status COMPLETED (COMPLETE SWEEP), 48/48 runs. The rule was applied separately per group (architecture, size) by `utils/select_hyperparameters.py --group-by architecture,size` (tie tolerance 0.005, ties to the smallest lr); source `results/classical_selection.json`.

@@ -135,7 +135,7 @@ def test_invalid_layouts_fail_clearly():
     with pytest.raises(ValueError, match="server_modes must be at least"):
         _model([0], "server_narrow", server_modes=6)
     with pytest.raises(ValueError, match="No input-state rule"):
-        PhotonicParty(2, "mode_expectations", 1.0, 8, 2)
+        PhotonicParty(2, "mode_expectations", 1.0, 8, 9)
 
 
 def test_config_values_reach_the_model():
@@ -300,3 +300,110 @@ def test_click_probability_message_depends_on_the_data():
     assert torch.all((message >= 0) & (message <= 1 + 1e-5))
     assert message.std(dim=0).max() > 1e-3
     assert model(_pixels()).shape == (3, 10)
+
+
+def _v3_model(circuit, n_modes=12, stages=8, server_modes=8, photons=4):
+    return PhotonicVerticalFederatedModel(
+        client_slices=list(range(8)),
+        server_encoding="server_wide",
+        n_modes=n_modes,
+        n_photons=photons,
+        client_encoding_scale=math.pi / 8,
+        server_encoding_scale=math.pi,
+        n_client_stages=stages,
+        server_modes=server_modes,
+        server_head=0,
+        computation_space="fock",
+        client_readout="click_probabilities",
+        circuit=circuit,
+    )
+
+
+def test_superposition_first_layer_replaces_only_the_first_mesh():
+    mesh = _model(list(range(8)), "server_wide", space="fock")
+    sup = PhotonicVerticalFederatedModel(
+        client_slices=list(range(8)),
+        server_encoding="server_wide",
+        n_modes=8,
+        n_photons=4,
+        client_encoding_scale=math.pi / 8,
+        server_encoding_scale=math.pi,
+        n_client_stages=4,
+        server_modes=8,
+        server_head=0,
+        computation_space="fock",
+        circuit={"first_layer": "superposition"},
+    )
+    # One 8-mode mesh has 56 phases; one beam-splitter layer has 7 x (theta, phi).
+    assert (
+        sum(p.numel() for p in mesh.clients[0].parameters())
+        - sum(p.numel() for p in sup.clients[0].parameters())
+        == 56 - 14
+    )
+    assert sup(_pixels()).shape == (3, 10)
+
+
+def test_feature_maps_use_separate_modes_and_message_width_is_kept():
+    model = _v3_model(
+        {
+            "client_feature_maps": ["identity", "square", "cos"],
+            "message_width": 8,
+            "server_photons": 4,
+        }
+    )
+    client = model.clients[0]
+    assert client.raw_per_stage == 4 and client.n_inputs == 32
+    assert client.layer.input_size == 8 * 12
+    values = (torch.rand(4, 32) > 0.5).float()
+    assert client(values).shape == (4, 8)
+    assert model(_pixels()).shape == (3, 10)
+
+
+def test_feature_maps_change_a_continuous_server_input():
+    model = _v3_model(
+        {
+            "first_layer": "superposition",
+            "client_feature_maps": ["identity", "square", "cos"],
+            "server_feature_maps": ["identity", "square", "cos"],
+            "message_width": 8,
+            "server_photons": 4,
+        },
+        server_modes=12,
+    )
+    server = model.server
+    assert server.raw_per_stage == 4 and server.n_stages == 16
+    message = torch.rand(2, 64)
+    other = message.clone()
+    other[:, 0] += 0.3
+    assert not torch.allclose(server(message), server(other))
+    model(_pixels()).sum().backward()
+    assert all(p.grad is not None for p in model.parameters())
+
+
+def test_invalid_circuit_options_fail_clearly():
+    with pytest.raises(ValueError, match="feature_maps"):
+        _v3_model({"client_feature_maps": ["bogus"]})
+    with pytest.raises(ValueError, match="first_layer"):
+        _v3_model({"first_layer": "bogus"}, n_modes=8, stages=4)
+    with pytest.raises(ValueError, match="do not encode"):
+        _v3_model({"client_feature_maps": ["identity", "cos"]}, n_modes=12, stages=8)
+
+
+def test_superposition_mixer_shrinks_the_client_parameter_count():
+    maps = ["identity"] * 3
+    counts = {}
+    for mixer, depth in (("mesh", 1), ("superposition", 1), ("superposition", 2)):
+        model = _v3_model(
+            {
+                "client_feature_maps": maps,
+                "message_width": 8,
+                "server_photons": 4,
+                "client_mixer": mixer,
+                "mixer_depth": depth,
+            }
+        )
+        counts[(mixer, depth)] = model.trainable_parameter_counts()["client_0"]
+    # 9 mixer layers (8 stages + final) of 11 beam splitters x (angle, phase) per pass.
+    assert counts[("superposition", 1)] == 9 * 22
+    assert counts[("superposition", 2)] == 2 * 9 * 22
+    assert counts[("mesh", 1)] > 2 * counts[("superposition", 2)]

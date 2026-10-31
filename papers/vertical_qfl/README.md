@@ -140,7 +140,7 @@ python papers/vertical_qfl/utils/run_distributions.py --config configs/e1_8clien
 
 **Sweeps:**
 - **Experiment sweeps:** every experiment is a logged sweep over the 5 distributions, 25 runs in total including the loss control. All are COMPLETE SWEEPs, and all were validated by the experiment-logging validator.
-- **Selection and diagnostic sweeps:** the photonic tuning (T1, T2), the photonic diagnostics (D1-D3) and the classical learning-rate selection (C-T).
+- **Selection and diagnostic sweeps:** the photonic tuning (T1, T2), the photonic diagnostics (D1-D5) and the classical learning-rate selection (C-T).
   - **Rules:** each was declared before its runs. The metric is final-epoch validation accuracy, maximised, as a mean over the seeds, with a tie tolerance of 0.5 points.
   - **Results:** all are COMPLETE SWEEPs. `results/selection_sweeps.md` has the **complete candidate tables**, with JSON copies in `results/sweeps/`. The selections are in `results/photonic_selection.json` and `results/classical_selection.json`.
 - **Independent check:** `python utils/recompute_from_raw.py` recomputes every aggregate, paired difference, verdict and selection rule in this README from the raw `metrics.json` of all 428 runs. It also checks that the headline numbers match across the documents. Result: 0 mismatches (`results/recomputation_check.md`).
@@ -226,8 +226,15 @@ Labels: `photonic adaptation, simulator, tuned`, 5 distributions with 1 seed eac
   - **Computation space:** `FOCK` removes post-selection but by itself did not add accuracy.
   - **Client message:** mean photon numbers in `FOCK` carry only single-photon interference, and are exactly constant with one photon per mode. Click probabilities carry multi-photon interference.
   - **Variations that didn't help:** 8 photons instead of 4, and re-uploading the data twice.
+- **v3 diagnostics (D4, D5): a richer 12-mode client circuit, validation only.** Tested on E1 (2 feature distributions, 100 epochs) against the fully photonic reference F (76.9% validation accuracy, 2744 phases). The options live in the optional `model.circuit` block of `lib/model_merlin.py`; the configs are `configs/e1_8clients_merlin_diagnostic_d4.json`, `d5.json` and the matching `d4_candidates.json`, `d5_candidates.json`. Full tables: `results/selection_sweeps.md`.
+  - **What was tried:** the first trainable mesh replaced by a trainable beam-splitter layer, and every value re-uploaded on three modes as x, x², cos(πx/2) on 12-mode, 4-photon clients (message still 8 click probabilities).
+  - **D4:** with full 12-mode meshes (about 10,000 phases in total) validation accuracy reached 83.3% (83.5% with the superposition first layer). The superposition layer alone on 8 modes gave 72.7%, and adding the maps on a 12-mode server gave 77.7%.
+  - **D5 (parameter-matched control):** replacing the meshes by beam-splitter layers (2,088 and 3,672 phases) gave 76.5–80.4%, with `[x, x, x]` at 78.8% and 77.5% and `[x, x², cos]` at 76.5% and 80.4%. All are within the seed spread (up to 5 points) of the reference.
+  - **Reading:** the D4 gain comes with about 4× the phases. At matched size no variant is distinguishable from the reference, and the nonlinear maps change the result in both directions. For binary pixels x² equals x and cos is affine in x, so on the clients the maps add no features.
+  - **Not run:** the full-mesh 12-mode client with `[x, x, x]`, which would separate capacity from maps at the large size. No test-set evaluation and no E2-E4 runs for these circuits.
 - **MerLin behaviours found:**
   - `UNBUNCHED` keeps only collision-free outcomes and renormalises them, which is post-selection, not threshold detection.
+  - `add_superpositions(trainable_phi=False)` still creates a trainable phase.
   - An angle-encoding name ending in a digit silently ignores `scale`.
 
 ## Hardware-Aware Settings

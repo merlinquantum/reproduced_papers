@@ -20,6 +20,7 @@ only (``xa``, ``xb``, ...).
 from __future__ import annotations
 
 import logging
+import math
 import string
 
 import merlin as ml
@@ -44,10 +45,14 @@ def _input_state(n_modes: int, n_photons: int) -> list[int]:
         return [1 if mode % 2 == 0 else 0 for mode in range(n_modes)]
     if n_photons == n_modes:
         return [1] * n_modes
-    raise ValueError(
-        f"No input-state rule for {n_photons} photons in {n_modes} modes; "
-        "use n_photons = n_modes / 2 (spread) or n_photons = n_modes (one per mode)"
-    )
+    if 0 < n_photons < n_modes:
+        # Photons evenly spread over the chip (one per occupied mode), e.g. 4 in 12 modes
+        # occupy modes 0, 3, 6, 9.
+        state = [0] * n_modes
+        for photon in range(n_photons):
+            state[photon * n_modes // n_photons] = 1
+        return state
+    raise ValueError(f"No input-state rule for {n_photons} photons in {n_modes} modes")
 
 
 def _marginal_matrix(
@@ -73,13 +78,24 @@ def _click_matrix(keys: list[tuple[int, ...]], n_modes: int) -> torch.Tensor:
     """
     matrix = torch.zeros(len(keys), n_modes)
     for row, key in enumerate(keys):
-        for mode, count in enumerate(key):
+        for mode, count in enumerate(key[:n_modes]):
             if count > 0:
                 matrix[row, mode] = 1.0
     return matrix
 
 
 CLIENT_READOUTS = {"mode_expectations", "click_probabilities"}
+FIRST_LAYERS = {"mesh", "superposition"}
+# Re-upload maps of one raw value v in [0, 1]. Each map goes to its own mode, so one value
+# drives several phase shifters with different non-linear responses. For a binary pixel
+# every map is affine in v (v**2 == v); the maps only add genuinely new features for the
+# continuous client messages that the server encodes.
+FEATURE_MAPS = {
+    "identity": lambda v: v,
+    "square": lambda v: v * v,
+    "cos": lambda v: torch.cos(0.5 * math.pi * v),
+    "sin": lambda v: torch.sin(0.5 * math.pi * v),
+}
 
 
 class PhotonicParty(nn.Module):
@@ -112,6 +128,26 @@ class PhotonicParty(nn.Module):
         Number of leading modes carrying the angle encoding in each stage; the
         remaining modes only interfere. ``None`` encodes on every mode. Default value is
         None.
+    feature_maps : tuple of str
+        Maps of every raw value re-uploaded on separate modes of one stage (keys of
+        ``FEATURE_MAPS``). A stage then takes ``encoded_modes // len(feature_maps)`` raw
+        values. Default value is ("identity",).
+    first_layer : str
+        ``"mesh"`` (full trainable interferometer) or ``"superposition"`` (trainable
+        nearest-neighbour beam-splitter layer) before the first encoding. Default value
+        is "mesh".
+    superposition_depth : int
+        Beam-splitter passes of the superposition layer. Default value is 1.
+    mixer : str
+        Layer between encodings (and the final layer): ``"mesh"`` (full interferometer)
+        or ``"superposition"`` (trainable nearest-neighbour beam splitters, far fewer
+        phases). Default value is "mesh".
+    mixer_depth : int
+        Beam-splitter passes of each superposition mixer. Default value is 1.
+    message_modes : int | None
+        For ``mode_expectations`` and ``click_probabilities``: number of leading modes
+        read out (the others are discarded). ``None`` reads every mode. Default value is
+        None.
     """
 
     def __init__(
@@ -124,6 +160,12 @@ class PhotonicParty(nn.Module):
         computation_space: str = "unbunched",
         dtype: torch.dtype = torch.float32,
         encoded_modes: int | None = None,
+        feature_maps: tuple[str, ...] = ("identity",),
+        first_layer: str = "mesh",
+        superposition_depth: int = 1,
+        message_modes: int | None = None,
+        mixer: str = "mesh",
+        mixer_depth: int = 1,
     ) -> None:
         super().__init__()
         if n_stages > len(string.ascii_lowercase):
@@ -135,17 +177,47 @@ class PhotonicParty(nn.Module):
             raise ValueError(
                 f"encoded_modes must be in 1..{n_modes}, got {encoded_modes}"
             )
-        self.n_inputs = n_stages * encoded_modes
+        unknown = [m for m in feature_maps if m not in FEATURE_MAPS]
+        if unknown or not feature_maps:
+            raise ValueError(f"Unknown feature_maps {list(feature_maps)!r}")
+        if mixer not in FIRST_LAYERS:
+            raise ValueError(f"Unknown mixer {mixer!r}")
+        if first_layer not in FIRST_LAYERS:
+            raise ValueError(f"Unknown first_layer {first_layer!r}")
+        if encoded_modes % len(feature_maps):
+            raise ValueError(
+                f"{encoded_modes} encoded modes cannot hold {len(feature_maps)} maps"
+            )
+        message_modes = n_modes if message_modes is None else message_modes
+        if not 0 < message_modes <= n_modes:
+            raise ValueError(f"message_modes must be in 1..{n_modes}")
+        self.feature_maps = tuple(feature_maps)
+        self.message_modes = message_modes
+        self.raw_per_stage = encoded_modes // len(self.feature_maps)
+        self.n_stages = n_stages
+        self.n_inputs = n_stages * self.raw_per_stage
         builder = ml.CircuitBuilder(n_modes=n_modes)
         for stage in range(n_stages):
             letter = string.ascii_lowercase[stage]
-            builder.add_entangling_layer(name=f"mesh{letter}")
+            if stage == 0 and first_layer == "superposition":
+                builder.add_superpositions(
+                    depth=superposition_depth, trainable=True, name="sup"
+                )
+            elif mixer == "superposition":
+                builder.add_superpositions(
+                    depth=mixer_depth, trainable=True, name=f"mix{letter}"
+                )
+            else:
+                builder.add_entangling_layer(name=f"mesh{letter}")
             builder.add_angle_encoding(
                 modes=list(range(encoded_modes)),
                 name=f"enc{letter}",
                 scale=encoding_scale,
             )
-        builder.add_entangling_layer(name="meshz")
+        if mixer == "superposition":
+            builder.add_superpositions(depth=mixer_depth, trainable=True, name="mixz")
+        else:
+            builder.add_entangling_layer(name="meshz")
         space = SPACES[computation_space]
         if readout == "mode_expectations":
             strategy = ml.MeasurementStrategy.mode_expectations(space)
@@ -159,7 +231,7 @@ class PhotonicParty(nn.Module):
         else:
             raise ValueError(f"Unknown readout {readout!r}")
         self.layer = ml.QuantumLayer(
-            input_size=self.n_inputs,
+            input_size=n_stages * encoded_modes,
             builder=builder,
             input_state=_input_state(n_modes, n_photons),
             n_photons=n_photons,
@@ -186,17 +258,27 @@ class PhotonicParty(nn.Module):
             self.marginals = matrix.to(dtype)
             self.head = nn.Linear(matrix.shape[1], N_CLASSES, dtype=dtype)
         elif readout == "click_probabilities":
-            self.clicks = _click_matrix(list(self.layer.output_keys), n_modes).to(dtype)
+            self.clicks = _click_matrix(list(self.layer.output_keys), message_modes).to(
+                dtype
+            )
 
     def forward(self, values: torch.Tensor) -> torch.Tensor:
         """Map ``(batch, n_inputs)`` values to the party's output."""
         if values.shape[1] != self.n_inputs:
             raise ValueError(f"Expected {self.n_inputs} inputs, got {values.shape[1]}")
+        if len(self.feature_maps) > 1:
+            # (batch, stages, raw) -> per stage, one block of raw values per map.
+            raw = values.reshape(values.shape[0], self.n_stages, self.raw_per_stage)
+            values = torch.cat(
+                [FEATURE_MAPS[name](raw) for name in self.feature_maps], dim=2
+            ).reshape(values.shape[0], -1)
         output = self.layer(values)
         if self.clicks is not None:
             return output @ self.clicks
         if self.group is not None:
             return self.group(output)
+        if self.head is None and self.message_modes < output.shape[1]:
+            return output[:, : self.message_modes]
         if self.marginals is not None:
             return self.head(output @ self.marginals)
         if self.head is not None:
@@ -228,6 +310,15 @@ class PhotonicVerticalFederatedModel(nn.Module):
     client_readout : str
         ``"mode_expectations"`` or ``"click_probabilities"``; both send 8 values per
         client. Default value is "mode_expectations".
+    circuit : dict | None
+        Optional circuit variant (v3 design). Keys: ``first_layer`` ("mesh" or
+        "superposition", for every party), ``superposition_depth``,
+        ``client_feature_maps`` and ``server_feature_maps`` (lists of ``FEATURE_MAPS``
+        keys re-uploaded on separate modes), ``message_width`` (values sent per client,
+        read from the leading modes), ``server_photons`` and the client mixer options
+        ``client_mixer`` and ``mixer_depth`` (each beam splitter has a trainable angle
+        and phase). ``None`` keeps the
+        original circuit. Default value is None.
     """
 
     def __init__(
@@ -245,15 +336,32 @@ class PhotonicVerticalFederatedModel(nn.Module):
         reuploads: int = 1,
         client_readout: str = "mode_expectations",
         dtype: torch.dtype = torch.float32,
+        circuit: dict | None = None,
     ) -> None:
         super().__init__()
+        circuit = circuit or {}
+        client_maps = tuple(circuit.get("client_feature_maps", ("identity",)))
+        server_maps = tuple(circuit.get("server_feature_maps", ("identity",)))
+        first_layer = circuit.get("first_layer", "mesh")
+        superposition_depth = int(circuit.get("superposition_depth", 1))
+        message_width = int(circuit.get("message_width", n_modes))
+        client_mixer = {
+            "mixer": circuit.get("client_mixer", "mesh"),
+            "mixer_depth": int(circuit.get("mixer_depth", 1)),
+        }
+        for maps in (client_maps, server_maps):
+            if not maps or any(name not in FEATURE_MAPS for name in maps):
+                raise ValueError(f"Unknown feature_maps {list(maps)!r}")
         if client_readout not in CLIENT_READOUTS:
             raise ValueError(f"Unknown client_readout {client_readout!r}")
         if server_encoding not in SERVER_ENCODINGS:
             raise ValueError(f"Unknown server_encoding {server_encoding!r}")
-        if n_client_stages * n_modes != PIXELS_PER_CLIENT:
+        if n_modes % len(client_maps):
+            raise ValueError(f"{n_modes} modes cannot hold {len(client_maps)} maps")
+        pixels_per_stage = n_modes // len(client_maps)
+        if n_client_stages * pixels_per_stage != PIXELS_PER_CLIENT:
             raise ValueError(
-                f"{n_client_stages} stages of {n_modes} modes do not encode "
+                f"{n_client_stages} stages of {pixels_per_stage} pixels do not encode "
                 f"{PIXELS_PER_CLIENT} pixels"
             )
         if int(server_head) not in SERVER_READOUTS:
@@ -272,22 +380,41 @@ class PhotonicVerticalFederatedModel(nn.Module):
                 n_photons,
                 computation_space,
                 dtype,
+                feature_maps=client_maps,
+                first_layer=first_layer,
+                superposition_depth=superposition_depth,
+                message_modes=message_width,
+                **client_mixer,
             )
             for _ in self.client_slices
         )
-        message_size = n_modes * len(self.client_slices)
+        message_size = message_width * len(self.client_slices)
+        # Raw message values one server stage takes; with several maps every value
+        # occupies len(server_maps) modes.
+        server_encoded_modes = (message_width // len(server_maps)) * len(server_maps)
+        if len(server_maps) > 1:
+            server_encoded_modes = (server_modes // len(server_maps)) * len(server_maps)
+        server_raw = server_encoded_modes // len(server_maps)
         if server_encoding == "server_wide":
-            server_stages, self.server_repeats = message_size // n_modes, 1
+            if message_size % server_raw:
+                raise ValueError(
+                    f"{message_size} client values do not split into stages of "
+                    f"{server_raw} values"
+                )
+            server_stages, self.server_repeats = message_size // server_raw, 1
         else:
             # Narrow server: re-upload the single client's message in every stage.
             server_stages, self.server_repeats = n_client_stages, n_client_stages
             if len(self.client_slices) != 1:
                 raise ValueError("server_narrow takes exactly one client")
-        if server_modes < n_modes:
+        if server_modes < message_width:
             raise ValueError("server_modes must be at least the client message width")
-        if (n_photons * server_modes) % n_modes:
-            raise ValueError("server_modes must keep an integer photon number")
-        server_photons = n_photons * server_modes // n_modes
+        if "server_photons" in circuit:
+            server_photons = int(circuit["server_photons"])
+        else:
+            if (n_photons * server_modes) % n_modes:
+                raise ValueError("server_modes must keep an integer photon number")
+            server_photons = n_photons * server_modes // n_modes
         self.server_readout = SERVER_READOUTS[int(server_head)]
         self.server_head = self.server_readout != "grouped_probabilities"
         # Each server stage encodes one client-message width (8 values) on its leading
@@ -300,7 +427,10 @@ class PhotonicVerticalFederatedModel(nn.Module):
             server_photons,
             computation_space,
             dtype,
-            encoded_modes=n_modes,
+            encoded_modes=server_encoded_modes,
+            feature_maps=server_maps,
+            first_layer=first_layer,
+            superposition_depth=superposition_depth,
         )
         logger.info(
             "PHOTONIC_MODEL | space=%s reuploads=%d | client modes=%d photons=%d "

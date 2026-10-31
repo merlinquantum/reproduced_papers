@@ -110,3 +110,11 @@ Four MerLin observations from building a photonic vertical-federated-learning mo
 - **Evidence:** the reproduction script printed `merlinquantum dist 0.4.2 | merlin.__version__ 0.4.1`. Every run log of the shared runtime prints `MerLin version 0.4.1` from `merlin.__version__`. The project's phase audit flagged the resulting inconsistency (`papers/vertical_qfl/LOG.md`, "Phase 4 MerLin Audit").
 - **Why it matters:** reproducibility records cite the version from `__version__`. A mismatch with the installed distribution makes environments ambiguous.
 - **Suggested action:** bump `merlin.__version__`, or derive it from the package metadata.
+
+### Low — CircuitBuilder.add_superpositions: `trainable_phi=False` is ignored
+
+- **Type:** bug or missing documentation.
+- **What happened:** `add_superpositions(trainable_theta=True, trainable_phi=False)` on 6 modes gives the same 10 trainable parameters (2 per beam splitter) as `trainable=True`; with `depth=2` it gives 20.
+- **Evidence:** probe on merlinquantum 0.4.2 (`QuantumLayer.named_parameters()` of a 6-mode builder with one superposition layer and an angle encoding). Seen while building the D5 control in `papers/vertical_qfl`.
+- **Why it matters:** an angle-only mixer would halve the parameter count, and users cannot build it from the documented flags.
+- **Suggested action:** honour the flag or document that the phase is always trainable.

@@ -150,6 +150,7 @@ def _build_model(cfg: dict[str, Any], dtype: torch.dtype):
         computation_space=model_cfg["computation_space"],
         reuploads=int(model_cfg["reuploads"]),
         client_readout=model_cfg["client_readout"],
+        circuit=model_cfg.get("circuit"),
         dtype=dtype,
     )
 
