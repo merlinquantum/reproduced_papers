@@ -1,0 +1,17 @@
+{
+  "description": "Horizon diagnostic (qb): same-day AQI(t) from pollutant windows ending at t (horizon 0), paper hyperparameters, 80/20 split. Tests whether the paper's metric levels match nowcasting rather than next-day forecasting. NOT the planned forecasting protocol.",
+  "model": {
+    "type": "qk_lstm",
+    "params": {
+      "gate_mode": "shared",
+      "hidden_size": 16,
+      "n_qubits": 4,
+      "n_references": 4,
+      "circuit_layout": "text",
+      "angle_map": "identity"
+    }
+  },
+  "dataset": {
+    "horizon": 0
+  }
+}

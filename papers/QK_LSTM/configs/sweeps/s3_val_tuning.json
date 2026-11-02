@@ -1,0 +1,368 @@
+{
+  "sweep_name": "s3_val_tuning",
+  "description": "S3: equal-budget validation-only tuning (lr grid for every trained model; N grid {4,16} for Q-A/B3-A; ridge alpha grid) plus D2 circuit-layout and angle-map checks. Train = targets before 2018-12-18, validation = 2018-12-18..2019-05-26 (160 days); test reported but never used for selection. 3 seeds.",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "candidates": [
+    {
+      "label": "QB_quantum_lr0.001",
+      "config": "configs/aqi_qklstm_count209_original.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.001"
+      ]
+    },
+    {
+      "label": "B3B_rbf_lr0.001",
+      "config": "configs/aqi_rbfkernel_count209_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.001"
+      ]
+    },
+    {
+      "label": "B1_lstm16_lr0.001",
+      "config": "configs/aqi_lstm_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.001"
+      ]
+    },
+    {
+      "label": "B2_lstm3_lr0.001",
+      "config": "configs/aqi_lstm_matched_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.001"
+      ]
+    },
+    {
+      "label": "QA_quantum_N4_lr0.001",
+      "config": "configs/aqi_qklstm_eq6_original.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.001",
+        "--n-references",
+        "4"
+      ]
+    },
+    {
+      "label": "B3A_rbf_N4_lr0.001",
+      "config": "configs/aqi_rbfkernel_eq6_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.001",
+        "--n-references",
+        "4"
+      ]
+    },
+    {
+      "label": "QA_quantum_N16_lr0.001",
+      "config": "configs/aqi_qklstm_eq6_original.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.001",
+        "--n-references",
+        "16"
+      ]
+    },
+    {
+      "label": "B3A_rbf_N16_lr0.001",
+      "config": "configs/aqi_rbfkernel_eq6_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.001",
+        "--n-references",
+        "16"
+      ]
+    },
+    {
+      "label": "QB_quantum_lr0.003",
+      "config": "configs/aqi_qklstm_count209_original.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.003"
+      ]
+    },
+    {
+      "label": "B3B_rbf_lr0.003",
+      "config": "configs/aqi_rbfkernel_count209_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.003"
+      ]
+    },
+    {
+      "label": "B1_lstm16_lr0.003",
+      "config": "configs/aqi_lstm_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.003"
+      ]
+    },
+    {
+      "label": "B2_lstm3_lr0.003",
+      "config": "configs/aqi_lstm_matched_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.003"
+      ]
+    },
+    {
+      "label": "QA_quantum_N4_lr0.003",
+      "config": "configs/aqi_qklstm_eq6_original.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.003",
+        "--n-references",
+        "4"
+      ]
+    },
+    {
+      "label": "B3A_rbf_N4_lr0.003",
+      "config": "configs/aqi_rbfkernel_eq6_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.003",
+        "--n-references",
+        "4"
+      ]
+    },
+    {
+      "label": "QA_quantum_N16_lr0.003",
+      "config": "configs/aqi_qklstm_eq6_original.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.003",
+        "--n-references",
+        "16"
+      ]
+    },
+    {
+      "label": "B3A_rbf_N16_lr0.003",
+      "config": "configs/aqi_rbfkernel_eq6_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.003",
+        "--n-references",
+        "16"
+      ]
+    },
+    {
+      "label": "QB_quantum_lr0.01",
+      "config": "configs/aqi_qklstm_count209_original.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.01"
+      ]
+    },
+    {
+      "label": "B3B_rbf_lr0.01",
+      "config": "configs/aqi_rbfkernel_count209_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.01"
+      ]
+    },
+    {
+      "label": "B1_lstm16_lr0.01",
+      "config": "configs/aqi_lstm_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.01"
+      ]
+    },
+    {
+      "label": "B2_lstm3_lr0.01",
+      "config": "configs/aqi_lstm_matched_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.01"
+      ]
+    },
+    {
+      "label": "QA_quantum_N4_lr0.01",
+      "config": "configs/aqi_qklstm_eq6_original.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.01",
+        "--n-references",
+        "4"
+      ]
+    },
+    {
+      "label": "B3A_rbf_N4_lr0.01",
+      "config": "configs/aqi_rbfkernel_eq6_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.01",
+        "--n-references",
+        "4"
+      ]
+    },
+    {
+      "label": "QA_quantum_N16_lr0.01",
+      "config": "configs/aqi_qklstm_eq6_original.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.01",
+        "--n-references",
+        "16"
+      ]
+    },
+    {
+      "label": "B3A_rbf_N16_lr0.01",
+      "config": "configs/aqi_rbfkernel_eq6_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--lr",
+        "0.01",
+        "--n-references",
+        "16"
+      ]
+    },
+    {
+      "label": "B0b_ridge_alpha0.001",
+      "config": "configs/sweeps/ridge_alpha0.001.json",
+      "args": [
+        "--validation-fraction",
+        "0.1"
+      ]
+    },
+    {
+      "label": "B0b_ridge_alpha0.01",
+      "config": "configs/sweeps/ridge_alpha0.01.json",
+      "args": [
+        "--validation-fraction",
+        "0.1"
+      ]
+    },
+    {
+      "label": "B0b_ridge_alpha0.1",
+      "config": "configs/sweeps/ridge_alpha0.1.json",
+      "args": [
+        "--validation-fraction",
+        "0.1"
+      ]
+    },
+    {
+      "label": "B0b_ridge_alpha1.0",
+      "config": "configs/sweeps/ridge_alpha1.0.json",
+      "args": [
+        "--validation-fraction",
+        "0.1"
+      ]
+    },
+    {
+      "label": "B0b_ridge_alpha10.0",
+      "config": "configs/sweeps/ridge_alpha10.0.json",
+      "args": [
+        "--validation-fraction",
+        "0.1"
+      ]
+    },
+    {
+      "label": "D2_QB_figure_lr0.001",
+      "config": "configs/aqi_qklstm_count209_original.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--circuit-layout",
+        "figure"
+      ]
+    },
+    {
+      "label": "D2_QA_figure_N4_lr0.001",
+      "config": "configs/aqi_qklstm_eq6_original.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--circuit-layout",
+        "figure"
+      ]
+    },
+    {
+      "label": "ANG_QB_arctan_lr0.001",
+      "config": "configs/aqi_qklstm_count209_original.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--angle-map",
+        "arctan"
+      ]
+    },
+    {
+      "label": "ANG_QB_tanhpi_lr0.001",
+      "config": "configs/aqi_qklstm_count209_original.json",
+      "args": [
+        "--validation-fraction",
+        "0.1",
+        "--angle-map",
+        "tanh_pi"
+      ]
+    },
+    {
+      "label": "B0_persistence_val",
+      "config": "configs/aqi_persistence_classical.json",
+      "args": [
+        "--validation-fraction",
+        "0.1"
+      ]
+    }
+  ],
+  "selection": {
+    "metric": null,
+    "direction": "minimize",
+    "tie_tolerance_relative": 0.01
+  }
+}

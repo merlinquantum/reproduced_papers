@@ -1,0 +1,30 @@
+{
+  "sweep_name": "s8_causal_fill",
+  "description": "S8 (post-handoff check): causal preprocessing (forward-fill only) for B1 LSTM(16), Q-B QK-LSTM and Q-B RBF at paper hp, 80/20 split, seeds 0-4 paired with S1. Plan recorded in LOG.md before launch.",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "candidates": [
+    {
+      "label": "B1_lstm_1873_causal",
+      "config": "configs/sweeps/s8_causal_lstm16.json"
+    },
+    {
+      "label": "QB_quantum_209_causal",
+      "config": "configs/sweeps/s8_causal_qb_quantum.json"
+    },
+    {
+      "label": "B3B_rbf_209_causal",
+      "config": "configs/sweeps/s8_causal_qb_rbf.json"
+    }
+  ],
+  "selection": {
+    "metric": null,
+    "direction": "minimize",
+    "tie_tolerance_relative": 0.01
+  }
+}

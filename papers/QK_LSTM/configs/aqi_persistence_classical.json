@@ -1,0 +1,4 @@
+{
+  "description": "B0: persistence forecast AQI(t+1) = AQI(t) (0 params). Uses the AQI series, which the learned models do not take as input.",
+  "model": {"type": "persistence", "params": {}}
+}

@@ -1,0 +1,18 @@
+{
+  "description": "Known-answer diagnostic (qb): target = same-day PM2.5, which is an input feature (horizon 0). A correct pipeline should fit it almost perfectly. NOT a reproduction result.",
+  "model": {
+    "type": "qk_lstm",
+    "params": {
+      "gate_mode": "shared",
+      "hidden_size": 16,
+      "n_qubits": 4,
+      "n_references": 4,
+      "circuit_layout": "text",
+      "angle_map": "identity"
+    }
+  },
+  "dataset": {
+    "target": "PM2.5",
+    "horizon": 0
+  }
+}

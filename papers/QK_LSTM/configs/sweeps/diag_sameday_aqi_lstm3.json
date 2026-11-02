@@ -1,0 +1,12 @@
+{
+  "description": "Horizon diagnostic (lstm3): same-day AQI(t) from pollutant windows ending at t (horizon 0), paper hyperparameters, 80/20 split. Tests whether the paper's metric levels match nowcasting rather than next-day forecasting. NOT the planned forecasting protocol.",
+  "model": {
+    "type": "lstm",
+    "params": {
+      "hidden_size": 3
+    }
+  },
+  "dataset": {
+    "horizon": 0
+  }
+}

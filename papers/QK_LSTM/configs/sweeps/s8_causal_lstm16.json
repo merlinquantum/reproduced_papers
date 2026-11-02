@@ -1,0 +1,12 @@
+{
+  "description": "S8 (post-handoff check): B1 paper LSTM(16) at paper hyperparameters with causal preprocessing (dataset.fill = causal).",
+  "model": {
+    "type": "lstm",
+    "params": {
+      "hidden_size": 16
+    }
+  },
+  "dataset": {
+    "fill": "causal"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "description": "Phase 4 MerLin ADAPTATION (not the paper): Q-A Eq. 6 QK-LSTM (N=4, 449 params) with a 2-photon, 4-mode photonic fidelity kernel (as aqi_qklstm_count209_merlin). Paper hyperparameters.",
+  "model": {
+    "type": "qk_lstm_merlin",
+    "params": {
+      "gate_mode": "per_gate",
+      "hidden_size": 16,
+      "n_qubits": 4,
+      "n_references": 4,
+      "photonic": {
+        "input_state": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "mesh_seeds": [
+          7,
+          8
+        ],
+        "encoding_scale": 1.0
+      }
+    }
+  }
+}

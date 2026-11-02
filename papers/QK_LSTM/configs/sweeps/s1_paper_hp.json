@@ -1,0 +1,16 @@
+{
+  "sweep_name": "s1_paper_hp",
+  "description": "S1: all models at the paper's Table II hyperparameters (20 epochs, batch 1, Adam lr 1e-3, seq len 3) on the chronological 80/20 split, 5 seeds. Comparison sweep; no candidate selection.",
+  "seeds": [0, 1, 2, 3, 4],
+  "candidates": [
+    {"label": "QB_quantum_209", "config": "configs/aqi_qklstm_count209_original.json"},
+    {"label": "QA_quantum_eq6_N4", "config": "configs/aqi_qklstm_eq6_original.json"},
+    {"label": "B1_lstm_1873", "config": "configs/aqi_lstm_classical.json"},
+    {"label": "B2_lstm_matched_196", "config": "configs/aqi_lstm_matched_classical.json"},
+    {"label": "B3B_rbf_209", "config": "configs/aqi_rbfkernel_count209_classical.json"},
+    {"label": "B3A_rbf_eq6_N4", "config": "configs/aqi_rbfkernel_eq6_classical.json"},
+    {"label": "B0_persistence", "config": "configs/aqi_persistence_classical.json"},
+    {"label": "B0b_ridge", "config": "configs/aqi_ridge_classical.json"}
+  ],
+  "selection": {"metric": null, "direction": "minimize", "tie_tolerance_relative": 0.01}
+}

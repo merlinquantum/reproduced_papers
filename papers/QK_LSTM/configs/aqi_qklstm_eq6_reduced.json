@@ -1,0 +1,6 @@
+{
+  "description": "Smoke run (reduced, NOT a reproduction result): Q-A with 1 epoch on the 64 most recent training windows, with a 10% validation block.",
+  "dataset": {"max_train_windows": 64, "split": {"scheme": "ratio", "test_fraction": 0.2, "validation_fraction": 0.1, "test_start": null}},
+  "model": {"type": "qk_lstm", "params": {"gate_mode": "per_gate", "hidden_size": 16, "n_qubits": 4, "n_references": 4, "circuit_layout": "text", "angle_map": "identity"}},
+  "training": {"epochs": 1}
+}

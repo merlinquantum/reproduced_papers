@@ -1,0 +1,40 @@
+{
+  "sweep_name": "s5_gap_diagnostics",
+  "description": "S5: gap diagnostics. (a) known-answer: target same-day PM2.5 (an input); (b) same-day AQI nowcasting (horizon 0) for QK-LSTM Q-B, LSTM(16), LSTM(3), ridge. Paper hyperparameters, 80/20 split, 3 seeds. Diagnostic only; no selection.",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "candidates": [
+    {
+      "label": "KA_pm25_QB_quantum",
+      "config": "configs/sweeps/diag_known_answer_pm25_qb.json"
+    },
+    {
+      "label": "KA_pm25_B1_lstm16",
+      "config": "configs/sweeps/diag_known_answer_pm25_lstm16.json"
+    },
+    {
+      "label": "H0_aqi_QB_quantum",
+      "config": "configs/sweeps/diag_sameday_aqi_qb.json"
+    },
+    {
+      "label": "H0_aqi_B1_lstm16",
+      "config": "configs/sweeps/diag_sameday_aqi_lstm16.json"
+    },
+    {
+      "label": "H0_aqi_B2_lstm3",
+      "config": "configs/sweeps/diag_sameday_aqi_lstm3.json"
+    },
+    {
+      "label": "H0_aqi_B0b_ridge",
+      "config": "configs/sweeps/diag_sameday_aqi_ridge.json"
+    }
+  ],
+  "selection": {
+    "metric": null,
+    "direction": "minimize",
+    "tie_tolerance_relative": 0.01
+  }
+}

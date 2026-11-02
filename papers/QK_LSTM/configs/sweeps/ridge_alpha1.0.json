@@ -1,0 +1,9 @@
+{
+  "description": "Ridge baseline, alpha=1.0 (S3 grid)",
+  "model": {
+    "type": "ridge",
+    "params": {
+      "alpha": 1.0
+    }
+  }
+}

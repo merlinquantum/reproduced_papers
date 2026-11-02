@@ -1,0 +1,25 @@
+{
+  "description": "Phase 4 MerLin ADAPTATION (not the paper): Q-B count-matched QK-LSTM (209 params) with a 2-photon, 4-mode photonic fidelity kernel (MerLin FidelityKernel, UNBUNCHED threshold detection, fixed MZI meshes seeds 7/8, input state [1,0,1,0]). Paper hyperparameters.",
+  "model": {
+    "type": "qk_lstm_merlin",
+    "params": {
+      "gate_mode": "shared",
+      "hidden_size": 16,
+      "n_qubits": 4,
+      "n_references": 4,
+      "photonic": {
+        "input_state": [
+          1,
+          0,
+          1,
+          0
+        ],
+        "mesh_seeds": [
+          7,
+          8
+        ],
+        "encoding_scale": 1.0
+      }
+    }
+  }
+}

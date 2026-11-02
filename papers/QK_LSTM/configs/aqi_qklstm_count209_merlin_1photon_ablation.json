@@ -1,0 +1,25 @@
+{
+  "description": "Phase 4 ABLATION (single photon; a trivial linear-optical baseline, NOT the photonic implementation): Q-B with input state [1,0,0,0], otherwise identical to aqi_qklstm_count209_merlin. Isolates the effect of multi-photon interference.",
+  "model": {
+    "type": "qk_lstm_merlin",
+    "params": {
+      "gate_mode": "shared",
+      "hidden_size": 16,
+      "n_qubits": 4,
+      "n_references": 4,
+      "photonic": {
+        "input_state": [
+          1,
+          0,
+          0,
+          0
+        ],
+        "mesh_seeds": [
+          7,
+          8
+        ],
+        "encoding_scale": 1.0
+      }
+    }
+  }
+}

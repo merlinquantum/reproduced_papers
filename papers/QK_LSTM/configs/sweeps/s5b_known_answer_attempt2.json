@@ -1,0 +1,24 @@
+{
+  "sweep_name": "s5b_known_answer_attempt2",
+  "description": "Attempt 2 of the S5 known-answer candidates (attempt 1 FAILED: duplicate target/feature column bug in lib/data.py, fixed and tested). Same plan, seeds 0-2.",
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "candidates": [
+    {
+      "label": "KA_pm25_QB_quantum",
+      "config": "configs/sweeps/diag_known_answer_pm25_qb.json"
+    },
+    {
+      "label": "KA_pm25_B1_lstm16",
+      "config": "configs/sweeps/diag_known_answer_pm25_lstm16.json"
+    }
+  ],
+  "selection": {
+    "metric": null,
+    "direction": "minimize",
+    "tie_tolerance_relative": 0.01
+  }
+}

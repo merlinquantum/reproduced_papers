@@ -1,0 +1,4 @@
+{
+  "description": "E1 (Q-B): QK-LSTM count-matched to Table II (209 params): Linear(27->4) -> 4-qubit fidelity kernel vs 4 fixed references -> one shared Linear(4->16) gate pre-activation. Paper hyperparameters.",
+  "model": {"type": "qk_lstm", "params": {"gate_mode": "shared", "hidden_size": 16, "n_qubits": 4, "n_references": 4, "circuit_layout": "text", "angle_map": "identity"}}
+}

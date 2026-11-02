@@ -1,0 +1,262 @@
+{
+  "spec": {
+    "title": "S7: decisive comparisons on fresh seeds 5-9 (post-handoff independent check)",
+    "note": "Metric: test RMSE (AQI), observed targets; lower is better. Seeds 5-9 were never used before. Decision rule predeclared in LOG.md (Post-handoff check S7).",
+    "seeds": [
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "tables": {
+      "Fresh seeds 5-9, 80/20 split": {
+        "scope": "Scope: paper-accurate data and split; paper hp (lr 1e-3) and S3-tuned lr (1e-2) for the LSTMs; 5 fresh seeds.",
+        "systems": {
+          "Q-B QK-LSTM (209)": {
+            "sweep": "papers/QK_LSTM/outdir/sweeps/s7_fresh_seeds_20261029-161122",
+            "candidate": "QB_quantum_209",
+            "role": "reproduced method",
+            "scope": "paper hp",
+            "matching": "reference"
+          },
+          "Paper LSTM(16), lr 1e-3": {
+            "sweep": "papers/QK_LSTM/outdir/sweeps/s7_fresh_seeds_20261029-161122",
+            "candidate": "B1_lstm_1873",
+            "role": "paper baseline",
+            "scope": "paper hp",
+            "matching": "paper architecture"
+          },
+          "LSTM(3), lr 1e-3": {
+            "sweep": "papers/QK_LSTM/outdir/sweeps/s7_fresh_seeds_20261029-161122",
+            "candidate": "B2_lstm_matched_196",
+            "role": "iso-parameter",
+            "scope": "paper hp",
+            "matching": "196/209 params"
+          },
+          "Paper LSTM(16), lr 1e-2": {
+            "sweep": "papers/QK_LSTM/outdir/sweeps/s7_fresh_seeds_20261029-161122",
+            "candidate": "B1_lstm16_lr0.01",
+            "role": "paper baseline, tuned",
+            "scope": "S3-tuned lr",
+            "matching": "paper architecture"
+          },
+          "LSTM(3), lr 1e-2": {
+            "sweep": "papers/QK_LSTM/outdir/sweeps/s7_fresh_seeds_20261029-161122",
+            "candidate": "B2_lstm3_lr0.01",
+            "role": "iso-parameter, tuned",
+            "scope": "S3-tuned lr",
+            "matching": "196/209 params"
+          }
+        },
+        "comparisons": [
+          {
+            "claim": "(a) C1 paper hp",
+            "a": "Q-B QK-LSTM (209)",
+            "b": "Paper LSTM(16), lr 1e-3",
+            "commensurability": "COMMENSURABLE"
+          },
+          {
+            "claim": "(b) C2 paper hp",
+            "a": "Q-B QK-LSTM (209)",
+            "b": "LSTM(3), lr 1e-3",
+            "commensurability": "COMMENSURABLE"
+          },
+          {
+            "claim": "(c) C1 tuned",
+            "a": "Q-B QK-LSTM (209)",
+            "b": "Paper LSTM(16), lr 1e-2",
+            "commensurability": "COMMENSURABLE"
+          },
+          {
+            "claim": "(d) C2 tuned",
+            "a": "Q-B QK-LSTM (209)",
+            "b": "LSTM(3), lr 1e-2",
+            "commensurability": "COMMENSURABLE"
+          }
+        ]
+      }
+    },
+    "paper": {
+      "QK-LSTM (paper)": {
+        "rmse": 9.2,
+        "params": 209
+      },
+      "LSTM (paper)": {
+        "rmse": 15.94,
+        "params": 1873
+      }
+    }
+  },
+  "tables": {
+    "Fresh seeds 5-9, 80/20 split": {
+      "rows": [
+        {
+          "system": "Q-B QK-LSTM (209)",
+          "role": "reproduced method",
+          "provenance": "local run (s7_fresh_seeds_20261029-161122:QB_quantum_209)",
+          "scope": "paper hp",
+          "successful": 5,
+          "expected": 5,
+          "rmse_mean": 15.826127214826178,
+          "rmse_std": 3.3939128122468634,
+          "r2_mean": 0.3236677032808675,
+          "matching": "reference",
+          "params": [
+            209
+          ],
+          "wall_minutes_mean": 5.213333333333334,
+          "status": "COMPLETE",
+          "commits": [
+            "bd0976559f98f9710419b79a9ce1d1f60205f4b5"
+          ]
+        },
+        {
+          "system": "Paper LSTM(16), lr 1e-3",
+          "role": "paper baseline",
+          "provenance": "local run (s7_fresh_seeds_20261029-161122:B1_lstm_1873)",
+          "scope": "paper hp",
+          "successful": 5,
+          "expected": 5,
+          "rmse_mean": 12.571641895253517,
+          "rmse_std": 3.051314708489577,
+          "r2_mean": 0.5689740604588727,
+          "matching": "paper architecture",
+          "params": [
+            1873
+          ],
+          "wall_minutes_mean": 0.3,
+          "status": "COMPLETE",
+          "commits": [
+            "bd0976559f98f9710419b79a9ce1d1f60205f4b5"
+          ]
+        },
+        {
+          "system": "LSTM(3), lr 1e-3",
+          "role": "iso-parameter",
+          "provenance": "local run (s7_fresh_seeds_20261029-161122:B2_lstm_matched_196)",
+          "scope": "paper hp",
+          "successful": 5,
+          "expected": 5,
+          "rmse_mean": 13.522165325353336,
+          "rmse_std": 1.8262971792065164,
+          "r2_mean": 0.5168256494145436,
+          "matching": "196/209 params",
+          "params": [
+            196
+          ],
+          "wall_minutes_mean": 0.30333333333333334,
+          "status": "COMPLETE",
+          "commits": [
+            "bd0976559f98f9710419b79a9ce1d1f60205f4b5"
+          ]
+        },
+        {
+          "system": "Paper LSTM(16), lr 1e-2",
+          "role": "paper baseline, tuned",
+          "provenance": "local run (s7_fresh_seeds_20261029-161122:B1_lstm16_lr0.01)",
+          "scope": "S3-tuned lr",
+          "successful": 5,
+          "expected": 5,
+          "rmse_mean": 13.834555318819659,
+          "rmse_std": 3.425690120518239,
+          "r2_mean": 0.4770658965303397,
+          "matching": "paper architecture",
+          "params": [
+            1873
+          ],
+          "wall_minutes_mean": 0.2833333333333333,
+          "status": "COMPLETE",
+          "commits": [
+            "bd0976559f98f9710419b79a9ce1d1f60205f4b5"
+          ]
+        },
+        {
+          "system": "LSTM(3), lr 1e-2",
+          "role": "iso-parameter, tuned",
+          "provenance": "local run (s7_fresh_seeds_20261029-161122:B2_lstm3_lr0.01)",
+          "scope": "S3-tuned lr",
+          "successful": 5,
+          "expected": 5,
+          "rmse_mean": 13.149132332719171,
+          "rmse_std": 3.7598138153443594,
+          "r2_mean": 0.520233868853099,
+          "matching": "196/209 params",
+          "params": [
+            196
+          ],
+          "wall_minutes_mean": 0.30666666666666664,
+          "status": "COMPLETE",
+          "commits": [
+            "bd0976559f98f9710419b79a9ce1d1f60205f4b5"
+          ]
+        }
+      ],
+      "decisions": [
+        {
+          "n": 5,
+          "mean": 3.254485319572661,
+          "std": 1.8736590717747832,
+          "ci95": [
+            0.9280303052420305,
+            5.580940333903292
+          ],
+          "decision": "A worse",
+          "a_better_seeds": 0,
+          "claim": "(a) C1 paper hp",
+          "a": "Q-B QK-LSTM (209)",
+          "b": "Paper LSTM(16), lr 1e-3",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "n": 5,
+          "mean": 2.3039618894728426,
+          "std": 2.3045264301935857,
+          "ci95": [
+            -0.5574856118075728,
+            5.165409390753258
+          ],
+          "decision": "not separated",
+          "a_better_seeds": 1,
+          "claim": "(b) C2 paper hp",
+          "a": "Q-B QK-LSTM (209)",
+          "b": "LSTM(3), lr 1e-3",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "n": 5,
+          "mean": 1.9915718960065187,
+          "std": 2.2594711796186484,
+          "ci95": [
+            -0.8139321227049474,
+            4.7970759147179844
+          ],
+          "decision": "not separated",
+          "a_better_seeds": 2,
+          "claim": "(c) C1 tuned",
+          "a": "Q-B QK-LSTM (209)",
+          "b": "Paper LSTM(16), lr 1e-2",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "n": 5,
+          "mean": 2.6769948821070058,
+          "std": 0.8890141858760076,
+          "ci95": [
+            1.5731379736123379,
+            3.7808517906016736
+          ],
+          "decision": "A worse",
+          "a_better_seeds": 0,
+          "claim": "(d) C2 tuned",
+          "a": "Q-B QK-LSTM (209)",
+          "b": "LSTM(3), lr 1e-2",
+          "commensurability": "COMMENSURABLE"
+        }
+      ],
+      "commits": [
+        "bd0976559f98f9710419b79a9ce1d1f60205f4b5"
+      ]
+    }
+  }
+}

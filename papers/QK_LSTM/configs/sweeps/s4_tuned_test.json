@@ -1,0 +1,10 @@
+{
+  "sweep_name": "s4_tuned_test",
+  "description": "S4: equal-budget tuned table. Families whose S3 selection differs from the S1 configuration (B1 and B2 LSTMs, selected lr 0.01) are rerun with seeds 0-4 on the full 80/20 training block and evaluated on test. All other families selected the exact S1 configuration (lr 1e-3; N=4; ridge alpha 1.0), so their S1 runs are reused.",
+  "seeds": [0, 1, 2, 3, 4],
+  "candidates": [
+    {"label": "B1_lstm16_lr0.01", "config": "configs/aqi_lstm_classical.json", "args": ["--lr", "0.01"]},
+    {"label": "B2_lstm3_lr0.01", "config": "configs/aqi_lstm_matched_classical.json", "args": ["--lr", "0.01"]}
+  ],
+  "selection": {"metric": null, "direction": "minimize", "tie_tolerance_relative": 0.01}
+}

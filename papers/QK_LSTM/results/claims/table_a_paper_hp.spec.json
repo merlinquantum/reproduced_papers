@@ -1,0 +1,67 @@
+{
+  "title": "Table A - paper hyperparameters, 80/20 split (S1)",
+  "scope": "Scope: **paper-accurate** (full data, Table II hyperparameters, 5 seeds 0-4, final epoch). Test = 402 days 2019-05-27..2020-07-01; observed AQI targets.",
+  "models": {
+    "Q-B quantum": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301:QB_quantum_209",
+    "Q-A quantum (N=4)": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301:QA_quantum_eq6_N4",
+    "B1 LSTM(16)": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301:B1_lstm_1873",
+    "B2 LSTM(3)": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301:B2_lstm_matched_196",
+    "B3-B RBF": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301:B3B_rbf_209",
+    "B3-A RBF (N=4)": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301:B3A_rbf_eq6_N4",
+    "B0 persistence": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301:B0_persistence",
+    "B0b ridge": "papers/QK_LSTM/outdir/sweeps/s1_paper_hp_20261021-134301:B0b_ridge"
+  },
+  "paper": {
+    "QK-LSTM (paper)": {
+      "rmse": 9.2,
+      "mae": 7.15,
+      "mape": 9.14,
+      "r2": 0.84,
+      "params": 209
+    },
+    "LSTM (paper)": {
+      "rmse": 15.94,
+      "mae": 11.07,
+      "mape": 13.32,
+      "r2": 0.78,
+      "params": 1873
+    }
+  },
+  "comparisons": [
+    {
+      "claim": "C1 (paper comparison)",
+      "a": "Q-B quantum",
+      "b": "B1 LSTM(16)"
+    },
+    {
+      "claim": "C1 (paper comparison)",
+      "a": "Q-A quantum (N=4)",
+      "b": "B1 LSTM(16)"
+    },
+    {
+      "claim": "C1/C2 iso-parameter",
+      "a": "Q-B quantum",
+      "b": "B2 LSTM(3)"
+    },
+    {
+      "claim": "C4 quantum vs classical kernel",
+      "a": "Q-B quantum",
+      "b": "B3-B RBF"
+    },
+    {
+      "claim": "C4 quantum vs classical kernel",
+      "a": "Q-A quantum (N=4)",
+      "b": "B3-A RBF (N=4)"
+    },
+    {
+      "claim": "naive floor",
+      "a": "Q-B quantum",
+      "b": "B0 persistence"
+    },
+    {
+      "claim": "naive floor",
+      "a": "B1 LSTM(16)",
+      "b": "B0 persistence"
+    }
+  ]
+}

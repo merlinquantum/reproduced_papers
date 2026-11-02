@@ -1,0 +1,89 @@
+{
+  "title": "S7: decisive comparisons on fresh seeds 5-9 (post-handoff independent check)",
+  "note": "Metric: test RMSE (AQI), observed targets; lower is better. Seeds 5-9 were never used before. Decision rule predeclared in LOG.md (Post-handoff check S7).",
+  "seeds": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "tables": {
+    "Fresh seeds 5-9, 80/20 split": {
+      "scope": "Scope: paper-accurate data and split; paper hp (lr 1e-3) and S3-tuned lr (1e-2) for the LSTMs; 5 fresh seeds.",
+      "systems": {
+        "Q-B QK-LSTM (209)": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s7_fresh_seeds_20261029-161122",
+          "candidate": "QB_quantum_209",
+          "role": "reproduced method",
+          "scope": "paper hp",
+          "matching": "reference"
+        },
+        "Paper LSTM(16), lr 1e-3": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s7_fresh_seeds_20261029-161122",
+          "candidate": "B1_lstm_1873",
+          "role": "paper baseline",
+          "scope": "paper hp",
+          "matching": "paper architecture"
+        },
+        "LSTM(3), lr 1e-3": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s7_fresh_seeds_20261029-161122",
+          "candidate": "B2_lstm_matched_196",
+          "role": "iso-parameter",
+          "scope": "paper hp",
+          "matching": "196/209 params"
+        },
+        "Paper LSTM(16), lr 1e-2": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s7_fresh_seeds_20261029-161122",
+          "candidate": "B1_lstm16_lr0.01",
+          "role": "paper baseline, tuned",
+          "scope": "S3-tuned lr",
+          "matching": "paper architecture"
+        },
+        "LSTM(3), lr 1e-2": {
+          "sweep": "papers/QK_LSTM/outdir/sweeps/s7_fresh_seeds_20261029-161122",
+          "candidate": "B2_lstm3_lr0.01",
+          "role": "iso-parameter, tuned",
+          "scope": "S3-tuned lr",
+          "matching": "196/209 params"
+        }
+      },
+      "comparisons": [
+        {
+          "claim": "(a) C1 paper hp",
+          "a": "Q-B QK-LSTM (209)",
+          "b": "Paper LSTM(16), lr 1e-3",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "(b) C2 paper hp",
+          "a": "Q-B QK-LSTM (209)",
+          "b": "LSTM(3), lr 1e-3",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "(c) C1 tuned",
+          "a": "Q-B QK-LSTM (209)",
+          "b": "Paper LSTM(16), lr 1e-2",
+          "commensurability": "COMMENSURABLE"
+        },
+        {
+          "claim": "(d) C2 tuned",
+          "a": "Q-B QK-LSTM (209)",
+          "b": "LSTM(3), lr 1e-2",
+          "commensurability": "COMMENSURABLE"
+        }
+      ]
+    }
+  },
+  "paper": {
+    "QK-LSTM (paper)": {
+      "rmse": 9.2,
+      "params": 209
+    },
+    "LSTM (paper)": {
+      "rmse": 15.94,
+      "params": 1873
+    }
+  }
+}
