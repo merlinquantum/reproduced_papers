@@ -1,0 +1,67 @@
+{
+  "sweep_id": "e2_merlin",
+  "purpose": "Phase 4 MerLin adaptation, E2: selected photonic classifier on the 4-class task, non-federated and 4 clients, 5 seeds",
+  "paper": "qfl_decentralized_data",
+  "base_config": "configs/e1_original.json",
+  "fixed_overrides": {
+    "dataset": {
+      "validation_fraction": 0.0
+    },
+    "model": {
+      "name": "merlin",
+      "n_photons": 2,
+      "encoding_scale": 1.0,
+      "superposition": "replace",
+      "photonic_readout": "linear_head",
+      "computation_space": "unbunched"
+    },
+    "training": {
+      "lr": 0.03
+    }
+  },
+  "candidates": [
+    {
+      "name": "fourclass_centralized",
+      "overrides": {
+        "dataset.classes": [
+          2,
+          3,
+          6,
+          7
+        ],
+        "federation.mode": "centralized",
+        "federation.n_clients": 1
+      }
+    },
+    {
+      "name": "fourclass_clients4",
+      "overrides": {
+        "dataset.classes": [
+          2,
+          3,
+          6,
+          7
+        ],
+        "federation.n_clients": 4
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "workers": 3,
+  "threads_per_worker": 3,
+  "selection": {
+    "metric": "test_accuracy",
+    "split": "test",
+    "checkpoint": "last",
+    "direction": "maximize",
+    "aggregation": "mean",
+    "tie_tolerance": 0.005,
+    "tie_handling": "reporting runs: configuration fixed by the calibration sweep, no candidate is selected"
+  }
+}
