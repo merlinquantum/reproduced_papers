@@ -1,0 +1,66 @@
+$ python validate_logging.py --run-dir outdir/sweep_B1B3-RAW/default_seed0/run_20261016-062338 --sweep-dir outdir/sweep_B1B3-RAW --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_B1B3-RAW/default_seed1/run_20261016-062619 --sweep-dir outdir/sweep_B1B3-RAW --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_B1B3-RAW/default_seed2/run_20261016-062839 --sweep-dir outdir/sweep_B1B3-RAW --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E1-CLASSICAL/default_seed0/run_20261016-063115 --sweep-dir outdir/sweep_E1-CLASSICAL --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E1-CLASSICAL/default_seed1/run_20261016-070438 --sweep-dir outdir/sweep_E1-CLASSICAL --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E1-CLASSICAL/default_seed2/run_20261016-084030 --sweep-dir outdir/sweep_E1-CLASSICAL --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E2-CLASSICAL/default_seed0/run_20261016-091507 --sweep-dir outdir/sweep_E2-CLASSICAL --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E2-CLASSICAL/default_seed1/run_20261016-094952 --sweep-dir outdir/sweep_E2-CLASSICAL --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E2-CLASSICAL/default_seed2/run_20261016-102334 --sweep-dir outdir/sweep_E2-CLASSICAL --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E3-CLASSICAL/default_seed0/run_20261016-042240 --sweep-dir outdir/sweep_E3-CLASSICAL --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E3-CLASSICAL/default_seed1/run_20261016-051221 --sweep-dir outdir/sweep_E3-CLASSICAL --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E3-CLASSICAL/default_seed2/run_20261016-060201 --sweep-dir outdir/sweep_E3-CLASSICAL --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E4-CLASSICAL/default_seed0/run_20261016-042306 --sweep-dir outdir/sweep_E4-CLASSICAL --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E4-CLASSICAL/default_seed1/run_20261016-051346 --sweep-dir outdir/sweep_E4-CLASSICAL --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E4-CLASSICAL/default_seed2/run_20261016-060426 --sweep-dir outdir/sweep_E4-CLASSICAL --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-SRSR/noise_mapping-ibm_brisbane_noise_scale-10_seed0/run_20261016-112357 --sweep-dir outdir/sweep_C6-SRSR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-SRSR/noise_mapping-ibm_brisbane_noise_scale-10_seed1/run_20261016-113256 --sweep-dir outdir/sweep_C6-SRSR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-SRSR/noise_mapping-ibm_brisbane_noise_scale-10_seed2/run_20261016-114118 --sweep-dir outdir/sweep_C6-SRSR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-SRSR/noise_mapping-paper_noise_scale-10_seed0/run_20261016-105654 --sweep-dir outdir/sweep_C6-SRSR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-SRSR/noise_mapping-paper_noise_scale-10_seed1/run_20261016-110617 --sweep-dir outdir/sweep_C6-SRSR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-SRSR/noise_mapping-paper_noise_scale-10_seed2/run_20261016-111457 --sweep-dir outdir/sweep_C6-SRSR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-MRSR/noise_mapping-ibm_brisbane_noise_scale-10_seed0/run_20261016-121701 --sweep-dir outdir/sweep_C6-MRSR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-MRSR/noise_mapping-ibm_brisbane_noise_scale-10_seed1/run_20261016-122501 --sweep-dir outdir/sweep_C6-MRSR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-MRSR/noise_mapping-ibm_brisbane_noise_scale-10_seed2/run_20261016-123326 --sweep-dir outdir/sweep_C6-MRSR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-MRSR/noise_mapping-paper_noise_scale-10_seed0/run_20261016-115037 --sweep-dir outdir/sweep_C6-MRSR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-MRSR/noise_mapping-paper_noise_scale-10_seed1/run_20261016-115938 --sweep-dir outdir/sweep_C6-MRSR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-MRSR/noise_mapping-paper_noise_scale-10_seed2/run_20261016-120839 --sweep-dir outdir/sweep_C6-MRSR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-MRMR/noise_mapping-ibm_brisbane_noise_scale-10_seed0/run_20261016-073226 --sweep-dir outdir/sweep_C6-MRMR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-MRMR/noise_mapping-ibm_brisbane_noise_scale-10_seed1/run_20261016-074446 --sweep-dir outdir/sweep_C6-MRMR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-MRMR/noise_mapping-ibm_brisbane_noise_scale-10_seed2/run_20261016-075706 --sweep-dir outdir/sweep_C6-MRMR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-MRMR/noise_mapping-paper_noise_scale-10_seed0/run_20261016-065525 --sweep-dir outdir/sweep_C6-MRMR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-MRMR/noise_mapping-paper_noise_scale-10_seed1/run_20261016-070745 --sweep-dir outdir/sweep_C6-MRMR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_C6-MRMR/noise_mapping-paper_noise_scale-10_seed2/run_20261016-072005 --sweep-dir outdir/sweep_C6-MRMR --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).

@@ -1,0 +1,48 @@
+$ python validate_logging.py --run-dir outdir/sweep_P1-MERLIN-SCALES/kernel_scale-2.0_neuron_scale-1.0_seed0/run_20261015-222610 --sweep-dir outdir/sweep_P1-MERLIN-SCALES --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_P1-MERLIN-SCALES/kernel_scale-2.0_neuron_scale-1.0_seed1/run_20261015-222711 --sweep-dir outdir/sweep_P1-MERLIN-SCALES --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_P1-MERLIN-SCALES/kernel_scale-2.0_neuron_scale-1.0_seed2/run_20261015-222812 --sweep-dir outdir/sweep_P1-MERLIN-SCALES --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_P1-MERLIN-SCALES/kernel_scale-2.0_neuron_scale-3.14159_seed0/run_20261015-222912 --sweep-dir outdir/sweep_P1-MERLIN-SCALES --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_P1-MERLIN-SCALES/kernel_scale-2.0_neuron_scale-3.14159_seed1/run_20261015-223012 --sweep-dir outdir/sweep_P1-MERLIN-SCALES --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_P1-MERLIN-SCALES/kernel_scale-2.0_neuron_scale-3.14159_seed2/run_20261015-223112 --sweep-dir outdir/sweep_P1-MERLIN-SCALES --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_P1-MERLIN-SCALES/kernel_scale-3.14159_neuron_scale-1.0_seed0/run_20261015-223213 --sweep-dir outdir/sweep_P1-MERLIN-SCALES --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_P1-MERLIN-SCALES/kernel_scale-3.14159_neuron_scale-1.0_seed1/run_20261015-223334 --sweep-dir outdir/sweep_P1-MERLIN-SCALES --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_P1-MERLIN-SCALES/kernel_scale-3.14159_neuron_scale-1.0_seed2/run_20261015-223433 --sweep-dir outdir/sweep_P1-MERLIN-SCALES --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_P1-MERLIN-SCALES/kernel_scale-3.14159_neuron_scale-3.14159_seed0/run_20261015-223533 --sweep-dir outdir/sweep_P1-MERLIN-SCALES --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_P1-MERLIN-SCALES/kernel_scale-3.14159_neuron_scale-3.14159_seed1/run_20261015-223634 --sweep-dir outdir/sweep_P1-MERLIN-SCALES --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_P1-MERLIN-SCALES/kernel_scale-3.14159_neuron_scale-3.14159_seed2/run_20261015-223734 --sweep-dir outdir/sweep_P1-MERLIN-SCALES --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E1-MERLIN/default_seed0/run_20261015-224042 --sweep-dir outdir/sweep_E1-MERLIN --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E1-MERLIN/default_seed1/run_20261015-225944 --sweep-dir outdir/sweep_E1-MERLIN --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E1-MERLIN/default_seed2/run_20261015-231831 --sweep-dir outdir/sweep_E1-MERLIN --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E2-MERLIN/default_seed0/run_20261015-233709 --sweep-dir outdir/sweep_E2-MERLIN --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E2-MERLIN/default_seed1/run_20261015-235514 --sweep-dir outdir/sweep_E2-MERLIN --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E2-MERLIN/default_seed2/run_20261016-001335 --sweep-dir outdir/sweep_E2-MERLIN --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E3-MERLIN/default_seed0/run_20261015-224609 --sweep-dir outdir/sweep_E3-MERLIN --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E3-MERLIN/default_seed1/run_20261015-231229 --sweep-dir outdir/sweep_E3-MERLIN --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E3-MERLIN/default_seed2/run_20261015-233909 --sweep-dir outdir/sweep_E3-MERLIN --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E4-MERLIN/default_seed0/run_20261015-204026 --sweep-dir outdir/sweep_E4-MERLIN --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E4-MERLIN/default_seed1/run_20261015-210706 --sweep-dir outdir/sweep_E4-MERLIN --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).
+$ python validate_logging.py --run-dir outdir/sweep_E4-MERLIN/default_seed2/run_20261015-213347 --sweep-dir outdir/sweep_E4-MERLIN --require-evaluation
+Logging validation passed: 1 run(s), 1 sweep(s).

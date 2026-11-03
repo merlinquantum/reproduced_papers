@@ -1,0 +1,15 @@
+{
+  "description": "P1 minimal central-claim test: SRSR with 10 neurons, ideal cells only, full-n kernels.",
+  "experiment": {
+    "id": "P1-SRSR",
+    "variant": "original",
+    "architecture": "srsr",
+    "sizes": [10],
+    "reservoir_types": ["classical", "quantum_ideal"],
+    "readout_types": ["linear", "quantum_kernel_ideal"]
+  },
+  "readout": {
+    "kernel_selection_subsample": 8000,
+    "kernel_fit_subsample": null
+  }
+}

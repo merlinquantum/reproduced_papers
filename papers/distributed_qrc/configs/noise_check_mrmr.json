@@ -1,0 +1,29 @@
+{
+  "description": "Noise side check (mrmr; Sec. III-B5 remark, not a tracked claim): fully quantum noisy cells (and noisy reservoir + linear) for the MRMR configurations; noise mapping and scale come from the sweep candidates (paper mapping vs same device, x10). Full-n kernels.",
+  "experiment": {
+    "id": "C6-MRMR",
+    "variant": "c6_control",
+    "architecture": "mrmr",
+    "sizes": [
+      "2x5",
+      "2x10",
+      "2x20",
+      "3x5",
+      "3x10",
+      "3x20",
+      "5x5",
+      "5x10"
+    ],
+    "reservoir_types": [
+      "quantum_noisy"
+    ],
+    "readout_types": [
+      "linear",
+      "quantum_kernel_noisy"
+    ]
+  },
+  "readout": {
+    "kernel_selection_subsample": 8000,
+    "kernel_fit_subsample": null
+  }
+}
