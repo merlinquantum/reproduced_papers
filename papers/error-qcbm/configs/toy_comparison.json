@@ -1,0 +1,72 @@
+{
+  "description": "Educational low-count comparison: six modes, three photons, T=0.5, 100 SPSA updates, all five seeds 0..4, 2000 initial shots per call; illustrative setting selected after two-photon and three-photon pilots, not a paper benchmark",
+  "task": "train",
+  "device": "cpu",
+  "dtype": "float64",
+  "model": {
+    "input_state": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      0
+    ]
+  },
+  "dataset": {
+    "name": "gaussian",
+    "means": [
+      6,
+      14
+    ],
+    "standard_deviations": [
+      2.5,
+      2.5
+    ]
+  },
+  "training": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "steps": 100,
+    "record_every": 10,
+    "shots": 2000,
+    "torch_threads": 1,
+    "sampling_seed_offset": 10000,
+    "perturbation_seed_offset": 100000,
+    "conditions": [
+      {
+        "name": "lossless",
+        "transmittance": 1.0,
+        "indistinguishability": 1.0,
+        "estimator": "postselection"
+      },
+      {
+        "name": "postselection",
+        "transmittance": 0.5,
+        "indistinguishability": 1.0,
+        "estimator": "postselection"
+      },
+      {
+        "name": "recycling",
+        "transmittance": 0.5,
+        "indistinguishability": 1.0,
+        "estimator": "recycling"
+      }
+    ],
+    "spsa": {
+      "alpha": 0.602,
+      "gamma": 0.101,
+      "c": 0.1,
+      "stability_fraction": 0.1,
+      "initial_step": 0.001,
+      "gain_calibration": "author_absolute_mean"
+    },
+    "loss": "kl",
+    "native_count_accumulation": "python"
+  }
+}

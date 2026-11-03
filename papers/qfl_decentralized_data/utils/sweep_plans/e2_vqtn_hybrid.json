@@ -1,0 +1,64 @@
+{
+  "sweep_id": "e2_vqtn_hybrid",
+  "purpose": "E2 primary: hybrid VQTN on the 4-class task (2, 3, 6, 7), non-federated and 4 clients, 5 seeds",
+  "paper": "qfl_decentralized_data",
+  "base_config": "configs/e1_original.json",
+  "fixed_overrides": {
+    "dataset": {
+      "validation_fraction": 0.0
+    },
+    "model": {
+      "layers": 2,
+      "init_std": 0.1,
+      "readout": "z_head"
+    },
+    "training": {
+      "lr": 0.03
+    }
+  },
+  "candidates": [
+    {
+      "name": "fourclass_centralized",
+      "overrides": {
+        "dataset.classes": [
+          2,
+          3,
+          6,
+          7
+        ],
+        "federation.mode": "centralized",
+        "federation.n_clients": 1
+      }
+    },
+    {
+      "name": "fourclass_clients4",
+      "overrides": {
+        "dataset.classes": [
+          2,
+          3,
+          6,
+          7
+        ],
+        "federation.n_clients": 4
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "workers": 3,
+  "threads_per_worker": 3,
+  "selection": {
+    "metric": "test_accuracy",
+    "split": "test",
+    "checkpoint": "last",
+    "direction": "maximize",
+    "aggregation": "mean",
+    "tie_tolerance": 0.005,
+    "tie_handling": "reporting runs: hyperparameters are fixed in advance, no candidate is selected; every mean +- std over 5 seeds is reported"
+  }
+}

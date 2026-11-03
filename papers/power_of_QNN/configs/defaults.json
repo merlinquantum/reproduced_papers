@@ -1,0 +1,83 @@
+{
+  "description": "Smoke run: Fig. 2 / 3a pipeline (E-01, E-02) for the three paper models at d=40 with tiny Monte Carlo sizes. Not a paper result.",
+  "experiment": {
+    "name": "smoke_fisher_d40",
+    "kind": "fisher_effective_dimension"
+  },
+  "seed": 0,
+  "dtype": "float64",
+  "device": "cpu",
+  "outdir": "outdir",
+  "fisher": {
+    "num_thetas": 4,
+    "num_inputs": 8,
+    "theta_low": 0.0,
+    "theta_high": 1.0,
+    "draw_seeds": [
+      0
+    ],
+    "chunk_size": 100,
+    "gamma": 1.0,
+    "n_values": [
+      1000,
+      2000,
+      8000,
+      10000,
+      40000,
+      60000,
+      100000,
+      150000,
+      200000,
+      500000,
+      1000000
+    ],
+    "zero_tolerance": 1e-10,
+    "save_fhat_draws": [
+      0
+    ]
+  },
+  "models": [
+    {
+      "name": "qnn",
+      "type": "qubit",
+      "n_qubits": 4,
+      "feature_map": "zz",
+      "feature_map_reps": 2,
+      "ansatz_reps": 9,
+      "feature_entanglement": "full",
+      "ansatz_entanglement": "full",
+      "hadamard_every_rep": true
+    },
+    {
+      "name": "easy_qnn",
+      "type": "qubit",
+      "n_qubits": 4,
+      "feature_map": "z",
+      "feature_map_reps": 1,
+      "ansatz_reps": 9,
+      "feature_entanglement": "full",
+      "ansatz_entanglement": "full",
+      "hadamard_every_rep": true
+    },
+    {
+      "name": "classical_4442",
+      "type": "classical",
+      "sizes": [
+        4,
+        4,
+        4,
+        2
+      ],
+      "activation": "leaky_relu",
+      "head": "softmax_tanh",
+      "bias": false
+    }
+  ],
+  "plots": {
+    "histogram_bins": 5,
+    "sensitivity_n_index": 10
+  },
+  "logging": {
+    "level": "info"
+  }
+}

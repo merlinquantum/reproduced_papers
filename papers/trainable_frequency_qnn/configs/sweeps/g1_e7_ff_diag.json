@@ -1,0 +1,39 @@
+{
+  "sweep_id": "g1_e7_ff_diag",
+  "description": "Gap G1 diagnosis (E7 FF 2.7-4x worse than paper, underfitting with loss still falling): one component changed per candidate on FF seed 1 - (a) 15000 iterations, (b) min-max inputs, (c) FF+S per-coordinate trainable scale. Preliminary (single seed).",
+  "candidates": [
+    {
+      "name": "ff_15k_iterations",
+      "config": "configs/ns_appc_ff_original.json",
+      "overrides": {
+        "training.iterations": 15000
+      }
+    },
+    {
+      "name": "ff_minmax",
+      "config": "configs/ns_appc_ff_original.json",
+      "overrides": {
+        "dataset.coordinate_transform": "minmax"
+      }
+    },
+    {
+      "name": "ffs",
+      "config": "configs/ns_appc_ff_original.json",
+      "overrides": {
+        "model.frequency_mode": "global_scale"
+      }
+    }
+  ],
+  "seeds": [
+    1
+  ],
+  "max_workers": 3,
+  "selection": {
+    "metric": "final_loss",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}

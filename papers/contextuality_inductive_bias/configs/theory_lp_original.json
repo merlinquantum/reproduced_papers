@@ -1,0 +1,7 @@
+{
+  "description": "E5: linear programs for Lemma 4.1 (bound 5/2) and the eta threshold of Theorem 4.1 (Sec. 4.3).",
+  "experiment": {
+    "task": "theory_lp",
+    "id": "theory_lp"
+  }
+}

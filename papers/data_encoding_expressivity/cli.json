@@ -1,0 +1,82 @@
+{
+  "description": "Data encoding and expressive power of variational quantum models (Schuld, Sweke, Meyer 2021)",
+  "arguments": [
+    {
+      "flags": [
+        "--steps"
+      ],
+      "help": "Override the number of optimizer steps of a fitting experiment (fit.training.steps)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "fit.training.steps"
+      }
+    },
+    {
+      "flags": [
+        "--lr"
+      ],
+      "help": "Override the Adam learning rate of a fitting experiment (fit.training.lr)",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "fit.training.lr"
+      }
+    },
+    {
+      "flags": [
+        "--batch-size"
+      ],
+      "help": "Override the mini-batch size of a fitting experiment (fit.training.batch_size)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "fit.training.batch_size"
+      }
+    },
+    {
+      "flags": [
+        "--seeds"
+      ],
+      "help": "Comma-separated seeds of a fitting experiment, e.g. 0,1,2 (fit.seeds)",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "fit.seeds"
+      }
+    },
+    {
+      "flags": [
+        "--full-batch"
+      ],
+      "help": "true: every optimizer step uses the whole grid (Phase 4 amendment protocols P1-P3); false: the paper's mini-batches (fit.training.full_batch)",
+      "type": "bool",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "fit.training.full_batch"
+      }
+    },
+    {
+      "flags": [
+        "--optimizer"
+      ],
+      "help": "adam (paper), adam_cosine (Phase 5 protocol P4) or lbfgs (P5, needs --full-batch true) (fit.training.optimizer)",
+      "type": "str",
+      "choices": [
+        "adam",
+        "adam_cosine",
+        "lbfgs"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "fit.training.optimizer"
+      }
+    }
+  ]
+}

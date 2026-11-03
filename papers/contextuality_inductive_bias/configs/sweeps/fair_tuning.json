@@ -1,0 +1,412 @@
+{
+  "sweep_id": "fair_tuning",
+  "description": "Phase 5 fair tuning (Comparison Plan 2026-10-16T20:13Z): every compared model x Adam lr {1e-3, 3e-3, 1e-2} (x L2 {0, 0.01, 0.1, 1, 10, 100} for B0/B2), tuning seeds 0-2, validation split (data seed 201), protocol paper, 2000 steps.",
+  "base_config": "configs/fair_quantum_tuning.json",
+  "grid": [
+    {
+      "--model": "biased_quantum",
+      "--layers": 1,
+      "--lr": 0.001,
+      "--l2": 0.0
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 2,
+      "--lr": 0.001,
+      "--l2": 0.0
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 1,
+      "--cnot-pattern": "paper",
+      "--lr": 0.001,
+      "--l2": 0.0
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 2,
+      "--cnot-pattern": "paper",
+      "--lr": 0.001,
+      "--l2": 0.0
+    },
+    {
+      "--model": "mlp_biased",
+      "--hidden": 7,
+      "--lr": 0.001,
+      "--l2": 0.0
+    },
+    {
+      "--model": "mlp_unbiased",
+      "--hidden": 9,
+      "--lr": 0.001,
+      "--l2": 0.0
+    },
+    {
+      "--model": "quadratic",
+      "--lr": 0.001,
+      "--l2": 0.0
+    },
+    {
+      "--model": "photonic_merlin",
+      "--readout": "group",
+      "--n-photons": 2,
+      "--computation-space": "fock",
+      "--lr": 0.001,
+      "--l2": 0.0
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 0.0
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 0.01
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 0.1
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 1.0
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 10.0
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 100.0
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 0.0
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 0.01
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 0.1
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 1.0
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 10.0
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 100.0
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 1,
+      "--lr": 0.003,
+      "--l2": 0.0
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 2,
+      "--lr": 0.003,
+      "--l2": 0.0
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 1,
+      "--cnot-pattern": "paper",
+      "--lr": 0.003,
+      "--l2": 0.0
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 2,
+      "--cnot-pattern": "paper",
+      "--lr": 0.003,
+      "--l2": 0.0
+    },
+    {
+      "--model": "mlp_biased",
+      "--hidden": 7,
+      "--lr": 0.003,
+      "--l2": 0.0
+    },
+    {
+      "--model": "mlp_unbiased",
+      "--hidden": 9,
+      "--lr": 0.003,
+      "--l2": 0.0
+    },
+    {
+      "--model": "quadratic",
+      "--lr": 0.003,
+      "--l2": 0.0
+    },
+    {
+      "--model": "photonic_merlin",
+      "--readout": "group",
+      "--n-photons": 2,
+      "--computation-space": "fock",
+      "--lr": 0.003,
+      "--l2": 0.0
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.003,
+      "--l2": 0.0
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.003,
+      "--l2": 0.01
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.003,
+      "--l2": 0.1
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.003,
+      "--l2": 1.0
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.003,
+      "--l2": 10.0
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.003,
+      "--l2": 100.0
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.003,
+      "--l2": 0.0
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.003,
+      "--l2": 0.01
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.003,
+      "--l2": 0.1
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.003,
+      "--l2": 1.0
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.003,
+      "--l2": 10.0
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.003,
+      "--l2": 100.0
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 1,
+      "--lr": 0.01,
+      "--l2": 0.0
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 2,
+      "--lr": 0.01,
+      "--l2": 0.0
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 1,
+      "--cnot-pattern": "paper",
+      "--lr": 0.01,
+      "--l2": 0.0
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 2,
+      "--cnot-pattern": "paper",
+      "--lr": 0.01,
+      "--l2": 0.0
+    },
+    {
+      "--model": "mlp_biased",
+      "--hidden": 7,
+      "--lr": 0.01,
+      "--l2": 0.0
+    },
+    {
+      "--model": "mlp_unbiased",
+      "--hidden": 9,
+      "--lr": 0.01,
+      "--l2": 0.0
+    },
+    {
+      "--model": "quadratic",
+      "--lr": 0.01,
+      "--l2": 0.0
+    },
+    {
+      "--model": "photonic_merlin",
+      "--readout": "group",
+      "--n-photons": 2,
+      "--computation-space": "fock",
+      "--lr": 0.01,
+      "--l2": 0.0
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.01,
+      "--l2": 0.0
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.01,
+      "--l2": 0.01
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.01,
+      "--l2": 0.1
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.01,
+      "--l2": 1.0
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.01,
+      "--l2": 10.0
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.01,
+      "--l2": 100.0
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.01,
+      "--l2": 0.0
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.01,
+      "--l2": 0.01
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.01,
+      "--l2": 0.1
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.01,
+      "--l2": 1.0
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.01,
+      "--l2": 10.0
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.01,
+      "--l2": 100.0
+    }
+  ],
+  "repetitions": [
+    {
+      "--seed": 0
+    },
+    {
+      "--seed": 1
+    },
+    {
+      "--seed": 2
+    }
+  ],
+  "progress_total": 2000,
+  "plan": {
+    "metrics": [
+      "final.validation_nll",
+      "final.test_kl",
+      "min_validation_nll.test_kl",
+      "min_validation_nll.step",
+      "final.train_nll",
+      "train_seconds"
+    ],
+    "direction": "minimize",
+    "split": "validation (data seed 201, n = 1500) for selection; test KL recorded but never used for selection",
+    "checkpoint": "final step 2000",
+    "aggregation": "mean final validation NLL over tuning seeds 0-2 per (model, lr, L2)",
+    "tie_tolerance": "1e-4 absolute on mean validation NLL; ties to the smallest lr, then the smallest L2",
+    "selection_rule": "per model: argmin mean final validation NLL (utils/select_hyperparameters.py)",
+    "note": "Phase 5 Comparison Plan, LOG.md."
+  },
+  "fixed_args": {
+    "--protocol": "paper",
+    "--validation": "true",
+    "--optimizer": "adam",
+    "--experiment-id": "P5_fair_tuning"
+  },
+  "max_workers": 6
+}

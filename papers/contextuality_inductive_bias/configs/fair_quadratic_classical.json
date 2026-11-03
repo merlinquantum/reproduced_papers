@@ -1,0 +1,23 @@
+{
+  "description": "B5: degree-2 polynomial with linear readout (84 parameters, class contains the true function); Phase 5 ceiling, Adam, validation split enabled.",
+  "experiment": {
+    "id": "fair_quadratic_classical"
+  },
+  "model": {
+    "kind": "quadratic"
+  },
+  "data": {
+    "protocol": "paper",
+    "validation": {
+      "enabled": true,
+      "seed": 201,
+      "n": 1500
+    }
+  },
+  "training": {
+    "steps": 2000,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "l2": 0.0
+  }
+}

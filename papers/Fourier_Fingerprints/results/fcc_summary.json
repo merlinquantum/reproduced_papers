@@ -1,0 +1,270 @@
+{
+  "seed": 42,
+  "n_samples": 200,
+  "records": [
+    {
+      "dimension": 1,
+      "encoding": "linear",
+      "circuit": "circuit_0",
+      "fcc": 0.22452095636348243,
+      "n_active_frequencies": 9,
+      "n_photons": 2,
+      "n_modes": 5,
+      "n_trainable_params": 40,
+      "fock_dim": 15
+    },
+    {
+      "dimension": 1,
+      "encoding": "linear",
+      "circuit": "circuit_1",
+      "fcc": 0.19125207501199826,
+      "n_active_frequencies": 7,
+      "n_photons": 2,
+      "n_modes": 5,
+      "n_trainable_params": 12,
+      "fock_dim": 15
+    },
+    {
+      "dimension": 1,
+      "encoding": "linear",
+      "circuit": "circuit_2",
+      "fcc": 0.2625561114430344,
+      "n_active_frequencies": 16,
+      "n_photons": 2,
+      "n_modes": 5,
+      "n_trainable_params": 60,
+      "fock_dim": 15
+    },
+    {
+      "dimension": 1,
+      "encoding": "linear",
+      "circuit": "circuit_3",
+      "fcc": 0.19427011468066713,
+      "n_active_frequencies": 8,
+      "n_photons": 2,
+      "n_modes": 5,
+      "n_trainable_params": 8,
+      "fock_dim": 15
+    },
+    {
+      "dimension": 1,
+      "encoding": "exponential",
+      "circuit": "circuit_0",
+      "fcc": 0.20411751146337462,
+      "n_active_frequencies": 17,
+      "n_photons": 2,
+      "n_modes": 5,
+      "n_trainable_params": 40,
+      "fock_dim": 15
+    },
+    {
+      "dimension": 1,
+      "encoding": "exponential",
+      "circuit": "circuit_1",
+      "fcc": 0.1810849501696979,
+      "n_active_frequencies": 12,
+      "n_photons": 2,
+      "n_modes": 5,
+      "n_trainable_params": 12,
+      "fock_dim": 15
+    },
+    {
+      "dimension": 1,
+      "encoding": "exponential",
+      "circuit": "circuit_2",
+      "fcc": 0.2249255445058635,
+      "n_active_frequencies": 32,
+      "n_photons": 2,
+      "n_modes": 5,
+      "n_trainable_params": 60,
+      "fock_dim": 15
+    },
+    {
+      "dimension": 1,
+      "encoding": "exponential",
+      "circuit": "circuit_3",
+      "fcc": 0.19565091235758286,
+      "n_active_frequencies": 16,
+      "n_photons": 2,
+      "n_modes": 5,
+      "n_trainable_params": 8,
+      "fock_dim": 15
+    },
+    {
+      "dimension": 1,
+      "encoding": "balanced",
+      "circuit": "circuit_0",
+      "fcc": 0.21210164554291241,
+      "n_active_frequencies": 9,
+      "n_photons": 2,
+      "n_modes": 5,
+      "n_trainable_params": 40,
+      "fock_dim": 15
+    },
+    {
+      "dimension": 1,
+      "encoding": "balanced",
+      "circuit": "circuit_1",
+      "fcc": 0.17327911218962955,
+      "n_active_frequencies": 8,
+      "n_photons": 2,
+      "n_modes": 5,
+      "n_trainable_params": 12,
+      "fock_dim": 15
+    },
+    {
+      "dimension": 1,
+      "encoding": "balanced",
+      "circuit": "circuit_2",
+      "fcc": 0.2474619276407618,
+      "n_active_frequencies": 17,
+      "n_photons": 2,
+      "n_modes": 5,
+      "n_trainable_params": 60,
+      "fock_dim": 15
+    },
+    {
+      "dimension": 1,
+      "encoding": "balanced",
+      "circuit": "circuit_3",
+      "fcc": 0.15153924555754314,
+      "n_active_frequencies": 8,
+      "n_photons": 2,
+      "n_modes": 5,
+      "n_trainable_params": 8,
+      "fock_dim": 15
+    },
+    {
+      "dimension": 2,
+      "encoding": "linear",
+      "circuit": "circuit_0",
+      "fcc": 0.20500501470034357,
+      "n_active_frequencies": 25,
+      "n_photons": 3,
+      "n_modes": 5,
+      "n_trainable_params": 40,
+      "fock_dim": 35
+    },
+    {
+      "dimension": 2,
+      "encoding": "linear",
+      "circuit": "circuit_1",
+      "fcc": 0.18334517547513474,
+      "n_active_frequencies": 25,
+      "n_photons": 3,
+      "n_modes": 5,
+      "n_trainable_params": 12,
+      "fock_dim": 35
+    },
+    {
+      "dimension": 2,
+      "encoding": "linear",
+      "circuit": "circuit_2",
+      "fcc": 0.14121215607984292,
+      "n_active_frequencies": 25,
+      "n_photons": 3,
+      "n_modes": 5,
+      "n_trainable_params": 60,
+      "fock_dim": 35
+    },
+    {
+      "dimension": 2,
+      "encoding": "linear",
+      "circuit": "circuit_3",
+      "fcc": 0.1775083088882566,
+      "n_active_frequencies": 25,
+      "n_photons": 3,
+      "n_modes": 5,
+      "n_trainable_params": 8,
+      "fock_dim": 35
+    },
+    {
+      "dimension": 2,
+      "encoding": "exponential",
+      "circuit": "circuit_0",
+      "fcc": 0.29602207044214757,
+      "n_active_frequencies": 25,
+      "n_photons": 3,
+      "n_modes": 5,
+      "n_trainable_params": 40,
+      "fock_dim": 35
+    },
+    {
+      "dimension": 2,
+      "encoding": "exponential",
+      "circuit": "circuit_1",
+      "fcc": 0.26986150962460903,
+      "n_active_frequencies": 25,
+      "n_photons": 3,
+      "n_modes": 5,
+      "n_trainable_params": 12,
+      "fock_dim": 35
+    },
+    {
+      "dimension": 2,
+      "encoding": "exponential",
+      "circuit": "circuit_2",
+      "fcc": 0.18159331617411686,
+      "n_active_frequencies": 25,
+      "n_photons": 3,
+      "n_modes": 5,
+      "n_trainable_params": 60,
+      "fock_dim": 35
+    },
+    {
+      "dimension": 2,
+      "encoding": "exponential",
+      "circuit": "circuit_3",
+      "fcc": 0.20506721446315376,
+      "n_active_frequencies": 25,
+      "n_photons": 3,
+      "n_modes": 5,
+      "n_trainable_params": 8,
+      "fock_dim": 35
+    },
+    {
+      "dimension": 2,
+      "encoding": "balanced",
+      "circuit": "circuit_0",
+      "fcc": 0.32005630769907506,
+      "n_active_frequencies": 25,
+      "n_photons": 3,
+      "n_modes": 5,
+      "n_trainable_params": 40,
+      "fock_dim": 35
+    },
+    {
+      "dimension": 2,
+      "encoding": "balanced",
+      "circuit": "circuit_1",
+      "fcc": 0.24997043676826744,
+      "n_active_frequencies": 25,
+      "n_photons": 3,
+      "n_modes": 5,
+      "n_trainable_params": 12,
+      "fock_dim": 35
+    },
+    {
+      "dimension": 2,
+      "encoding": "balanced",
+      "circuit": "circuit_2",
+      "fcc": 0.20273179518444862,
+      "n_active_frequencies": 25,
+      "n_photons": 3,
+      "n_modes": 5,
+      "n_trainable_params": 60,
+      "fock_dim": 35
+    },
+    {
+      "dimension": 2,
+      "encoding": "balanced",
+      "circuit": "circuit_3",
+      "fcc": 0.2355923028433304,
+      "n_active_frequencies": 25,
+      "n_photons": 3,
+      "n_modes": 5,
+      "n_trainable_params": 8,
+      "fock_dim": 35
+    }
+  ]
+}

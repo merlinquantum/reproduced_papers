@@ -1,0 +1,16 @@
+{
+  "description": "E3 / Fig. 11: surrogate L = 1 with an L2 penalty (strength from --l2; grid pre-declared in LOG.md), gradient descent lr 1e-3, 1000 steps.",
+  "experiment": {
+    "id": "fig11_surrogate_l1_reg"
+  },
+  "model": {
+    "kind": "surrogate",
+    "spectrum": 1
+  },
+  "training": {
+    "steps": 1000,
+    "optimizer": "sgd",
+    "lr": 0.001,
+    "l2": 0.0
+  }
+}

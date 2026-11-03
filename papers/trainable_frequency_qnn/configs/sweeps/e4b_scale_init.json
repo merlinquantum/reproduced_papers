@@ -1,0 +1,49 @@
+{
+  "sweep_id": "e4b_scale_init",
+  "description": "E4 diagnosis: does starting the frequency parameters at 1.5 (or fixing them there) let FF/FF+S/TF fit {1.5, 3, 4.5}? Separates optimisation reachability from expressivity/implementation.",
+  "candidates": [
+    {
+      "name": "ff_fixed1.5",
+      "config": "configs/e4_scaled_ff_original.json",
+      "overrides": {
+        "model.frequency_init": 1.5
+      }
+    },
+    {
+      "name": "ffs_init1.5",
+      "config": "configs/e4_scaled_ffs_original.json",
+      "overrides": {
+        "model.frequency_init": 1.5
+      }
+    },
+    {
+      "name": "tf_init1.5",
+      "config": "configs/e4_scaled_ff_original.json",
+      "overrides": {
+        "model.frequency_mode": "trainable",
+        "model.frequency_init": 1.5
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "max_workers": 6,
+  "selection": {
+    "metric": "train_mse",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}

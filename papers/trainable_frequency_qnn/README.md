@@ -1,0 +1,506 @@
+# Let Quantum Neural Networks Choose Their Own Frequencies - Reproduction
+
+> Status: gate-model reproduction complete: every paper experiment was run with the
+> paper's settings and multiple seeds, plus fairness controls. The fair comparison
+> with the paper's FF baseline and controls is complete. The photonic (MerLin)
+> adaptation is complete (`MERLIN_IMPLEMENTATION`, simulation only). Verdict: C1 and
+> C2 supported (C2 with a caveat); C3, C4, C5 and C7 partially supported; C6 (cost)
+> supported with a correction. Durable lessons: `INSIGHTS.md`.
+
+## Reference and Attribution
+
+- Paper: *Let Quantum Neural Networks Choose Their Own Frequencies*, Phys. Rev. A 109, 042421 (2024)
+- Authors: Ben Jaderberg, Antonio A. Gentile, Youssef Achari Berrada, Elvira Shishenina, Vincent E. Elfving
+- DOI: [10.1103/PhysRevA.109.042421](https://doi.org/10.1103/PhysRevA.109.042421)
+- arXiv: [2309.03279](https://arxiv.org/abs/2309.03279) (v1 2023-09-06, v2 2024-04-22)
+- Original repository: none released (searched GitHub, Hugging Face, Papers with Code)
+- License and attribution notes: the paper is cited below; this repository's code is an independent reimplementation.
+
+## Original Paper
+
+Quantum models with angle encoding compute truncated Fourier series whose
+accessible frequencies are fixed by the eigenvalues of the data-encoding
+generator Hamiltonians. The paper adds trainable parameters to those generators,
+producing trainable-frequency (TF) models whose spectrum is learned during
+training. Numerical studies analyse the learned spectra and apply TF models to
+a Navier-Stokes solving task, comparing against fixed-frequency (FF) models.
+
+The TF model replaces each encoding gate `R_y(x)` by `R_y(θ_m x)`, with `θ_m`
+trainable and initialised at 1, so a TF model starts as the conventional FF model.
+Main claims: (Sec. V, Fig. 2) FF QNNs cannot fit a cosine series with irregular
+frequencies {1, 1.2, 3}, while TF learns non-uniform gaps and fits it; (Fig. 3) TF
+beats simple, tower and exponential FF feature maps on average and in the worst case
+when the number of data frequencies is unknown; (Sec. VI, Table I, Fig. 4) on a
+physics-informed (DQC) solve of the 2D Navier–Stokes cylinder wake (Re = 100), TF
+lowers the MAERM error of u, v and p with one extra parameter per encoding gate;
+(App. C, Table II) the same holds for an over-parameterised model. Metric: MAERM =
+mean absolute error relative to the median, per time step, min / max / mean over
+t = 0.5…5.5, averaged over 10 runs.
+
+## Reproduction Scope, Claims, and Deviations
+
+Reproduced with the paper's hyperparameters (App. B) in noiseless statevector
+simulation: Fig. 2a/b/c (E1, E2), the FF depth ablation up to L = 128 (E3), the
+global-scale statement of Sec. V (E4), Fig. 3 (E5), Table I + Fig. 4 (E6), Table II +
+Fig. 5 (E7) and the circuit-cost factor (E8). Seeds: 10 paired seeds (E1, E2, E4, E6,
+E7), 5 (E5), 3 (E3). Original cylinder-wake data (Raissi et al.), full grid.
+
+Claims tested: C1 FF cannot fit irregular frequencies and TF can
+(Fig. 2); C2 FF fits its natural frequencies (Fig. 2a, Sec. V); C3 TF wins in mean and
+worst case when the spectral richness is unknown (Fig. 3); C4 TF lowers Navier–Stokes
+error (Table I, Fig. 4); C5 the same in an over-parameterised model (Table II); C6 the TF
+training overhead is small (C_f = 1.07); C7 TF is a sensible default that should never do
+worse than FF. Hardware assumptions: noiseless simulation; toy runs on a local Apple M3
+CPU, Navier–Stokes runs on a remote NVIDIA L4 host (8 vCPU, 4 parallel workers).
+
+Updates and deviations:
+
+- Own PyTorch statevector simulator (≤ 6 qubits, complex128), autograd instead of the
+  parameter-shift rule (identical values in noiseless simulation). Circuits are evaluated
+  in the Pauli-Y eigenbasis with fused ansatz layers — exact (tested against gate-by-gate
+  evaluation to 1e-12) and 58× faster.
+- Added fairness controls not in the paper: FF + one trainable input scale per coordinate
+  (FF+S), min–max input normalisation, an lr-robustness check, and small classical
+  references (MLP, Fourier regressor, MLP PINN) for context.
+- Paper ambiguities and inconsistencies (A1–A16), most importantly: N = 3
+  qubits for Fig. 2 (text vs appendix disagree; both run); MAERM uses the median of |y|
+  (this reproduces the paper's TF v error exactly; the signed median is also reported);
+  Navier–Stokes inputs are raw physical coordinates by default (the paper does not say;
+  min–max variant run); App. C layout inferred from its 804-parameter count; the paper's
+  cost factor 1.07 is 1.033 when counted consistently.
+- Photonic (MerLin) adaptation: see "Photonic Assessment and MerLin Extension" below; it is an
+  adaptation, not part of the paper.
+
+## Project Layout
+
+```text
+papers/trainable_frequency_qnn/
+|-- README.md, INSIGHTS.md
+|-- cli.json                      paper-specific CLI schema
+|-- configs/                      defaults.json, *_original.json (paper), *_classical.json,
+|   |                             *_merlin.json (adaptation), sweeps/<sweep_id>.json
+|-- lib/
+|   |-- runner.py                 train_and_evaluate(cfg, run_dir)
+|   |-- statevector.py, qnn.py    gate-model simulator and FF / TF / FF+S QNNs
+|   |-- qnn_merlin.py             MerLin photonic FF / TF / FF+S models
+|   |-- toy_task.py, spectrum.py  Fig. 2 / Fig. 3 tasks and DFT spectra
+|   |-- navier_stokes.py, data.py DQC Navier–Stokes loss, MAERM, cylinder-wake loader
+|   `-- models.py, training.py, plotting.py, experiment_logging.py
+|-- utils/                        run_sweep.py, aggregate_results.py, verify_results.py,
+|                                 analyze_lr_robustness.py, compare_fair.py, plot_*.py,
+|                                 merlin_hardware_report.py, sweep_ledger.py, export_per_seed_metrics.py
+|-- tests/                        pytest suite (simulator, QNN, MerLin, NS, CLI, smoke, decision rule)
+|-- notebook.ipynb                scientific walkthrough (runs in ~3 min on CPU)
+|-- results/                      curated tables (*_results.{json,md}), per_seed_metrics.json, figures
+`-- outdir/                       raw runs and sweeps (disposable, not committed)
+```
+
+## Install and How to Run
+
+```bash
+conda create -y -n trainable_freq -c conda-forge --override-channels python=3.12 pip
+conda activate trainable_freq
+pip install -r papers/trainable_frequency_qnn/requirements.txt
+```
+
+Quick smoke runs (seconds):
+
+```bash
+# From the repo root
+python implementation.py --paper trainable_frequency_qnn --help
+python implementation.py --paper trainable_frequency_qnn --config configs/fig2b_tf_original.json --iterations 300
+python implementation.py --paper trainable_frequency_qnn --config configs/ns_table1_tf_smoke_reduced.json
+
+# From inside papers/trainable_frequency_qnn
+python ../../implementation.py --config configs/fig2b_tf_original.json --iterations 300
+```
+
+Paper-setting runs (one seed each; set `--seed`):
+
+```bash
+python implementation.py --paper trainable_frequency_qnn --config configs/fig2a_ff_original.json   # E1, ~5 s
+python implementation.py --paper trainable_frequency_qnn --config configs/fig2b_tf_original.json   # E2 TF, ~11 s
+python implementation.py --paper trainable_frequency_qnn --config configs/fig2b_ff_original.json   # E2 FF
+python implementation.py --paper trainable_frequency_qnn --config configs/ns_table1_tf_original.json  # E6 TF, ~13 min on CPU
+python implementation.py --paper trainable_frequency_qnn --config configs/ns_table1_ff_original.json  # E6 FF, ~17 min on CPU
+```
+
+Notebook (entry point for readers; ~3 min on CPU, from the paper folder):
+
+```bash
+python utils/export_per_seed_metrics.py   # refresh results/per_seed_metrics.json from outdir/sweeps (optional)
+jupyter nbconvert --to notebook --execute --inplace notebook.ipynb
+```
+
+Each run writes `papers/trainable_frequency_qnn/outdir/run_YYYYMMDD-HHMMSS/` with
+`run.log`, `run_status.json`, `config_snapshot.json`, `metrics.json`,
+`losses.csv`, `predictions.npz` and, for toy QNN runs, `spectrum.npz`
+(Navier–Stokes runs also save `model_state.pt`).
+
+## Configuration
+
+`cli.json` is the authoritative paper-specific CLI schema: `--iterations`,
+`--batch-size`, `--lr`, `--n-qubits`, `--n-layers`, `--frequency-mode
+{fixed,trainable,global_scale}`, `--feature-map {simple,tower,exponential}` and
+`--coordinate-transform {raw,minmax}`. Global flags (`--config`, `--outdir`,
+`--seed`, `--dtype`, `--device`, `--log-level`, `--data-root`) come from the
+shared runtime.
+
+| Config | Experiment |
+|---|---|
+| `defaults.json` | E2 TF QNN (base for every overlay) |
+| `fig2a_ff_original.json` | E1, Fig. 2a: FF on {1, 2, 3} |
+| `fig2b_{ff,tf,ffs}_original.json` | E2, Fig. 2b–c: FF / TF / FF + global scale on {1, 1.2, 3} |
+| `fig2b_{mlp,fourier}_classical.json` | E2 classical context references |
+| `e4_scaled_{ff,ffs}_original.json` | E4: FF / FF + global scale on {1.5, 3, 4.5} |
+| `fig3_{simple,tower,exponential,tf,ffs}_original.json` | E5, Fig. 3 models (frequency set swept in Phase 3) |
+| `ns_table1_{ff,tf,ffs}_original.json` | E6, Table I / Fig. 4 |
+| `ns_table1_mlp_classical.json` | E6 classical PINN context reference |
+| `ns_table1_tf_smoke_reduced.json` | Navier–Stokes smoke (3 iterations) |
+| `ns_appc_{ff,tf}_original.json` | E7, App. C / Table II |
+| `*_merlin.json` (17 + smoke) | MerLin photonic adaptation of E1, E2 (+ UNBUNCHED ablation), E4, E5, E6 (Phase 4) |
+
+Main model keys: `model.family` (`qnn`, `mlp`, `fourier`), `model.layout`
+(`toy`, `ns_parallel`, `ns_serial`), `model.entangler` (`cnot`, `cz`),
+`model.feature_map`, `model.frequency_mode`. The Navier–Stokes inputs use raw
+physical coordinates by default (`dataset.coordinate_transform`, deviation A7).
+
+## Data
+
+- Toy regression tasks (Fig. 2, Fig. 3): the paper's own synthetic data, generated on
+  the fly (`lib/toy_task.py`); no download and no fallback. Target
+  `y(x) = (1/|Ω_d|) Σ_{ω ∈ Ω_d} cos(ω x)`, noiseless, float64, on `D = [−4π, 4π]`. Training
+  points: `n_d = ceil(2·|D|·max Ω_d)` equally spaced points including both ends (151 for
+  max Ω_d = 3, 227 for 4.5). Dense reporting grid: `4·n_d` points (our addition). Frequency
+  sets: {1, 2, 3} (E1), {1, 1.2, 3} (E2, E3), {1.5, 3, 4.5} (E4), `linspace(1, 3, k)` for
+  k = 1…7 (E5). Mini-batches of `b_s` points are drawn without replacement with a seeded
+  generator.
+- Navier–Stokes tasks (Table I, Fig. 4, App. C): the original cylinder-wake
+  dataset (Re = 100, NekTar FEM) of Raissi, Perdikaris and Karniadakis
+  (arXiv:1711.10566), from the authors' repository
+  [maziarraissi/PINNs](https://github.com/maziarraissi/PINNs) (MIT license),
+  pinned to commit `932f50a2d8ef4e80d1456bbae6887a73ff5166ef`. Expected path:
+  `data/trainable_frequency_qnn/cylinder_nektar_wake/cylinder_nektar_wake.mat`
+  (24.1 MB, git blob SHA `0098e4098c1df61b009137c60e3a506f8ccd27e2`). It holds
+  `X_star` (5000 × 2, a 100 × 50 grid over x ∈ [1, 8], y ∈ [−2, 2]), `t`
+  (200 steps, 0 to 19.9, Δt = 0.1), `U_star` (5000 × 2 × 200, u and v) and
+  `p_star` (5000 × 200). The full file is used; the paper's t ∈ [0, 5.5]
+  window and 10 × 5 data sub-grid are selected in code.
+
+```bash
+# From the repo root
+mkdir -p data/trainable_frequency_qnn/cylinder_nektar_wake
+curl -sSL -o data/trainable_frequency_qnn/cylinder_nektar_wake/cylinder_nektar_wake.mat \
+  https://raw.githubusercontent.com/maziarraissi/PINNs/932f50a2d8ef4e80d1456bbae6887a73ff5166ef/main/Data/cylinder_nektar_wake.mat
+git hash-object data/trainable_frequency_qnn/cylinder_nektar_wake/cylinder_nektar_wake.mat
+# expect 0098e4098c1df61b009137c60e3a506f8ccd27e2
+```
+
+The `data/` folder is git-ignored, so each machine (including the remote GPU
+machines used for the Navier–Stokes runs) must run this command once.
+
+## Results Obtained and Comparison with the Paper
+
+All numbers are means over seeds (± std), paper settings, noiseless simulation; label
+`paper-accurate` unless stated. Tables: `results/*_results.md`; figures: `results/*.png`.
+Lower is better for every metric (train MSE, MAERM %). "Paper value" is what the paper
+reports; "reproduced value" is our local result.
+
+**Claim-level summary** (Delta = reproduced − paper; the paper gives numbers only for
+Tables I–II and C_f):
+
+| Paper item | Claim tested | Paper value | Reproduced value | Delta | Metric agreement | Trend agreement | Claim support | Seeds | Comment |
+|---|---|---:|---:|---:|---|---|---|---:|---|
+| Fig. 2a (E1) | C2 | visually perfect fit | FF median train MSE 6.4e-3 (N = 3), 4.0e-4 (N = 4) | N/A | N/A (no number) | Yes | SUPPORTED | 10 | Good, not perfect, within the 2000-iteration budget |
+| Fig. 2b (E2) | C1 | FF fails, TF fits | TF 1.16e-3 ± 1.4e-3, FF 5.08e-2 ± 0.06e-2 | N/A | N/A (no number) | Yes | SUPPORTED | 10 paired | TF < FF 10/10, p = 0.002; FF+S 5.37e-2 |
+| Fig. 2c (E2) | C1 | θ_F ≈ {0.89, 1.05, 1.04} | one weight 0.885–0.925, two 0.93–1.15 per seed | ≈ 0.01–0.1 per weight | Approximate | Yes | SUPPORTED | 10 | Same non-uniform pattern in every seed |
+| Sec. V depth (E3) | C1 | FF never fits up to L = 128 | FF 0.0506 (L = 4) … 0.067 (L = 128) | N/A | N/A | Yes | SUPPORTED | 3 | FF with 1152 parameters is still worse than TF with 39 |
+| Sec. V global scale (E4, E4b) | C2 | FF + global scale fits {1.5, 3, 4.5} | 0.125 from scale 1; median 2e-11 from scale 1.5 | N/A | N/A | Only from a data-matched start | Caveat on C2 (statement holds only from a data-matched start) | 10 | Frequency parameters move only locally |
+| Fig. 3 mean (E5) | C3 | TF lowest | TF 0.0187; FF 0.0242–0.0243 | N/A (plot only) | N/A | Yes | PARTIALLY SUPPORTED | 5 / dataset | All FF maps identical (integer gaps); FF with data scale beats TF (E5b) |
+| Fig. 3 worst (E5) | C3 | TF lowest | TF 0.0492; FF 0.064 | N/A (plot only) | N/A | Yes | PARTIALLY SUPPORTED | 5 / dataset | At lr 1e-2 TF has the worst worst-case (3 seeds) |
+| Fig. 3 best (E5) | C3 | tie | TF 9.4e-11; FF 6.6e-11 … 1.6e-7 | N/A | N/A | Yes (tie at the numerical floor) | PARTIALLY SUPPORTED | 5 / dataset | |
+| Table I FF mean u / v / p (E6) | C4 | 17.5 / 103.2 / 73.2 | 20.1 / 61.0 / 76.2 | +2.6 / −42.2 / +3.0 | u, p close; v no | — | — | 10 | Paper input normalisation unstated (A7) |
+| Table I TF mean u / v / p (E6) | C4 | 13.2 / 30.4 / 57.0 | 9.0 / 30.4 / 45.6 | −4.2 / 0.0 / −11.4 | v exact; u, p better than the paper (G4) | TF < FF 10/10 | PARTIALLY SUPPORTED | 10 paired | FF+S recovers most of the gap; TF still lower 5/5 |
+| Table II FF mean u / v / p (E7) | C5 | 7.7 / 26.0 / 45.2 | 31.5 / 73.2 / 123.3 | +23.8 / +47.2 / +78.1 | No (raw-input plateau, G1) | — | — | 10 | FF+S 6.1 / 20.6 / 32.4; FF min–max 4.9 / 21.2 / 31.7 |
+| Table II TF mean u / v / p (E7) | C5 | 6.2 / 18.9 / 36.8 | 6.6 / 20.1 / 34.8 | +0.4 / +1.2 / −2.0 | Yes (≈ 1 seed-std) | TF < raw FF 10/10 | PARTIALLY SUPPORTED | 10 paired | No separation from FF+S; with min–max on both, TF lower 5/5 |
+| Sec. VI cost factor (E8) | C6 | C_f = 1.07 | C_f = 1.033; +4.3 % s/iter | −0.037 | No (paper miscount, A15) | Yes (small overhead) | SUPPORTED (corrected) | 10 | 12 θ_F / 360 θ_A |
+| Abstract / Discussion | C7 | TF never worse than FF | Never significantly worse at the paper's lr | N/A | N/A | Mostly | PARTIALLY SUPPORTED | all | Exceptions: E5 worst case at lr 1e-2; photonic E5 |
+
+**Fig. 2 — irregular frequencies (E2, N = 3, 10 paired seeds), train MSE**
+
+| Model | Params | Train MSE |
+|---|---:|---:|
+| FF (paper baseline) | 36 | 5.08e-2 ± 0.06e-2 |
+| FF + global scale | 37 | 5.37e-2 ± 0.79e-2 |
+| **TF** | 39 | **1.16e-3 ± 1.36e-3** |
+| FF, L = 128 (E3, 1152 params) | 1152 | 6.70e-2 ± 1.03e-2 |
+
+TF is lower than FF in 10/10 seeds (Wilcoxon p = 0.002); the learned θ_F
+(≈ 0.9, 1.05, 1.1) match the paper's {0.89, 1.05, 1.04}. Fig. 2a (E1): FF fits
+{1, 2, 3} with median MSE 6.4e-3 (N = 3) / 4.0e-4 (N = 4) (`results/fig2a_fit_spectrum.png`).
+![Fig. 2 analogue](results/fig2b_fit_spectrum.png)
+
+**Sec. V global-scale statement (E4)** — not reproduced as stated: FF with a trainable
+global scale started at 1 does not fit {1.5, 3, 4.5} (MSE 0.125); started at 1.5 it fits
+to ~1e-11 (E4b). Frequency parameters only move locally under gradient descent.
+
+**Fig. 3 — spectral richness (E5, N = 4, 5 seeds per dataset), train MSE over 7 datasets**
+
+| Model | Mean | Worst | Best |
+|---|---:|---:|---:|
+| simple FF | 0.0243 | 0.0641 | 7e-11 |
+| tower FF | 0.0242 | 0.0641 | 2e-7 |
+| exponential FF | 0.0242 | 0.0640 | 3e-8 |
+| **TF** | **0.0187** | **0.0492** | 9e-11 |
+| exponential FF with prior-knowledge input scale (E5b) | 3.0e-5 | 2.0e-4 | 6e-8 |
+
+The paper's ranking is reproduced (TF best mean and worst case, ties on the best case,
+robust to lr 1e-3…1e-2 for the mean). The mechanism differs: all FF maps fail identically
+for k ≥ 4 because those frequency sets are non-integer; the paper's "too few / too many
+frequencies" pattern appears only when FF inputs are scaled by the data's base frequency,
+and then exponential FF beats TF.
+![Fig. 3 analogue](results/fig3_spectral_richness.png)
+
+**Table I — Navier–Stokes (E6, 10 paired seeds), mean MAERM % (min / max / mean)**
+
+| | Paper FF | Ours FF | Paper TF | Ours TF |
+|---|---|---|---|---|
+| u | 16.8 / 18.3 / 17.5 | 19.5 / 20.7 / 20.1 | 12.8 / 14.2 / 13.2 | 8.4 / 10.0 / 9.0 |
+| v | 90.3 / 122 / 103.2 | 56.8 / 66.2 / 61.0 | 27.4 / 34.3 / 30.4 | 27.4 / 34.7 / 30.4 |
+| p | 62.9 / 78.3 / 73.2 | 61.1 / 92.9 / 76.2 | 51.0 / 62.8 / 57.0 | 37.0 / 58.8 / 45.6 |
+
+TF < FF for u, v, p in 10/10 seeds (p = 0.002). Controls: FF + per-coordinate trainable
+scale (3 params per QNN) reaches u 11.2, v 35.6, p 49.9 (5 seeds) — most of the gap — and
+TF remains lower in 5/5 seeds; with min–max inputs TF < FF in 5/5 seeds. A small classical
+MLP PINN (188 params per network) reaches u 4.0, v 17.1, p 30.7 (context only).
+![Fig. 4 analogue](results/e6_table1_pressure_t3.5.png)
+
+**Table II — over-parameterised (E7, 10 paired seeds), mean MAERM %**
+
+| | Paper FF | Ours FF (raw) | Paper TF | Ours TF (raw) | FF+S | FF min–max | TF min–max |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| u | 7.7 | 31.5 | 6.2 | 6.6 | 6.1 | 4.9 | 4.4 |
+| v | 26.0 | 73.2 | 18.9 | 20.1 | 20.6 | 21.2 | 18.2 |
+| p | 45.2 | 123 | 36.8 | 34.8 | 32.4 | 31.7 | 25.0 |
+
+Our TF reproduces Table II within about one seed-std. Our raw-input FF is stuck on a
+plateau (more iterations do not help); FF with min–max inputs or 3 trainable scales
+matches TF (FF+S vs TF: no difference, 2–3/5 seeds), so the raw-input gap is an
+input-scaling effect. With min–max inputs for both, TF is still lower in 5/5 seeds by
+small margins (u 0.5, v 3.0, p 6.7 points; 5 seeds, p = 0.0625).
+![Fig. 5 analogue](results/e7_appc_pressure_t4.0.png)
+
+**Figure orientation.** The reference fields in the paper's Figs. 4 and 5 are the dataset
+fields mirrored in y. At t = 3.5 the strongest pressure minimum of the stored dataset is
+at (x, y) = (1.28, +0.37); the paper draws it at y ≈ −0.4, and every other feature is
+mirrored the same way (likewise at t = 4.0). For this periodic wake a y-mirror equals a
+half-period time shift: the dataset fields at t = 0.5 and 6.5 match the y-mirrored
+t = 3.5 field with correlation 0.999. So the paper either flipped the y axis when
+plotting or shows a time other than its caption states; we cannot tell which. Our
+figures plot the dataset in its stored orientation (`X_star` rows ordered with y
+ascending). This affects only the figures, not any metric. The paper also uses a rainbow
+colour map with interpolation and does not state which seed it shows; we show the
+median-error seed.
+
+**Sweep records.** All sweeps declare the same selection rule: final-iteration
+metric on the training points (train MSE for toy tasks, total loss for Navier–Stokes),
+minimised, mean over seeds, 5 % relative tie tolerance. These are comparison sweeps,
+not hyperparameter searches: no candidate is carried forward. Claims are decided by
+paired per-seed tests (above, and `results/p5_comparison.md`). The coordinator's lowest
+observed aggregate is listed for traceability; for multi-dataset sweeps it ranks
+(model, dataset) cells, so it is not a model ranking. Full candidate tables:
+`results/<sweep>_results.md`.
+
+| Sweep | Runs (successful / expected) | Classification | Lowest observed aggregate (ties within 5 %) | Full table |
+|---|---:|---|---|---|
+| `e1_fig2a` | 20 / 20 | COMPLETE SWEEP | ff_n4 | `results/e1_fig2a_results.md` |
+| `e2_fig2b` | 70 / 70 | COMPLETE SWEEP | tf | `results/e2_fig2b_results.md` |
+| `e3_ff_depth` | 18 / 18 | COMPLETE SWEEP | ff_L4, ff_L8, ff_L16 (tied) | `results/e3_ff_depth_results.md` |
+| `e4_scaled` | 30 / 30 | COMPLETE SWEEP | ff, tf (tied in aggregate; TF lower 10/10 by 4 %) | `results/e4_scaled_results.md` |
+| `e4b_scale_init` | 30 / 30 | COMPLETE SWEEP | ff_fixed1.5 | `results/e4b_scale_init_results.md` |
+| `e5_fig3` | 175 / 175 | COMPLETE SWEEP | cell simple_k3 (model box: TF lowest mean and worst case) | `results/e5_fig3_results.md` |
+| `e5b_oracle_scale` | 63 / 63 | COMPLETE SWEEP | cell simple_oracle_k1 (model box: exponential lowest) | `results/e5b_oracle_scale_results.md` |
+| `lr_robustness` | 186 / 186 | COMPLETE SWEEP | cell e5_simple_k2_lr3e-3 (by-lr view in the table) | `results/lr_robustness_results.md` |
+| `e6_table1` | 20 / 20 | COMPLETE SWEEP | tf | `results/e6_table1_results.md` |
+| `e6_controls` (+ `e6_table1`) | 15 / 15 (35 / 35 merged) | COMPLETE SWEEP | mlp_lr1e-2 (classical context; best quantum: tf) | `results/e6_table1_with_controls_results.md` |
+| `e6_minmax` | 10 / 10 | COMPLETE SWEEP | tf_minmax | `results/e6_minmax_results.md` |
+| `e7_appc` + `e7_appc_retry` | 20 / 20 (union) | Complete run coverage; parent sweep record PARTIAL (coordinator killed by the time limit) | tf | `results/e7_appc_combined_results.md` |
+| `e7_scaling_controls` (+ E7) | 15 / 15 (35 / 35 merged) | COMPLETE SWEEP | tf_minmax | `results/e7_with_scaling_controls_results.md` |
+| `g1_e7_ff_diag` | 3 / 3 | COMPLETE SWEEP (single seed, diagnosis) | ff_minmax, ffs (tied) | `results/g1_e7_ff_diag_results.md` |
+| `m1_fig2a` | 10 / 10 | COMPLETE SWEEP | ff (only candidate) | `results/m1_fig2a_results.md` |
+| `m2_fig2b` | 50 / 50 | COMPLETE SWEEP | tf_unbunched (post-selected ablation; among FOCK readouts: tf) | `results/m2_fig2b_results.md` |
+| `m4_scaled` | 60 / 60 | COMPLETE SWEEP | ff_init1.5, ffs_init1.5, tf_init1.5 (tied) | `results/m4_scaled_results.md` |
+| `m5_fig3` | 175 / 175 | COMPLETE SWEEP | cells simple_k1, tf_k1 (tied; model box: tower lowest) | `results/m5_fig3_results.md` |
+| `m6_table1_{tf,ff,ffs}` | 25 / 25 (union of 3) | COMPLETE SWEEPs | tf | `results/m6_table1_merlin_results.md` |
+
+Uncertainty: 5-seed controls cannot reach two-sided p < 0.05 (minimum 0.0625), and 3-seed
+rows are preliminary.
+
+**Verdicts**: C1 irregular frequencies — supported
+(quantitative). C2 FF fits its natural frequencies — supported; the global-scale variant
+only with a suitable initial scale. C3 spectral richness — partially supported (ranking
+yes, mechanism no). C4 Table I — partially supported (TF < FF robustly; most of the gain
+is recoverable by 3 scale parameters). C5 Table II — partially supported (TF matches the
+paper; the advantage over FF shrinks to a small but consistent margin once inputs are
+scaled). C6 overhead — supported (C_f = 1.033, +4 % wall-clock). C7 "sensible default" —
+partially supported.
+
+## Fair Baselines
+
+The paper claims an advantage of TF over FF quantum models: better expressivity / accuracy at
+the same circuit, at a small training-cost overhead. It makes no quantum-vs-classical claim.
+The paper's FF baseline is the identical circuit with θ_F frozen at 1, so it differs from TF
+only in the claimed mechanism. TF has 3–12 more parameters per QNN (≤ 8.3 %). This baseline
+is fair and reproduced (`FAIR_AND_REPRODUCED`), so no new baseline was implemented. Phase 1
+also planned controls for the obvious confounders, and Phase 3 ran them under the same
+protocol: FF with trainable input scales (FF+S, +1 or +3 per QNN), deeper FF (up to 32× the
+parameters) and min–max-normalised inputs. Classical models (MLP, Fourier regressor, MLP PINN)
+are context only: they are not matched in circuit resources.
+
+Protocol (frozen before the table was generated): same data, optimiser, lr,
+iterations and paired initialisation. Metric: final-iteration train MSE (toy), box mean and
+worst case over 7 datasets (Fig. 3), mean MAERM u / v / p (NS). Tie tolerance: 5 % relative.
+A paired "lower" verdict needs ≥ 80 % of seeds and Wilcoxon p < 0.05. With 5 seeds a 5/5 sign
+is reported as *consistent* (the minimum attainable p is 0.0625).
+
+```bash
+python utils/compare_fair.py   # results/p5_comparison.{json,md}; 817 / 817 expected runs, all COMPLETE
+python utils/plot_p5_comparison.py --input results/p5_comparison.json --output results/p5_comparison_forest.png
+```
+
+| Claim | Fair comparison (local runs) | r = (TF − B) / B | Outcome |
+|---|---|---|---|
+| C1 irregular frequencies | TF vs FF / FF+S / FF L = 128, 10 seeds | −98 % / −98 % / −98 %, TF lower 10/10, p = 0.002 | **SUPPORTED** |
+| C3 spectral richness | TF vs simple / tower / exp. FF / FF+S, box over 7 datasets | mean −21…−23 %, worst −23 % | **PARTIALLY SUPPORTED** — FF with a prior-knowledge input scale beats TF (exp. FF mean 3e-5); at lr 1e-2 TF has the worst worst-case |
+| C4 Table I | TF vs FF (10 seeds); vs FF+S (5); min–max both (5) | u/v/p −55/−50/−40 % (p = 0.002); −19/−15/−9 % (5/5); −48/−68/−52 % (5/5) | **PARTIALLY SUPPORTED** — TF lower against every control, but against FF+S only as a consistent 5/5 sign |
+| C5 Table II | TF vs FF (10); vs FF+S (5); min–max both (5) | −79/−73/−72 % (p = 0.002); +4/−2/+6 % (no separation); −10/−14/−21 % (5/5) | **PARTIALLY SUPPORTED** — the raw-coordinate gap is an input-scaling effect; a smaller consistent gap remains with min–max inputs |
+| C6 overhead | TF vs FF s/iter, same E6 launch, L4 host, 4 workers | 0.243 vs 0.233 s/iter (+4.3 %); C_f = 1.033 | **SUPPORTED** (paper's C_f = 1.07 is a miscount) |
+| C7 sensible default | All TF vs FF rows + lr robustness | TF never significantly worse at the paper's lr | **PARTIALLY SUPPORTED** |
+
+Classical context (partially commensurable, not a test of any paper claim): on Navier–Stokes
+a small MLP PINN beats TF on u, v and p in 5/5 seeds (+130 / +76 / +48 % TF error). No
+quantum advantage is claimed or supported. MerLin adaptation (simulation, compared only with
+photonic FF / FF+S): photonic TF beats photonic FF on E2 and on E6 u and p (10/10). It ties
+the simple map and FF+S on Fig. 3 and loses to the tower and exponential maps. Photonic and
+qubit results are shown side by side but not ranked.
+
+![Phase 5 forest plot](results/p5_comparison_forest.png)
+
+## Photonic Assessment and MerLin Extension
+
+Status **`MERLIN_IMPLEMENTATION`**: a MerLin **adaptation** of the paper's FF / TF models,
+simulated only (no QPU). Model: `lib/qnn_merlin.py`; configs `configs/*_merlin.json`; sweeps
+`configs/sweeps/m*.json` (320 runs, all validated).
+
+Mapping: trainable MZI mesh → phase-shifter encoding `φ = γ·w·x` on the encoding modes → mesh
+(Navier–Stokes: plus a re-upload block). `w` fixed at 1 (FF), trainable per mode (TF) or one
+trainable scale per input (FF+S). A phase shifter `exp(iφn̂)` makes the output a Fourier
+series whose frequencies are photon-number differences weighted by `γ·w` — integers for FF,
+learnable for TF. Readout: threshold detectors without post-selection, as a fixed click
+observable (#clicks on even modes − #clicks on odd modes), simulated from `FOCK`
+probabilities. MerLin's default `UNBUNCHED` space post-selects collision-free outcomes, which
+breaks the finite spectrum, so it is only run as an ablation. 3 photons in 6 modes (E1, E2,
+E4, E6 per network), 4 photons in 8 modes (E5); input state `[1, 0, 1, 0, …]`; exact
+probabilities, exact autograd gradients. Full hardware-aware table:
+`results/merlin_hardware_report.md`.
+
+| Experiment | Photonic result (mean over seeds) | Same as the qubit reproduction? |
+|---|---|---|
+| E1, FF on {1, 2, 3} | train MSE 0.093 | No: the ω = 3 coefficient is capped near 0.05 |
+| E2, {1, 1.2, 3} | TF 0.057 < FF+S 0.067 < FF 0.101 (10/10 seeds) | Ranking yes; TF/FF 0.56 vs 0.02 for qubits |
+| E4 / E4b, {1.5, 3, 4.5} | init 1 ≈ 0.16; init 1.5 ≈ 0.065 | Pattern yes; no near-perfect fit |
+| E5, Fig. 3 | tower FF best (mean 0.024, worst 0.064); TF 0.059 / 0.117 | **No, inverted** |
+| E6, Table I (MAERM %, u / v / p) | TF 21.7 / 94.9 / 81.2; FF 96.8 / 90.8 / 125; FF+S 22.6 / 113 / 105 | Partly: TF < FF on u and p 10/10, not on v (3/10) |
+
+![Photonic Fig. 3](results/m5_fig3_spectral_richness_merlin.png)
+
+Photonic Fig. 2 (E2): `results/m2_fig2b_fit_spectrum_merlin.png`; photonic Fig. 4 (E6): `results/m6_table1_merlin_pressure_t3.5.png`.
+
+What carries over and what does not:
+
+- The FF-vs-TF mechanism carries over directly (integer vs learnable photonic spectra), and
+  TF beats FF on irregular frequencies as in the paper.
+- Linear optics with single-photon inputs caps the coefficients of frequencies that need
+  several photons in the encoding modes (a NOON-like term), so the photonic "simple" map
+  cannot express its own highest frequency. A tower or exponential map carries the same
+  frequency on one photon through a high-γ mode and avoids the cap. TF starts as the simple
+  map and only moves its multipliers locally, so it inherits the bottleneck: the paper's
+  "TF as a sensible default" argument does not transfer to this photonic setting.
+- On Navier–Stokes, photonic FF does not train with raw coordinates; most TF seeds (and all
+  FF+S seeds) shrink the x multipliers and switch off the time encoding, so TF's gain over FF
+  is mostly input rescaling; 2/10 TF seeds learn a richer spectrum (u 13–15, v 43,
+  p 52–60). All photonic errors are well above the qubit models'.
+
+## Hardware-Aware Settings
+
+Common to every MerLin run: MerLin 0.4.1 analytic simulator (Perceval 1.3.1), exact
+probabilities (shots = 0), exact autograd gradients, lossless and noiseless,
+indistinguishable photons, no QPU. Trainable MZI mesh → phase-shifter encoding
+`φ = γ·w·x` → mesh; fixed click observable (#clicks on even modes − #clicks on odd modes).
+Per-configuration table (50 rows, generated by `python utils/merlin_hardware_report.py`):
+`results/merlin_hardware_report.md`.
+
+| Sweep | Photons / modes | Input state | Computation space | Detector | Post-selection | Where | Seeds | Runs |
+|---|---|---|---|---|---|---|---:|---:|
+| `m1_fig2a` (E1) | 3 / 6 | `[1,0,1,0,1,0]` | FOCK (simulated) | threshold | none | local M3 CPU, 6 workers | 10 | 10 |
+| `m2_fig2b` (E2) | 3 / 6 | `[1,0,1,0,1,0]` | FOCK; UNBUNCHED ablation | threshold | none; ablation: collision-free, renormalised | local M3 CPU, 6 workers | 10 | 50 |
+| `m4_scaled` (E4 / E4b) | 3 / 6 | `[1,0,1,0,1,0]` | FOCK | threshold | none | local M3 CPU, 6 workers | 10 | 60 |
+| `m5_fig3` (E5) | 4 / 8 | `[1,0,1,0,1,0,1,0]` | FOCK | threshold | none | local M3 CPU, 6 workers | 5 | 175 |
+| `m6_table1_{tf,ff,ffs}` (E6) | 3 / 6 per network | `[1,0,1,0,1,0]` | FOCK | threshold | none | remote L4 host, 4 workers | 10 / 10 / 5 | 25 |
+
+| Experiment | Claim | Qubit reproduction | MerLin adaptation | Claim behaviour preserved? |
+|---|---|---|---|---|
+| E1 | C2 | FF median train MSE 6.4e-3 | FF 0.093 | No: ω = 3 coefficient capped near 0.05 |
+| E2 | C1 | TF / FF = 0.023 (10/10) | TF / FF = 0.56 (10/10, p = 0.002) | Ranking yes, magnitude no |
+| E4 / E4b | C2 | init 1 fails, init 1.5 fits to ~1e-11 | init 1 ≈ 0.16, init 1.5 ≈ 0.065 | Pattern yes, fit no |
+| E5 | C3 | TF lowest mean / worst | tower FF lowest (0.024 / 0.064); TF 0.059 / 0.117 | No, inverted |
+| E6 | C4 | TF < FF on u, v, p (10/10) | TF < FF on u, p (10/10), not v (3/10) | Partly |
+| E3, E7 | C1, C5 | run | not translated (planned scope) | N/A |
+
+## Limitations
+
+- Noiseless statevector simulation only, as in the paper; no shot noise or hardware.
+- The paper does not state its Navier–Stokes input normalisation, batch composition or
+  data-cell positions (A7, A8); our FF-vs-TF gaps depend strongly on the first.
+- The paper's Navier–Stokes pressure figures are y-mirrored relative to the dataset
+  (plotting flip or a half-period time offset; see Results), so our Fig. 4/5 analogues
+  look mirrored relative to the paper.
+- Several controls use 5 seeds (smallest attainable two-sided Wilcoxon p = 0.0625); their
+  5/5 outcomes are consistent signs, not established significance.
+- Ansatz initialisation (uniform [0, 2π)) and the FF+S control are our choices.
+- Remote runs used 4 parallel workers on an 8-vCPU L4 host; wall-clock numbers are not
+  comparable to single-process timings, and timing comparisons are only made within one
+  launch.
+- The fair comparison reuses executed runs: no new baseline was implemented. The classical
+  models are context only, not resource-matched. With 3 seeds the learning-rate check
+  cannot pass the frozen decision rule, so it is preliminary.
+- The toy tasks have no held-out split: they measure representational fit, not
+  generalisation.
+- Photonic results are noiseless, lossless simulations with indistinguishable photons and
+  exact probabilities; one architecture (mesh–encode–mesh, 3–4 photons, spread input state)
+  was tested, so the photonic limits found may depend on that choice. E3 (depth) and E7
+  (App. C) were not translated.
+
+## Tests
+
+```bash
+cd papers/trainable_frequency_qnn
+pytest -q
+```
+
+`tests/test_compare_fair.py` checks the frozen Phase 5 decision rule (paired, 5-seed and
+unpaired cases).
+
+## Citation and License
+
+```bibtex
+@article{jaderberg2024tfqnn,
+  title   = {Let Quantum Neural Networks Choose Their Own Frequencies},
+  author  = {Jaderberg, Ben and Gentile, Antonio A. and Achari Berrada, Youssef and Shishenina, Elvira and Elfving, Vincent E.},
+  journal = {Physical Review A},
+  volume  = {109},
+  pages   = {042421},
+  year    = {2024},
+  doi     = {10.1103/PhysRevA.109.042421}
+}
+```

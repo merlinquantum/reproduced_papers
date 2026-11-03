@@ -1,0 +1,53 @@
+{
+    "description": "XGBoost-only baseline (E1) - same CV/data protocol as moe_gate_original.json. NOTE: the pipeline always trains the GQC secondary expert and MoE router as part of run_cv_experiment (no model.skip_secondary_expert fast-path is implemented - correctness/simplicity was prioritized over this optimization, see LOG.md); the XGBoost-only metrics are the 'xgboost_baseline' row already produced by that same run, reported here as a standalone named config for clarity when only the E1 baseline is of interest.",
+    "seed": 42,
+    "dtype": "float32",
+    "outdir": "outdir",
+    "device": "cpu",
+    "dataset": {
+        "batch_size": 32
+    },
+    "cv": {
+        "n_repeats": 3,
+        "max_splits": null
+    },
+    "model": {
+        "backend": "gate",
+        "n_qubits": 6,
+        "lambda_recon": 0.5,
+        "autoencoder": {
+            "hidden_dims": [
+                256,
+                128,
+                64
+            ]
+        },
+        "vqc": {
+            "n_layers": 6
+        },
+        "head": {
+            "hidden_dim": 8
+        },
+        "xgboost": {
+            "n_estimators": 200,
+            "max_depth": 4
+        }
+    },
+    "training": {
+        "epochs": 30,
+        "lr": 0.001
+    },
+    "evaluation": {
+        "router_thresholds": [
+            0.5,
+            0.6,
+            0.7,
+            0.8,
+            0.9
+        ]
+    },
+    "logging": {
+        "level": "info",
+        "save_config_snapshot": true
+    }
+}

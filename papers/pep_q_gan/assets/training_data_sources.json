@@ -1,0 +1,64 @@
+{
+  "repository": "https://github.com/orcacomputing/pep-q-gan",
+  "revision": "51f7dfa162e33a3be9ee90a69dd93f92e07d7788",
+  "files": [
+    {
+      "name": "HLA_pos9mers.txt",
+      "role": "training",
+      "url": "https://raw.githubusercontent.com/orcacomputing/pep-q-gan/51f7dfa162e33a3be9ee90a69dd93f92e07d7788/data/HLA_pos9mers.txt",
+      "bytes": 2437333,
+      "sha256": "384c3507e168caae8c21da62f0add1400f0bf7c18bebe818ed808e3b22401579",
+      "official_git_blob": "d2cec808f48b57d89d42ab413090c7a1d81d7037"
+    },
+    {
+      "name": "MHC_pseudo_HLA_only.dat",
+      "role": "training",
+      "url": "https://raw.githubusercontent.com/orcacomputing/pep-q-gan/51f7dfa162e33a3be9ee90a69dd93f92e07d7788/data/MHC_pseudo_HLA_only.dat",
+      "bytes": 471715,
+      "sha256": "c9df069fb04d16a561ccc933909900d8d220820504653de906d3170dbbb6d293",
+      "official_git_blob": "e57e38ed1cd49f8da3dfdcca17820ee5a118caad"
+    },
+    {
+      "name": "unique_hla_allotypes.txt",
+      "role": "reference_only",
+      "url": "https://raw.githubusercontent.com/orcacomputing/pep-q-gan/51f7dfa162e33a3be9ee90a69dd93f92e07d7788/data/unique_hla_allotypes.txt",
+      "bytes": 1441,
+      "sha256": "26ba44c9a789223db9a33e92ee89608ce23a3845a308946acbbaf82d4b0c5075",
+      "official_git_blob": "d2af2456f5f9ff603c1ee19ff2aa250da63ceb6b"
+    },
+    {
+      "name": "HLA_9mer_test.txt",
+      "role": "reference_only",
+      "url": "https://raw.githubusercontent.com/orcacomputing/pep-q-gan/51f7dfa162e33a3be9ee90a69dd93f92e07d7788/data/HLA_9mer_test.txt",
+      "bytes": 3541793,
+      "sha256": "8acbe5f03647225334438e78c744ff6f1629691aee5cc7be29e9c2bbc64de6e3",
+      "official_git_blob": "ecf3f7c31551e32d8386c489c2682d20752fd428"
+    }
+  ],
+  "training": {
+    "rows": 105971,
+    "unique_peptides": 76917,
+    "hla_labels": 126,
+    "rows_with_X": 2,
+    "row_policy": "Preserve every nonblank row of the headerless training file",
+    "paper_reported_rows": 105970
+  },
+  "reference": {
+    "evaluation_hlas": 131,
+    "unseen_evaluation_hlas": [
+      "HLA-A02:02",
+      "HLA-A02:06",
+      "HLA-A02:11",
+      "HLA-A33:01",
+      "HLA-B53:01"
+    ],
+    "test_rows": 153991,
+    "test_labels": {
+      "1": 25316,
+      "0": 128675
+    },
+    "train_test_pair_overlap": 1,
+    "test_used_for_training": false
+  },
+  "distribution": "Source instructions and hashes only; datasets are not bundled"
+}

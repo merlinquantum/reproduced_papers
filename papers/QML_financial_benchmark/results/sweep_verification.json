@@ -1,0 +1,162 @@
+{
+  "e1_kchol_2": {
+    "sweep": "e1_kchol_20261021-114844",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 5,
+    "completed_runs": 5,
+    "coverage": "COMPLETE",
+    "selection_checks": 30,
+    "validator": "Logging validation passed: 5 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e1_kchol_sameday": {
+    "sweep": "e1_kchol_sameday_20261021-123723",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 5,
+    "completed_runs": 5,
+    "coverage": "COMPLETE",
+    "selection_checks": 30,
+    "validator": "Logging validation passed: 5 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e3_aapl": {
+    "sweep": "e3_aapl_20261021-114845",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 5,
+    "completed_runs": 5,
+    "coverage": "COMPLETE",
+    "selection_checks": 30,
+    "validator": "Logging validation passed: 5 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e2_spx": {
+    "sweep": "e2_spx_20261021-153815",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 5,
+    "completed_runs": 5,
+    "coverage": "COMPLETE",
+    "selection_checks": 30,
+    "validator": "Logging validation passed: 5 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e1_turkish_rest": {
+    "sweep": "e1_turkish_rest_20261021-193436",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 20,
+    "completed_runs": 20,
+    "coverage": "COMPLETE",
+    "selection_checks": 120,
+    "validator": "Logging validation passed: 20 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e3_us_rest_seed0": {
+    "sweep": "e3_us_rest_seed0_20261021-205740",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 4,
+    "completed_runs": 4,
+    "coverage": "COMPLETE",
+    "selection_checks": 24,
+    "validator": "Logging validation passed: 4 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e3_us_rest_seed12": {
+    "sweep": "e3_us_rest_seed12_20261021-233843",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 8,
+    "completed_runs": 8,
+    "coverage": "COMPLETE",
+    "selection_checks": 48,
+    "validator": "Logging validation passed: 8 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e3_tablev_aapl": {
+    "sweep": "e3_tablev_aapl_20261022-154535",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 5,
+    "completed_runs": 5,
+    "coverage": "COMPLETE",
+    "selection_checks": 30,
+    "validator": "Logging validation passed: 5 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e6_e7_seed0": {
+    "sweep": "e6_e7_seed0_20261021-153815",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 8,
+    "completed_runs": 8,
+    "coverage": "COMPLETE",
+    "selection_checks": 0,
+    "validator": "Logging validation passed: 8 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e6_garch_sigma2": {
+    "sweep": "e6_garch_sigma2_20261022-113221",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 4,
+    "completed_runs": 4,
+    "coverage": "COMPLETE",
+    "selection_checks": 0,
+    "validator": "Logging validation passed: 4 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e6_merlin": {
+    "sweep": "e6_merlin_20261022-213346",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 4,
+    "completed_runs": 4,
+    "coverage": "COMPLETE",
+    "selection_checks": 0,
+    "validator": "Logging validation passed: 4 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e2_merlin": {
+    "sweep": "e2_merlin_20261022-213346",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 5,
+    "completed_runs": 5,
+    "coverage": "COMPLETE",
+    "selection_checks": 30,
+    "validator": "Logging validation passed: 5 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e3_tablev_merlin": {
+    "sweep": "e3_tablev_merlin_20261022-214830",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 5,
+    "completed_runs": 5,
+    "coverage": "COMPLETE",
+    "selection_checks": 30,
+    "validator": "Logging validation passed: 5 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e5_stage1": {
+    "sweep": "e5_stage1_20261021-153806",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 4,
+    "completed_runs": 4,
+    "coverage": "COMPLETE",
+    "selection_checks": 24,
+    "validator": "Logging validation passed: 4 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e5_stage2_F1F3": {
+    "sweep": "e5_stage2_F1F3_20261022-113221",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 12,
+    "completed_runs": 12,
+    "coverage": "COMPLETE",
+    "selection_checks": 72,
+    "validator": "Logging validation passed: 12 run(s), 1 sweep(s).",
+    "problems": []
+  },
+  "e5_stage2_F4": {
+    "sweep": "e5_stage2_F4_20261022-135938",
+    "sweep_status": "COMPLETED",
+    "planned_runs": 4,
+    "completed_runs": 4,
+    "coverage": "COMPLETE",
+    "selection_checks": 24,
+    "validator": "Logging validation passed: 4 run(s), 1 sweep(s).",
+    "problems": []
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "description": "E5 / paper Section IV and App. C: the universality proof's construction (uniform |Gamma>, observable built from target coefficients) with the Pauli-rotation family H_m = (1/2) sum_i Z_i. Part 1: random truncated series of degree K reproduced exactly with m = K and m = K + 2. Part 2: sign(sin x) approximated with m = K = 1..10; RMS error compared with the exact Parseval truncation error.",
+  "experiment": "universality",
+  "universality": {
+    "exact_degrees": [1, 2, 3, 5, 8],
+    "extra_qubits": [0, 2],
+    "coefficient_bound": 0.5,
+    "evaluation_points": 2048,
+    "square_wave_qubits": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+  }
+}

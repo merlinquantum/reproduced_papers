@@ -1,0 +1,11 @@
+{
+  "sweep_id": "smoke_sweep",
+  "description": "Coordinator smoke test: FF and TF on Omega_d = {1, 1.2, 3}, 20 iterations, 2 seeds. Not a result.",
+  "candidates": [
+    {"name": "ff", "config": "configs/fig2b_ff_original.json", "overrides": {"training.iterations": 20, "evaluation.every": 10, "evaluation.spectrum.n_points": 1024, "evaluation.spectrum.half_width_pi": 16}},
+    {"name": "tf", "config": "configs/fig2b_tf_original.json", "overrides": {"training.iterations": 20, "evaluation.every": 10, "evaluation.spectrum.n_points": 1024, "evaluation.spectrum.half_width_pi": 16}}
+  ],
+  "seeds": [1, 2],
+  "max_workers": 2,
+  "selection": {"metric": "train_mse", "direction": "minimize", "split": "train", "checkpoint": "final_iteration", "aggregation": "mean over seeds", "tie_tolerance_rel": 0.05}
+}
