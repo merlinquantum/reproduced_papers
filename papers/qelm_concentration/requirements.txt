@@ -1,4 +1,4 @@
-# Tested with Python 3.12 in the `qelm_concentration` conda env (see LOG.md, Dependency Additions).
+# Tested with Python 3.12 in the `qelm_concentration` conda env.
 # merlinquantum is needed by the shared runtime (runtime_lib imports merlin and perceval)
 # and pulls perceval-quandela, torch and numpy transitively.
 merlinquantum>=0.4.1
