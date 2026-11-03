@@ -1,0 +1,100 @@
+{
+  "description": "E1 baseline B2: trainable classical Fourier model with the same frequency set and input scaling as each case's quantum model, trained with the identical protocol and seeds. B1 (least-squares oracle) is computed in every fit run.",
+  "experiment": "fit",
+  "fit": {
+    "grid": {
+      "start": -6.0,
+      "stop": 6.0,
+      "num": 70
+    },
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      42
+    ],
+    "models": [
+      "fourier_classical"
+    ],
+    "success_tolerance": 0.0001,
+    "training": {
+      "optimizer": "adam",
+      "lr": 0.3,
+      "batch_size": 25,
+      "steps": 200,
+      "init_high": 6.283185307179586,
+      "full_batch": false
+    },
+    "cases": [
+      {
+        "name": "fig3_row_a_degree1",
+        "target": {
+          "c0": 0.1,
+          "coefficients": [
+            {
+              "re": 0.15,
+              "im": -0.15
+            }
+          ],
+          "sign": -1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 1,
+          "encoding_scaling": 1.0,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      },
+      {
+        "name": "fig3_row_b_mismatch",
+        "target": {
+          "c0": 0.1,
+          "coefficients": [
+            {
+              "re": 0.15,
+              "im": -0.15
+            }
+          ],
+          "sign": -1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 1,
+          "encoding_scaling": 2.0,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      },
+      {
+        "name": "fig3_row_c_degree2",
+        "target": {
+          "c0": 0.1,
+          "coefficients": [
+            {
+              "re": 0.15,
+              "im": -0.15
+            },
+            {
+              "re": 0.15,
+              "im": -0.15
+            }
+          ],
+          "sign": -1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 1,
+          "encoding_scaling": 1.0,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      }
+    ]
+  }
+}

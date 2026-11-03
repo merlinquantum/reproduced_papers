@@ -1,0 +1,118 @@
+{
+  "description": "Phase 4 diagnostic A (MerLin adaptation): largest reachable |c_k| at the target's top frequency, by direct maximisation (Adam lr 0.1, 500 steps, 10 random inits). Photonic fit models with degree >= k, plus the Phase 3 qubit r = 5 models as references. Targets: Fig. 4 needs |c_5| = 0.0707; Fig. 3c needs |c_2| = 0.2121.",
+  "experiment": "coefficient_reach",
+  "coefficient_reach": {
+    "lr": 0.1,
+    "steps": 500,
+    "init_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "init_high": 6.283185307179586,
+    "cases": [
+      {
+        "name": "photonic_n5_L1_k5",
+        "kind": "photonic",
+        "model": {
+          "layout": "photonic",
+          "route": "photon_number",
+          "n_photons": 5,
+          "n_modes": 6,
+          "encoded_modes": [
+            0
+          ],
+          "encoding_layers": 1,
+          "encoding_scaling": 1.0,
+          "computation_space": "fock",
+          "mode_scales": [
+            1.0
+          ],
+          "phase_screens": false,
+          "readout": "threshold_mode0"
+        },
+        "frequency": 5,
+        "target_abs_coefficient": 0.07071067811865477
+      },
+      {
+        "name": "photonic_n2_L3_k5",
+        "kind": "photonic",
+        "model": {
+          "layout": "photonic",
+          "route": "reuploading",
+          "n_photons": 2,
+          "n_modes": 3,
+          "encoded_modes": [
+            0
+          ],
+          "encoding_layers": 3,
+          "encoding_scaling": 1.0,
+          "computation_space": "fock",
+          "mode_scales": [
+            1.0
+          ],
+          "phase_screens": false,
+          "readout": "threshold_mode0"
+        },
+        "frequency": 5,
+        "target_abs_coefficient": 0.07071067811865477
+      },
+      {
+        "name": "photonic_n2_L1_k2_fig3c",
+        "kind": "photonic",
+        "model": {
+          "layout": "photonic",
+          "route": "photon_number_fig3c",
+          "n_photons": 2,
+          "n_modes": 3,
+          "encoded_modes": [
+            0
+          ],
+          "encoding_layers": 1,
+          "encoding_scaling": 1.0,
+          "computation_space": "fock",
+          "mode_scales": [
+            1.0
+          ],
+          "phase_screens": false,
+          "readout": "threshold_mode0"
+        },
+        "frequency": 2,
+        "target_abs_coefficient": 0.21213203435596426
+      },
+      {
+        "name": "qubit_serial_r5_k5",
+        "kind": "quantum",
+        "model": {
+          "layout": "serial",
+          "repetitions": 5,
+          "encoding_scaling": 1.0,
+          "readout": "z0"
+        },
+        "frequency": 5,
+        "target_abs_coefficient": 0.07071067811865477
+      },
+      {
+        "name": "qubit_parallel_r5_k5",
+        "kind": "quantum",
+        "model": {
+          "layout": "parallel",
+          "repetitions": 5,
+          "encoding_scaling": 1.0,
+          "ansatz": "strongly",
+          "ansatz_layers": 3,
+          "readout": "z0"
+        },
+        "frequency": 5,
+        "target_abs_coefficient": 0.07071067811865477
+      }
+    ]
+  }
+}
