@@ -1,0 +1,25 @@
+{
+  "description": "E2 / Fig. 2b photonic: FF + global scale, 3 photons in 6 modes, threshold-click readout; data and training as fig2b_ffs_original. MerLin photonic ADAPTATION (Phase 4), not the paper's model; qubit-only keys inherited from defaults.json (n_qubits, n_layers, entangler) are unused by family merlin_qnn.",
+  "dataset": {
+    "frequencies": [
+      1.0,
+      1.2,
+      3.0
+    ]
+  },
+  "training": {
+    "iterations": 6000,
+    "batch_size": 2
+  },
+  "model": {
+    "family": "merlin_qnn",
+    "n_modes": 6,
+    "n_photons": 3,
+    "layout": "toy",
+    "encoding_modes_per_input": 3,
+    "feature_map": "simple",
+    "frequency_mode": "global_scale",
+    "frequency_init": 1.0,
+    "readout": "threshold_clicks"
+  }
+}

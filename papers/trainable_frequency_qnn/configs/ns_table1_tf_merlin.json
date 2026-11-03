@@ -1,0 +1,61 @@
+{
+  "description": "E6 / Table I photonic: TF; per network 3 photons in 6 modes, modes 0-1 encode x, 2-3 y, 4-5 t, mesh-encode-mesh-encode(re-upload)-mesh, threshold-click readout; data, loss and training as ns_table1_tf_original. MerLin photonic ADAPTATION (Phase 4), not the paper's model; qubit-only keys inherited from defaults.json (n_qubits, n_layers, entangler) are unused by family merlin_qnn.",
+  "task": "navier_stokes",
+  "dataset": {
+    "name": "cylinder_wake",
+    "file": "cylinder_nektar_wake/cylinder_nektar_wake.mat",
+    "time_window": [
+      0.0,
+      5.5
+    ],
+    "reynolds": 100.0,
+    "coordinate_transform": "raw",
+    "data_stride": 10,
+    "evaluation_times": [
+      0.0,
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0,
+      4.5,
+      5.0,
+      5.5
+    ]
+  },
+  "evaluation": {
+    "batch_size": 5000,
+    "table_times": [
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0,
+      4.5,
+      5.0,
+      5.5
+    ]
+  },
+  "training": {
+    "iterations": 5000,
+    "batch_size": 600,
+    "lr": 0.01
+  },
+  "model": {
+    "family": "merlin_qnn",
+    "n_modes": 6,
+    "n_photons": 3,
+    "layout": "ns_parallel",
+    "encoding_modes_per_input": 2,
+    "feature_map": "simple",
+    "frequency_mode": "trainable",
+    "frequency_init": 1.0,
+    "readout": "threshold_clicks"
+  }
+}

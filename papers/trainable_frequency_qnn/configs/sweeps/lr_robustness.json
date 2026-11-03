@@ -1,0 +1,790 @@
+{
+  "sweep_id": "lr_robustness",
+  "description": "Predeclared lr-robustness check (Fair Baseline Plan): lr 3e-3 and 1e-2 for E2 (FF, TF, FF+S) and E5 (simple, tower, exponential, TF; all k); lr 1e-3 comes from the main E2/E5 sweeps.",
+  "candidates": [
+    {
+      "name": "e2_ff_lr3e-3",
+      "config": "configs/fig2b_ff_original.json",
+      "overrides": {
+        "training.lr": 0.003
+      }
+    },
+    {
+      "name": "e2_tf_lr3e-3",
+      "config": "configs/fig2b_tf_original.json",
+      "overrides": {
+        "training.lr": 0.003
+      }
+    },
+    {
+      "name": "e2_ffs_lr3e-3",
+      "config": "configs/fig2b_ffs_original.json",
+      "overrides": {
+        "training.lr": 0.003
+      }
+    },
+    {
+      "name": "e5_simple_k1_lr3e-3",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "e5_simple_k2_lr3e-3",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_simple_k3_lr3e-3",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          2.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_simple_k4_lr3e-3",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.6666666666666665,
+          2.333333333333333,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_simple_k5_lr3e-3",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.5,
+          2.0,
+          2.5,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_simple_k6_lr3e-3",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.4,
+          1.8,
+          2.2,
+          2.6,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_simple_k7_lr3e-3",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.3333333333333333,
+          1.6666666666666665,
+          2.0,
+          2.333333333333333,
+          2.6666666666666665,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k1_lr3e-3",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k2_lr3e-3",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k3_lr3e-3",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          2.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k4_lr3e-3",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.6666666666666665,
+          2.333333333333333,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k5_lr3e-3",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.5,
+          2.0,
+          2.5,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k6_lr3e-3",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.4,
+          1.8,
+          2.2,
+          2.6,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k7_lr3e-3",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.3333333333333333,
+          1.6666666666666665,
+          2.0,
+          2.333333333333333,
+          2.6666666666666665,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k1_lr3e-3",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k2_lr3e-3",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k3_lr3e-3",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          2.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k4_lr3e-3",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.6666666666666665,
+          2.333333333333333,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k5_lr3e-3",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.5,
+          2.0,
+          2.5,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k6_lr3e-3",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.4,
+          1.8,
+          2.2,
+          2.6,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k7_lr3e-3",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.3333333333333333,
+          1.6666666666666665,
+          2.0,
+          2.333333333333333,
+          2.6666666666666665,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k1_lr3e-3",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k2_lr3e-3",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k3_lr3e-3",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          2.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k4_lr3e-3",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.6666666666666665,
+          2.333333333333333,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k5_lr3e-3",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.5,
+          2.0,
+          2.5,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k6_lr3e-3",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.4,
+          1.8,
+          2.2,
+          2.6,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k7_lr3e-3",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.003,
+        "dataset.frequencies": [
+          1.0,
+          1.3333333333333333,
+          1.6666666666666665,
+          2.0,
+          2.333333333333333,
+          2.6666666666666665,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e2_ff_lr1e-2",
+      "config": "configs/fig2b_ff_original.json",
+      "overrides": {
+        "training.lr": 0.01
+      }
+    },
+    {
+      "name": "e2_tf_lr1e-2",
+      "config": "configs/fig2b_tf_original.json",
+      "overrides": {
+        "training.lr": 0.01
+      }
+    },
+    {
+      "name": "e2_ffs_lr1e-2",
+      "config": "configs/fig2b_ffs_original.json",
+      "overrides": {
+        "training.lr": 0.01
+      }
+    },
+    {
+      "name": "e5_simple_k1_lr1e-2",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "e5_simple_k2_lr1e-2",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_simple_k3_lr1e-2",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          2.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_simple_k4_lr1e-2",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.6666666666666665,
+          2.333333333333333,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_simple_k5_lr1e-2",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.5,
+          2.0,
+          2.5,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_simple_k6_lr1e-2",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.4,
+          1.8,
+          2.2,
+          2.6,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_simple_k7_lr1e-2",
+      "config": "configs/fig3_simple_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.3333333333333333,
+          1.6666666666666665,
+          2.0,
+          2.333333333333333,
+          2.6666666666666665,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k1_lr1e-2",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k2_lr1e-2",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k3_lr1e-2",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          2.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k4_lr1e-2",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.6666666666666665,
+          2.333333333333333,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k5_lr1e-2",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.5,
+          2.0,
+          2.5,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k6_lr1e-2",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.4,
+          1.8,
+          2.2,
+          2.6,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tower_k7_lr1e-2",
+      "config": "configs/fig3_tower_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.3333333333333333,
+          1.6666666666666665,
+          2.0,
+          2.333333333333333,
+          2.6666666666666665,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k1_lr1e-2",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k2_lr1e-2",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k3_lr1e-2",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          2.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k4_lr1e-2",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.6666666666666665,
+          2.333333333333333,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k5_lr1e-2",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.5,
+          2.0,
+          2.5,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k6_lr1e-2",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.4,
+          1.8,
+          2.2,
+          2.6,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_exponential_k7_lr1e-2",
+      "config": "configs/fig3_exponential_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.3333333333333333,
+          1.6666666666666665,
+          2.0,
+          2.333333333333333,
+          2.6666666666666665,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k1_lr1e-2",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k2_lr1e-2",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k3_lr1e-2",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          2.0,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k4_lr1e-2",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.6666666666666665,
+          2.333333333333333,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k5_lr1e-2",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.5,
+          2.0,
+          2.5,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k6_lr1e-2",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.4,
+          1.8,
+          2.2,
+          2.6,
+          3.0
+        ]
+      }
+    },
+    {
+      "name": "e5_tf_k7_lr1e-2",
+      "config": "configs/fig3_tf_original.json",
+      "overrides": {
+        "training.lr": 0.01,
+        "dataset.frequencies": [
+          1.0,
+          1.3333333333333333,
+          1.6666666666666665,
+          2.0,
+          2.333333333333333,
+          2.6666666666666665,
+          3.0
+        ]
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "max_workers": 6,
+  "selection": {
+    "metric": "train_mse",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}
