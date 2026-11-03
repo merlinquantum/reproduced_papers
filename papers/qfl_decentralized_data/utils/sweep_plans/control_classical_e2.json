@@ -1,0 +1,63 @@
+{
+  "sweep_id": "control_classical_e2",
+  "purpose": "Fair baseline for E2: classical 16-4-4 tanh MLP (88 parameters vs 78 for the hybrid VQTN), same data and settings",
+  "paper": "qfl_decentralized_data",
+  "base_config": "configs/e1_original.json",
+  "fixed_overrides": {
+    "dataset": {
+      "validation_fraction": 0.0
+    },
+    "model": {
+      "name": "classical",
+      "hidden": 4
+    },
+    "training": {
+      "lr": 0.03
+    }
+  },
+  "candidates": [
+    {
+      "name": "fourclass_centralized",
+      "overrides": {
+        "dataset.classes": [
+          2,
+          3,
+          6,
+          7
+        ],
+        "federation.mode": "centralized",
+        "federation.n_clients": 1
+      }
+    },
+    {
+      "name": "fourclass_clients4",
+      "overrides": {
+        "dataset.classes": [
+          2,
+          3,
+          6,
+          7
+        ],
+        "federation.n_clients": 4
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "workers": 3,
+  "threads_per_worker": 3,
+  "selection": {
+    "metric": "test_accuracy",
+    "split": "test",
+    "checkpoint": "last",
+    "direction": "maximize",
+    "aggregation": "mean",
+    "tie_tolerance": 0.005,
+    "tie_handling": "reporting runs: hyperparameters are fixed in advance, no candidate is selected; every mean +- std over 5 seeds is reported"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "sweep_id": "diagnose_vqtn_components",
+  "purpose": "One-at-a-time diagnosis of the VQTN gap (about 87% validation accuracy vs the paper's 94%) on the non-federated model, task 0 vs 9, against the calibrated baseline",
+  "paper": "qfl_decentralized_data",
+  "base_config": "configs/e1_centralized.json",
+  "fixed_overrides": {
+    "dataset": {
+      "validation_fraction": 0.1
+    },
+    "model": {
+      "layers": 2,
+      "init_std": 0.1
+    },
+    "training": {
+      "lr": 0.03
+    }
+  },
+  "candidates": [
+    {
+      "name": "baseline",
+      "overrides": {}
+    },
+    {
+      "name": "encoding_scale_0.5",
+      "overrides": {
+        "model.encoding_scale": 0.5
+      }
+    },
+    {
+      "name": "encoding_scale_2.0",
+      "overrides": {
+        "model.encoding_scale": 2.0
+      }
+    },
+    {
+      "name": "encoding_gate_rx",
+      "overrides": {
+        "model.encoding_gate": "rx"
+      }
+    },
+    {
+      "name": "feature_minmax",
+      "overrides": {
+        "dataset.feature_scaling": "per_feature_minmax"
+      }
+    },
+    {
+      "name": "readout_z_head",
+      "overrides": {
+        "model.readout": "z_head"
+      }
+    },
+    {
+      "name": "epochs_60",
+      "overrides": {
+        "federation.rounds": 60
+      }
+    },
+    {
+      "name": "known_answer_0v1",
+      "overrides": {
+        "dataset.classes": [
+          0,
+          1
+        ]
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "workers": 3,
+  "threads_per_worker": 3,
+  "selection": {
+    "metric": "validation_accuracy",
+    "split": "validation",
+    "checkpoint": "last",
+    "direction": "maximize",
+    "aggregation": "mean",
+    "tie_tolerance": 0.005,
+    "tie_handling": "diagnosis only: no candidate is selected; all means are reported against the baseline"
+  }
+}

@@ -1,0 +1,72 @@
+{
+    "description": "Phase 5 fair control for C4: trained Phase 3 classifiers (and Phase 4 photonic adaptation) evaluated with EQUAL measurement shots per prediction (exact binomial); expected test accuracy. Not a paper experiment.",
+    "experiment": {
+        "task": "equal_shot_eval",
+        "id": "e4_equal_shot"
+    },
+    "equal_shot": {
+        "experiment": "e4",
+        "sweeps": {
+            "vqc": {
+                "path": "outdir/sweeps/e4_vqc_budget",
+                "kind": "gate",
+                "budget_axis": "--vqc-budget"
+            },
+            "param_matched": {
+                "path": "outdir/sweeps/e4_vqc_baselines",
+                "kind": "gate",
+                "filter": {
+                    "--config": "configs/e4_vqc_param_matched.json"
+                }
+            },
+            "noiseless_qc": {
+                "path": "outdir/sweeps/e4_vqc_baselines",
+                "kind": "gate",
+                "filter": {
+                    "--config": "configs/e4_vqc_noiseless.json"
+                }
+            },
+            "photonic": {
+                "path": "outdir/sweeps/e4_vqc_merlin_budget_enc01",
+                "kind": "photonic",
+                "budget_axis": "--vqc-merlin-budget"
+            },
+            "photonic_noiseless": {
+                "path": "outdir/sweeps/e4_vqc_merlin_noiseless_enc01",
+                "kind": "photonic",
+                "budget_axis": "--vqc-merlin-budget"
+            }
+        },
+        "shot_grid": [
+            1,
+            3,
+            10,
+            30,
+            100,
+            1000,
+            "inf"
+        ],
+        "paired_comparisons": [
+            [
+                "vqc|gamma=3.0",
+                "vqc|gamma=1.0"
+            ],
+            [
+                "vqc|gamma=3.0",
+                "param_matched|gamma=1.0"
+            ],
+            [
+                "vqc|gamma=3.0",
+                "noiseless_qc|gamma=1.0"
+            ],
+            [
+                "photonic|gamma=3.0",
+                "photonic|gamma=1.0"
+            ],
+            [
+                "photonic_noiseless|gamma=3.0",
+                "photonic_noiseless|gamma=1.0"
+            ]
+        ]
+    }
+}

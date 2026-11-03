@@ -1,0 +1,28 @@
+{
+    "description": "E3 QAOA MaxCut on 100 random six-qubit 3-regular graphs, P=1, init 0.01, lr 0.01, B=16, E=1, 70 rounds",
+    "label": "paper settings; loss normalisation and graph/client split inferred",
+    "experiment": "e3_qaoa_maxcut",
+    "metric_direction": "maximize",
+    "dataset": {
+        "name": "random_graphs",
+        "n_nodes": 6,
+        "degree": 3,
+        "n_train_graphs": 100,
+        "n_test_graphs": 100,
+        "graph_seed": 0
+    },
+    "model": {
+        "name": "qaoa",
+        "layers": 1,
+        "init_value": 0.01
+    },
+    "federation": {
+        "rounds": 70,
+        "n_clients": 2,
+        "min_client_size": 4
+    },
+    "training": {
+        "lr": 0.01,
+        "batch_size": 16
+    }
+}

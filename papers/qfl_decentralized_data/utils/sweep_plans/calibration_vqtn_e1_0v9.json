@@ -1,0 +1,42 @@
+{
+  "sweep_id": "calibration_vqtn_e1_0v9",
+  "purpose": "Calibrate the inferred VQTN (depth, learning rate, init scale) on E1 task 0 vs 9 using validation accuracy of the non-federated model, to close the gap to the paper's 94.03% centralised row",
+  "paper": "qfl_decentralized_data",
+  "base_config": "configs/e1_centralized.json",
+  "fixed_overrides": {
+    "dataset": {
+      "validation_fraction": 0.1
+    }
+  },
+  "axes": {
+    "model.layers": [
+      1,
+      2,
+      3
+    ],
+    "training.lr": [
+      0.03,
+      0.1
+    ],
+    "model.init_std": [
+      0.1,
+      1.0
+    ]
+  },
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "workers": 3,
+  "threads_per_worker": 3,
+  "selection": {
+    "metric": "validation_accuracy",
+    "split": "validation",
+    "checkpoint": "last",
+    "direction": "maximize",
+    "aggregation": "mean",
+    "tie_tolerance": 0.005,
+    "tie_handling": "report all tied candidates; for downstream runs use the tied candidate with the fewest parameters (smallest model.layers), then the lowest training.lr"
+  }
+}
