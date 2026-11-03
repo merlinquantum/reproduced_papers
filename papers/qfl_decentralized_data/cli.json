@@ -1,0 +1,49 @@
+{
+  "description": "Quantum federated learning with decentralized data (Huang, Tan, Xu 2022)",
+  "arguments": [
+    {
+      "flags": ["--rounds"],
+      "help": "Number of communication rounds (epochs in centralized mode)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "federation.rounds"}
+    },
+    {
+      "flags": ["--n-clients"],
+      "help": "Number of clients",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "federation.n_clients"}
+    },
+    {
+      "flags": ["--partition"],
+      "help": "Client data partition: noniid (Dirichlet, unbalanced) or iid",
+      "type": "str",
+      "choices": ["noniid", "iid"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "federation.partition"}
+    },
+    {
+      "flags": ["--mode"],
+      "help": "federated, or centralized (non-federated control)",
+      "type": "str",
+      "choices": ["federated", "centralized"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "federation.mode"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Local mini-batch size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.batch_size"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Adam learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lr"}
+    }
+  ]
+}

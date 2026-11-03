@@ -1,0 +1,7 @@
+{
+  "description": "Generate the 495-bin known Gaussian target in the shared data root; offline, no training",
+  "task": "prepare_data",
+  "model": {"input_state": [0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0]},
+  "dataset": {"name": "gaussian", "means": [141, 353], "standard_deviations": [61, 61]},
+  "data_preparation": {"download": false, "timeout_seconds": 25}
+}

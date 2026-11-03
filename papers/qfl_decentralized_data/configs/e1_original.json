@@ -1,0 +1,5 @@
+{
+    "description": "E1 task 0 vs 9, VQTN, federated, 2 clients: same as defaults (paper settings, inferred circuit/partition)",
+    "experiment": "e1_vqtn_0v9",
+    "label": "paper-accurate settings, inferred circuit and partition"
+}
