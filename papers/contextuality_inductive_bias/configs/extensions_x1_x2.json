@@ -1,0 +1,44 @@
+{
+  "description": "Phase 5 extensions declared in the Phase 5 Comparison Plan: X1 contextuality witness (characterization) and X2 stratified test KL (advantage evidence) on the fair_final sweep.",
+  "final_sweep_dir": "papers/contextuality_inductive_bias/outdir/sweeps/fair_final",
+  "out_dir": "papers/contextuality_inductive_bias/results",
+  "x1": {
+    "corner_samples": 3000,
+    "corner_alpha": 0.1,
+    "corner_seed": 7
+  },
+  "x2": {
+    "strata_edges": [
+      0.0,
+      0.1,
+      0.2,
+      0.5
+    ],
+    "comparisons": [
+      [
+        "quantum (biased) L=2",
+        "surrogate L=1"
+      ],
+      [
+        "quantum (biased) L=1",
+        "surrogate L=1"
+      ],
+      [
+        "quantum (biased) L=1",
+        "B2 bias-encoded Fourier L=1"
+      ],
+      [
+        "photonic MerLin (group readout, PNR) N=2",
+        "B2 bias-encoded Fourier L=1"
+      ],
+      [
+        "B2 bias-encoded Fourier L=1",
+        "surrogate L=1"
+      ],
+      [
+        "quantum (biased) L=2",
+        "quantum (no bias, Fig. 10 CNOTs) L=2"
+      ]
+    ]
+  }
+}

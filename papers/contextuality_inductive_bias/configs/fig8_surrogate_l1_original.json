@@ -1,0 +1,16 @@
+{
+  "description": "E1 / Fig. 8: Fourier surrogate with spectrum L = 1 (4374 parameters), plain gradient descent lr 1e-3, 2000 steps (App. F).",
+  "experiment": {
+    "id": "fig8_surrogate_l1"
+  },
+  "model": {
+    "kind": "surrogate",
+    "spectrum": 1
+  },
+  "training": {
+    "steps": 2000,
+    "optimizer": "sgd",
+    "lr": 0.001,
+    "l2": 0.0
+  }
+}
