@@ -3,7 +3,6 @@
 import exqalibur as xq
 import numpy as np
 import perceval as pc
-
 from pep_q_gan.lib.circuits import fock_moments
 from pep_q_gan.lib.distinguishable import sample_distinguishable
 

@@ -3,7 +3,6 @@
 import numpy as np
 import pandas as pd
 import pytest
-
 from pep_q_gan.lib.evaluation import (
     SCORES,
     aggregate_attempts,
