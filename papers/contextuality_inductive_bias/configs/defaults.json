@@ -1,0 +1,76 @@
+{
+  "description": "Defaults: paper-accurate biased quantum model (Fig. 7, L = 2, B = 2) on the author training data, P-paper protocol, 2000 full-batch Adam steps (App. F). Runs in a few minutes on CPU.",
+  "seed": 0,
+  "dtype": "float64",
+  "device": "cpu",
+  "outdir": "outdir",
+  "experiment": {
+    "task": "train",
+    "id": "defaults",
+    "sweep_id": null,
+    "run_id": null,
+    "repetition": 0
+  },
+  "data": {
+    "protocol": "paper",
+    "_comment_protocol": "paper: pi/2 on train and test; code: pi/2 train, unscaled test (author notebook, D12); fork: unscaled on both.",
+    "train": {
+      "source": "author",
+      "seed": null,
+      "n": 1500
+    },
+    "validation": {
+      "enabled": false,
+      "seed": 201,
+      "n": 1500
+    },
+    "test": {
+      "seed": 2302,
+      "n": 10000
+    }
+  },
+  "model": {
+    "kind": "biased_quantum",
+    "layers": 2,
+    "blocks": 2,
+    "zz_repetitions": 1,
+    "cnot_pattern": "paper",
+    "spectrum": 1,
+    "chunk_size": 500,
+    "readout": "vertex",
+    "n_photons": 2,
+    "input_states": {
+      "2": [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      "3": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ]
+    },
+    "computation_space": "unbunched",
+    "hidden": 7
+  },
+  "training": {
+    "steps": 2000,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "l2": 0.0
+  },
+  "evaluation": {
+    "every": 1,
+    "kl_floor": 1e-08
+  },
+  "logging": {
+    "level": "info"
+  }
+}
