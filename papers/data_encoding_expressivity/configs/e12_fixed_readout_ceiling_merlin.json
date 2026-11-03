@@ -1,0 +1,190 @@
+{
+  "description": "Phase 5 extension X1 (MerLin adaptation): is the photonic fixed-readout plateau (~2e-3) a model-class or an optimiser limit? Fixed threshold readout models on the published Fig. 4 target, protocol P5 (L-BFGS, strong Wolfe, 500 steps, full batch), 20 seeds. Label: advantage evidence (B2 and qubit <Z_0> run under the same conditions).",
+  "experiment": "fit",
+  "fit": {
+    "grid": {
+      "start": -6.0,
+      "stop": 6.0,
+      "num": 70
+    },
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "models": [
+      "photonic"
+    ],
+    "success_tolerance": 0.0001,
+    "training": {
+      "optimizer": "lbfgs",
+      "lr": 1.0,
+      "batch_size": 25,
+      "steps": 500,
+      "init_high": 6.283185307179586,
+      "full_batch": true
+    },
+    "cases": [
+      {
+        "name": "fig4_n2_L3_bare_fixed",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "photonic",
+          "route": "reuploading",
+          "n_photons": 2,
+          "n_modes": 3,
+          "encoded_modes": [
+            0
+          ],
+          "mode_scales": [
+            1.0
+          ],
+          "encoding_layers": 3,
+          "encoding_scaling": 1.0,
+          "phase_screens": false,
+          "readout": "threshold_mode0",
+          "computation_space": "fock"
+        }
+      },
+      {
+        "name": "fig4_n2_L3_universal_fixed",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "photonic",
+          "route": "reuploading",
+          "n_photons": 2,
+          "n_modes": 3,
+          "encoded_modes": [
+            0
+          ],
+          "mode_scales": [
+            1.0
+          ],
+          "encoding_layers": 3,
+          "encoding_scaling": 1.0,
+          "phase_screens": true,
+          "readout": "threshold_mode0",
+          "computation_space": "fock"
+        }
+      },
+      {
+        "name": "fig4_n2_multiscale_1_3_universal_fixed",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "photonic",
+          "route": "multiscale",
+          "n_photons": 2,
+          "n_modes": 4,
+          "encoded_modes": [
+            1,
+            2
+          ],
+          "mode_scales": [
+            1.0,
+            3.0
+          ],
+          "encoding_layers": 1,
+          "encoding_scaling": 1.0,
+          "phase_screens": true,
+          "readout": "threshold_mode0",
+          "computation_space": "fock"
+        }
+      }
+    ]
+  }
+}

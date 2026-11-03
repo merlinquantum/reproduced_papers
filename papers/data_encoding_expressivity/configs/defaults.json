@@ -1,0 +1,23 @@
+{
+  "description": "Defaults: lightweight E4 exact spectrum checks (r <= 3, 3 draws), the minimal test of the central claim. Named configs overlay this file and select their own experiment section.",
+  "seed": 0,
+  "dtype": "float64",
+  "device": "cpu",
+  "outdir": "outdir",
+  "logging": {"level": "info"},
+  "experiment": "spectrum",
+  "spectrum": {
+    "fft_tolerance": 1e-9,
+    "random_draws": 3,
+    "init_high": 6.283185307179586,
+    "pauli_repetitions": [1, 2, 3],
+    "parallel_ansatz": "strongly",
+    "parallel_ansatz_layers": 3,
+    "dense_cases": [
+      {"name": "d3_L1", "eigenvalues": [0, 1, 3], "layers": 1, "rotate_generator": false},
+      {"name": "d3_L2_rotated", "eigenvalues": [0, 1, 3], "layers": 2, "rotate_generator": true}
+    ],
+    "multivariate": {"repetitions_per_feature": [1, 2]},
+    "non_integer": {"base_frequency": 0.4, "eigenvalue_multiples": [0, 1, 3], "layers": 2}
+  }
+}

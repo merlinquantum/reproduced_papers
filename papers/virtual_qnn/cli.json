@@ -1,0 +1,226 @@
+{
+  "description": "Virtual quantum neural networks (Zhao et al., arXiv:2609.11327) reproduction runner",
+  "arguments": [
+    {
+      "flags": [
+        "--task"
+      ],
+      "help": "Experiment task: min_overhead_sdp, vqem, vqc, vqc_merlin, classical_classifier, vvqe, equal_shot_eval",
+      "type": "str",
+      "choices": [
+        "min_overhead_sdp",
+        "vqem",
+        "vqc",
+        "classical_classifier",
+        "vvqe",
+        "vqc_merlin",
+        "equal_shot_eval"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.task"
+      }
+    },
+    {
+      "flags": [
+        "--iterations"
+      ],
+      "help": "Override the number of optimizer iterations (full-batch)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.iterations"
+      }
+    },
+    {
+      "flags": [
+        "--lr"
+      ],
+      "help": "Override the Adam learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.lr"
+      }
+    },
+    {
+      "flags": [
+        "--noise-model"
+      ],
+      "help": "VQEM: noise channel to mitigate (depolarizing or amplitude_damping)",
+      "type": "str",
+      "choices": [
+        "depolarizing",
+        "amplitude_damping"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "vqem.noise_model"
+      }
+    },
+    {
+      "flags": [
+        "--noise-level"
+      ],
+      "help": "VQEM: noise level p or q of the channel to mitigate",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "vqem.noise_level"
+      }
+    },
+    {
+      "flags": [
+        "--penalty"
+      ],
+      "help": "VQEM Alg. 1: penalty strength alpha on the squared HS distance",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "vqem.penalty"
+      }
+    },
+    {
+      "flags": [
+        "--vqem-budget"
+      ],
+      "help": "VQEM Alg. 2: sampling-overhead budget gamma",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "vqem.budget"
+      }
+    },
+    {
+      "flags": [
+        "--vqc-budget"
+      ],
+      "help": "VQC: sampling-overhead budget gamma (1 = conventional classifier)",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "vqc.budget"
+      }
+    },
+    {
+      "flags": [
+        "--vqc-merlin-budget"
+      ],
+      "help": "MerLin photonic VQC adaptation: sampling-overhead budget gamma",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "vqc_merlin.budget"
+      }
+    },
+    {
+      "flags": [
+        "--seed-data"
+      ],
+      "help": "VQC / classical: seed of the generated circle data set",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "data.seed_data"
+      }
+    },
+    {
+      "flags": [
+        "--classical-kind"
+      ],
+      "help": "Classical baseline: logistic or mlp",
+      "type": "str",
+      "choices": [
+        "logistic",
+        "mlp"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "classical.kind"
+      }
+    },
+    {
+      "flags": [
+        "--vvqe-budget"
+      ],
+      "help": "VVQE: sampling-overhead budget gamma (1 = conventional VQE)",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "vvqe.budget"
+      }
+    },
+    {
+      "flags": [
+        "--half-distance"
+      ],
+      "help": "VVQE: half nuclear separation d in bohr (the paper's Fig. 7 'distance')",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "vvqe.half_distance_bohr"
+      }
+    },
+    {
+      "flags": [
+        "--experiment-id"
+      ],
+      "help": "Free-form experiment identifier recorded in run_status.json",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.id"
+      }
+    },
+    {
+      "flags": [
+        "--sweep-id"
+      ],
+      "help": "Sweep identifier recorded in run_status.json (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.sweep_id"
+      }
+    },
+    {
+      "flags": [
+        "--repetition"
+      ],
+      "help": "Repetition index recorded in run_status.json",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.repetition"
+      }
+    },
+    {
+      "flags": [
+        "--run-id"
+      ],
+      "help": "Run identifier recorded in run_status.json (set by utils/run_sweep.py; default: run directory name)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.run_id"
+      }
+    }
+  ]
+}

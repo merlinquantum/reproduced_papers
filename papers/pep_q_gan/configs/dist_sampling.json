@@ -1,0 +1,7 @@
+{
+  "description": "Official Perceval fully distinguishable tagged-photon event pool",
+  "stage": "sample",
+  "training": {
+    "prior_source": "dist"
+  }
+}

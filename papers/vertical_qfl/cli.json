@@ -1,0 +1,101 @@
+{
+  "description": "Vertical Quantum Federated Learning runner",
+  "arguments": [
+    {
+      "flags": [
+        "--epochs"
+      ],
+      "help": "Training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.epochs"
+      }
+    },
+    {
+      "flags": [
+        "--batch-size"
+      ],
+      "help": "Mini-batch size",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.batch_size"
+      }
+    },
+    {
+      "flags": [
+        "--lr"
+      ],
+      "help": "Adam learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.lr"
+      }
+    },
+    {
+      "flags": [
+        "--permutation-seed"
+      ],
+      "help": "Seed of the random pixel-to-client assignment (the paper's feature distribution; authors use 42-46)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.permutation_seed"
+      }
+    },
+    {
+      "flags": [
+        "--depth-per-block"
+      ],
+      "help": "Trainable layers per block L (paper: 100)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.depth_per_block"
+      }
+    },
+    {
+      "flags": [
+        "--max-train-samples"
+      ],
+      "help": "Cap on training samples (reduced runs only)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.max_train_samples"
+      }
+    },
+    {
+      "flags": [
+        "--max-test-samples"
+      ],
+      "help": "Cap on test samples (reduced runs only)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.max_test_samples"
+      }
+    },
+    {
+      "flags": [
+        "--client-encoding-scale"
+      ],
+      "help": "Photonic adaptation: multiplier of binary pixels before the phase encoding",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.client_encoding_scale"
+      }
+    }
+  ]
+}
