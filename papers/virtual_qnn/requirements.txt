@@ -1,6 +1,5 @@
 # Dependencies for the virtual QNN reproduction (arXiv:2609.11327).
-# Exact versions were verified on 2026-10-13 with Python 3.13.15 (macOS, Apple M2);
-# see LOG.md "Dependency Additions" for the verification checks.
+# Exact versions were verified on 2026-10-13 with Python 3.13.15 (macOS, Apple M2).
 # The numerical stack is pinned because Hamiltonian construction (PennyLane qchem),
 # SDP solutions (CVXPY/Clarabel) and simulation results can shift across versions.
 numpy==2.5.3

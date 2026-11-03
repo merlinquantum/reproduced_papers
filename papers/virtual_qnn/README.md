@@ -8,8 +8,7 @@
 >
 > Overall verdict: the error-mitigation results reproduce quantitatively;
 > the classifier and VVQE claims are only partially supported (see "Results
-> Obtained"). Progress and decisions are recorded in [`LOG.md`](LOG.md);
-> durable lessons are in [`INSIGHTS.md`](INSIGHTS.md). For a guided walkthrough
+> Obtained"). Durable lessons are in [`INSIGHTS.md`](INSIGHTS.md). For a guided walkthrough
 > of the claims and evidence, start with [`notebook.ipynb`](notebook.ipynb).
 
 ## Reference and Attribution
@@ -79,8 +78,7 @@ Planned experiments, in priority order:
 | E4 | Fig. 6d | Virtual quantum classifier accuracy vs budget, 10 repetitions; plus parameter-matched, noiseless and classical baselines |
 | E5 | Fig. 7 | Virtual VQE vs noisy VQE for HeH⁺; compared with exact FCI and with Hartree–Fock |
 
-Implementation notes and deviations (details in `LOG.md`, "Reference-code
-findings"):
+Implementation notes and deviations:
 
 - **Simulator:** a torch-native density-matrix simulator written for this
   reproduction (`lib/quantum.py`). The authors used QuAIRKit; none of its code
@@ -110,8 +108,7 @@ findings"):
   branch, so its parameter count is reported correctly. A depth-4
   parameter-matched branch and classical baselines are added.
 
-Claims tested, with outcomes after the fair comparison (details in `LOG.md`,
-Claim Inventory):
+Claims tested, with outcomes after the fair comparison:
 
 | ID | Claim | Experiments | Outcome |
 |---|---|---|---|
@@ -129,8 +126,7 @@ Claim Inventory):
 
 ```text
 papers/virtual_qnn/
-├── README.md, LOG.md, INSIGHTS.md, FEEDBACK.md, CONFLUENCE.md, VISITED_URLS.md
-├── ACTION_REQUIRED_SEND_TO_MERLIN_TEAM.md   MerLin-team feedback
+├── README.md, INSIGHTS.md
 ├── cli.json, requirements.txt
 ├── notebook.ipynb      executed scientific walkthrough (start here; about 80 s on CPU)
 ├── configs/            defaults.json, e0–e5 experiment configs, MerLin and equal-shot configs
@@ -204,8 +200,7 @@ Then regenerate the tables and figures from the structured artifacts:
 - `utils/export_sweep_tables.py` and `utils/build_results_table.py` produce
   `results/sweep_tables.md` and `results/results_summary.md`.
 
-Each script's docstring gives its exact arguments, and `LOG.md` records the
-commands that were run.
+Each script's docstring gives its exact arguments.
 
 Each run writes `outdir/run_YYYYMMDD-HHMMSS/` containing:
 - `run.log`: lifecycle events and per-iteration progress;
@@ -259,8 +254,7 @@ This paper has no downloadable dataset. Every input is generated:
 The generation rules come from the authors' notebooks
 (https://github.com/benchizhao/Virtual-Quantum-Neural-Network, commit
 `2bfe9d7`, no license, used read-only). A local reference copy is at
-`data/virtual_qnn/sources/repo_snapshot/` (git-ignored). See `LOG.md`, section
-"Data Acquisition Log", for provenance and verification.
+`data/virtual_qnn/sources/repo_snapshot/` (git-ignored).
 
 ## Results Obtained and Comparison with the Paper
 
@@ -271,7 +265,7 @@ checkpoint, aggregation, run counts and coverage, are in
 complete and descriptive, so no candidate is selected; one superseded
 photonic sweep and two diagnostic sweeps are labelled there.
 
-Paper values: Table I and the authors' figure data. Reproduced values: mean over repetitions, paper-accurate settings, exact simulation. Agreement criteria were predeclared (LOG.md, Sweep Plans). Claim support reflects the Phase 5 fair comparison.
+Paper values: Table I and the authors' figure data. Reproduced values: mean over repetitions, paper-accurate settings, exact simulation. Agreement criteria were predeclared. Claim support reflects the Phase 5 fair comparison.
 
 | Paper item | Claim tested | Paper value | Reproduced value | Delta | Metric agreement | Trend agreement | Claim support | Seeds | Comment |
 |---|---|---:|---:|---:|---|---|---|---:|---|
@@ -318,7 +312,7 @@ Paper values: Table I and the authors' figure data. Reproduced values: mean over
 | Fig. 7, d = 0.8, γ = 2.5 | C5 | -2.8327 | -2.8113 (best of 3: -2.8312) | +0.0214 | best-of-3 only | yes | PARTIALLY_SUPPORTED | 3 | |E − E_FCI| = 0.049 Ha; paper curve is HF |
 | Fig. 7, d = 1.7, γ = 1.0 | C5 | -2.5026 | -2.4672 (best of 3: -2.4891) | +0.0354 | best-of-3 only | yes | PARTIALLY_SUPPORTED | 3 | |E − E_FCI| = 0.347 Ha; paper curve is HF |
 | Fig. 7, d = 1.7, γ = 2.5 | C5 | -2.7900 | -2.7671 (best of 3: -2.7900) | +0.0229 | best-of-3 only | yes | PARTIALLY_SUPPORTED | 3 | |E − E_FCI| = 0.047 Ha; paper curve is HF |
-| Fig. 7, all 40 points | C5 | — | 13/40 within 0.02 Ha (mean), 24/40 (best of 3) | median |Δ| 0.029 Ha | no | yes (10/10 distances ordered) | PARTIALLY_SUPPORTED | 3 | gap diagnosed: not iteration budget; best-of-N insufficient (LOG.md) |
+| Fig. 7, all 40 points | C5 | — | 13/40 within 0.02 Ha (mean), 24/40 (best of 3) | median |Δ| 0.029 Ha | no | yes (10/10 distances ordered) | PARTIALLY_SUPPORTED | 3 | gap diagnosed: not iteration budget; best-of-N insufficient |
 
 
 
@@ -394,7 +388,7 @@ Three findings change how Fig. 7 should be read:
 2. **The ansatz itself caps the accuracy.** Noiseless VQE with the same 6-qubit circuit stops 0.018–0.047 Ha above FCI, sometimes above HF. VVQE at γ = 2.5 recovers roughly this noiseless level, so the virtual combination works as error mitigation, but it cannot exceed what the noiseless circuit can do.
 3. **Distance axis.** The authors' "distance" d places the atoms at ±d bohr, so the separation is 2d bohr ≈ 1.058·d Å, not d Å.
 
-The mean energies are 0.00–0.13 Ha above the paper's points. A predeclared diagnosis ruled out the iteration budget (600 iterations close ≤ 9% of the gap). It also showed that best-of-N selection alone cannot explain the gap: at 3/6 tested points the paper value is better than all 10 of our seeds. The most likely remaining cause is the optimizer landscape and initialization on a multimodal noisy 6-qubit circuit; QuAIRKit's initializer is not reproduced. The diagnosis is recorded in `LOG.md`.
+The mean energies are 0.00–0.13 Ha above the paper's points. A predeclared diagnosis ruled out the iteration budget (600 iterations close ≤ 9% of the gap). It also showed that best-of-N selection alone cannot explain the gap: at 3/6 tested points the paper value is better than all 10 of our seeds. The most likely remaining cause is the optimizer landscape and initialization on a multimodal noisy 6-qubit circuit; QuAIRKit's initializer is not reproduced.
 
 ## Fair Baselines
 
@@ -420,8 +414,8 @@ each ±1 outcome by ±γ. It is unbiased, but its per-shot variance is
 **γ² − ⟨P⟩²** instead of 1 − ⟨P⟩² (checked by Monte-Carlo in
 `tests/test_shot_budget.py`). The fair control re-evaluates the *trained*
 Phase 3 and Phase 4 models at **equal measurement-shot budgets**, using exact
-finite-shot formulas. The comparison plan was frozen before any result
-(`LOG.md`, "Phase 5 Comparison Plan"). Full tables:
+finite-shot formulas. The comparison plan was frozen before any result.
+Full tables:
 [`results/fair_comparison.md`](results/fair_comparison.md).
 
 ![Equal-shot comparison](results/fig_equal_shot.png)
@@ -487,8 +481,8 @@ process start-up):
 
 
 **Status: `PARTIAL_MERLIN_TRANSLATION`.** This section is an *adaptation*,
-not part of the original reproduction. Details: `LOG.md` (Phase 4 sections)
-and [`results/merlin_comparison.md`](results/merlin_comparison.md).
+not part of the original reproduction. Details:
+[`results/merlin_comparison.md`](results/merlin_comparison.md).
 
 The VQNN mechanism, a signed combination of two noisy trainable circuits
 estimated by sampling, does not depend on the hardware platform. What has to
