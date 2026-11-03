@@ -1,0 +1,8 @@
+{
+  "effdim_d40_merlin": "outdir/run_20261022-171359",
+  "effdim_d40_merlin_unbunched": "outdir/run_20261022-171527",
+  "effdim_d40_merlin_phase_domain": "outdir/run_20261022-171716",
+  "spectrum_scaling_merlin": "outdir/run_20261022-171905",
+  "training_iris_merlin": "outdir/run_20261022-171525",
+  "effdim_d40_merlin_8modes": "outdir/run_20261022-173002"
+}

@@ -1,0 +1,31 @@
+{
+    "description": "E4 baseline (Fair Baseline Plan ii): single noisy branch (budget 1) at depth 4, i.e. 16 parameters like the two-branch depth-2 VQC; separates 'more parameters' from 'virtual combination'.",
+    "experiment": {
+        "task": "vqc",
+        "id": "e4_vqc_param_matched"
+    },
+    "vqc": {
+        "n_qubits": 2,
+        "depth": 4,
+        "budget": 1.0,
+        "gate_noise": [
+            0.02,
+            0.05
+        ]
+    },
+    "data": {
+        "source": "generated",
+        "file": null,
+        "n_train": 200,
+        "n_test": 100,
+        "seed_data": 1,
+        "boundary_gap": 0.0,
+        "batch_size": null
+    },
+    "training": {
+        "iterations": 150,
+        "lr": 0.2,
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 10
+    }
+}

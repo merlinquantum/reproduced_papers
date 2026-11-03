@@ -1,0 +1,183 @@
+{
+  "description": "MerLin adaptation (Phase 04), Amendment 5 SCREEN (loss): B1-B6 on the Iris 1/2 split, lr in {0.1, 0.3} selected on mean final validation CE of seeds 0-9; final seeds 200-209 diagnostic only.",
+  "experiment": {
+    "name": "tier4_screen_train",
+    "kind": "fair_comparison"
+  },
+  "dataset": {
+    "name": "iris_pair",
+    "classes": [
+      1,
+      2
+    ],
+    "split_seed": 0,
+    "per_class": {
+      "train": 30,
+      "validation": 10,
+      "test": 10
+    },
+    "batch_size": null
+  },
+  "training": {
+    "iterations": 100,
+    "lr": 0.1,
+    "finite_difference_step": 1e-10,
+    "log_every": 1,
+    "loss_threshold": 0.3
+  },
+  "comparison": {
+    "lr_grid": [
+      0.1,
+      0.3
+    ],
+    "selection_seeds": {
+      "start": 0,
+      "count": 10
+    },
+    "final_seeds": {
+      "start": 200,
+      "count": 10
+    },
+    "tie_tolerance": 0.005,
+    "splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "selection_split": "validation"
+  },
+  "models": [
+    {
+      "name": "B1_6m_fock",
+      "type": "photonic",
+      "n_inputs": 4,
+      "encoding": "hard",
+      "d": 40,
+      "detection": "threshold",
+      "extra_modes": 2,
+      "mesh_order": "ps_bs",
+      "layout": "interleaved",
+      "input_kind": "fock",
+      "readout": "click_parity",
+      "data_reps": 3,
+      "training": {
+        "optimizer": "torch_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": -1.0,
+          "high": 1.0
+        }
+      }
+    },
+    {
+      "name": "B2_6m_cluster",
+      "type": "photonic",
+      "n_inputs": 4,
+      "encoding": "hard",
+      "d": 40,
+      "detection": "threshold",
+      "extra_modes": 2,
+      "mesh_order": "ps_bs",
+      "layout": "interleaved",
+      "input_kind": "cluster",
+      "readout": "click_parity",
+      "data_reps": 3,
+      "training": {
+        "optimizer": "torch_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": -1.0,
+          "high": 1.0
+        }
+      }
+    },
+    {
+      "name": "B3_8m_fock",
+      "type": "photonic",
+      "n_inputs": 4,
+      "encoding": "hard",
+      "d": 40,
+      "detection": "threshold",
+      "extra_modes": 4,
+      "mesh_order": "ps_bs",
+      "layout": "interleaved",
+      "input_kind": "fock",
+      "readout": "click_parity",
+      "data_reps": 3,
+      "training": {
+        "optimizer": "torch_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": -1.0,
+          "high": 1.0
+        }
+      }
+    },
+    {
+      "name": "B4_8m_cluster",
+      "type": "photonic",
+      "n_inputs": 4,
+      "encoding": "hard",
+      "d": 40,
+      "detection": "threshold",
+      "extra_modes": 4,
+      "mesh_order": "ps_bs",
+      "layout": "interleaved",
+      "input_kind": "cluster",
+      "readout": "click_parity",
+      "data_reps": 3,
+      "training": {
+        "optimizer": "torch_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": -1.0,
+          "high": 1.0
+        }
+      }
+    },
+    {
+      "name": "B5_10m_fock",
+      "type": "photonic",
+      "n_inputs": 4,
+      "encoding": "hard",
+      "d": 40,
+      "detection": "threshold",
+      "extra_modes": 6,
+      "mesh_order": "ps_bs",
+      "layout": "interleaved",
+      "input_kind": "fock",
+      "readout": "click_parity",
+      "data_reps": 3,
+      "training": {
+        "optimizer": "torch_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": -1.0,
+          "high": 1.0
+        }
+      }
+    },
+    {
+      "name": "B6_10m_cluster",
+      "type": "photonic",
+      "n_inputs": 4,
+      "encoding": "hard",
+      "d": 40,
+      "detection": "threshold",
+      "extra_modes": 6,
+      "mesh_order": "ps_bs",
+      "layout": "interleaved",
+      "input_kind": "cluster",
+      "readout": "click_parity",
+      "data_reps": 3,
+      "training": {
+        "optimizer": "torch_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": -1.0,
+          "high": 1.0
+        }
+      }
+    }
+  ]
+}

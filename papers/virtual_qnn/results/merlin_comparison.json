@@ -1,0 +1,238 @@
+{
+  "scope": "MerLin photonic ADAPTATION of E4 (not the original method); exact simulation; 10 paired repetitions",
+  "table": [
+    {
+      "model": "photonic_noisy",
+      "budget": 1.0,
+      "n_parameters": 24.0,
+      "train_mean": 0.9285,
+      "train_std": 0.03457238782612504,
+      "test_mean": 0.915,
+      "test_std": 0.05162363799656121,
+      "n": 10
+    },
+    {
+      "model": "photonic_noisy",
+      "budget": 1.5,
+      "n_parameters": 48.0,
+      "train_mean": 0.946,
+      "train_std": 0.02426932219902317,
+      "test_mean": 0.9390000000000001,
+      "test_std": 0.022113344387495952,
+      "n": 10
+    },
+    {
+      "model": "photonic_noisy",
+      "budget": 2.0,
+      "n_parameters": 48.0,
+      "train_mean": 0.9640000000000001,
+      "train_std": 0.015132745950421569,
+      "test_mean": 0.95,
+      "test_std": 0.024083189157584572,
+      "n": 10
+    },
+    {
+      "model": "photonic_noisy",
+      "budget": 2.5,
+      "n_parameters": 48.0,
+      "train_mean": 0.9814999999999999,
+      "train_std": 0.008381527307120114,
+      "test_mean": 0.9620000000000001,
+      "test_std": 0.020880613017821098,
+      "n": 10
+    },
+    {
+      "model": "photonic_noisy",
+      "budget": 3.0,
+      "n_parameters": 48.0,
+      "train_mean": 0.9824999999999999,
+      "train_std": 0.012093386622447836,
+      "test_mean": 0.962,
+      "test_std": 0.016613247725836163,
+      "n": 10
+    },
+    {
+      "model": "photonic_noise_free",
+      "budget": 1.0,
+      "n_parameters": 24.0,
+      "train_mean": 0.9235000000000001,
+      "train_std": 0.030744918279286403,
+      "test_mean": 0.9129999999999999,
+      "test_std": 0.042438190347845885,
+      "n": 10
+    },
+    {
+      "model": "photonic_noise_free",
+      "budget": 3.0,
+      "n_parameters": 48.0,
+      "train_mean": 0.985,
+      "train_std": 0.007745966692414841,
+      "test_mean": 0.96,
+      "test_std": 0.014832396974191338,
+      "n": 10
+    },
+    {
+      "model": "gate_model",
+      "budget": 1.0,
+      "n_parameters": 8.0,
+      "train_mean": 0.6535,
+      "train_std": 0.0398151981032369,
+      "test_mean": 0.64,
+      "test_std": 0.051380930314660504,
+      "n": 10
+    },
+    {
+      "model": "gate_model",
+      "budget": 1.5,
+      "n_parameters": 16.0,
+      "train_mean": 0.678,
+      "train_std": 0.05173006862551025,
+      "test_mean": 0.6679999999999999,
+      "test_std": 0.05878775382679628,
+      "n": 10
+    },
+    {
+      "model": "gate_model",
+      "budget": 2.0,
+      "n_parameters": 16.0,
+      "train_mean": 0.6910000000000001,
+      "train_std": 0.05028916384272063,
+      "test_mean": 0.6859999999999999,
+      "test_std": 0.05748043145279966,
+      "n": 10
+    },
+    {
+      "model": "gate_model",
+      "budget": 2.5,
+      "n_parameters": 16.0,
+      "train_mean": 0.7184999999999999,
+      "train_std": 0.04318854014666391,
+      "test_mean": 0.711,
+      "test_std": 0.05906775770248945,
+      "n": 10
+    },
+    {
+      "model": "gate_model",
+      "budget": 3.0,
+      "n_parameters": 16.0,
+      "train_mean": 0.7355,
+      "train_std": 0.043384905209070124,
+      "test_mean": 0.737,
+      "test_std": 0.04124318125460257,
+      "n": 10
+    }
+  ],
+  "paired_tests": {
+    "photonic_noisy_g3_minus_g1": {
+      "n_pairs": 10,
+      "mean_difference": 0.046999999999999965,
+      "std_difference": 0.04808557187163547,
+      "t_statistic": 3.0908866057509705,
+      "p_value_two_sided": 0.01291097812768084,
+      "pairs_improved": 8,
+      "pairs_tied": 1
+    },
+    "photonic_noise_free_g3_minus_g1": {
+      "n_pairs": 10,
+      "mean_difference": 0.046999999999999965,
+      "std_difference": 0.044234225060089685,
+      "t_statistic": 3.3600012168408577,
+      "p_value_two_sided": 0.00838914348457872,
+      "pairs_improved": 8,
+      "pairs_tied": 1
+    },
+    "photonic_noise_free_g1_minus_noisy_g1": {
+      "n_pairs": 10,
+      "mean_difference": -0.0020000000000000018,
+      "std_difference": 0.014757295747452407,
+      "t_statistic": -0.42857142857142977,
+      "p_value_two_sided": 0.6783097418055788,
+      "pairs_improved": 2,
+      "pairs_tied": 4
+    },
+    "photonic_noisy_g1_minus_gate_g1": {
+      "n_pairs": 10,
+      "mean_difference": 0.275,
+      "std_difference": 0.04994441354590565,
+      "t_statistic": 17.411884429216506,
+      "p_value_two_sided": 3.070959207480061e-08,
+      "pairs_improved": 10,
+      "pairs_tied": 0
+    },
+    "photonic_noisy_g3_minus_gate_g3": {
+      "n_pairs": 10,
+      "mean_difference": 0.225,
+      "std_difference": 0.03778594682918213,
+      "t_statistic": 18.83008190199388,
+      "p_value_two_sided": 1.5440434344435632e-08,
+      "pairs_improved": 10,
+      "pairs_tied": 0
+    }
+  },
+  "behaviour_preserved": true,
+  "rule": "test accuracy non-decreasing in \u03b3 (within 0.01) AND test(\u03b3=3) \u2212 test(\u03b3=1) > pooled std AND paired p < 0.05",
+  "trend": {
+    "test_means": [
+      0.915,
+      0.9390000000000001,
+      0.95,
+      0.9620000000000001,
+      0.962
+    ],
+    "gain_g3_minus_g1": 0.04699999999999993,
+    "pooled_std": 0.03834709897762801
+  },
+  "hardware": {
+    "photonic_noisy": {
+      "adaptation": "MerLin photonic adaptation (not the original method)",
+      "computation_space": "fock",
+      "detector_model": "photon-number-resolving",
+      "encoding": "phase (angle) encoding of (x1, x2) on modes [0, 1], scale=3.141592653589793",
+      "gradients": "exact (autograd through MerLin simulation)",
+      "input_state": [
+        1,
+        0,
+        1,
+        0
+      ],
+      "measurement_strategy": "MeasurementStrategy.probs -> first-half photon-number parity (-1)^(n0+n1)",
+      "n_modes": 4,
+      "n_photons": 2,
+      "noise_model": "pcvl.NoiseModel(indistinguishability=0.9)",
+      "postselection": "none",
+      "simulator": "MerLin exact CPU simulation (shots=0)",
+      "seeds": "seed = seed_data = r, r = 1..10",
+      "wall_clock_per_run_s": {
+        "median": 6.2,
+        "max": 7.3
+      },
+      "shot_count": "n/a (exact probabilities; virtual estimator needs ~\u03b3\u00b2 more shots than \u03b3=1)"
+    },
+    "photonic_noise_free": {
+      "adaptation": "MerLin photonic adaptation (not the original method)",
+      "computation_space": "fock",
+      "detector_model": "photon-number-resolving",
+      "encoding": "phase (angle) encoding of (x1, x2) on modes [0, 1], scale=3.141592653589793",
+      "gradients": "exact (autograd through MerLin simulation)",
+      "input_state": [
+        1,
+        0,
+        1,
+        0
+      ],
+      "measurement_strategy": "MeasurementStrategy.probs -> first-half photon-number parity (-1)^(n0+n1)",
+      "n_modes": 4,
+      "n_photons": 2,
+      "noise_model": "none",
+      "postselection": "none",
+      "simulator": "MerLin exact CPU simulation (shots=0)",
+      "seeds": "seed = seed_data = r, r = 1..10",
+      "wall_clock_per_run_s": {
+        "median": 6.1,
+        "max": 7.6
+      },
+      "shot_count": "n/a (exact probabilities; virtual estimator needs ~\u03b3\u00b2 more shots than \u03b3=1)"
+    }
+  },
+  "superseded": "e4_vqc_merlin_budget (encoding restricted outputs to x1\u2212x2; LOG.md Amendment 2) is excluded"
+}

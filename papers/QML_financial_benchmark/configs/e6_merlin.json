@@ -1,0 +1,29 @@
+{
+  "description": "Phase 4 MerLin adaptation of E6 (not the paper's method): SVR on a multi-photon fidelity kernel |<psi(x)|psi(x')>|^2, psi(x) = Phi(pi x) U_L ... Phi(pi x) U_1 |s>, m = 10 modes (one per feature), fixed random MZI meshes (seed 1234+l), n photons and L re-uploads tuned by Optuna with C and epsilon. Same data, refit schedule, budget and metric as e6_original (default ^GSPC; override with --vol-ticker).",
+  "task": "volatility",
+  "volatility": {
+    "dataset": {
+      "ticker": "^GSPC",
+      "start": "2005-01-01",
+      "end": "2024-12-31",
+      "return_lags": 5,
+      "rv_lags": 5,
+      "initial_train_days": 720,
+      "refit_every": 120,
+      "max_train_days": null,
+      "batch_size": 256
+    },
+    "models": ["photonic_kernel"],
+    "qsvr": {"angle_scale": 3.141592653589793, "layers": [0, 1, 2, 3], "topologies": ["ring", "chain"], "rotation_seed": 1234, "amplitude_betas": [1, 2, 3]},
+    "photonic": {"angle_scale": 3.141592653589793, "n_photons": [2, 3], "layers": [1, 2, 3], "mesh_seed": 1234},
+    "tuning": {
+      "n_trials": 50,
+      "tune_every_n_refits": 1,
+      "validation_fraction": 0.2,
+      "C": [0.01, 100.0],
+      "epsilon": [0.001, 1.0],
+      "rbf_wide_gamma": [0.001, 100.0],
+      "sampler_seed": 0
+    }
+  }
+}

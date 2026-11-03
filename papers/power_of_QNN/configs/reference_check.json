@@ -1,0 +1,89 @@
+{
+  "description": "V-00: compare with the authors' cached arrays (Fig. 3a formula, Fig. 2 quantum F_hat element-wise, classical distribution).",
+  "experiment": {
+    "name": "reference_check_v00",
+    "kind": "reference_check"
+  },
+  "fisher": {
+    "num_thetas": 100,
+    "num_inputs": 100,
+    "theta_low": 0.0,
+    "theta_high": 1.0,
+    "draw_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "chunk_size": 100,
+    "gamma": 1.0,
+    "n_values": [
+      1000,
+      2000,
+      8000,
+      10000,
+      40000,
+      60000,
+      100000,
+      150000,
+      200000,
+      500000,
+      1000000
+    ],
+    "zero_tolerance": 1e-10,
+    "save_fhat_draws": [
+      0
+    ]
+  },
+  "reference": {
+    "fig3a_arrays": [
+      "4qubits_9layer_f_hats_dep2.npy",
+      "fhat4_[4 4 4 2]_ed.npy",
+      "4qubits_9layer_f_hats_pauli.npy"
+    ],
+    "formula_tolerance": 1e-06,
+    "fhat_tolerance": 1e-09,
+    "band_sigmas": 3.0,
+    "quantum_models": [
+      {
+        "name": "qnn",
+        "type": "qubit",
+        "n_qubits": 4,
+        "feature_map": "zz",
+        "feature_map_reps": 2,
+        "ansatz_reps": 9,
+        "feature_entanglement": "full",
+        "ansatz_entanglement": "full",
+        "hadamard_every_rep": true,
+        "reference_file": "4qubits_9layer_f_hats_dep2.npy"
+      },
+      {
+        "name": "easy_qnn",
+        "type": "qubit",
+        "n_qubits": 4,
+        "feature_map": "z",
+        "feature_map_reps": 1,
+        "ansatz_reps": 9,
+        "feature_entanglement": "full",
+        "ansatz_entanglement": "full",
+        "hadamard_every_rep": true,
+        "reference_file": "4qubits_9layer_f_hats_pauli.npy"
+      }
+    ],
+    "classical_model": {
+      "name": "classical_4442",
+      "type": "classical",
+      "sizes": [
+        4,
+        4,
+        4,
+        2
+      ],
+      "activation": "leaky_relu",
+      "head": "softmax_tanh",
+      "bias": false,
+      "reference_file": "fhat4_[4 4 4 2]_fisher.npy"
+    }
+  }
+}

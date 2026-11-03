@@ -1,0 +1,70 @@
+{
+  "sweep_id": "fig8_biased_zz3_control",
+  "description": "D4 control: biased quantum model with each ZZ rotation applied 3 times per block (author code) instead of once (Fig. 7); L = 1, 2; protocols code and paper; seeds 0-4; 2000 Adam steps.",
+  "base_config": "configs/fig8_biased_quantum_original.json",
+  "grid": [
+    {
+      "--model": "biased_quantum",
+      "--layers": 1,
+      "--zz-repetitions": 3,
+      "--protocol": "code"
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 2,
+      "--zz-repetitions": 3,
+      "--protocol": "code"
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 1,
+      "--zz-repetitions": 3,
+      "--protocol": "paper"
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 2,
+      "--zz-repetitions": 3,
+      "--protocol": "paper"
+    }
+  ],
+  "repetitions": [
+    {
+      "--seed": 0
+    },
+    {
+      "--seed": 1
+    },
+    {
+      "--seed": 2
+    },
+    {
+      "--seed": 3
+    },
+    {
+      "--seed": 4
+    }
+  ],
+  "progress_total": 2000,
+  "plan": {
+    "metrics": [
+      "final.test_kl",
+      "min_test_kl.test_kl",
+      "min_test_kl.step",
+      "final.train_nll",
+      "last_step_objective",
+      "train_seconds"
+    ],
+    "direction": "minimize",
+    "split": "test (fixed seeded set, seed 2302, n = 10000)",
+    "checkpoint": "final step 2000 (no early stopping), as in Fig. 8; min_test_kl reported as a secondary, test-selected view",
+    "aggregation": "per candidate: mean and sample std (ddof = 1) over seeds; min and max also reported",
+    "tie_tolerance": "n/a (descriptive sweep)",
+    "selection_rule": "none: descriptive comparison of model classes; no candidate is selected",
+    "note": "Control for D4 (same model class, rescaled ZZ parameters); compare with the zz_repetitions = 1 candidates of fig8_quantum_paper / fig8_quantum_code_fork at matched seeds 0-4."
+  },
+  "fixed_args": {
+    "--experiment-id": "E1_D4_zz3_control"
+  },
+  "max_workers": 4
+}

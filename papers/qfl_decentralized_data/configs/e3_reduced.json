@@ -1,0 +1,28 @@
+{
+    "description": "E3 reduced smoke run (NOT paper-accurate)",
+    "experiment": "e3_qaoa_maxcut_reduced",
+    "metric_direction": "maximize",
+    "dataset": {
+        "name": "random_graphs",
+        "n_nodes": 6,
+        "degree": 3,
+        "n_train_graphs": 24,
+        "n_test_graphs": 12,
+        "graph_seed": 0
+    },
+    "model": {
+        "name": "qaoa",
+        "layers": 1,
+        "init_value": 0.01
+    },
+    "federation": {
+        "rounds": 3,
+        "n_clients": 2,
+        "min_client_size": 4
+    },
+    "training": {
+        "lr": 0.01,
+        "batch_size": 16
+    },
+    "label": "reduced smoke run"
+}

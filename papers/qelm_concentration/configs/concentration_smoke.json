@@ -1,0 +1,47 @@
+{
+  "description": "Smoke run of E1b: 4 and 6 qubits, 4 layers, one reservoir seed, 32 inputs, Table I versus scrambling. Checks the concentration task and its logging; not a result.",
+  "task": "concentration",
+  "dtype": "float32",
+  "reservoir": {
+    "input_shift": 4,
+    "chunk_size": 64
+  },
+  "dataset": {
+    "name": "uniform_inputs"
+  },
+  "concentration": {
+    "n_qubits": [
+      4,
+      6
+    ],
+    "n_layers": [
+      4
+    ],
+    "reservoir_seeds": [
+      0
+    ],
+    "n_samples": 32,
+    "parameter_settings": {
+      "table_I": {
+        "input_strength": 0.2,
+        "b_mean": 0.707,
+        "b_std": 0.031,
+        "h_mean": 0.683,
+        "h_std": 0.034,
+        "J_mean": 0.237,
+        "J_std": 0.038,
+        "h_min": 0.1
+      },
+      "scrambling": {
+        "input_strength": 0.2,
+        "b_mean": 0.7853981633974483,
+        "b_std": 0.0,
+        "h_mean": 0.6,
+        "h_std": 0.0,
+        "J_mean": 0.7853981633974483,
+        "J_std": 0.0,
+        "h_min": 0.1
+      }
+    }
+  }
+}

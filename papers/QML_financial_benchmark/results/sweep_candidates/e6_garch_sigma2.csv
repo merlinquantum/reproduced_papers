@@ -1,0 +1,9 @@
+variant,seed,rule,family,candidate,score,rank,tied_with_best,selected,run_dir
+AAPL,0,test_qlike,garch,garch,-7.3989803947217245,1,True,False,AAPL/seed0/run_20261022-113229
+AAPL,0,test_qlike,garch_sigma2,garch_sigma2,-7.224753633699906,2,False,False,AAPL/seed0/run_20261022-113229
+GARAN,0,test_qlike,garch,garch,-6.713126932961917,1,True,False,GARAN/seed0/run_20261022-113257
+GARAN,0,test_qlike,garch_sigma2,garch_sigma2,-6.5564239694146975,2,False,False,GARAN/seed0/run_20261022-113257
+GSPC,0,test_qlike,garch,garch,-8.589332883136311,1,True,False,GSPC/seed0/run_20261022-113227
+GSPC,0,test_qlike,garch_sigma2,garch_sigma2,-8.450292296772536,2,False,False,GSPC/seed0/run_20261022-113227
+KCHOL,0,test_qlike,garch,garch,-7.030493726814517,1,True,False,KCHOL/seed0/run_20261022-113257
+KCHOL,0,test_qlike,garch_sigma2,garch_sigma2,-6.867168286319085,2,False,False,KCHOL/seed0/run_20261022-113257

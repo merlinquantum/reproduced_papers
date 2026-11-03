@@ -1,0 +1,76 @@
+{
+  "sweep_id": "fig8_surrogates",
+  "description": "E1 / Fig. 8 Fourier surrogates L = 1 (SGD lr 1e-3) and L = 2 (SGD lr 1e-4) under protocols paper, code, fork; seeds 0-4; 2000 steps (App. F).",
+  "base_config": "configs/fig8_surrogate_l1_original.json",
+  "grid": [
+    {
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--protocol": "paper"
+    },
+    {
+      "--spectrum": 2,
+      "--lr": 0.0001,
+      "--protocol": "paper"
+    },
+    {
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--protocol": "code"
+    },
+    {
+      "--spectrum": 2,
+      "--lr": 0.0001,
+      "--protocol": "code"
+    },
+    {
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--protocol": "fork"
+    },
+    {
+      "--spectrum": 2,
+      "--lr": 0.0001,
+      "--protocol": "fork"
+    }
+  ],
+  "repetitions": [
+    {
+      "--seed": 0
+    },
+    {
+      "--seed": 1
+    },
+    {
+      "--seed": 2
+    },
+    {
+      "--seed": 3
+    },
+    {
+      "--seed": 4
+    }
+  ],
+  "progress_total": 2000,
+  "plan": {
+    "metrics": [
+      "final.test_kl",
+      "min_test_kl.test_kl",
+      "min_test_kl.step",
+      "final.train_nll",
+      "last_step_objective",
+      "train_seconds"
+    ],
+    "direction": "minimize",
+    "split": "test (fixed seeded set, seed 2302, n = 10000)",
+    "checkpoint": "final step 2000 (no early stopping), as in Fig. 8; min_test_kl reported as a secondary, test-selected view",
+    "aggregation": "per candidate: mean and sample std (ddof = 1) over seeds; min and max also reported",
+    "tie_tolerance": "n/a (descriptive sweep)",
+    "selection_rule": "none: descriptive comparison of model classes; no candidate is selected",
+    "note": "Surrogate baselines of Fig. 8."
+  },
+  "fixed_args": {
+    "--experiment-id": "E1_fig8_surrogates"
+  },
+  "max_workers": 2
+}

@@ -1,0 +1,33 @@
+{
+  "n_fock_states": 56,
+  "exact_mass": 0.9999998807907104,
+  "convergence": [
+    {
+      "n_samples": 12500,
+      "tvd": 0.02326869594759141,
+      "inv_sqrt_n": 0.00894427190999916
+    },
+    {
+      "n_samples": 50000,
+      "tvd": 0.013818625979404392,
+      "inv_sqrt_n": 0.00447213595499958
+    },
+    {
+      "n_samples": 200000,
+      "tvd": 0.005437226200654918,
+      "inv_sqrt_n": 0.00223606797749979
+    },
+    {
+      "n_samples": 800000,
+      "tvd": 0.0024452702509907883,
+      "inv_sqrt_n": 0.001118033988749895
+    }
+  ],
+  "control": {
+    "max_mean_occupancy_difference": 0.0012125000000000608,
+    "fano_quantum": 0.898477187608446,
+    "fano_distinguishable": 0.6697664011079221,
+    "tvd_distinguishable_vs_quantum": 0.26580486659858327
+  },
+  "bunching_fraction": 0.51348875
+}

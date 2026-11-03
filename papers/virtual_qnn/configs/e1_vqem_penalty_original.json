@@ -1,0 +1,26 @@
+{
+    "description": "E1 (Table I): VQEM Alg. 1, noiseless 3-qubit branches, depth 10, N=2, penalty alpha=1000, trainable c=(t, 1-t) from t=2. Reference: Adam lr 0.05, 800 iterations, ReduceLROnPlateau(0.5). Sweep noise_model x noise_level x seed via utils.",
+    "experiment": {
+        "task": "vqem",
+        "id": "e1_vqem_penalty_original"
+    },
+    "vqem": {
+        "algorithm": "penalty",
+        "noise_model": "depolarizing",
+        "noise_level": 0.1,
+        "depth": 10,
+        "penalty": 1000.0,
+        "initial_t": 2.0,
+        "budget": 1.0,
+        "gate_noise": [
+            0.0,
+            0.0
+        ]
+    },
+    "training": {
+        "iterations": 800,
+        "lr": 0.05,
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 10
+    }
+}

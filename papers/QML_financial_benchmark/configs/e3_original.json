@@ -1,0 +1,11 @@
+{
+  "description": "E3 (Table XI): 64-D lag-matrix features on a U.S. stock (default AAPL; override with --ticker). Amplitude-encoded QNN with n in {2..6}; hybrid layers map 64 -> 2^n amplitudes (reading (i) of R5); non-hybrid families only at n=6.",
+  "directional": {
+    "dataset": {"feature_set": "64d", "ticker": "AAPL"},
+    "models": {
+      "qnn": {"families": ["SQ", "MQ", "Hybrid-SQ", "Hybrid-MQ"], "n_qubits": [2, 3, 4, 5, 6], "layers": [1, 2, 3, 4, 5, 6], "encoding": "amplitude"},
+      "ann": {"hidden_layer_options": [[4], [8], [11], [16], [32], [64], [8, 4], [16, 8], [32, 16], [64, 32]], "minmax_inputs": true}
+    },
+    "training": {"max_epochs": 300}
+  }
+}

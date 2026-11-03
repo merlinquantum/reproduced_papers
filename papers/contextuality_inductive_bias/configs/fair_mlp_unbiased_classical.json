@@ -1,0 +1,24 @@
+{
+  "description": "B4: unbiased MLP 6 -> tanh(9) -> 3 sigmoid (93 parameters); Phase 5 fair baseline, Adam, validation split enabled.",
+  "experiment": {
+    "id": "fair_mlp_unbiased_classical"
+  },
+  "model": {
+    "kind": "mlp_unbiased",
+    "hidden": 9
+  },
+  "data": {
+    "protocol": "paper",
+    "validation": {
+      "enabled": true,
+      "seed": 201,
+      "n": 1500
+    }
+  },
+  "training": {
+    "steps": 2000,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "l2": 0.0
+  }
+}

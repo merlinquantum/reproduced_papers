@@ -1,0 +1,350 @@
+{
+  "experiment": "e1_8clients_merlin_diagnostic_d4",
+  "runs": [
+    {
+      "best_epoch": 80,
+      "best_epoch_test_accuracy_selected_on_test": 0.8056426332288401,
+      "final_test_accuracy": 0.7836990595611285,
+      "final_test_loss": 1.0437655553548688,
+      "final_validation_accuracy": 0.7019607843137254,
+      "overrides": {
+        "circuit": {
+          "first_layer": "superposition"
+        }
+      },
+      "permutation_seed": 42,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1008.7552754589997
+    },
+    {
+      "best_epoch": 40,
+      "best_epoch_test_accuracy_selected_on_test": 0.799373040752351,
+      "final_test_accuracy": 0.780564263322884,
+      "final_test_loss": 0.9812867753558024,
+      "final_validation_accuracy": 0.7529411764705882,
+      "overrides": {
+        "circuit": {
+          "first_layer": "superposition"
+        }
+      },
+      "permutation_seed": 43,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1017.8312704589989
+    },
+    {
+      "best_epoch": 79,
+      "best_epoch_test_accuracy_selected_on_test": 0.8620689655172413,
+      "final_test_accuracy": 0.8025078369905956,
+      "final_test_loss": 0.785352431868311,
+      "final_validation_accuracy": 0.8274509803921568,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "message_width": 8,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      },
+      "permutation_seed": 42,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 5015.308758832998
+    },
+    {
+      "best_epoch": 78,
+      "best_epoch_test_accuracy_selected_on_test": 0.8840125391849529,
+      "final_test_accuracy": 0.8714733542319749,
+      "final_test_loss": 0.752598771480931,
+      "final_validation_accuracy": 0.8392156862745098,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "message_width": 8,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      },
+      "permutation_seed": 43,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 5021.164497665999
+    },
+    {
+      "best_epoch": 64,
+      "best_epoch_test_accuracy_selected_on_test": 0.877742946708464,
+      "final_test_accuracy": 0.8432601880877743,
+      "final_test_loss": 0.8321729498597148,
+      "final_validation_accuracy": 0.8274509803921568,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "first_layer": "superposition",
+          "message_width": 8,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      },
+      "permutation_seed": 42,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 4560.366133709002
+    },
+    {
+      "best_epoch": 83,
+      "best_epoch_test_accuracy_selected_on_test": 0.8808777429467085,
+      "final_test_accuracy": 0.8338557993730408,
+      "final_test_loss": 0.8241218160312378,
+      "final_validation_accuracy": 0.8431372549019608,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "first_layer": "superposition",
+          "message_width": 8,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      },
+      "permutation_seed": 43,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 4551.683451290999
+    },
+    {
+      "best_epoch": 57,
+      "best_epoch_test_accuracy_selected_on_test": 0.8495297805642633,
+      "final_test_accuracy": 0.780564263322884,
+      "final_test_loss": 0.9345657743256668,
+      "final_validation_accuracy": 0.8156862745098039,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "first_layer": "superposition",
+          "message_width": 8,
+          "server_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12,
+        "server_modes": 12
+      },
+      "permutation_seed": 42,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 5582.942481291
+    },
+    {
+      "best_epoch": 96,
+      "best_epoch_test_accuracy_selected_on_test": 0.8589341692789969,
+      "final_test_accuracy": 0.7962382445141066,
+      "final_test_loss": 0.9946414624635702,
+      "final_validation_accuracy": 0.7372549019607844,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "first_layer": "superposition",
+          "message_width": 8,
+          "server_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12,
+        "server_modes": 12
+      },
+      "permutation_seed": 43,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 5591.903247000002
+    }
+  ],
+  "selection": {
+    "candidates": [
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.7821316614420062,
+          "std_ddof1": 0.0022166356777007876
+        },
+        "final_validation_accuracy": {
+          "mean": 0.7274509803921568,
+          "std_ddof1": 0.036048581001667156
+        },
+        "overrides": {
+          "circuit": {
+            "first_layer": "superposition"
+          }
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.8369905956112853,
+          "std_ddof1": 0.04876598490941709
+        },
+        "final_validation_accuracy": {
+          "mean": 0.8333333333333333,
+          "std_ddof1": 0.008318903308077078
+        },
+        "overrides": {
+          "circuit": {
+            "client_feature_maps": [
+              "identity",
+              "square",
+              "cos"
+            ],
+            "message_width": 8,
+            "server_photons": 4
+          },
+          "n_client_stages": 8,
+          "n_modes": 12
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.8385579937304075,
+          "std_ddof1": 0.006649907033102284
+        },
+        "final_validation_accuracy": {
+          "mean": 0.8352941176470587,
+          "std_ddof1": 0.011091871077436078
+        },
+        "overrides": {
+          "circuit": {
+            "client_feature_maps": [
+              "identity",
+              "square",
+              "cos"
+            ],
+            "first_layer": "superposition",
+            "message_width": 8,
+            "server_photons": 4
+          },
+          "n_client_stages": 8,
+          "n_modes": 12
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.7884012539184952,
+          "std_ddof1": 0.011083178388503938
+        },
+        "final_validation_accuracy": {
+          "mean": 0.7764705882352941,
+          "std_ddof1": 0.05545935538718016
+        },
+        "overrides": {
+          "circuit": {
+            "client_feature_maps": [
+              "identity",
+              "square",
+              "cos"
+            ],
+            "first_layer": "superposition",
+            "message_width": 8,
+            "server_feature_maps": [
+              "identity",
+              "square",
+              "cos"
+            ],
+            "server_photons": 4
+          },
+          "n_client_stages": 8,
+          "n_modes": 12,
+          "server_modes": 12
+        },
+        "successful_runs": 2
+      }
+    ],
+    "rule": {
+      "aggregation": "mean over permutation seeds",
+      "direction": "maximize",
+      "metric": "final_validation_accuracy",
+      "tie_break_ascending": [],
+      "tie_tolerance": 0.005
+    },
+    "selected": {
+      "circuit": {
+        "client_feature_maps": [
+          "identity",
+          "square",
+          "cos"
+        ],
+        "message_width": 8,
+        "server_photons": 4
+      },
+      "n_client_stages": 8,
+      "n_modes": 12
+    },
+    "tied": [
+      {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "message_width": 8,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      },
+      {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "first_layer": "superposition",
+          "message_width": 8,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      }
+    ]
+  }
+}
