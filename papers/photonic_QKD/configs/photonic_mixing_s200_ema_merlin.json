@@ -1,0 +1,27 @@
+{
+  "description": "Phase 4 F1: paper-faithful PQKD in a mixing regime: theta ~ U[-pi, pi], SPSA (a=0.01, c=0.2 from S2), S=200, EMA 0.9.",
+  "task": "student",
+  "teacher": {
+    "widths": [
+      64,
+      128,
+      128
+    ],
+    "dropout": 0.25,
+    "checkpoint": "<<RESULT_PATH>>"
+  },
+  "_comment_teacher_checkpoint": "Replace with the outdir run directory (or its teacher.pt) of a task=teacher run on the same dataset, split_seed and widths, or pass --teacher-path.",
+  "conditioning": {
+    "source": "photonic",
+    "theta_init_mode": "uniform",
+    "shots": 200,
+    "ema": {
+      "enabled": true,
+      "beta": 0.9
+    }
+  },
+  "spsa": {
+    "a": 0.01,
+    "c": 0.2
+  }
+}

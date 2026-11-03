@@ -1,0 +1,2471 @@
+{
+  "sweep_id": "S6_mnist_photonic_regimes_4ph",
+  "sweep_dirs": [
+    "outdir/sweeps/S6_mnist_photonic_regimes_4ph_20261026-175437",
+    "outdir/sweeps/S6_mnist_photonic_regimes_4ph_resume1_20261026-195315",
+    "outdir/sweeps/S6_mnist_photonic_regimes_4ph_resume2_20261027-085935",
+    "outdir/sweeps/S6_mnist_photonic_regimes_4ph_resume3_20261028-120645"
+  ],
+  "s4_sweep_dirs": [
+    "outdir/sweeps/S4_mnist_pqkd_baselines_20261023-182403",
+    "outdir/sweeps/S4b_mnist_completion_20261026-102105"
+  ],
+  "run_sources": {
+    "P0_pqkd_theta0__seed0": "S6_mnist_photonic_regimes_4ph_resume1_20261026-195315",
+    "P0_pqkd_theta0__seed1": "S6_mnist_photonic_regimes_4ph_resume1_20261026-195315",
+    "F1_mixing_s200_ema__seed0": "S6_mnist_photonic_regimes_4ph_resume1_20261026-195315",
+    "N1_native_grad_random__seed0": "S6_mnist_photonic_regimes_4ph_resume1_20261026-195315",
+    "F2_mixing_s200_noema__seed0": "S6_mnist_photonic_regimes_4ph_resume1_20261026-195315",
+    "N3_surrogate_grad__seed0": "S6_mnist_photonic_regimes_4ph_resume1_20261026-195315",
+    "F3_mixing_s25_ema__seed0": "S6_mnist_photonic_regimes_4ph_resume1_20261026-195315",
+    "N2_native_grad_zero__seed0": "S6_mnist_photonic_regimes_4ph_resume1_20261026-195315",
+    "F4_mixing_s25_noema__seed0": "S6_mnist_photonic_regimes_4ph_resume1_20261026-195315",
+    "F1_mixing_s200_ema__seed1": "S6_mnist_photonic_regimes_4ph_resume2_20261027-085935",
+    "N1_native_grad_random__seed1": "S6_mnist_photonic_regimes_4ph_resume2_20261027-085935",
+    "F2_mixing_s200_noema__seed1": "S6_mnist_photonic_regimes_4ph_resume2_20261027-085935",
+    "N3_surrogate_grad__seed1": "S6_mnist_photonic_regimes_4ph_resume2_20261027-085935",
+    "F3_mixing_s25_ema__seed1": "S6_mnist_photonic_regimes_4ph_resume2_20261027-085935",
+    "N2_native_grad_zero__seed1": "S6_mnist_photonic_regimes_4ph_resume2_20261027-085935",
+    "F4_mixing_s25_noema__seed1": "S6_mnist_photonic_regimes_4ph_resume3_20261028-120645",
+    "F4_mixing_s25_noema__seed2": "S6_mnist_photonic_regimes_4ph_resume3_20261028-120645",
+    "P0_pqkd_theta0__seed2": "S6_mnist_photonic_regimes_4ph_resume3_20261028-120645",
+    "F1_mixing_s200_ema__seed2": "S6_mnist_photonic_regimes_4ph_resume3_20261028-120645",
+    "N1_native_grad_random__seed2": "S6_mnist_photonic_regimes_4ph_resume3_20261028-120645",
+    "F2_mixing_s200_noema__seed2": "S6_mnist_photonic_regimes_4ph_resume3_20261028-120645",
+    "N3_surrogate_grad__seed2": "S6_mnist_photonic_regimes_4ph_resume3_20261028-120645",
+    "F3_mixing_s25_ema__seed2": "S6_mnist_photonic_regimes_4ph_resume3_20261028-120645",
+    "N2_native_grad_zero__seed2": "S6_mnist_photonic_regimes_4ph_resume3_20261028-120645"
+  },
+  "scope": "complete",
+  "label": "Phase 4 reduced-scope validation (MNIST, 4 photons, 30 epochs, 3 seeds)",
+  "coverage": {
+    "observed_runs": 24,
+    "expected_runs": 24,
+    "missing": []
+  },
+  "comparison_rule": "no winner declared; arm differs from a reference only if |mean paired difference| > its s.d. across seeds",
+  "arms": {
+    "P0_pqkd_theta0": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 99.19333333333334,
+        "std": 0.0907377172587754,
+        "n": 3,
+        "values": [
+          99.09,
+          99.26,
+          99.23
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.92666666666666,
+        "std": 0.19008769905844816,
+        "n": 3,
+        "values": [
+          98.74,
+          99.12,
+          98.92
+        ]
+      },
+      "val_cross_entropy": {
+        "mean": 0.032965723514556886,
+        "std": 0.0016464773736966699,
+        "n": 3,
+        "values": [
+          0.0344328763961792,
+          0.0311850154876709,
+          0.033279278659820555
+        ]
+      },
+      "train_accuracy": {
+        "mean": 99.38962962962962,
+        "std": 0.03207501495498012,
+        "n": 3,
+        "values": [
+          99.3711111111111,
+          99.42666666666666,
+          99.3711111111111
+        ]
+      },
+      "delta_vs_zero_feature": {
+        "mean": 87.84333333333335,
+        "std": 0.0907377172587754,
+        "n": 3,
+        "values": [
+          87.74000000000001,
+          87.91000000000001,
+          87.88000000000001
+        ]
+      },
+      "test_accuracy_fresh_feature": {
+        "mean": 99.19666666666667,
+        "std": 0.07767453465154252,
+        "n": 3,
+        "values": [
+          99.11,
+          99.26,
+          99.22
+        ]
+      },
+      "theta_norm": {
+        "mean": 0.9349067035844917,
+        "std": 0.7716906100112233,
+        "n": 3,
+        "values": [
+          1.812706838695631,
+          0.36331681095313495,
+          0.6286964611047088
+        ]
+      },
+      "proxy_delta_first_minus_final": {
+        "mean": 0.6398447016254067,
+        "std": 0.04504352817561735,
+        "n": 3,
+        "values": [
+          0.6011260971426964,
+          0.6892801020294428,
+          0.6291279057040811
+        ]
+      },
+      "trainable_parameters": {
+        "mean": 149439.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          149439.0,
+          149439.0,
+          149439.0
+        ]
+      },
+      "conditioning_trainable": {
+        "mean": 45.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          45.0,
+          45.0,
+          45.0
+        ]
+      },
+      "training_hours": {
+        "mean": 1.539286329144258,
+        "std": 0.20717303207778165,
+        "n": 3,
+        "values": [
+          1.502504771575279,
+          1.3529675502930534,
+          1.7623866655644411
+        ]
+      }
+    },
+    "F1_mixing_s200_ema": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 98.78000000000002,
+        "std": 0.4853864439804698,
+        "n": 3,
+        "values": [
+          99.18,
+          98.24,
+          98.92
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.55333333333333,
+        "std": 0.3477547028198666,
+        "n": 3,
+        "values": [
+          98.82,
+          98.16,
+          98.68
+        ]
+      },
+      "val_cross_entropy": {
+        "mean": 0.04610820309321086,
+        "std": 0.01800519926787652,
+        "n": 3,
+        "values": [
+          0.03192689876556396,
+          0.06636529579162598,
+          0.04003241472244263
+        ]
+      },
+      "train_accuracy": {
+        "mean": 98.59703703703703,
+        "std": 0.879905531779388,
+        "n": 3,
+        "values": [
+          99.36666666666666,
+          97.63777777777777,
+          98.78666666666666
+        ]
+      },
+      "delta_vs_zero_feature": {
+        "mean": 87.84666666666668,
+        "std": 0.9651079386956362,
+        "n": 3,
+        "values": [
+          87.83000000000001,
+          86.89,
+          88.82000000000001
+        ]
+      },
+      "test_accuracy_fresh_feature": {
+        "mean": 44.873333333333335,
+        "std": 47.10881269288511,
+        "n": 3,
+        "values": [
+          99.07,
+          21.81,
+          13.74
+        ]
+      },
+      "theta_norm": {
+        "mean": 13.476522004710654,
+        "std": 1.232500554160654,
+        "n": 3,
+        "values": [
+          12.066784517085317,
+          14.012459466653537,
+          14.35032203039311
+        ]
+      },
+      "proxy_delta_first_minus_final": {
+        "mean": 0.7915679855893055,
+        "std": 0.08159156140193943,
+        "n": 3,
+        "values": [
+          0.7027477975934744,
+          0.8631886206567287,
+          0.8087675385177135
+        ]
+      },
+      "trainable_parameters": {
+        "mean": 149439.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          149439.0,
+          149439.0,
+          149439.0
+        ]
+      },
+      "conditioning_trainable": {
+        "mean": 45.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          45.0,
+          45.0,
+          45.0
+        ]
+      },
+      "training_hours": {
+        "mean": 1.5819289481162933,
+        "std": 0.16565443300198793,
+        "n": 3,
+        "values": [
+          1.5142076687316643,
+          1.4608645659041657,
+          1.77071460971305
+        ]
+      }
+    },
+    "N1_native_grad_random": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 99.15333333333332,
+        "std": 0.08082903768654559,
+        "n": 3,
+        "values": [
+          99.08,
+          99.24,
+          99.14
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.89333333333333,
+        "std": 0.04618802153516908,
+        "n": 3,
+        "values": [
+          98.92,
+          98.84,
+          98.92
+        ]
+      },
+      "val_cross_entropy": {
+        "mean": 0.03411569983164469,
+        "std": 0.0047939595590022555,
+        "n": 3,
+        "values": [
+          0.033528183460235596,
+          0.039176340293884275,
+          0.02964257574081421
+        ]
+      },
+      "train_accuracy": {
+        "mean": 99.39407407407407,
+        "std": 0.010020555006278341,
+        "n": 3,
+        "values": [
+          99.39333333333333,
+          99.40444444444445,
+          99.38444444444444
+        ]
+      },
+      "delta_vs_zero_feature": {
+        "mean": 87.80333333333334,
+        "std": 0.08082903768654559,
+        "n": 3,
+        "values": [
+          87.73,
+          87.89,
+          87.79
+        ]
+      },
+      "test_accuracy_fresh_feature": {
+        "mean": 99.15333333333332,
+        "std": 0.08082903768654559,
+        "n": 3,
+        "values": [
+          99.08,
+          99.24,
+          99.14
+        ]
+      },
+      "theta_norm": {
+        "mean": 13.184819521006041,
+        "std": 0.5794442047999641,
+        "n": 3,
+        "values": [
+          12.533551277034453,
+          13.377627281632778,
+          13.64328000435089
+        ]
+      },
+      "proxy_delta_first_minus_final": {
+        "mean": 0.6888479463135203,
+        "std": 0.11227263249850072,
+        "n": 3,
+        "values": [
+          0.5666517093777657,
+          0.7124466812238097,
+          0.7874454483389854
+        ]
+      },
+      "trainable_parameters": {
+        "mean": 149439.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          149439.0,
+          149439.0,
+          149439.0
+        ]
+      },
+      "conditioning_trainable": {
+        "mean": 45.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          45.0,
+          45.0,
+          45.0
+        ]
+      },
+      "training_hours": {
+        "mean": 1.7325995063741682,
+        "std": 0.3860156896171529,
+        "n": 3,
+        "values": [
+          1.5187086691038945,
+          1.5008767320394427,
+          2.1782131179791677
+        ]
+      }
+    },
+    "F2_mixing_s200_noema": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 97.79666666666667,
+        "std": 2.1932244147221525,
+        "n": 3,
+        "values": [
+          99.3,
+          98.81,
+          95.28
+        ]
+      },
+      "val_accuracy": {
+        "mean": 97.48,
+        "std": 2.2162129861545354,
+        "n": 3,
+        "values": [
+          99.02,
+          98.48,
+          94.94
+        ]
+      },
+      "val_cross_entropy": {
+        "mean": 0.09681892649332684,
+        "std": 0.09393223454161109,
+        "n": 3,
+        "values": [
+          0.033312667083740234,
+          0.052424298858642575,
+          0.20471981353759766
+        ]
+      },
+      "train_accuracy": {
+        "mean": 95.95555555555556,
+        "std": 5.375578981162497,
+        "n": 3,
+        "values": [
+          99.38222222222223,
+          98.72444444444444,
+          89.76
+        ]
+      },
+      "delta_vs_zero_feature": {
+        "mean": 86.44666666666667,
+        "std": 2.1932244147221525,
+        "n": 3,
+        "values": [
+          87.95,
+          87.46000000000001,
+          83.93
+        ]
+      },
+      "test_accuracy_fresh_feature": {
+        "mean": 97.38333333333333,
+        "std": 2.963483310790416,
+        "n": 3,
+        "values": [
+          99.3,
+          98.88,
+          93.97
+        ]
+      },
+      "theta_norm": {
+        "mean": 13.055886328983647,
+        "std": 0.8741628549211107,
+        "n": 3,
+        "values": [
+          12.657439998241365,
+          12.451933867195738,
+          14.05828512151384
+        ]
+      },
+      "proxy_delta_first_minus_final": {
+        "mean": 0.615446393067638,
+        "std": 0.3751259348261372,
+        "n": 3,
+        "values": [
+          0.7007051073014736,
+          0.9406045842915773,
+          0.20502948760986328
+        ]
+      },
+      "trainable_parameters": {
+        "mean": 149439.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          149439.0,
+          149439.0,
+          149439.0
+        ]
+      },
+      "conditioning_trainable": {
+        "mean": 45.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          45.0,
+          45.0,
+          45.0
+        ]
+      },
+      "training_hours": {
+        "mean": 1.7605707428291728,
+        "std": 0.6231229597303534,
+        "n": 3,
+        "values": [
+          1.300653267746115,
+          1.5113226773847317,
+          2.4697362833566716
+        ]
+      }
+    },
+    "N3_surrogate_grad": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 99.10000000000001,
+        "std": 0.020000000000003126,
+        "n": 3,
+        "values": [
+          99.12,
+          99.08,
+          99.1
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.94,
+        "std": 0.060000000000002274,
+        "n": 3,
+        "values": [
+          98.88,
+          98.94,
+          99.0
+        ]
+      },
+      "val_cross_entropy": {
+        "mean": 0.03629710766474406,
+        "std": 0.0027932749343597043,
+        "n": 3,
+        "values": [
+          0.03612875757217407,
+          0.0391707501411438,
+          0.03359181528091431
+        ]
+      },
+      "train_accuracy": {
+        "mean": 99.41037037037036,
+        "std": 0.004625924443257658,
+        "n": 3,
+        "values": [
+          99.40666666666667,
+          99.41555555555556,
+          99.4088888888889
+        ]
+      },
+      "delta_vs_zero_feature": {
+        "mean": 88.28666666666668,
+        "std": 0.9122682354074001,
+        "n": 3,
+        "values": [
+          87.77000000000001,
+          89.34,
+          87.75
+        ]
+      },
+      "test_accuracy_fresh_feature": {
+        "mean": 99.10000000000001,
+        "std": 0.020000000000003126,
+        "n": 3,
+        "values": [
+          99.12,
+          99.08,
+          99.1
+        ]
+      },
+      "theta_norm": {
+        "mean": 12.163012422056783,
+        "std": 1.0406969153374628,
+        "n": 3,
+        "values": [
+          11.187461050657072,
+          13.258467884376708,
+          12.04310833113657
+        ]
+      },
+      "proxy_delta_first_minus_final": {
+        "mean": 0.773995659314096,
+        "std": 0.05666275676437872,
+        "n": 3,
+        "values": [
+          0.8162178080528975,
+          0.7961700977757573,
+          0.7095990721136332
+        ]
+      },
+      "trainable_parameters": {
+        "mean": 149439.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          149439.0,
+          149439.0,
+          149439.0
+        ]
+      },
+      "conditioning_trainable": {
+        "mean": 45.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          45.0,
+          45.0,
+          45.0
+        ]
+      },
+      "training_hours": {
+        "mean": 1.6509550993375914,
+        "std": 0.589298777101742,
+        "n": 3,
+        "values": [
+          1.1513587578150004,
+          1.500658693346664,
+          2.30084784685111
+        ]
+      }
+    },
+    "F3_mixing_s25_ema": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 98.58,
+        "std": 0.6323764701504984,
+        "n": 3,
+        "values": [
+          97.85,
+          98.96,
+          98.93
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.38666666666667,
+        "std": 0.5954270176380428,
+        "n": 3,
+        "values": [
+          97.7,
+          98.76,
+          98.7
+        ]
+      },
+      "val_cross_entropy": {
+        "mean": 0.056669213867187505,
+        "std": 0.01877147353348195,
+        "n": 3,
+        "values": [
+          0.0779964183807373,
+          0.04265434627532959,
+          0.049356876945495606
+        ]
+      },
+      "train_accuracy": {
+        "mean": 97.10222222222222,
+        "std": 2.467274199457503,
+        "n": 3,
+        "values": [
+          94.25333333333333,
+          98.50888888888889,
+          98.54444444444445
+        ]
+      },
+      "delta_vs_zero_feature": {
+        "mean": 87.23,
+        "std": 0.6323764701504984,
+        "n": 3,
+        "values": [
+          86.5,
+          87.61,
+          87.58000000000001
+        ]
+      },
+      "test_accuracy_fresh_feature": {
+        "mean": 12.46,
+        "std": 2.903876719146321,
+        "n": 3,
+        "values": [
+          10.91,
+          10.66,
+          15.81
+        ]
+      },
+      "theta_norm": {
+        "mean": 18.35842179851846,
+        "std": 1.8587582990375342,
+        "n": 3,
+        "values": [
+          16.50743424615753,
+          18.342976562331714,
+          20.224854587066133
+        ]
+      },
+      "proxy_delta_first_minus_final": {
+        "mean": 0.7466762910286585,
+        "std": 0.24113100892698278,
+        "n": 3,
+        "values": [
+          0.47055376321077347,
+          0.9157444201409817,
+          0.8537306897342205
+        ]
+      },
+      "trainable_parameters": {
+        "mean": 149439.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          149439.0,
+          149439.0,
+          149439.0
+        ]
+      },
+      "conditioning_trainable": {
+        "mean": 45.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          45.0,
+          45.0,
+          45.0
+        ]
+      },
+      "training_hours": {
+        "mean": 1.7012144196474954,
+        "std": 0.40509989497139387,
+        "n": 3,
+        "values": [
+          1.3007649390288902,
+          1.6920684719174945,
+          2.1108098479961015
+        ]
+      }
+    },
+    "N2_native_grad_zero": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 99.14999999999999,
+        "std": 0.08185352771872297,
+        "n": 3,
+        "values": [
+          99.08,
+          99.13,
+          99.24
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.8,
+        "std": 0.10392304845412836,
+        "n": 3,
+        "values": [
+          98.68,
+          98.86,
+          98.86
+        ]
+      },
+      "val_cross_entropy": {
+        "mean": 0.03705067914326986,
+        "std": 0.006630724980284934,
+        "n": 3,
+        "values": [
+          0.040733108139038084,
+          0.0410229232788086,
+          0.02939600601196289
+        ]
+      },
+      "train_accuracy": {
+        "mean": 99.41333333333334,
+        "std": 0.015555555555553926,
+        "n": 3,
+        "values": [
+          99.39555555555556,
+          99.42,
+          99.42444444444445
+        ]
+      },
+      "delta_vs_zero_feature": {
+        "mean": 87.8,
+        "std": 0.08185352771872297,
+        "n": 3,
+        "values": [
+          87.73,
+          87.78,
+          87.89
+        ]
+      },
+      "test_accuracy_fresh_feature": {
+        "mean": 99.14999999999999,
+        "std": 0.08185352771872297,
+        "n": 3,
+        "values": [
+          99.08,
+          99.13,
+          99.24
+        ]
+      },
+      "theta_norm": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "proxy_delta_first_minus_final": {
+        "mean": 0.6395902733008066,
+        "std": 0.25585490729876553,
+        "n": 3,
+        "values": [
+          0.3976744953542948,
+          0.6136832553893328,
+          0.9074130691587925
+        ]
+      },
+      "trainable_parameters": {
+        "mean": 149439.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          149439.0,
+          149439.0,
+          149439.0
+        ]
+      },
+      "conditioning_trainable": {
+        "mean": 45.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          45.0,
+          45.0,
+          45.0
+        ]
+      },
+      "training_hours": {
+        "mean": 1.6633716302997286,
+        "std": 0.29484630983328697,
+        "n": 3,
+        "values": [
+          1.3420359270161175,
+          1.7266132494949953,
+          1.9214657143880727
+        ]
+      }
+    },
+    "F4_mixing_s25_noema": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 95.26333333333334,
+        "std": 1.5970702343144842,
+        "n": 3,
+        "values": [
+          93.76,
+          95.09,
+          96.94
+        ]
+      },
+      "val_accuracy": {
+        "mean": 94.96666666666665,
+        "std": 1.3230772212283513,
+        "n": 3,
+        "values": [
+          93.88,
+          94.58,
+          96.44
+        ]
+      },
+      "val_cross_entropy": {
+        "mean": 0.21530294952392579,
+        "std": 0.07607414670492442,
+        "n": 3,
+        "values": [
+          0.2637711013793945,
+          0.25451494903564453,
+          0.12762279815673827
+        ]
+      },
+      "train_accuracy": {
+        "mean": 89.13037037037037,
+        "std": 4.477060506838496,
+        "n": 3,
+        "values": [
+          86.10444444444444,
+          87.01333333333334,
+          94.27333333333333
+        ]
+      },
+      "delta_vs_zero_feature": {
+        "mean": 83.91333333333334,
+        "std": 1.5970702343144842,
+        "n": 3,
+        "values": [
+          82.41000000000001,
+          83.74000000000001,
+          85.59
+        ]
+      },
+      "test_accuracy_fresh_feature": {
+        "mean": 47.923333333333325,
+        "std": 42.67145923604363,
+        "n": 3,
+        "values": [
+          14.54,
+          33.23,
+          96.0
+        ]
+      },
+      "theta_norm": {
+        "mean": 17.537018531446535,
+        "std": 5.112193572524362,
+        "n": 3,
+        "values": [
+          20.293333268012958,
+          11.63817870055887,
+          20.679543625767778
+        ]
+      },
+      "proxy_delta_first_minus_final": {
+        "mean": 0.1467476710677147,
+        "std": 0.3654141062866085,
+        "n": 3,
+        "values": [
+          -0.22667565941810608,
+          0.16333076357841492,
+          0.5035879090428352
+        ]
+      },
+      "trainable_parameters": {
+        "mean": 149439.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          149439.0,
+          149439.0,
+          149439.0
+        ]
+      },
+      "conditioning_trainable": {
+        "mean": 45.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          45.0,
+          45.0,
+          45.0
+        ]
+      },
+      "training_hours": {
+        "mean": 1.6826288309548119,
+        "std": 0.2909878294035183,
+        "n": 3,
+        "values": [
+          1.3504878553561057,
+          1.892695865291658,
+          1.8047027722166724
+        ]
+      }
+    }
+  },
+  "s4_reference_arms": {
+    "pqkd": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 99.13,
+        "std": 0.043588989435412735,
+        "n": 3,
+        "values": [
+          99.11,
+          99.18,
+          99.1
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.92,
+        "std": 0.15874507866388143,
+        "n": 3,
+        "values": [
+          98.74,
+          98.98,
+          99.04
+        ]
+      },
+      "val_cross_entropy": {
+        "mean": 0.03368692417144775,
+        "std": 0.0018917312321557773,
+        "n": 3,
+        "values": [
+          0.03583322257995605,
+          0.03226206569671631,
+          0.0329654842376709
+        ]
+      },
+      "train_accuracy": {
+        "mean": 99.22814814814815,
+        "std": 0.03592401674957412,
+        "n": 3,
+        "values": [
+          99.24888888888889,
+          99.24888888888889,
+          99.18666666666667
+        ]
+      },
+      "delta_vs_zero_feature": {
+        "mean": 87.78000000000002,
+        "std": 0.043588989435412735,
+        "n": 3,
+        "values": [
+          87.76,
+          87.83000000000001,
+          87.75
+        ]
+      },
+      "test_accuracy_fresh_feature": {
+        "mean": 99.12,
+        "std": 0.05567764362829935,
+        "n": 3,
+        "values": [
+          99.13,
+          99.17,
+          99.06
+        ]
+      },
+      "theta_norm": {
+        "mean": 1.6580557398538607,
+        "std": 0.5266580991901174,
+        "n": 3,
+        "values": [
+          1.690040310080969,
+          1.1161342828044953,
+          2.1679926266761176
+        ]
+      },
+      "proxy_delta_first_minus_final": {
+        "mean": 0.6102333584179481,
+        "std": 0.0997240837980436,
+        "n": 3,
+        "values": [
+          0.511296397075057,
+          0.7107263542711735,
+          0.6086773239076138
+        ]
+      },
+      "trainable_parameters": {
+        "mean": 149439.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          149439.0,
+          149439.0,
+          149439.0
+        ]
+      },
+      "conditioning_trainable": {
+        "mean": 45.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          45.0,
+          45.0,
+          45.0
+        ]
+      },
+      "training_hours": {
+        "mean": 1.4540966846466647,
+        "std": 0.17544900134239394,
+        "n": 3,
+        "values": [
+          1.3553131386974968,
+          1.3503097699413866,
+          1.6566671453011113
+        ]
+      }
+    },
+    "B3f_random_fixed": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 99.17666666666666,
+        "std": 0.015275252316521078,
+        "n": 3,
+        "values": [
+          99.16,
+          99.19,
+          99.18
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.95333333333333,
+        "std": 0.1101514109457212,
+        "n": 3,
+        "values": [
+          98.96,
+          98.84,
+          99.06
+        ]
+      },
+      "val_cross_entropy": {
+        "mean": 0.03450743385950724,
+        "std": 0.004654555683689429,
+        "n": 3,
+        "values": [
+          0.03193590412139893,
+          0.03988041229248047,
+          0.031705985164642334
+        ]
+      },
+      "train_accuracy": {
+        "mean": 99.35925925925926,
+        "std": 0.04715790827376545,
+        "n": 3,
+        "values": [
+          99.39777777777778,
+          99.37333333333333,
+          99.30666666666667
+        ]
+      },
+      "delta_vs_zero_feature": {
+        "mean": 87.82666666666667,
+        "std": 0.015275252316521078,
+        "n": 3,
+        "values": [
+          87.81,
+          87.84,
+          87.83000000000001
+        ]
+      },
+      "test_accuracy_fresh_feature": {
+        "mean": 99.17666666666666,
+        "std": 0.015275252316521078,
+        "n": 3,
+        "values": [
+          99.16,
+          99.19,
+          99.18
+        ]
+      },
+      "theta_norm": null,
+      "proxy_delta_first_minus_final": {
+        "mean": 0.8710715910419822,
+        "std": 0.12478132015362094,
+        "n": 3,
+        "values": [
+          0.7314479881897569,
+          0.91007243655622,
+          0.9716943483799696
+        ]
+      },
+      "trainable_parameters": {
+        "mean": 149394.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          149394.0,
+          149394.0,
+          149394.0
+        ]
+      },
+      "conditioning_trainable": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "training_hours": {
+        "mean": 1.1332617481028693,
+        "std": 0.03132803418300421,
+        "n": 3,
+        "values": [
+          1.1384059822336117,
+          1.1616992806191613,
+          1.0996799814558345
+        ]
+      }
+    },
+    "B1_kd_dense": {
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 99.28666666666668,
+        "std": 0.07767453465153673,
+        "n": 3,
+        "values": [
+          99.31,
+          99.35,
+          99.2
+        ]
+      },
+      "val_accuracy": {
+        "mean": 99.16666666666667,
+        "std": 0.041633319989322334,
+        "n": 3,
+        "values": [
+          99.12,
+          99.18,
+          99.2
+        ]
+      },
+      "val_cross_entropy": {
+        "mean": 0.03017258661588033,
+        "std": 0.000739497369882033,
+        "n": 3,
+        "values": [
+          0.030601859092712402,
+          0.030597207927703856,
+          0.02931869282722473
+        ]
+      },
+      "train_accuracy": {
+        "mean": 99.49111111111112,
+        "std": 0.0700264500292836,
+        "n": 3,
+        "values": [
+          99.42,
+          99.56,
+          99.49333333333334
+        ]
+      },
+      "delta_vs_zero_feature": null,
+      "test_accuracy_fresh_feature": null,
+      "theta_norm": null,
+      "proxy_delta_first_minus_final": {
+        "mean": 1.2544632903300226,
+        "std": 0.057403571905117905,
+        "n": 3,
+        "values": [
+          1.2683139094151556,
+          1.191401625983417,
+          1.303674335591495
+        ]
+      },
+      "trainable_parameters": {
+        "mean": 148626.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          148626.0,
+          148626.0,
+          148626.0
+        ]
+      },
+      "conditioning_trainable": {
+        "mean": 0.0,
+        "std": 0.0,
+        "n": 3,
+        "values": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "training_hours": {
+        "mean": 0.9369140768107403,
+        "std": 0.11035615407617601,
+        "n": 3,
+        "values": [
+          0.8710779127677779,
+          0.8753457557333322,
+          1.0643185619311109
+        ]
+      }
+    }
+  },
+  "paired": [
+    {
+      "arm": "F1_mixing_s200_ema",
+      "reference": "P0_pqkd_theta0",
+      "reference_source": "s6",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": -0.4133333333333364,
+        "std": 0.5621684207898385,
+        "n": 3,
+        "values": [
+          0.09000000000000341,
+          -1.0200000000000102,
+          -0.3100000000000023
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -0.37333333333333485,
+        "std": 0.5326662494783557,
+        "n": 3,
+        "values": [
+          0.0799999999999983,
+          -0.960000000000008,
+          -0.23999999999999488
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": 0.01314247957865397,
+        "std": 0.019638770129571128,
+        "n": 3,
+        "values": [
+          -0.00250597763061524,
+          0.03518028030395508,
+          0.006753136062622074
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "F2_mixing_s200_noema",
+      "reference": "P0_pqkd_theta0",
+      "reference_source": "s6",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": -1.3966666666666707,
+        "std": 2.235739996809407,
+        "n": 3,
+        "values": [
+          0.20999999999999375,
+          -0.45000000000000284,
+          -3.950000000000003
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -1.4466666666666679,
+        "std": 2.2416363071054466,
+        "n": 3,
+        "values": [
+          0.28000000000000114,
+          -0.6400000000000006,
+          -3.980000000000004
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": 0.06385320297876994,
+        "std": 0.09384168698997912,
+        "n": 3,
+        "values": [
+          -0.0011202093124389675,
+          0.021239283370971675,
+          0.1714405348777771
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "F3_mixing_s25_ema",
+      "reference": "P0_pqkd_theta0",
+      "reference_source": "s6",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": -0.6133333333333392,
+        "std": 0.542709253038251,
+        "n": 3,
+        "values": [
+          -1.240000000000009,
+          -0.30000000000001137,
+          -0.29999999999999716
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -0.5399999999999968,
+        "std": 0.4386342439892222,
+        "n": 3,
+        "values": [
+          -1.039999999999992,
+          -0.35999999999999943,
+          -0.21999999999999886
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": 0.023703490352630613,
+        "std": 0.01735296143171066,
+        "n": 3,
+        "values": [
+          0.0435635419845581,
+          0.011469330787658688,
+          0.01607759828567505
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 3,
+          "negative": 0,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "F4_mixing_s25_noema",
+      "reference": "P0_pqkd_theta0",
+      "reference_source": "s6",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": -3.930000000000002,
+        "std": 1.5341447128612045,
+        "n": 3,
+        "values": [
+          -5.329999999999998,
+          -4.170000000000002,
+          -2.2900000000000063
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -3.960000000000003,
+        "std": 1.291665591397401,
+        "n": 3,
+        "values": [
+          -4.859999999999999,
+          -4.540000000000006,
+          -2.480000000000004
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": 0.18233722600936889,
+        "std": 0.07626397695401312,
+        "n": 3,
+        "values": [
+          0.22933822498321532,
+          0.22332993354797365,
+          0.09434351949691772
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 3,
+          "negative": 0,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "N1_native_grad_random",
+      "reference": "P0_pqkd_theta0",
+      "reference_source": "s6",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": -0.04000000000000625,
+        "std": 0.04358898943540458,
+        "n": 3,
+        "values": [
+          -0.010000000000005116,
+          -0.020000000000010232,
+          -0.09000000000000341
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -0.03333333333333144,
+        "std": 0.2318045153428532,
+        "n": 3,
+        "values": [
+          0.18000000000000682,
+          -0.28000000000000114,
+          0.0
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 1,
+          "zero": 1
+        }
+      },
+      "val_cross_entropy": {
+        "mean": 0.0011499763170878079,
+        "std": 0.006080214346479418,
+        "n": 3,
+        "values": [
+          -0.000904692935943606,
+          0.007991324806213375,
+          -0.0036367029190063453
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "N2_native_grad_zero",
+      "reference": "P0_pqkd_theta0",
+      "reference_source": "s6",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": -0.043333333333341294,
+        "std": 0.07571877794400485,
+        "n": 3,
+        "values": [
+          -0.010000000000005116,
+          -0.13000000000000966,
+          0.009999999999990905
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -0.12666666666666515,
+        "std": 0.1154700538379309,
+        "n": 3,
+        "values": [
+          -0.05999999999998806,
+          -0.2600000000000051,
+          -0.060000000000002274
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": 0.004084955628712972,
+        "std": 0.007123783008787977,
+        "n": 3,
+        "values": [
+          0.006300231742858882,
+          0.009837907791137697,
+          -0.0038832726478576635
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "N3_surrogate_grad",
+      "reference": "P0_pqkd_theta0",
+      "reference_source": "s6",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": -0.09333333333333844,
+        "std": 0.10969655114603384,
+        "n": 3,
+        "values": [
+          0.030000000000001137,
+          -0.18000000000000682,
+          -0.13000000000000966
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": 0.01333333333333068,
+        "std": 0.1700980109623114,
+        "n": 3,
+        "values": [
+          0.14000000000000057,
+          -0.18000000000000682,
+          0.0799999999999983
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": 0.003331384150187175,
+        "std": 0.004089699804994336,
+        "n": 3,
+        "values": [
+          0.0016958811759948678,
+          0.007985734653472902,
+          0.00031253662109375496
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 3,
+          "negative": 0,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "N1_native_grad_random",
+      "reference": "N3_surrogate_grad",
+      "reference_source": "s6",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 0.0533333333333322,
+        "std": 0.10066445913694401,
+        "n": 3,
+        "values": [
+          -0.04000000000000625,
+          0.1599999999999966,
+          0.04000000000000625
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -0.04666666666666212,
+        "std": 0.07571877794400485,
+        "n": 3,
+        "values": [
+          0.04000000000000625,
+          -0.09999999999999432,
+          -0.0799999999999983
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": -0.002181407833099367,
+        "std": 0.0020104588411181744,
+        "n": 3,
+        "values": [
+          -0.0026005741119384737,
+          5.590152740472809e-06,
+          -0.0039492395401001
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "N2_native_grad_zero",
+      "reference": "N3_surrogate_grad",
+      "reference_source": "s6",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 0.04999999999999716,
+        "std": 0.09000000000000341,
+        "n": 3,
+        "values": [
+          -0.04000000000000625,
+          0.04999999999999716,
+          0.14000000000000057
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -0.13999999999999582,
+        "std": 0.05999999999999517,
+        "n": 3,
+        "values": [
+          -0.19999999999998863,
+          -0.0799999999999983,
+          -0.14000000000000057
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": 0.0007535714785257969,
+        "std": 0.004501766041019013,
+        "n": 3,
+        "values": [
+          0.004604350566864014,
+          0.0018521731376647949,
+          -0.004195809268951418
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "N1_native_grad_random",
+      "reference": "N2_native_grad_zero",
+      "reference_source": "s6",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 0.0033333333333350388,
+        "std": 0.10503967504392178,
+        "n": 3,
+        "values": [
+          0.0,
+          0.10999999999999943,
+          -0.09999999999999432
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 1,
+          "zero": 1
+        }
+      },
+      "val_accuracy": {
+        "mean": 0.09333333333333371,
+        "std": 0.13316656236958307,
+        "n": 3,
+        "values": [
+          0.23999999999999488,
+          -0.01999999999999602,
+          0.060000000000002274
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": -0.002934979311625164,
+        "std": 0.003843129863770661,
+        "n": 3,
+        "values": [
+          -0.007204924678802488,
+          -0.001846582984924322,
+          0.00024656972885131814
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "F1_mixing_s200_ema",
+      "reference": "F2_mixing_s200_noema",
+      "reference_source": "s6",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 0.9833333333333343,
+        "std": 2.311716533949034,
+        "n": 3,
+        "values": [
+          -0.11999999999999034,
+          -0.5700000000000074,
+          3.6400000000000006
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": 1.073333333333333,
+        "std": 2.3101803681386808,
+        "n": 3,
+        "values": [
+          -0.20000000000000284,
+          -0.3200000000000074,
+          3.740000000000009
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": -0.050710723400115974,
+        "std": 0.09900373395617419,
+        "n": 3,
+        "values": [
+          -0.0013857683181762726,
+          0.013940996932983403,
+          -0.16468739881515504
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "F3_mixing_s25_ema",
+      "reference": "F4_mixing_s25_noema",
+      "reference_source": "s6",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 3.316666666666663,
+        "std": 1.1541808061708996,
+        "n": 3,
+        "values": [
+          4.089999999999989,
+          3.8699999999999903,
+          1.990000000000009
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 3,
+          "negative": 0,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": 3.4200000000000066,
+        "std": 1.020588065773847,
+        "n": 3,
+        "values": [
+          3.8200000000000074,
+          4.180000000000007,
+          2.260000000000005
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 3,
+          "negative": 0,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": -0.15863373565673827,
+        "std": 0.07081213173963993,
+        "n": 3,
+        "values": [
+          -0.18577468299865724,
+          -0.21186060276031493,
+          -0.07826592121124266
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "F1_mixing_s200_ema",
+      "reference": "F3_mixing_s25_ema",
+      "reference_source": "s6",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 0.20000000000000284,
+        "std": 1.0410091258005445,
+        "n": 3,
+        "values": [
+          1.3300000000000125,
+          -0.7199999999999989,
+          -0.010000000000005116
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": 0.16666666666666194,
+        "std": 0.8750619025722294,
+        "n": 3,
+        "values": [
+          1.1199999999999903,
+          -0.6000000000000085,
+          -0.01999999999999602
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": -0.010561010773976642,
+        "std": 0.03490666494082603,
+        "n": 3,
+        "values": [
+          -0.04606951961517334,
+          0.02371094951629639,
+          -0.009324462223052978
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "P0_pqkd_theta0",
+      "reference": "B3f_random_fixed",
+      "reference_source": "s4",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 0.016666666666670455,
+        "std": 0.07571877794400173,
+        "n": 3,
+        "values": [
+          -0.06999999999999318,
+          0.07000000000000739,
+          0.04999999999999716
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -0.0266666666666661,
+        "std": 0.26857649437978287,
+        "n": 3,
+        "values": [
+          -0.21999999999999886,
+          0.28000000000000114,
+          -0.14000000000000057
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": -0.001541710344950357,
+        "std": 0.006212464736032836,
+        "n": 3,
+        "values": [
+          0.002496972274780275,
+          -0.008695396804809567,
+          0.0015732934951782213
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "P0_pqkd_theta0",
+      "reference": "B1_kd_dense",
+      "reference_source": "s4",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": -0.09333333333332898,
+        "std": 0.1250333288900738,
+        "n": 3,
+        "values": [
+          -0.21999999999999886,
+          -0.0899999999999892,
+          0.030000000000001137
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -0.24000000000000435,
+        "std": 0.163707055437452,
+        "n": 3,
+        "values": [
+          -0.38000000000000966,
+          -0.060000000000002274,
+          -0.28000000000000114
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": 0.0027931368986765562,
+        "std": 0.0019109696805718465,
+        "n": 3,
+        "values": [
+          0.0038310173034667994,
+          0.0005878075599670442,
+          0.003960585832595825
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 3,
+          "negative": 0,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "N1_native_grad_random",
+      "reference": "B3f_random_fixed",
+      "reference_source": "s4",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": -0.023333333333335798,
+        "std": 0.06658328118479243,
+        "n": 3,
+        "values": [
+          -0.0799999999999983,
+          0.04999999999999716,
+          -0.04000000000000625
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -0.059999999999997534,
+        "std": 0.07211102550928121,
+        "n": 3,
+        "values": [
+          -0.03999999999999204,
+          0.0,
+          -0.14000000000000057
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 2,
+          "zero": 1
+        }
+      },
+      "val_cross_entropy": {
+        "mean": -0.00039173402786254916,
+        "std": 0.0018477503452414556,
+        "n": 3,
+        "values": [
+          0.001592279338836669,
+          -0.0007040719985961924,
+          -0.002063409423828124
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "N1_native_grad_random",
+      "reference": "B1_kd_dense",
+      "reference_source": "s4",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": -0.13333333333333522,
+        "std": 0.08736894948054237,
+        "n": 3,
+        "values": [
+          -0.23000000000000398,
+          -0.10999999999999943,
+          -0.060000000000002274
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -0.2733333333333358,
+        "std": 0.07023769168568511,
+        "n": 3,
+        "values": [
+          -0.20000000000000284,
+          -0.3400000000000034,
+          -0.28000000000000114
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": 0.003943113215764364,
+        "std": 0.004220507144000168,
+        "n": 3,
+        "values": [
+          0.0029263243675231934,
+          0.008579132366180419,
+          0.0003238829135894794
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 3,
+          "negative": 0,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "N3_surrogate_grad",
+      "reference": "B3f_random_fixed",
+      "reference_source": "s4",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": -0.07666666666666799,
+        "std": 0.03511884584284694,
+        "n": 3,
+        "values": [
+          -0.03999999999999204,
+          -0.10999999999999943,
+          -0.0800000000000125
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -0.013333333333335418,
+        "std": 0.09865765724632164,
+        "n": 3,
+        "values": [
+          -0.0799999999999983,
+          0.09999999999999432,
+          -0.060000000000002274
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": 0.0017896738052368179,
+        "std": 0.0024526718766176903,
+        "n": 3,
+        "values": [
+          0.004192853450775143,
+          -0.0007096621513366652,
+          0.0018858301162719762
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "N3_surrogate_grad",
+      "reference": "B1_kd_dense",
+      "reference_source": "s4",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": -0.18666666666666742,
+        "std": 0.08504900548114748,
+        "n": 3,
+        "values": [
+          -0.18999999999999773,
+          -0.269999999999996,
+          -0.10000000000000853
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": -0.22666666666667368,
+        "std": 0.02309401076758864,
+        "n": 3,
+        "values": [
+          -0.2400000000000091,
+          -0.2400000000000091,
+          -0.20000000000000284
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy": {
+        "mean": 0.006124521048863731,
+        "std": 0.0022116209166823534,
+        "n": 3,
+        "values": [
+          0.005526898479461667,
+          0.008573542213439946,
+          0.00427312245368958
+        ],
+        "exceeds_seed_std": true,
+        "sign_counts": {
+          "positive": 3,
+          "negative": 0,
+          "zero": 0
+        }
+      }
+    },
+    {
+      "arm": "P0_pqkd_theta0",
+      "reference": "pqkd",
+      "reference_source": "s4",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "test_accuracy": {
+        "mean": 0.06333333333333731,
+        "std": 0.07637626158259919,
+        "n": 3,
+        "values": [
+          -0.01999999999999602,
+          0.0799999999999983,
+          0.13000000000000966
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      },
+      "val_accuracy": {
+        "mean": 0.00666666666666534,
+        "std": 0.13012814197295675,
+        "n": 3,
+        "values": [
+          0.0,
+          0.14000000000000057,
+          -0.12000000000000455
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 1,
+          "zero": 1
+        }
+      },
+      "val_cross_entropy": {
+        "mean": -0.0007212006568908686,
+        "std": 0.0009107915140403772,
+        "n": 3,
+        "values": [
+          -0.0014003461837768516,
+          -0.001077050209045409,
+          0.0003137944221496547
+        ],
+        "exceeds_seed_std": false,
+        "sign_counts": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      }
+    }
+  ],
+  "notes": [
+    "Student metrics are final-epoch; test accuracy is the primary metric.",
+    "test_accuracy_fresh_feature re-evaluates with one new feature draw (shots without EMA for F arms, exact for N arms).",
+    "theta_norm is the L2 norm of the conditioning parameters (theta for photonic arms, phi for N3).",
+    "S4 arms (pqkd, B3f, B1) come from the 8-photon Phase 3 sweep; B3f and B1 involve no photons.",
+    "training_hours sums per-epoch seconds with 3 runs in parallel x 4 CPU threads; pauses are excluded."
+  ]
+}

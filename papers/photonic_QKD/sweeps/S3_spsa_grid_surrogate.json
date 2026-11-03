@@ -1,0 +1,90 @@
+{
+  "sweep_id": "S3_spsa_grid_surrogate",
+  "description": "Predeclared SPSA grid for conditioning=surrogate: a in (0.01,0.05,0.2) x c in (0.05,0.2), MNIST conv1+conv2, R=4, dim(theta)=45, S=200, EMA 0.9, seed 0, 10 epochs. Candidates ordered by increasing a (tie-break toward smaller a).",
+  "fixed_args": [
+    "--config",
+    "configs/pqkd_merlin.json",
+    "--conditioning",
+    "surrogate",
+    "--epochs",
+    "10"
+  ],
+  "candidates": [
+    {
+      "name": "a0.01_c0.05",
+      "args": [
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.05"
+      ]
+    },
+    {
+      "name": "a0.01_c0.2",
+      "args": [
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "a0.05_c0.05",
+      "args": [
+        "--spsa-a",
+        "0.05",
+        "--spsa-c",
+        "0.05"
+      ]
+    },
+    {
+      "name": "a0.05_c0.2",
+      "args": [
+        "--spsa-a",
+        "0.05",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "a0.2_c0.05",
+      "args": [
+        "--spsa-a",
+        "0.2",
+        "--spsa-c",
+        "0.05"
+      ]
+    },
+    {
+      "name": "a0.2_c0.2",
+      "args": [
+        "--spsa-a",
+        "0.2",
+        "--spsa-c",
+        "0.2"
+      ]
+    }
+  ],
+  "seeds": [
+    0
+  ],
+  "max_parallel": 1,
+  "threads_per_run": 4,
+  "teacher_sweep": "papers/photonic_QKD/outdir/sweeps/S1_teacher_mnist_30ep_20261023-145803",
+  "selection": {
+    "metric": "final_epoch.proxy_objective",
+    "direction": "minimize",
+    "split": "val (fixed first 1024 images, SPSA proxy)",
+    "checkpoint": "final_epoch",
+    "aggregation": "single seed (seed 0)",
+    "tie_tolerance": 0.002,
+    "tie_break": "spec_order"
+  },
+  "report_metrics": [
+    "final_epoch.proxy_objective",
+    "proxy_objective_delta_first_minus_final",
+    "final_epoch.parameter_norm",
+    "final_evaluation.val_accuracy",
+    "final_evaluation.test_accuracy"
+  ]
+}

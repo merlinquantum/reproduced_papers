@@ -1,0 +1,39 @@
+{
+  "sweep_id": "S1_teacher_mnist_30ep",
+  "description": "MNIST teachers (64,128,128), seeds 0-2, 30 epochs (partial RED-tier; paper 100 epochs, 5 seeds). Not a selection sweep: one candidate.",
+  "fixed_args": [
+    "--config",
+    "configs/defaults.json"
+  ],
+  "candidates": [
+    {
+      "name": "teacher_64_128_128",
+      "args": []
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "max_parallel": 3,
+  "threads_per_run": 4,
+  "teacher_sweep": null,
+  "selection": {
+    "metric": "best_checkpoint.test_accuracy",
+    "direction": "maximize",
+    "split": "test",
+    "checkpoint": "best_val_epoch",
+    "aggregation": "mean over seeds",
+    "tie_tolerance": 0.0,
+    "tie_break": "spec_order"
+  },
+  "report_metrics": [
+    "best_checkpoint.val_accuracy",
+    "best_checkpoint.val_cross_entropy",
+    "best_checkpoint.test_accuracy",
+    "final_epoch.train_accuracy",
+    "final_epoch.val_accuracy",
+    "best_checkpoint.epoch"
+  ]
+}

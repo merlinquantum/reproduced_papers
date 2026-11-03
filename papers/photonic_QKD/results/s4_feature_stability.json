@@ -1,0 +1,280 @@
+{
+  "metric": "mean over epochs of ||z_t - z_(t-1)|| / ||z_(t-1)|| for the z used in training (EMA applied when enabled)",
+  "spearman_step_vs_test_accuracy": -0.8962314049278478,
+  "n_runs": 18,
+  "rows": [
+    {
+      "arm": "B0_zero",
+      "n": 3,
+      "used_step_mean": [
+        0.0,
+        0.0
+      ],
+      "raw_step_mean": [
+        0.0,
+        0.0
+      ],
+      "test_accuracy": [
+        10.813333333333333,
+        0.9295339333952972
+      ],
+      "runs": [
+        {
+          "seed": 0,
+          "used_step_mean": 0.0,
+          "used_step_last10": 0.0,
+          "raw_step_mean": 0.0,
+          "test_accuracy": 9.74
+        },
+        {
+          "seed": 1,
+          "used_step_mean": 0.0,
+          "used_step_last10": 0.0,
+          "raw_step_mean": 0.0,
+          "test_accuracy": 11.35
+        },
+        {
+          "seed": 2,
+          "used_step_mean": 0.0,
+          "used_step_last10": 0.0,
+          "raw_step_mean": 0.0,
+          "test_accuracy": 11.35
+        }
+      ]
+    },
+    {
+      "arm": "B4_fixed_photonic",
+      "n": 3,
+      "used_step_mean": [
+        1.4693758247178815e-10,
+        2.759221397803011e-11
+      ],
+      "raw_step_mean": [
+        0.0,
+        0.0
+      ],
+      "test_accuracy": [
+        99.14,
+        0.08888194417315019
+      ],
+      "runs": [
+        {
+          "seed": 0,
+          "used_step_mean": 1.616882738808556e-10,
+          "used_step_last10": 0.0,
+          "raw_step_mean": 0.0,
+          "test_accuracy": 99.04
+        },
+        {
+          "seed": 1,
+          "used_step_mean": 1.6401920099884393e-10,
+          "used_step_last10": 0.0,
+          "raw_step_mean": 0.0,
+          "test_accuracy": 99.17
+        },
+        {
+          "seed": 2,
+          "used_step_mean": 1.1510527253566494e-10,
+          "used_step_last10": 0.0,
+          "raw_step_mean": 0.0,
+          "test_accuracy": 99.21
+        }
+      ]
+    },
+    {
+      "arm": "B3f_random_fixed",
+      "n": 3,
+      "used_step_mean": [
+        2.8345697640948706e-09,
+        1.4216263894843982e-10
+      ],
+      "raw_step_mean": [
+        0.0,
+        0.0
+      ],
+      "test_accuracy": [
+        99.17666666666666,
+        0.015275252316521078
+      ],
+      "runs": [
+        {
+          "seed": 0,
+          "used_step_mean": 2.989574809930673e-09,
+          "used_step_last10": 0.0,
+          "raw_step_mean": 0.0,
+          "test_accuracy": 99.16
+        },
+        {
+          "seed": 1,
+          "used_step_mean": 2.803867804601623e-09,
+          "used_step_last10": 0.0,
+          "raw_step_mean": 0.0,
+          "test_accuracy": 99.19
+        },
+        {
+          "seed": 2,
+          "used_step_mean": 2.7102666777523154e-09,
+          "used_step_last10": 0.0,
+          "raw_step_mean": 0.0,
+          "test_accuracy": 99.18
+        }
+      ]
+    },
+    {
+      "arm": "pqkd",
+      "n": 3,
+      "used_step_mean": [
+        0.0024558148191620908,
+        0.0015282135390297577
+      ],
+      "raw_step_mean": [
+        0.024721781723201275,
+        0.013965662059553928
+      ],
+      "test_accuracy": [
+        99.13,
+        0.043588989435412735
+      ],
+      "runs": [
+        {
+          "seed": 0,
+          "used_step_mean": 0.0018571318360045552,
+          "used_step_last10": 0.0020411538425832987,
+          "raw_step_mean": 0.019398454576730728,
+          "test_accuracy": 99.11
+        },
+        {
+          "seed": 1,
+          "used_step_mean": 0.0013175817439332604,
+          "used_step_last10": 0.0013147821882739663,
+          "raw_step_mean": 0.01420063991099596,
+          "test_accuracy": 99.18
+        },
+        {
+          "seed": 2,
+          "used_step_mean": 0.004192730877548456,
+          "used_step_last10": 0.0032989748287945986,
+          "raw_step_mean": 0.040566250681877136,
+          "test_accuracy": 99.1
+        }
+      ]
+    },
+    {
+      "arm": "B5_surrogate",
+      "n": 3,
+      "used_step_mean": [
+        0.2650891840457916,
+        0.007016037631535295
+      ],
+      "raw_step_mean": [
+        1.3903884490331013,
+        0.0036142790534189643
+      ],
+      "test_accuracy": [
+        98.81666666666666,
+        0.09073771725877776
+      ],
+      "runs": [
+        {
+          "seed": 0,
+          "used_step_mean": 0.2611633539199829,
+          "used_step_last10": 0.31782734394073486,
+          "raw_step_mean": 1.3869391679763794,
+          "test_accuracy": 98.83
+        },
+        {
+          "seed": 1,
+          "used_step_mean": 0.2609148621559143,
+          "used_step_last10": 0.32979920506477356,
+          "raw_step_mean": 1.3900784254074097,
+          "test_accuracy": 98.9
+        },
+        {
+          "seed": 2,
+          "used_step_mean": 0.27318933606147766,
+          "used_step_last10": 0.3461955189704895,
+          "raw_step_mean": 1.3941477537155151,
+          "test_accuracy": 98.72
+        }
+      ]
+    },
+    {
+      "arm": "B6_classical_histogram",
+      "n": 3,
+      "used_step_mean": [
+        0.2714618941148122,
+        0.005580518168910061
+      ],
+      "raw_step_mean": [
+        1.3915415207544963,
+        0.0014405356614677733
+      ],
+      "test_accuracy": [
+        98.48333333333333,
+        0.0907377172587754
+      ],
+      "runs": [
+        {
+          "seed": 0,
+          "used_step_mean": 0.26757460832595825,
+          "used_step_last10": 0.33776912093162537,
+          "raw_step_mean": 1.392733097076416,
+          "test_accuracy": 98.55
+        },
+        {
+          "seed": 1,
+          "used_step_mean": 0.2778562605381012,
+          "used_step_last10": 0.3451475501060486,
+          "raw_step_mean": 1.3919508457183838,
+          "test_accuracy": 98.52
+        },
+        {
+          "seed": 2,
+          "used_step_mean": 0.2689548134803772,
+          "used_step_last10": 0.3472490608692169,
+          "raw_step_mean": 1.389940619468689,
+          "test_accuracy": 98.38
+        }
+      ]
+    },
+    {
+      "arm": "B3r_random_resampled",
+      "n": 3,
+      "used_step_mean": [
+        0.3153213361899058,
+        0.004745519478284646
+      ],
+      "raw_step_mean": [
+        1.4192532300949097,
+        0.002807572777234255
+      ],
+      "test_accuracy": [
+        98.14666666666666,
+        0.3467467856135559
+      ],
+      "runs": [
+        {
+          "seed": 0,
+          "used_step_mean": 0.3205718994140625,
+          "used_step_last10": 0.44462448358535767,
+          "raw_step_mean": 1.421662449836731,
+          "test_accuracy": 98.25
+        },
+        {
+          "seed": 1,
+          "used_step_mean": 0.31133824586868286,
+          "used_step_last10": 0.42492762207984924,
+          "raw_step_mean": 1.4199272394180298,
+          "test_accuracy": 97.76
+        },
+        {
+          "seed": 2,
+          "used_step_mean": 0.31405386328697205,
+          "used_step_last10": 0.4331447184085846,
+          "raw_step_mean": 1.4161700010299683,
+          "test_accuracy": 98.43
+        }
+      ]
+    }
+  ]
+}

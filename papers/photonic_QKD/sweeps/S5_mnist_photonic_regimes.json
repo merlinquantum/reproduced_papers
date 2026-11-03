@@ -1,0 +1,38 @@
+{
+  "sweep_id": "S5_mnist_photonic_regimes",
+  "description": "Phase 4 joint sweep (LOG.md Phase 4 Adaptation Plan, 2026-10-26): paper-faithful PQKD in a mixing regime (F1-F4: theta ~ U[-pi, pi], SPSA a=0.01 c=0.2, S in {200, 25}, EMA on/off) and the MerLin-native adaptation (N1/N2: exact feature, angles trained by autograd, random / zero init; N3: classical 45-parameter counterpart). MNIST conv1+conv2, R=4, dim(theta)=45, 30 epochs, seeds 0-2 with the S1 teachers. Partial RED-tier budget.",
+  "fixed_args": [],
+  "candidates": [
+    {"name": "F1_mixing_s200_ema", "args": ["--config", "configs/photonic_mixing_s200_ema_merlin.json"]},
+    {"name": "N1_native_grad_random", "args": ["--config", "configs/native_exact_grad_random_merlin.json"]},
+    {"name": "F2_mixing_s200_noema", "args": ["--config", "configs/photonic_mixing_s200_noema_merlin.json"]},
+    {"name": "N3_surrogate_grad", "args": ["--config", "configs/native_surrogate_grad_classical.json"]},
+    {"name": "F3_mixing_s25_ema", "args": ["--config", "configs/photonic_mixing_s25_ema_merlin.json"]},
+    {"name": "N2_native_grad_zero", "args": ["--config", "configs/native_exact_grad_zero_merlin.json"]},
+    {"name": "F4_mixing_s25_noema", "args": ["--config", "configs/photonic_mixing_s25_noema_merlin.json"]}
+  ],
+  "seeds": [0, 1, 2],
+  "run_order": "seed_major",
+  "max_parallel": 2,
+  "threads_per_run": 6,
+  "teacher_sweep": "papers/photonic_QKD/outdir/sweeps/S1_teacher_mnist_30ep_20261023-145803",
+  "selection": {
+    "metric": "final_evaluation.test_accuracy",
+    "direction": "maximize",
+    "split": "test",
+    "checkpoint": "final_epoch",
+    "aggregation": "mean over seeds",
+    "tie_tolerance": 0.0,
+    "tie_break": "report_all"
+  },
+  "report_metrics": [
+    "final_evaluation.test_accuracy",
+    "final_evaluation.val_accuracy",
+    "final_evaluation.val_cross_entropy",
+    "final_evaluation.delta_test_accuracy_vs_zero_feature",
+    "final_evaluation.test_accuracy_fresh_feature",
+    "final_epoch.parameter_norm",
+    "proxy_objective_delta_first_minus_final",
+    "final_epoch.train_accuracy"
+  ]
+}

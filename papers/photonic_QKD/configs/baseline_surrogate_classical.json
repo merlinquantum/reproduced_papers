@@ -1,0 +1,17 @@
+{
+  "description": "B5: classical iso-parameter generator cos(G phi + b), dim(phi)=dim(theta), same SPSA schedule.",
+  "task": "student",
+  "teacher": {
+    "widths": [
+      64,
+      128,
+      128
+    ],
+    "dropout": 0.25,
+    "checkpoint": "<<RESULT_PATH>>"
+  },
+  "_comment_teacher_checkpoint": "Replace with the outdir run directory (or its teacher.pt) of a task=teacher run on the same dataset, split_seed and widths, or pass --teacher-path.",
+  "conditioning": {
+    "source": "surrogate"
+  }
+}

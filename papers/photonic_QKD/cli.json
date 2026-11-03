@@ -1,0 +1,263 @@
+{
+  "description": "Photonic Quantum-Enhanced Knowledge Distillation (PQKD) reproduction runner",
+  "arguments": [
+    {
+      "flags": [
+        "--task"
+      ],
+      "help": "Which model this run trains",
+      "type": "str",
+      "choices": [
+        "teacher",
+        "student"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "task"
+      }
+    },
+    {
+      "flags": [
+        "--dataset"
+      ],
+      "help": "Dataset key",
+      "type": "str",
+      "choices": [
+        "mnist",
+        "fashion_mnist",
+        "cifar10",
+        "synthetic"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.name"
+      }
+    },
+    {
+      "flags": [
+        "--teacher-path"
+      ],
+      "help": "Teacher run directory or teacher.pt for task=student",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "teacher.checkpoint"
+      }
+    },
+    {
+      "flags": [
+        "--conditioning"
+      ],
+      "help": "Conditioning source for dictionary students (photonic = PQKD; others are baselines)",
+      "type": "str",
+      "choices": [
+        "photonic",
+        "photonic_fixed",
+        "surrogate",
+        "random_fixed",
+        "random_resampled",
+        "classical_histogram",
+        "zero",
+        "photonic_native",
+        "surrogate_native"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "conditioning.source"
+      }
+    },
+    {
+      "flags": [
+        "--student-variant"
+      ],
+      "help": "Student variant: dictionary (PQKD and conditioning baselines), dictionary_trainable (B2), dense (B1)",
+      "type": "str",
+      "choices": [
+        "dictionary",
+        "dictionary_trainable",
+        "dense"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "student.variant"
+      }
+    },
+    {
+      "flags": [
+        "--shots"
+      ],
+      "help": "Shot budget S per feature evaluation",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "conditioning.shots"
+      }
+    },
+    {
+      "flags": [
+        "--ema"
+      ],
+      "help": "Enable EMA smoothing of the conditioning feature (true/false)",
+      "type": "bool",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "conditioning.ema.enabled"
+      }
+    },
+    {
+      "flags": [
+        "--theta-dim"
+      ],
+      "help": "Photonic parameter budget dim(theta)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "conditioning.theta_dim"
+      }
+    },
+    {
+      "flags": [
+        "--spsa-a"
+      ],
+      "help": "SPSA step size a",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "spsa.a"
+      }
+    },
+    {
+      "flags": [
+        "--spsa-c"
+      ],
+      "help": "SPSA perturbation scale c",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "spsa.c"
+      }
+    },
+    {
+      "flags": [
+        "--epochs"
+      ],
+      "help": "Override number of training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.epochs"
+      }
+    },
+    {
+      "flags": [
+        "--batch-size"
+      ],
+      "help": "Override training batch size",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.batch_size"
+      }
+    },
+    {
+      "flags": [
+        "--lr"
+      ],
+      "help": "Override Adam learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.lr"
+      }
+    },
+    {
+      "flags": [
+        "--sweep-id"
+      ],
+      "help": "Sweep ID recorded in run_status.json (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "sweep.sweep_id"
+      }
+    },
+    {
+      "flags": [
+        "--run-label"
+      ],
+      "help": "Run ID recorded in run_status.json (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "sweep.run_id"
+      }
+    },
+    {
+      "flags": [
+        "--candidate-name"
+      ],
+      "help": "Candidate name recorded in run_status.json (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "sweep.candidate"
+      }
+    },
+    {
+      "flags": [
+        "--repetition"
+      ],
+      "help": "Repetition index recorded in run_status.json (set by utils/run_sweep.py)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "sweep.repetition"
+      }
+    },
+    {
+      "flags": [
+        "--theta-init-mode"
+      ],
+      "help": "Initial theta/phi: constant (theta_init, paper: 0) or uniform in [-theta_max, theta_max]",
+      "type": "str",
+      "choices": [
+        "constant",
+        "uniform"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "conditioning.theta_init_mode"
+      }
+    },
+    {
+      "flags": [
+        "--resume-from"
+      ],
+      "help": "Run directory of a stopped student run whose checkpoint.pt to continue from",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "resume_from"
+      }
+    }
+  ]
+}

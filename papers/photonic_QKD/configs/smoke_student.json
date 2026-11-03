@@ -1,0 +1,27 @@
+{
+  "description": "Smoke: 2-epoch PQKD student on 512 MNIST images, 2 SPSA updates/epoch (infrastructure check only, V5).",
+  "task": "student",
+  "dataset": {
+    "max_train_samples": 512,
+    "max_eval_samples": 512
+  },
+  "teacher": {
+    "widths": [
+      64,
+      128,
+      128
+    ],
+    "dropout": 0.25,
+    "checkpoint": "<<RESULT_PATH>>"
+  },
+  "_comment_teacher_checkpoint": "Replace with the outdir run directory (or its teacher.pt) of a task=teacher run on the same dataset, split_seed and widths, or pass --teacher-path.",
+  "conditioning": {
+    "reference_evaluations": 8
+  },
+  "spsa": {
+    "updates_per_epoch": 2
+  },
+  "training": {
+    "epochs": 2
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "sweep_id": "S4_mnist_pqkd_baselines",
+  "description": "PQKD vs fair baselines B0-B6 on MNIST (conv1+conv2, R=4, dim(theta)=45, S=200, EMA 0.9), 30 epochs, seeds 0-2 (partial RED-tier). SPSA (a, c): photonic ('0.01', '0.2') from S2_spsa_grid_photonic_20261023-161206, surrogate ('0.05', '0.2') from S3_spsa_grid_surrogate_20261023-161206. Comparison sweep: no winner is declared; differences are read as paired per-seed deltas vs pqkd.",
+  "fixed_args": [
+    "--config",
+    "configs/pqkd_merlin.json"
+  ],
+  "candidates": [
+    {
+      "name": "pqkd",
+      "args": [
+        "--conditioning",
+        "photonic",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B1_kd_dense",
+      "args": [
+        "--student-variant",
+        "dense",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B0_zero",
+      "args": [
+        "--conditioning",
+        "zero",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B4_fixed_photonic",
+      "args": [
+        "--conditioning",
+        "photonic_fixed",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B2_dictionary_trainable",
+      "args": [
+        "--student-variant",
+        "dictionary_trainable",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B3f_random_fixed",
+      "args": [
+        "--conditioning",
+        "random_fixed",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B6_classical_histogram",
+      "args": [
+        "--conditioning",
+        "classical_histogram",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B3r_random_resampled",
+      "args": [
+        "--conditioning",
+        "random_resampled",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B5_surrogate",
+      "args": [
+        "--conditioning",
+        "surrogate",
+        "--spsa-a",
+        "0.05",
+        "--spsa-c",
+        "0.2"
+      ]
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "run_order": "seed_major",
+  "max_parallel": 3,
+  "threads_per_run": 4,
+  "teacher_sweep": "papers/photonic_QKD/outdir/sweeps/S1_teacher_mnist_30ep_20261023-145803",
+  "selection": {
+    "metric": "final_evaluation.test_accuracy",
+    "direction": "maximize",
+    "split": "test",
+    "checkpoint": "final_epoch",
+    "aggregation": "mean over seeds",
+    "tie_tolerance": 0.0,
+    "tie_break": "report_all"
+  },
+  "report_metrics": [
+    "final_evaluation.test_accuracy",
+    "final_evaluation.val_accuracy",
+    "final_evaluation.val_cross_entropy",
+    "final_evaluation.test_accuracy_drop_vs_teacher",
+    "final_evaluation.delta_test_accuracy_vs_zero_feature",
+    "final_evaluation.test_accuracy_fresh_feature",
+    "proxy_objective_delta_first_minus_final",
+    "parameters.student_total_trainable",
+    "parameters.compression_overall",
+    "final_epoch.train_accuracy"
+  ]
+}

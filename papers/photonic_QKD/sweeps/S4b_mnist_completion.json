@@ -1,0 +1,181 @@
+{
+  "sweep_id": "S4b_mnist_completion",
+  "description": "Completion of S4_mnist_pqkd_baselines_20261023-182403, whose coordinator and 3 running runs (B5_surrogate__seed1, pqkd__seed2, B1_kd_dense__seed2) were killed when WSL stopped at ~2026-10-26T09:12Z. Same spec, arms, SPSA settings, teachers and lib/ code; only the 10 (candidate, seed) pairs S4 did not complete. The 3 killed runs are on their second and final attempt; the 7 never-started runs on their first.",
+  "fixed_args": [
+    "--config",
+    "configs/pqkd_merlin.json"
+  ],
+  "candidates": [
+    {
+      "name": "pqkd",
+      "args": [
+        "--conditioning",
+        "photonic",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B1_kd_dense",
+      "args": [
+        "--student-variant",
+        "dense",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B0_zero",
+      "args": [
+        "--conditioning",
+        "zero",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B4_fixed_photonic",
+      "args": [
+        "--conditioning",
+        "photonic_fixed",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B2_dictionary_trainable",
+      "args": [
+        "--student-variant",
+        "dictionary_trainable",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B3f_random_fixed",
+      "args": [
+        "--conditioning",
+        "random_fixed",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B6_classical_histogram",
+      "args": [
+        "--conditioning",
+        "classical_histogram",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B3r_random_resampled",
+      "args": [
+        "--conditioning",
+        "random_resampled",
+        "--spsa-a",
+        "0.01",
+        "--spsa-c",
+        "0.2"
+      ]
+    },
+    {
+      "name": "B5_surrogate",
+      "args": [
+        "--conditioning",
+        "surrogate",
+        "--spsa-a",
+        "0.05",
+        "--spsa-c",
+        "0.2"
+      ]
+    }
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "run_order": "seed_major",
+  "max_parallel": 3,
+  "threads_per_run": 4,
+  "teacher_sweep": "papers/photonic_QKD/outdir/sweeps/S1_teacher_mnist_30ep_20261023-145803",
+  "selection": {
+    "metric": "final_evaluation.test_accuracy",
+    "direction": "maximize",
+    "split": "test",
+    "checkpoint": "final_epoch",
+    "aggregation": "mean over seeds",
+    "tie_tolerance": 0.0,
+    "tie_break": "report_all"
+  },
+  "report_metrics": [
+    "final_evaluation.test_accuracy",
+    "final_evaluation.val_accuracy",
+    "final_evaluation.val_cross_entropy",
+    "final_evaluation.test_accuracy_drop_vs_teacher",
+    "final_evaluation.delta_test_accuracy_vs_zero_feature",
+    "final_evaluation.test_accuracy_fresh_feature",
+    "proxy_objective_delta_first_minus_final",
+    "parameters.student_total_trainable",
+    "parameters.compression_overall",
+    "final_epoch.train_accuracy"
+  ],
+  "only_runs": [
+    [
+      "B5_surrogate",
+      1
+    ],
+    [
+      "pqkd",
+      2
+    ],
+    [
+      "B1_kd_dense",
+      2
+    ],
+    [
+      "B0_zero",
+      2
+    ],
+    [
+      "B4_fixed_photonic",
+      2
+    ],
+    [
+      "B2_dictionary_trainable",
+      2
+    ],
+    [
+      "B3f_random_fixed",
+      2
+    ],
+    [
+      "B6_classical_histogram",
+      2
+    ],
+    [
+      "B3r_random_resampled",
+      2
+    ],
+    [
+      "B5_surrogate",
+      2
+    ]
+  ]
+}

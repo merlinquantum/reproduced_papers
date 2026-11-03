@@ -1,0 +1,320 @@
+{
+  "sweep_dir": "S2_spsa_grid_photonic_20261023-161206",
+  "selection": {
+    "aggregation": "single seed (seed 0)",
+    "checkpoint": "final_epoch",
+    "direction": "minimize",
+    "metric": "final_epoch.proxy_objective",
+    "split": "val (fixed first 1024 images, SPSA proxy)",
+    "tie_break": "spec_order",
+    "tie_tolerance": 0.002
+  },
+  "coverage": "COMPLETE SWEEP",
+  "generated_at": "2026-10-23T15:43:45Z",
+  "generator": "papers/photonic_QKD/utils/run_sweep.py --summarize",
+  "invalid_runs": [],
+  "rows": [
+    {
+      "candidate": "a0.01_c0.05",
+      "expected_runs": 1,
+      "final_epoch.parameter_norm": {
+        "mean": 0.3113153984627099,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.3113153984627099
+        ]
+      },
+      "final_epoch.proxy_objective": {
+        "mean": 0.16244705580174923,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.16244705580174923
+        ]
+      },
+      "final_evaluation.test_accuracy": {
+        "mean": 98.8,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.8
+        ]
+      },
+      "final_evaluation.val_accuracy": {
+        "mean": 98.6,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.6
+        ]
+      },
+      "proxy_objective_delta_first_minus_final": {
+        "mean": 0.4844172392040491,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.4844172392040491
+        ]
+      },
+      "seeds": [
+        0
+      ],
+      "status": "COMPLETE",
+      "successful_runs": 1
+    },
+    {
+      "candidate": "a0.01_c0.2",
+      "expected_runs": 1,
+      "final_epoch.parameter_norm": {
+        "mean": 1.079240972398259,
+        "n": 1,
+        "std": null,
+        "values": [
+          1.079240972398259
+        ]
+      },
+      "final_epoch.proxy_objective": {
+        "mean": 0.14251180924475193,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.14251180924475193
+        ]
+      },
+      "final_evaluation.test_accuracy": {
+        "mean": 98.78,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.78
+        ]
+      },
+      "final_evaluation.val_accuracy": {
+        "mean": 98.76,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.76
+        ]
+      },
+      "proxy_objective_delta_first_minus_final": {
+        "mean": 0.46427024714648724,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.46427024714648724
+        ]
+      },
+      "seeds": [
+        0
+      ],
+      "status": "COMPLETE",
+      "successful_runs": 1
+    },
+    {
+      "candidate": "a0.05_c0.05",
+      "expected_runs": 1,
+      "final_epoch.parameter_norm": {
+        "mean": 21.07444419312218,
+        "n": 1,
+        "std": null,
+        "values": [
+          21.07444419312218
+        ]
+      },
+      "final_epoch.proxy_objective": {
+        "mean": 0.28920384868979454,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.28920384868979454
+        ]
+      },
+      "final_evaluation.test_accuracy": {
+        "mean": 98.37,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.37
+        ]
+      },
+      "final_evaluation.val_accuracy": {
+        "mean": 97.9,
+        "n": 1,
+        "std": null,
+        "values": [
+          97.9
+        ]
+      },
+      "proxy_objective_delta_first_minus_final": {
+        "mean": 0.3743061013519764,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.3743061013519764
+        ]
+      },
+      "seeds": [
+        0
+      ],
+      "status": "COMPLETE",
+      "successful_runs": 1
+    },
+    {
+      "candidate": "a0.05_c0.2",
+      "expected_runs": 1,
+      "final_epoch.parameter_norm": {
+        "mean": 10.052657618353644,
+        "n": 1,
+        "std": null,
+        "values": [
+          10.052657618353644
+        ]
+      },
+      "final_epoch.proxy_objective": {
+        "mean": 0.1535859853029251,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.1535859853029251
+        ]
+      },
+      "final_evaluation.test_accuracy": {
+        "mean": 98.86,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.86
+        ]
+      },
+      "final_evaluation.val_accuracy": {
+        "mean": 98.66,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.66
+        ]
+      },
+      "proxy_objective_delta_first_minus_final": {
+        "mean": 0.4258050471544266,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.4258050471544266
+        ]
+      },
+      "seeds": [
+        0
+      ],
+      "status": "COMPLETE",
+      "successful_runs": 1
+    },
+    {
+      "candidate": "a0.2_c0.05",
+      "expected_runs": 1,
+      "final_epoch.parameter_norm": {
+        "mean": 15.749953754586173,
+        "n": 1,
+        "std": null,
+        "values": [
+          15.749953754586173
+        ]
+      },
+      "final_epoch.proxy_objective": {
+        "mean": 0.1926262229681015,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.1926262229681015
+        ]
+      },
+      "final_evaluation.test_accuracy": {
+        "mean": 98.44,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.44
+        ]
+      },
+      "final_evaluation.val_accuracy": {
+        "mean": 98.22,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.22
+        ]
+      },
+      "proxy_objective_delta_first_minus_final": {
+        "mean": 0.5609190613031387,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.5609190613031387
+        ]
+      },
+      "seeds": [
+        0
+      ],
+      "status": "COMPLETE",
+      "successful_runs": 1
+    },
+    {
+      "candidate": "a0.2_c0.2",
+      "expected_runs": 1,
+      "final_epoch.parameter_norm": {
+        "mean": 21.07444419312218,
+        "n": 1,
+        "std": null,
+        "values": [
+          21.07444419312218
+        ]
+      },
+      "final_epoch.proxy_objective": {
+        "mean": 0.20384853333234787,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.20384853333234787
+        ]
+      },
+      "final_evaluation.test_accuracy": {
+        "mean": 98.61,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.61
+        ]
+      },
+      "final_evaluation.val_accuracy": {
+        "mean": 98.18,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.18
+        ]
+      },
+      "proxy_objective_delta_first_minus_final": {
+        "mean": 0.3699882924556732,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.3699882924556732
+        ]
+      },
+      "seeds": [
+        0
+      ],
+      "status": "COMPLETE",
+      "successful_runs": 1
+    }
+  ],
+  "selected_candidates": [
+    "a0.01_c0.2"
+  ],
+  "selection_scope": "complete sweep",
+  "sweep_id": "S2_spsa_grid_photonic",
+  "tied_within_tolerance": [
+    "a0.01_c0.2"
+  ]
+}

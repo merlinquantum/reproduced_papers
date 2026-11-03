@@ -1,0 +1,1480 @@
+{
+  "protocol": "LOG.md 'Phase 5 Comparison Plan \u2014 2026-10-28T21:08Z'",
+  "rule": "final-epoch test accuracy, mean \u00b1 s.d. over seeds 0-2; differs only if |mean paired \u0394| > s.d. of paired \u0394; no winner from means alone",
+  "coverage": {
+    "teacher": "3/3",
+    "s4": "27/27",
+    "s6": "24/24"
+  },
+  "sweeps": {
+    "teacher": "outdir/sweeps/S1_teacher_mnist_30ep_20261023-145803",
+    "s4": [
+      "outdir/sweeps/S4_mnist_pqkd_baselines_20261023-182403",
+      "outdir/sweeps/S4b_mnist_completion_20261026-102105"
+    ],
+    "s6": [
+      "outdir/sweeps/S6_mnist_photonic_regimes_4ph_20261026-175437",
+      "outdir/sweeps/S6_mnist_photonic_regimes_4ph_resume1_20261026-195315",
+      "outdir/sweeps/S6_mnist_photonic_regimes_4ph_resume2_20261027-085935",
+      "outdir/sweeps/S6_mnist_photonic_regimes_4ph_resume3_20261028-120645"
+    ]
+  },
+  "code_revisions": {
+    "s4": [
+      "c96f1fc",
+      "d0249ba"
+    ],
+    "s6": [
+      "59ca70e"
+    ]
+  },
+  "rows": [
+    {
+      "system": "teacher (paper)",
+      "role": "paper reference",
+      "provenance": "paper-reported",
+      "scope": "100 epochs, 5 seeds",
+      "runs": "5 / 5 (paper)",
+      "metric": "val acc %",
+      "mean": 99.07,
+      "std": 0.13,
+      "test_accuracy": null,
+      "val_accuracy": {
+        "mean": 99.07,
+        "std": 0.13,
+        "n": 5
+      },
+      "matching_basis": "parameter count inferred (paper reports C_x and ~2.25e5)",
+      "trainable_parameters": 224394,
+      "training_hours": null,
+      "resources": "CUDA-Q ORCA simulator (paper)",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "note": "different budget (100 epochs, n = 5); validation metric tuned by SPSA"
+    },
+    {
+      "system": "PQKD (paper)",
+      "role": "paper method",
+      "provenance": "paper-reported",
+      "scope": "100 epochs, 5 seeds",
+      "runs": "5 / 5 (paper)",
+      "metric": "val acc %",
+      "mean": 99.09,
+      "std": 0.09,
+      "test_accuracy": null,
+      "val_accuracy": {
+        "mean": 99.09,
+        "std": 0.09,
+        "n": 5
+      },
+      "matching_basis": "parameter count inferred (paper reports C_x and ~2.25e5)",
+      "trainable_parameters": 149439,
+      "training_hours": null,
+      "resources": "CUDA-Q ORCA simulator (paper)",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "note": "different budget (100 epochs, n = 5); validation metric tuned by SPSA"
+    },
+    {
+      "system": "teacher (S1)",
+      "role": "distillation teacher, not iso-parameter",
+      "provenance": "locally executed",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds)",
+      "runs": "3 / 3",
+      "metric": "test acc % (best-val checkpoint)",
+      "test_accuracy": {
+        "mean": 99.29,
+        "std": 0.00999999999999801,
+        "n": 3,
+        "values": [
+          99.29,
+          99.3,
+          99.28
+        ]
+      },
+      "val_accuracy": {
+        "mean": 99.03333333333335,
+        "std": 0.09018499505646148,
+        "n": 3,
+        "values": [
+          98.94,
+          99.04,
+          99.12
+        ]
+      },
+      "matching_basis": "224,394 params (1.5\u00d7 PQKD)",
+      "trainable_parameters": 224394,
+      "training_hours": {
+        "mean": 1.1902323215943504,
+        "std": 0.00646031705585098,
+        "n": 3,
+        "values": [
+          1.1964140503722211,
+          1.190757445099443,
+          1.1835254693113877
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "note": "checkpoint rule differs (best-val vs final epoch); not a fair comparator for claim A"
+    },
+    {
+      "system": "PQKD, 8 photons",
+      "role": "reproduced paper method",
+      "provenance": "locally executed",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds)",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 99.13,
+        "std": 0.043588989435412735,
+        "n": 3,
+        "values": [
+          99.11,
+          99.18,
+          99.1
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.92,
+        "std": 0.15874507866388143,
+        "n": 3,
+        "values": [
+          98.74,
+          98.98,
+          99.04
+        ]
+      },
+      "matching_basis": "reference",
+      "trainable_parameters": 149439,
+      "training_hours": {
+        "mean": 1.4540966846466647,
+        "std": 0.17544900134239394,
+        "n": 3,
+        "values": [
+          1.3553131386974968,
+          1.3503097699413866,
+          1.6566671453011113
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "system": "B1 dense KD",
+      "role": "fair classical baseline (claim A)",
+      "provenance": "locally executed",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds)",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 99.28666666666668,
+        "std": 0.07767453465153673,
+        "n": 3,
+        "values": [
+          99.31,
+          99.35,
+          99.2
+        ]
+      },
+      "val_accuracy": {
+        "mean": 99.16666666666667,
+        "std": 0.041633319989322334,
+        "n": 3,
+        "values": [
+          99.12,
+          99.18,
+          99.2
+        ]
+      },
+      "matching_basis": "trainable params \u00b15% (\u22120.5%)",
+      "trainable_parameters": 148626,
+      "training_hours": {
+        "mean": 0.9369140768107403,
+        "std": 0.11035615407617601,
+        "n": 3,
+        "values": [
+          0.8710779127677779,
+          0.8753457557333322,
+          1.0643185619311109
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "system": "B2 learned mixing",
+      "role": "upper reference (claim A)",
+      "provenance": "locally executed",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds)",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 99.26333333333332,
+        "std": 0.06110100926607966,
+        "n": 3,
+        "values": [
+          99.25,
+          99.33,
+          99.21
+        ]
+      },
+      "val_accuracy": {
+        "mean": 99.04666666666667,
+        "std": 0.06429100507328978,
+        "n": 3,
+        "values": [
+          99.12,
+          99.02,
+          99.0
+        ]
+      },
+      "matching_basis": "same R, +33k params",
+      "trainable_parameters": 182418,
+      "training_hours": {
+        "mean": 1.1359515109431486,
+        "std": 0.022959476555960666,
+        "n": 3,
+        "values": [
+          1.159401395134444,
+          1.134937066608335,
+          1.1135160710866667
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "PARTIALLY_COMMENSURABLE",
+      "note": "not iso-parameter; upper reference only"
+    },
+    {
+      "system": "B3f fixed random z",
+      "role": "fair classical baseline (claim B)",
+      "provenance": "locally executed",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds)",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 99.17666666666666,
+        "std": 0.015275252316521078,
+        "n": 3,
+        "values": [
+          99.16,
+          99.19,
+          99.18
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.95333333333333,
+        "std": 0.1101514109457212,
+        "n": 3,
+        "values": [
+          98.96,
+          98.84,
+          99.06
+        ]
+      },
+      "matching_basis": "identical architecture, no \u03b8",
+      "trainable_parameters": 149394,
+      "training_hours": {
+        "mean": 1.1332617481028693,
+        "std": 0.03132803418300421,
+        "n": 3,
+        "values": [
+          1.1384059822336117,
+          1.1616992806191613,
+          1.0996799814558345
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "system": "B3r random z per epoch",
+      "role": "fair classical baseline (claims B, C)",
+      "provenance": "locally executed",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds)",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 98.14666666666666,
+        "std": 0.3467467856135559,
+        "n": 3,
+        "values": [
+          98.25,
+          97.76,
+          98.43
+        ]
+      },
+      "val_accuracy": {
+        "mean": 97.78000000000002,
+        "std": 0.41036569057366734,
+        "n": 3,
+        "values": [
+          97.76,
+          97.38,
+          98.2
+        ]
+      },
+      "matching_basis": "identical architecture, no \u03b8",
+      "trainable_parameters": 149394,
+      "training_hours": {
+        "mean": 1.1645846979861116,
+        "std": 0.034142805286813696,
+        "n": 3,
+        "values": [
+          1.143314058976941,
+          1.1464728247588938,
+          1.2039672102225
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "system": "B4 photonic, \u03b8 frozen",
+      "role": "paper control (Supp. Note 5), reproduced",
+      "provenance": "locally executed",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds)",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 99.14,
+        "std": 0.08888194417315019,
+        "n": 3,
+        "values": [
+          99.04,
+          99.17,
+          99.21
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.89999999999999,
+        "std": 0.11999999999999744,
+        "n": 3,
+        "values": [
+          98.78,
+          99.02,
+          98.9
+        ]
+      },
+      "matching_basis": "identical architecture, \u03b8 not trained",
+      "trainable_parameters": 149394,
+      "training_hours": {
+        "mean": 1.1267337808830549,
+        "std": 0.006856708171343119,
+        "n": 3,
+        "values": [
+          1.130694230976946,
+          1.1188163365174963,
+          1.1306907751547224
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "system": "B5 classical generator, SPSA",
+      "role": "fair classical baseline (claim B)",
+      "provenance": "locally executed",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds)",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 98.81666666666666,
+        "std": 0.09073771725877776,
+        "n": 3,
+        "values": [
+          98.83,
+          98.9,
+          98.72
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.44,
+        "std": 0.1599999999999966,
+        "n": 3,
+        "values": [
+          98.6,
+          98.44,
+          98.28
+        ]
+      },
+      "matching_basis": "dim \u03c6 = dim \u03b8 = 45, equal SPSA grid",
+      "trainable_parameters": 149439,
+      "training_hours": {
+        "mean": 1.338623308981851,
+        "std": 0.3116720511986538,
+        "n": 3,
+        "values": [
+          1.367783440535275,
+          1.6346905231613886,
+          1.0133959632488894
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "system": "B6 classical histograms, S = 200",
+      "role": "fair classical baseline (claims B, C)",
+      "provenance": "locally executed",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds)",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 98.48333333333333,
+        "std": 0.0907377172587754,
+        "n": 3,
+        "values": [
+          98.55,
+          98.52,
+          98.38
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.12666666666667,
+        "std": 0.12055427546683178,
+        "n": 3,
+        "values": [
+          98.0,
+          98.14,
+          98.24
+        ]
+      },
+      "matching_basis": "same \u03a6, S, EMA",
+      "trainable_parameters": 149394,
+      "training_hours": {
+        "mean": 1.1656878651898126,
+        "std": 0.03418013813400525,
+        "n": 3,
+        "values": [
+          1.1366917648955546,
+          1.1569975245205508,
+          1.2033743061533324
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "system": "B0 z = 0",
+      "role": "paper control (Fig. 4)",
+      "provenance": "locally executed",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds)",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 10.813333333333333,
+        "std": 0.9295339333952972,
+        "n": 3,
+        "values": [
+          9.74,
+          11.35,
+          11.35
+        ]
+      },
+      "val_accuracy": {
+        "mean": 11.14,
+        "std": 1.2470765814495919,
+        "n": 3,
+        "values": [
+          9.7,
+          11.86,
+          11.86
+        ]
+      },
+      "matching_basis": "identical architecture",
+      "trainable_parameters": 149394,
+      "training_hours": {
+        "mean": 1.1189218593076817,
+        "std": 0.06429440601239493,
+        "n": 3,
+        "values": [
+          1.1131515554699976,
+          1.0577071021805486,
+          1.185906920272499
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "INCOMPARABLE",
+      "note": "degenerate: M = 0 zeroes every compressed kernel; metric agreement only"
+    },
+    {
+      "system": "P0 PQKD, 4 photons",
+      "role": "MerLin adaptation reference",
+      "provenance": "locally executed (MerLin adaptation)",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds), 4 photons, simulated",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 99.19333333333334,
+        "std": 0.0907377172587754,
+        "n": 3,
+        "values": [
+          99.09,
+          99.26,
+          99.23
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.92666666666666,
+        "std": 0.19008769905844816,
+        "n": 3,
+        "values": [
+          98.74,
+          99.12,
+          98.92
+        ]
+      },
+      "matching_basis": "identical to PQKD, 4 photons",
+      "trainable_parameters": 149439,
+      "training_hours": {
+        "mean": 1.539286329144258,
+        "std": 0.20717303207778165,
+        "n": 3,
+        "values": [
+          1.502504771575279,
+          1.3529675502930534,
+          1.7623866655644411
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": "code revision differs from S4 by additive changes only"
+    },
+    {
+      "system": "F1 mixing \u03b8, S = 200, EMA",
+      "role": "MerLin adaptation (claim C)",
+      "provenance": "locally executed (MerLin adaptation)",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds), 4 photons, simulated",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 98.78000000000002,
+        "std": 0.4853864439804698,
+        "n": 3,
+        "values": [
+          99.18,
+          98.24,
+          98.92
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.55333333333333,
+        "std": 0.3477547028198666,
+        "n": 3,
+        "values": [
+          98.82,
+          98.16,
+          98.68
+        ]
+      },
+      "matching_basis": "identical architecture",
+      "trainable_parameters": 149439,
+      "training_hours": {
+        "mean": 1.5819289481162933,
+        "std": 0.16565443300198793,
+        "n": 3,
+        "values": [
+          1.5142076687316643,
+          1.4608645659041657,
+          1.77071460971305
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "system": "F2 mixing \u03b8, S = 200, no EMA",
+      "role": "MerLin adaptation (claim C)",
+      "provenance": "locally executed (MerLin adaptation)",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds), 4 photons, simulated",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 97.79666666666667,
+        "std": 2.1932244147221525,
+        "n": 3,
+        "values": [
+          99.3,
+          98.81,
+          95.28
+        ]
+      },
+      "val_accuracy": {
+        "mean": 97.48,
+        "std": 2.2162129861545354,
+        "n": 3,
+        "values": [
+          99.02,
+          98.48,
+          94.94
+        ]
+      },
+      "matching_basis": "identical architecture",
+      "trainable_parameters": 149439,
+      "training_hours": {
+        "mean": 1.7605707428291728,
+        "std": 0.6231229597303534,
+        "n": 3,
+        "values": [
+          1.300653267746115,
+          1.5113226773847317,
+          2.4697362833566716
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "system": "F3 mixing \u03b8, S = 25, EMA",
+      "role": "MerLin adaptation (claim C)",
+      "provenance": "locally executed (MerLin adaptation)",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds), 4 photons, simulated",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 98.58,
+        "std": 0.6323764701504984,
+        "n": 3,
+        "values": [
+          97.85,
+          98.96,
+          98.93
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.38666666666667,
+        "std": 0.5954270176380428,
+        "n": 3,
+        "values": [
+          97.7,
+          98.76,
+          98.7
+        ]
+      },
+      "matching_basis": "identical architecture",
+      "trainable_parameters": 149439,
+      "training_hours": {
+        "mean": 1.7012144196474954,
+        "std": 0.40509989497139387,
+        "n": 3,
+        "values": [
+          1.3007649390288902,
+          1.6920684719174945,
+          2.1108098479961015
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "system": "F4 mixing \u03b8, S = 25, no EMA",
+      "role": "MerLin adaptation (claim C)",
+      "provenance": "locally executed (MerLin adaptation)",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds), 4 photons, simulated",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 95.26333333333334,
+        "std": 1.5970702343144842,
+        "n": 3,
+        "values": [
+          93.76,
+          95.09,
+          96.94
+        ]
+      },
+      "val_accuracy": {
+        "mean": 94.96666666666665,
+        "std": 1.3230772212283513,
+        "n": 3,
+        "values": [
+          93.88,
+          94.58,
+          96.44
+        ]
+      },
+      "matching_basis": "identical architecture",
+      "trainable_parameters": 149439,
+      "training_hours": {
+        "mean": 1.6826288309548119,
+        "std": 0.2909878294035183,
+        "n": 3,
+        "values": [
+          1.3504878553561057,
+          1.892695865291658,
+          1.8047027722166724
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "system": "N1 exact, autograd \u03b8, \u03b8\u2080 random",
+      "role": "MerLin adaptation (claims A, B)",
+      "provenance": "locally executed (MerLin adaptation)",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds), 4 photons, simulated",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 99.15333333333332,
+        "std": 0.08082903768654559,
+        "n": 3,
+        "values": [
+          99.08,
+          99.24,
+          99.14
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.89333333333333,
+        "std": 0.04618802153516908,
+        "n": 3,
+        "values": [
+          98.92,
+          98.84,
+          98.92
+        ]
+      },
+      "matching_basis": "identical architecture, 45 trained angles",
+      "trainable_parameters": 149439,
+      "training_hours": {
+        "mean": 1.7325995063741682,
+        "std": 0.3860156896171529,
+        "n": 3,
+        "values": [
+          1.5187086691038945,
+          1.5008767320394427,
+          2.1782131179791677
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": "simulation-only gradients"
+    },
+    {
+      "system": "N2 exact, autograd \u03b8, \u03b8\u2080 = 0",
+      "role": "MerLin adaptation (claim B)",
+      "provenance": "locally executed (MerLin adaptation)",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds), 4 photons, simulated",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 99.14999999999999,
+        "std": 0.08185352771872297,
+        "n": 3,
+        "values": [
+          99.08,
+          99.13,
+          99.24
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.8,
+        "std": 0.10392304845412836,
+        "n": 3,
+        "values": [
+          98.68,
+          98.86,
+          98.86
+        ]
+      },
+      "matching_basis": "identical architecture, 45 trained angles",
+      "trainable_parameters": 149439,
+      "training_hours": {
+        "mean": 1.6633716302997286,
+        "std": 0.29484630983328697,
+        "n": 3,
+        "values": [
+          1.3420359270161175,
+          1.7266132494949953,
+          1.9214657143880727
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": "simulation-only gradients"
+    },
+    {
+      "system": "N3 classical generator, autograd",
+      "role": "fair classical counterpart to N1/N2 (Phase 4 sweep)",
+      "provenance": "locally executed",
+      "scope": "partial RED-tier run (30 epochs, 3 seeds)",
+      "runs": "3 / 3",
+      "metric": "test acc % (final epoch)",
+      "test_accuracy": {
+        "mean": 99.10000000000001,
+        "std": 0.020000000000003126,
+        "n": 3,
+        "values": [
+          99.12,
+          99.08,
+          99.1
+        ]
+      },
+      "val_accuracy": {
+        "mean": 98.94,
+        "std": 0.060000000000002274,
+        "n": 3,
+        "values": [
+          98.88,
+          98.94,
+          99.0
+        ]
+      },
+      "matching_basis": "dim \u03c6 = 45, same optimiser",
+      "trainable_parameters": 149439,
+      "training_hours": {
+        "mean": 1.6509550993375914,
+        "std": 0.589298777101742,
+        "n": 3,
+        "values": [
+          1.1513587578150004,
+          1.500658693346664,
+          2.30084784685111
+        ]
+      },
+      "resources": "3 parallel \u00d7 4 threads, CPU laptop",
+      "status": "COMMENSURABLE",
+      "note": ""
+    }
+  ],
+  "paired": [
+    {
+      "claim": "A",
+      "arm": "B1_kd_dense",
+      "arm_sweep": "s4",
+      "reference": "pqkd",
+      "reference_sweep": "s4",
+      "test_accuracy_difference": {
+        "mean": 0.1566666666666663,
+        "std": 0.05131601439446371,
+        "n": 3,
+        "values": [
+          0.20000000000000284,
+          0.1699999999999875,
+          0.10000000000000853
+        ],
+        "separated": true,
+        "signs": {
+          "positive": 3,
+          "negative": 0,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": -0.0035143375555674247,
+        "std": 0.0017869383809460634,
+        "n": 3,
+        "values": [
+          -0.005231363487243651,
+          -0.0016648577690124532,
+          -0.00364679141044617
+        ]
+      }
+    },
+    {
+      "claim": "A",
+      "arm": "N1_native_grad_random",
+      "arm_sweep": "s6",
+      "reference": "B1_kd_dense",
+      "reference_sweep": "s4",
+      "test_accuracy_difference": {
+        "mean": -0.13333333333333522,
+        "std": 0.08736894948054237,
+        "n": 3,
+        "values": [
+          -0.23000000000000398,
+          -0.10999999999999943,
+          -0.060000000000002274
+        ],
+        "separated": true,
+        "signs": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": 0.003943113215764364,
+        "std": 0.004220507144000168,
+        "n": 3,
+        "values": [
+          0.0029263243675231934,
+          0.008579132366180419,
+          0.0003238829135894794
+        ]
+      }
+    },
+    {
+      "claim": "A",
+      "arm": "P0_pqkd_theta0",
+      "arm_sweep": "s6",
+      "reference": "B1_kd_dense",
+      "reference_sweep": "s4",
+      "test_accuracy_difference": {
+        "mean": -0.09333333333332898,
+        "std": 0.1250333288900738,
+        "n": 3,
+        "values": [
+          -0.21999999999999886,
+          -0.0899999999999892,
+          0.030000000000001137
+        ],
+        "separated": false,
+        "signs": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": 0.0027931368986765562,
+        "std": 0.0019109696805718465,
+        "n": 3,
+        "values": [
+          0.0038310173034667994,
+          0.0005878075599670442,
+          0.003960585832595825
+        ]
+      }
+    },
+    {
+      "claim": "B",
+      "arm": "B3f_random_fixed",
+      "arm_sweep": "s4",
+      "reference": "pqkd",
+      "reference_sweep": "s4",
+      "test_accuracy_difference": {
+        "mean": 0.046666666666666856,
+        "std": 0.03511884584285301,
+        "n": 3,
+        "values": [
+          0.04999999999999716,
+          0.009999999999990905,
+          0.0800000000000125
+        ],
+        "separated": true,
+        "signs": {
+          "positive": 3,
+          "negative": 0,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": 0.0008205096880594884,
+        "std": 0.006033030975014252,
+        "n": 3,
+        "values": [
+          -0.0038973184585571266,
+          0.007618346595764158,
+          -0.0012594990730285666
+        ]
+      }
+    },
+    {
+      "claim": "B",
+      "arm": "B4_fixed_photonic",
+      "arm_sweep": "s4",
+      "reference": "pqkd",
+      "reference_sweep": "s4",
+      "test_accuracy_difference": {
+        "mean": 0.010000000000000378,
+        "std": 0.09165151389911406,
+        "n": 3,
+        "values": [
+          -0.06999999999999318,
+          -0.010000000000005116,
+          0.10999999999999943
+        ],
+        "separated": false,
+        "signs": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": 0.002388955148061115,
+        "std": 0.001826962223828111,
+        "n": 3,
+        "values": [
+          0.0026094818115234356,
+          0.00046173915863036846,
+          0.00409564447402954
+        ]
+      }
+    },
+    {
+      "claim": "B",
+      "arm": "B5_surrogate",
+      "arm_sweep": "s4",
+      "reference": "pqkd",
+      "reference_sweep": "s4",
+      "test_accuracy_difference": {
+        "mean": -0.3133333333333326,
+        "std": 0.05773502691895929,
+        "n": 3,
+        "values": [
+          -0.28000000000000114,
+          -0.28000000000000114,
+          -0.37999999999999545
+        ],
+        "separated": true,
+        "signs": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": 0.016560295422871907,
+        "std": 0.007104561123037771,
+        "n": 3,
+        "values": [
+          0.008356654930114747,
+          0.02066298179626465,
+          0.020661249542236325
+        ]
+      }
+    },
+    {
+      "claim": "B",
+      "arm": "B6_classical_histogram",
+      "arm_sweep": "s4",
+      "reference": "pqkd",
+      "reference_sweep": "s4",
+      "test_accuracy_difference": {
+        "mean": -0.6466666666666706,
+        "std": 0.08082903768654677,
+        "n": 3,
+        "values": [
+          -0.5600000000000023,
+          -0.6600000000000108,
+          -0.7199999999999989
+        ],
+        "separated": true,
+        "signs": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": 0.03182751013437907,
+        "std": 0.0020363099971199925,
+        "n": 3,
+        "values": [
+          0.030408841323852534,
+          0.034160757255554196,
+          0.030912931823730463
+        ]
+      }
+    },
+    {
+      "claim": "B",
+      "arm": "B3r_random_resampled",
+      "arm_sweep": "s4",
+      "reference": "pqkd",
+      "reference_sweep": "s4",
+      "test_accuracy_difference": {
+        "mean": -0.9833333333333295,
+        "std": 0.3899145205469246,
+        "n": 3,
+        "values": [
+          -0.8599999999999994,
+          -1.4200000000000017,
+          -0.6699999999999875
+        ],
+        "separated": true,
+        "signs": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": 0.04774727789560954,
+        "std": 0.015008472007399666,
+        "n": 3,
+        "values": [
+          0.04820933990478515,
+          0.06251938343048097,
+          0.0325131103515625
+        ]
+      }
+    },
+    {
+      "claim": "B",
+      "arm": "N1_native_grad_random",
+      "arm_sweep": "s6",
+      "reference": "N3_surrogate_grad",
+      "reference_sweep": "s6",
+      "test_accuracy_difference": {
+        "mean": 0.0533333333333322,
+        "std": 0.10066445913694401,
+        "n": 3,
+        "values": [
+          -0.04000000000000625,
+          0.1599999999999966,
+          0.04000000000000625
+        ],
+        "separated": false,
+        "signs": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": -0.002181407833099367,
+        "std": 0.0020104588411181744,
+        "n": 3,
+        "values": [
+          -0.0026005741119384737,
+          5.590152740472809e-06,
+          -0.0039492395401001
+        ]
+      }
+    },
+    {
+      "claim": "B",
+      "arm": "N1_native_grad_random",
+      "arm_sweep": "s6",
+      "reference": "B3f_random_fixed",
+      "reference_sweep": "s4",
+      "test_accuracy_difference": {
+        "mean": -0.023333333333335798,
+        "std": 0.06658328118479243,
+        "n": 3,
+        "values": [
+          -0.0799999999999983,
+          0.04999999999999716,
+          -0.04000000000000625
+        ],
+        "separated": false,
+        "signs": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": -0.00039173402786254916,
+        "std": 0.0018477503452414556,
+        "n": 3,
+        "values": [
+          0.001592279338836669,
+          -0.0007040719985961924,
+          -0.002063409423828124
+        ]
+      }
+    },
+    {
+      "claim": "B",
+      "arm": "N2_native_grad_zero",
+      "arm_sweep": "s6",
+      "reference": "N3_surrogate_grad",
+      "reference_sweep": "s6",
+      "test_accuracy_difference": {
+        "mean": 0.04999999999999716,
+        "std": 0.09000000000000341,
+        "n": 3,
+        "values": [
+          -0.04000000000000625,
+          0.04999999999999716,
+          0.14000000000000057
+        ],
+        "separated": false,
+        "signs": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": 0.0007535714785257969,
+        "std": 0.004501766041019013,
+        "n": 3,
+        "values": [
+          0.004604350566864014,
+          0.0018521731376647949,
+          -0.004195809268951418
+        ]
+      }
+    },
+    {
+      "claim": "C",
+      "arm": "F1_mixing_s200_ema",
+      "arm_sweep": "s6",
+      "reference": "P0_pqkd_theta0",
+      "reference_sweep": "s6",
+      "test_accuracy_difference": {
+        "mean": -0.4133333333333364,
+        "std": 0.5621684207898385,
+        "n": 3,
+        "values": [
+          0.09000000000000341,
+          -1.0200000000000102,
+          -0.3100000000000023
+        ],
+        "separated": false,
+        "signs": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": 0.01314247957865397,
+        "std": 0.019638770129571128,
+        "n": 3,
+        "values": [
+          -0.00250597763061524,
+          0.03518028030395508,
+          0.006753136062622074
+        ]
+      }
+    },
+    {
+      "claim": "C",
+      "arm": "F2_mixing_s200_noema",
+      "arm_sweep": "s6",
+      "reference": "P0_pqkd_theta0",
+      "reference_sweep": "s6",
+      "test_accuracy_difference": {
+        "mean": -1.3966666666666707,
+        "std": 2.235739996809407,
+        "n": 3,
+        "values": [
+          0.20999999999999375,
+          -0.45000000000000284,
+          -3.950000000000003
+        ],
+        "separated": false,
+        "signs": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": 0.06385320297876994,
+        "std": 0.09384168698997912,
+        "n": 3,
+        "values": [
+          -0.0011202093124389675,
+          0.021239283370971675,
+          0.1714405348777771
+        ]
+      }
+    },
+    {
+      "claim": "C",
+      "arm": "F3_mixing_s25_ema",
+      "arm_sweep": "s6",
+      "reference": "P0_pqkd_theta0",
+      "reference_sweep": "s6",
+      "test_accuracy_difference": {
+        "mean": -0.6133333333333392,
+        "std": 0.542709253038251,
+        "n": 3,
+        "values": [
+          -1.240000000000009,
+          -0.30000000000001137,
+          -0.29999999999999716
+        ],
+        "separated": true,
+        "signs": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": 0.023703490352630613,
+        "std": 0.01735296143171066,
+        "n": 3,
+        "values": [
+          0.0435635419845581,
+          0.011469330787658688,
+          0.01607759828567505
+        ]
+      }
+    },
+    {
+      "claim": "C",
+      "arm": "F4_mixing_s25_noema",
+      "arm_sweep": "s6",
+      "reference": "P0_pqkd_theta0",
+      "reference_sweep": "s6",
+      "test_accuracy_difference": {
+        "mean": -3.930000000000002,
+        "std": 1.5341447128612045,
+        "n": 3,
+        "values": [
+          -5.329999999999998,
+          -4.170000000000002,
+          -2.2900000000000063
+        ],
+        "separated": true,
+        "signs": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": 0.18233722600936889,
+        "std": 0.07626397695401312,
+        "n": 3,
+        "values": [
+          0.22933822498321532,
+          0.22332993354797365,
+          0.09434351949691772
+        ]
+      }
+    },
+    {
+      "claim": "C",
+      "arm": "F3_mixing_s25_ema",
+      "arm_sweep": "s6",
+      "reference": "F4_mixing_s25_noema",
+      "reference_sweep": "s6",
+      "test_accuracy_difference": {
+        "mean": 3.316666666666663,
+        "std": 1.1541808061708996,
+        "n": 3,
+        "values": [
+          4.089999999999989,
+          3.8699999999999903,
+          1.990000000000009
+        ],
+        "separated": true,
+        "signs": {
+          "positive": 3,
+          "negative": 0,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": -0.15863373565673827,
+        "std": 0.07081213173963993,
+        "n": 3,
+        "values": [
+          -0.18577468299865724,
+          -0.21186060276031493,
+          -0.07826592121124266
+        ]
+      }
+    },
+    {
+      "claim": "C",
+      "arm": "F1_mixing_s200_ema",
+      "arm_sweep": "s6",
+      "reference": "F2_mixing_s200_noema",
+      "reference_sweep": "s6",
+      "test_accuracy_difference": {
+        "mean": 0.9833333333333343,
+        "std": 2.311716533949034,
+        "n": 3,
+        "values": [
+          -0.11999999999999034,
+          -0.5700000000000074,
+          3.6400000000000006
+        ],
+        "separated": false,
+        "signs": {
+          "positive": 1,
+          "negative": 2,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": -0.050710723400115974,
+        "std": 0.09900373395617419,
+        "n": 3,
+        "values": [
+          -0.0013857683181762726,
+          0.013940996932983403,
+          -0.16468739881515504
+        ]
+      }
+    },
+    {
+      "claim": "C",
+      "arm": "B3r_random_resampled",
+      "arm_sweep": "s4",
+      "reference": "B3f_random_fixed",
+      "reference_sweep": "s4",
+      "test_accuracy_difference": {
+        "mean": -1.0299999999999965,
+        "std": 0.35552777669262,
+        "n": 3,
+        "values": [
+          -0.9099999999999966,
+          -1.4299999999999926,
+          -0.75
+        ],
+        "separated": true,
+        "signs": {
+          "positive": 0,
+          "negative": 3,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": 0.04692676820755005,
+        "std": 0.011477197294017085,
+        "n": 3,
+        "values": [
+          0.05210665836334228,
+          0.0549010368347168,
+          0.033772609424591066
+        ]
+      }
+    },
+    {
+      "claim": "check",
+      "arm": "P0_pqkd_theta0",
+      "arm_sweep": "s6",
+      "reference": "pqkd",
+      "reference_sweep": "s4",
+      "test_accuracy_difference": {
+        "mean": 0.06333333333333731,
+        "std": 0.07637626158259919,
+        "n": 3,
+        "values": [
+          -0.01999999999999602,
+          0.0799999999999983,
+          0.13000000000000966
+        ],
+        "separated": false,
+        "signs": {
+          "positive": 2,
+          "negative": 1,
+          "zero": 0
+        }
+      },
+      "val_cross_entropy_difference": {
+        "mean": -0.0007212006568908686,
+        "std": 0.0009107915140403772,
+        "n": 3,
+        "values": [
+          -0.0014003461837768516,
+          -0.001077050209045409,
+          0.0003137944221496547
+        ]
+      }
+    }
+  ]
+}
