@@ -1,0 +1,94 @@
+{
+  "description": "E5 stage 2 for F2: retrain the seed-0 selections of e5_stage1_20261021-153806/F2/seed0/run_20261021-153811/metrics.json (QLSTM ['qlstm_q3_L4', 'qlstm_q4_L3'], LSTM ['lstm_h3_L2', 'lstm_h3_L3', 'lstm_h4_L2']) for seeds 1-4 and report every candidate without re-selection. Partial (RED reduction rule).",
+  "task": "trading",
+  "trading": {
+    "dataset": {
+      "ticker": "^GSPC",
+      "window": 10,
+      "regime": "F2",
+      "regimes": {
+        "F1": [
+          "2008-01-02",
+          "2009-12-31"
+        ],
+        "F2": [
+          "2018-01-02",
+          "2019-12-31"
+        ],
+        "F3": [
+          "2020-01-02",
+          "2021-12-31"
+        ],
+        "F4": [
+          "2022-01-03",
+          "2024-12-31"
+        ]
+      },
+      "split_mode": "history_then_regime",
+      "history_start": "2003-01-01",
+      "split_fractions": [
+        0.7,
+        0.1,
+        0.1,
+        0.1
+      ],
+      "batch_size": 32
+    },
+    "models": {
+      "qlstm": {
+        "configs": [
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            3
+          ]
+        ],
+        "topology": "chain"
+      },
+      "lstm": {
+        "configs": [
+          [
+            3,
+            2
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            4,
+            2
+          ]
+        ]
+      }
+    },
+    "training": {
+      "lr": 0.001,
+      "batch_size": 32,
+      "max_epochs": 300,
+      "patience": 30,
+      "class_weighting": "balanced"
+    },
+    "backtest": {
+      "fee": 0.0005,
+      "tau_long_grid": [
+        0.5,
+        0.9,
+        0.05
+      ],
+      "tau_short_grid": [
+        0.1,
+        0.5,
+        0.05
+      ]
+    },
+    "selection": {
+      "tie_tolerance": 0.0001,
+      "parameter_match_tolerance": 0.25,
+      "report_all_candidates": true
+    }
+  }
+}

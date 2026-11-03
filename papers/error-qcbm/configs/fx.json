@@ -1,0 +1,91 @@
+{
+  "description": "Financial Fig.2(c,d) adaptation: ECB 2004-2023, paired finite-shot native MerLin SPSA",
+  "task": "train",
+  "device": "cpu",
+  "dtype": "float64",
+  "model": {
+    "input_state": [
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0
+    ]
+  },
+  "dataset": {
+    "name": "fx",
+    "source_file": "ecb_usd_per_eur_2004_2023.csv",
+    "sha256": "2d45d8e704309af8ec25f53bdaab38f17b7d731022662b5708cbeedebca89794",
+    "start_date": "2004-01-01",
+    "end_date": "2023-12-31",
+    "binning": "equal_width_observed_range",
+    "source_url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?startPeriod=2004-01-01&endPeriod=2023-12-31&format=csvdata"
+  },
+  "training": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "steps": 1000,
+    "record_every": 10,
+    "shots": 60000,
+    "torch_threads": 1,
+    "sampling_seed_offset": 10000,
+    "perturbation_seed_offset": 100000,
+    "conditions": [
+      {
+        "name": "lossless",
+        "transmittance": 1.0,
+        "indistinguishability": 1.0,
+        "estimator": "postselection"
+      },
+      {
+        "name": "postselection",
+        "transmittance": 0.2,
+        "indistinguishability": 1.0,
+        "estimator": "postselection"
+      },
+      {
+        "name": "recycling",
+        "transmittance": 0.2,
+        "indistinguishability": 1.0,
+        "estimator": "recycling"
+      }
+    ],
+    "spsa": {
+      "alpha": 0.602,
+      "gamma": 0.101,
+      "c": 0.1,
+      "stability_fraction": 0.1,
+      "initial_step": 0.001,
+      "gain_calibration": "author_absolute_mean"
+    },
+    "loss": "tvd",
+    "native_count_accumulation": "python"
+  }
+}

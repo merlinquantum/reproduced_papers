@@ -1,0 +1,140 @@
+{
+  "run_dir": "outdir/run_20261028-100221",
+  "experiment": "universality",
+  "worst_exact_reconstruction_error": 1.1324274851176597e-14,
+  "worst_relative_gap_to_parseval": 3.934879260010447e-05,
+  "exact": [
+    {
+      "degree": 1,
+      "max_abs_error": 6.661338147750939e-16,
+      "n_qubits": 1,
+      "observable_is_hermitian": true
+    },
+    {
+      "degree": 1,
+      "max_abs_error": 9.992007221626409e-16,
+      "n_qubits": 3,
+      "observable_is_hermitian": true
+    },
+    {
+      "degree": 2,
+      "max_abs_error": 4.440892098500626e-16,
+      "n_qubits": 2,
+      "observable_is_hermitian": true
+    },
+    {
+      "degree": 2,
+      "max_abs_error": 4.440892098500626e-16,
+      "n_qubits": 4,
+      "observable_is_hermitian": true
+    },
+    {
+      "degree": 3,
+      "max_abs_error": 1.3322676295501878e-15,
+      "n_qubits": 3,
+      "observable_is_hermitian": true
+    },
+    {
+      "degree": 3,
+      "max_abs_error": 3.1086244689504383e-15,
+      "n_qubits": 5,
+      "observable_is_hermitian": true
+    },
+    {
+      "degree": 5,
+      "max_abs_error": 2.6645352591003757e-15,
+      "n_qubits": 5,
+      "observable_is_hermitian": true
+    },
+    {
+      "degree": 5,
+      "max_abs_error": 5.329070518200751e-15,
+      "n_qubits": 7,
+      "observable_is_hermitian": true
+    },
+    {
+      "degree": 8,
+      "max_abs_error": 6.661338147750939e-15,
+      "n_qubits": 8,
+      "observable_is_hermitian": true
+    },
+    {
+      "degree": 8,
+      "max_abs_error": 1.1324274851176597e-14,
+      "n_qubits": 10,
+      "observable_is_hermitian": true
+    }
+  ],
+  "square_wave": [
+    {
+      "degree": 1,
+      "max_abs_error_to_truncation": 6.661338147750939e-16,
+      "n_qubits": 1,
+      "parseval_tail_rms": 0.4352361782541723,
+      "rms_to_target": 0.43523544786499835
+    },
+    {
+      "degree": 2,
+      "max_abs_error_to_truncation": 0.0,
+      "n_qubits": 2,
+      "parseval_tail_rms": 0.4352361782541723,
+      "rms_to_target": 0.43523544786499835
+    },
+    {
+      "degree": 3,
+      "max_abs_error_to_truncation": 1.3322676295501878e-15,
+      "n_qubits": 3,
+      "parseval_tail_rms": 0.3152257231136967,
+      "rms_to_target": 0.31522370619141654
+    },
+    {
+      "degree": 4,
+      "max_abs_error_to_truncation": 8.881784197001252e-16,
+      "n_qubits": 4,
+      "parseval_tail_rms": 0.3152257231136967,
+      "rms_to_target": 0.3152237061914166
+    },
+    {
+      "degree": 5,
+      "max_abs_error_to_truncation": 3.4416913763379853e-15,
+      "n_qubits": 5,
+      "parseval_tail_rms": 0.25873630929385394,
+      "rms_to_target": 0.258732623362929
+    },
+    {
+      "degree": 6,
+      "max_abs_error_to_truncation": 3.164135620181696e-15,
+      "n_qubits": 6,
+      "parseval_tail_rms": 0.25873630929385394,
+      "rms_to_target": 0.25873262336292907
+    },
+    {
+      "degree": 7,
+      "max_abs_error_to_truncation": 3.552713678800501e-15,
+      "n_qubits": 7,
+      "parseval_tail_rms": 0.2245044402299201,
+      "rms_to_target": 0.22449877624784054
+    },
+    {
+      "degree": 8,
+      "max_abs_error_to_truncation": 2.886579864025407e-15,
+      "n_qubits": 8,
+      "parseval_tail_rms": 0.2245044402299201,
+      "rms_to_target": 0.22449877624784054
+    },
+    {
+      "degree": 9,
+      "max_abs_error_to_truncation": 6.716849298982197e-15,
+      "n_qubits": 9,
+      "parseval_tail_rms": 0.20098560445901573,
+      "rms_to_target": 0.20097769591815026
+    },
+    {
+      "degree": 10,
+      "max_abs_error_to_truncation": 4.440892098500626e-15,
+      "n_qubits": 10,
+      "parseval_tail_rms": 0.20098560445901573,
+      "rms_to_target": 0.2009776959181503
+    }
+  ]
+}

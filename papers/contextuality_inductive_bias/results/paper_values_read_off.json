@@ -1,0 +1,44 @@
+{
+  "source": "arXiv:2302.01365v3, figures 8, 9 and 11 (rendered from the TeX-source figure PDFs data/contextuality_inductive_bias/sources/tex_src/{rps_plot_1500,reg_plot-2,reg_plot_1}.pdf)",
+  "method": "Read by eye from log-scale (KL) and linear (NLL) axes on 2026-10-16. No numerical tables are published. Uncertainty is roughly +-5% on KL values and +-0.002 on NLL values. The figures use the author code's evaluation, which corresponds to protocol 'code' here (D12).",
+  "fig8": {
+    "steps": 2000,
+    "seeds_stated": 20,
+    "final_test_kl": {
+      "quantum (biased)": 4.4e-3,
+      "quantum (no bias)": 9.5e-3,
+      "surrogate L=1": 7.6e-3,
+      "surrogate L=2": 1.25e-2
+    },
+    "min_test_kl": {
+      "quantum (biased)": 4.3e-3,
+      "quantum (no bias)": 9.3e-3,
+      "surrogate L=1": 6.3e-3,
+      "surrogate L=2": 7.2e-3
+    },
+    "min_test_kl_step": {
+      "surrogate L=1": 400,
+      "surrogate L=2": 75
+    },
+    "final_train_nll": {
+      "quantum (biased)": 0.681,
+      "quantum (no bias)": 0.685,
+      "surrogate L=1": 0.676,
+      "surrogate L=2": 0.659
+    }
+  },
+  "fig9_surrogate_l2": {
+    "steps": 1000,
+    "unregularised_min_test_kl": 6.9e-3,
+    "unregularised_min_step": 60,
+    "regularised_plateau_test_kl_range": [7.4e-3, 8.0e-3],
+    "strongest_reg_train_objective": 0.6885
+  },
+  "fig11_surrogate_l1": {
+    "steps": 1000,
+    "weakest_reg_min_test_kl": 6.0e-3,
+    "weakest_reg_min_step": 400,
+    "regularised_plateau_test_kl_range": [6.3e-3, 9.4e-3],
+    "strongest_reg_train_objective": 0.691
+  }
+}

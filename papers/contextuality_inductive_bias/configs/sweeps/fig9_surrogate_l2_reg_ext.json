@@ -1,0 +1,44 @@
+{
+  "sweep_id": "fig9_surrogate_l2_reg_ext",
+  "description": "E2 / Fig. 9: EXTENSION of the pre-declared L2 grid with strengths {3, 10, 30, 100}, protocols paper and code, seed 0 (plan amendment 2026-10-16T11:07Z, see LOG.md).",
+  "base_config": "configs/fig9_surrogate_l2_reg_original.json",
+  "axes": {
+    "--protocol": [
+      "paper",
+      "code"
+    ],
+    "--l2": [
+      3.0,
+      10.0,
+      30.0,
+      100.0
+    ]
+  },
+  "repetitions": [
+    {
+      "--seed": 0
+    }
+  ],
+  "progress_total": 1000,
+  "plan": {
+    "metrics": [
+      "final.test_kl",
+      "min_test_kl.test_kl",
+      "min_test_kl.step",
+      "final.train_nll",
+      "last_step_objective",
+      "train_seconds"
+    ],
+    "direction": "minimize",
+    "split": "test (fixed seeded set, seed 2302, n = 10000)",
+    "checkpoint": "final step 1000, as in Fig. 9; min_test_kl reported as a secondary, test-selected view",
+    "aggregation": "per candidate: mean and sample std (ddof = 1) over seeds; min and max also reported",
+    "tie_tolerance": "n/a (descriptive sweep)",
+    "selection_rule": "none: descriptive comparison of model classes; no candidate is selected",
+    "note": "Result-informed plan amendment: the pre-declared grid {0..1} changed train NLL by <= 0.003, below the plateau range of the paper's figure; strengths are extended, not selected."
+  },
+  "fixed_args": {
+    "--experiment-id": "E2_fig9_surrogate_l2_reg_ext"
+  },
+  "max_workers": 2
+}

@@ -1,0 +1,24 @@
+{
+  "description": "B2: bias-encoded Fourier surrogate L = 1 (softmax over the 6 hexagon vertices, 8748 parameters); Phase 5 fair baseline, Adam, validation split enabled; lr and L2 from --lr/--l2.",
+  "experiment": {
+    "id": "fair_bias_fourier_classical"
+  },
+  "model": {
+    "kind": "bias_fourier",
+    "spectrum": 1
+  },
+  "data": {
+    "protocol": "paper",
+    "validation": {
+      "enabled": true,
+      "seed": 201,
+      "n": 1500
+    }
+  },
+  "training": {
+    "steps": 2000,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "l2": 0.0
+  }
+}

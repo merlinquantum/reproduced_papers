@@ -1,0 +1,264 @@
+{
+  "runs": [
+    {
+      "label": "Qubit fixed vs trainable observable, P0 paper protocol",
+      "run_dir": "outdir/run_20261028-155555",
+      "steps": 200,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_serial_r5_z0",
+          "final_mse_max": 0.043748992552472346,
+          "final_mse_mean": 0.024744211665053247,
+          "final_mse_min": 0.0025565471139918504,
+          "final_mse_std": 0.014588796440032584,
+          "model_kind": "quantum",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_serial_r5_trainable_linear",
+          "final_mse_max": 0.009787815785236928,
+          "final_mse_mean": 0.005703435397115136,
+          "final_mse_min": 0.0018859355718852159,
+          "final_mse_std": 0.0030368550313646277,
+          "model_kind": "quantum",
+          "n_parameters": 21,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_parallel_r5_z0",
+          "final_mse_max": 0.0073801379744578045,
+          "final_mse_mean": 0.0033141528066228405,
+          "final_mse_min": 7.104186778481566e-05,
+          "final_mse_std": 0.0031831733032700957,
+          "model_kind": "quantum",
+          "n_parameters": 90,
+          "n_seeds": 6,
+          "success_fraction": 0.3333333333333333
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_parallel_r5_trainable_linear",
+          "final_mse_max": 0.0058584010171443,
+          "final_mse_mean": 0.0021293392730223986,
+          "final_mse_min": 0.00017272938387077788,
+          "final_mse_std": 0.0025099125782893296,
+          "model_kind": "quantum",
+          "n_parameters": 123,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        }
+      ],
+      "repetition_pairs": []
+    },
+    {
+      "label": "Qubit fixed vs trainable observable, P1 (non-paper protocol)",
+      "run_dir": "outdir/run_20261028-155615",
+      "steps": 1000,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_serial_r5_z0",
+          "final_mse_max": 0.0052690201977956125,
+          "final_mse_mean": 0.0013865064551825158,
+          "final_mse_min": 2.0736363074359e-05,
+          "final_mse_std": 0.0019850285129735822,
+          "model_kind": "quantum",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 0.3333333333333333
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_serial_r5_trainable_linear",
+          "final_mse_max": 0.0008800683668086104,
+          "final_mse_mean": 0.00045069163698186393,
+          "final_mse_min": 3.114463101835309e-06,
+          "final_mse_std": 0.00031330130568403027,
+          "model_kind": "quantum",
+          "n_parameters": 21,
+          "n_seeds": 6,
+          "success_fraction": 0.16666666666666666
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_parallel_r5_z0",
+          "final_mse_max": 0.0024155694825427924,
+          "final_mse_mean": 0.000410264413721582,
+          "final_mse_min": 4.786717468018152e-18,
+          "final_mse_std": 0.0009825541600178777,
+          "model_kind": "quantum",
+          "n_parameters": 90,
+          "n_seeds": 6,
+          "success_fraction": 0.8333333333333334
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_parallel_r5_trainable_linear",
+          "final_mse_max": 4.279069120895783e-11,
+          "final_mse_mean": 1.5238402706547554e-11,
+          "final_mse_min": 5.2623504151720407e-23,
+          "final_mse_std": 1.800747152862593e-11,
+          "model_kind": "quantum",
+          "n_parameters": 123,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        }
+      ],
+      "repetition_pairs": []
+    },
+    {
+      "label": "Qubit fixed vs trainable observable, P2 (non-paper protocol)",
+      "run_dir": "outdir/run_20261028-155808",
+      "steps": 1000,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_serial_r5_z0",
+          "final_mse_max": 0.007250690370891948,
+          "final_mse_mean": 0.001224975033891458,
+          "final_mse_min": 7.363595390629235e-31,
+          "final_mse_std": 0.002952252039507092,
+          "model_kind": "quantum",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 0.8333333333333334
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_serial_r5_trainable_linear",
+          "final_mse_max": 6.255647249528523e-07,
+          "final_mse_mean": 1.729172751294232e-07,
+          "final_mse_min": 7.875213521614782e-32,
+          "final_mse_std": 2.62979596536852e-07,
+          "model_kind": "quantum",
+          "n_parameters": 21,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_parallel_r5_z0",
+          "final_mse_max": 3.719589625117258e-06,
+          "final_mse_mean": 7.382928500630534e-07,
+          "final_mse_min": 2.912771289150333e-31,
+          "final_mse_std": 1.4878707367850853e-06,
+          "model_kind": "quantum",
+          "n_parameters": 90,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_parallel_r5_trainable_linear",
+          "final_mse_max": 5.872654841428589e-05,
+          "final_mse_mean": 1.26522432504261e-05,
+          "final_mse_min": 1.9135512225563174e-07,
+          "final_mse_std": 2.2858985074267793e-05,
+          "model_kind": "quantum",
+          "n_parameters": 123,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        }
+      ],
+      "repetition_pairs": []
+    },
+    {
+      "label": "Qubit fixed vs trainable observable, P3 (non-paper protocol)",
+      "run_dir": "outdir/run_20261028-155958",
+      "steps": 1000,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_serial_r5_z0",
+          "final_mse_max": 0.010683221846339986,
+          "final_mse_mean": 0.005228450975199657,
+          "final_mse_min": 9.103194507554468e-14,
+          "final_mse_std": 0.004294545762700094,
+          "model_kind": "quantum",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 0.16666666666666666
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_serial_r5_trainable_linear",
+          "final_mse_max": 3.553714816575044e-05,
+          "final_mse_mean": 5.9958558907662696e-06,
+          "final_mse_min": 3.6467431909563087e-31,
+          "final_mse_std": 1.4473278863798037e-05,
+          "model_kind": "quantum",
+          "n_parameters": 21,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_parallel_r5_z0",
+          "final_mse_max": 1.0994807332248307e-31,
+          "final_mse_mean": 7.322792615899709e-32,
+          "final_mse_min": 3.838051658905338e-32,
+          "final_mse_std": 2.926116719851762e-32,
+          "model_kind": "quantum",
+          "n_parameters": 90,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_parallel_r5_trainable_linear",
+          "final_mse_max": 2.5766466227270757e-07,
+          "final_mse_mean": 6.207008402089837e-08,
+          "final_mse_min": 3.4735231936804616e-19,
+          "final_mse_std": 1.0572823894015764e-07,
+          "model_kind": "quantum",
+          "n_parameters": 123,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        }
+      ],
+      "repetition_pairs": []
+    }
+  ]
+}

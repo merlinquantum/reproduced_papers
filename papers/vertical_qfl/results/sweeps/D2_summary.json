@@ -1,0 +1,408 @@
+{
+  "experiment": "e1_8clients_merlin_diagnostic_d2",
+  "runs": [
+    {
+      "best_epoch": 31,
+      "best_epoch_test_accuracy_selected_on_test": 0.8119122257053292,
+      "final_test_accuracy": 0.7554858934169278,
+      "final_test_loss": 1.0118348770380767,
+      "final_validation_accuracy": 0.7411764705882353,
+      "overrides": {
+        "n_photons": 4,
+        "reuploads": 1,
+        "server_head": 0
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 869.2502437910007
+    },
+    {
+      "best_epoch": 89,
+      "best_epoch_test_accuracy_selected_on_test": 0.7931034482758621,
+      "final_test_accuracy": 0.7492163009404389,
+      "final_test_loss": 0.9977400250569406,
+      "final_validation_accuracy": 0.6862745098039216,
+      "overrides": {
+        "n_photons": 4,
+        "reuploads": 1,
+        "server_head": 0
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 873.1623330829971
+    },
+    {
+      "best_epoch": 94,
+      "best_epoch_test_accuracy_selected_on_test": 0.18808777429467086,
+      "final_test_accuracy": 0.13479623824451412,
+      "final_test_loss": 2.3040374229694236,
+      "final_validation_accuracy": 0.1607843137254902,
+      "overrides": {
+        "n_photons": 4,
+        "reuploads": 2,
+        "server_head": 0
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1516.2842195000012
+    },
+    {
+      "best_epoch": 80,
+      "best_epoch_test_accuracy_selected_on_test": 0.20689655172413793,
+      "final_test_accuracy": 0.10031347962382445,
+      "final_test_loss": 2.3525702975760434,
+      "final_validation_accuracy": 0.10588235294117647,
+      "overrides": {
+        "n_photons": 4,
+        "reuploads": 2,
+        "server_head": 0
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1504.6615774579986
+    },
+    {
+      "best_epoch": 96,
+      "best_epoch_test_accuracy_selected_on_test": 0.8934169278996865,
+      "final_test_accuracy": 0.8526645768025078,
+      "final_test_loss": 0.45906865409922826,
+      "final_validation_accuracy": 0.8117647058823529,
+      "overrides": {
+        "n_photons": 4,
+        "reuploads": 1,
+        "server_head": 2
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 868.0040524579999
+    },
+    {
+      "best_epoch": 45,
+      "best_epoch_test_accuracy_selected_on_test": 0.8840125391849529,
+      "final_test_accuracy": 0.8338557993730408,
+      "final_test_loss": 0.48754027495189894,
+      "final_validation_accuracy": 0.8274509803921568,
+      "overrides": {
+        "n_photons": 4,
+        "reuploads": 1,
+        "server_head": 2
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1011.9931342500022
+    },
+    {
+      "best_epoch": 94,
+      "best_epoch_test_accuracy_selected_on_test": 0.8432601880877743,
+      "final_test_accuracy": 0.7931034482758621,
+      "final_test_loss": 0.545820382695213,
+      "final_validation_accuracy": 0.8,
+      "overrides": {
+        "n_photons": 4,
+        "reuploads": 2,
+        "server_head": 2
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 2136.3433365419987
+    },
+    {
+      "best_epoch": 91,
+      "best_epoch_test_accuracy_selected_on_test": 0.8463949843260188,
+      "final_test_accuracy": 0.7304075235109718,
+      "final_test_loss": 0.8783808920450719,
+      "final_validation_accuracy": 0.6509803921568628,
+      "overrides": {
+        "n_photons": 4,
+        "reuploads": 2,
+        "server_head": 2
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 2150.849399915998
+    },
+    {
+      "best_epoch": 1,
+      "best_epoch_test_accuracy_selected_on_test": 0.10031347962382445,
+      "final_test_accuracy": 0.10031347962382445,
+      "final_test_loss": 2.3040186006073666,
+      "final_validation_accuracy": 0.10196078431372549,
+      "overrides": {
+        "n_photons": 8,
+        "reuploads": 1,
+        "server_head": 0
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 2132.6696923329982
+    },
+    {
+      "best_epoch": 1,
+      "best_epoch_test_accuracy_selected_on_test": 0.10031347962382445,
+      "final_test_accuracy": 0.10031347962382445,
+      "final_test_loss": 2.303084155235171,
+      "final_validation_accuracy": 0.10196078431372549,
+      "overrides": {
+        "n_photons": 8,
+        "reuploads": 1,
+        "server_head": 0
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 2122.1438882500006
+    },
+    {
+      "best_epoch": 1,
+      "best_epoch_test_accuracy_selected_on_test": 0.10031347962382445,
+      "final_test_accuracy": 0.10031347962382445,
+      "final_test_loss": 2.3035571059463167,
+      "final_validation_accuracy": 0.09803921568627451,
+      "overrides": {
+        "n_photons": 8,
+        "reuploads": 2,
+        "server_head": 0
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 2768.9683362920005
+    },
+    {
+      "best_epoch": 13,
+      "best_epoch_test_accuracy_selected_on_test": 0.109717868338558,
+      "final_test_accuracy": 0.10031347962382445,
+      "final_test_loss": 2.303455579990877,
+      "final_validation_accuracy": 0.10196078431372549,
+      "overrides": {
+        "n_photons": 8,
+        "reuploads": 2,
+        "server_head": 0
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 2555.826949208
+    },
+    {
+      "best_epoch": 1,
+      "best_epoch_test_accuracy_selected_on_test": 0.10031347962382445,
+      "final_test_accuracy": 0.10031347962382445,
+      "final_test_loss": 2.319043485348501,
+      "final_validation_accuracy": 0.10196078431372549,
+      "overrides": {
+        "n_photons": 8,
+        "reuploads": 1,
+        "server_head": 2
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1559.8165035830025
+    },
+    {
+      "best_epoch": 1,
+      "best_epoch_test_accuracy_selected_on_test": 0.10031347962382445,
+      "final_test_accuracy": 0.10031347962382445,
+      "final_test_loss": 2.3182660524374263,
+      "final_validation_accuracy": 0.10196078431372549,
+      "overrides": {
+        "n_photons": 8,
+        "reuploads": 1,
+        "server_head": 2
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1686.811296584001
+    },
+    {
+      "best_epoch": 1,
+      "best_epoch_test_accuracy_selected_on_test": 0.10031347962382445,
+      "final_test_accuracy": 0.10031347962382445,
+      "final_test_loss": 2.3186796421541316,
+      "final_validation_accuracy": 0.10196078431372549,
+      "overrides": {
+        "n_photons": 8,
+        "reuploads": 2,
+        "server_head": 2
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 2618.8441941659985
+    },
+    {
+      "best_epoch": 1,
+      "best_epoch_test_accuracy_selected_on_test": 0.10031347962382445,
+      "final_test_accuracy": 0.10031347962382445,
+      "final_test_loss": 2.3175829705026083,
+      "final_validation_accuracy": 0.10196078431372549,
+      "overrides": {
+        "n_photons": 8,
+        "reuploads": 2,
+        "server_head": 2
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 2968.6119731670005
+    }
+  ],
+  "selection": {
+    "candidates": [
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.7523510971786833,
+          "std_ddof1": 0.004433271355401496
+        },
+        "final_validation_accuracy": {
+          "mean": 0.7137254901960784,
+          "std_ddof1": 0.03882154877102616
+        },
+        "overrides": {
+          "n_photons": 4,
+          "reuploads": 1,
+          "server_head": 0
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.11755485893416928,
+          "std_ddof1": 0.024382992454708544
+        },
+        "final_validation_accuracy": {
+          "mean": 0.13333333333333333,
+          "std_ddof1": 0.03882154877102615
+        },
+        "overrides": {
+          "n_photons": 4,
+          "reuploads": 2,
+          "server_head": 0
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.8432601880877744,
+          "std_ddof1": 0.013299814066204646
+        },
+        "final_validation_accuracy": {
+          "mean": 0.8196078431372549,
+          "std_ddof1": 0.011091871077436
+        },
+        "overrides": {
+          "n_photons": 4,
+          "reuploads": 1,
+          "server_head": 2
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.761755485893417,
+          "std_ddof1": 0.04433271355401552
+        },
+        "final_validation_accuracy": {
+          "mean": 0.7254901960784315,
+          "std_ddof1": 0.1053727752356424
+        },
+        "overrides": {
+          "n_photons": 4,
+          "reuploads": 2,
+          "server_head": 2
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.10031347962382445,
+          "std_ddof1": 0.0
+        },
+        "final_validation_accuracy": {
+          "mean": 0.10196078431372549,
+          "std_ddof1": 0.0
+        },
+        "overrides": {
+          "n_photons": 8,
+          "reuploads": 1,
+          "server_head": 0
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.10031347962382445,
+          "std_ddof1": 0.0
+        },
+        "final_validation_accuracy": {
+          "mean": 0.1,
+          "std_ddof1": 0.00277296776935901
+        },
+        "overrides": {
+          "n_photons": 8,
+          "reuploads": 2,
+          "server_head": 0
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.10031347962382445,
+          "std_ddof1": 0.0
+        },
+        "final_validation_accuracy": {
+          "mean": 0.10196078431372549,
+          "std_ddof1": 0.0
+        },
+        "overrides": {
+          "n_photons": 8,
+          "reuploads": 1,
+          "server_head": 2
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.10031347962382445,
+          "std_ddof1": 0.0
+        },
+        "final_validation_accuracy": {
+          "mean": 0.10196078431372549,
+          "std_ddof1": 0.0
+        },
+        "overrides": {
+          "n_photons": 8,
+          "reuploads": 2,
+          "server_head": 2
+        },
+        "successful_runs": 2
+      }
+    ],
+    "rule": {
+      "aggregation": "mean over permutation seeds",
+      "direction": "maximize",
+      "metric": "final_validation_accuracy",
+      "tie_break_ascending": [
+        "server_head",
+        "n_photons",
+        "reuploads"
+      ],
+      "tie_tolerance": 0.005
+    },
+    "selected": {
+      "n_photons": 4,
+      "reuploads": 1,
+      "server_head": 2
+    },
+    "tied": [
+      {
+        "n_photons": 4,
+        "reuploads": 1,
+        "server_head": 2
+      }
+    ]
+  }
+}

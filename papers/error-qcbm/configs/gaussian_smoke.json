@@ -1,0 +1,74 @@
+{
+  "description": "Gaussian full-circuit native smoke: seed 0, 200k shots, 20 actual SPSA updates",
+  "task": "train",
+  "device": "cpu",
+  "dtype": "float64",
+  "model": {
+    "input_state": [
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      0,
+      0
+    ]
+  },
+  "dataset": {
+    "name": "gaussian",
+    "means": [
+      141,
+      353
+    ],
+    "standard_deviations": [
+      61,
+      61
+    ]
+  },
+  "training": {
+    "seeds": [
+      0
+    ],
+    "steps": 20,
+    "record_every": 5,
+    "shots": 200000,
+    "torch_threads": 1,
+    "sampling_seed_offset": 10000,
+    "perturbation_seed_offset": 100000,
+    "conditions": [
+      {
+        "name": "lossless",
+        "transmittance": 1.0,
+        "indistinguishability": 1.0,
+        "estimator": "postselection"
+      },
+      {
+        "name": "postselection",
+        "transmittance": 0.2,
+        "indistinguishability": 1.0,
+        "estimator": "postselection"
+      },
+      {
+        "name": "recycling",
+        "transmittance": 0.2,
+        "indistinguishability": 1.0,
+        "estimator": "recycling"
+      }
+    ],
+    "spsa": {
+      "alpha": 0.602,
+      "gamma": 0.101,
+      "c": 0.1,
+      "stability_fraction": 0.1,
+      "initial_step": 0.001,
+      "gain_calibration": "author_absolute_mean"
+    },
+    "loss": "kl",
+    "native_count_accumulation": "python"
+  }
+}

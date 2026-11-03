@@ -1,0 +1,80 @@
+{
+  "run_dir": "outdir/run_20261028-100025",
+  "experiment": "spectrum",
+  "checks_passed": 19,
+  "checks_total": 19,
+  "largest_coefficient_outside_any_prediction": 8.383310325263793e-16,
+  "bound_table": [
+    {
+      "case": "qubit_L1",
+      "dimension": 2,
+      "distinct_sum_bound": 1,
+      "layers": 1,
+      "paper_bound": 1.0,
+      "spectrum_size": 1,
+      "within_distinct_sum_bound": true,
+      "within_paper_bound": true
+    },
+    {
+      "case": "qubit_L4",
+      "dimension": 2,
+      "distinct_sum_bound": 120,
+      "layers": 4,
+      "paper_bound": 127.0,
+      "spectrum_size": 4,
+      "within_distinct_sum_bound": true,
+      "within_paper_bound": true
+    },
+    {
+      "case": "d3_L1",
+      "dimension": 3,
+      "distinct_sum_bound": 3,
+      "layers": 1,
+      "paper_bound": 3.5,
+      "spectrum_size": 3,
+      "within_distinct_sum_bound": true,
+      "within_paper_bound": true
+    },
+    {
+      "case": "d3_L2_rotated",
+      "dimension": 3,
+      "distinct_sum_bound": 36,
+      "layers": 2,
+      "paper_bound": 39.5,
+      "spectrum_size": 6,
+      "within_distinct_sum_bound": true,
+      "within_paper_bound": true
+    },
+    {
+      "case": "d4_L1_golomb",
+      "dimension": 4,
+      "distinct_sum_bound": 6,
+      "layers": 1,
+      "paper_bound": 7.0,
+      "spectrum_size": 6,
+      "within_distinct_sum_bound": true,
+      "within_paper_bound": true
+    },
+    {
+      "case": "d4_L2",
+      "dimension": 4,
+      "distinct_sum_bound": 120,
+      "layers": 2,
+      "paper_bound": 127.0,
+      "spectrum_size": 12,
+      "within_distinct_sum_bound": true,
+      "within_paper_bound": true
+    },
+    {
+      "case": "d4_L1_degenerate",
+      "dimension": 4,
+      "distinct_sum_bound": 6,
+      "layers": 1,
+      "paper_bound": 7.0,
+      "spectrum_size": 1,
+      "within_distinct_sum_bound": true,
+      "within_paper_bound": true
+    }
+  ],
+  "all_passed": true
+}

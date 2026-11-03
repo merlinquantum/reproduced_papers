@@ -1,0 +1,62 @@
+[
+  {
+    "model.n_modes": 12,
+    "model.n_client_stages": 8,
+    "model.circuit": {
+      "client_feature_maps": [
+        "identity",
+        "identity",
+        "identity"
+      ],
+      "message_width": 8,
+      "server_photons": 4,
+      "client_mixer": "superposition",
+      "mixer_depth": 1
+    }
+  },
+  {
+    "model.n_modes": 12,
+    "model.n_client_stages": 8,
+    "model.circuit": {
+      "client_feature_maps": [
+        "identity",
+        "identity",
+        "identity"
+      ],
+      "message_width": 8,
+      "server_photons": 4,
+      "client_mixer": "superposition",
+      "mixer_depth": 2
+    }
+  },
+  {
+    "model.n_modes": 12,
+    "model.n_client_stages": 8,
+    "model.circuit": {
+      "client_feature_maps": [
+        "identity",
+        "square",
+        "cos"
+      ],
+      "message_width": 8,
+      "server_photons": 4,
+      "client_mixer": "superposition",
+      "mixer_depth": 1
+    }
+  },
+  {
+    "model.n_modes": 12,
+    "model.n_client_stages": 8,
+    "model.circuit": {
+      "client_feature_maps": [
+        "identity",
+        "square",
+        "cos"
+      ],
+      "message_width": 8,
+      "server_photons": 4,
+      "client_mixer": "superposition",
+      "mixer_depth": 2
+    }
+  }
+]
