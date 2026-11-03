@@ -74,6 +74,14 @@ def _stats(values: list[float]) -> dict[str, Any] | None:
     return {"mean": mean, "std": std, "n": len(values), "values": values}
 
 
+def _paper_relative(path: Path) -> str:
+    """Record a sweep directory relative to the paper folder, not as a local absolute path."""
+    try:
+        return path.relative_to(PAPER_DIR).as_posix()
+    except ValueError:
+        return path.as_posix()
+
+
 def _format(entry: dict[str, Any] | None, digits: int = 2) -> str:
     if entry is None:
         return "—"
@@ -189,7 +197,7 @@ def analyse(sweep_dirs: list[Path], teacher_sweep: Path) -> dict[str, Any]:
 
     return {
         "sweep_id": spec["sweep_id"],
-        "sweep_dirs": [str(path) for path in sweep_dirs],
+        "sweep_dirs": [_paper_relative(path) for path in sweep_dirs],
         "run_sources": sources,
         "scope": "complete" if complete else "partial",
         "label": "partial RED-tier run (30 epochs, 3 seeds)"

@@ -7,16 +7,16 @@
     "s6": "24/24"
   },
   "sweeps": {
-    "teacher": "/mnt/c/Users/BenjaminSTOTT/PycharmProjects/reproduced_papers/papers/photonic_QKD/outdir/sweeps/S1_teacher_mnist_30ep_20261023-145803",
+    "teacher": "outdir/sweeps/S1_teacher_mnist_30ep_20261023-145803",
     "s4": [
-      "/mnt/c/Users/BenjaminSTOTT/PycharmProjects/reproduced_papers/papers/photonic_QKD/outdir/sweeps/S4_mnist_pqkd_baselines_20261023-182403",
-      "/mnt/c/Users/BenjaminSTOTT/PycharmProjects/reproduced_papers/papers/photonic_QKD/outdir/sweeps/S4b_mnist_completion_20261026-102105"
+      "outdir/sweeps/S4_mnist_pqkd_baselines_20261023-182403",
+      "outdir/sweeps/S4b_mnist_completion_20261026-102105"
     ],
     "s6": [
-      "/mnt/c/Users/BenjaminSTOTT/PycharmProjects/reproduced_papers/papers/photonic_QKD/outdir/sweeps/S6_mnist_photonic_regimes_4ph_20261026-175437",
-      "/mnt/c/Users/BenjaminSTOTT/PycharmProjects/reproduced_papers/papers/photonic_QKD/outdir/sweeps/S6_mnist_photonic_regimes_4ph_resume1_20261026-195315",
-      "/mnt/c/Users/BenjaminSTOTT/PycharmProjects/reproduced_papers/papers/photonic_QKD/outdir/sweeps/S6_mnist_photonic_regimes_4ph_resume2_20261027-085935",
-      "/mnt/c/Users/BenjaminSTOTT/PycharmProjects/reproduced_papers/papers/photonic_QKD/outdir/sweeps/S6_mnist_photonic_regimes_4ph_resume3_20261028-120645"
+      "outdir/sweeps/S6_mnist_photonic_regimes_4ph_20261026-175437",
+      "outdir/sweeps/S6_mnist_photonic_regimes_4ph_resume1_20261026-195315",
+      "outdir/sweeps/S6_mnist_photonic_regimes_4ph_resume2_20261027-085935",
+      "outdir/sweeps/S6_mnist_photonic_regimes_4ph_resume3_20261028-120645"
     ]
   },
   "code_revisions": {

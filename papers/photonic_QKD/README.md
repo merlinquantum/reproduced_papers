@@ -99,7 +99,7 @@ papers/photonic_QKD/
 └── models/    teacher_mnist_s1_seed0/teacher.pt (S1 seed-0 teacher, 0.9 MB; used by the notebook's live run); other weights stay in outdir/
 ```
 
-`outdir/` holds raw runs and is git-ignored. `LOG.md`, `FEEDBACK.md` and `VISITED_URLS.md` are git-ignored working notes.
+`outdir/` holds raw runs and is git-ignored.
 
 ## Install and How to Run
 

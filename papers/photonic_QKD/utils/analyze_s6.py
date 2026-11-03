@@ -31,7 +31,7 @@ import math
 from pathlib import Path
 from typing import Any
 
-from analyze_s4 import _dotted, _format, _stats, load_runs
+from analyze_s4 import _dotted, _format, _paper_relative, _stats, load_runs
 
 PAPER_DIR = Path(__file__).resolve().parents[1]
 ARM_METRICS = {
@@ -175,8 +175,8 @@ def analyse(sweep_dirs: list[Path], s4_sweep_dirs: list[Path]) -> dict[str, Any]
     }
     return {
         "sweep_id": spec["sweep_id"],
-        "sweep_dirs": [str(path) for path in sweep_dirs],
-        "s4_sweep_dirs": [str(path) for path in s4_sweep_dirs],
+        "sweep_dirs": [_paper_relative(path) for path in sweep_dirs],
+        "s4_sweep_dirs": [_paper_relative(path) for path in s4_sweep_dirs],
         "run_sources": sources,
         "scope": "complete" if complete else "partial",
         "label": "Phase 4 reduced-scope validation (MNIST, 4 photons, 30 epochs, 3 seeds)"

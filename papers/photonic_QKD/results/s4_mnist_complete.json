@@ -1,8 +1,8 @@
 {
   "sweep_id": "S4_mnist_pqkd_baselines",
   "sweep_dirs": [
-    "/mnt/c/Users/BenjaminSTOTT/PycharmProjects/reproduced_papers/papers/photonic_QKD/outdir/sweeps/S4_mnist_pqkd_baselines_20261023-182403",
-    "/mnt/c/Users/BenjaminSTOTT/PycharmProjects/reproduced_papers/papers/photonic_QKD/outdir/sweeps/S4b_mnist_completion_20261026-102105"
+    "outdir/sweeps/S4_mnist_pqkd_baselines_20261023-182403",
+    "outdir/sweeps/S4b_mnist_completion_20261026-102105"
   ],
   "run_sources": {
     "pqkd__seed0": "S4_mnist_pqkd_baselines_20261023-182403",

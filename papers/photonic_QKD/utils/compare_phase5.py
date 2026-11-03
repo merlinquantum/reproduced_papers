@@ -25,7 +25,7 @@ import math
 from pathlib import Path
 from typing import Any
 
-from analyze_s4 import _format, _stats
+from analyze_s4 import _format, _paper_relative, _stats
 from analyze_s6 import merge_sweeps
 
 PAPER_DIR = Path(__file__).resolve().parents[1]
@@ -387,9 +387,9 @@ def build(teacher_sweep: Path, s4: list[Path], s6: list[Path]) -> dict[str, Any]
             "s6": f"{sum(len(v) for v in sweeps['s6']['runs'].values())}/24",
         },
         "sweeps": {
-            "teacher": str(teacher_sweep),
-            "s4": [str(d) for d in s4],
-            "s6": [str(d) for d in s6],
+            "teacher": _paper_relative(teacher_sweep),
+            "s4": [_paper_relative(d) for d in s4],
+            "s6": [_paper_relative(d) for d in s6],
         },
         "code_revisions": {name: sweep["commits"] for name, sweep in sweeps.items()},
         "rows": rows,
