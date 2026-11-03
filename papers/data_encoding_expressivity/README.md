@@ -1,6 +1,6 @@
 # The effect of data encoding on the expressive power of variational quantum machine learning models - Reproduction
 
-Status: reproduction complete (planning, implementation, reproduction, photonic adaptation, fair comparison, documentation). Photonic status: `PARTIAL_MERLIN_TRANSLATION`. `LOG.md` is the authoritative record; `INSIGHTS.md` holds the reusable lessons.
+Status: reproduction complete (planning, implementation, reproduction, photonic adaptation, fair comparison, documentation). Photonic status: `PARTIAL_MERLIN_TRANSLATION`. `INSIGHTS.md` holds the reusable lessons.
 
 ## Reference and Attribution
 
@@ -37,7 +37,7 @@ random circuits). The paper reports no numbers, seeds or uncertainty for them.
 
 ## Reproduction Scope, Claims, and Deviations
 
-**Reproduced** (with the claim IDs of `LOG.md`):
+**Reproduced**:
 
 | ID | Claim | Experiment |
 |---|---|---|
@@ -86,8 +86,7 @@ same frequency set; a MerLin photonic adaptation; training protocols P1–P5
 
 ```text
 papers/data_encoding_expressivity/
-├── README.md, LOG.md, INSIGHTS.md, FEEDBACK.md, CONFLUENCE.md, VISITED_URLS.md
-├── ACTION_REQUIRED_SEND_TO_MERLIN_TEAM.md
+├── README.md, INSIGHTS.md
 ├── notebook.ipynb   the reproduction as a scientific walkthrough (runs in ~40 s on CPU)
 ├── cli.json, requirements.txt, implementation.py
 ├── configs/      one JSON per experiment variant (see "Configuration")
@@ -179,7 +178,7 @@ The script saves a snapshot of the resolved config alongside results and logs.
   the paper's original data, not a substitute. Their only limitation is the
   paper's own: noiseless 1D targets with no held-out split, so no
   generalisation claim is tested. The full generator specification is in
-  `LOG.md` → Data Acquisition Log. `data/data_encoding_expressivity/sources/`
+  `lib/data.py`. `data/data_encoding_expressivity/sources/`
   only caches the paper source and the original repository snapshot (commit
   `fe3ad00`).
 
@@ -251,7 +250,7 @@ The others are non-paper and are set from the command line:
 single "typical" runs or scatter plots, with no seeds or uncertainty. The
 comparison with the paper is therefore **qualitative (trend-level)**.
 Quantitative statements below are about this reproduction only. Every value
-comes from the `metrics.json` of the run named in `LOG.md` ("Phase 3"), via
+comes from the `metrics.json` of its run, via
 the tables in `results/*_summary.md`. "Delta" is not defined where the paper gives
 no value. "B1" is the closed-form least-squares fit using exactly the model's frequency set: the lowest error any model of that
 class can reach. "B2" is the same frequency set as a classical model trained
@@ -283,8 +282,9 @@ Each figure is stamped with its result-scope label.
 Issues found in the paper's text and figures are listed in "Notes on the
 Paper" below.
 
-Regeneration commands for every table and figure are in `LOG.md` ("Exact
-Fig. 4 plotting commands" and "Phase 3 result summary").
+To regenerate a table or figure, run its config (see "Install and How to Run"),
+then the matching `utils/` script on the run directory. Each script's docstring
+gives its exact usage.
 
 ## Notes on the Paper
 
@@ -399,10 +399,7 @@ mode m−1┤      ├────────────────┤ ϕ ├
 
 ### Hardware-Aware Settings
 
-Full per-configuration tables in `LOG.md`:
-"Hardware-aware report", under "Phase 4 Execution and Results", for the
-original runs, and "Hardware-aware report — Phase 4 Amendment" for the
-amendment runs. Summary:
+Summary for the original and amendment runs:
 - `FOCK` space; threshold detectors (emulated); 1–5 photons in 2–8 modes;
   single-photon inputs in the first n modes; no postselection;
 - MerLin 0.2.3 analytic CPU simulator, no shots, exact autograd gradients;
@@ -485,8 +482,7 @@ the published Fig. 4 target at degrees 1–6 under:
 **A disclosed amendment.** B2 was first initialised like the circuit angles
 (`U[0, 2π)`), and that failed at lr 0.01. The quantum and photonic trainable
 readouts it is compared with are zero-initialised. A zero-initialised B2 was
-therefore added, *after* the first result was seen and recorded as such in
-`LOG.md`, and both variants are reported. Even this linear model is sensitive
+therefore added, *after* the first result was seen, and both variants are reported. Even this linear model is sensitive
 to protocol and initialisation: under P1/P2 both variants reach the exact
 floor at every degree; under P0 and P3 one of them fails.
 
@@ -514,7 +510,7 @@ comparison with the paper, which reports no numbers.
 
 ### Phase 5 extensions (beyond the paper's claims)
 
-Three extensions were declared in `LOG.md` before they ran. Each carries the
+Three extensions were declared before they ran. Each carries the
 **advantage-evidence** label, because the classical baseline B2 ran under
 identical conditions. None supports a quantum or photonic advantage, and
 none changes the claim outcomes above.
@@ -545,8 +541,8 @@ none changes the claim outcomes above.
   obstacle to reliable fits.
 
 Tables: `results/phase5_extensions.md`. Figure:
-`results/phase5_extensions.png`. Runs, timings and plan:
-`LOG.md`, "Phase 5 Extensions X1–X3".
+`results/phase5_extensions.png`. Run manifest:
+`results/phase5_extensions_manifest.json`.
 
 ## Limitations
 
@@ -572,7 +568,7 @@ Tables: `results/phase5_extensions.md`. Figure:
 - Noise and finite shots for the photonic models (loss, distinguishability).
 - A scaling study of multi-scale encodings beyond degree 9, with more photons.
 - Re-run with MerLin 0.4.x in a separate environment to see whether the mesh
-  and encoding-scale issues in `ACTION_REQUIRED_SEND_TO_MERLIN_TEAM.md` persist.
+  and encoding-scale issues reported to the MerLin team persist.
 - A held-out-data task, to test whether higher degree helps or hurts
   generalisation (the paper's open question).
 
