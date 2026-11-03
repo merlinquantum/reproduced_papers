@@ -34,8 +34,6 @@ trainable than comparable classical neural networks.
 
 ## Reproduction Scope, Claims, and Deviations
 
-The full claim and experiment inventories are in `LOG.md`.
-
 **Reproduced (Phase 03, paper-accurate):**
 - Fig. 2 and Fig. 3a (Fisher spectra and effective dimension at d=40);
 - Fig. 9 (spectra at s_in = 6, 8, 10);
@@ -116,7 +114,7 @@ authors' cached arrays.
 
 ```text
 papers/power_of_QNN/
-|-- README.md, LOG.md, INSIGHTS.md, FEEDBACK.md, VISITED_URLS.md, CONFLUENCE.md
+|-- README.md, INSIGHTS.md
 |-- requirements.txt, cli.json, notebook.ipynb
 |-- configs/            JSON configs (defaults, paper runs, ablations, MerLin, fair_* comparisons)
 |-- lib/
@@ -243,7 +241,7 @@ Every dataset lives under `data/power_of_QNN/` (repository data root, `--data-ro
 | Authors' figure arrays (`.npy`) | numeric reference targets | `sources/effective_dimension/` (tag v1.0.0) | original |
 
 Regeneration:
-- Iris and blobs: the exact command is in `LOG.md` (Data Acquisition Log).
+- Iris and blobs: each file's construction is documented in `lib/data.py`.
 - Breast cancer and MNIST: `python papers/power_of_QNN/utils/prepare_datasets.py --data-root data`
   from the repository root.
 
@@ -290,6 +288,10 @@ Phase 03 (2026-10-21).
 
 Footnote 18's choice of [4,4,4,2] as the highest-rank classical network is therefore not reproduced.
 
+**Sample-size sensitivity (Fig. 8, C-11):** stable by about 40 samples for d <= 40, still rising at 100 for d = 60-100.
+
+![Fig. 8](results/fig8_sensitivity.png)
+
 ### Fisher spectra (Figs. 2 and 9)
 
 - **Normalized spectra:** the classical F_hat is degenerate (43% of eigenvalues < 1e-10). The
@@ -299,6 +301,10 @@ Footnote 18's choice of [4,4,4,2] as the highest-rank classical network is there
   It shrinks by about half per qubit for the QNN (x0.49) and the easy model (x0.53). The
   claimed barren-plateau resilience is therefore not supported.
 
+![Fig. 2](results/fig2_spectra_d40.png)
+
+Fig. 9 spectra: [s_in = 6](results/fig9_spectra_s6.png) · [s_in = 8](results/fig9_spectra_s8.png) · [s_in = 10](results/fig9_spectra_s10.png).
+
 ![Fisher trace scaling](results/fisher_trace_scaling.png)
 
 ### Training on Iris (Fig. 3b, Table 1; d=8, 100 seeds, Adam lr 0.1, 100 iterations)
@@ -306,7 +312,7 @@ Footnote 18's choice of [4,4,4,2] as the highest-rank classical network is there
 ![Fig. 3b](results/fig3b_training_iris.png)
 
 - **Gradients:** exact gradients and the authors' finite differences differ by <= 3e-4.
-- **Init range:** with every model initialized in [-1,1], the QNN still has the lowest loss
+- **Init range:** with every model initialized in [-1,1] (`results/fig3b_training_iris_paper_domain.png`), the QNN still has the lowest loss
   under the paper's shared lr (0.2307 ± 0.0062 vs classical 0.3029 ± 0.1650). This changes once
   each model's lr is tuned (Fair Baselines).
 
@@ -334,7 +340,7 @@ photonic designs learn as well as their capacity suggests?
 - C-04: `MISSING_OR_UNFAIR`, because the paper's [4,1,1,1,2] is a width-1 chain, one untuned lr
   (0.1) is shared, and the init ranges differ. The fix is the B-2 baselines below.
 
-**Protocol (frozen in `LOG.md` "Phase 5 Comparison Plan" before any run).** Every model gets:
+**Protocol (frozen before any run).** Every model gets:
 - the same Adam optimizer (torch defaults), init U[-1,1], 100 full-batch iterations;
 - its own lr from {0.01, 0.03, 0.1, 0.3}, selected on seeds 0-19 by the lowest mean final loss
   (training loss on Iris 0/1 at d=8, validation loss otherwise; ties within 0.005 reported);
@@ -419,6 +425,8 @@ classifier:
 | Search 3: chip size and input | **photonic 10-mode**: 10 modes / 5 photons, cluster input, 3 uploads | **0.9096 ± 0.0018** (beats the 3-upload qubit QNN 0.8926, >3 std at n=1e3-1e6) | worst of all models (0.44-0.46) | same; Phase 05 |
 | Search 4: capacity and loss together | **photonic 6-mode**: 6 modes / 3 photons, cluster input, 3 uploads | 0.8970 ± 0.0007 (>= qubit up to n=1e5, tie at 1e6) | best quantum model on Iris 1/2, breast cancer, MNIST | `phase04_amendment5_tables.md`; Phase 05 |
 
+Figures: `results/merlin_effective_dimension_d40.png`, `results/merlin_fisher_trace_scaling.png` and `results/merlin_training_iris.png` (photonic adaptation against the qubit and classical models); `results/merlin_amendment5_training.png` (Iris training and test cross-entropy of the search 3 and 4 designs).
+
 **What carries over from the paper:**
 - **Encoding effect:** the hard encoding gives a higher effective dimension and a lower Iris loss
   than the easy one at s_in = 4 (`results/phase04_tables.md`). It is not resolved at s_in = 8, 10.
@@ -426,7 +434,7 @@ classifier:
   input vs x0.49).
 
 **What the design searches showed.** Every candidate of every search is listed in
-`results/phase04_design_screens.md`, with the predeclared rules in `LOG.md` (searches 1-4 are recorded there as Amendments 2-5).
+`results/phase04_design_screens.md` and plotted in `results/merlin_design_study.png` (searches 1-4 are Amendments 2-5).
 - **Capacity levers:** data re-uploading interleaved with trainable meshes gave the largest gain.
   More modes and an emitter cluster input also help, and fixing dead mesh phases matters.
   Feed-forward and PNR readout do not help.
@@ -465,9 +473,6 @@ All MerLin results are exact simulations (shots = 0, float64) with:
 | Scaling (s_in = 6, 8, 10) | FOCK | ideal threshold | 4 / 5 / 6 | 8 / 10 / 12 (up to 12,376) | [1,0,...] | hard / easy, d = 60-100 | same | none | same | 8.5 min | draws 0-2 |
 | Photonic 10-mode | FOCK | ideal threshold | 5 | 10 (2,002) | linear cluster from one spin emitter | hard, 3 re-uploads interleaved with a 20-MZI ps_bs mesh | same | none | MerLin, local CPU, photonic_engines fork | 61 s (Fisher); 826-1569 s (Phase 05 runs) | draws 10-14; seeds 0-19, 100-199 |
 | Photonic 6-mode | FOCK | ideal threshold | 3 | 6 (56) | linear cluster from one spin emitter | as the 10-mode model | same | none | same | 37-369 s (Phase 05 runs) | draws 10-14; seeds 0-19, 100-199 |
-
-Per-run hardware tables for every MerLin run, including all design-search candidates, are in
-`LOG.md` ("Hardware-aware table", and the Amendment 4 and 5 tables for searches 3 and 4).
 
 ## Limitations
 
