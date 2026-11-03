@@ -1,0 +1,226 @@
+{
+ "pinned_lib_sha256": "764ee0c7f1151e06f07f74f7eb72f44abaeae5b989cd079eac9943f4366f41e1",
+ "sweeps": {
+  "P1-MERLIN-SCALES": {
+   "status": "COMPLETED",
+   "machine_device": "local cpu",
+   "planned_runs": 12,
+   "completed_runs": 12,
+   "attempts": 12,
+   "started_at": "2026-10-15T20:26:06Z",
+   "completed_at": "2026-10-15T20:38:29Z",
+   "run_wall_clock_s": [
+    47.0,
+    47.0,
+    44.0,
+    49.0,
+    45.0,
+    46.0,
+    45.0,
+    44.0,
+    46.0,
+    46.0,
+    47.0,
+    43.0
+   ],
+   "photonic_kernel_shapes": [
+    {
+     "n_modes": 10,
+     "n_photons": 2,
+     "input_state": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     "fock_dim": 55
+    }
+   ]
+  },
+  "E1-MERLIN": {
+   "status": "COMPLETED",
+   "machine_device": "local cpu",
+   "planned_runs": 3,
+   "completed_runs": 3,
+   "attempts": 3,
+   "started_at": "2026-10-15T20:40:37Z",
+   "completed_at": "2026-10-15T21:36:46Z",
+   "run_wall_clock_s": [
+    1107.0,
+    1083.0,
+    1076.0
+   ],
+   "photonic_kernel_shapes": [
+    {
+     "n_modes": 10,
+     "n_photons": 2,
+     "input_state": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     "fock_dim": 55
+    }
+   ]
+  },
+  "E2-MERLIN": {
+   "status": "COMPLETED",
+   "machine_device": "local cpu",
+   "planned_runs": 3,
+   "completed_runs": 3,
+   "attempts": 3,
+   "started_at": "2026-10-15T21:37:04Z",
+   "completed_at": "2026-10-15T22:31:31Z",
+   "run_wall_clock_s": [
+    1073.0,
+    1080.0,
+    1058.0
+   ],
+   "photonic_kernel_shapes": [
+    {
+     "n_modes": 10,
+     "n_photons": 2,
+     "input_state": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     "fock_dim": 55
+    }
+   ]
+  },
+  "E3-MERLIN": {
+   "status": "COMPLETED",
+   "machine_device": "cuda:0",
+   "planned_runs": 3,
+   "completed_runs": 3,
+   "attempts": 3,
+   "started_at": "2026-10-15T22:46:06Z",
+   "completed_at": "2026-10-16T00:05:47Z",
+   "run_wall_clock_s": [
+    1576.0,
+    1577.0,
+    1579.0
+   ],
+   "photonic_kernel_shapes": [
+    {
+     "n_modes": 5,
+     "n_photons": 2,
+     "input_state": [
+      1,
+      0,
+      1,
+      0,
+      0
+     ],
+     "fock_dim": 15
+    },
+    {
+     "n_modes": 10,
+     "n_photons": 2,
+     "input_state": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     "fock_dim": 55
+    }
+   ]
+  },
+  "E4-MERLIN": {
+   "status": "COMPLETED",
+   "machine_device": "cuda:0",
+   "planned_runs": 3,
+   "completed_runs": 3,
+   "attempts": 3,
+   "started_at": "2026-10-15T20:40:24Z",
+   "completed_at": "2026-10-15T22:00:24Z",
+   "run_wall_clock_s": [
+    1585.0,
+    1584.0,
+    1583.0
+   ],
+   "photonic_kernel_shapes": [
+    {
+     "n_modes": 5,
+     "n_photons": 2,
+     "input_state": [
+      1,
+      0,
+      1,
+      0,
+      0
+     ],
+     "fock_dim": 15
+    },
+    {
+     "n_modes": 10,
+     "n_photons": 2,
+     "input_state": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0
+     ],
+     "fock_dim": 55
+    }
+   ]
+  }
+ },
+ "m0_selection": {
+  "mean_eval_rmse": {
+   "{\"kernel_scale\": 2.0, \"neuron_scale\": 1.0}": 0.02131800460923367,
+   "{\"kernel_scale\": 2.0, \"neuron_scale\": 3.14159}": 0.023862202225740464,
+   "{\"kernel_scale\": 3.14159, \"neuron_scale\": 1.0}": 0.021164798203859168,
+   "{\"kernel_scale\": 3.14159, \"neuron_scale\": 3.14159}": 0.02355428026965978
+  },
+  "tied_within_1pct": [
+   {
+    "neuron_scale": 1.0,
+    "kernel_scale": 2.0
+   },
+   {
+    "neuron_scale": 1.0,
+    "kernel_scale": 3.14159
+   }
+  ],
+  "selected": {
+   "neuron_scale": 1.0,
+   "kernel_scale": 2.0
+  }
+ },
+ "problems": []
+}

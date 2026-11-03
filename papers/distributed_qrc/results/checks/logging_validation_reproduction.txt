@@ -1,0 +1,46 @@
+# validate_logging.py over every R2 sweep (all runs), 2026-10-15T18:36:46Z
+## papers/distributed_qrc/outdir/sweep_E1-R2
+Logging validation passed: 3 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_E2-R2
+Logging validation passed: 3 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_E3-R2
+Logging validation passed: 3 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_E4-R2
+Logging validation passed: 3 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_GAP-CLASSICAL-MRMR-R2
+Logging validation passed: 20 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_GAP-CLASSICAL-MRSR-R2
+Logging validation passed: 20 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_GAP-CLASSICAL-SRMR-R2
+Logging validation passed: 20 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_GAP-CLASSICAL-SRSR-R2
+Logging validation passed: 20 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_GAP-INTERCEPT-R2
+Logging validation passed: 6 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_GAP-NOISE-SCALE-R2
+Logging validation passed: 9 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_GAP-SHOTS-R2
+Logging validation passed: 9 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_P1-R6R7-R2
+Logging validation passed: 12 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_P1-ROBUST-R2
+Logging validation passed: 9 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_XCHECK-E3-R2
+Logging validation passed: 1 run(s), 1 sweep(s).
+exit=0
+## papers/distributed_qrc/outdir/sweep_XCHECK-E4-R2
+Logging validation passed: 1 run(s), 1 sweep(s).
+exit=0

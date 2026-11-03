@@ -1,0 +1,147 @@
+{
+ "paper_reference": "Sec. III-B; noisy fully quantum cells of Tables C3, C6, C9, C12; device mapping Table III",
+ "mrsr-vs-srsr@10": {
+  "ours_diff": 0.0001442996508287525,
+  "ours_diff_in_pooled_std": 0.42744651893322905,
+  "paper_diff": -0.0002999999999999982,
+  "same_sign": false
+ },
+ "mrsr-vs-srsr@15": {
+  "ours_diff": -0.00016196449388753906,
+  "ours_diff_in_pooled_std": -0.8113400524627786,
+  "paper_diff": -0.0016000000000000007,
+  "same_sign": true
+ },
+ "mrsr-vs-srsr@20": {
+  "ours_diff": 5.824810984659222e-05,
+  "ours_diff_in_pooled_std": 0.5681627613489278,
+  "paper_diff": -0.0007999999999999986,
+  "same_sign": false
+ },
+ "mrsr-vs-srsr@25": {
+  "ours_diff": -8.454235550513743e-05,
+  "ours_diff_in_pooled_std": -0.5629432995435976,
+  "paper_diff": -0.004200000000000001,
+  "same_sign": true
+ },
+ "mrsr-vs-srsr@30": {
+  "ours_diff": -6.32259452759635e-05,
+  "ours_diff_in_pooled_std": -1.0495774369731032,
+  "paper_diff": -0.002100000000000001,
+  "same_sign": true
+ },
+ "mrsr-vs-srsr@40": {
+  "ours_diff": -2.0247151078379988e-05,
+  "ours_diff_in_pooled_std": -0.18499317134837412,
+  "paper_diff": -0.002999999999999999,
+  "same_sign": true
+ },
+ "mrsr-vs-srsr@50": {
+  "ours_diff": 0.0001221910114215189,
+  "ours_diff_in_pooled_std": 1.0374787528665963,
+  "paper_diff": -0.0034999999999999996,
+  "same_sign": false
+ },
+ "mrsr-vs-srsr@60": {
+  "ours_diff": 6.747635062739725e-05,
+  "ours_diff_in_pooled_std": 0.7785870795925021,
+  "paper_diff": -0.0028000000000000004,
+  "same_sign": false
+ },
+ "srmr-vs-srsr@10": {
+  "ours_diff": 0.001290918789511637,
+  "ours_diff_in_pooled_std": 1.4736295260805332,
+  "paper_diff": 0.0030000000000000027,
+  "same_sign": true
+ },
+ "srmr-vs-srsr@15": {
+  "ours_diff": 0.0023845580803418063,
+  "ours_diff_in_pooled_std": 4.087913645436817,
+  "paper_diff": 0.002100000000000001,
+  "same_sign": true
+ },
+ "srmr-vs-srsr@20": {
+  "ours_diff": 0.0004656274467848467,
+  "ours_diff_in_pooled_std": 6.191344378656212,
+  "paper_diff": 0.0006999999999999992,
+  "same_sign": true
+ },
+ "srmr-vs-srsr@25": {
+  "ours_diff": 0.002294292292660557,
+  "ours_diff_in_pooled_std": 2.8906167892920007,
+  "paper_diff": 0.0019999999999999983,
+  "same_sign": true
+ },
+ "srmr-vs-srsr@30": {
+  "ours_diff": 0.0004696244260883036,
+  "ours_diff_in_pooled_std": 4.336708440074062,
+  "paper_diff": 0.0005000000000000004,
+  "same_sign": true
+ },
+ "srmr-vs-srsr@40": {
+  "ours_diff": 0.00013145365365778948,
+  "ours_diff_in_pooled_std": 1.1329651404621566,
+  "paper_diff": 0.001299999999999999,
+  "same_sign": true
+ },
+ "srmr-vs-srsr@50": {
+  "ours_diff": 0.0007657556451682954,
+  "ours_diff_in_pooled_std": 4.851901571737389,
+  "paper_diff": 0.00040000000000000105,
+  "same_sign": true
+ },
+ "srmr-vs-srsr@60": {
+  "ours_diff": 8.467707583795919e-05,
+  "ours_diff_in_pooled_std": 1.985935819666038,
+  "paper_diff": 0.0011000000000000003,
+  "same_sign": true
+ },
+ "mrmr-vs-srsr@10": {
+  "ours_diff": 0.00043865433131275167,
+  "ours_diff_in_pooled_std": 1.2407900147668418,
+  "paper_diff": 9.99999999999994e-05,
+  "same_sign": true
+ },
+ "mrmr-vs-srsr@15": {
+  "ours_diff": 0.0013940313344469255,
+  "ours_diff_in_pooled_std": 10.736478202542049,
+  "paper_diff": -0.0005999999999999998,
+  "same_sign": false
+ },
+ "mrmr-vs-srsr@20": {
+  "ours_diff": 0.000562963083334497,
+  "ours_diff_in_pooled_std": 4.3644819248537114,
+  "paper_diff": 0.0006999999999999992,
+  "same_sign": true
+ },
+ "mrmr-vs-srsr@25": {
+  "ours_diff": 0.0012434604859563915,
+  "ours_diff_in_pooled_std": 1.5259680867556906,
+  "paper_diff": -0.0016000000000000007,
+  "same_sign": false
+ },
+ "mrmr-vs-srsr@30": {
+  "ours_diff": 0.0002693164156349955,
+  "ours_diff_in_pooled_std": 2.705824971102959,
+  "paper_diff": -0.0008000000000000021,
+  "same_sign": false
+ },
+ "mrmr-vs-srsr@40": {
+  "ours_diff": 8.584854205779223e-05,
+  "ours_diff_in_pooled_std": 0.7527069344991378,
+  "paper_diff": -0.0017999999999999995,
+  "same_sign": false
+ },
+ "mrmr-vs-srsr@50": {
+  "ours_diff": 0.0004841582001908172,
+  "ours_diff_in_pooled_std": 5.310068967906781,
+  "paper_diff": -0.0017000000000000001,
+  "same_sign": false
+ },
+ "mrmr-vs-srsr@60": {
+  "ours_diff": 7.464051059005022e-05,
+  "ours_diff_in_pooled_std": 1.2239084452735356,
+  "paper_diff": -0.0009000000000000015,
+  "same_sign": false
+ }
+}

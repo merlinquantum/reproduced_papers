@@ -1,0 +1,1616 @@
+{
+ "tolerance": "max(0.10 * R2 mean, 2 * pooled std); >= 6/8 configurations",
+ "srsr": {
+  "status": "COMPLETED",
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "anchor_max_abs_diff": 0.0,
+  "a_full_quantum": {
+   "merlin_cell": "photonic|photonic_kernel",
+   "r2_cell": "quantum_ideal|quantum_kernel_ideal",
+   "configurations": {
+    "10": {
+     "merlin_mean": 0.014668519535424916,
+     "merlin_std": 0.00015622918488601708,
+     "r2_mean": 0.014150346269650685,
+     "r2_std": 0.00015370733973496425,
+     "delta": 0.000518173265774231,
+     "relative_delta": 0.03661912266313908,
+     "tolerance": 0.0014150346269650685,
+     "preserved": true
+    },
+    "20": {
+     "merlin_mean": 0.014222207387921139,
+     "merlin_std": 7.55343204517558e-05,
+     "r2_mean": 0.013797439160710067,
+     "r2_std": 0.00016619821111062862,
+     "delta": 0.00042476822721107185,
+     "relative_delta": 0.030786019221643136,
+     "tolerance": 0.0013797439160710067,
+     "preserved": true
+    },
+    "40": {
+     "merlin_mean": 0.014102816660359818,
+     "merlin_std": 8.289693142094504e-05,
+     "r2_mean": 0.013837835485590666,
+     "r2_std": 2.9370523430624035e-05,
+     "delta": 0.0002649811747691515,
+     "relative_delta": 0.019149033463006285,
+     "tolerance": 0.0013837835485590666,
+     "preserved": true
+    },
+    "15": {
+     "merlin_mean": 0.014358969773982724,
+     "merlin_std": 7.393050191049264e-05,
+     "r2_mean": 0.013899031625785723,
+     "r2_std": 3.3639920534302485e-05,
+     "delta": 0.00045993814819700156,
+     "relative_delta": 0.03309138079401995,
+     "tolerance": 0.0013899031625785724,
+     "preserved": true
+    },
+    "30": {
+     "merlin_mean": 0.0142267296065399,
+     "merlin_std": 9.300129455209459e-05,
+     "r2_mean": 0.013856844051511325,
+     "r2_std": 8.555372565498182e-05,
+     "delta": 0.00036988555502857554,
+     "relative_delta": 0.026693347608846996,
+     "tolerance": 0.0013856844051511326,
+     "preserved": true
+    },
+    "60": {
+     "merlin_mean": 0.01418599564665754,
+     "merlin_std": 6.483129390721636e-05,
+     "r2_mean": 0.013828212250109675,
+     "r2_std": 0.0001268590667903368,
+     "delta": 0.0003577833965478644,
+     "relative_delta": 0.025873438306895147,
+     "tolerance": 0.0013828212250109675,
+     "preserved": true
+    },
+    "25": {
+     "merlin_mean": 0.014293715441570905,
+     "merlin_std": 2.112020251374492e-05,
+     "r2_mean": 0.013892731222904096,
+     "r2_std": 4.977806910669626e-05,
+     "delta": 0.0004009842186668087,
+     "relative_delta": 0.02886287888487546,
+     "tolerance": 0.0013892731222904097,
+     "preserved": true
+    },
+    "50": {
+     "merlin_mean": 0.014126873105657306,
+     "merlin_std": 9.990607976525811e-05,
+     "r2_mean": 0.013769076897945454,
+     "r2_std": 0.00014695343098156073,
+     "delta": 0.0003577962077118517,
+     "relative_delta": 0.025985489830857147,
+     "tolerance": 0.0013769076897945454,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": 0.027778113246861226,
+   "verdict": "preserves"
+  },
+  "b_kernel_on_classical": {
+   "merlin_cell": "classical|photonic_kernel",
+   "r2_cell": "classical|quantum_kernel_ideal",
+   "configurations": {
+    "10": {
+     "merlin_mean": 0.03338572558672872,
+     "merlin_std": 0.0175108372225051,
+     "r2_mean": 0.033080918791592556,
+     "r2_std": 0.017729239579153976,
+     "delta": 0.000304806795136163,
+     "relative_delta": 0.009213976100737232,
+     "tolerance": 0.03524075357560079,
+     "preserved": true
+    },
+    "20": {
+     "merlin_mean": 0.01375666690050309,
+     "merlin_std": 0.0008359076148737637,
+     "r2_mean": 0.013478031791998092,
+     "r2_std": 0.0008581965189357598,
+     "delta": 0.0002786351085049977,
+     "relative_delta": 0.020673278769858916,
+     "tolerance": 0.0016942507522308499,
+     "preserved": true
+    },
+    "40": {
+     "merlin_mean": 0.012980109360762054,
+     "merlin_std": 0.0011973563329675215,
+     "r2_mean": 0.013944182669212615,
+     "r2_std": 0.0006115155288204078,
+     "delta": -0.0009640733084505613,
+     "relative_delta": -0.06913802919257078,
+     "tolerance": 0.0019013749919918129,
+     "preserved": true
+    },
+    "15": {
+     "merlin_mean": 0.014073137059825299,
+     "merlin_std": 0.0001858321277514281,
+     "r2_mean": 0.014137984558933158,
+     "r2_std": 0.00017947727229139686,
+     "delta": -6.484749910785903e-05,
+     "relative_delta": -0.004586756962249248,
+     "tolerance": 0.001413798455893316,
+     "preserved": true
+    },
+    "30": {
+     "merlin_mean": 0.014398552440177575,
+     "merlin_std": 0.0005307201456844015,
+     "r2_mean": 0.01640546894387045,
+     "r2_std": 0.0038675986194628984,
+     "delta": -0.002006916503692875,
+     "relative_delta": -0.12233216316822909,
+     "tolerance": 0.00552086640923444,
+     "preserved": true
+    },
+    "60": {
+     "merlin_mean": 0.013143911254519483,
+     "merlin_std": 0.001397233345815855,
+     "r2_mean": 0.013099144427658369,
+     "r2_std": 0.0013075953959635477,
+     "delta": 4.4766826861114203e-05,
+     "relative_delta": 0.0034175382299465812,
+     "tolerance": 0.0027063136337848338,
+     "preserved": true
+    },
+    "25": {
+     "merlin_mean": 0.014657636547351187,
+     "merlin_std": 0.00020563212431252083,
+     "r2_mean": 0.014778025991164305,
+     "r2_std": 0.00029599440183918253,
+     "delta": -0.00012038944381311846,
+     "relative_delta": -0.008146517260498703,
+     "tolerance": 0.0014778025991164306,
+     "preserved": true
+    },
+    "50": {
+     "merlin_mean": 0.013001135693112216,
+     "merlin_std": 0.00030779772279468956,
+     "r2_mean": 0.013520526816229173,
+     "r2_std": 0.0004768844864890981,
+     "delta": -0.0005193911231169569,
+     "relative_delta": -0.038415006321611156,
+     "tolerance": 0.0013520526816229173,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": -0.006366637111373976,
+   "verdict": "preserves"
+  },
+  "b_kernel_on_quantum": {
+   "merlin_cell": "quantum_ideal|photonic_kernel",
+   "r2_cell": "quantum_ideal|quantum_kernel_ideal",
+   "configurations": {
+    "10": {
+     "merlin_mean": 0.01436866768534093,
+     "merlin_std": 0.00012989632486125837,
+     "r2_mean": 0.014150346269650685,
+     "r2_std": 0.00015370733973496425,
+     "delta": 0.00021832141569024487,
+     "relative_delta": 0.015428697752682935,
+     "tolerance": 0.0014150346269650685,
+     "preserved": true
+    },
+    "20": {
+     "merlin_mean": 0.014017443062835257,
+     "merlin_std": 2.5000007215472114e-05,
+     "r2_mean": 0.013797439160710067,
+     "r2_std": 0.00016619821111062862,
+     "delta": 0.0002200039021251904,
+     "relative_delta": 0.01594527068122025,
+     "tolerance": 0.0013797439160710067,
+     "preserved": true
+    },
+    "40": {
+     "merlin_mean": 0.013854454305612912,
+     "merlin_std": 0.00011815761800307007,
+     "r2_mean": 0.013837835485590666,
+     "r2_std": 2.9370523430624035e-05,
+     "delta": 1.661882002224578e-05,
+     "relative_delta": 0.0012009696198188621,
+     "tolerance": 0.0013837835485590666,
+     "preserved": true
+    },
+    "15": {
+     "merlin_mean": 0.014159914977979061,
+     "merlin_std": 0.0001980742228982695,
+     "r2_mean": 0.013899031625785723,
+     "r2_std": 3.3639920534302485e-05,
+     "delta": 0.0002608833521933387,
+     "relative_delta": 0.018769894134879395,
+     "tolerance": 0.0013899031625785724,
+     "preserved": true
+    },
+    "30": {
+     "merlin_mean": 0.013874900252660492,
+     "merlin_std": 3.9870853095239114e-05,
+     "r2_mean": 0.013856844051511325,
+     "r2_std": 8.555372565498182e-05,
+     "delta": 1.8056201149167436e-05,
+     "relative_delta": 0.001303052923309626,
+     "tolerance": 0.0013856844051511326,
+     "preserved": true
+    },
+    "60": {
+     "merlin_mean": 0.013770264538420807,
+     "merlin_std": 8.920947176698928e-06,
+     "r2_mean": 0.013828212250109675,
+     "r2_std": 0.0001268590667903368,
+     "delta": -5.794771168886846e-05,
+     "relative_delta": -0.004190542540190534,
+     "tolerance": 0.0013828212250109675,
+     "preserved": true
+    },
+    "25": {
+     "merlin_mean": 0.013896569974151111,
+     "merlin_std": 9.446253712080538e-05,
+     "r2_mean": 0.013892731222904096,
+     "r2_std": 4.977806910669626e-05,
+     "delta": 3.838751247015049e-06,
+     "relative_delta": 0.00027631364815338354,
+     "tolerance": 0.0013892731222904097,
+     "preserved": true
+    },
+    "50": {
+     "merlin_mean": 0.013760602414299153,
+     "merlin_std": 0.00012201536769601394,
+     "r2_mean": 0.013769076897945454,
+     "r2_std": 0.00014695343098156073,
+     "delta": -8.474483646301462e-06,
+     "relative_delta": -0.0006154721706555345,
+     "tolerance": 0.0013769076897945454,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": 0.001252011271564244,
+   "verdict": "preserves"
+  },
+  "c_reservoir_linear": {
+   "merlin_cell": "photonic|linear",
+   "r2_cell": "quantum_ideal|linear",
+   "configurations": {
+    "10": {
+     "merlin_mean": 0.01560962196804544,
+     "merlin_std": 0.0012129411034081732,
+     "r2_mean": 0.016708889095023143,
+     "r2_std": 0.00043244166624733317,
+     "delta": -0.0010992671269777037,
+     "relative_delta": -0.06578936042523185,
+     "tolerance": 0.0018211160946209918,
+     "preserved": true
+    },
+    "20": {
+     "merlin_mean": 0.015019673489017763,
+     "merlin_std": 0.0003571094705317238,
+     "r2_mean": 0.015248438103507492,
+     "r2_std": 0.00016279999962236582,
+     "delta": -0.0002287646144897293,
+     "relative_delta": -0.015002494874350977,
+     "tolerance": 0.0015248438103507493,
+     "preserved": true
+    },
+    "40": {
+     "merlin_mean": 0.014491588762916155,
+     "merlin_std": 9.897068163778313e-05,
+     "r2_mean": 0.014773843130189044,
+     "r2_std": 0.00023186854708175968,
+     "delta": -0.00028225436727288833,
+     "relative_delta": -0.019105006380914284,
+     "tolerance": 0.0014773843130189044,
+     "preserved": true
+    },
+    "15": {
+     "merlin_mean": 0.015731196788922635,
+     "merlin_std": 0.0012254106979289509,
+     "r2_mean": 0.015324524753249046,
+     "r2_std": 0.0004437959013172506,
+     "delta": 0.00040667203567358937,
+     "relative_delta": 0.02653733425484326,
+     "tolerance": 0.001843141980762583,
+     "preserved": true
+    },
+    "30": {
+     "merlin_mean": 0.014497109192459402,
+     "merlin_std": 4.914349894696975e-05,
+     "r2_mean": 0.015068036523305246,
+     "r2_std": 0.00012288049173876078,
+     "delta": -0.0005709273308458444,
+     "relative_delta": -0.03788996197101125,
+     "tolerance": 0.0015068036523305248,
+     "preserved": true
+    },
+    "60": {
+     "merlin_mean": 0.014379902625092042,
+     "merlin_std": 0.00010185036632493792,
+     "r2_mean": 0.014818956609265861,
+     "r2_std": 0.0001558037703239177,
+     "delta": -0.00043905398417381884,
+     "relative_delta": -0.02962786083733393,
+     "tolerance": 0.0014818956609265862,
+     "preserved": true
+    },
+    "25": {
+     "merlin_mean": 0.014825028869135138,
+     "merlin_std": 0.0005084133415195233,
+     "r2_mean": 0.015325037733100769,
+     "r2_std": 0.00033363419745439585,
+     "delta": -0.0005000088639656314,
+     "relative_delta": -0.03262692547148873,
+     "tolerance": 0.001532503773310077,
+     "preserved": true
+    },
+    "50": {
+     "merlin_mean": 0.014472368055778765,
+     "merlin_std": 9.33828623937126e-05,
+     "r2_mean": 0.01503099825852242,
+     "r2_std": 0.0002785185475576407,
+     "delta": -0.0005586302027436561,
+     "relative_delta": -0.037165209730958396,
+     "tolerance": 0.0015030998258522422,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": -0.03112739315441133,
+   "verdict": "preserves"
+  },
+  "d_headline": {
+   "merlin": {
+    "mae": {
+     "average_mean": 0.23140551322479194,
+     "average_std": 0.019419930510658826,
+     "peak_mean": 0.6373306263677131,
+     "peak_std": 0.12103742001220784
+    },
+    "rmse": {
+     "average_mean": 0.26867323910221447,
+     "average_std": 0.009612332130084491,
+     "peak_mean": 0.623738317856583,
+     "peak_std": 0.1100937349027937
+    },
+    "best_cell_counts": {
+     "classical|photonic_kernel": 11,
+     "photonic|photonic_kernel": 13
+    }
+   },
+   "r2_ideal": {
+    "mae": {
+     "average_mean": 0.23215860231929827,
+     "average_std": 0.011813315673446047,
+     "peak_mean": 0.6489246179755804,
+     "peak_std": 0.12288281291078448
+    },
+    "rmse": {
+     "average_mean": 0.2742499813300126,
+     "average_std": 0.00890518147299716,
+     "peak_mean": 0.6409285252584779,
+     "peak_std": 0.1173398926716616
+    },
+    "best_cell_counts": {
+     "classical|quantum_kernel_ideal": 5,
+     "quantum_ideal|quantum_kernel_ideal": 19
+    }
+   }
+  }
+ },
+ "mrsr": {
+  "status": "COMPLETED",
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "anchor_max_abs_diff": 0.0,
+  "a_full_quantum": {
+   "merlin_cell": "photonic|photonic_kernel",
+   "r2_cell": "quantum_ideal|quantum_kernel_ideal",
+   "configurations": {
+    "2x5": {
+     "merlin_mean": 0.0151560922981677,
+     "merlin_std": 0.0006312471495060403,
+     "r2_mean": 0.014318611388090102,
+     "r2_std": 0.00024424422853515083,
+     "delta": 0.0008374809100775982,
+     "relative_delta": 0.058488975458485866,
+     "tolerance": 0.0014318611388090103,
+     "preserved": true
+    },
+    "2x10": {
+     "merlin_mean": 0.014253968476775647,
+     "merlin_std": 6.219667138031327e-05,
+     "r2_mean": 0.013869058802556586,
+     "r2_std": 3.0199149581009657e-05,
+     "delta": 0.0003849096742190618,
+     "relative_delta": 0.027753121513055274,
+     "tolerance": 0.0013869058802556586,
+     "preserved": true
+    },
+    "2x20": {
+     "merlin_mean": 0.014009683331747758,
+     "merlin_std": 4.625634964835594e-05,
+     "r2_mean": 0.013881457940457748,
+     "r2_std": 3.344440922502141e-05,
+     "delta": 0.00012822539129000998,
+     "relative_delta": 0.009237170320294303,
+     "tolerance": 0.0013881457940457748,
+     "preserved": true
+    },
+    "3x5": {
+     "merlin_mean": 0.014341241966936978,
+     "merlin_std": 0.00016185431461373343,
+     "r2_mean": 0.013911254375943248,
+     "r2_std": 0.0001015946868778386,
+     "delta": 0.0004299875909937294,
+     "relative_delta": 0.030909332787222087,
+     "tolerance": 0.001391125437594325,
+     "preserved": true
+    },
+    "3x10": {
+     "merlin_mean": 0.01415242384429992,
+     "merlin_std": 9.654138573222338e-05,
+     "r2_mean": 0.013853729580168376,
+     "r2_std": 0.00010356402003240806,
+     "delta": 0.00029869426413154515,
+     "relative_delta": 0.021560566950803356,
+     "tolerance": 0.0013853729580168377,
+     "preserved": true
+    },
+    "3x20": {
+     "merlin_mean": 0.014015801069391076,
+     "merlin_std": 0.00010026304903203767,
+     "r2_mean": 0.013904491573430855,
+     "r2_std": 3.915625840247299e-05,
+     "delta": 0.00011130949596022122,
+     "relative_delta": 0.008005290619393444,
+     "tolerance": 0.0013904491573430856,
+     "preserved": true
+    },
+    "5x5": {
+     "merlin_mean": 0.014282863432159306,
+     "merlin_std": 8.614055760457648e-05,
+     "r2_mean": 0.013800928448918523,
+     "r2_std": 0.00011430860040046592,
+     "delta": 0.00048193498324078377,
+     "relative_delta": 0.03492047546109475,
+     "tolerance": 0.0013800928448918523,
+     "preserved": true
+    },
+    "5x10": {
+     "merlin_mean": 0.013996510873354429,
+     "merlin_std": 9.411430434390656e-05,
+     "r2_mean": 0.01389189993877703,
+     "r2_std": 6.940864904628122e-05,
+     "delta": 0.00010461093457739962,
+     "relative_delta": 0.007530354741858947,
+     "tolerance": 0.001389189993877703,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": 0.024656844231929313,
+   "verdict": "preserves"
+  },
+  "b_kernel_on_classical": {
+   "merlin_cell": "classical|photonic_kernel",
+   "r2_cell": "classical|quantum_kernel_ideal",
+   "configurations": {
+    "2x5": {
+     "merlin_mean": 0.020620195810240716,
+     "merlin_std": 0.008476346150358648,
+     "r2_mean": 0.020436165416966228,
+     "r2_std": 0.008531679057714505,
+     "delta": 0.00018403039327448759,
+     "relative_delta": 0.009005133278168929,
+     "tolerance": 0.017008115216245696,
+     "preserved": true
+    },
+    "2x10": {
+     "merlin_mean": 0.014370763455210739,
+     "merlin_std": 0.0005206725334840455,
+     "r2_mean": 0.01472587211914511,
+     "r2_std": 0.0005659441260179459,
+     "delta": -0.00035510866393437084,
+     "relative_delta": -0.024114610059168855,
+     "tolerance": 0.0014725872119145111,
+     "preserved": true
+    },
+    "2x20": {
+     "merlin_mean": 0.014584016510598328,
+     "merlin_std": 0.00012105014662371862,
+     "r2_mean": 0.014469443412321084,
+     "r2_std": 0.0006076163667150527,
+     "delta": 0.00011457309827724374,
+     "relative_delta": 0.007918279578030069,
+     "tolerance": 0.0014469443412321085,
+     "preserved": true
+    },
+    "3x5": {
+     "merlin_mean": 0.014874316285342824,
+     "merlin_std": 0.0015049775958434948,
+     "r2_mean": 0.0164321854527152,
+     "r2_std": 0.004211688753011024,
+     "delta": -0.0015578691673723763,
+     "relative_delta": -0.09480596308112864,
+     "tolerance": 0.006325073867747383,
+     "preserved": true
+    },
+    "3x10": {
+     "merlin_mean": 0.014564575046932204,
+     "merlin_std": 0.0001275792826674554,
+     "r2_mean": 0.014667546238168521,
+     "r2_std": 0.0005369735639082046,
+     "delta": -0.00010297119123631703,
+     "relative_delta": -0.007020342023423178,
+     "tolerance": 0.0014667546238168521,
+     "preserved": true
+    },
+    "3x20": {
+     "merlin_mean": 0.01384472570833206,
+     "merlin_std": 0.0009202599682403159,
+     "r2_mean": 0.01459294052726374,
+     "r2_std": 0.0009671020846385087,
+     "delta": -0.0007482148189316799,
+     "relative_delta": -0.051272381843385374,
+     "tolerance": 0.001887943246635246,
+     "preserved": true
+    },
+    "5x5": {
+     "merlin_mean": 0.020552148100722065,
+     "merlin_std": 0.01078383807913809,
+     "r2_mean": 0.021269754448432363,
+     "r2_std": 0.011818371839180938,
+     "delta": -0.0007176063477102972,
+     "relative_delta": -0.03373834660151362,
+     "tolerance": 0.02262587353656047,
+     "preserved": true
+    },
+    "5x10": {
+     "merlin_mean": 0.01431919437022714,
+     "merlin_std": 0.0001776027993569843,
+     "r2_mean": 0.014500403396548267,
+     "r2_std": 0.00016022647614905225,
+     "delta": -0.00018120902632112745,
+     "relative_delta": -0.012496826561684703,
+     "tolerance": 0.0014500403396548267,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": -0.01830571831042678,
+   "verdict": "preserves"
+  },
+  "b_kernel_on_quantum": {
+   "merlin_cell": "quantum_ideal|photonic_kernel",
+   "r2_cell": "quantum_ideal|quantum_kernel_ideal",
+   "configurations": {
+    "2x5": {
+     "merlin_mean": 0.014520145783205471,
+     "merlin_std": 0.00024068592883652682,
+     "r2_mean": 0.014318611388090102,
+     "r2_std": 0.00024424422853515083,
+     "delta": 0.00020153439511536898,
+     "relative_delta": 0.014074995797637244,
+     "tolerance": 0.0014318611388090103,
+     "preserved": true
+    },
+    "2x10": {
+     "merlin_mean": 0.014067459626467119,
+     "merlin_std": 0.00011073749166677567,
+     "r2_mean": 0.013869058802556586,
+     "r2_std": 3.0199149581009657e-05,
+     "delta": 0.00019840082391053317,
+     "relative_delta": 0.014305283922652378,
+     "tolerance": 0.0013869058802556586,
+     "preserved": true
+    },
+    "2x20": {
+     "merlin_mean": 0.013854516366478746,
+     "merlin_std": 5.4445743012940126e-05,
+     "r2_mean": 0.013881457940457748,
+     "r2_std": 3.344440922502141e-05,
+     "delta": -2.6941573979002292e-05,
+     "relative_delta": -0.0019408317263621576,
+     "tolerance": 0.0013881457940457748,
+     "preserved": true
+    },
+    "3x5": {
+     "merlin_mean": 0.014101269963575825,
+     "merlin_std": 0.00014394538893259748,
+     "r2_mean": 0.013911254375943248,
+     "r2_std": 0.0001015946868778386,
+     "delta": 0.00019001558763257625,
+     "relative_delta": 0.01365912681182586,
+     "tolerance": 0.001391125437594325,
+     "preserved": true
+    },
+    "3x10": {
+     "merlin_mean": 0.013838784330380114,
+     "merlin_std": 1.2253798354425328e-05,
+     "r2_mean": 0.013853729580168376,
+     "r2_std": 0.00010356402003240806,
+     "delta": -1.4945249788261838e-05,
+     "relative_delta": -0.0010787889067544651,
+     "tolerance": 0.0013853729580168377,
+     "preserved": true
+    },
+    "3x20": {
+     "merlin_mean": 0.013881366089451464,
+     "merlin_std": 8.389013055196073e-05,
+     "r2_mean": 0.013904491573430855,
+     "r2_std": 3.915625840247299e-05,
+     "delta": -2.3125483979390127e-05,
+     "relative_delta": -0.001663166456483676,
+     "tolerance": 0.0013904491573430856,
+     "preserved": true
+    },
+    "5x5": {
+     "merlin_mean": 0.013833518909261086,
+     "merlin_std": 0.0001179266542736171,
+     "r2_mean": 0.013800928448918523,
+     "r2_std": 0.00011430860040046592,
+     "delta": 3.2590460342563424e-05,
+     "relative_delta": 0.0023614686840230156,
+     "tolerance": 0.0013800928448918523,
+     "preserved": true
+    },
+    "5x10": {
+     "merlin_mean": 0.013926627739587737,
+     "merlin_std": 9.951544491685649e-05,
+     "r2_mean": 0.01389189993877703,
+     "r2_std": 6.940864904628122e-05,
+     "delta": 3.47278008107077e-05,
+     "relative_delta": 0.0024998596998075523,
+     "tolerance": 0.001389189993877703,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": 0.002430664191915284,
+   "verdict": "preserves"
+  },
+  "c_reservoir_linear": {
+   "merlin_cell": "photonic|linear",
+   "r2_cell": "quantum_ideal|linear",
+   "configurations": {
+    "2x5": {
+     "merlin_mean": 0.016753723729333935,
+     "merlin_std": 0.0007565485452905212,
+     "r2_mean": 0.017044330755463286,
+     "r2_std": 0.00032641784775031837,
+     "delta": -0.00029060702612935044,
+     "relative_delta": -0.017050069627180933,
+     "tolerance": 0.0017044330755463287,
+     "preserved": true
+    },
+    "2x10": {
+     "merlin_mean": 0.015211442232750607,
+     "merlin_std": 0.00039345555677312486,
+     "r2_mean": 0.015706201842265274,
+     "r2_std": 0.0005140103882980224,
+     "delta": -0.000494759609514667,
+     "relative_delta": -0.031500907379355875,
+     "tolerance": 0.0015706201842265275,
+     "preserved": true
+    },
+    "2x20": {
+     "merlin_mean": 0.014693698844689166,
+     "merlin_std": 0.00012169258510077457,
+     "r2_mean": 0.01496008373855146,
+     "r2_std": 0.0001401150222464029,
+     "delta": -0.00026638489386229466,
+     "relative_delta": -0.0178063771913143,
+     "tolerance": 0.0014960083738551461,
+     "preserved": true
+    },
+    "3x5": {
+     "merlin_mean": 0.015553866768553146,
+     "merlin_std": 0.0002916629068284144,
+     "r2_mean": 0.015771289182476927,
+     "r2_std": 0.000764557460650008,
+     "delta": -0.00021742241392378077,
+     "relative_delta": -0.013785963303833982,
+     "tolerance": 0.0015771289182476929,
+     "preserved": true
+    },
+    "3x10": {
+     "merlin_mean": 0.014672150771246747,
+     "merlin_std": 0.0004556722299217508,
+     "r2_mean": 0.015191777801131859,
+     "r2_std": 0.00036807835912578367,
+     "delta": -0.0005196270298851117,
+     "relative_delta": -0.034204491185119694,
+     "tolerance": 0.0015191777801131859,
+     "preserved": true
+    },
+    "3x20": {
+     "merlin_mean": 0.014347811025800822,
+     "merlin_std": 4.2628314998329056e-05,
+     "r2_mean": 0.014701820657278687,
+     "r2_std": 0.00017552579883887124,
+     "delta": -0.0003540096314778654,
+     "relative_delta": -0.024079305531631533,
+     "tolerance": 0.001470182065727869,
+     "preserved": true
+    },
+    "5x5": {
+     "merlin_mean": 0.014646262062393221,
+     "merlin_std": 0.00015501993499017678,
+     "r2_mean": 0.015430036255820215,
+     "r2_std": 0.0001340677086646359,
+     "delta": -0.0007837741934269941,
+     "relative_delta": -0.05079535656511204,
+     "tolerance": 0.0015430036255820216,
+     "preserved": true
+    },
+    "5x10": {
+     "merlin_mean": 0.014479351382521537,
+     "merlin_std": 7.71531995648998e-05,
+     "r2_mean": 0.014810859066277937,
+     "r2_std": 0.0001589961422053111,
+     "delta": -0.00033150768375640044,
+     "relative_delta": -0.022382745138071886,
+     "tolerance": 0.0014810859066277937,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": -0.02323102533485171,
+   "verdict": "preserves"
+  },
+  "d_headline": {
+   "merlin": {
+    "mae": {
+     "average_mean": 0.250899187266035,
+     "average_std": 0.03883976189880527,
+     "peak_mean": 0.5668953021652866,
+     "peak_std": 0.17745391836786784
+    },
+    "rmse": {
+     "average_mean": 0.32059970661338627,
+     "average_std": 0.04937527574544725,
+     "peak_mean": 0.6163943765704697,
+     "peak_std": 0.1458421197535935
+    },
+    "best_cell_counts": {
+     "classical|photonic_kernel": 5,
+     "photonic|photonic_kernel": 19
+    }
+   },
+   "r2_ideal": {
+    "mae": {
+     "average_mean": 0.26086164126963224,
+     "average_std": 0.0361507038600163,
+     "peak_mean": 0.5794505009824658,
+     "peak_std": 0.17376667124617198
+    },
+    "rmse": {
+     "average_mean": 0.3300283682017957,
+     "average_std": 0.04675408793073317,
+     "peak_mean": 0.6304276277395621,
+     "peak_std": 0.14196010231136275
+    },
+    "best_cell_counts": {
+     "classical|quantum_kernel_ideal": 1,
+     "quantum_ideal|quantum_kernel_ideal": 23
+    }
+   }
+  }
+ },
+ "srmr": {
+  "status": "COMPLETED",
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "anchor_max_abs_diff": 0.0,
+  "a_full_quantum": {
+   "merlin_cell": "photonic|photonic_kernel",
+   "r2_cell": "quantum_ideal|quantum_kernel_ideal",
+   "configurations": {
+    "10/2": {
+     "merlin_mean": 0.030859283983539904,
+     "merlin_std": 0.024145193256153302,
+     "r2_mean": 0.014960207798693578,
+     "r2_std": 0.0004659704540206219,
+     "delta": 0.015899076184846324,
+     "relative_delta": 1.062757710239475,
+     "tolerance": 0.034152817917150295,
+     "preserved": true
+    },
+    "20/2": {
+     "merlin_mean": 0.014372239768976619,
+     "merlin_std": 3.740551862311021e-05,
+     "r2_mean": 0.014179899999001747,
+     "r2_std": 4.629138650740214e-05,
+     "delta": 0.00019233976997487176,
+     "relative_delta": 0.013564254331018717,
+     "tolerance": 0.0014179899999001747,
+     "preserved": true
+    },
+    "40/2": {
+     "merlin_mean": 0.014218677591940072,
+     "merlin_std": 3.8634351530825373e-05,
+     "r2_mean": 0.013797265386415796,
+     "r2_std": 5.4222899997910355e-05,
+     "delta": 0.0004214122055242759,
+     "relative_delta": 0.030543168789025434,
+     "tolerance": 0.0013797265386415796,
+     "preserved": true
+    },
+    "15/3": {
+     "merlin_mean": 0.01698521898890004,
+     "merlin_std": 0.0016928475289304235,
+     "r2_mean": 0.01605060702528005,
+     "r2_std": 0.0008047721114628729,
+     "delta": 0.0009346119636199912,
+     "relative_delta": 0.05822907271656189,
+     "tolerance": 0.002650807766547492,
+     "preserved": true
+    },
+    "30/3": {
+     "merlin_mean": 0.014511442060435002,
+     "merlin_std": 4.046631553225237e-05,
+     "r2_mean": 0.014171970266724397,
+     "r2_std": 5.908261488510369e-05,
+     "delta": 0.0003394717937106051,
+     "relative_delta": 0.023953747243435904,
+     "tolerance": 0.0014171970266724397,
+     "preserved": true
+    },
+    "60/3": {
+     "merlin_mean": 0.01423973864113112,
+     "merlin_std": 5.71640250457877e-05,
+     "r2_mean": 0.013757551613923396,
+     "r2_std": 5.3827900526554196e-05,
+     "delta": 0.00048218702720772416,
+     "relative_delta": 0.03504889828795732,
+     "tolerance": 0.0013757551613923398,
+     "preserved": true
+    },
+    "25/5": {
+     "merlin_mean": 0.017310565679373485,
+     "merlin_std": 0.002116053246063231,
+     "r2_mean": 0.0155513041883997,
+     "r2_std": 0.0009345020763688277,
+     "delta": 0.001759261490973784,
+     "relative_delta": 0.11312629922614999,
+     "tolerance": 0.003271383643326593,
+     "preserved": true
+    },
+    "50/5": {
+     "merlin_mean": 0.014540188302705688,
+     "merlin_std": 6.486274123015232e-05,
+     "r2_mean": 0.014321046528967046,
+     "r2_std": 0.00014581065383757142,
+     "delta": 0.0002191417737386417,
+     "relative_delta": 0.015302078189284958,
+     "tolerance": 0.0014321046528967046,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": 0.03279603353849138,
+   "verdict": "preserves"
+  },
+  "b_kernel_on_classical": {
+   "merlin_cell": "classical|photonic_kernel",
+   "r2_cell": "classical|quantum_kernel_ideal",
+   "configurations": {
+    "10/2": {
+     "merlin_mean": 0.04974768657220701,
+     "merlin_std": 0.02735851432070107,
+     "r2_mean": 0.0493950096099042,
+     "r2_std": 0.02715132705997683,
+     "delta": 0.00035267696230281004,
+     "relative_delta": 0.007139931039351286,
+     "tolerance": 0.05451023512981457,
+     "preserved": true
+    },
+    "20/2": {
+     "merlin_mean": 0.01495698345343404,
+     "merlin_std": 0.002169315665868544,
+     "r2_mean": 0.014782419072089832,
+     "r2_std": 0.002198284992322395,
+     "delta": 0.00017456438134420826,
+     "relative_delta": 0.011808918451905964,
+     "tolerance": 0.004367696730692862,
+     "preserved": true
+    },
+    "40/2": {
+     "merlin_mean": 0.012912838507455587,
+     "merlin_std": 0.0011552355674995958,
+     "r2_mean": 0.014076894757832649,
+     "r2_std": 0.0013834697433184715,
+     "delta": -0.0011640562503770612,
+     "relative_delta": -0.0826926868746645,
+     "tolerance": 0.0025489439958907654,
+     "preserved": true
+    },
+    "15/3": {
+     "merlin_mean": 0.02391409810883884,
+     "merlin_std": 0.007433760114290272,
+     "r2_mean": 0.022454883723936794,
+     "r2_std": 0.008043473939268343,
+     "delta": 0.0014592143849020446,
+     "relative_delta": 0.0649842770437742,
+     "tolerance": 0.015489239003159704,
+     "preserved": true
+    },
+    "30/3": {
+     "merlin_mean": 0.01981402057132797,
+     "merlin_std": 0.005164895890052528,
+     "r2_mean": 0.01965322468647767,
+     "r2_std": 0.005405877051345657,
+     "delta": 0.00016079588485029897,
+     "relative_delta": 0.008181654024488613,
+     "tolerance": 0.010573519399835337,
+     "preserved": true
+    },
+    "60/3": {
+     "merlin_mean": 0.016621427426375433,
+     "merlin_std": 0.0028306580028217903,
+     "r2_mean": 0.016208141301899643,
+     "r2_std": 0.0026923948056050695,
+     "delta": 0.0004132861244757896,
+     "relative_delta": 0.025498674818891863,
+     "tolerance": 0.005524783166457885,
+     "preserved": true
+    },
+    "25/5": {
+     "merlin_mean": 0.032933020482137705,
+     "merlin_std": 0.005089085469832421,
+     "r2_mean": 0.0315340748959917,
+     "r2_std": 0.0039215045845933365,
+     "delta": 0.0013989455861460054,
+     "relative_delta": 0.044362981655879354,
+     "tolerance": 0.009085921981422253,
+     "preserved": true
+    },
+    "50/5": {
+     "merlin_mean": 0.016725102147499366,
+     "merlin_std": 0.0027903872642267144,
+     "r2_mean": 0.01615888896395014,
+     "r2_std": 0.0023505966340100983,
+     "delta": 0.0005662131835492239,
+     "relative_delta": 0.035040353629041184,
+     "tolerance": 0.005159760773558839,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": 0.018653796635398914,
+   "verdict": "preserves"
+  },
+  "b_kernel_on_quantum": {
+   "merlin_cell": "quantum_ideal|photonic_kernel",
+   "r2_cell": "quantum_ideal|quantum_kernel_ideal",
+   "configurations": {
+    "10/2": {
+     "merlin_mean": 0.01764627539615726,
+     "merlin_std": 0.001156508889555311,
+     "r2_mean": 0.014960207798693578,
+     "r2_std": 0.0004659704540206219,
+     "delta": 0.0026860675974636813,
+     "relative_delta": 0.17954747912647617,
+     "tolerance": 0.0017633157831997326,
+     "preserved": false
+    },
+    "20/2": {
+     "merlin_mean": 0.014228832257325809,
+     "merlin_std": 0.00011680091981529777,
+     "r2_mean": 0.014179899999001747,
+     "r2_std": 4.629138650740214e-05,
+     "delta": 4.893225832406159e-05,
+     "relative_delta": 0.0034508182940293218,
+     "tolerance": 0.0014179899999001747,
+     "preserved": true
+    },
+    "40/2": {
+     "merlin_mean": 0.013933349794433926,
+     "merlin_std": 3.760154199202168e-05,
+     "r2_mean": 0.013797265386415796,
+     "r2_std": 5.4222899997910355e-05,
+     "delta": 0.00013608440801812956,
+     "relative_delta": 0.009863143471322404,
+     "tolerance": 0.0013797265386415796,
+     "preserved": true
+    },
+    "15/3": {
+     "merlin_mean": 0.017005713672230003,
+     "merlin_std": 0.0013412884581366893,
+     "r2_mean": 0.01605060702528005,
+     "r2_std": 0.0008047721114628729,
+     "delta": 0.0009551066469499526,
+     "relative_delta": 0.05950595173413935,
+     "tolerance": 0.002212108893937687,
+     "preserved": true
+    },
+    "30/3": {
+     "merlin_mean": 0.01438816032780952,
+     "merlin_std": 0.00015016207086771338,
+     "r2_mean": 0.014171970266724397,
+     "r2_std": 5.908261488510369e-05,
+     "delta": 0.00021619006108512286,
+     "relative_delta": 0.015254763947165084,
+     "tolerance": 0.0014171970266724397,
+     "preserved": true
+    },
+    "60/3": {
+     "merlin_mean": 0.013864368500133416,
+     "merlin_std": 3.655156380695955e-05,
+     "r2_mean": 0.013757551613923396,
+     "r2_std": 5.3827900526554196e-05,
+     "delta": 0.00010681688621001946,
+     "relative_delta": 0.007764236632186422,
+     "tolerance": 0.0013757551613923398,
+     "preserved": true
+    },
+    "25/5": {
+     "merlin_mean": 0.017022223542489185,
+     "merlin_std": 0.0014145621139858857,
+     "r2_mean": 0.0155513041883997,
+     "r2_std": 0.0009345020763688277,
+     "delta": 0.0014709193540894845,
+     "relative_delta": 0.0945849516072548,
+     "tolerance": 0.0023976155259181437,
+     "preserved": true
+    },
+    "50/5": {
+     "merlin_mean": 0.014431052652687066,
+     "merlin_std": 0.0002502189675822171,
+     "r2_mean": 0.014321046528967046,
+     "r2_std": 0.00014581065383757142,
+     "delta": 0.00011000612372001964,
+     "relative_delta": 0.007681430508413703,
+     "tolerance": 0.0014321046528967046,
+     "preserved": true
+    }
+   },
+   "preserved_count": 7,
+   "median_relative_delta": 0.012558953709243745,
+   "verdict": "preserves"
+  },
+  "c_reservoir_linear": {
+   "merlin_cell": "photonic|linear",
+   "r2_cell": "quantum_ideal|linear",
+   "configurations": {
+    "10/2": {
+     "merlin_mean": 0.03320165594164521,
+     "merlin_std": 0.024980193111489375,
+     "r2_mean": 0.021937982288328384,
+     "r2_std": 0.004874965410692215,
+     "delta": 0.011263673653316826,
+     "relative_delta": 0.5134325256206179,
+     "tolerance": 0.035993758782398556,
+     "preserved": true
+    },
+    "20/2": {
+     "merlin_mean": 0.016073356306509367,
+     "merlin_std": 0.0004824517925883366,
+     "r2_mean": 0.016237254982883743,
+     "r2_std": 0.0004814947127763811,
+     "delta": -0.00016389867637437577,
+     "relative_delta": -0.010093989196274068,
+     "tolerance": 0.0016237254982883744,
+     "preserved": true
+    },
+    "40/2": {
+     "merlin_mean": 0.01459636330239949,
+     "merlin_std": 0.00019609997810810084,
+     "r2_mean": 0.015415647803314536,
+     "r2_std": 0.00044133221112946445,
+     "delta": -0.0008192845009150455,
+     "relative_delta": -0.05314629079284558,
+     "tolerance": 0.0015415647803314536,
+     "preserved": true
+    },
+    "15/3": {
+     "merlin_mean": 0.01966144839076828,
+     "merlin_std": 0.0033335604394828322,
+     "r2_mean": 0.023752216142021443,
+     "r2_std": 0.0033171337850645068,
+     "delta": -0.0040907677512531625,
+     "relative_delta": -0.17222678198923697,
+     "tolerance": 0.006650714510742639,
+     "preserved": true
+    },
+    "30/3": {
+     "merlin_mean": 0.015906420777633937,
+     "merlin_std": 0.0003064342636853267,
+     "r2_mean": 0.015622614200593911,
+     "r2_std": 0.0002908933580500395,
+     "delta": 0.00028380657704002617,
+     "relative_delta": 0.018166394778489567,
+     "tolerance": 0.0015622614200593913,
+     "preserved": true
+    },
+    "60/3": {
+     "merlin_mean": 0.01505820499820914,
+     "merlin_std": 0.0002901551073200177,
+     "r2_mean": 0.01517036697397964,
+     "r2_std": 0.00016826699657879917,
+     "delta": -0.00011216197577049863,
+     "relative_delta": -0.007393491269056309,
+     "tolerance": 0.001517036697397964,
+     "preserved": true
+    },
+    "25/5": {
+     "merlin_mean": 0.01797139961449801,
+     "merlin_std": 0.0014164574699636267,
+     "r2_mean": 0.02418630422168358,
+     "r2_std": 0.0016750380653411056,
+     "delta": -0.0062149046071855694,
+     "relative_delta": -0.2569596640405178,
+     "tolerance": 0.0031022908582392567,
+     "preserved": false
+    },
+    "50/5": {
+     "merlin_mean": 0.015815678950210046,
+     "merlin_std": 0.000511834395329288,
+     "r2_mean": 0.01601939072566388,
+     "r2_std": 8.065267838595223e-05,
+     "delta": -0.00020371177545383534,
+     "relative_delta": -0.012716574490406722,
+     "tolerance": 0.0016019390725663882,
+     "preserved": true
+    }
+   },
+   "preserved_count": 7,
+   "median_relative_delta": -0.011405281843340394,
+   "verdict": "preserves"
+  },
+  "d_headline": {
+   "merlin": {
+    "mae": {
+     "average_mean": 0.40729294927637083,
+     "average_std": 0.049957049771466096,
+     "peak_mean": 0.650568502238761,
+     "peak_std": 0.059397679105602126
+    },
+    "rmse": {
+     "average_mean": 0.40636940030799246,
+     "average_std": 0.04356996757322205,
+     "peak_mean": 0.6249857790128054,
+     "peak_std": 0.048588722130244406
+    },
+    "best_cell_counts": {
+     "classical|photonic_kernel": 4,
+     "photonic|linear": 1,
+     "photonic|photonic_kernel": 19
+    }
+   },
+   "r2_ideal": {
+    "mae": {
+     "average_mean": 0.4411881466474353,
+     "average_std": 0.031347965939670805,
+     "peak_mean": 0.7554653367568411,
+     "peak_std": 0.06475102782486326
+    },
+    "rmse": {
+     "average_mean": 0.4425563900639859,
+     "average_std": 0.027933286928287632,
+     "peak_mean": 0.7256677543120557,
+     "peak_std": 0.06608281051016611
+    },
+    "best_cell_counts": {
+     "classical|quantum_kernel_ideal": 5,
+     "quantum_ideal|quantum_kernel_ideal": 19
+    }
+   }
+  }
+ },
+ "mrmr": {
+  "status": "COMPLETED",
+  "seeds": [
+   0,
+   1,
+   2
+  ],
+  "anchor_max_abs_diff": 0.0,
+  "a_full_quantum": {
+   "merlin_cell": "photonic|photonic_kernel",
+   "r2_cell": "quantum_ideal|quantum_kernel_ideal",
+   "configurations": {
+    "2x5": {
+     "merlin_mean": 0.018267906374736687,
+     "merlin_std": 0.0028238079260305823,
+     "r2_mean": 0.014790663088617357,
+     "r2_std": 0.00047163660093243554,
+     "delta": 0.0034772432861193293,
+     "relative_delta": 0.23509718700815763,
+     "tolerance": 0.004048785567661552,
+     "preserved": true
+    },
+    "2x10": {
+     "merlin_mean": 0.014400654085727294,
+     "merlin_std": 3.825072156991001e-05,
+     "r2_mean": 0.014322499572803236,
+     "r2_std": 0.00025440283746524947,
+     "delta": 7.815451292405781e-05,
+     "relative_delta": 0.005456764898248917,
+     "tolerance": 0.0014322499572803236,
+     "preserved": true
+    },
+    "2x20": {
+     "merlin_mean": 0.014225052416600084,
+     "merlin_std": 3.4923631115933796e-05,
+     "r2_mean": 0.013856181563602092,
+     "r2_std": 6.804193777823208e-05,
+     "delta": 0.000368870852997992,
+     "relative_delta": 0.02662139286388647,
+     "tolerance": 0.0013856181563602094,
+     "preserved": true
+    },
+    "3x5": {
+     "merlin_mean": 0.025653553083296043,
+     "merlin_std": 0.016987495559912275,
+     "r2_mean": 0.015389606417296442,
+     "r2_std": 0.0004846936041284086,
+     "delta": 0.0102639466659996,
+     "relative_delta": 0.6669401664791056,
+     "tolerance": 0.024033723527074294,
+     "preserved": true
+    },
+    "3x10": {
+     "merlin_mean": 0.014500053791082351,
+     "merlin_std": 4.749166618205581e-05,
+     "r2_mean": 0.014048054517307978,
+     "r2_std": 0.00010367041891520743,
+     "delta": 0.00045199927377437277,
+     "relative_delta": 0.03217522207203031,
+     "tolerance": 0.001404805451730798,
+     "preserved": true
+    },
+    "3x20": {
+     "merlin_mean": 0.014214257014659289,
+     "merlin_std": 6.435911886965271e-05,
+     "r2_mean": 0.013827028600478639,
+     "r2_std": 5.5133510883486756e-05,
+     "delta": 0.0003872284141806497,
+     "relative_delta": 0.02800517923042738,
+     "tolerance": 0.001382702860047864,
+     "preserved": true
+    },
+    "5x5": {
+     "merlin_mean": 0.01773004455700945,
+     "merlin_std": 0.0017078025659921323,
+     "r2_mean": 0.015072358000764063,
+     "r2_std": 0.0009048628909191276,
+     "delta": 0.002657686556245386,
+     "relative_delta": 0.1763285184780417,
+     "tolerance": 0.002733264149610071,
+     "preserved": true
+    },
+    "5x10": {
+     "merlin_mean": 0.014443031178298578,
+     "merlin_std": 0.00011836647492796352,
+     "r2_mean": 0.014181147563383309,
+     "r2_std": 9.921863166337114e-05,
+     "delta": 0.00026188361491526896,
+     "relative_delta": 0.01846702558765204,
+     "tolerance": 0.001418114756338331,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": 0.030090200651228846,
+   "verdict": "preserves"
+  },
+  "b_kernel_on_classical": {
+   "merlin_cell": "classical|photonic_kernel",
+   "r2_cell": "classical|quantum_kernel_ideal",
+   "configurations": {
+    "2x5": {
+     "merlin_mean": 0.048034199196207515,
+     "merlin_std": 0.02624295187599845,
+     "r2_mean": 0.048189977918680904,
+     "r2_std": 0.026065596630723265,
+     "delta": -0.00015577872247338892,
+     "relative_delta": -0.0032325958467185997,
+     "tolerance": 0.05230884917261214,
+     "preserved": true
+    },
+    "2x10": {
+     "merlin_mean": 0.01746898258885157,
+     "merlin_std": 0.004647321478640046,
+     "r2_mean": 0.01747669856321484,
+     "r2_std": 0.004805309165727989,
+     "delta": -7.71597436327251e-06,
+     "relative_delta": -0.00044150068363101383,
+     "tolerance": 0.009453950825349002,
+     "preserved": true
+    },
+    "2x20": {
+     "merlin_mean": 0.0165687026622687,
+     "merlin_std": 0.004312196438893722,
+     "r2_mean": 0.016600692430146557,
+     "r2_std": 0.003966430880784001,
+     "delta": -3.198976787785815e-05,
+     "relative_delta": -0.0019270140695917786,
+     "tolerance": 0.008285844804200068,
+     "preserved": true
+    },
+    "3x5": {
+     "merlin_mean": 0.039735399909091064,
+     "merlin_std": 0.0074129616968677155,
+     "r2_mean": 0.03990863907917973,
+     "r2_std": 0.0078614758570433,
+     "delta": -0.00017323917008866402,
+     "relative_delta": -0.004340893953936971,
+     "tolerance": 0.01528102115502119,
+     "preserved": true
+    },
+    "3x10": {
+     "merlin_mean": 0.020199604983057375,
+     "merlin_std": 0.0031775575566816527,
+     "r2_mean": 0.019880540763617532,
+     "r2_std": 0.0030473628571032444,
+     "delta": 0.00031906421943984214,
+     "relative_delta": 0.01604907146307343,
+     "tolerance": 0.0062262817811077455,
+     "preserved": true
+    },
+    "3x20": {
+     "merlin_mean": 0.020141824954200065,
+     "merlin_std": 0.00452860873353713,
+     "r2_mean": 0.021293770987163497,
+     "r2_std": 0.004397338496740814,
+     "delta": -0.0011519460329634315,
+     "relative_delta": -0.05409779384111241,
+     "tolerance": 0.008926912446796768,
+     "preserved": true
+    },
+    "5x5": {
+     "merlin_mean": 0.041511596644841414,
+     "merlin_std": 0.013967899884349003,
+     "r2_mean": 0.04167002989483537,
+     "r2_std": 0.01351464950427384,
+     "delta": -0.00015843324999395558,
+     "relative_delta": -0.003802091104657258,
+     "tolerance": 0.027486286704557456,
+     "preserved": true
+    },
+    "5x10": {
+     "merlin_mean": 0.03742354212013199,
+     "merlin_std": 0.016834748450215743,
+     "r2_mean": 0.0371508395327143,
+     "r2_std": 0.017051869367967404,
+     "delta": 0.00027270258741769055,
+     "relative_delta": 0.007340415205894715,
+     "tolerance": 0.03388731338788209,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": -0.002579804958155189,
+   "verdict": "preserves"
+  },
+  "b_kernel_on_quantum": {
+   "merlin_cell": "quantum_ideal|photonic_kernel",
+   "r2_cell": "quantum_ideal|quantum_kernel_ideal",
+   "configurations": {
+    "2x5": {
+     "merlin_mean": 0.016876840075760242,
+     "merlin_std": 0.0017359450336164395,
+     "r2_mean": 0.014790663088617357,
+     "r2_std": 0.00047163660093243554,
+     "delta": 0.002086176987142885,
+     "relative_delta": 0.14104688712356456,
+     "tolerance": 0.0025439914477358933,
+     "preserved": true
+    },
+    "2x10": {
+     "merlin_mean": 0.014408578402936687,
+     "merlin_std": 0.00017637284841120698,
+     "r2_mean": 0.014322499572803236,
+     "r2_std": 0.00025440283746524947,
+     "delta": 8.607883013345141e-05,
+     "relative_delta": 0.006010042429807791,
+     "tolerance": 0.0014322499572803236,
+     "preserved": true
+    },
+    "2x20": {
+     "merlin_mean": 0.013949687897015355,
+     "merlin_std": 0.00011555634482227389,
+     "r2_mean": 0.013856181563602092,
+     "r2_std": 6.804193777823208e-05,
+     "delta": 9.350633341326242e-05,
+     "relative_delta": 0.006748347875210308,
+     "tolerance": 0.0013856181563602094,
+     "preserved": true
+    },
+    "3x5": {
+     "merlin_mean": 0.018417613104424975,
+     "merlin_std": 0.0031242405606038996,
+     "r2_mean": 0.015389606417296442,
+     "r2_std": 0.0004846936041284086,
+     "delta": 0.0030280066871285326,
+     "relative_delta": 0.19675660345188187,
+     "tolerance": 0.004471198266774927,
+     "preserved": true
+    },
+    "3x10": {
+     "merlin_mean": 0.014154501479257455,
+     "merlin_std": 0.00013345573982827881,
+     "r2_mean": 0.014048054517307978,
+     "r2_std": 0.00010367041891520743,
+     "delta": 0.0001064469619494763,
+     "relative_delta": 0.007577345447964183,
+     "tolerance": 0.001404805451730798,
+     "preserved": true
+    },
+    "3x20": {
+     "merlin_mean": 0.013877291734113076,
+     "merlin_std": 9.66784751360785e-05,
+     "r2_mean": 0.013827028600478639,
+     "r2_std": 5.5133510883486756e-05,
+     "delta": 5.0263133634436893e-05,
+     "relative_delta": 0.003635136303449678,
+     "tolerance": 0.001382702860047864,
+     "preserved": true
+    },
+    "5x5": {
+     "merlin_mean": 0.016537500260227666,
+     "merlin_std": 0.0017421332011082326,
+     "r2_mean": 0.015072358000764063,
+     "r2_std": 0.0009048628909191276,
+     "delta": 0.0014651422594636025,
+     "relative_delta": 0.09720723588103003,
+     "tolerance": 0.0027762582523123236,
+     "preserved": true
+    },
+    "5x10": {
+     "merlin_mean": 0.014281370692763931,
+     "merlin_std": 9.868435245524495e-05,
+     "r2_mean": 0.014181147563383309,
+     "r2_std": 9.921863166337114e-05,
+     "delta": 0.00010022312938062251,
+     "relative_delta": 0.007067349728410236,
+     "tolerance": 0.001418114756338331,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": 0.00732234758818721,
+   "verdict": "preserves"
+  },
+  "c_reservoir_linear": {
+   "merlin_cell": "photonic|linear",
+   "r2_cell": "quantum_ideal|linear",
+   "configurations": {
+    "2x5": {
+     "merlin_mean": 0.01946251576695583,
+     "merlin_std": 0.0036169606764134567,
+     "r2_mean": 0.018125985861360727,
+     "r2_std": 0.000860981746973961,
+     "delta": 0.0013365299055951019,
+     "relative_delta": 0.07373557034733161,
+     "tolerance": 0.005258078375860068,
+     "preserved": true
+    },
+    "2x10": {
+     "merlin_mean": 0.01573044976859216,
+     "merlin_std": 0.00016944117447330304,
+     "r2_mean": 0.016514401931923727,
+     "r2_std": 0.0006256476342941587,
+     "delta": -0.000783952163331568,
+     "relative_delta": -0.04747081768768886,
+     "tolerance": 0.0016514401931923728,
+     "preserved": true
+    },
+    "2x20": {
+     "merlin_mean": 0.015143776502804787,
+     "merlin_std": 0.00026537693000039815,
+     "r2_mean": 0.015189328456921067,
+     "r2_std": 0.00017443794965377692,
+     "delta": -4.555195411628035e-05,
+     "relative_delta": -0.0029989445712146974,
+     "tolerance": 0.0015189328456921068,
+     "preserved": true
+    },
+    "3x5": {
+     "merlin_mean": 0.029755447840995163,
+     "merlin_std": 0.014409430376128074,
+     "r2_mean": 0.025845927783742065,
+     "r2_std": 0.0047177294614447,
+     "delta": 0.003909520057253098,
+     "relative_delta": 0.15126251570324026,
+     "tolerance": 0.021442418475343016,
+     "preserved": true
+    },
+    "3x10": {
+     "merlin_mean": 0.0157810411403752,
+     "merlin_std": 0.0005909396839895025,
+     "r2_mean": 0.016994009858509723,
+     "r2_std": 0.0005424718947281077,
+     "delta": -0.0012129687181345224,
+     "relative_delta": -0.07137625129287131,
+     "tolerance": 0.0016994009858509723,
+     "preserved": true
+    },
+    "3x20": {
+     "merlin_mean": 0.014951983340082584,
+     "merlin_std": 0.0001788100103075545,
+     "r2_mean": 0.015079381550273607,
+     "r2_std": 0.00014636853026460048,
+     "delta": -0.00012739821019102336,
+     "relative_delta": -0.008448503658209497,
+     "tolerance": 0.0015079381550273609,
+     "preserved": true
+    },
+    "5x5": {
+     "merlin_mean": 0.021190760041738668,
+     "merlin_std": 0.0021273378436803595,
+     "r2_mean": 0.021127422066985858,
+     "r2_std": 0.0036714670608397866,
+     "delta": 6.333797475280983e-05,
+     "relative_delta": 0.002997903603761627,
+     "tolerance": 0.006000872716528179,
+     "preserved": true
+    },
+    "5x10": {
+     "merlin_mean": 0.01540403760074238,
+     "merlin_std": 0.0001324925126098918,
+     "r2_mean": 0.015959214297303435,
+     "r2_std": 0.0008324072364767175,
+     "delta": -0.0005551766965610546,
+     "relative_delta": -0.0347872198604953,
+     "tolerance": 0.0015959214297303435,
+     "preserved": true
+    }
+   },
+   "preserved_count": 8,
+   "median_relative_delta": -0.005723724114712097,
+   "verdict": "preserves"
+  },
+  "d_headline": {
+   "merlin": {
+    "mae": {
+     "average_mean": 0.4676051930408595,
+     "average_std": 0.026481597284106862,
+     "peak_mean": 0.7167611988686337,
+     "peak_std": 0.10437611367297299
+    },
+    "rmse": {
+     "average_mean": 0.45777791454356026,
+     "average_std": 0.02062043249080042,
+     "peak_mean": 0.6883231834250977,
+     "peak_std": 0.10025741041467438
+    },
+    "best_cell_counts": {
+     "classical|photonic_kernel": 2,
+     "photonic|photonic_kernel": 22
+    }
+   },
+   "r2_ideal": {
+    "mae": {
+     "average_mean": 0.5179349446202002,
+     "average_std": 0.05962030621984844,
+     "peak_mean": 0.7539259644210653,
+     "peak_std": 0.07043970081082941
+    },
+    "rmse": {
+     "average_mean": 0.5100344939043172,
+     "average_std": 0.04976704216375686,
+     "peak_mean": 0.7245013094490641,
+     "peak_std": 0.0667349352089297
+    },
+    "best_cell_counts": {
+     "classical|quantum_kernel_ideal": 1,
+     "quantum_ideal|quantum_kernel_ideal": 23
+    }
+   }
+  }
+ }
+}

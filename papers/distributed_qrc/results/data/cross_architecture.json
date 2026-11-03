@@ -1,0 +1,253 @@
+{
+ "paper_reference": "Table VIII (best model per total neurons)",
+ "paper": {
+  "10": {
+   "best_architecture": "mrsr",
+   "best_configuration": "2x5",
+   "best_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_mae_mean": 0.0139,
+   "best_r2_mean": 0.9853,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ]
+  },
+  "15": {
+   "best_architecture": "mrsr",
+   "best_configuration": "3x5",
+   "best_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_mae_mean": 0.0142,
+   "best_r2_mean": 0.9848,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ]
+  },
+  "20": {
+   "best_architecture": "mrmr",
+   "best_configuration": "2x10",
+   "best_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_mae_mean": 0.0139,
+   "best_r2_mean": 0.9856,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ]
+  },
+  "25": {
+   "best_architecture": "srmr",
+   "best_configuration": "25/5",
+   "best_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_mae_mean": 0.0139,
+   "best_r2_mean": 0.9854,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ]
+  },
+  "30": {
+   "best_architecture": "srmr",
+   "best_configuration": "30/3",
+   "best_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_mae_mean": 0.0138,
+   "best_r2_mean": 0.9855,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ]
+  },
+  "40": {
+   "best_architecture": "mrmr",
+   "best_configuration": "2x20",
+   "best_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_mae_mean": 0.0137,
+   "best_r2_mean": 0.9858,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ]
+  },
+  "50": {
+   "best_architecture": "mrmr",
+   "best_configuration": "5x10",
+   "best_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_mae_mean": 0.0138,
+   "best_r2_mean": 0.9857,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ]
+  },
+  "60": {
+   "best_architecture": "mrsr",
+   "best_configuration": "3x20",
+   "best_cell": "classical|quantum_kernel_ideal",
+   "best_mae_mean": 0.0113,
+   "best_r2_mean": 0.9904,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ]
+  }
+ },
+ "ours": {
+  "10": {
+   "best_architecture": "srsr",
+   "best_configuration": "10",
+   "best_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_mae_mean": 0.014150346269650685,
+   "best_r2_mean": 0.9847079541245737,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ],
+   "best_srsr_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_srsr_mae_mean": 0.014150346269650685,
+   "mae_gap_srsr_minus_best": 0.0,
+   "mae_gap_in_pooled_std": 0.0
+  },
+  "15": {
+   "best_architecture": "srsr",
+   "best_configuration": "15",
+   "best_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_mae_mean": 0.013899031625785723,
+   "best_r2_mean": 0.98527379727765,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ],
+   "best_srsr_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_srsr_mae_mean": 0.013899031625785723,
+   "mae_gap_srsr_minus_best": 0.0,
+   "mae_gap_in_pooled_std": 0.0
+  },
+  "20": {
+   "best_architecture": "srsr",
+   "best_configuration": "20",
+   "best_cell": "classical|quantum_kernel_noisy",
+   "best_mae_mean": 0.013477033439024446,
+   "best_r2_mean": 0.9859453671033075,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ],
+   "best_srsr_cell": "classical|quantum_kernel_noisy",
+   "best_srsr_mae_mean": 0.013477033439024446,
+   "mae_gap_srsr_minus_best": 0.0,
+   "mae_gap_in_pooled_std": 0.0
+  },
+  "25": {
+   "best_architecture": "mrsr",
+   "best_configuration": "5x5",
+   "best_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_mae_mean": 0.013800928448918523,
+   "best_r2_mean": 0.9855340104228724,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ],
+   "best_srsr_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_srsr_mae_mean": 0.013892731222904096,
+   "mae_gap_srsr_minus_best": 9.180277398557375e-05,
+   "mae_gap_in_pooled_std": 1.0413220048143925
+  },
+  "30": {
+   "best_architecture": "mrsr",
+   "best_configuration": "3x10",
+   "best_cell": "quantum_ideal|quantum_kernel_noisy",
+   "best_mae_mean": 0.013852736068694521,
+   "best_r2_mean": 0.9852930813096252,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ],
+   "best_srsr_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_srsr_mae_mean": 0.013856844051511325,
+   "mae_gap_srsr_minus_best": 4.107982816803357e-06,
+   "mae_gap_in_pooled_std": 0.04713733520087649
+  },
+  "40": {
+   "best_architecture": "mrsr",
+   "best_configuration": "2x20",
+   "best_cell": "quantum_noisy|quantum_kernel_noisy",
+   "best_mae_mean": 0.013837512708769525,
+   "best_r2_mean": 0.9854356097371735,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ],
+   "best_srsr_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_srsr_mae_mean": 0.013837835485590666,
+   "mae_gap_srsr_minus_best": 3.22776821140916e-07,
+   "mae_gap_in_pooled_std": 0.01208189518227502
+  },
+  "50": {
+   "best_architecture": "srsr",
+   "best_configuration": "50",
+   "best_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_mae_mean": 0.013769076897945454,
+   "best_r2_mean": 0.9856073202548369,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ],
+   "best_srsr_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_srsr_mae_mean": 0.013769076897945454,
+   "mae_gap_srsr_minus_best": 0.0,
+   "mae_gap_in_pooled_std": 0.0
+  },
+  "60": {
+   "best_architecture": "srmr",
+   "best_configuration": "60/3",
+   "best_cell": "quantum_ideal|quantum_kernel_ideal",
+   "best_mae_mean": 0.013757551613923396,
+   "best_r2_mean": 0.9855490676426305,
+   "architectures_available": [
+    "mrmr",
+    "mrsr",
+    "srmr",
+    "srsr"
+   ],
+   "best_srsr_cell": "quantum_noisy|quantum_kernel_noisy",
+   "best_srsr_mae_mean": 0.013778674847553284,
+   "mae_gap_srsr_minus_best": 2.1123233629887633e-05,
+   "mae_gap_in_pooled_std": 0.3805432709060381
+  }
+ },
+ "sweeps": [
+  "papers/distributed_qrc/outdir/sweep_E1-R2",
+  "papers/distributed_qrc/outdir/sweep_E2-R2",
+  "papers/distributed_qrc/outdir/sweep_E3-R2",
+  "papers/distributed_qrc/outdir/sweep_E4-R2"
+ ]
+}

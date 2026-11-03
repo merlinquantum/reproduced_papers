@@ -1,0 +1,15 @@
+{
+  "description": "Gap diagnosis (noisy cells): SRSR with 10 neurons, all 9 cells, full-n kernels. Run with --reservoir-shots / --kernel-shots candidates.",
+  "experiment": {
+    "id": "GAP-SRSR10",
+    "variant": "original",
+    "architecture": "srsr",
+    "sizes": [10],
+    "reservoir_types": ["classical", "quantum_ideal", "quantum_noisy"],
+    "readout_types": ["linear", "quantum_kernel_ideal", "quantum_kernel_noisy"]
+  },
+  "readout": {
+    "kernel_selection_subsample": 8000,
+    "kernel_fit_subsample": null
+  }
+}
