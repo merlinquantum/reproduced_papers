@@ -1,0 +1,26 @@
+{
+    "description": "E2 (Fig. 4): VQEM Alg. 1 on amplitude damping q=0.3, depth 10; sweep penalty over [1, 3, 10, 30, 100, 300, 1000, 3000] x seed via utils (this file fixes penalty=1).",
+    "experiment": {
+        "task": "vqem",
+        "id": "e2_vqem_penalty_sweep_original"
+    },
+    "vqem": {
+        "algorithm": "penalty",
+        "noise_model": "amplitude_damping",
+        "noise_level": 0.3,
+        "depth": 10,
+        "penalty": 1.0,
+        "initial_t": 2.0,
+        "budget": 1.0,
+        "gate_noise": [
+            0.0,
+            0.0
+        ]
+    },
+    "training": {
+        "iterations": 800,
+        "lr": 0.05,
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 10
+    }
+}

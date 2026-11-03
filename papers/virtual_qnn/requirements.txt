@@ -1,0 +1,18 @@
+# Dependencies for the virtual QNN reproduction (arXiv:2609.11327).
+# Exact versions were verified on 2026-10-13 with Python 3.13.15 (macOS, Apple M2);
+# see LOG.md "Dependency Additions" for the verification checks.
+# The numerical stack is pinned because Hamiltonian construction (PennyLane qchem),
+# SDP solutions (CVXPY/Clarabel) and simulation results can shift across versions.
+numpy==2.5.3
+scipy==1.18.1
+torch==2.12.1
+# HeH+ Hamiltonian for E5 (qml.qchem, STO-3G, Jordan-Wigner, qubit tapering).
+pennylane==0.45.1
+pennylane-lightning==0.45.0
+# Minimum-sampling-overhead SDP for E0 (paper App. D); Clarabel is the solver used.
+cvxpy==1.9.3
+clarabel==0.11.1
+matplotlib==3.11.1
+# Imported by the shared runtime (runtime_lib/runtime.py logs MerLin/Perceval versions).
+merlinquantum==0.4.1
+pytest
