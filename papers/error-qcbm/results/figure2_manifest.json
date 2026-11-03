@@ -163,24 +163,11 @@
     "No actual Altair/Belenos hardware output",
     "I=.84 is a model choice; HOM measurement definition is not confirmed equivalent",
     "Original failures and separate sampling retries remain distinct",
-    "Attribution/permission and live ECB acquisition limits remain in ATTRIBUTION.md and DATA_SOURCES.md"
+    "Attribution/permission and live ECB acquisition limits remain in DATA_SOURCES.md"
   ],
   "figure_sha256": {
-    "gaussian_fig2ab": {
-      "png": "76ff18b50f018771e8c9a717210df018a56fc88a476fbc1a7a53195b5ca7406d",
-      "svg": "f23653c291e72a18067fea063892abeaad0b9e0896dbbf2c0b554d93306fc653"
-    },
-    "financial_fig2cd": {
-      "png": "02f3f31851ea3c61d9dc2971c63e700b59a4fc7a6e23a69980e466e7d9652ada",
-      "svg": "ff726d9c6d445a8a648ec2c8d6c6d810b4b03b7b3e962ef722b789169d07d39a"
-    },
-    "belenos_fig2ef_original": {
-      "png": "e0386677dab464da43b858a3abef8d6c6ae0f54aa3f8fbc0372b58768dc38148",
-      "svg": "80c980b065d21910cfe83b53920c6bbfb488212bba8c4ddbdc566ae402ba9a7c"
-    },
     "figure2_combined": {
-      "png": "545901b514e98e4f7fc7c2bf64eef5fc16810557bb05c12336933cbe8df4e69d",
-      "svg": "c06a74bd52c41eb8788c715bd417e2e7d0ebb8b6b12bf371634a2f02b1cc80c2"
+      "png": "545901b514e98e4f7fc7c2bf64eef5fc16810557bb05c12336933cbe8df4e69d"
     }
   },
   "combined_layout": {
