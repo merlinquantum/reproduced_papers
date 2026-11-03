@@ -1,0 +1,17 @@
+{
+  "upstream": "https://github.com/orcacomputing/pep-q-gan",
+  "license": "Apache-2.0",
+  "imported_files_sha256": {
+    "lib\\pepqgan\\data.py": "a288376739d1223dd4f864f77a023dfb74f7108c34e28a92fa2be7cadfdeb0b3",
+    "lib\\pepqgan\\model.py": "7b86e991340535d7df6c1e93e7153af7868cac13f0cdcda33cbb37c3d902c2ce",
+    "lib\\pepqgan\\tokeniser.py": "574210f2002466c1d0bab9ca86a145037d3a98881171d3637cc801e713c53212",
+    "lib\\pepqgan\\__init__.py": "7c0d76dae4b2507db7181d8a59c6a650d9cf6c7e7652328efedaf84d933d0447"
+  },
+  "distributed_files_sha256": {
+    "lib\\pepqgan\\data.py": "57447bace689ea2cee6895291a6584fc10d40c66909277d2710caab5922717a2",
+    "lib\\pepqgan\\model.py": "0d9ab39c5fb467b2547649aa62633bf6de4f3ef49d10381e69967bd16d869caa",
+    "lib\\pepqgan\\tokeniser.py": "175db321fa5530f90d659c6d4d8c491ac3151a30466088346ace22b50ad106f2",
+    "lib\\pepqgan\\__init__.py": "7c0d76dae4b2507db7181d8a59c6a650d9cf6c7e7652328efedaf84d933d0447"
+  },
+  "changes": "Local package imports, batch-safe squeeze inherited from existing reproduction, and formatting. Apache-2.0 license retained."
+}
