@@ -42,8 +42,8 @@ def mnist_directory(cfg: dict[str, Any]) -> Path:
     directory = root / cfg["dataset"]["subdir"]
     if not directory.is_dir():
         raise FileNotFoundError(
-            f"MNIST directory not found at {directory}. See LOG.md (Data Acquisition "
-            "Log) for the download command, or pass --data-root."
+            f"MNIST directory not found at {directory}. See the README's Data "
+            "section for the download command, or pass --data-root."
         )
     return directory
 

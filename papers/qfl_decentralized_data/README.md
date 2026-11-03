@@ -42,7 +42,7 @@ Main claims: federated accuracy is comparable to the non-federated VQTN and in p
 | C4, C5 | QFL works for QAOA and VQE | not tested (descoped) |
 | C6, C7 | privacy; NISQ suitability | not tested (argued, not measured, in the paper) |
 
-Deviations from the paper (details in `LOG.md`):
+Deviations from the paper:
 
 - **Backend.** A PyTorch statevector simulator (`lib/statevector.py`) replaces TensorFlow Quantum and TensorFlow Federated, which are not installed in this repository's environment. The federated loop is implemented directly (`lib/federated.py`).
 - **Gradients.** Autograd through the simulation replaces parameter-shift qSGD. A test checks that the parameter-shift derivative equals the autograd derivative for every VQTN angle, so only the derivative estimator differs.
@@ -57,7 +57,7 @@ Deviations from the paper (details in `LOG.md`):
 
 ```text
 papers/qfl_decentralized_data/
-|-- README.md, LOG.md, VISITED_URLS.md, FEEDBACK.md, INSIGHTS.md, CONFLUENCE.md
+|-- README.md, INSIGHTS.md
 |-- cli.json, requirements.txt, notebook.ipynb (scientific walkthrough, runs in about 1 minute)
 |-- configs/        defaults.json and one overlay per experiment and variant
 |-- lib/            runner.py (entry point), federated.py, task.py, data.py, mnist_task.py,
