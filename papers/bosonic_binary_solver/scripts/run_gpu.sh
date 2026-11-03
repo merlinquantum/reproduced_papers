@@ -3,7 +3,7 @@
 # anchors while you wait, then start the whole queue detached.
 #
 #   scripts/run_gpu.sh --host user@gpu --key ~/.ssh/id_ed25519 \
-#       --clifford ~/DEV/claude_experiments/clifford_gpu/gpu-clifford
+#       --clifford /path/to/gpu-clifford
 #
 #   scripts/run_gpu.sh --host user@gpu --key ~/.ssh/id_ed25519 --fetch
 #
@@ -13,7 +13,7 @@ set -u
 
 HOST=${HOST:-}
 SSH_KEY=${SSH_KEY:-$HOME/.ssh/id_ed25519}
-CLIFFORD=${CLIFFORD:-$HOME/DEV/claude_experiments/clifford_gpu/gpu-clifford}
+CLIFFORD=${CLIFFORD:-}
 REMOTE=${REMOTE:-bbs_repro}
 CHUNK=${CHUNK:-20}
 MODE=launch

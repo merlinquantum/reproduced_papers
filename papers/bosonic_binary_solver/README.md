@@ -405,14 +405,6 @@ which the m=25 comparison shows is the better of the two (discordant 13/3, z = â
 | Tactical deconfliction instance distribution | **Not specified.** 5 of Table I's 13 rows cannot be generated without inventing it. |
 | Loss model | Not attempted. The paper gives no loss budget, so Table II is unreproducible without hardware. The density result implies a sharp prediction for it: loss lowers click density, so it should move the boson arm monotonically down the same ladder. |
 
-## Working documents
-
-The reproduction effort also produced `LOG.md` (running decision log and run history),
-`VISITED_URLS.md` (resource trail), `FEEDBACK.md` (feedback on the reproduction workflow
-itself) and `CONFLUENCE.md` (a summary staged for publication elsewhere). These are working
-documents rather than part of the deliverable and are not committed; this README is the
-committed record, and everything load-bearing from them is folded into the sections above.
-
 ## Limitations
 
 - Tactical deconfliction and the hardware table are out of scope (see above).

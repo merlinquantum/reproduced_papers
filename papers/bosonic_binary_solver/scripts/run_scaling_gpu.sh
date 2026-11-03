@@ -2,7 +2,7 @@
 # Beyond the paper: one launch for the scaling extension.
 #
 #   scripts/run_scaling_gpu.sh --host user@gpu --key ~/.ssh/id_ed25519 \
-#       --clifford ~/DEV/claude_experiments/clifford_gpu/gpu-clifford
+#       --clifford /path/to/gpu-clifford
 #
 # Thin wrapper over run_gpu.sh with the scaling queue and a smaller lockstep
 # chunk: at m=42 one chunk holds instances x 227 circuits x 50 shots, so 10
