@@ -9,8 +9,7 @@
 >   generalises best. The paper's reading that the biased quantum model
 >   beats the classical alternatives is therefore not supported.
 >
-> Working notes, inventories and every decision live in `LOG.md`; durable
-> lessons are in `INSIGHTS.md`.
+> Durable lessons are in `INSIGHTS.md`.
 
 ## Reference and Attribution
 
@@ -60,7 +59,7 @@ advantage.
 
 ## Reproduction Scope, Claims, and Deviations
 
-What is reproduced, with experiment IDs from `LOG.md`:
+What is reproduced:
 
 | ID | Paper item | What we run |
 |---|---|---|
@@ -72,7 +71,7 @@ What is reproduced, with experiment IDs from `LOG.md`:
 | X3 | Fig. 8 claims (Phase 5) | Fair comparison: every model tuned on a validation split, 10 final seeds, classical baselines B2-B5 with and without the bias |
 | X1, X2 | extensions (Phase 5) | Contextuality witness of the trained models; test KL by distance from the centre of the behaviour space |
 
-Claims tested (full inventory with confounders in `LOG.md`, "Claim Inventory"):
+Claims tested:
 
 | ID | Claim | Outcome |
 |---|---|---|
@@ -93,7 +92,7 @@ Updates and deviations:
   matches PennyLane to 1e-12, and torch Adam/SGD match optax to 1e-12 (tests).
 - **Three test-scaling protocols**, selected with `--protocol`. The author
   code scales training inputs by pi/2 but evaluates the test KL on unscaled
-  inputs (discrepancy D12 in `LOG.md`; also found by a third-party fork).
+  inputs (discrepancy D12; also found by a third-party fork).
   - `paper` (default): pi/2 on both. This matches the paper text and is used
     for the verdict.
   - `code`: reproduces the published curves.
@@ -105,8 +104,7 @@ Updates and deviations:
   run, instead of a fresh draw per run (D8).
 - **Factorised surrogate evaluation**: the same function and gradients as
   the dense features, with 0.64 GB peak memory instead of 2.5 GB for L = 2.
-- **L2 strengths for Figs. 9 and 11** are not given. A grid is pre-declared
-  in `LOG.md`.
+- **L2 strengths for Figs. 9 and 11** are not given. A grid was pre-declared.
 - **Fair comparison (Phase 5, not in the paper).**
   - Every model is trained with Adam for 2000 steps.
   - Hyperparameters are selected on a held-out validation split (data seed
@@ -139,7 +137,7 @@ utils/verify_from_raw_metrics.py  read-only check: recomputes every sweep, the t
 utils/export_notebook_data.py  per-run metrics and learning curves for the notebook (results/per_run_metrics.csv, learning_curves.csv)
 notebook.ipynb         scientific walkthrough: claim, checks, live runs, fair comparison, controls, photonic, verdict
 results/               curated tables, statistics and figures
-LOG.md, INSIGHTS.md, FEEDBACK.md, CONFLUENCE.md, ACTION_REQUIRED_SEND_TO_MERLIN_TEAM.md
+INSIGHTS.md
 ```
 
 Raw runs go to `outdir/` (git-ignored). Curated results are in `results/`.
@@ -287,8 +285,7 @@ Limitations:
 ## Results Obtained and Comparison with the Paper
 
 Every number below comes from the structured run artifacts through the
-scripts in `utils/`. Commands are in `LOG.md` under "Phase 3 Results",
-"Phase 4 Results" and "Phase 5 Results".
+scripts in `utils/`; the commands are under "Install and How to Run".
 
 | Phase | Sweeps | Runs | Coverage |
 |---|---:|---:|---|
@@ -297,7 +294,7 @@ scripts in `utils/`. Commands are in `LOG.md` under "Phase 3 Results",
 | 5 | 5 | 499 planned, 456 valid | two sweeps partial, see "Sweeps" below |
 
 Every included run is logging-validated. Full-precision tables are in
-`results/*.csv` / `*.json`, and per-run ledgers in `results/sweep_ledger*.md`.
+`results/*.csv` / `*.json`.
 
 The paper publishes no numerical tables. Its values were **read off the
 figures by eye** (`results/paper_values_read_off.json`, about +-5% on KL).
@@ -410,8 +407,7 @@ Further views:
 ### Figs. 9 and 11: L2-regularised surrogates (partial: 1 seed per strength)
 
 The L2 strengths are not given in the paper. A pre-declared grid {0 .. 1}
-turned out too weak and was extended to {3, 10, 30, 100} before those runs
-(`LOG.md`, plan amendment).
+turned out too weak and was extended to {3, 10, 30, 100} before those runs.
 
 Under `code`, regularisation removes overfitting but never reaches the
 biased model (4.6e-3):
@@ -489,8 +485,8 @@ The fair comparison fixes all four:
 - each system is then run on 10 fresh seeds (10-19).
 
 A difference counts as resolved only if both the Welch and the
-Mann-Whitney test give p < 0.05. The plan was frozen in `LOG.md` before any
-run; three amendments are dated there.
+Mann-Whitney test give p < 0.05. The plan was frozen before any
+run; it was amended three times.
 
 ![Fair comparison](results/fair_comparison.png)
 
@@ -651,7 +647,7 @@ How these rows relate to the rest of the results:
     (HardTanh saturation), as did 42 of its 54 tuning runs.
   - Robustness uses 3 data seeds, which gives low statistical power.
   - The B3-B5 L2 grid was extended twice after tuning results were seen.
-    Both changes are dated amendments in `LOG.md`, made before any final run.
+    Both changes were made before any final run.
 - **Parameter count.** B2 has 8748 parameters against 91 for the biased
   quantum model. At about 91 parameters, the MLPs B3 and B4 and the
   polynomial B5 are worse than biased L = 1, so compactness remains an
