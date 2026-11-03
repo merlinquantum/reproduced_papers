@@ -1,0 +1,45 @@
+{
+  "experiment": "cifar_dogs_cats",
+  "description": "Example 3a: CQ transfer learning for CIFAR-10 dogs vs cats (Fig. 5a, Table 3)",
+
+  "dataset": {
+    "name": "cifar10",
+    "root": "data",
+    "download": true,
+    "classes": [3, 5],
+    "class_names": ["cat", "dog"],
+    "image_size": 224
+  },
+
+  "feature_extractor": {
+    "model": "resnet18",
+    "pretrained": true,
+    "freeze": true,
+    "n_features": 512
+  },
+
+  "model": {
+    "type": "cq_transfer",
+    "n_qubits": 4,
+    "q_depth": 5,
+    "n_inputs": 512,
+    "n_outputs": 2,
+    "n_photons": 2,
+    "computation_space": "unbunched"
+  },
+
+  "training": {
+    "epochs": 3,
+    "batch_size": 8,
+    "learning_rate": 0.001,
+    "optimizer": "adam",
+    "loss": "cross_entropy",
+    "lr_schedule": null
+  },
+
+  "options": {
+    "use_merlin": true,
+    "save_model": true,
+    "generate_figures": true
+  }
+}

@@ -1,0 +1,226 @@
+{
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "epochs": 200,
+  "lr": 0.05,
+  "fingerprint_samples": 200,
+  "spearman_fcc_vs_mse": {
+    "per_encoding": {
+      "balanced": -0.19999999999999998,
+      "exponential": 0.19999999999999998,
+      "linear": -0.39999999999999997
+    },
+    "pooled": -0.22377622377622378
+  },
+  "records": [
+    {
+      "encoding": "linear",
+      "circuit": "circuit_0",
+      "fcc": 0.21524817488929185,
+      "n_active_frequencies": 9,
+      "max_frequency": 15,
+      "mse_mean": 0.6770723700523377,
+      "mse_std": 0.05845135942350127,
+      "mse_per_seed": [
+        0.6391870975494385,
+        0.5930004715919495,
+        0.7057180404663086,
+        0.6824647188186646,
+        0.7649915218353271
+      ],
+      "n_trainable_params": 42
+    },
+    {
+      "encoding": "linear",
+      "circuit": "circuit_1",
+      "fcc": 0.18936123284714051,
+      "n_active_frequencies": 7,
+      "max_frequency": 15,
+      "mse_mean": 0.8947788357734681,
+      "mse_std": 0.06358563798083301,
+      "mse_per_seed": [
+        0.7734087109565735,
+        0.9196113348007202,
+        0.9522781372070312,
+        0.8942962288856506,
+        0.9342997670173645
+      ],
+      "n_trainable_params": 14
+    },
+    {
+      "encoding": "linear",
+      "circuit": "circuit_2",
+      "fcc": 0.26088726033652065,
+      "n_active_frequencies": 16,
+      "max_frequency": 15,
+      "mse_mean": 0.2872824758291245,
+      "mse_std": 0.12611469871570288,
+      "mse_per_seed": [
+        0.4980716109275818,
+        0.36038318276405334,
+        0.20290610194206238,
+        0.15060265362262726,
+        0.22444882988929749
+      ],
+      "n_trainable_params": 62
+    },
+    {
+      "encoding": "linear",
+      "circuit": "circuit_3",
+      "fcc": 0.27520773254419434,
+      "n_active_frequencies": 9,
+      "max_frequency": 15,
+      "mse_mean": 0.8907784461975098,
+      "mse_std": 0.06231901535916984,
+      "mse_per_seed": [
+        0.7783357501029968,
+        0.8967825770378113,
+        0.9675272703170776,
+        0.8913445472717285,
+        0.9199020862579346
+      ],
+      "n_trainable_params": 10
+    },
+    {
+      "encoding": "exponential",
+      "circuit": "circuit_0",
+      "fcc": 0.17923362210982166,
+      "n_active_frequencies": 17,
+      "max_frequency": 31,
+      "mse_mean": 0.720195209980011,
+      "mse_std": 0.014875408403191903,
+      "mse_per_seed": [
+        0.7390055656433105,
+        0.7093753218650818,
+        0.7123533487319946,
+        0.7370617389678955,
+        0.7031800746917725
+      ],
+      "n_trainable_params": 42
+    },
+    {
+      "encoding": "exponential",
+      "circuit": "circuit_1",
+      "fcc": 0.17230783156296003,
+      "n_active_frequencies": 12,
+      "max_frequency": 31,
+      "mse_mean": 0.917033565044403,
+      "mse_std": 0.023009123754538775,
+      "mse_per_seed": [
+        0.8892123103141785,
+        0.9412537813186646,
+        0.9036343693733215,
+        0.9035972356796265,
+        0.9474701285362244
+      ],
+      "n_trainable_params": 14
+    },
+    {
+      "encoding": "exponential",
+      "circuit": "circuit_2",
+      "fcc": 0.23663226633421566,
+      "n_active_frequencies": 31,
+      "max_frequency": 31,
+      "mse_mean": 0.42125937938690183,
+      "mse_std": 0.053311286300576494,
+      "mse_per_seed": [
+        0.37495917081832886,
+        0.44288504123687744,
+        0.40940457582473755,
+        0.3660687804222107,
+        0.5129793286323547
+      ],
+      "n_trainable_params": 62
+    },
+    {
+      "encoding": "exponential",
+      "circuit": "circuit_3",
+      "fcc": 0.24475902232575766,
+      "n_active_frequencies": 17,
+      "max_frequency": 31,
+      "mse_mean": 0.9193179368972778,
+      "mse_std": 0.04038371994710406,
+      "mse_per_seed": [
+        0.981637179851532,
+        0.9011138677597046,
+        0.9135206341743469,
+        0.9399799108505249,
+        0.8603380918502808
+      ],
+      "n_trainable_params": 10
+    },
+    {
+      "encoding": "balanced",
+      "circuit": "circuit_0",
+      "fcc": 0.186406972088812,
+      "n_active_frequencies": 9,
+      "max_frequency": 16,
+      "mse_mean": 0.6649367332458496,
+      "mse_std": 0.06171071620452675,
+      "mse_per_seed": [
+        0.6488645076751709,
+        0.6073811650276184,
+        0.6782025694847107,
+        0.6130435466766357,
+        0.7771918773651123
+      ],
+      "n_trainable_params": 42
+    },
+    {
+      "encoding": "balanced",
+      "circuit": "circuit_1",
+      "fcc": 0.19581826148028103,
+      "n_active_frequencies": 8,
+      "max_frequency": 16,
+      "mse_mean": 0.8822376132011414,
+      "mse_std": 0.05189736086538169,
+      "mse_per_seed": [
+        0.785366415977478,
+        0.8939849138259888,
+        0.9417209029197693,
+        0.8888261318206787,
+        0.901289701461792
+      ],
+      "n_trainable_params": 14
+    },
+    {
+      "encoding": "balanced",
+      "circuit": "circuit_2",
+      "fcc": 0.22404463574085956,
+      "n_active_frequencies": 16,
+      "max_frequency": 16,
+      "mse_mean": 0.373029950261116,
+      "mse_std": 0.08712796681669431,
+      "mse_per_seed": [
+        0.45556485652923584,
+        0.34248560667037964,
+        0.4622268080711365,
+        0.22405122220516205,
+        0.38082125782966614
+      ],
+      "n_trainable_params": 62
+    },
+    {
+      "encoding": "balanced",
+      "circuit": "circuit_3",
+      "fcc": 0.1968247931363313,
+      "n_active_frequencies": 8,
+      "max_frequency": 16,
+      "mse_mean": 0.8855323314666748,
+      "mse_std": 0.05671123313253842,
+      "mse_per_seed": [
+        0.7846991419792175,
+        0.8912906050682068,
+        0.9601120948791504,
+        0.9031339287757874,
+        0.888425886631012
+      ],
+      "n_trainable_params": 10
+    }
+  ]
+}

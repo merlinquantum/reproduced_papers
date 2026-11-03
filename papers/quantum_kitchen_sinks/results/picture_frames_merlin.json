@@ -1,0 +1,44 @@
+{
+ "description": "Photonic MerLin QKS adaptation on picture frames (4 modes, 2 photons, UNBUNCHED).",
+ "config": "configs/picture_frames_merlin.json",
+ "regenerate": "python implementation.py --paper quantum_kitchen_sinks --config picture_frames_merlin.json",
+ "note": "Curated copy of a run's metrics.json, committed so the notebook and README do not depend on the git-ignored outdir/. Gate-model rows are deterministic given the seeds; photonic rows depend on the torch RNG and so on the torch/merlin versions installed.",
+ "results": [
+  {
+   "sigma": 3.0,
+   "n_episodes": 2000,
+   "seed": 42,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.995,
+   "train_error": 0.0,
+   "test_error": 0.0050000000000000044,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 8000
+  },
+  {
+   "sigma": 3.0,
+   "n_episodes": 2000,
+   "seed": 43,
+   "train_accuracy": 1.0,
+   "test_accuracy": 0.99,
+   "train_error": 0.0,
+   "test_error": 0.010000000000000009,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 8000
+  },
+  {
+   "sigma": 3.0,
+   "n_episodes": 2000,
+   "seed": 44,
+   "train_accuracy": 1.0,
+   "test_accuracy": 1.0,
+   "train_error": 0.0,
+   "test_error": 0.0,
+   "name": "logistic_regression",
+   "backend": "photonic_merlin",
+   "n_features": 8000
+  }
+ ]
+}
