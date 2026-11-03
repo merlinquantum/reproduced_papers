@@ -1,0 +1,23 @@
+[
+  {
+    "target": "quantum",
+    "latent": "distinguishable",
+    "seed": 0,
+    "l1_nearest_int": 0.07677387446165085,
+    "mean_total": 8.34528636932373
+  },
+  {
+    "target": "quantum",
+    "latent": "distinguishable",
+    "seed": 1,
+    "l1_nearest_int": 0.0765627846121788,
+    "mean_total": 8.205642700195312
+  },
+  {
+    "target": "quantum",
+    "latent": "distinguishable",
+    "seed": 2,
+    "l1_nearest_int": 0.07162456214427948,
+    "mean_total": 7.856439113616943
+  }
+]
