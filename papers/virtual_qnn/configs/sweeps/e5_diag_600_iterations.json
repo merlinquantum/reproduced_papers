@@ -1,0 +1,48 @@
+{
+  "sweep_id": "e5_diag_600_iterations",
+  "description": "Gap diagnosis H2 (iteration budget): 600 iterations instead of 300, 3 seeds. Not a paper-accurate result.",
+  "fixed_args": {
+    "--iterations": 600
+  },
+  "max_workers": 6,
+  "base_config": "configs/e5_vvqe_original.json",
+  "axes": {
+    "--half-distance": [
+      0.45,
+      0.6,
+      1.0
+    ],
+    "--vvqe-budget": [
+      1.0,
+      2.5
+    ]
+  },
+  "repetitions": [
+    {
+      "--seed": 1
+    },
+    {
+      "--seed": 2
+    },
+    {
+      "--seed": 3
+    }
+  ],
+  "progress_total": 600,
+  "plan": {
+    "metrics": [
+      "energy",
+      "abs_error_fci",
+      "abs_error_hf",
+      "exact_negativity",
+      "min_eigenvalue_sigma"
+    ],
+    "direction": "minimize",
+    "split": "n/a",
+    "checkpoint": "final iteration (no early stopping)",
+    "aggregation": "per candidate: mean, population std, min (best-of-N), max",
+    "tie_tolerance": "n/a (diagnostic)",
+    "selection_rule": "none: diagnostic sweep",
+    "note": "Gap diagnosis H2 (iteration budget): 600 iterations instead of 300, 3 seeds. Not a paper-accurate result."
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "description": "pep_q_gan: gaussian baseline",
+  "stage": "train",
+  "device": "cuda",
+  "training": {
+    "prior_source": "gaussian",
+    "steps": 100000,
+    "batch_size": 256,
+    "save_every": 1000
+  }
+}

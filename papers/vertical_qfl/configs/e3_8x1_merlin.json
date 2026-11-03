@@ -1,0 +1,56 @@
+{
+  "description": "E3p - one slice duplicated over 8 clients. MerLin photonic ADAPTATION (not the original reproduction): encoding scale pi/8 and Adam lr 0.01 selected on a validation split (see LOG.md, Phase 4).",
+  "experiment": "e3p_8x1client_merlin",
+  "label": "photonic adaptation, tuned (validation-selected) hyperparameters, 5 distributions, 1 seed each",
+  "seed": 42,
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "data_root": "../../data",
+  "dataset": {
+    "name": "semeion",
+    "subdir": "vertical_qfl/semeion",
+    "file": "semeion.data",
+    "permutation_seed": 42,
+    "partition_seed": 42,
+    "test_size": 0.2,
+    "batch_size": 32,
+    "max_train_samples": null,
+    "max_test_samples": null
+  },
+  "model": {
+    "name": "vqfl_merlin",
+    "client_slices": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "server_encoding": "server_wide",
+    "backend": "merlin",
+    "n_modes": 8,
+    "n_photons": 4,
+    "client_encoding_scale": 0.39269908169872414,
+    "server_encoding_scale": 3.141592653589793,
+    "n_client_stages": 4,
+    "server_modes": 8,
+    "server_head": 0,
+    "computation_space": "unbunched",
+    "reuploads": 1,
+    "client_readout": "mode_expectations"
+  },
+  "training": {
+    "epochs": 30,
+    "optimizer": "adam",
+    "lr": 0.01,
+    "weight_decay": 0.0
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

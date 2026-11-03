@@ -1,0 +1,17 @@
+{
+  "description": "Photonic QCBM validation and finite-shot Gaussian/financial/Belenos training",
+  "arguments": [
+    {
+      "flags": [
+        "--task"
+      ],
+      "type": "str",
+      "default": null,
+      "help": "check_environment (default), prepare_data, plot_results, phase1 (fixed-circuit validation), native_sampling_check, sampler_validation, or train (requires an explicit config)",
+      "apply": {
+        "kind": "config_path",
+        "path": "task"
+      }
+    }
+  ]
+}

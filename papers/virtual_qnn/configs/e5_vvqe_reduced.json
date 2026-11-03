@@ -1,0 +1,25 @@
+{
+    "description": "E5 reduced smoke settings (not a paper result): depth 2, 20 iterations, budget 2.5 at d=0.8.",
+    "experiment": {
+        "task": "vvqe",
+        "id": "e5_vvqe_reduced"
+    },
+    "vvqe": {
+        "half_distance_bohr": 0.8,
+        "n_qubits": 6,
+        "depth": 2,
+        "budget": 2.5,
+        "gate_noise": [
+            0.01,
+            0.02
+        ],
+        "penalty": 10.0,
+        "chebyshev_order": 100
+    },
+    "training": {
+        "iterations": 20,
+        "lr": 0.2,
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 10
+    }
+}

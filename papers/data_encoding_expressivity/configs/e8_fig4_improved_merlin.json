@@ -1,0 +1,325 @@
+{
+  "description": "Phase 4 amendment (MerLin ADAPTATION): improved photonic models on the published Fig. 4 target. Phase 4 model vs + universal meshes (phase screens) vs + trainable observable (linear readout over click patterns); photon-number route n = 5; multi-scale n = 2 (scales 1, 3; degree 6); single-photon theorem setting (m = 6, scales 1..5; classically simulable, a theorem test). Default protocol = paper P0; P1-P3 via CLI (see LOG.md amendment).",
+  "experiment": "fit",
+  "fit": {
+    "grid": {
+      "start": -6.0,
+      "stop": 6.0,
+      "num": 70
+    },
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      42
+    ],
+    "models": [
+      "photonic"
+    ],
+    "success_tolerance": 0.0001,
+    "training": {
+      "optimizer": "adam",
+      "lr": 0.3,
+      "batch_size": 25,
+      "steps": 200,
+      "init_high": 6.283185307179586,
+      "full_batch": false
+    },
+    "cases": [
+      {
+        "name": "fig4_n2_L3_phase4_model",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "photonic",
+          "route": "reuploading",
+          "n_photons": 2,
+          "n_modes": 3,
+          "encoded_modes": [
+            0
+          ],
+          "mode_scales": [
+            1.0
+          ],
+          "encoding_layers": 3,
+          "encoding_scaling": 1.0,
+          "phase_screens": false,
+          "readout": "threshold_mode0",
+          "computation_space": "fock"
+        }
+      },
+      {
+        "name": "fig4_n2_L3_screens_fixed_readout",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "photonic",
+          "route": "reuploading",
+          "n_photons": 2,
+          "n_modes": 3,
+          "encoded_modes": [
+            0
+          ],
+          "mode_scales": [
+            1.0
+          ],
+          "encoding_layers": 3,
+          "encoding_scaling": 1.0,
+          "phase_screens": true,
+          "readout": "threshold_mode0",
+          "computation_space": "fock"
+        }
+      },
+      {
+        "name": "fig4_n2_L3_screens_trainable_readout",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "photonic",
+          "route": "reuploading",
+          "n_photons": 2,
+          "n_modes": 3,
+          "encoded_modes": [
+            0
+          ],
+          "mode_scales": [
+            1.0
+          ],
+          "encoding_layers": 3,
+          "encoding_scaling": 1.0,
+          "phase_screens": true,
+          "readout": "trainable_linear",
+          "computation_space": "fock"
+        }
+      },
+      {
+        "name": "fig4_n5_L1_screens_trainable_readout",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "photonic",
+          "route": "photon_number",
+          "n_photons": 5,
+          "n_modes": 6,
+          "encoded_modes": [
+            0
+          ],
+          "mode_scales": [
+            1.0
+          ],
+          "encoding_layers": 1,
+          "encoding_scaling": 1.0,
+          "phase_screens": true,
+          "readout": "trainable_linear",
+          "computation_space": "fock"
+        }
+      },
+      {
+        "name": "fig4_n2_multiscale_1_3_screens_trainable_readout",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "photonic",
+          "route": "multiscale",
+          "n_photons": 2,
+          "n_modes": 4,
+          "encoded_modes": [
+            1,
+            2
+          ],
+          "mode_scales": [
+            1.0,
+            3.0
+          ],
+          "encoding_layers": 1,
+          "encoding_scaling": 1.0,
+          "phase_screens": true,
+          "readout": "trainable_linear",
+          "computation_space": "fock"
+        }
+      },
+      {
+        "name": "fig4_single_photon_m6_theorem_setting",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "photonic",
+          "route": "theorem_single_photon",
+          "n_photons": 1,
+          "n_modes": 6,
+          "encoded_modes": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "mode_scales": [
+            1.0,
+            2.0,
+            3.0,
+            4.0,
+            5.0
+          ],
+          "encoding_layers": 1,
+          "encoding_scaling": 1.0,
+          "phase_screens": true,
+          "readout": "trainable_linear",
+          "computation_space": "fock"
+        }
+      }
+    ]
+  }
+}

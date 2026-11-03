@@ -1,0 +1,255 @@
+{
+  "description": "Phase 5 additional fair baseline B2 (classical, independent control; not part of the paper): trainable Fourier model a_0 + sum_{n=1..D} (a_n cos nx + b_n sin nx), 2D + 1 parameters, frequency set matched to each compared model's degree D = 1..6, on the published Fig. 4 target (T4b, s = 1). The 'model' block only defines the frequency set {1..D} (layout/readout are unused by B2). Default protocol P0 (paper); P1-P3 via CLI per the Phase 5 plan.",
+  "experiment": "fit",
+  "fit": {
+    "grid": {
+      "start": -6.0,
+      "stop": 6.0,
+      "num": 70
+    },
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      42
+    ],
+    "models": [
+      "fourier_classical"
+    ],
+    "success_tolerance": 0.0001,
+    "training": {
+      "optimizer": "adam",
+      "lr": 0.3,
+      "batch_size": 25,
+      "steps": 200,
+      "init_high": 6.283185307179586,
+      "full_batch": false
+    },
+    "cases": [
+      {
+        "name": "fig4s1_classical_degree1",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 1,
+          "encoding_scaling": 1.0,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      },
+      {
+        "name": "fig4s1_classical_degree2",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 2,
+          "encoding_scaling": 1.0,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      },
+      {
+        "name": "fig4s1_classical_degree3",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 3,
+          "encoding_scaling": 1.0,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      },
+      {
+        "name": "fig4s1_classical_degree4",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 4,
+          "encoding_scaling": 1.0,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      },
+      {
+        "name": "fig4s1_classical_degree5",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 5,
+          "encoding_scaling": 1.0,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      },
+      {
+        "name": "fig4s1_classical_degree6",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 6,
+          "encoding_scaling": 1.0,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,75 @@
+[
+  {
+    "model.size": "gate",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 195,
+    "model.server_hidden": 107,
+    "model.central_hidden": 270,
+    "training.epochs": 30,
+    "training.lr": 0.002
+  },
+  {
+    "model.size": "gate",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0
+    ],
+    "model.server_encoding": "server_narrow",
+    "model.client_hidden": 195,
+    "model.server_hidden": 421,
+    "model.central_hidden": 270,
+    "training.epochs": 30,
+    "training.lr": 0.002
+  },
+  {
+    "model.size": "gate",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 195,
+    "model.server_hidden": 107,
+    "model.central_hidden": 270,
+    "training.epochs": 30,
+    "training.lr": 0.002
+  },
+  {
+    "model.size": "gate",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      0,
+      1,
+      2,
+      3
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 195,
+    "model.server_hidden": 107,
+    "model.central_hidden": 270,
+    "training.epochs": 30,
+    "training.lr": 0.002
+  }
+]
