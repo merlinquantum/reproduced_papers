@@ -149,7 +149,7 @@ python papers/vertical_qfl/utils/run_distributions.py --config configs/e1_8clien
 
 **Why a new baseline was needed.**
 - The paper's own controls (E2-E4) fix the per-model budget and change only the factor under test. They are fair for C2-C4 and were reproduced, so they are reused.
-- The paper has **no classical comparator**, so a classical vertical-FL baseline was added. This was planned in Phase 1 and frozen in `LOG.md` before any baseline run.
+- The paper has **no classical comparator**, so a classical vertical-FL baseline was added. This was planned in Phase 1 and frozen before any baseline run.
 
 **The baseline (`lib/model_classical.py`):**
 - Each client is a one-hidden-layer ReLU MLP on its own 32-pixel slice and sends 8 tanh-bounded values. The server is a one-hidden-layer MLP that outputs 10 logits.
