@@ -5,8 +5,7 @@
 > with the paper's FF baseline and controls is complete. The photonic (MerLin)
 > adaptation is complete (`MERLIN_IMPLEMENTATION`, simulation only). Verdict: C1 and
 > C2 supported (C2 with a caveat); C3, C4, C5 and C7 partially supported; C6 (cost)
-> supported with a correction. Evidence, decisions and ledgers: `LOG.md`; durable lessons:
-> `INSIGHTS.md`.
+> supported with a correction. Durable lessons: `INSIGHTS.md`.
 
 ## Reference and Attribution
 
@@ -14,7 +13,7 @@
 - Authors: Ben Jaderberg, Antonio A. Gentile, Youssef Achari Berrada, Elvira Shishenina, Vincent E. Elfving
 - DOI: [10.1103/PhysRevA.109.042421](https://doi.org/10.1103/PhysRevA.109.042421)
 - arXiv: [2309.03279](https://arxiv.org/abs/2309.03279) (v1 2023-09-06, v2 2024-04-22)
-- Original repository: none released (searched GitHub, Hugging Face, Papers with Code; see `VISITED_URLS.md`)
+- Original repository: none released (searched GitHub, Hugging Face, Papers with Code)
 - License and attribution notes: the paper is cited below; this repository's code is an independent reimplementation.
 
 ## Original Paper
@@ -46,7 +45,7 @@ global-scale statement of Sec. V (E4), Fig. 3 (E5), Table I + Fig. 4 (E6), Table
 Fig. 5 (E7) and the circuit-cost factor (E8). Seeds: 10 paired seeds (E1, E2, E4, E6,
 E7), 5 (E5), 3 (E3). Original cylinder-wake data (Raissi et al.), full grid.
 
-Claims tested (IDs as in `LOG.md`): C1 FF cannot fit irregular frequencies and TF can
+Claims tested: C1 FF cannot fit irregular frequencies and TF can
 (Fig. 2); C2 FF fits its natural frequencies (Fig. 2a, Sec. V); C3 TF wins in mean and
 worst case when the spectral richness is unknown (Fig. 3); C4 TF lowers Navier–Stokes
 error (Table I, Fig. 4); C5 the same in an over-parameterised model (Table II); C6 the TF
@@ -63,7 +62,7 @@ Updates and deviations:
 - Added fairness controls not in the paper: FF + one trainable input scale per coordinate
   (FF+S), min–max input normalisation, an lr-robustness check, and small classical
   references (MLP, Fourier regressor, MLP PINN) for context.
-- Paper ambiguities and inconsistencies (A1–A16 in `LOG.md`), most importantly: N = 3
+- Paper ambiguities and inconsistencies (A1–A16), most importantly: N = 3
   qubits for Fig. 2 (text vs appendix disagree; both run); MAERM uses the median of |y|
   (this reproduces the paper's TF v error exactly; the signed median is also reported);
   Navier–Stokes inputs are raw physical coordinates by default (the paper does not say;
@@ -76,7 +75,7 @@ Updates and deviations:
 
 ```text
 papers/trainable_frequency_qnn/
-|-- README.md, LOG.md, INSIGHTS.md, FEEDBACK.md, CONFLUENCE.md, VISITED_URLS.md
+|-- README.md, INSIGHTS.md
 |-- cli.json                      paper-specific CLI schema
 |-- configs/                      defaults.json, *_original.json (paper), *_classical.json,
 |   |                             *_merlin.json (adaptation), sweeps/<sweep_id>.json
@@ -92,7 +91,7 @@ papers/trainable_frequency_qnn/
 |                                 merlin_hardware_report.py, sweep_ledger.py, export_per_seed_metrics.py
 |-- tests/                        pytest suite (simulator, QNN, MerLin, NS, CLI, smoke, decision rule)
 |-- notebook.ipynb                scientific walkthrough (runs in ~3 min on CPU)
-|-- results/                      curated tables (*_results.{json,md}), per_seed_metrics.json, figures, ledgers/
+|-- results/                      curated tables (*_results.{json,md}), per_seed_metrics.json, figures
 `-- outdir/                       raw runs and sweeps (disposable, not committed)
 ```
 
@@ -164,7 +163,7 @@ shared runtime.
 Main model keys: `model.family` (`qnn`, `mlp`, `fourier`), `model.layout`
 (`toy`, `ns_parallel`, `ns_serial`), `model.entangler` (`cnot`, `cz`),
 `model.feature_map`, `model.frequency_mode`. The Navier–Stokes inputs use raw
-physical coordinates by default (`dataset.coordinate_transform`, LOG.md A7).
+physical coordinates by default (`dataset.coordinate_transform`, deviation A7).
 
 ## Data
 
@@ -238,7 +237,7 @@ Tables I–II and C_f):
 
 TF is lower than FF in 10/10 seeds (Wilcoxon p = 0.002); the learned θ_F
 (≈ 0.9, 1.05, 1.1) match the paper's {0.89, 1.05, 1.04}. Fig. 2a (E1): FF fits
-{1, 2, 3} with median MSE 6.4e-3 (N = 3) / 4.0e-4 (N = 4).
+{1, 2, 3} with median MSE 6.4e-3 (N = 3) / 4.0e-4 (N = 4) (`results/fig2a_fit_spectrum.png`).
 ![Fig. 2 analogue](results/fig2b_fit_spectrum.png)
 
 **Sec. V global-scale statement (E4)** — not reproduced as stated: FF with a trainable
@@ -310,7 +309,7 @@ not hyperparameter searches: no candidate is carried forward. Claims are decided
 paired per-seed tests (above, and `results/p5_comparison.md`). The coordinator's lowest
 observed aggregate is listed for traceability; for multi-dataset sweeps it ranks
 (model, dataset) cells, so it is not a model ranking. Full candidate tables:
-`results/<sweep>_results.md`; per-run ledgers: `results/ledgers/<sweep>_ledger.md`.
+`results/<sweep>_results.md`.
 
 | Sweep | Runs (successful / expected) | Classification | Lowest observed aggregate (ties within 5 %) | Full table |
 |---|---:|---|---|---|
@@ -337,7 +336,7 @@ observed aggregate is listed for traceability; for multi-dataset sweeps it ranks
 Uncertainty: 5-seed controls cannot reach two-sided p < 0.05 (minimum 0.0625), and 3-seed
 rows are preliminary.
 
-**Verdicts** (claim IDs as in `LOG.md`): C1 irregular frequencies — supported
+**Verdicts**: C1 irregular frequencies — supported
 (quantitative). C2 FF fits its natural frequencies — supported; the global-scale variant
 only with a suitable initial scale. C3 spectral richness — partially supported (ranking
 yes, mechanism no). C4 Table I — partially supported (TF < FF robustly; most of the gain
@@ -358,7 +357,7 @@ protocol: FF with trainable input scales (FF+S, +1 or +3 per QNN), deeper FF (up
 parameters) and min–max-normalised inputs. Classical models (MLP, Fourier regressor, MLP PINN)
 are context only: they are not matched in circuit resources.
 
-Protocol (frozen in `LOG.md` before the table was generated): same data, optimiser, lr,
+Protocol (frozen before the table was generated): same data, optimiser, lr,
 iterations and paired initialisation. Metric: final-iteration train MSE (toy), box mean and
 worst case over 7 datasets (Fig. 3), mean MAERM u / v / p (NS). Tie tolerance: 5 % relative.
 A paired "lower" verdict needs ≥ 80 % of seeds and Wilcoxon p < 0.05. With 5 seeds a 5/5 sign
@@ -414,6 +413,8 @@ probabilities, exact autograd gradients. Full hardware-aware table:
 | E6, Table I (MAERM %, u / v / p) | TF 21.7 / 94.9 / 81.2; FF 96.8 / 90.8 / 125; FF+S 22.6 / 113 / 105 | Partly: TF < FF on u and p 10/10, not on v (3/10) |
 
 ![Photonic Fig. 3](results/m5_fig3_spectral_richness_merlin.png)
+
+Photonic Fig. 2 (E2): `results/m2_fig2b_fit_spectrum_merlin.png`; photonic Fig. 4 (E6): `results/m6_table1_merlin_pressure_t3.5.png`.
 
 What carries over and what does not:
 
