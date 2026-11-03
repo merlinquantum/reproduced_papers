@@ -1,0 +1,11 @@
+{
+  "description": "E3 variant (reading (ii) of R5): hybrid layers map 64 -> n features that are angle-encoded on n in {2..6} qubits. Non-hybrid families are impossible here and are skipped.",
+  "directional": {
+    "dataset": {"feature_set": "64d", "ticker": "AAPL"},
+    "models": {
+      "qnn": {"families": ["Hybrid-SQ", "Hybrid-MQ"], "n_qubits": [2, 3, 4, 5, 6], "layers": [1, 2, 3, 4, 5, 6], "encoding": "angle"},
+      "ann": {"hidden_layer_options": [[4], [8], [11], [16], [32], [64], [8, 4], [16, 8], [32, 16], [64, 32]], "minmax_inputs": true}
+    },
+    "training": {"max_epochs": 300}
+  }
+}
