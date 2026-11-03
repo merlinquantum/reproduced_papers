@@ -1,0 +1,164 @@
+{
+  "run_dir": "outdir/run_20261028-110524",
+  "experiment": "coefficient_reach",
+  "cases": [
+    {
+      "best_abs_coefficient": 0.002399999999999889,
+      "frequency": 5,
+      "kind": "photonic",
+      "median_abs_coefficient": 0.002399999998020166,
+      "model": {
+        "computation_space": "fock",
+        "encoded_modes": [
+          0
+        ],
+        "encoding_layers": 1,
+        "encoding_scaling": 1.0,
+        "layout": "photonic",
+        "n_modes": 6,
+        "n_photons": 5,
+        "route": "photon_number"
+      },
+      "model_degree": 5,
+      "name": "photonic_n5_L1_k5",
+      "per_init_best": [
+        0.0023999999041539205,
+        0.0023999999993567817,
+        0.002399999998961111,
+        0.002399999999991559,
+        0.002399999997369465,
+        0.0023999987918088004,
+        0.002399999999999889,
+        0.0023999999986536393,
+        0.0023999999075368403,
+        0.0023999999973866926
+      ],
+      "target_abs_coefficient": 0.07071067811865477,
+      "target_reached": false
+    },
+    {
+      "best_abs_coefficient": 0.20093878600823073,
+      "frequency": 5,
+      "kind": "photonic",
+      "median_abs_coefficient": 0.2009387860081886,
+      "model": {
+        "computation_space": "fock",
+        "encoded_modes": [
+          0
+        ],
+        "encoding_layers": 3,
+        "encoding_scaling": 1.0,
+        "layout": "photonic",
+        "n_modes": 3,
+        "n_photons": 2,
+        "route": "reuploading"
+      },
+      "model_degree": 6,
+      "name": "photonic_n2_L3_k5",
+      "per_init_best": [
+        0.2009387860081467,
+        0.20093878600823067,
+        0.2009385659793617,
+        0.20093876338538583,
+        0.20093878600823073,
+        0.20093878600823073,
+        0.20093878600823045,
+        0.20093878598751383,
+        0.20093878598651355,
+        0.20093878600823048
+      ],
+      "target_abs_coefficient": 0.07071067811865477,
+      "target_reached": true
+    },
+    {
+      "best_abs_coefficient": 0.25000000000000033,
+      "frequency": 2,
+      "kind": "photonic",
+      "median_abs_coefficient": 0.2500000000000002,
+      "model": {
+        "computation_space": "fock",
+        "encoded_modes": [
+          0
+        ],
+        "encoding_layers": 1,
+        "encoding_scaling": 1.0,
+        "layout": "photonic",
+        "n_modes": 3,
+        "n_photons": 2,
+        "route": "photon_number_fig3c"
+      },
+      "model_degree": 2,
+      "name": "photonic_n2_L1_k2_fig3c",
+      "per_init_best": [
+        0.25000000000000033,
+        0.2500000000000001,
+        0.2500000000000001,
+        0.2500000000000002,
+        0.25000000000000017,
+        0.25000000000000033,
+        0.25000000000000017,
+        0.25000000000000006,
+        0.2500000000000002,
+        0.2500000000000002
+      ],
+      "target_abs_coefficient": 0.21213203435596426,
+      "target_reached": true
+    },
+    {
+      "best_abs_coefficient": 0.5000000000000004,
+      "frequency": 5,
+      "kind": "quantum",
+      "median_abs_coefficient": 0.4999999999999971,
+      "model": {
+        "encoding_scaling": 1.0,
+        "layout": "serial",
+        "repetitions": 5
+      },
+      "model_degree": 5,
+      "name": "qubit_serial_r5_k5",
+      "per_init_best": [
+        0.4999999999999958,
+        0.5000000000000003,
+        0.5000000000000002,
+        0.49999999999994305,
+        0.49999999999995987,
+        0.4999999999999984,
+        0.5000000000000004,
+        0.49999999999974076,
+        0.49999999999997075,
+        0.5000000000000003
+      ],
+      "target_abs_coefficient": 0.07071067811865477,
+      "target_reached": true
+    },
+    {
+      "best_abs_coefficient": 0.4999999978888129,
+      "frequency": 5,
+      "kind": "quantum",
+      "median_abs_coefficient": 0.4999999622923344,
+      "model": {
+        "ansatz": "strongly",
+        "ansatz_layers": 3,
+        "encoding_scaling": 1.0,
+        "layout": "parallel",
+        "repetitions": 5
+      },
+      "model_degree": 5,
+      "name": "qubit_parallel_r5_k5",
+      "per_init_best": [
+        0.499999995485472,
+        0.4999999403382804,
+        0.49999951441222207,
+        0.49999998669782053,
+        0.4999999978888129,
+        0.49999994740351894,
+        0.4999999280527687,
+        0.49999997718114986,
+        0.49999999761228264,
+        0.49999968626606806
+      ],
+      "target_abs_coefficient": 0.07071067811865477,
+      "target_reached": true
+    }
+  ]
+}

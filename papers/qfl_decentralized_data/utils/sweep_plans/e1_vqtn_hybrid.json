@@ -1,0 +1,192 @@
+{
+  "sweep_id": "e1_vqtn_hybrid",
+  "purpose": "E1 primary: hybrid VQTN (2 layers, eight-<Z> head) on three binary MNIST tasks, non-federated plus 2, 4, 8, 16 clients, 5 seeds, paper settings otherwise (B=20, E=1, 20 rounds)",
+  "paper": "qfl_decentralized_data",
+  "base_config": "configs/e1_original.json",
+  "fixed_overrides": {
+    "dataset": {
+      "validation_fraction": 0.0
+    },
+    "model": {
+      "layers": 2,
+      "init_std": 0.1,
+      "readout": "z_head"
+    },
+    "training": {
+      "lr": 0.03
+    }
+  },
+  "candidates": [
+    {
+      "name": "task0v9_centralized",
+      "overrides": {
+        "dataset.classes": [
+          0,
+          9
+        ],
+        "federation.mode": "centralized",
+        "federation.n_clients": 1
+      }
+    },
+    {
+      "name": "task0v9_clients2",
+      "overrides": {
+        "dataset.classes": [
+          0,
+          9
+        ],
+        "federation.n_clients": 2
+      }
+    },
+    {
+      "name": "task0v9_clients4",
+      "overrides": {
+        "dataset.classes": [
+          0,
+          9
+        ],
+        "federation.n_clients": 4
+      }
+    },
+    {
+      "name": "task0v9_clients8",
+      "overrides": {
+        "dataset.classes": [
+          0,
+          9
+        ],
+        "federation.n_clients": 8
+      }
+    },
+    {
+      "name": "task0v9_clients16",
+      "overrides": {
+        "dataset.classes": [
+          0,
+          9
+        ],
+        "federation.n_clients": 16
+      }
+    },
+    {
+      "name": "task2v7_centralized",
+      "overrides": {
+        "dataset.classes": [
+          2,
+          7
+        ],
+        "federation.mode": "centralized",
+        "federation.n_clients": 1
+      }
+    },
+    {
+      "name": "task2v7_clients2",
+      "overrides": {
+        "dataset.classes": [
+          2,
+          7
+        ],
+        "federation.n_clients": 2
+      }
+    },
+    {
+      "name": "task2v7_clients4",
+      "overrides": {
+        "dataset.classes": [
+          2,
+          7
+        ],
+        "federation.n_clients": 4
+      }
+    },
+    {
+      "name": "task2v7_clients8",
+      "overrides": {
+        "dataset.classes": [
+          2,
+          7
+        ],
+        "federation.n_clients": 8
+      }
+    },
+    {
+      "name": "task2v7_clients16",
+      "overrides": {
+        "dataset.classes": [
+          2,
+          7
+        ],
+        "federation.n_clients": 16
+      }
+    },
+    {
+      "name": "task3v6_centralized",
+      "overrides": {
+        "dataset.classes": [
+          3,
+          6
+        ],
+        "federation.mode": "centralized",
+        "federation.n_clients": 1
+      }
+    },
+    {
+      "name": "task3v6_clients2",
+      "overrides": {
+        "dataset.classes": [
+          3,
+          6
+        ],
+        "federation.n_clients": 2
+      }
+    },
+    {
+      "name": "task3v6_clients4",
+      "overrides": {
+        "dataset.classes": [
+          3,
+          6
+        ],
+        "federation.n_clients": 4
+      }
+    },
+    {
+      "name": "task3v6_clients8",
+      "overrides": {
+        "dataset.classes": [
+          3,
+          6
+        ],
+        "federation.n_clients": 8
+      }
+    },
+    {
+      "name": "task3v6_clients16",
+      "overrides": {
+        "dataset.classes": [
+          3,
+          6
+        ],
+        "federation.n_clients": 16
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "workers": 3,
+  "threads_per_worker": 3,
+  "selection": {
+    "metric": "test_accuracy",
+    "split": "test",
+    "checkpoint": "last",
+    "direction": "maximize",
+    "aggregation": "mean",
+    "tie_tolerance": 0.005,
+    "tie_handling": "reporting runs: hyperparameters are fixed in advance, no candidate is selected; every mean +- std over 5 seeds is reported"
+  }
+}

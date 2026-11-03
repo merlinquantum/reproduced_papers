@@ -1,0 +1,10 @@
+{
+    "description": "E1 task 2 vs 7",
+    "experiment": "e1_vqtn_2v7",
+    "dataset": {
+        "classes": [
+            2,
+            7
+        ]
+    }
+}

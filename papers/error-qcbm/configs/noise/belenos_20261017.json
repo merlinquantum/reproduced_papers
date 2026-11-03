@@ -1,0 +1,24 @@
+{
+  "schema": "error_qcbm.noise_profile.v1",
+  "profile_id": "belenos_20261017",
+  "platform": "qpu:belenos",
+  "parameters": {
+    "transmittance_percent": 2.8,
+    "hom_percent": 72.9
+  },
+  "assumptions": {
+    "brightness": 1.0,
+    "g2": 0.0,
+    "detector": "threshold"
+  },
+  "source": {
+    "kind": "selected_fields_from_read_only_hub_snapshot",
+    "queried_at_utc": "2026-10-17T11:23:43.820379+00:00",
+    "calibration_timestamp": null,
+    "snapshot_sha256": "e94ff99c712f0f844a55ea709c98b261bd033a283171c625584dceecbcbaa90e",
+    "field_mapping": {
+      "transmittance_percent": "processor.perfs.Transmittance (%)",
+      "hom_percent": "processor.perfs.HOM (%)"
+    }
+  }
+}

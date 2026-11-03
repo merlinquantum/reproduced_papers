@@ -1,0 +1,25 @@
+{
+    "description": "E5 (Fig. 7): virtual VQE for tapered HeH+, 6-qubit noisy branches (depth 5, 0.01/0.02), K=100, alpha=10, Adam lr 0.2, 300 iterations. Sweep half_distance_bohr over [0.4, 0.45, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.25, 1.7] x budget [1, 1.5, 2, 2.5] x seed via utils. budget=1 is the paper's noisy-VQE baseline.",
+    "experiment": {
+        "task": "vvqe",
+        "id": "e5_vvqe_original"
+    },
+    "vvqe": {
+        "half_distance_bohr": 0.8,
+        "n_qubits": 6,
+        "depth": 5,
+        "budget": 1.5,
+        "gate_noise": [
+            0.01,
+            0.02
+        ],
+        "penalty": 10.0,
+        "chebyshev_order": 100
+    },
+    "training": {
+        "iterations": 300,
+        "lr": 0.2,
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 10
+    }
+}

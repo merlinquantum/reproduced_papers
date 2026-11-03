@@ -1,0 +1,11 @@
+# Core simulation and training (torch statevector re-implementation of the
+# paper's PennyLane circuits).
+torch>=2.3
+numpy>=1.26
+matplotlib>=3.8
+
+# Photonic adaptation (Phase 4); merlinquantum pulls in perceval-quandela.
+merlinquantum>=0.2.3
+
+# Tests
+pytest>=8
