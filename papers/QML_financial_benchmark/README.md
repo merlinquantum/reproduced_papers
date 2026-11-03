@@ -13,7 +13,7 @@ Reproduction of arXiv:2601.03802.
 - **Paper:** Quantum vs. Classical Machine Learning: A Benchmark Study for Financial Prediction. arXiv preprint, 2026; cs.LG / quant-ph.
 - **Authors:** Rehan Ahmad, Muhammad Kashif, Nouhaila Innan, Muhammad Shafique.
 - **arXiv:** https://arxiv.org/abs/2601.03802
-- **Original repository:** none released. We searched GitHub, Hugging Face, Semantic Scholar and the author pages (`VISITED_URLS.md`).
+- **Original repository:** none released. We searched GitHub, Hugging Face, Semantic Scholar and the author pages.
 - **Attribution:** all code in this folder is an independent reimplementation. `lib/metrics.py::diebold_mariano` is adapted from `papers/QARIMA`. Cite the arXiv preprint for the method and the paper's numbers.
 
 ## Original Paper
@@ -67,7 +67,7 @@ The paper benchmarks simulated gate-based quantum models against classical model
 
 **Implementation:** everything is written from scratch in PyTorch. `lib/statevector.py` is a batched exact-statevector simulator with the same noiseless semantics as the paper's TorchQuantum. The QLSTM layout was reconstructed from the paper's parameter counts and reproduces all four Table XII counts exactly.
 
-**Deviations and filled gaps** (full list in `LOG.md`, "Phase 2 implementation decisions"):
+**Deviations and filled gaps**:
 
 - **Task 1 selection.**
   - Primary protocol (`leak_free`): select on validation folds 1–4 and test on fold 5.
@@ -157,7 +157,7 @@ python implementation.py --paper QML_financial_benchmark --config configs/e7_ori
 python ../../implementation.py --config configs/e1_original.json --ticker KCHOL.IS
 ```
 
-**Seed sweeps** use `utils/sweep.py`. The exact command of every sweep (S1–S15) is in `LOG.md` under "Sweep Records". For example:
+**Seed sweeps** use `utils/sweep.py`. Each sweep runs one config over a list of seeds; `results/sweep_verification.json` lists every sweep with its run counts. For example:
 
 ```bash
 .venv/bin/python papers/QML_financial_benchmark/utils/sweep.py --config configs/e1_original.json \
@@ -422,7 +422,7 @@ Focused tests for these controls are in `tests/test_baselines.py`.
 - **Not translated:**
   - **Trading (QLSTM):** the protocol cannot separate models (G3).
   - **E7 amplitude kernel:** classical on any platform, because a fixed unitary cancels in the fidelity.
-- **MerLin issues found** (angle-encoding `scale` ignored, `FidelityKernel` returning all ones, version string mismatch, kernel cost) are in `ACTION_REQUIRED_SEND_TO_MERLIN_TEAM.md`.
+- **MerLin issues found** (angle-encoding `scale` ignored, `FidelityKernel` returning all ones, version string mismatch, kernel cost) were reported to the MerLin team.
 
 ## Hardware-Aware Settings
 
