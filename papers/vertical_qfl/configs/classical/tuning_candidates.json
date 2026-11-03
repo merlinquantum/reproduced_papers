@@ -1,0 +1,482 @@
+[
+  {
+    "model.size": "gate",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 195,
+    "model.server_hidden": 107,
+    "model.central_hidden": 270,
+    "training.epochs": 30,
+    "training.lr": 0.001
+  },
+  {
+    "model.size": "gate",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 195,
+    "model.server_hidden": 107,
+    "model.central_hidden": 270,
+    "training.epochs": 30,
+    "training.lr": 0.002
+  },
+  {
+    "model.size": "gate",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 195,
+    "model.server_hidden": 107,
+    "model.central_hidden": 270,
+    "training.epochs": 30,
+    "training.lr": 0.005
+  },
+  {
+    "model.size": "gate",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 195,
+    "model.server_hidden": 107,
+    "model.central_hidden": 270,
+    "training.epochs": 30,
+    "training.lr": 0.01
+  },
+  {
+    "model.size": "photonic_h",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 12,
+    "model.central_hidden": 12,
+    "training.epochs": 100,
+    "training.lr": 0.001
+  },
+  {
+    "model.size": "photonic_h",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 12,
+    "model.central_hidden": 12,
+    "training.epochs": 100,
+    "training.lr": 0.002
+  },
+  {
+    "model.size": "photonic_h",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 12,
+    "model.central_hidden": 12,
+    "training.epochs": 100,
+    "training.lr": 0.005
+  },
+  {
+    "model.size": "photonic_h",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 12,
+    "model.central_hidden": 12,
+    "training.epochs": 100,
+    "training.lr": 0.01
+  },
+  {
+    "model.size": "photonic_f",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 7,
+    "model.central_hidden": 10,
+    "training.epochs": 100,
+    "training.lr": 0.001
+  },
+  {
+    "model.size": "photonic_f",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 7,
+    "model.central_hidden": 10,
+    "training.epochs": 100,
+    "training.lr": 0.002
+  },
+  {
+    "model.size": "photonic_f",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 7,
+    "model.central_hidden": 10,
+    "training.epochs": 100,
+    "training.lr": 0.005
+  },
+  {
+    "model.size": "photonic_f",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 7,
+    "model.central_hidden": 10,
+    "training.epochs": 100,
+    "training.lr": 0.01
+  },
+  {
+    "model.size": "gate",
+    "model.architecture": "central",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 195,
+    "model.server_hidden": 107,
+    "model.central_hidden": 270,
+    "training.epochs": 30,
+    "training.lr": 0.001
+  },
+  {
+    "model.size": "gate",
+    "model.architecture": "central",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 195,
+    "model.server_hidden": 107,
+    "model.central_hidden": 270,
+    "training.epochs": 30,
+    "training.lr": 0.002
+  },
+  {
+    "model.size": "gate",
+    "model.architecture": "central",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 195,
+    "model.server_hidden": 107,
+    "model.central_hidden": 270,
+    "training.epochs": 30,
+    "training.lr": 0.005
+  },
+  {
+    "model.size": "gate",
+    "model.architecture": "central",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 195,
+    "model.server_hidden": 107,
+    "model.central_hidden": 270,
+    "training.epochs": 30,
+    "training.lr": 0.01
+  },
+  {
+    "model.size": "photonic_h",
+    "model.architecture": "central",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 12,
+    "model.central_hidden": 12,
+    "training.epochs": 100,
+    "training.lr": 0.001
+  },
+  {
+    "model.size": "photonic_h",
+    "model.architecture": "central",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 12,
+    "model.central_hidden": 12,
+    "training.epochs": 100,
+    "training.lr": 0.002
+  },
+  {
+    "model.size": "photonic_h",
+    "model.architecture": "central",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 12,
+    "model.central_hidden": 12,
+    "training.epochs": 100,
+    "training.lr": 0.005
+  },
+  {
+    "model.size": "photonic_h",
+    "model.architecture": "central",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 12,
+    "model.central_hidden": 12,
+    "training.epochs": 100,
+    "training.lr": 0.01
+  },
+  {
+    "model.size": "photonic_f",
+    "model.architecture": "central",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 7,
+    "model.central_hidden": 10,
+    "training.epochs": 100,
+    "training.lr": 0.001
+  },
+  {
+    "model.size": "photonic_f",
+    "model.architecture": "central",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 7,
+    "model.central_hidden": 10,
+    "training.epochs": 100,
+    "training.lr": 0.002
+  },
+  {
+    "model.size": "photonic_f",
+    "model.architecture": "central",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 7,
+    "model.central_hidden": 10,
+    "training.epochs": 100,
+    "training.lr": 0.005
+  },
+  {
+    "model.size": "photonic_f",
+    "model.architecture": "central",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 7,
+    "model.central_hidden": 10,
+    "training.epochs": 100,
+    "training.lr": 0.01
+  }
+]

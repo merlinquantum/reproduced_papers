@@ -1,0 +1,23 @@
+[
+  {
+    "target": "quantum",
+    "latent": "gaussian",
+    "seed": 0,
+    "l1_nearest_int": 0.11297248303890228,
+    "mean_total": 7.830560207366943
+  },
+  {
+    "target": "quantum",
+    "latent": "gaussian",
+    "seed": 1,
+    "l1_nearest_int": 0.11616959422826767,
+    "mean_total": 8.246620178222656
+  },
+  {
+    "target": "quantum",
+    "latent": "gaussian",
+    "seed": 2,
+    "l1_nearest_int": 0.11332272738218307,
+    "mean_total": 7.754639625549316
+  }
+]

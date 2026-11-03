@@ -1,0 +1,364 @@
+{
+  "experiment": "e1_8clients_merlin_diagnostic_d5",
+  "runs": [
+    {
+      "best_epoch": 91,
+      "best_epoch_test_accuracy_selected_on_test": 0.799373040752351,
+      "final_test_accuracy": 0.7962382445141066,
+      "final_test_loss": 0.9660920827740038,
+      "final_validation_accuracy": 0.796078431372549,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "identity",
+            "identity"
+          ],
+          "client_mixer": "superposition",
+          "message_width": 8,
+          "mixer_depth": 1,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      },
+      "permutation_seed": 42,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1809.8681139170003
+    },
+    {
+      "best_epoch": 61,
+      "best_epoch_test_accuracy_selected_on_test": 0.7931034482758621,
+      "final_test_accuracy": 0.780564263322884,
+      "final_test_loss": 0.970143841351835,
+      "final_validation_accuracy": 0.7803921568627451,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "identity",
+            "identity"
+          ],
+          "client_mixer": "superposition",
+          "message_width": 8,
+          "mixer_depth": 1,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      },
+      "permutation_seed": 43,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1811.0223187910015
+    },
+    {
+      "best_epoch": 83,
+      "best_epoch_test_accuracy_selected_on_test": 0.8213166144200627,
+      "final_test_accuracy": 0.7836990595611285,
+      "final_test_loss": 0.8393390978391642,
+      "final_validation_accuracy": 0.7803921568627451,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "identity",
+            "identity"
+          ],
+          "client_mixer": "superposition",
+          "message_width": 8,
+          "mixer_depth": 2,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      },
+      "permutation_seed": 42,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 2471.1249830000015
+    },
+    {
+      "best_epoch": 94,
+      "best_epoch_test_accuracy_selected_on_test": 0.8338557993730408,
+      "final_test_accuracy": 0.8025078369905956,
+      "final_test_loss": 1.0003799330851875,
+      "final_validation_accuracy": 0.7686274509803922,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "identity",
+            "identity"
+          ],
+          "client_mixer": "superposition",
+          "message_width": 8,
+          "mixer_depth": 2,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      },
+      "permutation_seed": 43,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 2467.9076822919997
+    },
+    {
+      "best_epoch": 82,
+      "best_epoch_test_accuracy_selected_on_test": 0.7899686520376176,
+      "final_test_accuracy": 0.774294670846395,
+      "final_test_loss": 0.9681261236017401,
+      "final_validation_accuracy": 0.7372549019607844,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "client_mixer": "superposition",
+          "message_width": 8,
+          "mixer_depth": 1,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      },
+      "permutation_seed": 42,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1809.3134785000002
+    },
+    {
+      "best_epoch": 39,
+      "best_epoch_test_accuracy_selected_on_test": 0.8213166144200627,
+      "final_test_accuracy": 0.7774294670846394,
+      "final_test_loss": 0.8922600103396233,
+      "final_validation_accuracy": 0.792156862745098,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "client_mixer": "superposition",
+          "message_width": 8,
+          "mixer_depth": 1,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      },
+      "permutation_seed": 43,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1805.1059783749988
+    },
+    {
+      "best_epoch": 78,
+      "best_epoch_test_accuracy_selected_on_test": 0.8401253918495298,
+      "final_test_accuracy": 0.799373040752351,
+      "final_test_loss": 0.84191051471196,
+      "final_validation_accuracy": 0.7803921568627451,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "client_mixer": "superposition",
+          "message_width": 8,
+          "mixer_depth": 2,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      },
+      "permutation_seed": 42,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 2472.7536443749996
+    },
+    {
+      "best_epoch": 44,
+      "best_epoch_test_accuracy_selected_on_test": 0.8244514106583072,
+      "final_test_accuracy": 0.8087774294670846,
+      "final_test_loss": 0.8812442827374211,
+      "final_validation_accuracy": 0.8274509803921568,
+      "overrides": {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "client_mixer": "superposition",
+          "message_width": 8,
+          "mixer_depth": 2,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      },
+      "permutation_seed": 43,
+      "seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 2470.6684515000015
+    }
+  ],
+  "selection": {
+    "candidates": [
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.7884012539184952,
+          "std_ddof1": 0.011083178388503938
+        },
+        "final_validation_accuracy": {
+          "mean": 0.788235294117647,
+          "std_ddof1": 0.011091871077436
+        },
+        "overrides": {
+          "circuit": {
+            "client_feature_maps": [
+              "identity",
+              "identity",
+              "identity"
+            ],
+            "client_mixer": "superposition",
+            "message_width": 8,
+            "mixer_depth": 1,
+            "server_photons": 4
+          },
+          "n_client_stages": 8,
+          "n_modes": 12
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.7931034482758621,
+          "std_ddof1": 0.013299814066204646
+        },
+        "final_validation_accuracy": {
+          "mean": 0.7745098039215687,
+          "std_ddof1": 0.008318903308077
+        },
+        "overrides": {
+          "circuit": {
+            "client_feature_maps": [
+              "identity",
+              "identity",
+              "identity"
+            ],
+            "client_mixer": "superposition",
+            "message_width": 8,
+            "mixer_depth": 2,
+            "server_photons": 4
+          },
+          "n_client_stages": 8,
+          "n_modes": 12
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.7758620689655172,
+          "std_ddof1": 0.002216635677700709
+        },
+        "final_validation_accuracy": {
+          "mean": 0.7647058823529411,
+          "std_ddof1": 0.03882154877102608
+        },
+        "overrides": {
+          "circuit": {
+            "client_feature_maps": [
+              "identity",
+              "square",
+              "cos"
+            ],
+            "client_mixer": "superposition",
+            "message_width": 8,
+            "mixer_depth": 1,
+            "server_photons": 4
+          },
+          "n_client_stages": 8,
+          "n_modes": 12
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.8040752351097178,
+          "std_ddof1": 0.006649907033102363
+        },
+        "final_validation_accuracy": {
+          "mean": 0.803921568627451,
+          "std_ddof1": 0.03327561323230808
+        },
+        "overrides": {
+          "circuit": {
+            "client_feature_maps": [
+              "identity",
+              "square",
+              "cos"
+            ],
+            "client_mixer": "superposition",
+            "message_width": 8,
+            "mixer_depth": 2,
+            "server_photons": 4
+          },
+          "n_client_stages": 8,
+          "n_modes": 12
+        },
+        "successful_runs": 2
+      }
+    ],
+    "rule": {
+      "aggregation": "mean over permutation seeds",
+      "direction": "maximize",
+      "metric": "final_validation_accuracy",
+      "tie_break_ascending": [],
+      "tie_tolerance": 0.005
+    },
+    "selected": {
+      "circuit": {
+        "client_feature_maps": [
+          "identity",
+          "square",
+          "cos"
+        ],
+        "client_mixer": "superposition",
+        "message_width": 8,
+        "mixer_depth": 2,
+        "server_photons": 4
+      },
+      "n_client_stages": 8,
+      "n_modes": 12
+    },
+    "tied": [
+      {
+        "circuit": {
+          "client_feature_maps": [
+            "identity",
+            "square",
+            "cos"
+          ],
+          "client_mixer": "superposition",
+          "message_width": 8,
+          "mixer_depth": 2,
+          "server_photons": 4
+        },
+        "n_client_stages": 8,
+        "n_modes": 12
+      }
+    ]
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "sweep_id": "fig8_photonic_merlin",
+  "description": "Phase 4 MerLin ADAPTATION: readouts vertex, group (noncontextual) and unbiased x N = 2, 3 photons; 6 modes, L = 2 re-uploading, UNBUNCHED threshold detection; protocol paper; seeds 0-9; 2000 Adam steps lr 1e-3.",
+  "base_config": "configs/fig8_photonic_vertex_merlin.json",
+  "grid": [
+    {
+      "--readout": "vertex",
+      "--n-photons": 2
+    },
+    {
+      "--readout": "group",
+      "--n-photons": 2
+    },
+    {
+      "--readout": "unbiased",
+      "--n-photons": 2
+    },
+    {
+      "--readout": "vertex",
+      "--n-photons": 3
+    },
+    {
+      "--readout": "group",
+      "--n-photons": 3
+    },
+    {
+      "--readout": "unbiased",
+      "--n-photons": 3
+    }
+  ],
+  "repetitions": [
+    {
+      "--seed": 0
+    },
+    {
+      "--seed": 1
+    },
+    {
+      "--seed": 2
+    },
+    {
+      "--seed": 3
+    },
+    {
+      "--seed": 4
+    },
+    {
+      "--seed": 5
+    },
+    {
+      "--seed": 6
+    },
+    {
+      "--seed": 7
+    },
+    {
+      "--seed": 8
+    },
+    {
+      "--seed": 9
+    }
+  ],
+  "progress_total": 2000,
+  "plan": {
+    "metrics": [
+      "final.test_kl",
+      "min_test_kl.test_kl",
+      "min_test_kl.step",
+      "final.train_nll",
+      "final.test_zero_sum_violation",
+      "photonic.postselection_success_test_mean",
+      "train_seconds"
+    ],
+    "direction": "minimize",
+    "split": "test (fixed seeded set, seed 2302, n = 10000)",
+    "checkpoint": "final step 2000 (no early stopping)",
+    "aggregation": "per candidate: mean and sample std (ddof = 1) over 10 seeds",
+    "tie_tolerance": "n/a (descriptive sweep)",
+    "selection_rule": "none: pre-declared comparisons (a)-(d) of the Phase 4 Adaptation Plan",
+    "note": "Phase 4 Adaptation Plan, LOG.md."
+  },
+  "fixed_args": {
+    "--protocol": "paper",
+    "--experiment-id": "P4_fig8_photonic_merlin"
+  },
+  "max_workers": 6
+}

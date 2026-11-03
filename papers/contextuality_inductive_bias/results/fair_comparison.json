@@ -1,0 +1,1580 @@
+{
+  "rows": [
+    {
+      "system": "B2 bias-encoded Fourier L=1",
+      "role": "additional fair baseline B2",
+      "provenance": "locally executed (fair_final)",
+      "scope": "fair-tuned, paper-accurate data",
+      "successful": 10,
+      "expected": 10,
+      "excluded": [],
+      "lr": 0.001,
+      "l2": 0.1,
+      "n_parameters": 8748,
+      "final_test_kl_mean": 0.0036061462121711784,
+      "early_stop_test_kl_mean": 0.0036895187855003884,
+      "final_validation_nll_mean": 0.6848746049459764,
+      "final_train_nll_mean": 0.6813780696006039,
+      "train_seconds_mean": 527.6517002708919,
+      "final_test_kl_std": 2.816374727976372e-08,
+      "early_stop_test_kl_std": 0.00013704370117950435,
+      "final_validation_nll_std": 7.919405989278888e-07,
+      "final_train_nll_std": 7.956885787437404e-07,
+      "train_seconds_std": 9.877781487785596,
+      "matching_basis": "same data/protocol/steps/tuning budget; capacity per Comparison Plan",
+      "commensurability": "COMMENSURABLE",
+      "commensurability_reason": "same data, protocol, test set, steps, seeds and tuning budget"
+    },
+    {
+      "system": "photonic MerLin (group readout, PNR) N=2",
+      "role": "MerLin ADAPTATION (Phase 4)",
+      "provenance": "locally executed (fair_final)",
+      "scope": "fair-tuned, paper-accurate data",
+      "successful": 10,
+      "expected": 10,
+      "excluded": [],
+      "lr": 0.003,
+      "l2": 0.0,
+      "n_parameters": 90,
+      "final_test_kl_mean": 0.004009312642561136,
+      "early_stop_test_kl_mean": 0.003965153542745227,
+      "final_validation_nll_mean": 0.68643683729158,
+      "final_train_nll_mean": 0.682678019706062,
+      "train_seconds_mean": 549.9643605373858,
+      "final_test_kl_std": 9.573137841426231e-05,
+      "early_stop_test_kl_std": 0.000188155855184462,
+      "final_validation_nll_std": 0.0003127783793228084,
+      "final_train_nll_std": 0.0004053109345574355,
+      "train_seconds_std": 35.75037624287029,
+      "matching_basis": "same data/protocol/steps/tuning budget; capacity per Comparison Plan",
+      "commensurability": "COMMENSURABLE",
+      "commensurability_reason": "same data, protocol, test set, steps and tuning budget; a simulated MerLin ADAPTATION (exact probabilities, PNR detection), not the reproduction"
+    },
+    {
+      "system": "quantum (biased) L=1",
+      "role": "paper method (fair-tuned)",
+      "provenance": "locally executed (fair_final)",
+      "scope": "fair-tuned, paper-accurate data",
+      "successful": 10,
+      "expected": 10,
+      "excluded": [],
+      "lr": 0.001,
+      "l2": 0.0,
+      "n_parameters": 55,
+      "final_test_kl_mean": 0.004105809816713213,
+      "early_stop_test_kl_mean": 0.004052507791614161,
+      "final_validation_nll_mean": 0.6852375654330821,
+      "final_train_nll_mean": 0.6837287432888195,
+      "train_seconds_mean": 153.88070022920147,
+      "final_test_kl_std": 0.0003684412141178658,
+      "early_stop_test_kl_std": 0.0004447411265868126,
+      "final_validation_nll_std": 0.000757655067695839,
+      "final_train_nll_std": 0.0005396629232974991,
+      "train_seconds_std": 4.8556159921752835,
+      "matching_basis": "same data/protocol/steps/tuning budget; capacity per Comparison Plan",
+      "commensurability": "COMMENSURABLE",
+      "commensurability_reason": "same data, protocol, test set, steps, seeds and tuning budget"
+    },
+    {
+      "system": "surrogate L=1",
+      "role": "paper baseline B0 (fair-tuned)",
+      "provenance": "locally executed (fair_final)",
+      "scope": "fair-tuned, paper-accurate data; PARTIAL",
+      "successful": 9,
+      "expected": 10,
+      "excluded": [
+        [
+          "fair_final__c009_r01",
+          "FAILED"
+        ]
+      ],
+      "lr": 0.001,
+      "l2": 1.0,
+      "n_parameters": 4374,
+      "final_test_kl_mean": 0.004415132422299803,
+      "early_stop_test_kl_mean": 0.004352736361428596,
+      "final_validation_nll_mean": 0.6859681346352604,
+      "final_train_nll_mean": 0.6818126674319379,
+      "train_seconds_mean": 230.69856136089786,
+      "final_test_kl_std": 2.137861577365362e-08,
+      "early_stop_test_kl_std": 0.0001072168801817584,
+      "final_validation_nll_std": 4.873853702600251e-08,
+      "final_train_nll_std": 1.2337428902957419e-09,
+      "train_seconds_std": 38.378969566874055,
+      "matching_basis": "same data/protocol/steps/tuning budget; capacity per Comparison Plan",
+      "commensurability": "COMMENSURABLE",
+      "commensurability_reason": "PARTIAL coverage (9/10): one seed failed on both attempts (HardTanh saturation under Adam)"
+    },
+    {
+      "system": "B5 quadratic (ceiling)",
+      "role": "ceiling B5 (class contains the truth)",
+      "provenance": "locally executed (fair_final)",
+      "scope": "fair-tuned, paper-accurate data",
+      "successful": 10,
+      "expected": 10,
+      "excluded": [],
+      "lr": 0.001,
+      "l2": 0.01,
+      "n_parameters": 84,
+      "final_test_kl_mean": 0.004521415390810485,
+      "early_stop_test_kl_mean": 0.004521201006925152,
+      "final_validation_nll_mean": 0.687882753097054,
+      "final_train_nll_mean": 0.6800590848732415,
+      "train_seconds_mean": 8.670871766802156,
+      "final_test_kl_std": 7.308525188499334e-05,
+      "early_stop_test_kl_std": 9.806435791597934e-05,
+      "final_validation_nll_std": 7.701297754513813e-05,
+      "final_train_nll_std": 9.76422047392274e-05,
+      "train_seconds_std": 0.0376758158279346,
+      "matching_basis": "same data/protocol/steps/tuning budget; capacity per Comparison Plan",
+      "commensurability": "COMMENSURABLE",
+      "commensurability_reason": "same data, protocol, test set, steps, seeds and tuning budget"
+    },
+    {
+      "system": "quantum (biased) L=2",
+      "role": "paper method (fair-tuned)",
+      "provenance": "locally executed (fair_final)",
+      "scope": "fair-tuned, paper-accurate data",
+      "successful": 10,
+      "expected": 10,
+      "excluded": [],
+      "lr": 0.001,
+      "l2": 0.0,
+      "n_parameters": 91,
+      "final_test_kl_mean": 0.005123992330925713,
+      "early_stop_test_kl_mean": 0.00473254455120697,
+      "final_validation_nll_mean": 0.6870954041602391,
+      "final_train_nll_mean": 0.6807366947761295,
+      "train_seconds_mean": 242.1701184084057,
+      "final_test_kl_std": 0.0004278558310932672,
+      "early_stop_test_kl_std": 0.00024573461014017385,
+      "final_validation_nll_std": 0.0008370572225693038,
+      "final_train_nll_std": 0.000519897859505594,
+      "train_seconds_std": 7.818557885703649,
+      "matching_basis": "same data/protocol/steps/tuning budget; capacity per Comparison Plan",
+      "commensurability": "COMMENSURABLE",
+      "commensurability_reason": "same data, protocol, test set, steps, seeds and tuning budget"
+    },
+    {
+      "system": "quantum (no bias, Fig. 10 CNOTs) L=1",
+      "role": "paper baseline (fair-tuned)",
+      "provenance": "locally executed (fair_final)",
+      "scope": "fair-tuned, paper-accurate data",
+      "successful": 10,
+      "expected": 10,
+      "excluded": [],
+      "lr": 0.003,
+      "l2": 0.0,
+      "n_parameters": 54,
+      "final_test_kl_mean": 0.005381747493934245,
+      "early_stop_test_kl_mean": 0.0053300630149316335,
+      "final_validation_nll_mean": 0.6864933323093995,
+      "final_train_nll_mean": 0.6812955455400486,
+      "train_seconds_mean": 143.6819928708952,
+      "final_test_kl_std": 0.00031364482101821155,
+      "early_stop_test_kl_std": 0.00027934567570607433,
+      "final_validation_nll_std": 0.0011042254861106276,
+      "final_train_nll_std": 0.000924299227816608,
+      "train_seconds_std": 1.8262506823817533,
+      "matching_basis": "same data/protocol/steps/tuning budget; capacity per Comparison Plan",
+      "commensurability": "COMMENSURABLE",
+      "commensurability_reason": "same data, protocol, test set, steps, seeds and tuning budget"
+    },
+    {
+      "system": "B3 bias-encoded MLP h=7",
+      "role": "additional fair baseline B3",
+      "provenance": "locally executed (fair_final)",
+      "scope": "fair-tuned, paper-accurate data",
+      "successful": 10,
+      "expected": 10,
+      "excluded": [],
+      "lr": 0.001,
+      "l2": 0.001,
+      "n_parameters": 97,
+      "final_test_kl_mean": 0.005761548967083004,
+      "early_stop_test_kl_mean": 0.005757241631063214,
+      "final_validation_nll_mean": 0.6887075247902125,
+      "final_train_nll_mean": 0.6861898472966667,
+      "train_seconds_mean": 8.763380654103821,
+      "final_test_kl_std": 1.330945256906945e-05,
+      "early_stop_test_kl_std": 2.2315941408757856e-05,
+      "final_validation_nll_std": 1.6576318065486975e-05,
+      "final_train_nll_std": 2.1045149315609362e-05,
+      "train_seconds_std": 0.07636373529057149,
+      "matching_basis": "same data/protocol/steps/tuning budget; capacity per Comparison Plan",
+      "commensurability": "COMMENSURABLE",
+      "commensurability_reason": "same data, protocol, test set, steps, seeds and tuning budget"
+    },
+    {
+      "system": "B4 unbiased MLP h=9",
+      "role": "additional fair baseline B4",
+      "provenance": "locally executed (fair_final)",
+      "scope": "fair-tuned, paper-accurate data",
+      "successful": 10,
+      "expected": 10,
+      "excluded": [],
+      "lr": 0.001,
+      "l2": 0.001,
+      "n_parameters": 93,
+      "final_test_kl_mean": 0.0057791630212999465,
+      "early_stop_test_kl_mean": 0.005819553368371287,
+      "final_validation_nll_mean": 0.6888588091341336,
+      "final_train_nll_mean": 0.6857031859497775,
+      "train_seconds_mean": 8.213437653903384,
+      "final_test_kl_std": 1.2963973373518673e-05,
+      "early_stop_test_kl_std": 5.615570240951716e-05,
+      "final_validation_nll_std": 1.9257495974387894e-05,
+      "final_train_nll_std": 3.055232670311099e-05,
+      "train_seconds_std": 0.07179066495502809,
+      "matching_basis": "same data/protocol/steps/tuning budget; capacity per Comparison Plan",
+      "commensurability": "COMMENSURABLE",
+      "commensurability_reason": "same data, protocol, test set, steps, seeds and tuning budget"
+    },
+    {
+      "system": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "role": "paper baseline (fair-tuned)",
+      "provenance": "locally executed (fair_final)",
+      "scope": "fair-tuned, paper-accurate data",
+      "successful": 10,
+      "expected": 10,
+      "excluded": [],
+      "lr": 0.001,
+      "l2": 0.0,
+      "n_parameters": 90,
+      "final_test_kl_mean": 0.007126793094415107,
+      "early_stop_test_kl_mean": 0.007075981375937115,
+      "final_validation_nll_mean": 0.6880068683668105,
+      "final_train_nll_mean": 0.6794916578063445,
+      "train_seconds_mean": 236.23590571251697,
+      "final_test_kl_std": 0.0006801445884449104,
+      "early_stop_test_kl_std": 0.0007119739190631157,
+      "final_validation_nll_std": 0.0010320359322058541,
+      "final_train_nll_std": 0.001673593108889035,
+      "train_seconds_std": 8.920132846090079,
+      "matching_basis": "same data/protocol/steps/tuning budget; capacity per Comparison Plan",
+      "commensurability": "COMMENSURABLE",
+      "commensurability_reason": "same data, protocol, test set, steps, seeds and tuning budget"
+    }
+  ],
+  "untuned_reference": {
+    "system": "surrogate L=2 (not tuned, paper App. F settings)",
+    "provenance": "locally executed (Phase 3, fig8_surrogates)",
+    "grid_point": {
+      "--lr": 0.0001,
+      "--protocol": "paper",
+      "--spectrum": 2
+    },
+    "successful": 5,
+    "expected": 5,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "final_test_kl_mean": 0.01865009827923844,
+    "final_test_kl_std": 3.5141642751118624e-06,
+    "train_seconds_mean": 2940.5682603831983,
+    "status": "PARTIALLY_COMMENSURABLE",
+    "reason": "same data, protocol paper, test set and 2000 steps, but plain SGD at the fixed paper lr, no validation tuning, Phase 3 seeds; excluded from the statistics"
+  },
+  "comparisons": [
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=1",
+      "n": "10 vs 10",
+      "diff": -0.00025775516300853216,
+      "ci_low": -0.0006125071205518591,
+      "ci_high": 9.69967945347948e-05,
+      "welch_p": 0.14337454521531962,
+      "mw_p": 0.14046504815835498,
+      "resolved": false
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=1",
+      "n": "10 vs 10",
+      "diff": -0.0005975184637246637,
+      "ci_low": -0.0008449840998006777,
+      "ci_high": -0.00035005282764864976,
+      "welch_p": 8.219268220380301e-05,
+      "mw_p": 0.0003298385207779935,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "n": "10 vs 10",
+      "diff": -0.002002800763489394,
+      "ci_low": -0.0025439043989540886,
+      "ci_high": -0.0014616971280246994,
+      "welch_p": 9.638592886018734e-07,
+      "mw_p": 0.0002461281279052297,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "n": "10 vs 10",
+      "diff": -0.0023434368247301452,
+      "ci_low": -0.0028670085178940717,
+      "ci_high": -0.0018198651315662188,
+      "welch_p": 7.998380269628647e-07,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "photonic MerLin (group readout, PNR) N=2",
+      "n": "10 vs 10",
+      "diff": 0.0011146796883645766,
+      "ci_low": 0.000805330464872822,
+      "ci_high": 0.0014240289118563313,
+      "welch_p": 1.1997430657796566e-05,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "photonic MerLin (group readout, PNR) N=2",
+      "n": "10 vs 10",
+      "diff": 0.0007673910084617427,
+      "ci_low": 0.0005607636246145381,
+      "ci_high": 0.0009740183923089473,
+      "welch_p": 5.080437148350105e-07,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "B3 bias-encoded MLP h=7",
+      "n": "10 vs 10",
+      "diff": -0.000637556636157291,
+      "ci_low": -0.0009436841704661242,
+      "ci_high": -0.0003314291018484578,
+      "welch_p": 0.001098871160543873,
+      "mw_p": 0.0028272720911168077,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "B3 bias-encoded MLP h=7",
+      "n": "10 vs 10",
+      "diff": -0.0010246970798562438,
+      "ci_low": -0.0012007728008517741,
+      "ci_high": -0.0008486213588607133,
+      "welch_p": 3.035394552834178e-07,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "B4 unbiased MLP h=9",
+      "n": "10 vs 10",
+      "diff": -0.0006551706903742335,
+      "ci_low": -0.0009612952515071571,
+      "ci_high": -0.0003490461292413099,
+      "welch_p": 0.0009160357504745017,
+      "mw_p": 0.0028272720911168077,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "B4 unbiased MLP h=9",
+      "n": "10 vs 10",
+      "diff": -0.0010870088171643175,
+      "ci_low": -0.0012647683966987865,
+      "ci_high": -0.0009092492376298485,
+      "welch_p": 9.299726723585553e-08,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (biased) L=1",
+      "n": "10 vs 10",
+      "diff": 0.0010181825142125001,
+      "ci_low": 0.0006424648289093367,
+      "ci_high": 0.0013939001995156635,
+      "welch_p": 2.2650291175038492e-05,
+      "mw_p": 0.0005828399431792745,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (biased) L=1",
+      "n": "10 vs 10",
+      "diff": 0.000680036759592809,
+      "ci_low": 0.0003354744384491454,
+      "ci_high": 0.0010245990807364726,
+      "welch_p": 0.0008331099421685246,
+      "mw_p": 0.003610514312329602,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "B2 bias-encoded Fourier L=1",
+      "n": "10 vs 10",
+      "diff": 0.0015178461187545346,
+      "ci_low": 0.0012117764949633692,
+      "ci_high": 0.0018239157425457,
+      "welch_p": 1.3637112741005337e-06,
+      "mw_p": 0.0001816511460914649,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "B2 bias-encoded Fourier L=1",
+      "n": "10 vs 10",
+      "diff": 0.0010430257657065814,
+      "ci_low": 0.0008523248253045336,
+      "ci_high": 0.0012337267061086291,
+      "welch_p": 1.1649156049744841e-08,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "B5 quadratic (ceiling)",
+      "n": "10 vs 10",
+      "diff": 0.0006025769401152284,
+      "ci_low": 0.0002946623637385619,
+      "ci_high": 0.0009104915164918949,
+      "welch_p": 0.0015234759203664975,
+      "mw_p": 0.0003298385207779935,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "B5 quadratic (ceiling)",
+      "n": "10 vs 10",
+      "diff": 0.00021134354428181765,
+      "ci_low": 2.8697372720756114e-05,
+      "ci_high": 0.0003939897158428792,
+      "welch_p": 0.02690934505068369,
+      "mw_p": 0.03763531378731424,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "surrogate L=1",
+      "n": "10 vs 9",
+      "diff": 0.0007088599086259098,
+      "ci_low": 0.0004027902849278453,
+      "ci_high": 0.0010149295323239743,
+      "welch_p": 0.0005353482721940456,
+      "mw_p": 0.0002779758535378231,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "surrogate L=1",
+      "n": "10 vs 9",
+      "diff": 0.00037980818977837415,
+      "ci_low": 0.00019439250817831325,
+      "ci_high": 0.000565223871378435,
+      "welch_p": 0.0007205774982436454,
+      "mw_p": 0.0016693366427425497,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=1",
+      "n": "10 vs 10",
+      "diff": -0.0012759376772210323,
+      "ci_low": -0.0015979889786343732,
+      "ci_high": -0.0009538863758076913,
+      "welch_p": 1.629222937800436e-07,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=1",
+      "n": "10 vs 10",
+      "diff": -0.0012775552233174727,
+      "ci_low": -0.0016312534801371495,
+      "ci_high": -0.0009238569664977959,
+      "welch_p": 1.3080027476186954e-06,
+      "mw_p": 0.0003298385207779935,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "n": "10 vs 10",
+      "diff": -0.003020983277701894,
+      "ci_low": -0.003546107503992312,
+      "ci_high": -0.002495859051411476,
+      "welch_p": 7.220451557673613e-09,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "n": "10 vs 10",
+      "diff": -0.0030234735843229542,
+      "ci_low": -0.0035889811140096747,
+      "ci_high": -0.0024579660546362337,
+      "welch_p": 8.216167615883745e-09,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "photonic MerLin (group readout, PNR) N=2",
+      "n": "10 vs 10",
+      "diff": 9.649717415207652e-05,
+      "ci_low": -0.00017098135861326333,
+      "ci_high": 0.00036397570691741637,
+      "welch_p": 0.44103916102456653,
+      "mw_p": 0.5707503880581739,
+      "resolved": false
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "photonic MerLin (group readout, PNR) N=2",
+      "n": "10 vs 10",
+      "diff": 8.73542488689337e-05,
+      "ci_low": -0.0002449976042500012,
+      "ci_high": 0.0004197061019878686,
+      "welch_p": 0.5777531016264779,
+      "mw_p": 0.9698499769931556,
+      "resolved": false
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "B3 bias-encoded MLP h=7",
+      "n": "10 vs 10",
+      "diff": -0.001655739150369791,
+      "ci_low": -0.0019193734147300774,
+      "ci_high": -0.0013921048860095048,
+      "welch_p": 1.7640647287205577e-07,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "B3 bias-encoded MLP h=7",
+      "n": "10 vs 10",
+      "diff": -0.0017047338394490527,
+      "ci_low": -0.0020230396123836836,
+      "ci_high": -0.0013864280665144219,
+      "welch_p": 6.826394990733018e-07,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "B4 unbiased MLP h=9",
+      "n": "10 vs 10",
+      "diff": -0.0016733532045867337,
+      "ci_low": -0.0019369840115390222,
+      "ci_high": -0.001409722397634445,
+      "welch_p": 1.6111035909160198e-07,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "B4 unbiased MLP h=9",
+      "n": "10 vs 10",
+      "diff": -0.0017670455767571265,
+      "ci_low": -0.0020862165248729265,
+      "ci_high": -0.0014478746286413263,
+      "welch_p": 4.150988470587369e-07,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "quantum (biased) L=2",
+      "n": "10 vs 10",
+      "diff": -0.0010181825142125001,
+      "ci_low": -0.0013939001995156635,
+      "ci_high": -0.0006424648289093367,
+      "welch_p": 2.2650291175038492e-05,
+      "mw_p": 0.0005828399431792745,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "quantum (biased) L=2",
+      "n": "10 vs 10",
+      "diff": -0.000680036759592809,
+      "ci_low": -0.0010245990807364726,
+      "ci_high": -0.0003354744384491454,
+      "welch_p": 0.0008331099421685246,
+      "mw_p": 0.003610514312329602,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "B2 bias-encoded Fourier L=1",
+      "n": "10 vs 10",
+      "diff": 0.0004996636045420345,
+      "ci_low": 0.000236096637278094,
+      "ci_high": 0.000763230571805975,
+      "welch_p": 0.0020244047754756377,
+      "mw_p": 0.0001816511460914649,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "B2 bias-encoded Fourier L=1",
+      "n": "10 vs 10",
+      "diff": 0.00036298900611377244,
+      "ci_low": 3.794589793756995e-05,
+      "ci_high": 0.0006880321142899749,
+      "welch_p": 0.031879015581171365,
+      "mw_p": 0.014019277113959951,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "B5 quadratic (ceiling)",
+      "n": "10 vs 10",
+      "diff": -0.00041560557409727177,
+      "ci_low": -0.0006813533938226569,
+      "ci_high": -0.00014985775437188667,
+      "welch_p": 0.00600009845517726,
+      "mw_p": 0.0028272720911168077,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "B5 quadratic (ceiling)",
+      "n": "10 vs 10",
+      "diff": -0.0004686932153109913,
+      "ci_low": -0.0007901449118163379,
+      "ci_high": -0.00014724151880564465,
+      "welch_p": 0.008798674073269059,
+      "mw_p": 0.003610514312329602,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "surrogate L=1",
+      "n": "10 vs 9",
+      "diff": -0.0003093226055865903,
+      "ci_low": -0.0005728895727424167,
+      "ci_high": -4.575563843076401e-05,
+      "welch_p": 0.02626565152446608,
+      "mw_p": 0.003733591420941252,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "surrogate L=1",
+      "n": "10 vs 9",
+      "diff": -0.0003002285698144348,
+      "ci_low": -0.0006228963694736688,
+      "ci_high": 2.2439229844799246e-05,
+      "welch_p": 0.06498039671177783,
+      "mw_p": 0.016010990810517163,
+      "resolved": false
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=1",
+      "n": "10 vs 10",
+      "diff": -0.0013724348513731088,
+      "ci_low": -0.0016015623699189435,
+      "ci_high": -0.001143307332827274,
+      "welch_p": 5.906434638398884e-08,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=1",
+      "n": "10 vs 10",
+      "diff": -0.0013649094721864064,
+      "ci_low": -0.001590958605318344,
+      "ci_high": -0.0011388603390544687,
+      "welch_p": 9.440546550807438e-10,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "n": "10 vs 10",
+      "diff": -0.0031174804518539706,
+      "ci_low": -0.0036059837452237977,
+      "ci_high": -0.0026289771584841436,
+      "welch_p": 1.0981917663022654e-07,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "n": "10 vs 10",
+      "diff": -0.003110827833191888,
+      "ci_low": -0.003627989372641823,
+      "ci_high": -0.0025936662937419528,
+      "welch_p": 8.172241269427865e-08,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B3 bias-encoded MLP h=7",
+      "n": "10 vs 10",
+      "diff": -0.0017522363245218676,
+      "ci_low": -0.001820986954969571,
+      "ci_high": -0.0016834856940741642,
+      "welch_p": 3.160422937319097e-13,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B3 bias-encoded MLP h=7",
+      "n": "10 vs 10",
+      "diff": -0.0017920880883179864,
+      "ci_low": -0.0019270668933985854,
+      "ci_high": -0.0016571092832373875,
+      "welch_p": 1.595795665213802e-10,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B4 unbiased MLP h=9",
+      "n": "10 vs 10",
+      "diff": -0.0017698503787388102,
+      "ci_low": -0.001838586769395696,
+      "ci_high": -0.0017011139880819244,
+      "welch_p": 2.9962404173376745e-13,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B4 unbiased MLP h=9",
+      "n": "10 vs 10",
+      "diff": -0.0018543998256260602,
+      "ci_low": -0.001991713962189315,
+      "ci_high": -0.0017170856890628052,
+      "welch_p": 1.4408774491321459e-11,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "quantum (biased) L=1",
+      "n": "10 vs 10",
+      "diff": -9.649717415207652e-05,
+      "ci_low": -0.00036397570691741637,
+      "ci_high": 0.00017098135861326333,
+      "welch_p": 0.44103916102456653,
+      "mw_p": 0.5707503880581739,
+      "resolved": false
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "quantum (biased) L=1",
+      "n": "10 vs 10",
+      "diff": -8.73542488689337e-05,
+      "ci_low": -0.0004197061019878686,
+      "ci_high": 0.0002449976042500012,
+      "welch_p": 0.5777531016264779,
+      "mw_p": 0.9698499769931556,
+      "resolved": false
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "quantum (biased) L=2",
+      "n": "10 vs 10",
+      "diff": -0.0011146796883645766,
+      "ci_low": -0.0014240289118563313,
+      "ci_high": -0.000805330464872822,
+      "welch_p": 1.1997430657796566e-05,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "quantum (biased) L=2",
+      "n": "10 vs 10",
+      "diff": -0.0007673910084617427,
+      "ci_low": -0.0009740183923089473,
+      "ci_high": -0.0005607636246145381,
+      "welch_p": 5.080437148350105e-07,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B2 bias-encoded Fourier L=1",
+      "n": "10 vs 10",
+      "diff": 0.000403166430389958,
+      "ci_low": 0.0003346843265666564,
+      "ci_high": 0.0004716485342132596,
+      "welch_p": 3.155205688149477e-07,
+      "mw_p": 0.0001816511460914649,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B2 bias-encoded Fourier L=1",
+      "n": "10 vs 10",
+      "diff": 0.00027563475724483874,
+      "ci_low": 0.00011993712252964206,
+      "ci_high": 0.00043133239196003543,
+      "welch_p": 0.0016950149607442915,
+      "mw_p": 0.003610514312329602,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B5 quadratic (ceiling)",
+      "n": "10 vs 10",
+      "diff": -0.0005121027482493483,
+      "ci_low": -0.0005925201427524002,
+      "ci_high": -0.0004316853537462963,
+      "welch_p": 1.9836092681656262e-10,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B5 quadratic (ceiling)",
+      "n": "10 vs 10",
+      "diff": -0.000556047464179925,
+      "ci_low": -0.0007004009698890248,
+      "ci_high": -0.00041169395847082525,
+      "welch_p": 1.1363509844611066e-06,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "surrogate L=1",
+      "n": "10 vs 9",
+      "diff": -0.00040581977973866683,
+      "ci_low": -0.0004743018831458695,
+      "ci_high": -0.0003373376763314642,
+      "welch_p": 2.9820003125607417e-07,
+      "mw_p": 0.0002779758535378231,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "surrogate L=1",
+      "n": "10 vs 9",
+      "diff": -0.0003875828186833685,
+      "ci_low": -0.000535935024019224,
+      "ci_high": -0.0002392306133475131,
+      "welch_p": 5.8589363649627423e-05,
+      "mw_p": 0.0005202443475902287,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "surrogate L=1",
+      "n": "10 vs 9",
+      "diff": -0.0008089862101286248,
+      "ci_low": -0.0008090103226912368,
+      "ci_high": -0.0008089620975660129,
+      "welch_p": 1.0090010860801128e-71,
+      "mw_p": 0.00027625915088534203,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "surrogate L=1",
+      "n": "10 vs 9",
+      "diff": -0.0006632175759282073,
+      "ci_low": -0.00078188865166973,
+      "ci_high": -0.0005445465001866845,
+      "welch_p": 1.5767615355520371e-09,
+      "mw_p": 0.00027970027018668647,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "B3 bias-encoded MLP h=7",
+      "other": "B4 unbiased MLP h=9",
+      "n": "10 vs 10",
+      "diff": -1.7614054216942565e-05,
+      "ci_low": -2.9958474859056238e-05,
+      "ci_high": -5.269633574828891e-06,
+      "welch_p": 0.007724552217874235,
+      "mw_p": 0.011329696684474666,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "B3 bias-encoded MLP h=7",
+      "other": "B4 unbiased MLP h=9",
+      "n": "10 vs 10",
+      "diff": -6.231173730807376e-05,
+      "ci_low": -0.0001040352832816018,
+      "ci_high": -2.0588191334545708e-05,
+      "welch_p": 0.006977013915863166,
+      "mw_p": 0.0022022199424970783,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "n": "10 vs 10",
+      "diff": -0.002002800763489394,
+      "ci_low": -0.0025439043989540886,
+      "ci_high": -0.0014616971280246994,
+      "welch_p": 9.638592886018734e-07,
+      "mw_p": 0.0002461281279052297,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "n": "10 vs 10",
+      "diff": -0.0023434368247301452,
+      "ci_low": -0.0028670085178940717,
+      "ci_high": -0.0018198651315662188,
+      "welch_p": 7.998380269628647e-07,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "final_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=1",
+      "n": "10 vs 10",
+      "diff": -0.0012759376772210323,
+      "ci_low": -0.0015979889786343732,
+      "ci_high": -0.0009538863758076913,
+      "welch_p": 1.629222937800436e-07,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "metric": "early_stop_test_kl",
+      "reference": "quantum (biased) L=1",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=1",
+      "n": "10 vs 10",
+      "diff": -0.0012775552233174727,
+      "ci_low": -0.0016312534801371495,
+      "ci_high": -0.0009238569664977959,
+      "welch_p": 1.3080027476186954e-06,
+      "mw_p": 0.0003298385207779935,
+      "resolved": true
+    }
+  ],
+  "robustness": {
+    "quantum (no bias, Fig. 10 CNOTs) L=1": {
+      "mean": 0.005958231085078901,
+      "per_seed": {
+        "101": 0.005601685535011552,
+        "102": 0.005833712000272713,
+        "103": 0.00643929571995244
+      }
+    },
+    "quantum (no bias, Fig. 10 CNOTs) L=2": {
+      "mean": 0.006849262444449052,
+      "per_seed": {
+        "101": 0.006315447262295339,
+        "102": 0.00731713067622355,
+        "103": 0.006915209394828267
+      }
+    },
+    "photonic MerLin (group readout, PNR) N=2": {
+      "mean": 0.005000857403053282,
+      "per_seed": {
+        "101": 0.004361921889324617,
+        "102": 0.005115239323352083,
+        "103": 0.005525410996483143
+      }
+    },
+    "B3 bias-encoded MLP h=7": {
+      "mean": 0.00665813206969917,
+      "per_seed": {
+        "101": 0.005778991641198236,
+        "102": 0.006747734095580272,
+        "103": 0.007447670472319001
+      }
+    },
+    "B4 unbiased MLP h=9": {
+      "mean": 0.006692623462577758,
+      "per_seed": {
+        "101": 0.006420672121640753,
+        "102": 0.006484906451783103,
+        "103": 0.00717229181430942
+      }
+    },
+    "quantum (biased) L=1": {
+      "mean": 0.005924888078838241,
+      "per_seed": {
+        "101": 0.006011349397844731,
+        "102": 0.005921374993711431,
+        "103": 0.005841939844958563
+      }
+    },
+    "quantum (biased) L=2": {
+      "mean": 0.006041155915128208,
+      "per_seed": {
+        "101": 0.005034413234497147,
+        "102": 0.006889559660367513,
+        "103": 0.0061994948505199625
+      }
+    },
+    "B2 bias-encoded Fourier L=1": {
+      "mean": 0.004332267237031101,
+      "per_seed": {
+        "101": 0.003736541767385996,
+        "102": 0.004484547957939246,
+        "103": 0.004775711985768064
+      }
+    },
+    "B5 quadratic (ceiling)": {
+      "mean": 0.0055852016875015155,
+      "per_seed": {
+        "101": 0.0055870237590588704,
+        "102": 0.0048287340777278505,
+        "103": 0.0063398472257178255
+      }
+    },
+    "surrogate L=1": {
+      "mean": 0.005118483545239195,
+      "per_seed": {
+        "101": 0.004801913822094077,
+        "102": 0.004883807653691927,
+        "103": 0.00566972915993158
+      }
+    }
+  },
+  "paired": [
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": 8.292483004930604e-05,
+      "reference_lower": 2,
+      "n": 3,
+      "paired_t_p": 0.8824959131467127
+    },
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0008081065293208444,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.08423852362440001
+    },
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "photonic MerLin (group readout, PNR) N=2",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": 0.0010402985120749268,
+      "reference_lower": 0,
+      "n": 3,
+      "paired_t_p": 0.10518881155764813
+    },
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "B3 bias-encoded MLP h=7",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0006169761545709619,
+      "reference_lower": 2,
+      "n": 3,
+      "paired_t_p": 0.2682054287159509
+    },
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "B4 unbiased MLP h=9",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0006514675474495508,
+      "reference_lower": 2,
+      "n": 3,
+      "paired_t_p": 0.3519571506291881
+    },
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (biased) L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": 0.00011626783628996586,
+      "reference_lower": 1,
+      "n": 3,
+      "paired_t_p": 0.8582953306922511
+    },
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "B2 bias-encoded Fourier L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": 0.0017088886780971056,
+      "reference_lower": 0,
+      "n": 3,
+      "paired_t_p": 0.03947052796787747
+    },
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "B5 quadratic (ceiling)",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": 0.00045595422762669213,
+      "reference_lower": 2,
+      "n": 3,
+      "paired_t_p": 0.6306611447427781
+    },
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "surrogate L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": 0.0009226723698890126,
+      "reference_lower": 0,
+      "n": 3,
+      "paired_t_p": 0.23444385279465835
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -3.334300624065981e-05,
+      "reference_lower": 1,
+      "n": 3,
+      "paired_t_p": 0.9208466180073566
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0009243743656108102,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.10393004890882557
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "photonic MerLin (group readout, PNR) N=2",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": 0.0009240306757849608,
+      "reference_lower": 0,
+      "n": 3,
+      "paired_t_p": 0.14090496247466314
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "B3 bias-encoded MLP h=7",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0007332439908609278,
+      "reference_lower": 2,
+      "n": 3,
+      "paired_t_p": 0.30248703296141033
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "B4 unbiased MLP h=9",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0007677353837395167,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.1144689227384234
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "quantum (biased) L=2",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.00011626783628996586,
+      "reference_lower": 2,
+      "n": 3,
+      "paired_t_p": 0.8582953306922511
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "B2 bias-encoded Fourier L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": 0.0015926208418071397,
+      "reference_lower": 0,
+      "n": 3,
+      "paired_t_p": 0.04686802163378737
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "B5 quadratic (ceiling)",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": 0.0003396863913367263,
+      "reference_lower": 1,
+      "n": 3,
+      "paired_t_p": 0.5380059793576519
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "surrogate L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": 0.0008064045335990467,
+      "reference_lower": 0,
+      "n": 3,
+      "paired_t_p": 0.1285612490301984
+    },
+    {
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0009573736820256206,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.024306794814864183
+    },
+    {
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0018484050413957712,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.016477715607057086
+    },
+    {
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B3 bias-encoded MLP h=7",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0016572746666458887,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.007709342249331619
+    },
+    {
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B4 unbiased MLP h=9",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0016917660595244775,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.013714132350370854
+    },
+    {
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "quantum (biased) L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0009240306757849608,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.14090496247466314
+    },
+    {
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "quantum (biased) L=2",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0010402985120749268,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.10518881155764813
+    },
+    {
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B2 bias-encoded Fourier L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": 0.0006685901660221789,
+      "reference_lower": 0,
+      "n": 3,
+      "paired_t_p": 0.0036642459984749156
+    },
+    {
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B5 quadratic (ceiling)",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0005843442844482346,
+      "reference_lower": 2,
+      "n": 3,
+      "paired_t_p": 0.3246967886889626
+    },
+    {
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "surrogate L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0001176261421859141,
+      "reference_lower": 2,
+      "n": 3,
+      "paired_t_p": 0.6064388001625729
+    },
+    {
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0016259638480477998,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.008418261213615351
+    },
+    {
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.00251699520741795,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.006407825685506673
+    },
+    {
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "photonic MerLin (group readout, PNR) N=2",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0006685901660221789,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.0036642459984749156
+    },
+    {
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "B3 bias-encoded MLP h=7",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0023258648326680673,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.006227440887418119
+    },
+    {
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "B4 unbiased MLP h=9",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0023603562255466565,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.0069785084411821624
+    },
+    {
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "quantum (biased) L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0015926208418071397,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.04686802163378737
+    },
+    {
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "quantum (biased) L=2",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0017088886780971056,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.03947052796787747
+    },
+    {
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "B5 quadratic (ceiling)",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.0012529344504704136,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.11324805339045574
+    },
+    {
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "surrogate L=1",
+      "data_seeds": [
+        101,
+        102,
+        103
+      ],
+      "mean_diff": -0.000786216308208093,
+      "reference_lower": 3,
+      "n": 3,
+      "paired_t_p": 0.05887737647987081
+    }
+  ]
+}

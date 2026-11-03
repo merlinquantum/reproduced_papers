@@ -1,0 +1,408 @@
+{
+  "experiment": "e1_8clients_merlin_diagnostic",
+  "runs": [
+    {
+      "best_epoch": 26,
+      "best_epoch_test_accuracy_selected_on_test": 0.7115987460815048,
+      "final_test_accuracy": 0.6802507836990596,
+      "final_test_loss": 1.168933772741814,
+      "final_validation_accuracy": 0.6352941176470588,
+      "overrides": {
+        "epochs": 30,
+        "server_head": 0,
+        "server_modes": 8
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 271.6257054589987
+    },
+    {
+      "best_epoch": 29,
+      "best_epoch_test_accuracy_selected_on_test": 0.7962382445141066,
+      "final_test_accuracy": 0.7335423197492164,
+      "final_test_loss": 1.145702720809506,
+      "final_validation_accuracy": 0.7058823529411765,
+      "overrides": {
+        "epochs": 30,
+        "server_head": 0,
+        "server_modes": 8
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 270.58381120800186
+    },
+    {
+      "best_epoch": 85,
+      "best_epoch_test_accuracy_selected_on_test": 0.8025078369905956,
+      "final_test_accuracy": 0.7711598746081505,
+      "final_test_loss": 0.9464268400377615,
+      "final_validation_accuracy": 0.7098039215686275,
+      "overrides": {
+        "epochs": 100,
+        "server_head": 0,
+        "server_modes": 8
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 834.3025975
+    },
+    {
+      "best_epoch": 92,
+      "best_epoch_test_accuracy_selected_on_test": 0.8150470219435737,
+      "final_test_accuracy": 0.8056426332288401,
+      "final_test_loss": 0.8508546643870004,
+      "final_validation_accuracy": 0.796078431372549,
+      "overrides": {
+        "epochs": 100,
+        "server_head": 0,
+        "server_modes": 8
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 840.217668291998
+    },
+    {
+      "best_epoch": 30,
+      "best_epoch_test_accuracy_selected_on_test": 0.7460815047021944,
+      "final_test_accuracy": 0.7460815047021944,
+      "final_test_loss": 1.109248038743357,
+      "final_validation_accuracy": 0.7215686274509804,
+      "overrides": {
+        "epochs": 30,
+        "server_head": 0,
+        "server_modes": 12
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 342.0535427499981
+    },
+    {
+      "best_epoch": 30,
+      "best_epoch_test_accuracy_selected_on_test": 0.7899686520376176,
+      "final_test_accuracy": 0.7899686520376176,
+      "final_test_loss": 1.0114493355108278,
+      "final_validation_accuracy": 0.7529411764705882,
+      "overrides": {
+        "epochs": 30,
+        "server_head": 0,
+        "server_modes": 12
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 312.3926964159982
+    },
+    {
+      "best_epoch": 64,
+      "best_epoch_test_accuracy_selected_on_test": 0.8150470219435737,
+      "final_test_accuracy": 0.7962382445141066,
+      "final_test_loss": 0.8195289563983211,
+      "final_validation_accuracy": 0.7647058823529411,
+      "overrides": {
+        "epochs": 100,
+        "server_head": 0,
+        "server_modes": 12
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1032.8384788749972
+    },
+    {
+      "best_epoch": 93,
+      "best_epoch_test_accuracy_selected_on_test": 0.8401253918495298,
+      "final_test_accuracy": 0.8056426332288401,
+      "final_test_loss": 0.8989232281532408,
+      "final_validation_accuracy": 0.7568627450980392,
+      "overrides": {
+        "epochs": 100,
+        "server_head": 0,
+        "server_modes": 12
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1038.8567288749982
+    },
+    {
+      "best_epoch": 26,
+      "best_epoch_test_accuracy_selected_on_test": 0.774294670846395,
+      "final_test_accuracy": 0.7335423197492164,
+      "final_test_loss": 0.8115645262141212,
+      "final_validation_accuracy": 0.6705882352941176,
+      "overrides": {
+        "epochs": 30,
+        "server_head": 1,
+        "server_modes": 8
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 239.05615237500024
+    },
+    {
+      "best_epoch": 28,
+      "best_epoch_test_accuracy_selected_on_test": 0.8213166144200627,
+      "final_test_accuracy": 0.7711598746081505,
+      "final_test_loss": 0.6430770820211094,
+      "final_validation_accuracy": 0.7764705882352941,
+      "overrides": {
+        "epochs": 30,
+        "server_head": 1,
+        "server_modes": 8
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 242.47052224999788
+    },
+    {
+      "best_epoch": 90,
+      "best_epoch_test_accuracy_selected_on_test": 0.8683385579937304,
+      "final_test_accuracy": 0.8369905956112853,
+      "final_test_loss": 0.5261933855875907,
+      "final_validation_accuracy": 0.8,
+      "overrides": {
+        "epochs": 100,
+        "server_head": 1,
+        "server_modes": 8
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 801.0223533330027
+    },
+    {
+      "best_epoch": 76,
+      "best_epoch_test_accuracy_selected_on_test": 0.8589341692789969,
+      "final_test_accuracy": 0.8589341692789969,
+      "final_test_loss": 0.43995005060512815,
+      "final_validation_accuracy": 0.8431372549019608,
+      "overrides": {
+        "epochs": 100,
+        "server_head": 1,
+        "server_modes": 8
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 799.3596235420009
+    },
+    {
+      "best_epoch": 29,
+      "best_epoch_test_accuracy_selected_on_test": 0.7836990595611285,
+      "final_test_accuracy": 0.7586206896551724,
+      "final_test_loss": 0.741617334300074,
+      "final_validation_accuracy": 0.788235294117647,
+      "overrides": {
+        "epochs": 30,
+        "server_head": 1,
+        "server_modes": 12
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 318.2524822080013
+    },
+    {
+      "best_epoch": 30,
+      "best_epoch_test_accuracy_selected_on_test": 0.8244514106583072,
+      "final_test_accuracy": 0.8244514106583072,
+      "final_test_loss": 0.6296935066534061,
+      "final_validation_accuracy": 0.8117647058823529,
+      "overrides": {
+        "epochs": 30,
+        "server_head": 1,
+        "server_modes": 12
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 316.817862625001
+    },
+    {
+      "best_epoch": 86,
+      "best_epoch_test_accuracy_selected_on_test": 0.8589341692789969,
+      "final_test_accuracy": 0.8213166144200627,
+      "final_test_loss": 0.5274198526125343,
+      "final_validation_accuracy": 0.803921568627451,
+      "overrides": {
+        "epochs": 100,
+        "server_head": 1,
+        "server_modes": 12
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 883.0063409159993
+    },
+    {
+      "best_epoch": 95,
+      "best_epoch_test_accuracy_selected_on_test": 0.8714733542319749,
+      "final_test_accuracy": 0.8119122257053292,
+      "final_test_loss": 0.5381657815652208,
+      "final_validation_accuracy": 0.7725490196078432,
+      "overrides": {
+        "epochs": 100,
+        "server_head": 1,
+        "server_modes": 12
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 874.3628648329977
+    }
+  ],
+  "selection": {
+    "candidates": [
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.7068965517241379,
+          "std_ddof1": 0.03768280652091323
+        },
+        "final_validation_accuracy": {
+          "mean": 0.6705882352941177,
+          "std_ddof1": 0.04991341984846224
+        },
+        "overrides": {
+          "epochs": 30,
+          "server_head": 0,
+          "server_modes": 8
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.7884012539184952,
+          "std_ddof1": 0.024382992454708506
+        },
+        "final_validation_accuracy": {
+          "mean": 0.7529411764705882,
+          "std_ddof1": 0.06100529092589816
+        },
+        "overrides": {
+          "epochs": 100,
+          "server_head": 0,
+          "server_modes": 8
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.768025078369906,
+          "std_ddof1": 0.031032899487810867
+        },
+        "final_validation_accuracy": {
+          "mean": 0.7372549019607844,
+          "std_ddof1": 0.02218374215487208
+        },
+        "overrides": {
+          "epochs": 30,
+          "server_head": 0,
+          "server_modes": 12
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.8009404388714734,
+          "std_ddof1": 0.006649907033102284
+        },
+        "final_validation_accuracy": {
+          "mean": 0.7607843137254902,
+          "std_ddof1": 0.005545935538718
+        },
+        "overrides": {
+          "epochs": 100,
+          "server_head": 0,
+          "server_modes": 12
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.7523510971786834,
+          "std_ddof1": 0.026599628132409292
+        },
+        "final_validation_accuracy": {
+          "mean": 0.7235294117647059,
+          "std_ddof1": 0.07487012977269332
+        },
+        "overrides": {
+          "epochs": 30,
+          "server_head": 1,
+          "server_modes": 8
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.8479623824451411,
+          "std_ddof1": 0.015516449743905434
+        },
+        "final_validation_accuracy": {
+          "mean": 0.8215686274509804,
+          "std_ddof1": 0.03050264546294908
+        },
+        "overrides": {
+          "epochs": 100,
+          "server_head": 1,
+          "server_modes": 8
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.7915360501567398,
+          "std_ddof1": 0.0465493492317163
+        },
+        "final_validation_accuracy": {
+          "mean": 0.8,
+          "std_ddof1": 0.016637806616154077
+        },
+        "overrides": {
+          "epochs": 30,
+          "server_head": 1,
+          "server_modes": 12
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.8166144200626959,
+          "std_ddof1": 0.006649907033102284
+        },
+        "final_validation_accuracy": {
+          "mean": 0.7882352941176471,
+          "std_ddof1": 0.02218374215487208
+        },
+        "overrides": {
+          "epochs": 100,
+          "server_head": 1,
+          "server_modes": 12
+        },
+        "successful_runs": 2
+      }
+    ],
+    "rule": {
+      "aggregation": "mean over permutation seeds",
+      "direction": "maximize",
+      "metric": "final_validation_accuracy",
+      "tie_break_ascending": [
+        "server_head",
+        "server_modes",
+        "epochs"
+      ],
+      "tie_tolerance": 0.005
+    },
+    "selected": {
+      "epochs": 100,
+      "server_head": 1,
+      "server_modes": 8
+    },
+    "tied": [
+      {
+        "epochs": 100,
+        "server_head": 1,
+        "server_modes": 8
+      }
+    ]
+  }
+}

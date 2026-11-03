@@ -1,0 +1,308 @@
+{
+  "strata": [
+    "[0.0, 0.1)",
+    "[0.1, 0.2)",
+    "[0.2, 0.5]"
+  ],
+  "test_points_per_stratum": [
+    7032,
+    2588,
+    380
+  ],
+  "models": {
+    "quantum (no bias, Fig. 10 CNOTs) L=1": {
+      "mean": [
+        0.0032200820197858396,
+        0.00802225481038333,
+        0.027400691386674635
+      ],
+      "std": [
+        0.0001401778022849504,
+        0.0006679593567155376,
+        0.0024325945654140963
+      ],
+      "n": 10
+    },
+    "quantum (no bias, Fig. 10 CNOTs) L=2": {
+      "mean": [
+        0.0046059391823913805,
+        0.010303022225647449,
+        0.03214406603578758
+      ],
+      "std": [
+        0.0005585494648754071,
+        0.000857049701804069,
+        0.0029338069412692008
+      ],
+      "n": 10
+    },
+    "photonic MerLin (group readout, PNR) N=2": {
+      "mean": [
+        0.0020449932794871324,
+        0.0062917059850855755,
+        0.024815259460148367
+      ],
+      "std": [
+        9.479850245045031e-05,
+        0.00021027251052235587,
+        0.0009840571357506015
+      ],
+      "n": 10
+    },
+    "B3 bias-encoded MLP h=7": {
+      "mean": [
+        0.002484201927172208,
+        0.010413865968776987,
+        0.03472499103094797
+      ],
+      "std": [
+        3.281624396787791e-06,
+        3.1499020838179595e-05,
+        0.00013236827253018936
+      ],
+      "n": 10
+    },
+    "B4 unbiased MLP h=9": {
+      "mean": [
+        0.0026500017892382923,
+        0.010210928422716144,
+        0.03350246019233263
+      ],
+      "std": [
+        4.78368421787282e-06,
+        2.8705581477783404e-05,
+        0.00012447149269111408
+      ],
+      "n": 10
+    },
+    "quantum (biased) L=1": {
+      "mean": [
+        0.002200379543822988,
+        0.006228880685006626,
+        0.024907068426767723
+      ],
+      "std": [
+        0.00015069231005550318,
+        0.0006538208646679901,
+        0.0034330828377168855
+      ],
+      "n": 10
+    },
+    "quantum (biased) L=2": {
+      "mean": [
+        0.002805364998377723,
+        0.007848874443054895,
+        0.02947291995273398
+      ],
+      "std": [
+        0.00021971911178923328,
+        0.0007437685464112463,
+        0.003711389208253548
+      ],
+      "n": 10
+    },
+    "B2 bias-encoded Fourier L=1": {
+      "mean": [
+        0.0019749872929652862,
+        0.0052954637004548645,
+        0.022286030054743937
+      ],
+      "std": [
+        8.570459105603915e-07,
+        1.627333761306951e-06,
+        4.636599464206315e-06
+      ],
+      "n": 10
+    },
+    "B5 quadratic (ceiling)": {
+      "mean": [
+        0.002539607673469862,
+        0.007408101967947979,
+        0.021535433829514238
+      ],
+      "std": [
+        2.6794449130023094e-05,
+        0.00015083929650060296,
+        0.0004007244359175047
+      ],
+      "n": 10
+    },
+    "surrogate L=1": {
+      "mean": [
+        0.0022587598255073395,
+        0.0069907665308821705,
+        0.026777950916072008
+      ],
+      "std": [
+        3.0777935494023935e-08,
+        6.035483792568225e-09,
+        4.806346502583418e-08
+      ],
+      "n": 9
+    }
+  },
+  "comparisons": [
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "surrogate L=1",
+      "stratum": "[0.0, 0.1)",
+      "diff": 0.0005466051728703833,
+      "welch_p": 2.530240422255546e-05,
+      "mw_p": 0.00027970027018668647,
+      "resolved": true
+    },
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "surrogate L=1",
+      "stratum": "[0.1, 0.2)",
+      "diff": 0.0008581079121727266,
+      "welch_p": 0.005330658644557791,
+      "mw_p": 0.003733591420941252,
+      "resolved": true
+    },
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "surrogate L=1",
+      "stratum": "[0.2, 0.5]",
+      "diff": 0.0026949690366619705,
+      "welch_p": 0.047289426258784385,
+      "mw_p": 0.03041330616806205,
+      "resolved": true
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "surrogate L=1",
+      "stratum": "[0.0, 0.1)",
+      "diff": -5.838028168435143e-05,
+      "welch_p": 0.2516283974193238,
+      "mw_p": 0.15304188415882009,
+      "resolved": false
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "surrogate L=1",
+      "stratum": "[0.1, 0.2)",
+      "diff": -0.0007618858458755453,
+      "welch_p": 0.0050366897474907486,
+      "mw_p": 0.03041330616806205,
+      "resolved": true
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "surrogate L=1",
+      "stratum": "[0.2, 0.5]",
+      "diff": -0.0018708824893042854,
+      "welch_p": 0.11892761640486373,
+      "mw_p": 0.03041330616806205,
+      "resolved": false
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "B2 bias-encoded Fourier L=1",
+      "stratum": "[0.0, 0.1)",
+      "diff": 0.00022539225085770184,
+      "welch_p": 0.0010740396157777673,
+      "mw_p": 0.00017861448837368167,
+      "resolved": true
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "B2 bias-encoded Fourier L=1",
+      "stratum": "[0.1, 0.2)",
+      "diff": 0.0009334169845517616,
+      "welch_p": 0.001458083369265909,
+      "mw_p": 0.0001816511460914649,
+      "resolved": true
+    },
+    {
+      "reference": "quantum (biased) L=1",
+      "other": "B2 bias-encoded Fourier L=1",
+      "stratum": "[0.2, 0.5]",
+      "diff": 0.002621038372023786,
+      "welch_p": 0.03897404573050692,
+      "mw_p": 0.025692444548908212,
+      "resolved": true
+    },
+    {
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B2 bias-encoded Fourier L=1",
+      "stratum": "[0.0, 0.1)",
+      "diff": 7.000598652184614e-05,
+      "welch_p": 0.04436645349337042,
+      "mw_p": 0.00278594464156807,
+      "resolved": true
+    },
+    {
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B2 bias-encoded Fourier L=1",
+      "stratum": "[0.1, 0.2)",
+      "diff": 0.0009962422846307118,
+      "welch_p": 1.1384642495934039e-07,
+      "mw_p": 0.0001816511460914649,
+      "resolved": true
+    },
+    {
+      "reference": "photonic MerLin (group readout, PNR) N=2",
+      "other": "B2 bias-encoded Fourier L=1",
+      "stratum": "[0.2, 0.5]",
+      "diff": 0.0025292294054044297,
+      "welch_p": 1.9496320080472483e-05,
+      "mw_p": 0.0001816511460914649,
+      "resolved": true
+    },
+    {
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "surrogate L=1",
+      "stratum": "[0.0, 0.1)",
+      "diff": -0.00028377253254205327,
+      "welch_p": 2.9471755679253797e-24,
+      "mw_p": 0.0002728488113337,
+      "resolved": true
+    },
+    {
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "surrogate L=1",
+      "stratum": "[0.1, 0.2)",
+      "diff": -0.0016953028304273069,
+      "welch_p": 1.1121934213184347e-28,
+      "mw_p": 0.00027625915088534203,
+      "resolved": true
+    },
+    {
+      "reference": "B2 bias-encoded Fourier L=1",
+      "other": "surrogate L=1",
+      "stratum": "[0.2, 0.5]",
+      "diff": -0.004491920861328071,
+      "welch_p": 2.1132978587651973e-28,
+      "mw_p": 0.00027625915088534203,
+      "resolved": true
+    },
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "stratum": "[0.0, 0.1)",
+      "diff": -0.0018005741840136577,
+      "welch_p": 7.609557793734835e-07,
+      "mw_p": 0.00018267179110955002,
+      "resolved": true
+    },
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "stratum": "[0.1, 0.2)",
+      "diff": -0.00245414778259255,
+      "welch_p": 2.3538809812899334e-06,
+      "mw_p": 0.00043963875262656465,
+      "resolved": true
+    },
+    {
+      "reference": "quantum (biased) L=2",
+      "other": "quantum (no bias, Fig. 10 CNOTs) L=2",
+      "stratum": "[0.2, 0.5]",
+      "diff": -0.0026711460830536014,
+      "welch_p": 0.09194409260155538,
+      "mw_p": 0.08897301170181328,
+      "resolved": false
+    }
+  ]
+}

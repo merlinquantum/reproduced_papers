@@ -1,0 +1,34 @@
+{
+  "description": "E6 smoke (reduced, not a paper result): ^GSPC 2015-2017, 3 Optuna trials, every model family including both QSVR encodings with 4+4 lags.",
+  "task": "volatility",
+  "volatility": {
+    "dataset": {
+      "ticker": "^GSPC",
+      "start": "2015-01-01",
+      "end": "2017-12-31",
+      "return_lags": 4,
+      "rv_lags": 4,
+      "initial_train_days": 400,
+      "refit_every": 120,
+      "max_train_days": null,
+      "batch_size": 256
+    },
+    "models": ["persistence", "har", "garch", "svr_linear", "svr_poly", "svr_rbf", "svr_rbf_wide", "qsvr_angle", "qsvr_amplitude"],
+    "qsvr": {
+      "angle_scale": 3.141592653589793,
+      "layers": [0, 1],
+      "topologies": ["ring"],
+      "rotation_seed": 1234,
+      "amplitude_betas": [1, 2]
+    },
+    "tuning": {
+      "n_trials": 3,
+      "tune_every_n_refits": 1,
+      "validation_fraction": 0.2,
+      "C": [0.01, 100.0],
+      "epsilon": [0.001, 1.0],
+      "rbf_wide_gamma": [0.001, 100.0],
+      "sampler_seed": 0
+    }
+  }
+}

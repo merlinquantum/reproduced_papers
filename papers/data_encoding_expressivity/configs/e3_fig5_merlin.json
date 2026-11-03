@@ -1,0 +1,52 @@
+{
+  "description": "Phase 4 MerLin ADAPTATION of E3/Fig. 5: coefficients c_0..c_5 of 100 random photonic models of degree 4: photon-number route (n = 4, 5 modes, L = 1) and re-uploading route (n = 2, 3 modes, L = 2); FOCK simulation, threshold readout. c_5 is predicted to vanish.",
+  "experiment": "coefficients",
+  "coefficients": {
+    "n_samples": 100,
+    "max_frequency": 5,
+    "init_high": 6.283185307179586,
+    "zero_tolerance": 1e-09,
+    "settings": [
+      {
+        "label": "photonic_n4_L1",
+        "photonic": {
+          "layout": "photonic",
+          "route": "photon_number",
+          "n_photons": 4,
+          "n_modes": 5,
+          "encoded_modes": [
+            0
+          ],
+          "encoding_layers": 1,
+          "encoding_scaling": 1.0,
+          "computation_space": "fock",
+          "mode_scales": [
+            1.0
+          ],
+          "phase_screens": false,
+          "readout": "threshold_mode0"
+        }
+      },
+      {
+        "label": "photonic_n2_L2",
+        "photonic": {
+          "layout": "photonic",
+          "route": "reuploading",
+          "n_photons": 2,
+          "n_modes": 3,
+          "encoded_modes": [
+            0
+          ],
+          "encoding_layers": 2,
+          "encoding_scaling": 1.0,
+          "computation_space": "fock",
+          "mode_scales": [
+            1.0
+          ],
+          "phase_screens": false,
+          "readout": "threshold_mode0"
+        }
+      }
+    ]
+  }
+}

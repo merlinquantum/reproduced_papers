@@ -1,0 +1,328 @@
+{
+  "runs": [
+    {
+      "label": "Photonic universality test (single photon, theorem setting), P0 paper protocol",
+      "run_dir": "outdir/run_20261028-160148",
+      "steps": 200,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 0.1767695000562389,
+          "case": "square_single_photon_m2_K1",
+          "final_mse_max": 0.2609358986830262,
+          "final_mse_mean": 0.20865759553173716,
+          "final_mse_min": 0.1875418997338691,
+          "final_mse_std": 0.026213125455062283,
+          "model_kind": "photonic",
+          "n_parameters": 8,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.1767695000562389,
+          "case": "square_single_photon_m3_K2",
+          "final_mse_max": 0.2661558490666968,
+          "final_mse_mean": 0.2063456056927551,
+          "final_mse_min": 0.18383176265098056,
+          "final_mse_std": 0.030809788191845083,
+          "model_kind": "photonic",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.0867062257074942,
+          "case": "square_single_photon_m4_K3",
+          "final_mse_max": 0.16676906130878183,
+          "final_mse_mean": 0.12685424403484408,
+          "final_mse_min": 0.1085037652482571,
+          "final_mse_std": 0.022115841710226937,
+          "model_kind": "photonic",
+          "n_parameters": 32,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.08670622570749421,
+          "case": "square_single_photon_m5_K4",
+          "final_mse_max": 0.16721291603493282,
+          "final_mse_mean": 0.1511095115182089,
+          "final_mse_min": 0.12072878740904491,
+          "final_mse_std": 0.01766077168766887,
+          "model_kind": "photonic",
+          "n_parameters": 50,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.05428344694194611,
+          "case": "square_single_photon_m6_K5",
+          "final_mse_max": 0.12539201987325402,
+          "final_mse_mean": 0.10557823508750337,
+          "final_mse_min": 0.0718695372879147,
+          "final_mse_std": 0.019721678184356453,
+          "model_kind": "photonic",
+          "n_parameters": 72,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.054283446941946104,
+          "case": "square_single_photon_m7_K6",
+          "final_mse_max": 0.17497115485446169,
+          "final_mse_mean": 0.1351544621389614,
+          "final_mse_min": 0.09088074828559412,
+          "final_mse_std": 0.034726179347321716,
+          "model_kind": "photonic",
+          "n_parameters": 98,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.03774121287789099,
+          "case": "square_single_photon_m8_K7",
+          "final_mse_max": 0.3925703834909636,
+          "final_mse_mean": 0.17826210899420158,
+          "final_mse_min": 0.07839613131828657,
+          "final_mse_std": 0.10987936294177204,
+          "model_kind": "photonic",
+          "n_parameters": 128,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        }
+      ],
+      "repetition_pairs": [
+        {
+          "layout": "photonic/theorem_single_photon",
+          "model_kind": "photonic",
+          "from_case": "square_single_photon_m2_K1",
+          "to_case": "square_single_photon_m3_K2",
+          "from_r": 1,
+          "to_r": 2,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 3
+        },
+        {
+          "layout": "photonic/theorem_single_photon",
+          "model_kind": "photonic",
+          "from_case": "square_single_photon_m3_K2",
+          "to_case": "square_single_photon_m4_K3",
+          "from_r": 2,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        },
+        {
+          "layout": "photonic/theorem_single_photon",
+          "model_kind": "photonic",
+          "from_case": "square_single_photon_m4_K3",
+          "to_case": "square_single_photon_m5_K4",
+          "from_r": 3,
+          "to_r": 4,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 2
+        },
+        {
+          "layout": "photonic/theorem_single_photon",
+          "model_kind": "photonic",
+          "from_case": "square_single_photon_m5_K4",
+          "to_case": "square_single_photon_m6_K5",
+          "from_r": 4,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 5
+        },
+        {
+          "layout": "photonic/theorem_single_photon",
+          "model_kind": "photonic",
+          "from_case": "square_single_photon_m6_K5",
+          "to_case": "square_single_photon_m7_K6",
+          "from_r": 5,
+          "to_r": 6,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 1
+        },
+        {
+          "layout": "photonic/theorem_single_photon",
+          "model_kind": "photonic",
+          "from_case": "square_single_photon_m7_K6",
+          "to_case": "square_single_photon_m8_K7",
+          "from_r": 6,
+          "to_r": 7,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 2
+        }
+      ]
+    },
+    {
+      "label": "Photonic universality test (single photon, theorem setting), P3 (full batch, lr 0.01, 1000 steps)",
+      "run_dir": "outdir/run_20261028-160227",
+      "steps": 1000,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 0.1767695000562389,
+          "case": "square_single_photon_m2_K1",
+          "final_mse_max": 0.1767695025326347,
+          "final_mse_mean": 0.17676950046897155,
+          "final_mse_min": 0.17676950005623887,
+          "final_mse_std": 1.0109843380739617e-09,
+          "model_kind": "photonic",
+          "n_parameters": 8,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 0.1767695000562389,
+          "case": "square_single_photon_m3_K2",
+          "final_mse_max": 0.17676952879895405,
+          "final_mse_mean": 0.17676950610327533,
+          "final_mse_min": 0.1767695000562389,
+          "final_mse_std": 1.1503463763696123e-08,
+          "model_kind": "photonic",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 0.0867062257074942,
+          "case": "square_single_photon_m4_K3",
+          "final_mse_max": 0.08670622583418261,
+          "final_mse_mean": 0.08670622572860898,
+          "final_mse_min": 0.08670622570749419,
+          "final_mse_std": 5.1720307444313455e-11,
+          "model_kind": "photonic",
+          "n_parameters": 32,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 0.08670622570749421,
+          "case": "square_single_photon_m5_K4",
+          "final_mse_max": 0.08670640548701056,
+          "final_mse_mean": 0.08670626698600901,
+          "final_mse_min": 0.08670622570749423,
+          "final_mse_std": 7.109917859708266e-08,
+          "model_kind": "photonic",
+          "n_parameters": 50,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 0.05428344694194611,
+          "case": "square_single_photon_m6_K5",
+          "final_mse_max": 0.05428686945415375,
+          "final_mse_mean": 0.054284017367610314,
+          "final_mse_min": 0.05428344694194612,
+          "final_mse_std": 1.397231346834999e-06,
+          "model_kind": "photonic",
+          "n_parameters": 72,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 0.054283446941946104,
+          "case": "square_single_photon_m7_K6",
+          "final_mse_max": 0.054293705309515265,
+          "final_mse_mean": 0.05428524901030491,
+          "final_mse_min": 0.05428344694194609,
+          "final_mse_std": 4.147231444770666e-06,
+          "model_kind": "photonic",
+          "n_parameters": 98,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 0.03774121287789099,
+          "case": "square_single_photon_m8_K7",
+          "final_mse_max": 0.037741213143598434,
+          "final_mse_mean": 0.03774121293809111,
+          "final_mse_min": 0.037741212877891034,
+          "final_mse_std": 1.0597880666117504e-10,
+          "model_kind": "photonic",
+          "n_parameters": 128,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        }
+      ],
+      "repetition_pairs": [
+        {
+          "layout": "photonic/theorem_single_photon",
+          "model_kind": "photonic",
+          "from_case": "square_single_photon_m2_K1",
+          "to_case": "square_single_photon_m3_K2",
+          "from_r": 1,
+          "to_r": 2,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 2
+        },
+        {
+          "layout": "photonic/theorem_single_photon",
+          "model_kind": "photonic",
+          "from_case": "square_single_photon_m3_K2",
+          "to_case": "square_single_photon_m4_K3",
+          "from_r": 2,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        },
+        {
+          "layout": "photonic/theorem_single_photon",
+          "model_kind": "photonic",
+          "from_case": "square_single_photon_m4_K3",
+          "to_case": "square_single_photon_m5_K4",
+          "from_r": 3,
+          "to_r": 4,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 1
+        },
+        {
+          "layout": "photonic/theorem_single_photon",
+          "model_kind": "photonic",
+          "from_case": "square_single_photon_m5_K4",
+          "to_case": "square_single_photon_m6_K5",
+          "from_r": 4,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        },
+        {
+          "layout": "photonic/theorem_single_photon",
+          "model_kind": "photonic",
+          "from_case": "square_single_photon_m6_K5",
+          "to_case": "square_single_photon_m7_K6",
+          "from_r": 5,
+          "to_r": 6,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 1
+        },
+        {
+          "layout": "photonic/theorem_single_photon",
+          "model_kind": "photonic",
+          "from_case": "square_single_photon_m7_K6",
+          "to_case": "square_single_photon_m8_K7",
+          "from_r": 6,
+          "to_r": 7,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        }
+      ]
+    }
+  ]
+}
