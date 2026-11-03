@@ -47,7 +47,7 @@ Main claims:
 
 ## Reproduction Scope, Claims, and Deviations
 
-Experiments (IDs as in `LOG.md`):
+Experiments:
 
 | ID | What | Scope |
 |---|---|---|
@@ -87,8 +87,7 @@ Deviations, and findings that change how the paper reads:
 
 ```text
 papers/QNN_hyperparameters/
-|-- README.md, FEEDBACK.md, INSIGHTS.md, CONFLUENCE.md
-|-- ACTION_REQUIRED_SEND_TO_MERLIN_TEAM.md   MerLin bugs and requests found here
+|-- README.md, INSIGHTS.md
 |-- cli.json, requirements.txt
 |-- configs/        defaults, smoke, one config per sweep (E-B ... E-P)
 |-- lib/            data.py, circuits.py, simulator.py, qnn.py (Qiskit port),
@@ -392,7 +391,7 @@ not a reproduction.
   - Gate-level dual-rail transpilation: needs postselected two-qubit gates,
     and keeps the syntax, not the role.
   - A qubit-mimicking phase-encoding classifier: replaced, before any run, by
-    the photonic-native design (`LOG.md`, amendment of 2026-10-28).
+    the photonic-native design (amendment of 2026-10-28).
   - A kernel or reservoir model: it has no trainable ansatz, so the init
     question disappears.
 
@@ -420,7 +419,7 @@ same configs and seeds on the same GPU kept every verdict but moved individual
 effects by up to 0.03. CUDA arithmetic is not deterministic, and small
 differences grow during training.
 
-Two MerLin issues found here are in `ACTION_REQUIRED_SEND_TO_MERLIN_TEAM.md`:
+Two MerLin issues found here were reported to the MerLin team:
 - the `mode_expectations` mask stays on the CPU for CUDA layers (worked around
   in `lib/photonic.py`);
 - the missing `perceval-quandela<1.3` cap.
@@ -440,8 +439,7 @@ Values from each run's `metrics.json["hardware"]`:
 | Parameters | 180-546 trainable phases plus the linear head (246-576 in total) |
 | Seeds, wall-clock | seeds 1-3; 38-131 s training per run (8 runs sharing the GPU), 25 min for all 144 runs |
 
-These are simulator results, not hardware validation. Per-configuration timing
-and parameter counts are in `LOG.md` ("Phase 4 Hardware-Aware Report").
+These are simulator results, not hardware validation.
 
 ## Limitations
 

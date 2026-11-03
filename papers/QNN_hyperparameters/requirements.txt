@@ -1,7 +1,6 @@
 # QNN_hyperparameters dependencies (Python 3.12).
 # The author used Python 3.11.7 with qiskit 0.42.1 / qiskit-aer 0.12.0 /
-# qiskit-machine-learning 0.6.0; this reproduction ports to the versions below
-# (see LOG.md, "Paper vs reference code").
+# qiskit-machine-learning 0.6.0; this reproduction ports to the versions below.
 qiskit==1.4.6
 qiskit-aer==0.18.2
 qiskit-machine-learning==0.8.4

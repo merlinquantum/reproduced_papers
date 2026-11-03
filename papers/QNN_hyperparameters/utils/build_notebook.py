@@ -32,7 +32,7 @@ evidence, and ends with an *Observation / Inference / Remaining uncertainty /
 Claim impact* block. Cells marked **LIVE** run here on a CPU (the whole
 notebook takes about 5 minutes). Cells marked **STORED** load results from the
 full sweeps, which ran on a GPU server (`merlin-ai`: 8 vCPU, NVIDIA L4). Their
-provenance is given in the cell. The full record is in `LOG.md` and `README.md`.
+provenance is given in the cell. The full record is in `README.md`.
 
 **Verdict up front.** The released numbers reproduce. The paper's main claim,
 that a beta-distribution initialization is better, does not. The author code
