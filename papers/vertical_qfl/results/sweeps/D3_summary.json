@@ -1,0 +1,205 @@
+{
+  "experiment": "e1_8clients_merlin_diagnostic_d3",
+  "runs": [
+    {
+      "best_epoch": 97,
+      "best_epoch_test_accuracy_selected_on_test": 0.8369905956112853,
+      "final_test_accuracy": 0.7836990595611285,
+      "final_test_loss": 0.9286690117049741,
+      "final_validation_accuracy": 0.796078431372549,
+      "overrides": {
+        "n_photons": 4,
+        "server_head": 0
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1542.7025184159975
+    },
+    {
+      "best_epoch": 97,
+      "best_epoch_test_accuracy_selected_on_test": 0.7774294670846394,
+      "final_test_accuracy": 0.7272727272727273,
+      "final_test_loss": 0.9960859113352426,
+      "final_validation_accuracy": 0.7411764705882353,
+      "overrides": {
+        "n_photons": 4,
+        "server_head": 0
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1551.1137449589987
+    },
+    {
+      "best_epoch": 75,
+      "best_epoch_test_accuracy_selected_on_test": 0.8714733542319749,
+      "final_test_accuracy": 0.8589341692789969,
+      "final_test_loss": 0.4648439861763981,
+      "final_validation_accuracy": 0.8352941176470589,
+      "overrides": {
+        "n_photons": 4,
+        "server_head": 2
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1553.7024111249993
+    },
+    {
+      "best_epoch": 60,
+      "best_epoch_test_accuracy_selected_on_test": 0.8808777429467085,
+      "final_test_accuracy": 0.7962382445141066,
+      "final_test_loss": 0.6541657761720281,
+      "final_validation_accuracy": 0.7294117647058823,
+      "overrides": {
+        "n_photons": 4,
+        "server_head": 2
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1545.3520499999977
+    },
+    {
+      "best_epoch": 26,
+      "best_epoch_test_accuracy_selected_on_test": 0.6990595611285266,
+      "final_test_accuracy": 0.4106583072100313,
+      "final_test_loss": 1.8442970802044045,
+      "final_validation_accuracy": 0.403921568627451,
+      "overrides": {
+        "n_photons": 8,
+        "server_head": 0
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 2172.888884791002
+    },
+    {
+      "best_epoch": 47,
+      "best_epoch_test_accuracy_selected_on_test": 0.799373040752351,
+      "final_test_accuracy": 0.7492163009404389,
+      "final_test_loss": 1.801510000677318,
+      "final_validation_accuracy": 0.6705882352941176,
+      "overrides": {
+        "n_photons": 8,
+        "server_head": 0
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1377.1707119999992
+    },
+    {
+      "best_epoch": 87,
+      "best_epoch_test_accuracy_selected_on_test": 0.8652037617554859,
+      "final_test_accuracy": 0.8338557993730408,
+      "final_test_loss": 0.4860323574102037,
+      "final_validation_accuracy": 0.8666666666666667,
+      "overrides": {
+        "n_photons": 8,
+        "server_head": 2
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1373.9952825830005
+    },
+    {
+      "best_epoch": 90,
+      "best_epoch_test_accuracy_selected_on_test": 0.8275862068965517,
+      "final_test_accuracy": 0.7836990595611285,
+      "final_test_loss": 0.6741836183123454,
+      "final_validation_accuracy": 0.7764705882352941,
+      "overrides": {
+        "n_photons": 8,
+        "server_head": 2
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 1380.1968842909992
+    }
+  ],
+  "selection": {
+    "candidates": [
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.755485893416928,
+          "std_ddof1": 0.03989944219861394
+        },
+        "final_validation_accuracy": {
+          "mean": 0.7686274509803921,
+          "std_ddof1": 0.03882154877102608
+        },
+        "overrides": {
+          "n_photons": 4,
+          "server_head": 0
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.8275862068965518,
+          "std_ddof1": 0.04433271355401552
+        },
+        "final_validation_accuracy": {
+          "mean": 0.7823529411764706,
+          "std_ddof1": 0.07487012977269332
+        },
+        "overrides": {
+          "n_photons": 4,
+          "server_head": 2
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.5799373040752351,
+          "std_ddof1": 0.23939665319168382
+        },
+        "final_validation_accuracy": {
+          "mean": 0.5372549019607843,
+          "std_ddof1": 0.18856180831641264
+        },
+        "overrides": {
+          "n_photons": 8,
+          "server_head": 0
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.8087774294670846,
+          "std_ddof1": 0.03546617084321244
+        },
+        "final_validation_accuracy": {
+          "mean": 0.8215686274509804,
+          "std_ddof1": 0.06377825869525723
+        },
+        "overrides": {
+          "n_photons": 8,
+          "server_head": 2
+        },
+        "successful_runs": 2
+      }
+    ],
+    "rule": {
+      "aggregation": "mean over permutation seeds",
+      "direction": "maximize",
+      "metric": "final_validation_accuracy",
+      "tie_break_ascending": [
+        "server_head",
+        "n_photons"
+      ],
+      "tie_tolerance": 0.005
+    },
+    "selected": {
+      "n_photons": 8,
+      "server_head": 2
+    },
+    "tied": [
+      {
+        "n_photons": 8,
+        "server_head": 2
+      }
+    ]
+  }
+}
