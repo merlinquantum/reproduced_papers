@@ -1,0 +1,226 @@
+[
+  {
+    "merlin": "qcbm_merlin_sigma3.0",
+    "jax": "qcbm_sigma3.0",
+    "metric": "test_mmd_estimator",
+    "merlin_mean": 0.00010790860238157006,
+    "merlin_std": 7.483711777941237e-06,
+    "jax_mean": 0.00010790860238154986,
+    "jax_std": 7.483711777935e-06,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 2.020681798969859e-17,
+    "se": 4.733114914102539e-06,
+    "preserved": true
+  },
+  {
+    "merlin": "qcbm_merlin_sigma3.0",
+    "jax": "qcbm_sigma3.0",
+    "metric": "model.walsh_mmd",
+    "merlin_mean": 0.00010765165974077112,
+    "merlin_std": 3.636351638474619e-05,
+    "jax_mean": 0.00010429767586883584,
+    "jax_std": 3.2890826681955026e-05,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 3.3539838719352777e-06,
+    "se": 2.1927661998882184e-05,
+    "preserved": true
+  },
+  {
+    "merlin": "qcbm_merlin_sigma3.0",
+    "jax": "qcbm_sigma3.0",
+    "metric": "model.gaussian_mmd_raw",
+    "merlin_mean": 0.0001283754137651083,
+    "merlin_std": 9.227971572122335e-06,
+    "jax_mean": 0.00011847656844178878,
+    "jax_std": 2.3455422982880233e-05,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 9.898845323319514e-06,
+    "se": 1.1272198779667827e-05,
+    "preserved": true
+  },
+  {
+    "merlin": "qcbm_merlin_sigma3.0",
+    "jax": "qcbm_sigma3.0",
+    "metric": "model.gaussian_mmd_binarized",
+    "merlin_mean": 0.000137834443392848,
+    "merlin_std": 1.8082523456492982e-05,
+    "jax_mean": 0.00012710175754060415,
+    "jax_std": 2.949656328055618e-05,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 1.0732685852243845e-05,
+    "se": 1.5472717278606716e-05,
+    "preserved": true
+  },
+  {
+    "merlin": "qcbm_merlin_sigma3.0",
+    "jax": "qcbm_sigma3.0",
+    "metric": "final_train_mmd_estimate",
+    "merlin_mean": -5.0086989233989e-05,
+    "merlin_std": 2.624669378073916e-06,
+    "jax_mean": -5.008698923400943e-05,
+    "jax_std": 2.624669378063267e-06,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 2.0430434687773724e-17,
+    "se": 1.6599866679188683e-06,
+    "preserved": true
+  },
+  {
+    "merlin": "qcbm_merlin_sigma3.0",
+    "jax": "qcbm_sigma3.0",
+    "metric": "steps_run",
+    "merlin_mean": 429.2,
+    "merlin_std": 2.16794833886788,
+    "jax_mean": 429.2,
+    "jax_std": 2.16794833886788,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 0.0,
+    "se": 1.3711309200802089,
+    "preserved": null
+  },
+  {
+    "merlin": "qcbm_merlin_sigma3.0",
+    "jax": "qcbm_sigma3.0",
+    "metric": "seconds_per_step",
+    "merlin_mean": 0.33245951508411864,
+    "merlin_std": 4.6443981750946525e-05,
+    "jax_mean": 0.21516162494969313,
+    "jax_std": 0.0001371874246197216,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 0.11729789013442551,
+    "se": 6.477257585533256e-05,
+    "preserved": null
+  },
+  {
+    "merlin": "b5_merlin_sigma3.0",
+    "jax": "b5_sigma3.0",
+    "metric": "test_mmd_estimator",
+    "merlin_mean": 0.0004906637276725761,
+    "merlin_std": 1.888289698006139e-05,
+    "jax_mean": 0.0004906637276725328,
+    "jax_std": 1.888289698012073e-05,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 4.3259666682171627e-17,
+    "se": 1.1942592655880584e-05,
+    "preserved": true
+  },
+  {
+    "merlin": "b5_merlin_sigma3.0",
+    "jax": "b5_sigma3.0",
+    "metric": "model.walsh_mmd",
+    "merlin_mean": 0.000449921766554179,
+    "merlin_std": 5.067069364851537e-05,
+    "jax_mean": 0.0004499217665541789,
+    "jax_std": 5.0670693648515336e-05,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 1.0842021724855044e-19,
+    "se": 3.204696050998718e-05,
+    "preserved": true
+  },
+  {
+    "merlin": "b5_merlin_sigma3.0",
+    "jax": "b5_sigma3.0",
+    "metric": "model.gaussian_mmd_raw",
+    "merlin_mean": 0.0004817840031844378,
+    "merlin_std": 2.8951664312177327e-05,
+    "jax_mean": 0.0004817840031844378,
+    "jax_std": 2.8951664312177327e-05,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 0.0,
+    "se": 1.83106402558185e-05,
+    "preserved": true
+  },
+  {
+    "merlin": "b5_merlin_sigma3.0",
+    "jax": "b5_sigma3.0",
+    "metric": "model.gaussian_mmd_binarized",
+    "merlin_mean": 0.0002322966658449277,
+    "merlin_std": 3.313095462822047e-05,
+    "jax_mean": 0.0002322966658449277,
+    "jax_std": 3.313095462822047e-05,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 0.0,
+    "se": 2.0953855536174755e-05,
+    "preserved": true
+  },
+  {
+    "merlin": "b5_merlin_sigma3.0",
+    "jax": "b5_sigma3.0",
+    "metric": "final_train_mmd_estimate",
+    "merlin_mean": 0.00031503570957628973,
+    "merlin_std": 6.9793129260138125e-06,
+    "jax_mean": 0.00031503570957626284,
+    "jax_std": 6.9793129259971505e-06,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 2.688821387764051e-17,
+    "se": 4.414105069846308e-06,
+    "preserved": true
+  },
+  {
+    "merlin": "b5_merlin_sigma3.0",
+    "jax": "b5_sigma3.0",
+    "metric": "steps_run",
+    "merlin_mean": 447.2,
+    "merlin_std": 12.336936410632909,
+    "jax_mean": 447.2,
+    "jax_std": 12.336936410632909,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 0.0,
+    "se": 7.8025636812524635,
+    "preserved": null
+  },
+  {
+    "merlin": "b5_merlin_sigma3.0",
+    "jax": "b5_sigma3.0",
+    "metric": "seconds_per_step",
+    "merlin_mean": 0.030762293346851738,
+    "merlin_std": 0.0001550447077388774,
+    "jax_mean": 0.026548479700444327,
+    "jax_std": 0.00029368577617373267,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 0.0042138136464074105,
+    "se": 0.0001485194913299946,
+    "preserved": null
+  }
+]

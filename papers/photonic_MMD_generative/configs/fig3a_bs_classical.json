@@ -1,0 +1,46 @@
+{
+    "description": "Fig. 3a fair baseline B5: same ansatz, init, optimizer and estimator with distinguishable photons (classically samplable twin).",
+    "experiment": {
+        "name": "fig3a_bs_distinguishable",
+        "paper_reference": "Fig. 3a (added baseline B5)"
+    },
+    "dataset": {
+        "name": "boson_sampling",
+        "m": 256,
+        "n": 16,
+        "n_train": 5000,
+        "n_test": 5000,
+        "input_state": "middle_compact",
+        "unitary_seed": 2603,
+        "sample_seed": 8793
+    },
+    "model": {
+        "ansatz": "haar",
+        "butterfly_variant": "reference",
+        "input_state": "middle_alternating",
+        "photon_model": "distinguishable"
+    },
+    "kernel": {
+        "type": "gaussian",
+        "sigma": 3.0
+    },
+    "init": {
+        "strategy": "identity",
+        "perturbation": 0.01
+    },
+    "training": {
+        "steps": 2000,
+        "learning_rate": 0.01,
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "convergence_interval": 200,
+        "log_every": 1
+    },
+    "evaluation": {
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "sample_metrics": true,
+        "num_model_samples": 2000,
+        "baselines": []
+    }
+}

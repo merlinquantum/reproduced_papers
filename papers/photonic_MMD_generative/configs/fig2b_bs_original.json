@@ -1,0 +1,51 @@
+{
+    "description": "Fig. 2b: as Fig. 2a with |K|=|Z|=5000.",
+    "experiment": {
+        "name": "fig2b_bs",
+        "paper_reference": "Fig. 2b"
+    },
+    "dataset": {
+        "name": "boson_sampling",
+        "m": 256,
+        "n": 16,
+        "n_train": 5000,
+        "n_test": 5000,
+        "input_state": "middle_compact",
+        "unitary_seed": 2603,
+        "sample_seed": 8793
+    },
+    "model": {
+        "ansatz": "haar",
+        "butterfly_variant": "reference",
+        "input_state": "middle_alternating",
+        "photon_model": "indistinguishable"
+    },
+    "kernel": {
+        "type": "gaussian",
+        "sigma": 3.0
+    },
+    "init": {
+        "strategy": "identity",
+        "perturbation": 0.01
+    },
+    "training": {
+        "steps": 2000,
+        "learning_rate": 0.01,
+        "n_operators": 5000,
+        "n_gurvits": 5000,
+        "convergence_interval": null,
+        "log_every": 1
+    },
+    "evaluation": {
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "sample_metrics": false,
+        "num_model_samples": 2000,
+        "baselines": [
+            "random",
+            "marginal",
+            "rbm",
+            "test_to_test"
+        ]
+    }
+}

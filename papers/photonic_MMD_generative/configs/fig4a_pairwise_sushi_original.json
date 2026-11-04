@@ -1,0 +1,53 @@
+{
+    "description": "Fig. 4a: pairwise sushi (m=100, n=10), Haar, Gaussian sigma=2, input on the first mode of each pair; sweep --init weak_unbiased/data_dependent/identity/pairwise_uniform/random, 5 instances, up to 10000 steps or convergence. |K|, |Z| from the original study notebook (1500/1000).",
+    "experiment": {
+        "name": "fig4a_pairwise_sushi",
+        "paper_reference": "Fig. 4a"
+    },
+    "dataset": {
+        "name": "pairwise_sushi",
+        "m": 100,
+        "n": 10,
+        "n_items": 10,
+        "n_pairs": 10,
+        "n_train": 3000,
+        "n_test": 2000,
+        "seed": 42
+    },
+    "model": {
+        "ansatz": "haar",
+        "butterfly_variant": "reference",
+        "input_state": "pairs",
+        "photon_model": "indistinguishable"
+    },
+    "kernel": {
+        "type": "gaussian",
+        "sigma": 2.0
+    },
+    "init": {
+        "strategy": "pairwise_uniform",
+        "n_pairs": 10,
+        "perturbation": 0.01,
+        "steps": 5000,
+        "learning_rate": 0.5
+    },
+    "training": {
+        "steps": 10000,
+        "learning_rate": 0.01,
+        "n_operators": 1500,
+        "n_gurvits": 1000,
+        "convergence_interval": 200,
+        "log_every": 1
+    },
+    "evaluation": {
+        "n_operators": 1500,
+        "n_gurvits": 1000,
+        "sample_metrics": true,
+        "num_model_samples": 2000,
+        "baselines": [
+            "random",
+            "marginal",
+            "test_to_test"
+        ]
+    }
+}
