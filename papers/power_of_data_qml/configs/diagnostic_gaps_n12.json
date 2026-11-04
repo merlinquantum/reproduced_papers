@@ -1,0 +1,58 @@
+{
+  "description": "Gap diagnostic (G1, G2, G4): one factor at a time at n=12, seeds 0-2, paper protocol: input_scale {0.3 current, 0.35 per-n fit at large n, 0.5} and QNN boundary periodic (AMB-3). Components: quantum_dataset, classical_dataset, engineered_pqk. Read-out: distance to Source Data per component.",
+  "experiment": "convention_check",
+  "study": {
+    "embeddings": [
+      "E1",
+      "E2",
+      "E3"
+    ],
+    "system_sizes": [
+      12
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "components": [
+      "quantum_dataset",
+      "classical_dataset",
+      "engineered_pqk"
+    ],
+    "cv_system_sizes": []
+  },
+  "models": {
+    "grid": "paper",
+    "protocols": [
+      "paper"
+    ],
+    "n_jobs": 8,
+    "include_polynomial_extension": false
+  },
+  "convention_check": {
+    "variants": [
+      {
+        "name": "scale0.3_current"
+      },
+      {
+        "name": "scale0.35",
+        "conventions": {
+          "input_scale": 0.35
+        }
+      },
+      {
+        "name": "scale0.5",
+        "conventions": {
+          "input_scale": 0.5
+        }
+      },
+      {
+        "name": "scale0.3_qnn_periodic",
+        "conventions": {
+          "qnn_boundary": "periodic"
+        }
+      }
+    ]
+  }
+}

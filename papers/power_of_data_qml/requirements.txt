@@ -1,0 +1,16 @@
+# Power of data in quantum machine learning (Huang et al., Nat. Commun. 2021)
+# Versions are those of the environment the reproduction was developed in.
+numpy>=2.0
+# scipy 1.15.3 wheels fail to import on macOS 27 (dyld __thread_bss error); 1.16.3 works.
+scipy>=1.16
+scikit-learn>=1.5
+torch>=2.4
+joblib>=1.4
+matplotlib>=3.8
+# notebook.ipynb tables; to run it also install jupyter (or ipykernel) in this environment.
+pandas>=2.0
+# The shared runtime (runtime_lib) imports MerLin and Perceval at start-up.
+# lib/photonic_merlin.py uses the 0.2.x QuantumLayer/MeasurementStrategy API (enum).
+merlinquantum==0.2.3
+perceval-quandela>=1.0
+pytest
