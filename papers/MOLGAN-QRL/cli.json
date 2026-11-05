@@ -1,0 +1,117 @@
+{
+  "data_dir": {
+    "flags": ["--data-dir"],
+    "type": "str",
+    "help": "Chemin du répertoire racine pour le jeu de données QM9"
+  },
+  "target_sample_count": {
+    "flags": ["--target-sample-count"],
+    "type": "int",
+    "help": "Nombre d'échantillons QM9 valides à charger"
+  },
+  "n_nodes": {
+    "flags": ["--n-nodes"],
+    "type": "int",
+    "help": "Nombre maximal d'atomes par molécule"
+  },
+  "n_atoms": {
+    "flags": ["--n-atoms"],
+    "type": "int",
+    "help": "Nombre de types d'atomes (inclus le token vide)"
+  },
+  "n_bonds": {
+    "flags": ["--n-bonds"],
+    "type": "int",
+    "help": "Nombre de types de liaisons (inclus l'absence de liaison)"
+  },
+  "batch_size": {
+    "flags": ["-b", "--batch-size"],
+    "type": "int",
+    "help": "Taille de lot pour le DataLoader"
+  },
+  "z_dim": {
+    "flags": ["--z-dim"],
+    "type": "int",
+    "help": "Dimension du vecteur latent de bruit z"
+  },
+  "nb_modes": {
+    "flags": ["--nb-modes"],
+    "type": "int",
+    "help": "Nombre de modes photoniques pour le module quantique"
+  },
+  "pca_components": {
+    "flags": ["--pca-components"],
+    "type": "int",
+    "help": "Nombre de composantes principales pour l'ACP"
+  },
+  "lr_g": {
+    "flags": ["--lr-g"],
+    "type": "float",
+    "help": "Taux d'apprentissage de l'optimiseur du Générateur"
+  },
+  "lr_d": {
+    "flags": ["--lr-d"],
+    "type": "float",
+    "help": "Taux d'apprentissage de l'optimiseur du Discriminateur"
+  },
+  "lr_q": {
+    "flags": ["--lr-q"],
+    "type": "float",
+    "help": "Taux d'apprentissage de l'optimiseur Photonique"
+  },
+  "epochs": {
+    "flags": ["-e", "--epochs"],
+    "type": "int",
+    "help": "Nombre total d'époques d'entraînement"
+  },
+  "n_critic": {
+    "flags": ["--n-critic"],
+    "type": "int",
+    "help": "Nombre d'itérations du Discriminateur par pas de Générateur"
+  },
+  "lambda_gp": {
+    "flags": ["--lambda-gp"],
+    "type": "float",
+    "help": "Coefficient de pénalité de gradient (WGAN-GP)"
+  },
+  "tau": {
+    "flags": ["--tau"],
+    "type": "float",
+    "help": "Temperature for gumbell softmax"
+  },
+  "warmup_epochs": {
+    "flags": ["--warmup-epochs"],
+    "type": "int",
+    "help": "warmup for RL"
+  },
+  "ramp_epochs": {
+    "flags": ["--ramp-epochs"],
+    "type": "int",
+    "help": "Time duration of the RL linear ramp."
+  },
+  "lambda_max": {
+    "flags": ["--lambda-max"],
+    "type": "float",
+    "help": "Maximum values for RL coefficient"
+  },
+  "ema_beta": {
+    "flags": ["--ema-beta"],
+    "type": "float",
+    "help": "EMA absorption factor for quantum reward tracking"
+  },
+  "log_dir": {
+    "flags": ["--log-dir"],
+    "type": "str",
+    "help": "Directory for TensorBoard logs"
+  },
+  "save_model_path": {
+    "flags": ["--save-model-path"],
+    "type": "str",
+    "help": "Path to save the final generator weights"
+  },
+  "seed": {
+    "flags": ["--seed"],
+    "type": "int",
+    "help": "Random seed for reproducibility (optional)"
+  }
+}
