@@ -1,0 +1,34 @@
+# QNN_hyperparameters dependencies (Python 3.12).
+# The author used Python 3.11.7 with qiskit 0.42.1 / qiskit-aer 0.12.0 /
+# qiskit-machine-learning 0.6.0; this reproduction ports to the versions below.
+qiskit==1.4.6
+qiskit-aer==0.18.2
+qiskit-machine-learning==0.8.4
+# FakePerth noise model for the noisy runs.
+qiskit-ibm-runtime==0.44.1
+# uv otherwise backtracks to ibm-platform-services 0.55.2, an sdist whose build
+# needs pkg_resources; these are the versions pip resolves, both with wheels.
+ibm-platform-services==0.77.1
+ibm-cloud-sdk-core==3.28.0
+# SciPy 1.16 replaced COBYLA's Fortran implementation with PRIMA; keep the
+# implementation the author's SciPy 1.10 used.
+scipy>=1.11,<1.16
+numpy>=1.26
+pandas>=2.0
+scikit-learn==1.9.1
+sympy>=1.12
+matplotlib>=3.8
+pytest>=8
+# Shared repository runtime and the Phase 4 photonic adaptation.
+# merlin-ai runs NVIDIA driver 570 (CUDA <= 12.8); the default PyPI torch wheel
+# targets CUDA 13 and cannot see that GPU. Pin the cu128 wheel by URL on Linux
+# (an extra index would make uv take other packages, e.g. requests, from it).
+torch @ https://download.pytorch.org/whl/cu128/torch-2.11.0%2Bcu128-cp312-cp312-manylinux_2_28_x86_64.whl ; sys_platform == "linux"
+torch>=2.2 ; sys_platform != "linux"
+merlinquantum==0.4.1
+# merlinquantum 0.4.1 does not cap Perceval; 1.3.x removes perceval.runtime.session.
+perceval-quandela>=1.2,<1.3
+# Executing notebook.ipynb headlessly (Phase 7).
+nbformat>=5.10
+nbclient>=0.10
+ipykernel>=6.29

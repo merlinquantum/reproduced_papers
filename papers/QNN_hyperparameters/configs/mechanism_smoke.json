@@ -1,0 +1,102 @@
+{
+  "description": "Smoke version of E-B: 2 x 2 x 3 x 1 circuit x 1 optimizer x 1 seed = 12 tiny runs (40 rows, 5 iterations).",
+  "mode": "sweep",
+  "sweep": {
+    "id": "E-B_smoke",
+    "output_dir": "outdir/sweeps/E-B_smoke",
+    "candidate_mode": "qnn",
+    "workers": 4,
+    "seeds": [
+      1
+    ],
+    "factors": [
+      {
+        "name": "data",
+        "levels": [
+          {
+            "label": "rice",
+            "set": {
+              "dataset.name": "rice",
+              "dataset.preprocessing": "pca"
+            }
+          },
+          {
+            "label": "glass",
+            "set": {
+              "dataset.name": "glass",
+              "dataset.preprocessing": "lda"
+            }
+          }
+        ]
+      },
+      {
+        "name": "scaling",
+        "levels": [
+          {
+            "label": "raw",
+            "set": {
+              "dataset.input_scaling": "raw"
+            }
+          },
+          {
+            "label": "minmax",
+            "set": {
+              "dataset.input_scaling": "minmax"
+            }
+          }
+        ]
+      },
+      {
+        "name": "init",
+        "levels": [
+          {
+            "label": "default",
+            "set": {
+              "model.init": "qiskit_default"
+            }
+          },
+          {
+            "label": "beta",
+            "set": {
+              "model.init": "beta"
+            }
+          },
+          {
+            "label": "zeros",
+            "set": {
+              "model.init": "zeros"
+            }
+          }
+        ]
+      },
+      {
+        "name": "circuit",
+        "levels": {
+          "paper_grid": [
+            31
+          ]
+        }
+      },
+      {
+        "name": "optimizer",
+        "levels": [
+          {
+            "label": "cobyla",
+            "set": {
+              "training.optimizer": "COBYLA",
+              "training.maxiter": 5,
+              "training.tol": 0.1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "dataset": {
+    "n_train": 40,
+    "n_eval": 40
+  },
+  "training": {
+    "maxiter": 5
+  }
+}

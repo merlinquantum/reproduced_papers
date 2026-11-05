@@ -1,0 +1,58 @@
+{
+  "description": "One QNN run in the author pipeline: Rice, PCA(7), ZFeatureMap + RealAmplitudes(linear), COBYLA (maxiter 500, tol 0.1), 1024 shots. input_scaling 'minmax' with init 'qiskit_default' is what the author's 'beta' arm actually executed; 'raw' + 'qiskit_default' is the author's uniform/normal/zero arms.",
+  "mode": "qnn",
+  "seed": 1,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "device": "cpu",
+  "data_root": "../../data",
+  "dataset": {
+    "name": "rice",
+    "preprocessing": "pca",
+    "n_components": 7,
+    "n_train": 400,
+    "n_eval": 250,
+    "subsample_seed": 12,
+    "input_scaling": "minmax",
+    "pca_signs": "installed"
+  },
+  "model": {
+    "feature_map": "ZFeatureMap",
+    "feature_map_entanglement": null,
+    "feature_map_reps": 2,
+    "ansatz": "RealAmplitudes",
+    "ansatz_entanglement": "linear",
+    "ansatz_reps": 3,
+    "init": "qiskit_default"
+  },
+  "training": {
+    "optimizer": "COBYLA",
+    "maxiter": 500,
+    "tol": 0.1,
+    "maxfev": 1000,
+    "shots": 1024,
+    "steps": 200,
+    "lr": 0.05
+  },
+  "noise": {
+    "enabled": false,
+    "model": "FakePerth"
+  },
+  "baseline": {
+    "model": "logistic_regression",
+    "cv_folds": 5,
+    "mlp_parameter_target": 28
+  },
+  "reanalysis": {
+    "results_subdir": "sources/author_repo/reports/results",
+    "equivalence_margin": 0.02
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  },
+  "photonic": {
+    "photons": 2,
+    "depth": 1
+  }
+}

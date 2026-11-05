@@ -1,0 +1,20 @@
+data,system,configuration,val_mean,val_gap_to_best,exact_tie_with_best,test_mean,test_sd
+rice,qubit QNN (E-B),"init=beta, circuit=c57, optimizer=spsa",0.8973333333333334,0.0,True,0.876,0.0040000000000000036
+rice,qubit QNN (E-B),"init=default, circuit=c31, optimizer=spsa",0.896,0.0013333333333334085,False,0.8826666666666667,0.0046188021535170185
+rice,qubit QNN (E-B),"init=beta, circuit=c31, optimizer=spsa",0.8933333333333334,0.0040000000000000036,False,0.884,0.010583005244258372
+rice,qubit QNN (E-B),"init=zeros, circuit=c57, optimizer=cobyla",0.8933333333333334,0.0040000000000000036,False,0.8773333333333334,0.006110100926607807
+rice,classical (E-F),model=rbf_svm,0.9179999999999999,0.0,True,0.9008,0.004541169697580371
+rice,classical (E-F),model=mlp,0.9148,0.0031999999999999806,False,0.9076000000000001,0.0035023801430836554
+rice,"photonic MerLin (E-P, adaptation)","init=default, photons=n4, depth=d2",0.92,0.0,True,0.8853333333333334,0.006110100926607807
+rice,"photonic MerLin (E-P, adaptation)","init=default, photons=n2, depth=d2",0.9186666666666667,0.0013333333333332975,False,0.8933333333333334,0.010066445913694329
+rice,"photonic MerLin (E-P, adaptation)","init=zeros, photons=n4, depth=d1",0.9186666666666667,0.0013333333333332975,False,0.896,0.008000000000000007
+rice,"photonic MerLin (E-P, adaptation)","init=default, photons=n2, depth=d1",0.9173333333333334,0.002666666666666595,False,0.8973333333333334,0.0046188021535170185
+rice,"photonic MerLin (E-P, adaptation)","init=zeros, photons=n4, depth=d2",0.916,0.0040000000000000036,False,0.8973333333333334,0.008326663997864543
+glass,qubit QNN (E-B),"init=default, circuit=c31, optimizer=spsa",0.5891472868217055,0.0,True,0.4728682170542636,0.06713375223135186
+glass,qubit QNN (E-B),"init=zeros, circuit=c57, optimizer=spsa",0.5658914728682171,0.023255813953488413,False,0.5038759689922481,0.02685350089254071
+glass,classical (E-F),model=rbf_svm,0.6418604651162791,0.0,True,0.5674418604651164,0.012009250685914493
+glass,classical (E-F),model=logistic_regression,0.627906976744186,0.013953488372093092,False,0.6046511627906976,0.0
+glass,"photonic MerLin (E-P, adaptation)","init=beta, photons=n4, depth=d1",0.6356589147286822,0.0,True,0.5891472868217055,0.03552384259655689
+glass,"photonic MerLin (E-P, adaptation)","init=default, photons=n4, depth=d1",0.6356589147286821,1.1102230246251565e-16,True,0.5736434108527132,0.048410837196886776
+glass,"photonic MerLin (E-P, adaptation)","init=zeros, photons=n2, depth=d1",0.627906976744186,0.007751937984496138,False,0.6356589147286822,0.01342675044627039
+glass,"photonic MerLin (E-P, adaptation)","init=beta, photons=n4, depth=d2",0.6124031007751938,0.023255813953488413,False,0.6511627906976744,0.0402802513388111

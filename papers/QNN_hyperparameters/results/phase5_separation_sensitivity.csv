@@ -1,0 +1,7 @@
+data,system_a,system_b,combinations,separated_a_higher,separated_b_higher,not_separated
+rice,qubit QNN (E-B),classical (E-F),8,0,7,1
+rice,qubit QNN (E-B),"photonic MerLin (E-P, adaptation)",20,0,7,13
+rice,classical (E-F),"photonic MerLin (E-P, adaptation)",10,3,0,7
+glass,qubit QNN (E-B),classical (E-F),4,0,2,2
+glass,qubit QNN (E-B),"photonic MerLin (E-P, adaptation)",8,0,5,3
+glass,classical (E-F),"photonic MerLin (E-P, adaptation)",8,0,3,5

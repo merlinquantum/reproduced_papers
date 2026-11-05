@@ -1,0 +1,38 @@
+{
+  "protocol": "LOG.md, Phase 5 Comparison Plan (2026-10-29T11:30Z)",
+  "data_identity": {
+    "rice/raw": [
+      "pca(7)+raw",
+      "{\"test\": 250, \"train\": 400, \"val\": 250}",
+      "installed"
+    ],
+    "rice/minmax": [
+      "pca(7)+minmax",
+      "{\"test\": 250, \"train\": 400, \"val\": 250}",
+      "installed"
+    ],
+    "glass/raw": [
+      "lda(5)+raw",
+      "{\"test\": 43, \"train\": 128, \"val\": 43}",
+      "installed"
+    ],
+    "glass/minmax": [
+      "lda(5)+minmax",
+      "{\"test\": 43, \"train\": 128, \"val\": 43}",
+      "installed"
+    ]
+  },
+  "runs_per_family": {
+    "qubit QNN (E-B)": 288,
+    "classical (E-F)": 420,
+    "photonic MerLin (E-P, adaptation)": 144
+  },
+  "outputs": {
+    "systems": "phase5_systems.csv",
+    "separation": "phase5_separation.csv",
+    "matched_capacity": "phase5_matched_capacity.csv",
+    "optimizer_timing": "phase5_optimizer_timing.csv",
+    "near_tied_selection": "phase5_near_tied_selection.csv",
+    "separation_sensitivity": "phase5_separation_sensitivity.csv"
+  }
+}
