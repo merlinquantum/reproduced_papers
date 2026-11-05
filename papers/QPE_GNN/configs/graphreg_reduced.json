@@ -1,0 +1,21 @@
+{
+  "description": "Smoke graph regression: predict the Fiedler value from PE. Runs in seconds.",
+  "dataset": "graph_reg",
+  "dataset_kwargs": {"num_graphs": 64, "n_range": [6, 10], "p": 0.4, "seed": 0},
+  "model": "grit_lite",
+  "encoding": "rrwp+qirw2",
+  "rrwp_dim": 4,
+  "qpe_dim": 4,
+  "qpe_initial_distribution": "adjacency",
+  "node_dim": 16,
+  "depth": 1,
+  "num_heads": 2,
+  "head": "graph_reg",
+  "epochs": 10,
+  "batch_size": 8,
+  "lr": 1e-3,
+  "weight_decay": 0.0,
+  "train_frac": 0.8,
+  "val_frac": 0.1,
+  "device": "cpu"
+}

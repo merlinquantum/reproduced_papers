@@ -1,0 +1,6 @@
+merlinquantum>=0.4.1
+torch_geometric>=2.6
+networkx>=3.0
+matplotlib>=3.7
+pytest>=7.0
+scipy>=1.11

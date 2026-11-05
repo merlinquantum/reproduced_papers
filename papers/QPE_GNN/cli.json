@@ -1,0 +1,277 @@
+{
+  "description": "Quantum positional encodings for graph neural networks reproduction runner",
+  "arguments": [
+    {
+      "flags": ["--dataset"],
+      "help": "Dataset: ladder_concat, graph_reg, srg_pair, zinc, mnist, cifar10, pattern, or cluster",
+      "type": "str",
+      "choices": ["ladder_concat", "graph_reg", "srg_pair", "zinc", "mnist", "cifar10", "pattern", "cluster"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset"}
+    },
+    {
+      "flags": ["--model"],
+      "help": "Model architecture: full GRIT, GRIT-lite smoke model, or GCN",
+      "type": "str",
+      "choices": ["grit", "grit_lite", "gcn", "gated_gcn"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model"}
+    },
+    {
+      "flags": ["--encoding"],
+      "help": "Positional encoding used by the model",
+      "type": "str",
+      "choices": ["rrwp", "cqrw1", "qirw2", "ground_state_corr", "laplacian", "rrwp_node", "rrwp_edge", "none", "rrwp+cqrw1", "rrwp+qirw2"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "encoding"}
+    },
+    {
+      "flags": ["--pe-dim"],
+      "help": "Legacy single positional-encoding dimension used by smoke configs",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "pe_dim"}
+    },
+    {
+      "flags": ["--rrwp-dim"],
+      "help": "Number of RRWP channels",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "rrwp_dim"}
+    },
+    {
+      "flags": ["--qpe-dim"],
+      "help": "Number of quantum positional-encoding channels",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qpe_dim"}
+    },
+    {
+      "flags": ["--qpe-min-time"],
+      "help": "Minimum 1-CQRW evolution time",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qpe_min_time"}
+    },
+    {
+      "flags": ["--qpe-max-time"],
+      "help": "Maximum 1-CQRW evolution time",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qpe_max_time"}
+    },
+    {
+      "flags": ["--node-dim"],
+      "help": "Hidden node-feature dimension",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "node_dim"}
+    },
+    {
+      "flags": ["--node-in-dim"],
+      "help": "Input node-feature dimension",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "node_in_dim"}
+    },
+    {
+      "flags": ["--hidden-dim"],
+      "help": "Hidden feature dimension used by the GCN baseline",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "hidden_dim"}
+    },
+    {
+      "flags": ["--depth"],
+      "help": "Number of model layers",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "depth"}
+    },
+    {
+      "flags": ["--num-heads"],
+      "help": "Number of attention heads used by GRIT",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_heads"}
+    },
+    {
+      "flags": ["--num-classes"],
+      "help": "Number of output classes for classification",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "num_classes"}
+    },
+    {
+      "flags": ["--head"],
+      "help": "Graph-level task head",
+      "type": "str",
+      "choices": ["graph_class", "graph_reg", "node_class"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "head"}
+    },
+    {
+      "flags": ["--dropout"],
+      "help": "Feature dropout probability used by GRIT",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dropout"}
+    },
+    {
+      "flags": ["--attention-dropout"],
+      "help": "Dropout probability applied only to GRIT attention coefficients",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "attention_dropout"}
+    },
+    {
+      "flags": ["--pooling"],
+      "help": "Graph pooling used by full GRIT",
+      "type": "str",
+      "choices": ["mean", "sum", "none"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "pooling"}
+    },
+    {
+      "flags": ["--epochs"],
+      "help": "Number of training epochs",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "epochs"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Training and evaluation batch size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "batch_size"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Adam learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "lr"}
+    },
+    {
+      "flags": ["--minimum-lr"],
+      "help": "Minimum learning rate after cosine decay",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "minimum_lr"}
+    },
+    {
+      "flags": ["--warmup-epochs"],
+      "help": "Number of linear learning-rate warmup epochs",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "warmup_epochs"}
+    },
+    {
+      "flags": ["--parameter-budget"],
+      "help": "Maximum permitted trainable parameter count",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "parameter_budget"}
+    },
+    {
+      "flags": ["--weight-decay"],
+      "help": "Adam weight decay",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "weight_decay"}
+    },
+    {
+      "flags": ["--train-frac"],
+      "help": "Fraction of records assigned to the training split",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "train_frac"}
+    },
+    {
+      "flags": ["--val-frac"],
+      "help": "Fraction of records assigned to the validation split",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "val_frac"}
+    },
+    {
+      "flags": ["--srg-index"],
+      "help": "Index of the strongly regular graph pair",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "srg_index"}
+    },
+    {
+      "flags": ["--times"],
+      "help": "Evolution times used by the cqrw1 encoding",
+      "type": "float",
+      "nargs": "+",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "times"}
+    },
+    {
+      "flags": ["--per-class"],
+      "help": "Synthetic ladder samples generated per class",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_kwargs.per_class"}
+    },
+    {
+      "flags": ["--length-range"],
+      "help": "Inclusive synthetic ladder length range as MIN,MAX",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_kwargs.length_range"}
+    },
+    {
+      "flags": ["--num-graphs"],
+      "help": "Number of random graphs generated for graph regression",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_kwargs.num_graphs"}
+    },
+    {
+      "flags": ["--n-range"],
+      "help": "Inclusive random-graph node-count range as MIN,MAX",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_kwargs.n_range"}
+    },
+    {
+      "flags": ["--edge-probability"],
+      "help": "Erdos-Renyi edge probability for graph regression",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_kwargs.p"}
+    },
+    {
+      "flags": ["--n-per-class"],
+      "help": "Permuted strongly regular graph samples per class",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_kwargs.n_per_class"}
+    },
+    {
+      "flags": ["--dataset-seed"],
+      "help": "Dataset generator seed independent of the global training seed",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_kwargs.seed"}
+    },
+    {
+      "flags": ["--limit"],
+      "help": "Maximum number of PyG records loaded from the selected split",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_kwargs.limit"}
+    },
+    {
+      "flags": ["--subset"],
+      "help": "Use the PyG ZINC subset",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset_kwargs.subset"}
+    }
+  ]
+}

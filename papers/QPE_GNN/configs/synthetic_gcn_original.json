@@ -1,0 +1,41 @@
+{
+  "description": "Controlled Appendix D.2 no-PE GCN baseline with uniform node features.",
+  "dataset": "ladder_concat",
+  "dataset_kwargs": {
+    "per_class": 400,
+    "length_range": [
+      100,
+      400
+    ],
+    "seed": 314159,
+    "node_encoding": "none",
+    "pe_dim": 20,
+    "crossing_range": [
+      2,
+      2
+    ],
+    "cache_path": "../../data/QPE_GNN/synthetic/gcn_original.pt"
+  },
+  "split_seed": 1729,
+  "model": "gcn",
+  "encoding": "none",
+  "node_in_dim": 1,
+  "hidden_dim": 32,
+  "depth": 4,
+  "num_classes": 2,
+  "head": "graph_class",
+  "optimizer": "adam",
+  "epochs": 200,
+  "batch_size": 16,
+  "lr": 0.001,
+  "weight_decay": 0,
+  "train_frac": 0.8,
+  "val_frac": 0.1,
+  "device": "cpu",
+  "seeds": [
+    0,
+    1,
+    2,
+    3
+  ]
+}
