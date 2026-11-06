@@ -1,0 +1,23 @@
+{
+  "dataset": {
+    "path": "weather.csv",
+    "time_column": "date",
+    "features_mode": "MS",
+    "target": "OT",
+    "sequence_length": 8,
+    "prediction_horizon": 2,
+    "batch_size": 4,
+    "max_rows": 64
+  },
+  "model": {
+    "name": "photonic_qultsf",
+    "params": {
+      "latent_dim": 2,
+      "hidden_dim": 6,
+      "shots": 0
+    }
+  },
+  "training": {
+    "epochs": 1
+  }
+}
