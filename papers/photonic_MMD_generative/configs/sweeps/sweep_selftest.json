@@ -1,0 +1,9 @@
+{
+    "sweep_id": "sweep_selftest",
+    "description": "Coordinator self-test on the synthetic defaults (not a paper experiment).",
+    "seeds": [0, 1],
+    "candidates": [
+        {"label": "sigma1", "config": "configs/smoke.json", "overrides": {"kernel.sigma": 1.0, "training.steps": 3, "evaluation.baselines": ["random", "test_to_test"]}},
+        {"label": "sigma2", "config": "configs/smoke.json", "overrides": {"kernel.sigma": 2.0, "training.steps": 3, "evaluation.baselines": ["random", "test_to_test"]}}
+    ]
+}

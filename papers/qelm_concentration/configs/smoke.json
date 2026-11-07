@@ -1,0 +1,43 @@
+{
+  "description": "Smoke run: 8-qubit, 8-layer QELM on a 200-row Landsat subsample with 2000 shots, a subset of readouts and tiny sweeps. Checks the full pipeline and the logging contract in seconds; not a result.",
+  "dtype": "float32",
+  "dataset": {
+    "landsat": {
+      "n_subsample": 200
+    }
+  },
+  "landsat_readouts": {
+    "headline_shots": 2000,
+    "readouts": [
+      "w1_x_unit",
+      "w1_pauli_scaled",
+      "w1_et_scaled",
+      "w2_pauli_scaled",
+      "w2_etcut_scaled"
+    ],
+    "cutoff_sweep": {
+      "cutoffs": [
+        1.0
+      ],
+      "readouts": [
+        "w2_etcut_scaled"
+      ]
+    },
+    "train_size_sweep": {
+      "sizes": [
+        20,
+        160
+      ],
+      "resamples": 2,
+      "readout": "w1_pauli_scaled"
+    },
+    "shots_sweep": {
+      "shots": [
+        100,
+        2000
+      ],
+      "readout": "w1_pauli_scaled"
+    },
+    "save_probabilities": false
+  }
+}

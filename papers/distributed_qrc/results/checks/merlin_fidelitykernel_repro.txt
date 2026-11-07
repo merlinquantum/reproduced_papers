@@ -1,0 +1,9 @@
+merlin 0.4.1; modes 5, photons 2, input state [1, 0, 1, 0, 0], 10 phase parameters
+QuantumLayer(circuit=...) amplitudes, phases scale*x : max|K - exact| = 0.000e+00
+FidelityKernel computation_space=None     : max|K - exact| = 1.810e-01, mean off-diagonal K/exact = 1.254
+FidelityKernel computation_space=fock     : max|K - exact| = 1.810e-01, mean off-diagonal K/exact = 1.254
+FidelityKernel computation_space=unbunched: max|K - exact| = 2.278e-01, mean off-diagonal K/exact = 1.916
+Perceval |<s|U(x')^dagger U(x)|s>|^2: max|FidelityKernel - V| = 1.810e-01, max|exact - V| = 1.554e-15
+Perceval |<s|U(x')^T U(x)|s>|^2: max|FidelityKernel - V| = 9.994e-01, max|exact - V| = 9.994e-01
+Perceval |<s|conj(U(x')) U(x)|s>|^2: max|FidelityKernel - V| = 9.969e-01, max|exact - V| = 9.969e-01
+Perceval |<s|U(x') U(x)|s>|^2: max|FidelityKernel - V| = 9.968e-01, max|exact - V| = 9.968e-01

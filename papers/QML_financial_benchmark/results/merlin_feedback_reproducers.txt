@@ -1,0 +1,20 @@
+merlin.__version__ = 0.4.1; installed merlinquantum = 0.4.2; torch = 2.12.1
+
+[1] add_angle_encoding(scale=pi), 2 photons, 4 modes, FOCK probabilities
+  max |P(scale=pi, x) - P(scale=1, x)|    = 0.000e+00
+  max |P(scale=pi, x) - P(scale=1, pi*x)| = 9.605e-02
+
+[2] FidelityKernel vs exact FOCK fidelity, 6 random points, 4 modes
+  final mesh=False: exact off-diagonal mean 0.9747
+    computation_space=None                         off-diagonal mean 1.0000, min 1.0000, max |K - exact| 0.0616
+    computation_space=ComputationSpace.FOCK        off-diagonal mean 1.0000, min 1.0000, max |K - exact| 0.0616
+    computation_space=ComputationSpace.UNBUNCHED   off-diagonal mean 1.0000, min 1.0000, max |K - exact| 0.0616
+  final mesh=True: exact off-diagonal mean 0.9747
+    computation_space=None                         off-diagonal mean 0.9521, min 0.8537, max |K - exact| 0.0847
+    computation_space=ComputationSpace.FOCK        off-diagonal mean 0.9521, min 0.8537, max |K - exact| 0.0847
+    computation_space=ComputationSpace.UNBUNCHED   off-diagonal mean 0.9596, min 0.8807, max |K - exact| 0.0577
+
+[3] wall-clock, 3 photons, 10 modes, FOCK (mesh -> encoding -> mesh); one Gram matrix
+  N= 180: FidelityKernel    0.22 s; FOCK states + Gram  0.043 s; ratio     5x
+  N= 360: FidelityKernel    0.68 s; FOCK states + Gram  0.050 s; ratio    14x
+  N= 720: FidelityKernel   10.04 s; FOCK states + Gram  0.227 s; ratio    44x

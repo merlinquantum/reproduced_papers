@@ -1,0 +1,114 @@
+{
+  "sweep_id": "fig8_quantum_code_fork",
+  "description": "E1 / Fig. 8 quantum models under protocols code (pi/2 train, unscaled test, author notebook) and fork (unscaled both); same 6 models; seeds 0-4.",
+  "base_config": "configs/fig8_biased_quantum_original.json",
+  "grid": [
+    {
+      "--model": "biased_quantum",
+      "--layers": 1,
+      "--protocol": "code"
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 2,
+      "--protocol": "code"
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 1,
+      "--cnot-pattern": "paper",
+      "--protocol": "code"
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 2,
+      "--cnot-pattern": "paper",
+      "--protocol": "code"
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 1,
+      "--cnot-pattern": "code",
+      "--protocol": "code"
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 2,
+      "--cnot-pattern": "code",
+      "--protocol": "code"
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 1,
+      "--protocol": "fork"
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 2,
+      "--protocol": "fork"
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 1,
+      "--cnot-pattern": "paper",
+      "--protocol": "fork"
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 2,
+      "--cnot-pattern": "paper",
+      "--protocol": "fork"
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 1,
+      "--cnot-pattern": "code",
+      "--protocol": "fork"
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 2,
+      "--cnot-pattern": "code",
+      "--protocol": "fork"
+    }
+  ],
+  "repetitions": [
+    {
+      "--seed": 0
+    },
+    {
+      "--seed": 1
+    },
+    {
+      "--seed": 2
+    },
+    {
+      "--seed": 3
+    },
+    {
+      "--seed": 4
+    }
+  ],
+  "progress_total": 2000,
+  "plan": {
+    "metrics": [
+      "final.test_kl",
+      "min_test_kl.test_kl",
+      "min_test_kl.step",
+      "final.train_nll",
+      "last_step_objective",
+      "train_seconds"
+    ],
+    "direction": "minimize",
+    "split": "test (fixed seeded set, seed 2302, n = 10000)",
+    "checkpoint": "final step 2000 (no early stopping), as in Fig. 8; min_test_kl reported as a secondary, test-selected view",
+    "aggregation": "per candidate: mean and sample std (ddof = 1) over seeds; min and max also reported",
+    "tie_tolerance": "n/a (descriptive sweep)",
+    "selection_rule": "none: descriptive comparison of model classes; no candidate is selected",
+    "note": "Protocol controls for D12: code reproduces the published evaluation, fork the third-party fix."
+  },
+  "fixed_args": {
+    "--experiment-id": "E1_fig8_quantum_code_fork"
+  },
+  "max_workers": 6
+}

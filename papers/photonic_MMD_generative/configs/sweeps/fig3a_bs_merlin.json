@@ -1,0 +1,28 @@
+{
+    "sweep_id": "fig3a_bs_merlin",
+    "description": "Phase 04 M1/M2: Fig. 3a sigma=3 on the MerLin backend, QCBM and B5, seeds 0-4; compare with fig3a_bs (JAX) sigma=3.",
+    "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ],
+    "candidates": [
+        {
+            "label": "qcbm_merlin_sigma3.0",
+            "config": "configs/fig3a_bs_merlin.json"
+        },
+        {
+            "label": "b5_merlin_sigma3.0",
+            "config": "configs/fig3a_bs_merlin_classical.json"
+        }
+    ],
+    "metric": "primary: sample_metrics.model.walsh_mmd and test_mmd_estimator, compared with the Phase 03 JAX sweep (|\u0394mean| \u2264 2 SE); M3: noise_study[].exact_mmd",
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final parameters",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "within 2 standard errors = preserved / not separated",
+    "selection": "none (comparison sweep)"
+}

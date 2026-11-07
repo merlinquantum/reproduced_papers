@@ -1,0 +1,6 @@
+# Bosonic Binary Solver reproduction (arXiv:2510.08274)
+merlinquantum>=0.4.1
+perceval-quandela>=1.2.4
+torch>=2.0
+numpy>=1.24
+pytest>=7.0

@@ -1,0 +1,15 @@
+{
+  "description": "E4 (Table VII, C10-C12, Fig. 7): MRMR, 8 configurations x 9 cells, full-n kernels. Run on an NVIDIA L4 GPU.",
+  "experiment": {
+    "id": "E4",
+    "variant": "original",
+    "architecture": "mrmr",
+    "sizes": ["2x5", "2x10", "2x20", "3x5", "3x10", "3x20", "5x5", "5x10"],
+    "reservoir_types": ["classical", "quantum_ideal", "quantum_noisy"],
+    "readout_types": ["linear", "quantum_kernel_ideal", "quantum_kernel_noisy"]
+  },
+  "readout": {
+    "kernel_selection_subsample": 8000,
+    "kernel_fit_subsample": null
+  }
+}

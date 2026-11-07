@@ -1,0 +1,40 @@
+{
+    "sweep_id": "fig3e_movies",
+    "description": "Fig. 3e: movies m=100, n=10 (rebuilt, unverified), Haar, near-identity; Gaussian sigma 2.5, 3.5 and standard polynomial degree 2 (c=15.5); seeds 0-4.",
+    "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ],
+    "candidates": [
+        {
+            "label": "gaussian2.5",
+            "config": "configs/fig3e_movies_gaussian.json",
+            "overrides": {
+                "kernel.sigma": 2.5,
+                "evaluation.rbm.score_sigma": 2.5
+            }
+        },
+        {
+            "label": "gaussian3.5",
+            "config": "configs/fig3e_movies_gaussian.json",
+            "overrides": {
+                "kernel.sigma": 3.5,
+                "evaluation.rbm.score_sigma": 3.5
+            }
+        },
+        {
+            "label": "polynomial2",
+            "config": "configs/fig3e_movies_polynomial.json"
+        }
+    ],
+    "metric": "primary: sample_metrics.<model>.walsh_mmd (same kernel operators for every model); also test_mmd_estimator (paper protocol) and gaussian_mmd_raw/binarized for Gaussian kernels",
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final parameters",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "differences within one pooled std are reported as not separated",
+    "selection": "none (comparison sweep)"
+}

@@ -1,0 +1,19 @@
+{
+  "description": "QARIMA reproduction — shared defaults",
+  "seed": 42,
+  "dtype": "float64",
+  "device": "cpu",
+  "outdir": "outdir",
+  "data_root": null,
+  "dataset": {"name": "sunspots"},
+  "refiners": ["classical", "gate", "merlin"],
+  "seeds": [0, 1, 2],
+  "loss": {"lambda_cos": 0.1, "lambda_ent": 0.05, "lambda_l2": 0.0, "omega": 1.0, "shots": null},
+  "vqc": {"reps": 1, "max_iter": 80, "step_frac": 1.0, "n_train": null},
+  "candidates": [[3, 1, 1], [10, 1, 1], [5, 1, 3]],
+  "order_sweep": {"enabled": true, "p_max": 16, "d": 1, "q": 0},
+  "seasonal_baseline": {"enabled": false},
+  "paper_baseline_order": null,
+  "paper_best_quantum_mse": null,
+  "logging": {"level": "info", "save_config_snapshot": true}
+}

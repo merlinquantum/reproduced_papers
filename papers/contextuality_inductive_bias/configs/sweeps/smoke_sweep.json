@@ -1,0 +1,22 @@
+{
+  "sweep_id": "smoke_sweep",
+  "description": "Coordinator smoke test: biased quantum L = 1, 5 steps, 500 test strategies, protocols paper and code, one seed. Not evidence.",
+  "base_config": "configs/smoke.json",
+  "axes": {
+    "--protocol": ["paper", "code"]
+  },
+  "repetitions": [{"--seed": 0}],
+  "progress_total": 5,
+  "plan": {
+    "metrics": ["final.test_kl", "final.train_nll"],
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final step (no early stopping)",
+    "aggregation": "per candidate: mean and sample std (ddof = 1) over repetitions; min and max also reported",
+    "tie_tolerance": "n/a (descriptive sweep)",
+    "selection_rule": "none: smoke test of the coordinator",
+    "note": "Smoke only."
+  },
+  "fixed_args": {},
+  "max_workers": 2
+}

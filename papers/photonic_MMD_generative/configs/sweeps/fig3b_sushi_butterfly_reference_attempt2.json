@@ -1,0 +1,28 @@
+{
+    "sweep_id": "fig3b_sushi_butterfly_reference_attempt2",
+    "description": "Second attempt of the 5 fig3b_sushi butterfly_reference runs (seeds 0-4). Attempt 1 trained to the end but failed at boson sampling: Perceval rejects the non-unitary trained U (D3). Corrective change: runner marks unitarity_error > 1e-8 as not deployable and skips model sampling; all other metrics written.",
+    "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ],
+    "candidates": [
+        {
+            "label": "butterfly_reference",
+            "config": "configs/fig3b_sushi_original.json",
+            "overrides": {
+                "model.ansatz": "butterfly",
+                "model.butterfly_variant": "reference"
+            }
+        }
+    ],
+    "metric": "primary: sample_metrics.<model>.walsh_mmd (same kernel operators for every model); also test_mmd_estimator (paper protocol) and gaussian_mmd_raw/binarized for Gaussian kernels",
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final parameters",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "differences within one pooled std are reported as not separated",
+    "selection": "none (comparison sweep)"
+}

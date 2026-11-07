@@ -1,0 +1,28 @@
+{
+  "sweep_id": "e7_appc_retry",
+  "description": "E7 retry (2026-10-26): TF seeds missing from e7_appc, which hit its 5 h time limit (75 min/run under 4-way CPU contention vs 23 min estimated). Seeds 3, 5, 6, 7: second attempt (first attempt cut off by the time limit); seeds 8, 9, 10: first attempt (never started).",
+  "candidates": [
+    {
+      "name": "tf",
+      "config": "configs/ns_appc_tf_original.json"
+    }
+  ],
+  "seeds": [
+    3,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "max_workers": 4,
+  "selection": {
+    "metric": "final_loss",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}

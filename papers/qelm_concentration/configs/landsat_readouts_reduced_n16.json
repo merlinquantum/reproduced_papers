@@ -1,0 +1,88 @@
+{
+  "description": "E5 + E3 + E4 + E7 + E8 at 16 qubits (reduced from the paper's 124): 36 layers (9 encoding + 27 dynamics, as in the paper), input shift 8 so the 9 encoding layers x 8 blocks feed all 72 stacked inputs once. 5 splits x 3 reservoirs x 3 shot seeds at 1e5 shots. Local tier.",
+  "reservoir": {
+    "n_qubits": 16,
+    "n_layers": 36,
+    "input_shift": 8,
+    "chunk_size": 64
+  },
+  "landsat_readouts": {
+    "split_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "reservoir_seeds": [
+      0,
+      1,
+      2
+    ],
+    "shot_seeds": [
+      0,
+      1,
+      2
+    ],
+    "headline_shots": 100000,
+    "nsr_cutoff": 1.0,
+    "readouts": [
+      "w1_x_unit",
+      "w1_x_scaled",
+      "w1_pauli_unit",
+      "w1_pauli_scaled",
+      "w1_et_unit",
+      "w1_et_scaled",
+      "w1_etcut_unit",
+      "w1_etcut_scaled",
+      "w2_x_unit",
+      "w2_x_scaled",
+      "w2_pauli_unit",
+      "w2_pauli_scaled",
+      "w2_et_unit",
+      "w2_et_scaled",
+      "w2_etcut_unit",
+      "w2_etcut_scaled"
+    ],
+    "cutoff_sweep": {
+      "cutoffs": [
+        0.01,
+        0.03,
+        0.1,
+        0.3,
+        1.0,
+        3.0,
+        10.0,
+        30.0,
+        100.0
+      ],
+      "readouts": [
+        "w2_etcut_scaled",
+        "w2_etcut_unit"
+      ]
+    },
+    "train_size_sweep": {
+      "sizes": [
+        10,
+        25,
+        50,
+        100,
+        200,
+        400,
+        688
+      ],
+      "resamples": 20,
+      "readout": "w1_pauli_scaled"
+    },
+    "shots_sweep": {
+      "shots": [
+        100,
+        1000,
+        10000,
+        100000
+      ],
+      "readout": "w1_pauli_scaled"
+    },
+    "save_probabilities": true
+  }
+}

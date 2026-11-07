@@ -1,0 +1,9 @@
+{
+    "description": "E1 classical federated baseline, 21 parameters (16->1->2 tanh MLP) = VQTN parameter count",
+    "experiment": "e1_classical_0v9",
+    "label": "classical parameter-matched baseline",
+    "model": {
+        "name": "classical",
+        "hidden": 1
+    }
+}

@@ -1,0 +1,11 @@
+{
+  "description": "Gap diagnosis C: linear readout only (with / without intercept) on the SRSR grid, all reservoir types.",
+  "experiment": {
+    "id": "GAP-LINEAR-SRSR",
+    "variant": "original",
+    "architecture": "srsr",
+    "sizes": [10, 20, 40, 15, 30, 60, 25, 50],
+    "reservoir_types": ["classical", "quantum_ideal", "quantum_noisy"],
+    "readout_types": ["linear"]
+  }
+}

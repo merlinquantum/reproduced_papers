@@ -1,0 +1,23 @@
+{
+  "description": "E2 classical context reference B4b: trainable-frequency Fourier regressor with K = 3 terms initialised at the FF gaps {1, 2, 3}.",
+  "dataset": {
+    "frequencies": [
+      1.0,
+      1.2,
+      3.0
+    ]
+  },
+  "training": {
+    "iterations": 6000,
+    "batch_size": 2
+  },
+  "model": {
+    "family": "fourier",
+    "initial_frequencies": [
+      1.0,
+      2.0,
+      3.0
+    ],
+    "trainable_frequencies": true
+  }
+}

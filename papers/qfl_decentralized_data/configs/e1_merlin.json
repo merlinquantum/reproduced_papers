@@ -1,0 +1,16 @@
+{
+    "description": "Phase 4 MerLin adaptation (not the paper's model): selected photonic classifier, E1 task 0 vs 9, 2 clients, paper rounds and batch size",
+    "experiment": "e1_merlin_0v9",
+    "label": "MerLin adaptation, configuration selected by calibration_merlin_e1_0v9",
+    "model": {
+        "name": "merlin",
+        "n_photons": 2,
+        "encoding_scale": 1.0,
+        "superposition": "replace",
+        "photonic_readout": "linear_head",
+        "computation_space": "unbunched"
+    },
+    "training": {
+        "lr": 0.03
+    }
+}

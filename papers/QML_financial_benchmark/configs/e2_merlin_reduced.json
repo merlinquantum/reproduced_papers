@@ -1,0 +1,11 @@
+{
+  "description": "Phase 4 MerLin smoke (reduced, not a result): photonic QNN Hybrid-MQ on 7 modes, 2 photons, L = 1, plus the [7-32-16-1] ANN, 2 epochs, on E2 data.",
+  "directional": {
+    "dataset": {"feature_set": "7d", "ticker": "^GSPC"},
+    "models": {
+      "qnn": {"backend": "merlin", "families": ["Hybrid-MQ", "SQ"], "n_modes": [7], "n_photons": [2], "layers": [1], "angle_scale": 3.141592653589793},
+      "ann": {"hidden_layer_options": [[32, 16]], "minmax_inputs": true}
+    },
+    "training": {"max_epochs": 2}
+  }
+}

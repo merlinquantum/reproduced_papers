@@ -1,0 +1,121 @@
+{
+  "description": "Phase 5 extension X1 (qubit reference): serial and parallel r = 5 with the paper's fixed <Z_0> on the published Fig. 4 target, protocol P5 (L-BFGS), 20 seeds.",
+  "experiment": "fit",
+  "fit": {
+    "grid": {
+      "start": -6.0,
+      "stop": 6.0,
+      "num": 70
+    },
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "models": [
+      "quantum"
+    ],
+    "success_tolerance": 0.0001,
+    "training": {
+      "optimizer": "lbfgs",
+      "lr": 1.0,
+      "batch_size": 25,
+      "steps": 500,
+      "init_high": 6.283185307179586,
+      "full_batch": true
+    },
+    "cases": [
+      {
+        "name": "fig4s1_serial_r5_z0",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 5,
+          "encoding_scaling": 1.0,
+          "readout": "z0"
+        }
+      },
+      {
+        "name": "fig4s1_parallel_r5_z0",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "parallel",
+          "repetitions": 5,
+          "encoding_scaling": 1.0,
+          "ansatz": "strongly",
+          "ansatz_layers": 3,
+          "readout": "z0"
+        }
+      }
+    ]
+  }
+}

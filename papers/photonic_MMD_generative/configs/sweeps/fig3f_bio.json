@@ -1,0 +1,44 @@
+{
+    "sweep_id": "fig3f_bio",
+    "description": "Fig. 3f: bioinformatics m=100, n=10 (rebuilt, unverified), Haar, weak-unbiased init, |K|=1500, |Z|=1000; six kernels incl. paper-normalized weighted Gaussian (D4); seeds 0-4.",
+    "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ],
+    "candidates": [
+        {
+            "label": "standard_polynomial",
+            "config": "configs/fig3f_bio_standard_polynomial.json"
+        },
+        {
+            "label": "parity_polynomial",
+            "config": "configs/fig3f_bio_parity_polynomial.json"
+        },
+        {
+            "label": "weighted_gaussian",
+            "config": "configs/fig3f_bio_weighted_gaussian.json"
+        },
+        {
+            "label": "weighted_gaussian_paper",
+            "config": "configs/fig3f_bio_weighted_gaussian_paper.json"
+        },
+        {
+            "label": "data_biased_low_order",
+            "config": "configs/fig3f_bio_data_biased_low_order.json"
+        },
+        {
+            "label": "low_order",
+            "config": "configs/fig3f_bio_low_order.json"
+        }
+    ],
+    "metric": "primary: sample_metrics.<model>.walsh_mmd (same kernel operators for every model); also test_mmd_estimator (paper protocol) and gaussian_mmd_raw/binarized for Gaussian kernels",
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final parameters",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "differences within one pooled std are reported as not separated",
+    "selection": "none (comparison sweep)"
+}

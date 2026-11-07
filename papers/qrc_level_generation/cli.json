@@ -1,0 +1,97 @@
+{
+  "description": "Quantum Reservoir Computing for Level Generation (Ferreira et al., arXiv:2505.13287).",
+  "arguments": [
+    {
+      "flags": ["--n-qubits"],
+      "help": "Number of qubits in the QRC reservoir",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qrc.n_qubits"}
+    },
+    {
+      "flags": ["--epochs"],
+      "help": "Override number of training epochs for the FNN",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.epochs"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "FNN learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lr"}
+    },
+    {
+      "flags": ["--temperatures"],
+      "help": "Comma-separated list of temperatures for generation",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "generation.temperatures_str"}
+    },
+    {
+      "flags": ["--n-samples"],
+      "help": "Number of generated levels per temperature",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "generation.n_samples"}
+    },
+    {
+      "flags": ["--gen-length"],
+      "help": "Length of each generated level",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "generation.length"}
+    },
+    {
+      "flags": ["--backend"],
+      "help": "Reservoir backend: 'qubit' (gate-based numpy) or 'photonic' (MerLin)",
+      "type": "str",
+      "choices": ["qubit", "photonic"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qrc.backend"}
+    },
+    {
+      "flags": ["--depolarizing-p"],
+      "help": "Depolarizing probability for 2-qubit gates (1-qubit gets p/10). Set 0 for noiseless.",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qrc.depolarizing_p"}
+    },
+    {
+      "flags": ["--shots"],
+      "help": "Number of measurement shots (0 = analytic probabilities)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qrc.shots"}
+    },
+    {
+      "flags": ["--reference-only"],
+      "help": "Skip QRC training/generation; only evaluate published reference sequences",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "evaluation.reference_only"}
+    },
+    {
+      "flags": ["--n-modes"],
+      "help": "Photonic backend: number of modes",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qrc.n_modes"}
+    },
+    {
+      "flags": ["--n-photons"],
+      "help": "Photonic backend: number of photons",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "qrc.n_photons"}
+    },
+    {
+      "flags": ["--evaluate-reference-sequences"],
+      "help": "Toggle metric computation on the Moth-published Aer sequences (default true in reference_eval.json)",
+      "type": "bool",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "evaluation.evaluate_reference_sequences"}
+    }
+  ]
+}

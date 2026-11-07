@@ -1,0 +1,38 @@
+{
+  "label": "poisson_qpinn_smoke_200ep",
+  "experiment": "poisson_qpinn",
+  "source_run": "run_20260528-120233",
+  "seed": 42,
+  "n_params": 48,
+  "metrics": {
+    "rmse": 0.004640787955801748,
+    "mae": 0.004110447700332686,
+    "l_inf": 0.007450748747307161,
+    "nmse": 0.011082310934237045,
+    "mean_trace": 1.0000000000000027
+  },
+  "best": {
+    "epoch": 199,
+    "loss": 0.00035737609334294304
+  },
+  "wall_time_sec": 168.256281375885,
+  "model": {
+    "n_qumodes": 2,
+    "n_multi_layers": 2,
+    "n_single_layers": 2,
+    "cutoff": 8,
+    "active_sd": 0.001,
+    "passive_sd": 0.1
+  },
+  "training": {
+    "epochs": 200,
+    "lr": 0.05,
+    "collocation_points": 64,
+    "lambdas": {
+      "pde": 0.25,
+      "bc": 0.25,
+      "consistency": 0.25,
+      "trace": 0.25
+    }
+  }
+}

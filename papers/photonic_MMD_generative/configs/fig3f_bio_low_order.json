@@ -1,0 +1,46 @@
+{
+    "description": "Fig. 3f: bioinformatics m=100, n=10 (rebuilt, unverified), Haar, weak-unbiased init (original kernel-study notebook), kernel low_order; |K|=1500, |Z|=1000 as in that notebook; QCBM vs random baseline.",
+    "experiment": {
+        "name": "fig3f_bio_low_order",
+        "paper_reference": "Fig. 3f"
+    },
+    "dataset": {
+        "name": "bioinformatics",
+        "m": 100,
+        "n": 10,
+        "number_samples": 10000,
+        "frac_train": 0.7
+    },
+    "model": {
+        "ansatz": "haar",
+        "butterfly_variant": "reference",
+        "input_state": "middle_alternating",
+        "photon_model": "indistinguishable"
+    },
+    "kernel": {
+        "type": "low_order",
+        "max_weight": 2
+    },
+    "init": {
+        "strategy": "weak_unbiased"
+    },
+    "training": {
+        "steps": 2000,
+        "learning_rate": 0.01,
+        "n_operators": 1500,
+        "n_gurvits": 1000,
+        "convergence_interval": 200,
+        "log_every": 1
+    },
+    "evaluation": {
+        "n_operators": 1500,
+        "n_gurvits": 1000,
+        "sample_metrics": true,
+        "num_model_samples": 2000,
+        "baselines": [
+            "random",
+            "marginal",
+            "test_to_test"
+        ]
+    }
+}

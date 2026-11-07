@@ -1,0 +1,12 @@
+{
+ "XCHECK-E3-R2": {
+  "max_abs_diff": 6.038824995613368e-11,
+  "lambdas_identical": true,
+  "verdict": "equivalent"
+ },
+ "XCHECK-E4-R2": {
+  "max_abs_diff": 6.70090649634858e-11,
+  "lambdas_identical": true,
+  "verdict": "equivalent"
+ }
+}

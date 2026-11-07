@@ -1,0 +1,15 @@
+{
+  "description": "E3 RED-tier fallback if the remote GPU is unavailable: kernels fitted on 8,000 evenly spaced training points (partial RED-tier run).",
+  "experiment": {
+    "id": "E3",
+    "variant": "reduced",
+    "architecture": "srmr",
+    "sizes": [[10, 2], [20, 2], [40, 2], [15, 3], [30, 3], [60, 3], [25, 5], [50, 5]],
+    "reservoir_types": ["classical", "quantum_ideal", "quantum_noisy"],
+    "readout_types": ["linear", "quantum_kernel_ideal", "quantum_kernel_noisy"]
+  },
+  "readout": {
+    "kernel_selection_subsample": 8000,
+    "kernel_fit_subsample": 8000
+  }
+}

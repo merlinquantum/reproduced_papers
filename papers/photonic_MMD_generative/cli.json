@@ -1,0 +1,180 @@
+{
+  "description": "Efficient training of photonic quantum generative models (arXiv:2603.08793): MMD training of a photonic QCBM with the Gurvits estimator, evaluated by boson sampling against classical baselines.",
+  "arguments": [
+    {
+      "flags": [
+        "--steps"
+      ],
+      "help": "Maximum number of Adam steps",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.steps"
+      }
+    },
+    {
+      "flags": [
+        "--sigma"
+      ],
+      "help": "Gaussian / weighted-Gaussian kernel bandwidth",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "kernel.sigma"
+      }
+    },
+    {
+      "flags": [
+        "--ansatz"
+      ],
+      "help": "Interferometer parametrization (merlin_mesh needs --backend merlin)",
+      "type": "str",
+      "choices": [
+        "haar",
+        "clements",
+        "butterfly",
+        "mzi3",
+        "merlin_mesh"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.ansatz"
+      }
+    },
+    {
+      "flags": [
+        "--butterfly-variant"
+      ],
+      "help": "Butterfly mesh: 'reference' (original code, non-unitary for m not a power of 2) or 'corrected'",
+      "type": "str",
+      "choices": [
+        "reference",
+        "corrected"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.butterfly_variant"
+      }
+    },
+    {
+      "flags": [
+        "--photon-model"
+      ],
+      "help": "'indistinguishable' (QCBM) or 'distinguishable' (classical twin B5)",
+      "type": "str",
+      "choices": [
+        "indistinguishable",
+        "distinguishable"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.photon_model"
+      }
+    },
+    {
+      "flags": [
+        "--init"
+      ],
+      "help": "Initialization strategy",
+      "type": "str",
+      "choices": [
+        "identity",
+        "random",
+        "weak_unbiased",
+        "data_dependent",
+        "pairwise_uniform",
+        "block_uniform"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "init.strategy"
+      }
+    },
+    {
+      "flags": [
+        "--perturbation"
+      ],
+      "help": "Near-identity perturbation size (identity init)",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "init.perturbation"
+      }
+    },
+    {
+      "flags": [
+        "--n-operators"
+      ],
+      "help": "|K|: Walsh operators per training estimate",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.n_operators"
+      }
+    },
+    {
+      "flags": [
+        "--n-gurvits"
+      ],
+      "help": "|Z|: Glynn samples per operator during training",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.n_gurvits"
+      }
+    },
+    {
+      "flags": [
+        "--sample-metrics"
+      ],
+      "help": "Sample the trained model and baselines and compute sample-based MMDs (true/false)",
+      "type": "bool",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.sample_metrics"
+      }
+    },
+    {
+      "flags": [
+        "--backend"
+      ],
+      "help": "Training backend: 'jax' (Phase 03 reproduction) or 'merlin' (Phase 04 MerLin adaptation)",
+      "type": "str",
+      "choices": [
+        "jax",
+        "merlin"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.backend"
+      }
+    },
+    {
+      "flags": [
+        "--sampler"
+      ],
+      "help": "Boson sampler for the trained model: 'perceval' (Clifford2017, CPU) or 'merlin_clifford' (MerLin engine, CUDA)",
+      "type": "str",
+      "choices": [
+        "perceval",
+        "merlin_clifford"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.sampler"
+      }
+    }
+  ]
+}

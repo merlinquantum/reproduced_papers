@@ -1,0 +1,1 @@
+{"c4": "PARTIALLY_SUPPORTED", "c8_part2": "UNSUPPORTED", "run_counts": {"fig3a": [30, 30], "b6": [5, 5], "fig3a_merlin": [10, 10], "fig3e": [15, 15]}}

@@ -1,0 +1,70 @@
+{
+  "description": "MerLin adaptation (Phase 04), Amendment 2 CONFIRMATION: P4 architecture at d=8 on Iris classes 0/1, 100 seeds, qubit-QNN training settings.",
+  "experiment": {
+    "name": "training_iris_merlin_design",
+    "kind": "training"
+  },
+  "dataset": {
+    "name": "iris_binary",
+    "batch_size": null
+  },
+  "training": {
+    "iterations": 100,
+    "lr": 0.1,
+    "seeds": {
+      "start": 0,
+      "count": 100
+    },
+    "finite_difference_step": 1e-10,
+    "log_every": 1,
+    "loss_threshold": 0.3,
+    "fisher_rao": true,
+    "fisher_chunk_size": 100
+  },
+  "models": [
+    {
+      "name": "P4_hard",
+      "type": "photonic",
+      "n_inputs": 4,
+      "encoding": "hard",
+      "d": 8,
+      "detection": "threshold",
+      "extra_modes": 4,
+      "mesh_order": "ps_bs",
+      "layout": "interleaved",
+      "input_kind": "fock",
+      "readout": "click_parity",
+      "training": {
+        "optimizer": "qiskit_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": 0.0,
+          "high": 6.283185307179586
+        }
+      },
+      "data_reps": null
+    },
+    {
+      "name": "P4_easy",
+      "type": "photonic",
+      "n_inputs": 4,
+      "encoding": "easy",
+      "d": 8,
+      "detection": "threshold",
+      "extra_modes": 4,
+      "mesh_order": "ps_bs",
+      "layout": "interleaved",
+      "input_kind": "fock",
+      "readout": "click_parity",
+      "training": {
+        "optimizer": "qiskit_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": 0.0,
+          "high": 6.283185307179586
+        }
+      },
+      "data_reps": null
+    }
+  ]
+}

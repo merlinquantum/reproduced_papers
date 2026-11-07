@@ -1,0 +1,32 @@
+{
+    "description": "Default fast smoke config: classical MLP on Henon, 5 epochs.",
+    "seed": 0,
+    "dtype": "float32",
+    "outdir": "outdir",
+    "device": "cpu",
+    "dataset": {
+        "name": "henon_1000",
+        "root": "data/variational_qml_ts_benchmark",
+        "sequence_length": 4,
+        "prediction_step": 1,
+        "batch_size": 64
+    },
+    "model": {
+        "name": "mlp",
+        "params": {
+            "ansatz": "relu_16",
+            "num_qubits": 4,
+            "hidden_size": 16,
+            "bugfix": false
+        }
+    },
+    "training": {
+        "epochs": 5,
+        "optimizer": "adam",
+        "lr": 0.001,
+        "use_convergence": false,
+        "min_epochs": 400,
+        "window": 200
+    },
+    "logging": {"level": "info", "save_config_snapshot": true}
+}

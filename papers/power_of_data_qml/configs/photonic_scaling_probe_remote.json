@@ -1,0 +1,124 @@
+{
+  "description": "Photonic scaling probe on gpu-reproduced-papers-1 (NVIDIA L4): simulation time and memory of the MerLin PA/PB banks (800 points, fidelity Gram + no-click features + labels) vs Fock dimension. Uncapped k=floor(m/2) for PA n=14-18 and PB n=13-17; capped k=5-8 at n=20; CPU complex128 cross-check at n=10. No models trained. batch_memory_mb counts output amplitudes only (MerLin peaks at about 22x that on the device); gram_memory_mb is per Gram block.",
+  "experiment": "photonic_scaling",
+  "dtype": "float32",
+  "device": "cuda:0",
+  "study": {
+    "embeddings": [
+      "PA",
+      "PB"
+    ],
+    "system_sizes": [
+      10,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      20
+    ],
+    "seeds": [
+      0
+    ]
+  },
+  "simulation": {
+    "batch_memory_mb": 192,
+    "gram_memory_mb": 4096
+  },
+  "photonic_scaling": {
+    "subsample_seed": 0,
+    "points": [
+      {
+        "embedding": "PA",
+        "n": 10,
+        "compare_cpu": true
+      },
+      {
+        "embedding": "PB",
+        "n": 10,
+        "compare_cpu": true
+      },
+      {
+        "embedding": "PA",
+        "n": 20,
+        "max_photons": 5
+      },
+      {
+        "embedding": "PB",
+        "n": 20,
+        "max_photons": 5
+      },
+      {
+        "embedding": "PA",
+        "n": 14
+      },
+      {
+        "embedding": "PB",
+        "n": 13
+      },
+      {
+        "embedding": "PA",
+        "n": 15
+      },
+      {
+        "embedding": "PB",
+        "n": 14
+      },
+      {
+        "embedding": "PA",
+        "n": 20,
+        "max_photons": 6
+      },
+      {
+        "embedding": "PB",
+        "n": 20,
+        "max_photons": 6
+      },
+      {
+        "embedding": "PA",
+        "n": 16
+      },
+      {
+        "embedding": "PB",
+        "n": 15
+      },
+      {
+        "embedding": "PA",
+        "n": 20,
+        "max_photons": 7
+      },
+      {
+        "embedding": "PA",
+        "n": 17
+      },
+      {
+        "embedding": "PB",
+        "n": 16
+      },
+      {
+        "embedding": "PB",
+        "n": 20,
+        "max_photons": 7
+      },
+      {
+        "embedding": "PA",
+        "n": 20,
+        "max_photons": 8
+      },
+      {
+        "embedding": "PB",
+        "n": 20,
+        "max_photons": 8
+      },
+      {
+        "embedding": "PA",
+        "n": 18
+      },
+      {
+        "embedding": "PB",
+        "n": 17
+      }
+    ]
+  }
+}

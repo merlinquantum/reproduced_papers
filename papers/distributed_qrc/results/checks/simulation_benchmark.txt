@@ -1,0 +1,8 @@
+CPU Apple M5; Python 3.14.2, qiskit 2.5.2, numpy 2.5.4, torch 2.12.1; ideal circuits, single run
+quantum neuron, 2000 windows: max |ours - Qiskit| = 1.0e-15
+  per window: Qiskit StatevectorEstimator 284 us, ours 1.20 us (x237)
+  one 60-neuron reservoir (6,311,520 evaluations): Qiskit 30 min, ours 8 s
+quantum kernel, 2000 points, 20 features on 10 qubits: max |ours - Qiskit| = 1.3e-14
+  per point: Qiskit statevector 0.96 ms, ours (Bloch vectors) 1 us
+  per pair: Qiskit (matrix product of states) 23 ns, ours 13 ns
+  full training Gram (24,539 points): Qiskit 38 s, ours 8 s

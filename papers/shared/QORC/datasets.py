@@ -49,6 +49,27 @@ def _data_root() -> Path:
 
 _MERLIN_DATA_ROOT = _data_root()
 
+MEDMNIST_DATASETS = {
+    "oct": "OCTMNIST",
+    "octmnist": "OCTMNIST",
+    "organs": "OrganSMNIST",
+    "organsm": "OrganSMNIST",
+    "organsmnist": "OrganSMNIST",
+    "organa": "OrganAMNIST",
+    "organamnist": "OrganAMNIST",
+    "derma": "DermaMNIST",
+    "dermamnist": "DermaMNIST",
+}
+
+MNIST_GAUSSIAN_PERCENTAGES = np.array(
+    [1.2, 3.5, 7.9, 13.8, 18.8, 20.0, 16.6, 10.7, 5.4, 2.1],
+    dtype=np.float64,
+)
+MNIST_IMBALANCED_PERCENTAGES = np.array(
+    [64.3, 9.7, 8.0, 6.4, 3.9, 3.2, 1.6, 1.3, 1.0, 0.6],
+    dtype=np.float64,
+)
+
 if _datasets_utils:
 
     def _custom_data_dir() -> Path:
@@ -153,10 +174,167 @@ def get_mnist_variant(dataset_name):
     return [X_train, y_train, X_test, y_test]
 
 
+def _load_medmnist(dataset_name):
+    dataset_class_name = MEDMNIST_DATASETS[dataset_name.lower()]
+    try:
+        import medmnist
+    except ImportError as exc:
+        raise ImportError("MedMNIST datasets require the 'medmnist' package.") from exc
+
+    dataset_class = getattr(medmnist, dataset_class_name)
+    dataset_root = _MERLIN_DATA_ROOT / "medmnist"
+    dataset_root.mkdir(parents=True, exist_ok=True)
+    train_dataset = dataset_class(split="train", root=str(dataset_root), download=True)
+    test_dataset = dataset_class(split="test", root=str(dataset_root), download=True)
+    return (
+        np.asarray(train_dataset.imgs),
+        np.asarray(train_dataset.labels).reshape(-1),
+        np.asarray(test_dataset.imgs),
+        np.asarray(test_dataset.labels).reshape(-1),
+    )
+
+
+def _allocate_class_counts(percentages, sample_count):
+    exact_counts = np.asarray(percentages, dtype=np.float64) * sample_count / 100.0
+    counts = np.floor(exact_counts).astype(int)
+    remainder = sample_count - int(counts.sum())
+    if remainder:
+        fractional_parts = exact_counts - counts
+        largest_remainders = np.argsort(-fractional_parts, kind="stable")[:remainder]
+        counts[largest_remainders] += 1
+    return counts
+
+
+def _sample_training_data(
+    data, labels, sampling, sample_count, samples_per_class, seed
+):
+    normalized_sampling = sampling.lower()
+    if normalized_sampling == "full":
+        if sample_count is None:
+            return data, labels
+        if sample_count <= 0 or sample_count > len(labels):
+            raise ValueError(
+                "sample_count must be between 1 and the training-set size."
+            )
+        rng = np.random.default_rng(seed)
+        selected_indices = rng.choice(len(labels), size=sample_count, replace=False)
+        return data[selected_indices], labels[selected_indices]
+
+    if normalized_sampling == "balanced":
+        if samples_per_class is None:
+            if sample_count is None or sample_count % 10:
+                raise ValueError(
+                    "Balanced MNIST sampling requires samples_per_class or a "
+                    "sample_count divisible by 10."
+                )
+            samples_per_class = sample_count // 10
+        if samples_per_class <= 0:
+            raise ValueError("samples_per_class must be positive.")
+        class_counts = np.full(10, samples_per_class, dtype=int)
+    elif normalized_sampling in {"gauss", "gaussian", "imbal", "imbalanced"}:
+        if samples_per_class is not None:
+            raise ValueError(
+                "samples_per_class is only valid for balanced MNIST sampling."
+            )
+        sample_count = 10000 if sample_count is None else sample_count
+        if sample_count <= 0:
+            raise ValueError("sample_count must be positive.")
+        percentages = (
+            MNIST_GAUSSIAN_PERCENTAGES
+            if normalized_sampling in {"gauss", "gaussian"}
+            else MNIST_IMBALANCED_PERCENTAGES
+        )
+        if normalized_sampling in {"imbal", "imbalanced"}:
+            percentages = percentages[np.random.default_rng(seed).permutation(10)]
+        class_counts = _allocate_class_counts(percentages, sample_count)
+    else:
+        raise ValueError(
+            "Unknown MNIST sampling mode. Expected full, balanced, gauss, or imbal."
+        )
+
+    rng = np.random.default_rng(seed)
+    selected_indices = []
+    for class_label, class_count in enumerate(class_counts):
+        class_indices = np.flatnonzero(labels == class_label)
+        if class_count > len(class_indices):
+            raise ValueError(
+                f"Not enough training examples for class {class_label}: "
+                f"requested {class_count}, available {len(class_indices)}."
+            )
+        selected_indices.extend(
+            rng.choice(class_indices, size=class_count, replace=False).tolist()
+        )
+    selected_indices = np.asarray(selected_indices, dtype=int)
+    rng.shuffle(selected_indices)
+    return data[selected_indices], labels[selected_indices]
+
+
+def get_qorc_dataset(
+    dataset_name,
+    sampling="full",
+    sample_count=None,
+    samples_per_class=None,
+    seed=42,
+):
+    """Load a QORC dataset and optionally resample its training set.
+
+    Parameters
+    ----------
+    dataset_name : str
+        Dataset identifier: mnist, oct, organs, organa, or derma.
+    sampling : str
+        MNIST training sampling mode: full, balanced, gauss, or imbal. MedMNIST
+        datasets currently support full sampling only. Default value is full.
+    sample_count : int|None
+        Total number of training samples for a sampled MNIST dataset. Gaussian
+        and imbal modes default to 10000. Default value is None.
+    samples_per_class : int|None
+        Number of examples per class for balanced MNIST sampling. Default value
+        is None.
+    seed : int
+        Seed controlling sample selection and the imbal class permutation.
+
+    Returns
+    -------
+    tuple[numpy.ndarray, numpy.ndarray, numpy.ndarray, numpy.ndarray]
+        Training data, training labels, test data, and test labels.
+
+    Raises
+    ------
+    ValueError
+        If the dataset or sampling configuration is unsupported.
+    """
+    normalized_name = dataset_name.lower()
+    if normalized_name in MEDMNIST_DATASETS:
+        if (
+            sampling.lower() != "full"
+            or sample_count is not None
+            or samples_per_class is not None
+        ):
+            raise ValueError("MedMNIST datasets currently support full sampling only.")
+        return _load_medmnist(normalized_name)
+
+    if normalized_name != "mnist":
+        raise ValueError(
+            "Unknown dataset. Expected mnist, oct, organs, organa, or derma."
+        )
+    train_data, train_labels, test_data, test_labels = get_mnist_variant("mnist")
+    sampled_train_data, sampled_train_labels = _sample_training_data(
+        train_data,
+        np.asarray(train_labels).reshape(-1),
+        sampling,
+        sample_count,
+        samples_per_class,
+        seed,
+    )
+    return sampled_train_data, sampled_train_labels, test_data, test_labels
+
+
 __all__ = [
     "tensor_dataset",
     "seed_worker",
     "get_dataloader",
     "split_fold_numpy",
     "get_mnist_variant",
+    "get_qorc_dataset",
 ]
