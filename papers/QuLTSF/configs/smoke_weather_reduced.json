@@ -1,0 +1,31 @@
+{
+  "description": "Reduced smoke on the real Weather data: QuLTSF N=10, K=3, L=336, T=96, one epoch of 50 batches. Execution check only, not a result.",
+  "seed": 2021,
+  "dtype": "float32",
+  "dataset": {
+    "source": "csv",
+    "name": "weather_ltsf",
+    "path": "weather/weather.csv",
+    "sha256": "34ee981d07313e51da2a50bb600072c8ae4a69cb4b0651f4cb93a069d7a2ba63",
+    "features_mode": "M",
+    "sequence_length": 336,
+    "prediction_horizon": 96,
+    "batch_size": 16
+  },
+  "model": {
+    "name": "qultsf",
+    "params": {
+      "simulator": "torch",
+      "num_qubits": 10,
+      "num_layers": 3,
+      "circuit": "trainable"
+    }
+  },
+  "training": {
+    "epochs": 1,
+    "lr": 0.0001,
+    "lr_schedule": "type3",
+    "patience": 20,
+    "max_batches_per_epoch": 50
+  }
+}

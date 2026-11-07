@@ -2,67 +2,193 @@
   "description": "QuLTSF reproduction runner",
   "arguments": [
     {
-      "flags": ["--epochs"],
-      "help": "Override number of training epochs",
+      "flags": [
+        "--epochs"
+      ],
+      "help": "Override the maximum number of training epochs",
       "type": "int",
       "default": null,
-      "apply": {"kind": "config_path", "path": "training.epochs"}
+      "apply": {
+        "kind": "config_path",
+        "path": "training.epochs"
+      }
     },
     {
-      "flags": ["--batch-size"],
-      "help": "Override dataset batch size",
+      "flags": [
+        "--patience"
+      ],
+      "help": "Override the early-stopping patience (epochs)",
       "type": "int",
       "default": null,
-      "apply": {"kind": "config_path", "path": "dataset.batch_size"}
+      "apply": {
+        "kind": "config_path",
+        "path": "training.patience"
+      }
     },
     {
-      "flags": ["--lr"],
-      "help": "Override learning rate",
+      "flags": [
+        "--batch-size"
+      ],
+      "help": "Override the batch size",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.batch_size"
+      }
+    },
+    {
+      "flags": [
+        "--lr"
+      ],
+      "help": "Override the initial learning rate",
       "type": "float",
       "default": null,
-      "apply": {"kind": "config_path", "path": "training.lr"}
+      "apply": {
+        "kind": "config_path",
+        "path": "training.lr"
+      }
     },
     {
-      "flags": ["--sequence-length"],
-      "help": "Override input sequence length",
+      "flags": [
+        "--sequence-length"
+      ],
+      "help": "Override the lookback length L",
       "type": "int",
       "default": null,
-      "apply": {"kind": "config_path", "path": "dataset.sequence_length"}
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.sequence_length"
+      }
     },
     {
-      "flags": ["--prediction-horizon"],
-      "help": "Override prediction horizon",
+      "flags": [
+        "--prediction-horizon"
+      ],
+      "help": "Override the forecast horizon T",
       "type": "int",
       "default": null,
-      "apply": {"kind": "config_path", "path": "dataset.prediction_horizon"}
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.prediction_horizon"
+      }
     },
     {
-      "flags": ["--model-name"],
-      "help": "Model variant: qultsf_reference, photonic_qultsf, or qultsf_original",
+      "flags": [
+        "--model-name"
+      ],
+      "help": "Model: qultsf, linear, nlinear, dlinear, persistence, rank_bottleneck, mlp or qultsf_merlin (Phase 4 photonic adaptation)",
       "type": "str",
       "default": null,
-      "apply": {"kind": "config_path", "path": "model.name"}
+      "apply": {
+        "kind": "config_path",
+        "path": "model.name"
+      }
     },
     {
-      "flags": ["--num-qubits"],
-      "help": "Number of qubits for the original QuLTSF hybrid model",
+      "flags": [
+        "--num-qubits"
+      ],
+      "help": "Number of qubits N of the QuLTSF hidden layer",
       "type": "int",
       "default": null,
-      "apply": {"kind": "config_path", "path": "model.params.num_qubits"}
+      "apply": {
+        "kind": "config_path",
+        "path": "model.params.num_qubits"
+      }
     },
     {
-      "flags": ["--num-layers"],
-      "help": "Number of variational layers for the original QuLTSF hybrid model",
+      "flags": [
+        "--num-layers"
+      ],
+      "help": "Number of StronglyEntanglingLayers K of the QuLTSF hidden layer",
       "type": "int",
       "default": null,
-      "apply": {"kind": "config_path", "path": "model.params.num_layers"}
+      "apply": {
+        "kind": "config_path",
+        "path": "model.params.num_layers"
+      }
     },
     {
-      "flags": ["--qml-device"],
-      "help": "PennyLane device name for the original QuLTSF hybrid model",
+      "flags": [
+        "--circuit"
+      ],
+      "help": "QuLTSF circuit mode: trainable (paper), frozen or identity",
+      "type": "str",
+      "choices": [
+        "trainable",
+        "frozen",
+        "identity"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.params.circuit"
+      }
+    },
+    {
+      "flags": [
+        "--simulator"
+      ],
+      "help": "QuLTSF simulator: torch (batched, default) or pennylane (upstream reference, slow)",
+      "type": "str",
+      "choices": [
+        "torch",
+        "pennylane"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.params.simulator"
+      }
+    },
+    {
+      "flags": [
+        "--sweep-id"
+      ],
+      "help": "Sweep identifier recorded in run_status.json (set by utils/run_sweep.py)",
       "type": "str",
       "default": null,
-      "apply": {"kind": "config_path", "path": "model.params.qml_device"}
+      "apply": {
+        "kind": "config_path",
+        "path": "sweep.sweep_id"
+      }
+    },
+    {
+      "flags": [
+        "--sweep-candidate"
+      ],
+      "help": "Sweep candidate name recorded in run_status.json (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "sweep.candidate"
+      }
+    },
+    {
+      "flags": [
+        "--repetition"
+      ],
+      "help": "Repetition index recorded in run_status.json (set by utils/run_sweep.py)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "sweep.repetition"
+      }
+    },
+    {
+      "flags": [
+        "--qml-device"
+      ],
+      "help": "PennyLane device name used when --simulator pennylane",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.params.qml_device"
+      }
     }
   ]
 }

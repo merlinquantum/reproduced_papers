@@ -1,0 +1,2341 @@
+{
+  "schema_version": 1,
+  "protocol": "LOG.md 'Phase 5 Comparison Plan'",
+  "rule": "QuLTSF better than a system if its mean test MSE is lower by > 2x the larger seed std and DM p < 0.05 (seed-averaged per-window squared errors, lag window T); worse symmetrically; otherwise tie",
+  "hardware": "NVIDIA L4 (reproduced-papers-1), float32; MerLin exact simulation",
+  "not_commensurable": {
+    "C4 PatchTST / MTST": "INCOMPARABLE: values quoted from Zhang et al. 2024 (different pipeline, RevIN); not rerun",
+    "Transformer baselines (FEDformer, Autoformer, Informer)": "INCOMPARABLE: quoted from Zeng et al. 2023, not rerun; far worse than the linear models"
+  },
+  "horizons": [
+    {
+      "T": 96,
+      "rows": [
+        {
+          "system": "qultsf (paper Table 1)",
+          "role": "paper method",
+          "provenance": "paper-reported",
+          "scope": "single seed (2021), test drop_last",
+          "mse": 0.156,
+          "mae": 0.211
+        },
+        {
+          "system": "linear (paper Table 1, quoted from Zeng et al.)",
+          "role": "paper baseline",
+          "provenance": "paper-reported",
+          "scope": "LTSF-Linear budget, single run, other pipeline",
+          "mse": 0.176,
+          "mae": 0.236
+        },
+        {
+          "system": "nlinear (paper Table 1, quoted from Zeng et al.)",
+          "role": "paper baseline",
+          "provenance": "paper-reported",
+          "scope": "LTSF-Linear budget, single run, other pipeline",
+          "mse": 0.182,
+          "mae": 0.232
+        },
+        {
+          "system": "dlinear (paper Table 1, quoted from Zeng et al.)",
+          "role": "paper baseline",
+          "provenance": "paper-reported",
+          "scope": "LTSF-Linear budget, single run, other pipeline",
+          "mse": 0.176,
+          "mae": 0.237
+        },
+        {
+          "system": "qultsf",
+          "role": "paper method (reproduced)",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "reference",
+          "commensurability": "REFERENCE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_leftovers",
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.1560615474033418,
+          "mse_std": 0.00014268019949461696,
+          "mae_mean": 0.20980269197702892,
+          "mae_std": 0.0004778328827161959,
+          "trainable_parameters": 346234,
+          "epochs_mean": 63.666666666666664,
+          "wall_clock_by_sweep": {
+            "sweep_table1_leftovers": {
+              "runs": 1,
+              "parallel_runs": 4,
+              "wall_clock_minutes_mean": 84.11528846924969
+            },
+            "sweep_table1_r2": {
+              "runs": 2,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 113.22980425789332
+            }
+          }
+        },
+        {
+          "system": "linear",
+          "role": "paper baseline, rerun",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.1744387865267484,
+          "mse_std": 0.0004614993702280542,
+          "mae_mean": 0.23542151348593868,
+          "mae_std": 0.0011746613750427642,
+          "trainable_parameters": 32352,
+          "epochs_mean": 36.333333333333336,
+          "wall_clock_by_sweep": {
+            "sweep_table1_r2": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 15.420491112766063
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1560615474033418,
+            "reference_mse": 0.1744387865267484,
+            "margin": 0.018377239123406608,
+            "threshold": 0.0009229987404561084,
+            "dm_statistic": 5.493842090390108,
+            "dm_p_value": 4.025091164057549e-08,
+            "dm_p_value_per_seed": {
+              "2021": 2.7051346153162122e-08,
+              "2022": 6.020742143395873e-08,
+              "2023": 4.7835574359821974e-08
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "nlinear",
+          "role": "paper baseline, rerun",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.1751085363325414,
+          "mse_std": 0.00023868118512926747,
+          "mae_mean": 0.2254685304364312,
+          "mae_std": 0.00026098712702588906,
+          "trainable_parameters": 32352,
+          "epochs_mean": 59.666666666666664,
+          "wall_clock_by_sweep": {
+            "sweep_table1_r2": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 21.91210109455149
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1560615474033418,
+            "reference_mse": 0.1751085363325414,
+            "margin": 0.019046988929199593,
+            "threshold": 0.00047736237025853493,
+            "dm_statistic": 5.2950293733013165,
+            "dm_p_value": 1.2141418327123158e-07,
+            "dm_p_value_per_seed": {
+              "2021": 8.936698700326443e-08,
+              "2022": 9.605223281159121e-08,
+              "2023": 2.16904113111116e-07
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "dlinear",
+          "role": "paper baseline, rerun",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_leftovers",
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.1742754616892029,
+          "mse_std": 5.732790856528515e-05,
+          "mae_mean": 0.23528756168423315,
+          "mae_std": 0.00042121003459433823,
+          "trainable_parameters": 64704,
+          "epochs_mean": 35.0,
+          "wall_clock_by_sweep": {
+            "sweep_table1_leftovers": {
+              "runs": 1,
+              "parallel_runs": 4,
+              "wall_clock_minutes_mean": 2.4690620369277894
+            },
+            "sweep_table1_r2": {
+              "runs": 2,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 7.953124704021805
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1560615474033418,
+            "reference_mse": 0.1742754616892029,
+            "margin": 0.01821391428586111,
+            "threshold": 0.0002853603989892339,
+            "dm_statistic": 5.409117915202186,
+            "dm_p_value": 6.473411254564743e-08,
+            "dm_p_value_per_seed": {
+              "2021": 9.786691362004307e-08,
+              "2022": 3.6922356839916606e-08,
+              "2023": 8.442334082329403e-08
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "linear_ltsf_budget",
+          "role": "paper baseline, rerun at LTSF-Linear budget",
+          "provenance": "local",
+          "scope": "paper-accurate for Zeng et al., 3 seeds",
+          "matching_basis": "same pipeline and seeds; 10 epochs, patience 3, type1",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_budget"
+          ],
+          "mse_mean": 0.1768547091226523,
+          "mse_std": 0.0006264152523459653,
+          "mae_mean": 0.2383519466818704,
+          "mae_std": 0.0016744219651932297,
+          "trainable_parameters": 32352,
+          "epochs_mean": 8.0,
+          "wall_clock_by_sweep": {
+            "sweep_budget": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.4760378986959242
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1560615474033418,
+            "reference_mse": 0.1768547091226523,
+            "margin": 0.020793161719310504,
+            "threshold": 0.0012528305046919305,
+            "dm_statistic": 6.050752948095681,
+            "dm_p_value": 1.491183194754226e-09,
+            "dm_p_value_per_seed": {
+              "2021": 5.428099376893065e-10,
+              "2022": 1.0252743631877734e-09,
+              "2023": 6.657559205008007e-09
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "nlinear_ltsf_budget",
+          "role": "paper baseline, rerun at LTSF-Linear budget",
+          "provenance": "local",
+          "scope": "paper-accurate for Zeng et al., 3 seeds",
+          "matching_basis": "same pipeline and seeds; 10 epochs, patience 3, type1",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_budget"
+          ],
+          "mse_mean": 0.18045285071881176,
+          "mse_std": 0.000621093640822872,
+          "mae_mean": 0.23112396037012142,
+          "mae_std": 0.0006444811178028547,
+          "trainable_parameters": 32352,
+          "epochs_mean": 10.0,
+          "wall_clock_by_sweep": {
+            "sweep_budget": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.5796150350348196
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1560615474033418,
+            "reference_mse": 0.18045285071881176,
+            "margin": 0.02439130331546996,
+            "threshold": 0.001242187281645744,
+            "dm_statistic": 6.414827170043117,
+            "dm_p_value": 1.4708559344174654e-10,
+            "dm_p_value_per_seed": {
+              "2021": 8.933638830706526e-11,
+              "2022": 1.9333519499501655e-10,
+              "2023": 1.9380585120395256e-10
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "dlinear_ltsf_budget",
+          "role": "paper baseline, rerun at LTSF-Linear budget",
+          "provenance": "local",
+          "scope": "paper-accurate for Zeng et al., 3 seeds",
+          "matching_basis": "same pipeline and seeds; 10 epochs, patience 3, type1",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_budget"
+          ],
+          "mse_mean": 0.17509589569623066,
+          "mse_std": 0.0004135814209788674,
+          "mae_mean": 0.2363135500164446,
+          "mae_std": 0.0008977240453981518,
+          "trainable_parameters": 64704,
+          "epochs_mean": 8.333333333333334,
+          "wall_clock_by_sweep": {
+            "sweep_budget": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.653570242668502
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1560615474033418,
+            "reference_mse": 0.17509589569623066,
+            "margin": 0.01903434829288886,
+            "threshold": 0.0008271628419577348,
+            "dm_statistic": 5.60009300941173,
+            "dm_p_value": 2.1965543822647173e-08,
+            "dm_p_value_per_seed": {
+              "2021": 1.7042213863821362e-08,
+              "2022": 1.9776412903672856e-08,
+              "2023": 3.47623149962643e-08
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "persistence",
+          "role": "indexing control (no training)",
+          "provenance": "local",
+          "scope": "deterministic, 1 run",
+          "matching_basis": "same pipeline; no parameters",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 1,
+          "expected_runs": 1,
+          "n_runs": 1,
+          "seeds": [
+            2021
+          ],
+          "sweeps": [
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.2591330175201024,
+          "mse_std": null,
+          "mae_mean": 0.25422027566299804,
+          "mae_std": null,
+          "trainable_parameters": 0,
+          "epochs_mean": 0.0,
+          "wall_clock_by_sweep": {
+            "sweep_table1_r2": {
+              "runs": 1,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.133055348515821
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1560615474033418,
+            "reference_mse": 0.2591330175201024,
+            "margin": 0.10307147011676063,
+            "threshold": 0.0002853603989892339,
+            "dm_statistic": 10.945522565912004,
+            "dm_p_value": 9.87425235197907e-28,
+            "dm_p_value_per_seed": {
+              "2021": 6.640280166898312e-28
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "mlp",
+          "role": "capacity-matched classical (Phase 1 plan)",
+          "provenance": "local",
+          "scope": "paper-accurate settings, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds; parameter count matched to QuLTSF",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_ablations"
+          ],
+          "mse_mean": 0.1600700368557393,
+          "mse_std": 0.00048107774019543793,
+          "mae_mean": 0.21484096972738542,
+          "mae_std": 0.0009529781533343904,
+          "trainable_parameters": 346063,
+          "epochs_mean": 55.666666666666664,
+          "wall_clock_by_sweep": {
+            "sweep_ablations": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 12.61111470603177
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1560615474033418,
+            "reference_mse": 0.1600700368557393,
+            "margin": 0.004008489452397512,
+            "threshold": 0.0009621554803908759,
+            "dm_statistic": 3.032003039625016,
+            "dm_p_value": 0.0024353260034028963,
+            "dm_p_value_per_seed": {
+              "2021": 0.005961798385906131,
+              "2022": 0.0004749400981389442,
+              "2023": 0.006443239713297193
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "rank_bottleneck",
+          "role": "QuLTSF skeleton without hidden layer",
+          "provenance": "local",
+          "scope": "paper-accurate settings, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds; rank 10",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_ablations"
+          ],
+          "mse_mean": 0.1748978410366245,
+          "mse_std": 0.00020845030357401746,
+          "mae_mean": 0.23565482556242892,
+          "mae_std": 0.0006297314927077562,
+          "trainable_parameters": 4426,
+          "epochs_mean": 58.333333333333336,
+          "wall_clock_by_sweep": {
+            "sweep_ablations": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 13.709232753688573
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1560615474033418,
+            "reference_mse": 0.1748978410366245,
+            "margin": 0.018836293633282708,
+            "threshold": 0.0004169006071480349,
+            "dm_statistic": 5.66406947628688,
+            "dm_p_value": 1.5173405735955604e-08,
+            "dm_p_value_per_seed": {
+              "2021": 1.093313306914432e-08,
+              "2022": 1.2565119552124079e-08,
+              "2023": 2.7653806795204297e-08
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "identity_circuit",
+          "role": "QuLTSF without circuit (C3 control)",
+          "provenance": "local",
+          "scope": "paper-accurate settings, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds; QuLTSF minus 90 circuit weights",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_ablations"
+          ],
+          "mse_mean": 0.15491897120053566,
+          "mse_std": 0.00017255034994155516,
+          "mae_mean": 0.20891791404542692,
+          "mae_std": 0.000241709183555545,
+          "trainable_parameters": 346144,
+          "epochs_mean": 69.0,
+          "wall_clock_by_sweep": {
+            "sweep_ablations": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 16.15654750602941
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1560615474033418,
+            "reference_mse": 0.15491897120053566,
+            "margin": -0.0011425762028061393,
+            "threshold": 0.00034510069988311033,
+            "dm_statistic": -4.314431619132631,
+            "dm_p_value": 1.6148632904451865e-05,
+            "dm_p_value_per_seed": {
+              "2021": 0.00030084850316974935,
+              "2022": 1.1685944120216902e-05,
+              "2023": 0.0001124014897922035
+            },
+            "verdict": "worse"
+          }
+        },
+        {
+          "system": "frozen_circuit",
+          "role": "QuLTSF with random frozen circuit (C3 control)",
+          "provenance": "local",
+          "scope": "paper-accurate settings, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_ablations"
+          ],
+          "mse_mean": 0.15628666802434102,
+          "mse_std": 0.00017538812481013977,
+          "mae_mean": 0.20986492944129123,
+          "mae_std": 0.0003112681212513953,
+          "trainable_parameters": 346144,
+          "epochs_mean": 69.0,
+          "wall_clock_by_sweep": {
+            "sweep_ablations": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 44.73867370048538
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1560615474033418,
+            "reference_mse": 0.15628666802434102,
+            "margin": 0.0002251206209992196,
+            "threshold": 0.00035077624962027954,
+            "dm_statistic": 1.6663691736718391,
+            "dm_p_value": 0.09566989654774635,
+            "dm_p_value_per_seed": {
+              "2021": 0.0642917989878189,
+              "2022": 0.009199097954015764,
+              "2023": 0.32123088478737577
+            },
+            "verdict": "tie"
+          }
+        },
+        {
+          "system": "identity_interferometer_merlin",
+          "role": "MerLin adaptation, no interferometer",
+          "provenance": "local",
+          "scope": "MerLin adaptation (simulation), 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds; 1001-state photonic embedding",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_merlin_control"
+          ],
+          "mse_mean": 0.15895527903871512,
+          "mse_std": 0.00016117844350025783,
+          "mae_mean": 0.21421416729019668,
+          "mae_std": 0.0003451934441503464,
+          "trainable_parameters": 338777,
+          "epochs_mean": 74.33333333333333,
+          "wall_clock_by_sweep": {
+            "sweep_merlin_control": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 6.429629223868768
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1560615474033418,
+            "reference_mse": 0.15895527903871512,
+            "margin": 0.00289373163537332,
+            "threshold": 0.00032235688700051567,
+            "dm_statistic": 2.877150929362932,
+            "dm_p_value": 0.004020967180293401,
+            "dm_p_value_per_seed": {
+              "2021": 0.004397336796048359,
+              "2022": 0.001968798917173483,
+              "2023": 0.007777341906069622
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "qultsf_merlin_e20",
+          "role": "MerLin adaptation, trained interferometer",
+          "provenance": "local",
+          "scope": "MerLin adaptation (simulation), reduced scope, 1 seed",
+          "matching_basis": "same pipeline; seed 2021 only; 20-epoch cap",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 1,
+          "expected_runs": 1,
+          "n_runs": 1,
+          "seeds": [
+            2021
+          ],
+          "sweeps": [
+            "sweep_merlin_trained_reduced"
+          ],
+          "mse_mean": 0.16166134235835142,
+          "mse_std": null,
+          "mae_mean": 0.21698305401867665,
+          "mae_std": null,
+          "trainable_parameters": 338959,
+          "epochs_mean": 20.0,
+          "wall_clock_by_sweep": {
+            "sweep_merlin_trained_reduced": {
+              "runs": 1,
+              "parallel_runs": 2,
+              "wall_clock_minutes_mean": 127.59284146782011
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1560615474033418,
+            "reference_mse": 0.16166134235835142,
+            "margin": 0.005599794955009618,
+            "threshold": 0.0002853603989892339,
+            "dm_statistic": 4.935346357956119,
+            "dm_p_value": 8.124446726991047e-07,
+            "dm_p_value_per_seed": {
+              "2021": 1.6266115635579812e-06
+            },
+            "verdict": "better"
+          }
+        }
+      ]
+    },
+    {
+      "T": 192,
+      "rows": [
+        {
+          "system": "qultsf (paper Table 1)",
+          "role": "paper method",
+          "provenance": "paper-reported",
+          "scope": "single seed (2021), test drop_last",
+          "mse": 0.199,
+          "mae": 0.253
+        },
+        {
+          "system": "linear (paper Table 1, quoted from Zeng et al.)",
+          "role": "paper baseline",
+          "provenance": "paper-reported",
+          "scope": "LTSF-Linear budget, single run, other pipeline",
+          "mse": 0.218,
+          "mae": 0.276
+        },
+        {
+          "system": "nlinear (paper Table 1, quoted from Zeng et al.)",
+          "role": "paper baseline",
+          "provenance": "paper-reported",
+          "scope": "LTSF-Linear budget, single run, other pipeline",
+          "mse": 0.225,
+          "mae": 0.269
+        },
+        {
+          "system": "dlinear (paper Table 1, quoted from Zeng et al.)",
+          "role": "paper baseline",
+          "provenance": "paper-reported",
+          "scope": "LTSF-Linear budget, single run, other pipeline",
+          "mse": 0.22,
+          "mae": 0.282
+        },
+        {
+          "system": "qultsf",
+          "role": "paper method (reproduced)",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "reference",
+          "commensurability": "REFERENCE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_leftovers",
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.1986815286502821,
+          "mse_std": 0.0003034551319732898,
+          "mae_mean": 0.25195221111139016,
+          "mae_std": 0.0008200849253732556,
+          "trainable_parameters": 347290,
+          "epochs_mean": 53.333333333333336,
+          "wall_clock_by_sweep": {
+            "sweep_table1_leftovers": {
+              "runs": 1,
+              "parallel_runs": 4,
+              "wall_clock_minutes_mean": 84.58239601445385
+            },
+            "sweep_table1_r2": {
+              "runs": 2,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 83.43849972468645
+            }
+          }
+        },
+        {
+          "system": "linear",
+          "role": "paper baseline, rerun",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.21595593342270156,
+          "mse_std": 0.0007020152660938901,
+          "mae_mean": 0.27487012200635585,
+          "mae_std": 0.0013962600633764016,
+          "trainable_parameters": 64704,
+          "epochs_mean": 35.0,
+          "wall_clock_by_sweep": {
+            "sweep_table1_r2": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 13.697189510549006
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1986815286502821,
+            "reference_mse": 0.21595593342270156,
+            "margin": 0.017274404772419455,
+            "threshold": 0.0014040305321877803,
+            "dm_statistic": 3.7191089911695787,
+            "dm_p_value": 0.00020098343772460267,
+            "dm_p_value_per_seed": {
+              "2021": 0.00020485345451288562,
+              "2022": 0.0003028967708906094,
+              "2023": 0.00013144780282571162
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "nlinear",
+          "role": "paper baseline, rerun",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.21848202026003605,
+          "mse_std": 0.0002387633065290158,
+          "mae_mean": 0.2616637299988372,
+          "mae_std": 0.00021763555108819416,
+          "trainable_parameters": 64704,
+          "epochs_mean": 62.666666666666664,
+          "wall_clock_by_sweep": {
+            "sweep_table1_r2": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 22.529346216987403
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1986815286502821,
+            "reference_mse": 0.21848202026003605,
+            "margin": 0.019800491609753945,
+            "threshold": 0.0006069102639465795,
+            "dm_statistic": 3.782553298265711,
+            "dm_p_value": 0.00015610224631153855,
+            "dm_p_value_per_seed": {
+              "2021": 0.00021635272429736265,
+              "2022": 0.0001368857788927745,
+              "2023": 0.00012852564083741798
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "dlinear",
+          "role": "paper baseline, rerun",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_leftovers",
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.21657080995948955,
+          "mse_std": 0.0003130852323817754,
+          "mae_mean": 0.27552315893716695,
+          "mae_std": 0.0012162019224930972,
+          "trainable_parameters": 129408,
+          "epochs_mean": 33.0,
+          "wall_clock_by_sweep": {
+            "sweep_table1_leftovers": {
+              "runs": 1,
+              "parallel_runs": 4,
+              "wall_clock_minutes_mean": 2.243758707260713
+            },
+            "sweep_table1_r2": {
+              "runs": 2,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 7.153638115517484
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1986815286502821,
+            "reference_mse": 0.21657080995948955,
+            "margin": 0.017889281309207444,
+            "threshold": 0.0006261704647635508,
+            "dm_statistic": 3.681912144921121,
+            "dm_p_value": 0.00023266927889495728,
+            "dm_p_value_per_seed": {
+              "2021": 0.00020659353109909467,
+              "2022": 0.0003143099867136829,
+              "2023": 0.000196564614105155
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "linear_ltsf_budget",
+          "role": "paper baseline, rerun at LTSF-Linear budget",
+          "provenance": "local",
+          "scope": "paper-accurate for Zeng et al., 3 seeds",
+          "matching_basis": "same pipeline and seeds; 10 epochs, patience 3, type1",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_budget"
+          ],
+          "mse_mean": 0.21796851124405234,
+          "mse_std": 0.0012578118992603888,
+          "mae_mean": 0.27618319717213397,
+          "mae_std": 0.0027846733767227716,
+          "trainable_parameters": 64704,
+          "epochs_mean": 8.0,
+          "wall_clock_by_sweep": {
+            "sweep_budget": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.4630497505293331
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1986815286502821,
+            "reference_mse": 0.21796851124405234,
+            "margin": 0.019286982593770235,
+            "threshold": 0.0025156237985207775,
+            "dm_statistic": 3.9864339247838485,
+            "dm_p_value": 6.753463315865156e-05,
+            "dm_p_value_per_seed": {
+              "2021": 0.0001600924462888631,
+              "2022": 2.317057886719351e-05,
+              "2023": 9.385748660394851e-05
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "nlinear_ltsf_budget",
+          "role": "paper baseline, rerun at LTSF-Linear budget",
+          "provenance": "local",
+          "scope": "paper-accurate for Zeng et al., 3 seeds",
+          "matching_basis": "same pipeline and seeds; 10 epochs, patience 3, type1",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_budget"
+          ],
+          "mse_mean": 0.22375293753668554,
+          "mse_std": 0.0011936498466211798,
+          "mae_mean": 0.2670010123936409,
+          "mae_std": 0.0011223924123139088,
+          "trainable_parameters": 64704,
+          "epochs_mean": 10.0,
+          "wall_clock_by_sweep": {
+            "sweep_budget": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.5986778920361151
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1986815286502821,
+            "reference_mse": 0.22375293753668554,
+            "margin": 0.02507140888640344,
+            "threshold": 0.0023872996932423596,
+            "dm_statistic": 4.534551348860874,
+            "dm_p_value": 5.837490566507798e-06,
+            "dm_p_value_per_seed": {
+              "2021": 4.74843832935295e-06,
+              "2022": 6.904637039777932e-06,
+              "2023": 6.233405739968654e-06
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "dlinear_ltsf_budget",
+          "role": "paper baseline, rerun at LTSF-Linear budget",
+          "provenance": "local",
+          "scope": "paper-accurate for Zeng et al., 3 seeds",
+          "matching_basis": "same pipeline and seeds; 10 epochs, patience 3, type1",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_budget"
+          ],
+          "mse_mean": 0.216914800390647,
+          "mse_std": 0.0012335558051681124,
+          "mae_mean": 0.275398608750741,
+          "mae_std": 0.002460107665384341,
+          "trainable_parameters": 129408,
+          "epochs_mean": 7.333333333333333,
+          "wall_clock_by_sweep": {
+            "sweep_budget": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.5798687137534013
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1986815286502821,
+            "reference_mse": 0.216914800390647,
+            "margin": 0.018233271740364904,
+            "threshold": 0.002467111610336225,
+            "dm_statistic": 3.7936652499908576,
+            "dm_p_value": 0.0001492852338747159,
+            "dm_p_value_per_seed": {
+              "2021": 7.356770867801476e-05,
+              "2022": 0.0003258564637802727,
+              "2023": 0.00013967332111866797
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "persistence",
+          "role": "indexing control (no training)",
+          "provenance": "local",
+          "scope": "deterministic, 1 run",
+          "matching_basis": "same pipeline; no parameters",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 1,
+          "expected_runs": 1,
+          "n_runs": 1,
+          "seeds": [
+            2021
+          ],
+          "sweeps": [
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.3092152809958299,
+          "mse_std": null,
+          "mae_mean": 0.2917442113576314,
+          "mae_std": null,
+          "trainable_parameters": 0,
+          "epochs_mean": 0.0,
+          "wall_clock_by_sweep": {
+            "sweep_table1_r2": {
+              "runs": 1,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.13280456049833447
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1986815286502821,
+            "reference_mse": 0.3092152809958299,
+            "margin": 0.1105337523455478,
+            "threshold": 0.0006069102639465795,
+            "dm_statistic": 9.870848828285249,
+            "dm_p_value": 7.027611675352828e-23,
+            "dm_p_value_per_seed": {
+              "2021": 1.1091182316266604e-22
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "identity_interferometer_merlin",
+          "role": "MerLin adaptation, no interferometer",
+          "provenance": "local",
+          "scope": "MerLin adaptation (simulation), 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds; 1001-state photonic embedding",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_merlin_control"
+          ],
+          "mse_mean": 0.20149546706790522,
+          "mse_std": 0.00025394643933550603,
+          "mae_mean": 0.25748360095944295,
+          "mae_std": 0.00030939509327853736,
+          "trainable_parameters": 340217,
+          "epochs_mean": 67.66666666666667,
+          "wall_clock_by_sweep": {
+            "sweep_merlin_control": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 6.043277100507273
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.1986815286502821,
+            "reference_mse": 0.20149546706790522,
+            "margin": 0.0028139384176231186,
+            "threshold": 0.0006069102639465795,
+            "dm_statistic": 3.2983421147986016,
+            "dm_p_value": 0.000975858219947509,
+            "dm_p_value_per_seed": {
+              "2021": 0.0015967998723662236,
+              "2022": 0.0003379271679138415,
+              "2023": 0.002001718698369368
+            },
+            "verdict": "better"
+          }
+        }
+      ]
+    },
+    {
+      "T": 336,
+      "rows": [
+        {
+          "system": "qultsf (paper Table 1)",
+          "role": "paper method",
+          "provenance": "paper-reported",
+          "scope": "single seed (2021), test drop_last",
+          "mse": 0.248,
+          "mae": 0.296
+        },
+        {
+          "system": "linear (paper Table 1, quoted from Zeng et al.)",
+          "role": "paper baseline",
+          "provenance": "paper-reported",
+          "scope": "LTSF-Linear budget, single run, other pipeline",
+          "mse": 0.262,
+          "mae": 0.312
+        },
+        {
+          "system": "nlinear (paper Table 1, quoted from Zeng et al.)",
+          "role": "paper baseline",
+          "provenance": "paper-reported",
+          "scope": "LTSF-Linear budget, single run, other pipeline",
+          "mse": 0.271,
+          "mae": 0.301
+        },
+        {
+          "system": "dlinear (paper Table 1, quoted from Zeng et al.)",
+          "role": "paper baseline",
+          "provenance": "paper-reported",
+          "scope": "LTSF-Linear budget, single run, other pipeline",
+          "mse": 0.265,
+          "mae": 0.319
+        },
+        {
+          "system": "qultsf",
+          "role": "paper method (reproduced)",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "reference",
+          "commensurability": "REFERENCE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_leftovers",
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.24792263408079407,
+          "mse_std": 0.0005122797501790602,
+          "mae_mean": 0.29591550437414255,
+          "mae_std": 0.0012465171189633038,
+          "trainable_parameters": 348874,
+          "epochs_mean": 47.0,
+          "wall_clock_by_sweep": {
+            "sweep_table1_leftovers": {
+              "runs": 1,
+              "parallel_runs": 4,
+              "wall_clock_minutes_mean": 74.56940462131364
+            },
+            "sweep_table1_r2": {
+              "runs": 2,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 75.36437739354248
+            }
+          }
+        },
+        {
+          "system": "linear",
+          "role": "paper baseline, rerun",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.26326100462409335,
+          "mse_std": 0.0014892165289964272,
+          "mae_mean": 0.31512870041680713,
+          "mae_std": 0.0023984546274417175,
+          "trainable_parameters": 113232,
+          "epochs_mean": 33.666666666666664,
+          "wall_clock_by_sweep": {
+            "sweep_table1_r2": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 12.609319882917529
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.24792263408079407,
+            "reference_mse": 0.26326100462409335,
+            "margin": 0.015338370543299285,
+            "threshold": 0.0029784330579928544,
+            "dm_statistic": 2.6121787741346165,
+            "dm_p_value": 0.009009901710780208,
+            "dm_p_value_per_seed": {
+              "2021": 0.008932651083045988,
+              "2022": 0.015102621430382565,
+              "2023": 0.005916445484990082
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "nlinear",
+          "role": "paper baseline, rerun",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_leftovers",
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.2658638845439191,
+          "mse_std": 0.0003032197456883002,
+          "mae_mean": 0.29630528629720476,
+          "mae_std": 0.00031451942531642474,
+          "trainable_parameters": 113232,
+          "epochs_mean": 48.0,
+          "wall_clock_by_sweep": {
+            "sweep_table1_leftovers": {
+              "runs": 1,
+              "parallel_runs": 4,
+              "wall_clock_minutes_mean": 9.894395383959637
+            },
+            "sweep_table1_r2": {
+              "runs": 2,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 16.038247300277
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.24792263408079407,
+            "reference_mse": 0.2658638845439191,
+            "margin": 0.017941250463125058,
+            "threshold": 0.0010245595003581204,
+            "dm_statistic": 2.378522865169135,
+            "dm_p_value": 0.017400454874491763,
+            "dm_p_value_per_seed": {
+              "2021": 0.011307489275444157,
+              "2022": 0.023754961814039105,
+              "2023": 0.019102392215388522
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "dlinear",
+          "role": "paper baseline, rerun",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_leftovers",
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.26336733520735445,
+          "mse_std": 0.0020066965786388682,
+          "mae_mean": 0.3162564227669316,
+          "mae_std": 0.003199106420268661,
+          "trainable_parameters": 226464,
+          "epochs_mean": 26.666666666666668,
+          "wall_clock_by_sweep": {
+            "sweep_table1_leftovers": {
+              "runs": 1,
+              "parallel_runs": 4,
+              "wall_clock_minutes_mean": 1.5020151918365932
+            },
+            "sweep_table1_r2": {
+              "runs": 2,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 7.099554901799032
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.24792263408079407,
+            "reference_mse": 0.26336733520735445,
+            "margin": 0.015444701126560378,
+            "threshold": 0.0040133931572777365,
+            "dm_statistic": 2.705335217473126,
+            "dm_p_value": 0.006834881963329208,
+            "dm_p_value_per_seed": {
+              "2021": 0.005685330137371713,
+              "2022": 0.018541564408906187,
+              "2023": 0.0036257975913875666
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "linear_ltsf_budget",
+          "role": "paper baseline, rerun at LTSF-Linear budget",
+          "provenance": "local",
+          "scope": "paper-accurate for Zeng et al., 3 seeds",
+          "matching_basis": "same pipeline and seeds; 10 epochs, patience 3, type1",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_budget"
+          ],
+          "mse_mean": 0.26305041222356046,
+          "mse_std": 0.0007311596928994631,
+          "mae_mean": 0.3132044100101796,
+          "mae_std": 0.0016621589033238256,
+          "trainable_parameters": 113232,
+          "epochs_mean": 7.0,
+          "wall_clock_by_sweep": {
+            "sweep_budget": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.4139109337831744
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.24792263408079407,
+            "reference_mse": 0.26305041222356046,
+            "margin": 0.01512777814276639,
+            "threshold": 0.0014623193857989261,
+            "dm_statistic": 2.6371225476569946,
+            "dm_p_value": 0.00837393552454731,
+            "dm_p_value_per_seed": {
+              "2021": 0.0074124501018635125,
+              "2022": 0.00667747098325592,
+              "2023": 0.012283692007325034
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "nlinear_ltsf_budget",
+          "role": "paper baseline, rerun at LTSF-Linear budget",
+          "provenance": "local",
+          "scope": "paper-accurate for Zeng et al., 3 seeds",
+          "matching_basis": "same pipeline and seeds; 10 epochs, patience 3, type1",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_budget"
+          ],
+          "mse_mean": 0.27016791504178045,
+          "mse_std": 0.00031203894575316236,
+          "mae_mean": 0.30049353498652775,
+          "mae_std": 0.0002443284235627202,
+          "trainable_parameters": 113232,
+          "epochs_mean": 10.0,
+          "wall_clock_by_sweep": {
+            "sweep_budget": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.6015963360848319
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.24792263408079407,
+            "reference_mse": 0.27016791504178045,
+            "margin": 0.02224528096098638,
+            "threshold": 0.0010245595003581204,
+            "dm_statistic": 2.81695066876082,
+            "dm_p_value": 0.004857511002544165,
+            "dm_p_value_per_seed": {
+              "2021": 0.002793258308565816,
+              "2022": 0.006488017212518735,
+              "2023": 0.0061343053401655325
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "dlinear_ltsf_budget",
+          "role": "paper baseline, rerun at LTSF-Linear budget",
+          "provenance": "local",
+          "scope": "paper-accurate for Zeng et al., 3 seeds",
+          "matching_basis": "same pipeline and seeds; 10 epochs, patience 3, type1",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_budget"
+          ],
+          "mse_mean": 0.26244018660656904,
+          "mse_std": 0.0011245425336107212,
+          "mae_mean": 0.3128729270556752,
+          "mae_std": 0.0018691700443653656,
+          "trainable_parameters": 226464,
+          "epochs_mean": 6.333333333333333,
+          "wall_clock_by_sweep": {
+            "sweep_budget": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.4976092319030108
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.24792263408079407,
+            "reference_mse": 0.26244018660656904,
+            "margin": 0.014517552525774968,
+            "threshold": 0.0022490850672214424,
+            "dm_statistic": 2.5366169182686167,
+            "dm_p_value": 0.011207711777088122,
+            "dm_p_value_per_seed": {
+              "2021": 0.004480288278466705,
+              "2022": 0.022542207393303464,
+              "2023": 0.015215194194142712
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "persistence",
+          "role": "indexing control (no training)",
+          "provenance": "local",
+          "scope": "deterministic, 1 run",
+          "matching_basis": "same pipeline; no parameters",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 1,
+          "expected_runs": 1,
+          "n_runs": 1,
+          "seeds": [
+            2021
+          ],
+          "sweeps": [
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.3764121604534796,
+          "mse_std": null,
+          "mae_mean": 0.3377075919761085,
+          "mae_std": null,
+          "trainable_parameters": 0,
+          "epochs_mean": 0.0,
+          "wall_clock_by_sweep": {
+            "sweep_table1_r2": {
+              "runs": 1,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.12939100973308088
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.24792263408079407,
+            "reference_mse": 0.3764121604534796,
+            "margin": 0.12848952637268551,
+            "threshold": 0.0010245595003581204,
+            "dm_statistic": 9.73293779110055,
+            "dm_p_value": 2.727437253841773e-22,
+            "dm_p_value_per_seed": {
+              "2021": 1.507759601603924e-22
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "identity_interferometer_merlin",
+          "role": "MerLin adaptation, no interferometer",
+          "provenance": "local",
+          "scope": "MerLin adaptation (simulation), 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds; 1001-state photonic embedding",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_merlin_control"
+          ],
+          "mse_mean": 0.24892139745456765,
+          "mse_std": 0.000491147882481371,
+          "mae_mean": 0.2977534554116603,
+          "mae_std": 0.0009405938521121418,
+          "trainable_parameters": 342377,
+          "epochs_mean": 57.0,
+          "wall_clock_by_sweep": {
+            "sweep_merlin_control": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 5.025488689901411
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.24792263408079407,
+            "reference_mse": 0.24892139745456765,
+            "margin": 0.0009987633737735813,
+            "threshold": 0.0010245595003581204,
+            "dm_statistic": 1.0647816389869496,
+            "dm_p_value": 0.28699995321543115,
+            "dm_p_value_per_seed": {
+              "2021": 0.03154527610038063,
+              "2022": 0.7780068459331158,
+              "2023": 0.46320922110117163
+            },
+            "verdict": "tie"
+          }
+        }
+      ]
+    },
+    {
+      "T": 720,
+      "rows": [
+        {
+          "system": "qultsf (paper Table 1)",
+          "role": "paper method",
+          "provenance": "paper-reported",
+          "scope": "single seed (2021), test drop_last",
+          "mse": 0.315,
+          "mae": 0.346
+        },
+        {
+          "system": "linear (paper Table 1, quoted from Zeng et al.)",
+          "role": "paper baseline",
+          "provenance": "paper-reported",
+          "scope": "LTSF-Linear budget, single run, other pipeline",
+          "mse": 0.326,
+          "mae": 0.365
+        },
+        {
+          "system": "nlinear (paper Table 1, quoted from Zeng et al.)",
+          "role": "paper baseline",
+          "provenance": "paper-reported",
+          "scope": "LTSF-Linear budget, single run, other pipeline",
+          "mse": 0.338,
+          "mae": 0.348
+        },
+        {
+          "system": "dlinear (paper Table 1, quoted from Zeng et al.)",
+          "role": "paper baseline",
+          "provenance": "paper-reported",
+          "scope": "LTSF-Linear budget, single run, other pipeline",
+          "mse": 0.323,
+          "mae": 0.362
+        },
+        {
+          "system": "qultsf",
+          "role": "paper method (reproduced)",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "reference",
+          "commensurability": "REFERENCE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_leftovers",
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.31629273746026665,
+          "mse_std": 0.00217740962615097,
+          "mae_mean": 0.3493819451326319,
+          "mae_std": 0.004375860540415026,
+          "trainable_parameters": 353098,
+          "epochs_mean": 43.666666666666664,
+          "wall_clock_by_sweep": {
+            "sweep_table1_leftovers": {
+              "runs": 1,
+              "parallel_runs": 4,
+              "wall_clock_minutes_mean": 79.7498895959463
+            },
+            "sweep_table1_r2": {
+              "runs": 2,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 65.02886661119992
+            }
+          }
+        },
+        {
+          "system": "linear",
+          "role": "paper baseline, rerun",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.32552211492807,
+          "mse_std": 0.0008440089975003853,
+          "mae_mean": 0.3655114436018163,
+          "mae_std": 0.0011369298275820262,
+          "trainable_parameters": 242640,
+          "epochs_mean": 31.333333333333332,
+          "wall_clock_by_sweep": {
+            "sweep_table1_r2": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 11.346531558223068
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.31629273746026665,
+            "reference_mse": 0.32552211492807,
+            "margin": 0.009229377467803335,
+            "threshold": 0.00435481925230194,
+            "dm_statistic": 1.5123394925802174,
+            "dm_p_value": 0.13047970190870126,
+            "dm_p_value_per_seed": {
+              "2021": 0.1288917251833772,
+              "2022": 0.24628566823101575,
+              "2023": 0.08389491395545753
+            },
+            "verdict": "tie"
+          }
+        },
+        {
+          "system": "nlinear",
+          "role": "paper baseline, rerun",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_leftovers",
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.33455368349882786,
+          "mse_std": 0.00016710103203091732,
+          "mae_mean": 0.3445005452114734,
+          "mae_std": 0.00015550260280093462,
+          "trainable_parameters": 242640,
+          "epochs_mean": 54.666666666666664,
+          "wall_clock_by_sweep": {
+            "sweep_table1_leftovers": {
+              "runs": 1,
+              "parallel_runs": 4,
+              "wall_clock_minutes_mean": 5.915398119436577
+            },
+            "sweep_table1_r2": {
+              "runs": 2,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 15.01734678496529
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.31629273746026665,
+            "reference_mse": 0.33455368349882786,
+            "margin": 0.01826094603856121,
+            "threshold": 0.00435481925230194,
+            "dm_statistic": 1.6647309556759802,
+            "dm_p_value": 0.09599834938914865,
+            "dm_p_value_per_seed": {
+              "2021": 0.06980757864283743,
+              "2022": 0.19801863866086686,
+              "2023": 0.05155678815118329
+            },
+            "verdict": "tie"
+          }
+        },
+        {
+          "system": "dlinear",
+          "role": "paper baseline, rerun",
+          "provenance": "local",
+          "scope": "paper-accurate, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_table1_leftovers",
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.3257523864143686,
+          "mse_std": 0.00044713415384800825,
+          "mae_mean": 0.3657583182839584,
+          "mae_std": 0.00047024942169400486,
+          "trainable_parameters": 485280,
+          "epochs_mean": 28.0,
+          "wall_clock_by_sweep": {
+            "sweep_table1_leftovers": {
+              "runs": 1,
+              "parallel_runs": 4,
+              "wall_clock_minutes_mean": 1.4649970445161065
+            },
+            "sweep_table1_r2": {
+              "runs": 2,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 7.2051897329899175
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.31629273746026665,
+            "reference_mse": 0.3257523864143686,
+            "margin": 0.009459648954101951,
+            "threshold": 0.00435481925230194,
+            "dm_statistic": 1.5464091586772821,
+            "dm_p_value": 0.12203801098399955,
+            "dm_p_value_per_seed": {
+              "2021": 0.09608192160219108,
+              "2022": 0.20603079842342287,
+              "2023": 0.10853150840000005
+            },
+            "verdict": "tie"
+          }
+        },
+        {
+          "system": "linear_ltsf_budget",
+          "role": "paper baseline, rerun at LTSF-Linear budget",
+          "provenance": "local",
+          "scope": "paper-accurate for Zeng et al., 3 seeds",
+          "matching_basis": "same pipeline and seeds; 10 epochs, patience 3, type1",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_budget"
+          ],
+          "mse_mean": 0.3260202668520688,
+          "mse_std": 0.0005547816123307584,
+          "mae_mean": 0.3645932833602881,
+          "mae_std": 0.0010105883906331404,
+          "trainable_parameters": 242640,
+          "epochs_mean": 8.0,
+          "wall_clock_by_sweep": {
+            "sweep_budget": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.45218869140112977
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.31629273746026665,
+            "reference_mse": 0.3260202668520688,
+            "margin": 0.009727529391802159,
+            "threshold": 0.00435481925230194,
+            "dm_statistic": 1.6366768606865352,
+            "dm_p_value": 0.10173005369209275,
+            "dm_p_value_per_seed": {
+              "2021": 0.08070571270516888,
+              "2022": 0.23777105614685412,
+              "2023": 0.06676033108218603
+            },
+            "verdict": "tie"
+          }
+        },
+        {
+          "system": "nlinear_ltsf_budget",
+          "role": "paper baseline, rerun at LTSF-Linear budget",
+          "provenance": "local",
+          "scope": "paper-accurate for Zeng et al., 3 seeds",
+          "matching_basis": "same pipeline and seeds; 10 epochs, patience 3, type1",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_budget"
+          ],
+          "mse_mean": 0.33850229787043284,
+          "mse_std": 0.00028541756429685295,
+          "mae_mean": 0.34821993159946296,
+          "mae_std": 0.0002658651563307677,
+          "trainable_parameters": 242640,
+          "epochs_mean": 10.0,
+          "wall_clock_by_sweep": {
+            "sweep_budget": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.6064849377376959
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.31629273746026665,
+            "reference_mse": 0.33850229787043284,
+            "margin": 0.022209560410166196,
+            "threshold": 0.00435481925230194,
+            "dm_statistic": 1.9791480149027167,
+            "dm_p_value": 0.04782723337825348,
+            "dm_p_value_per_seed": {
+              "2021": 0.032542951476953554,
+              "2022": 0.10791202164128129,
+              "2023": 0.02485108534460231
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "dlinear_ltsf_budget",
+          "role": "paper baseline, rerun at LTSF-Linear budget",
+          "provenance": "local",
+          "scope": "paper-accurate for Zeng et al., 3 seeds",
+          "matching_basis": "same pipeline and seeds; 10 epochs, patience 3, type1",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_budget"
+          ],
+          "mse_mean": 0.3272011382743956,
+          "mse_std": 0.004229650439475333,
+          "mae_mean": 0.3671801068273302,
+          "mae_std": 0.005910630911604634,
+          "trainable_parameters": 485280,
+          "epochs_mean": 7.0,
+          "wall_clock_by_sweep": {
+            "sweep_budget": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.48319012374979337
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.31629273746026665,
+            "reference_mse": 0.3272011382743956,
+            "margin": 0.010908400814128971,
+            "threshold": 0.008459300878950665,
+            "dm_statistic": 1.7286266568903912,
+            "dm_p_value": 0.08390737078985722,
+            "dm_p_value_per_seed": {
+              "2021": 0.03594034316907071,
+              "2022": 0.27464434869902626,
+              "2023": 0.10251463137022926
+            },
+            "verdict": "tie"
+          }
+        },
+        {
+          "system": "persistence",
+          "role": "indexing control (no training)",
+          "provenance": "local",
+          "scope": "deterministic, 1 run",
+          "matching_basis": "same pipeline; no parameters",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 1,
+          "expected_runs": 1,
+          "n_runs": 1,
+          "seeds": [
+            2021
+          ],
+          "sweeps": [
+            "sweep_table1_r2"
+          ],
+          "mse_mean": 0.4651866020032915,
+          "mse_std": null,
+          "mae_mean": 0.3935038634556764,
+          "mae_std": null,
+          "trainable_parameters": 0,
+          "epochs_mean": 0.0,
+          "wall_clock_by_sweep": {
+            "sweep_table1_r2": {
+              "runs": 1,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 0.1677242202529063
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.31629273746026665,
+            "reference_mse": 0.4651866020032915,
+            "margin": 0.14889386454302483,
+            "threshold": 0.00435481925230194,
+            "dm_statistic": 6.712932528652384,
+            "dm_p_value": 2.012976350556391e-11,
+            "dm_p_value_per_seed": {
+              "2021": 8.819464701481525e-12
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "mlp",
+          "role": "capacity-matched classical (Phase 1 plan)",
+          "provenance": "local",
+          "scope": "paper-accurate settings, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds; parameter count matched to QuLTSF",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_ablations"
+          ],
+          "mse_mean": 0.3251894726191551,
+          "mse_std": 0.003279110839276949,
+          "mae_mean": 0.3552382410896328,
+          "mae_std": 0.006314933744889731,
+          "trainable_parameters": 352701,
+          "epochs_mean": 48.0,
+          "wall_clock_by_sweep": {
+            "sweep_ablations": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 10.736396198039357
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.31629273746026665,
+            "reference_mse": 0.3251894726191551,
+            "margin": 0.008896735158888447,
+            "threshold": 0.006558221678553898,
+            "dm_statistic": 3.3603161933486865,
+            "dm_p_value": 0.0007815003302921512,
+            "dm_p_value_per_seed": {
+              "2021": 0.0004166776691446088,
+              "2022": 0.2619273416755586,
+              "2023": 0.00025886256316808584
+            },
+            "verdict": "better"
+          }
+        },
+        {
+          "system": "rank_bottleneck",
+          "role": "QuLTSF skeleton without hidden layer",
+          "provenance": "local",
+          "scope": "paper-accurate settings, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds; rank 10",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_ablations"
+          ],
+          "mse_mean": 0.32547448632780424,
+          "mse_std": 0.0002823530037167427,
+          "mae_mean": 0.3644705887163748,
+          "mae_std": 0.00036554748427525713,
+          "trainable_parameters": 11290,
+          "epochs_mean": 56.0,
+          "wall_clock_by_sweep": {
+            "sweep_ablations": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 12.49304372954648
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.31629273746026665,
+            "reference_mse": 0.32547448632780424,
+            "margin": 0.009181748867537587,
+            "threshold": 0.00435481925230194,
+            "dm_statistic": 1.660958309086542,
+            "dm_p_value": 0.09675374680398945,
+            "dm_p_value_per_seed": {
+              "2021": 0.08609029070526861,
+              "2022": 0.2148623954664173,
+              "2023": 0.05519212275751156
+            },
+            "verdict": "tie"
+          }
+        },
+        {
+          "system": "identity_circuit",
+          "role": "QuLTSF without circuit (C3 control)",
+          "provenance": "local",
+          "scope": "paper-accurate settings, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds; QuLTSF minus 90 circuit weights",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_ablations"
+          ],
+          "mse_mean": 0.3144817051271859,
+          "mse_std": 0.0012679080176500794,
+          "mae_mean": 0.34790388594213945,
+          "mae_std": 0.0032982100054864834,
+          "trainable_parameters": 353008,
+          "epochs_mean": 42.0,
+          "wall_clock_by_sweep": {
+            "sweep_ablations": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 9.461400713246418
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.31629273746026665,
+            "reference_mse": 0.3144817051271859,
+            "margin": -0.0018110323330807754,
+            "threshold": 0.00435481925230194,
+            "dm_statistic": -3.5507777523517925,
+            "dm_p_value": 0.0003858926081717483,
+            "dm_p_value_per_seed": {
+              "2021": 0.011150087069919769,
+              "2022": 0.0009051549740740538,
+              "2023": 0.00030654811361237615
+            },
+            "verdict": "tie"
+          }
+        },
+        {
+          "system": "frozen_circuit",
+          "role": "QuLTSF with random frozen circuit (C3 control)",
+          "provenance": "local",
+          "scope": "paper-accurate settings, 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_ablations"
+          ],
+          "mse_mean": 0.3163935341224248,
+          "mse_std": 0.002184659055644878,
+          "mae_mean": 0.3494133226815448,
+          "mae_std": 0.004501043627430258,
+          "trainable_parameters": 353008,
+          "epochs_mean": 43.666666666666664,
+          "wall_clock_by_sweep": {
+            "sweep_ablations": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 27.55018275970231
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.31629273746026665,
+            "reference_mse": 0.3163935341224248,
+            "margin": 0.00010079666215817573,
+            "threshold": 0.004369318111289756,
+            "dm_statistic": 2.2475786922425773,
+            "dm_p_value": 0.02462517353655198,
+            "dm_p_value_per_seed": {
+              "2021": 0.1684282502316941,
+              "2022": 0.02902536550821963,
+              "2023": 0.4796853108004907
+            },
+            "verdict": "tie"
+          }
+        },
+        {
+          "system": "identity_interferometer_merlin",
+          "role": "MerLin adaptation, no interferometer",
+          "provenance": "local",
+          "scope": "MerLin adaptation (simulation), 3 seeds",
+          "matching_basis": "same pipeline, budget, seeds; 1001-state photonic embedding",
+          "commensurability": "COMMENSURABLE",
+          "successful_runs": 3,
+          "expected_runs": 3,
+          "n_runs": 3,
+          "seeds": [
+            2021,
+            2022,
+            2023
+          ],
+          "sweeps": [
+            "sweep_merlin_control"
+          ],
+          "mse_mean": 0.3202544657032225,
+          "mse_std": 0.003365999238679842,
+          "mae_mean": 0.3550314558961312,
+          "mae_std": 0.005720535614993624,
+          "trainable_parameters": 348137,
+          "epochs_mean": 44.0,
+          "wall_clock_by_sweep": {
+            "sweep_merlin_control": {
+              "runs": 3,
+              "parallel_runs": 6,
+              "wall_clock_minutes_mean": 4.0588411246788585
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.31629273746026665,
+            "reference_mse": 0.3202544657032225,
+            "margin": 0.003961728242955875,
+            "threshold": 0.006731998477359684,
+            "dm_statistic": 3.410006467724264,
+            "dm_p_value": 0.000652228133654625,
+            "dm_p_value_per_seed": {
+              "2021": 0.06617562087708077,
+              "2022": 0.9746945236325216,
+              "2023": 0.0004487530225160238
+            },
+            "verdict": "tie"
+          }
+        },
+        {
+          "system": "qultsf_merlin_e20",
+          "role": "MerLin adaptation, trained interferometer",
+          "provenance": "local",
+          "scope": "MerLin adaptation (simulation), reduced scope, 1 seed",
+          "matching_basis": "same pipeline; seed 2021 only; 20-epoch cap",
+          "commensurability": "PARTIALLY_COMMENSURABLE",
+          "successful_runs": 1,
+          "expected_runs": 1,
+          "n_runs": 1,
+          "seeds": [
+            2021
+          ],
+          "sweeps": [
+            "sweep_merlin_trained_reduced"
+          ],
+          "mse_mean": 0.3252325063562079,
+          "mse_std": null,
+          "mae_mean": 0.36311028095194525,
+          "mae_std": null,
+          "trainable_parameters": 348319,
+          "epochs_mean": 20.0,
+          "wall_clock_by_sweep": {
+            "sweep_merlin_trained_reduced": {
+              "runs": 1,
+              "parallel_runs": 2,
+              "wall_clock_minutes_mean": 124.75530425428103
+            }
+          },
+          "qultsf_vs_system": {
+            "quantum_mse": 0.31629273746026665,
+            "reference_mse": 0.3252325063562079,
+            "margin": 0.008939768895941225,
+            "threshold": 0.00435481925230194,
+            "dm_statistic": 4.185505384647935,
+            "dm_p_value": 2.870123883362314e-05,
+            "dm_p_value_per_seed": {
+              "2021": 0.0002221331162883979
+            },
+            "verdict": "better"
+          }
+        }
+      ]
+    }
+  ],
+  "plan_coverage": {
+    "all_planned_runs_completed": true,
+    "plans": [
+      {
+        "plan": "configs/sweeps/table1.json",
+        "expected_runs": 52,
+        "observed_runs": 52,
+        "missing": [],
+        "sweeps": {
+          "sweep_table1_leftovers": 10,
+          "sweep_table1_r2": 42
+        },
+        "sweep_states": {
+          "sweep_table1_leftovers": "COMPLETED",
+          "sweep_table1_r2": "RUNNING"
+        },
+        "all_planned_runs_completed": true,
+        "sweep_label": "PARTIAL SWEEP",
+        "unfinished_sweeps": [
+          "sweep_table1_r2"
+        ]
+      },
+      {
+        "plan": "configs/sweeps/budget.json",
+        "expected_runs": 36,
+        "observed_runs": 36,
+        "missing": [],
+        "sweeps": {
+          "sweep_budget": 36
+        },
+        "sweep_states": {
+          "sweep_budget": "COMPLETED"
+        },
+        "all_planned_runs_completed": true,
+        "sweep_label": "COMPLETE SWEEP",
+        "unfinished_sweeps": []
+      },
+      {
+        "plan": "configs/sweeps/ablations.json",
+        "expected_runs": 24,
+        "observed_runs": 24,
+        "missing": [],
+        "sweeps": {
+          "sweep_ablations": 24
+        },
+        "sweep_states": {
+          "sweep_ablations": "COMPLETED"
+        },
+        "all_planned_runs_completed": true,
+        "sweep_label": "COMPLETE SWEEP",
+        "unfinished_sweeps": []
+      },
+      {
+        "plan": "configs/sweeps/merlin_control.json",
+        "expected_runs": 12,
+        "observed_runs": 12,
+        "missing": [],
+        "sweeps": {
+          "sweep_merlin_control": 12
+        },
+        "sweep_states": {
+          "sweep_merlin_control": "COMPLETED"
+        },
+        "all_planned_runs_completed": true,
+        "sweep_label": "COMPLETE SWEEP",
+        "unfinished_sweeps": []
+      },
+      {
+        "plan": "configs/sweeps/merlin_trained_reduced.json",
+        "expected_runs": 2,
+        "observed_runs": 2,
+        "missing": [],
+        "sweeps": {
+          "sweep_merlin_trained_reduced": 2
+        },
+        "sweep_states": {
+          "sweep_merlin_trained_reduced": "COMPLETED"
+        },
+        "all_planned_runs_completed": true,
+        "sweep_label": "COMPLETE SWEEP",
+        "unfinished_sweeps": []
+      }
+    ],
+    "unplanned": []
+  }
+}

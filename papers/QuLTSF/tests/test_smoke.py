@@ -9,7 +9,7 @@ import runtime_lib.runtime as runtime_module
 from runtime_lib import run_from_project
 
 
-def test_placeholder(monkeypatch, tmp_path):
+def test_shared_runtime_dispatches_to_project_runner(monkeypatch, tmp_path):
     recorded: dict[str, Path] = {}
 
     def fake_import_callable(name: str):
@@ -18,8 +18,6 @@ def test_placeholder(monkeypatch, tmp_path):
         def _runner(cfg, run_dir: Path):
             recorded["cfg"] = cfg
             recorded["run_dir"] = run_dir
-            run_dir.mkdir(parents=True, exist_ok=True)
-            (run_dir / "done.txt").write_text("ok", encoding="utf-8")
 
         return _runner
 
@@ -34,4 +32,5 @@ def test_placeholder(monkeypatch, tmp_path):
         os.chdir(original_cwd)
 
     assert recorded.get("run_dir") == run_dir
-    assert (run_dir / "done.txt").exists()
+    assert recorded["cfg"]["training"]["epochs"] == 1
+    assert (run_dir / "config_snapshot.json").exists()

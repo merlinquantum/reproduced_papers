@@ -1,0 +1,25 @@
+{
+  "description": "Phase 4 MerLin adaptation, reduced scope (user decision 2026-11-07): trained interferometer at T in {96,720}, seed 2021, capped at 20 epochs (MerLin exact simulation costs about 9 min per epoch on the L4). Otherwise the Table 1 budget.",
+  "sweep_id": "merlin_trained_reduced",
+  "max_epochs": 20,
+  "entries": [
+    {
+      "name": "qultsf_merlin_e20",
+      "config": "configs/table1_qultsf_merlin.json",
+      "seeds": [
+        2021
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        720
+      ],
+      "extra_args": [
+        "--epochs",
+        "20"
+      ]
+    }
+  ]
+}

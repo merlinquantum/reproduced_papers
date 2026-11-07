@@ -1,0 +1,26 @@
+{
+  "description": "NLinear baseline rerun on the QuLTSF pipeline and budget.",
+  "seed": 2021,
+  "dtype": "float32",
+  "dataset": {
+    "source": "csv",
+    "name": "weather_ltsf",
+    "path": "weather/weather.csv",
+    "sha256": "34ee981d07313e51da2a50bb600072c8ae4a69cb4b0651f4cb93a069d7a2ba63",
+    "features_mode": "M",
+    "sequence_length": 336,
+    "prediction_horizon": 96,
+    "batch_size": 16
+  },
+  "model": {
+    "name": "nlinear",
+    "params": {}
+  },
+  "training": {
+    "epochs": 100,
+    "lr": 0.0001,
+    "lr_schedule": "type3",
+    "patience": 20,
+    "max_batches_per_epoch": null
+  }
+}

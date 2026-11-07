@@ -1,39 +1,44 @@
 {
-  "description": "Default parameters for QuLTSF",
-  "seed": 42,
-  "dtype": "float64",
+  "description": "Lightweight smoke defaults: QuLTSF on 4 qubits over a small synthetic weather-like series (no download). Paper settings live in configs/table1_*.json and configs/ablation_*.json.",
+  "seed": 2021,
+  "dtype": "float32",
   "outdir": "outdir",
   "device": "cpu",
   "dataset": {
-    "name": "weather",
-    "path": "weather.csv",
+    "source": "synthetic",
+    "name": "synthetic_weather_like",
+    "synthetic": {"n_rows": 2000, "n_channels": 4, "seed": 0},
+    "path": null,
+    "sha256": null,
     "time_column": "date",
-    "features_mode": "MS",
     "target": "OT",
-    "sequence_length": 96,
+    "features_mode": "M",
+    "sequence_length": 48,
     "prediction_horizon": 24,
     "batch_size": 16,
     "train_ratio": 0.7,
-    "val_ratio": 0.1,
     "test_ratio": 0.2,
-    "max_rows": null
+    "val_drop_last": true,
+    "test_drop_last": false
   },
   "model": {
-    "name": "qultsf_reference",
+    "name": "qultsf",
     "params": {
-      "latent_dim": 4,
-      "hidden_dim": 16,
-      "shots": 0
+      "simulator": "torch",
+      "num_qubits": 4,
+      "num_layers": 3,
+      "circuit": "trainable",
+      "qml_device": "default.qubit"
     }
   },
   "training": {
-    "epochs": 5,
-    "optimizer": "adam",
+    "epochs": 2,
     "lr": 0.001,
-    "weight_decay": 0.0
+    "lr_schedule": "type3",
+    "patience": 20,
+    "max_batches_per_epoch": null
   },
   "logging": {
-    "level": "info",
-    "save_config_snapshot": true
+    "level": "info"
   }
 }
