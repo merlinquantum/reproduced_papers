@@ -1,0 +1,16 @@
+{
+  "description": "Phase 4 MerLin adaptation of the Section 4.3 SRG experiment: the paper's protocol (all 25 catalog graphs, five isomorphic controls per graph, sorted half-L1 distance, tolerance 1e-9) applied to photonic walk covariances through the interferometer U(t) = exp(-i 2 A t). The paper's interacting two-particle walk is recomputed in the same run as the reference. Main rows: 2 and 3 photons with threshold detection postselected on n clicks. Ablations: 1 photon, 2 photons with number-resolving detection (no postselection), 2 distinguishable photons with postselection (closed form; MerLin simulates indistinguishable photons only).",
+  "experiment": "srg_photonic",
+  "srg_data_directory": "srg",
+  "evolution_time": 1.0,
+  "isomorphic_permutations": 5,
+  "tolerance": 1e-09,
+  "seed": 0,
+  "photonic_methods": [
+    {"name": "photon2_threshold", "n_photons": 2, "detection": "threshold", "particles": "bosons", "backend": "merlin"},
+    {"name": "photon3_threshold", "n_photons": 3, "detection": "threshold", "particles": "bosons", "backend": "merlin"},
+    {"name": "ablation_photon1", "n_photons": 1, "detection": "threshold", "particles": "bosons", "backend": "merlin"},
+    {"name": "ablation_photon2_pnr", "n_photons": 2, "detection": "pnr", "particles": "bosons", "backend": "merlin"},
+    {"name": "ablation_photon2_distinguishable", "n_photons": 2, "detection": "threshold", "particles": "distinguishable", "backend": "permanent"}
+  ]
+}

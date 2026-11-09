@@ -1,0 +1,19 @@
+{
+  "sweep_id": "zinc_reduced",
+  "description": "Reduced Table 1 ZINC comparison (claim C1): GRIT with RRWP, RRWP plus 1-CQRW, RRWP plus 2-QiRW and the matched-width RRWP-41 control, four seeds each, 200 of 2000 epochs. Results are partial.",
+  "machine": "reproduced-papers-1",
+  "max_epochs": 200,
+  "metric": "test_mae",
+  "direction": "minimize",
+  "split": "test (official ZINC 12k subset, 1,000 graphs)",
+  "checkpoint_rule": "model with the lowest validation MAE over the 200 epochs, evaluated once on the test split",
+  "aggregation": "mean and sample standard deviation over the four seeds",
+  "tie_rule": "no winner unless the margin exceeds twice the larger seed standard deviation and a Wilcoxon signed-rank test on seed-averaged per-graph absolute errors gives p < 0.05",
+  "selection_rule": "none: this sweep compares fixed configurations, no candidate is selected",
+  "entries": [
+    {"name": "zinc_rrwp", "config": "configs/zinc_rrwp_reduced.json", "seeds": [0, 1, 2, 3]},
+    {"name": "zinc_cqrw1", "config": "configs/zinc_cqrw1_reduced.json", "seeds": [0, 1, 2, 3]},
+    {"name": "zinc_qirw2", "config": "configs/zinc_qirw2_reduced.json", "seeds": [0, 1, 2, 3]},
+    {"name": "zinc_rrwp41", "config": "configs/zinc_rrwp41_reduced.json", "seeds": [0, 1, 2, 3]}
+  ]
+}

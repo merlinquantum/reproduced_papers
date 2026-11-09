@@ -1,0 +1,65 @@
+{
+  "sweep_id": "synthetic",
+  "description": "Appendix D.2 ladder-concatenation task (claim C3): GCN with Ising ground-state correlation eigenvectors against GCN with Laplacian eigenvectors, GatedGCN with RRWP edges and GCN without encoding, four seeds each, the paper's 200 epochs. Amended 2026-11-08 before launch (user decision): added the top-3 eigenvector control synthetic_quantum_top3, so 20 runs.",
+  "machine": "reproduced-papers-1",
+  "max_epochs": 200,
+  "metric": "test_acc",
+  "direction": "maximize",
+  "split": "test (10% of the 800 generated graphs, split seed 1729)",
+  "checkpoint_rule": "model with the highest validation accuracy over the 200 epochs, evaluated once on the test split",
+  "aggregation": "mean and sample standard deviation over the four seeds",
+  "tie_rule": "no winner unless the margin exceeds twice the larger seed standard deviation and an exact McNemar test on the pooled test predictions gives p < 0.05",
+  "selection_rule": "none: this sweep compares fixed configurations, no candidate is selected",
+  "entries": [
+    {
+      "name": "synthetic_quantum",
+      "config": "configs/synthetic_quantum_original.json",
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "synthetic_quantum_top3",
+      "config": "configs/synthetic_quantum_top3.json",
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "synthetic_laplacian",
+      "config": "configs/synthetic_laplacian_original.json",
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "synthetic_rrwp",
+      "config": "configs/synthetic_rrwp_original.json",
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "synthetic_gcn",
+      "config": "configs/synthetic_gcn_original.json",
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    }
+  ]
+}

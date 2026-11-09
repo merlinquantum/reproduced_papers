@@ -1,0 +1,2 @@
+candidate,status,observed_runs,expected_runs,mean_test_acc,std_test_acc,num_params,epochs,mean_wall_clock_s
+synthetic_rrwp_cosine,COMPLETE,4,4,0.4937499985098839,0.037500008940696716,7074,200,132.06291246414185

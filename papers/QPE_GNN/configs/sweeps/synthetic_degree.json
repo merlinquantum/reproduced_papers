@@ -1,0 +1,25 @@
+{
+  "sweep_id": "synthetic_degree",
+  "description": "Phase 5 fair-baseline control for claim C3 (Phase 5 Comparison Plan 2026-11-09T11:00+01:00): GCN with one-hot node degree, the quantum model's architecture and 3,906 parameters, four seeds, the paper's 200 epochs at constant lr 1e-3.",
+  "machine": "reproduced-papers-1",
+  "metric": "test_acc",
+  "direction": "maximize",
+  "split": "test (10% of the 800 generated graphs, split seed 1729)",
+  "selection_rule": "none",
+  "max_epochs": 200,
+  "checkpoint_rule": "model with the highest validation accuracy over the 200 epochs, evaluated once on the test split",
+  "aggregation": "mean and sample standard deviation over the four seeds",
+  "tie_rule": "no winner unless the margin exceeds twice the larger seed standard deviation and an exact McNemar test on the pooled test predictions gives p < 0.05",
+  "entries": [
+    {
+      "name": "synthetic_degree",
+      "config": "configs/synthetic_degree_classical.json",
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    }
+  ]
+}

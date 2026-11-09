@@ -1,0 +1,387 @@
+{
+  "candidates": [
+    {
+      "best_epochs": [
+        55,
+        42,
+        54,
+        47
+      ],
+      "candidate": "synthetic_quantum",
+      "config": "configs/synthetic_quantum_original.json",
+      "epochs": 200,
+      "expected_runs": 4,
+      "mean": 1.0,
+      "mean_wall_clock_s": 138.15334874391556,
+      "missing_seeds": [],
+      "num_params": 3906,
+      "observed_runs": 4,
+      "resumed_runs": [],
+      "run_dirs": [
+        "synthetic_quantum_seed0/run_20261108-132813",
+        "synthetic_quantum_seed1/run_20261108-133043",
+        "synthetic_quantum_seed2/run_20261108-133314",
+        "synthetic_quantum_seed3/run_20261108-133544"
+      ],
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "status": "COMPLETE",
+      "std": 0.0,
+      "values": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "best_epochs": [
+        45,
+        63,
+        33,
+        35
+      ],
+      "candidate": "synthetic_quantum_top3",
+      "config": "configs/synthetic_quantum_top3.json",
+      "epochs": 200,
+      "expected_runs": 4,
+      "mean": 0.9843750149011612,
+      "mean_wall_clock_s": 137.9615454673767,
+      "missing_seeds": [],
+      "num_params": 3906,
+      "observed_runs": 4,
+      "resumed_runs": [],
+      "run_dirs": [
+        "synthetic_quantum_top3_seed0/run_20261108-132813",
+        "synthetic_quantum_top3_seed1/run_20261108-133043",
+        "synthetic_quantum_top3_seed2/run_20261108-133314",
+        "synthetic_quantum_top3_seed3/run_20261108-133724"
+      ],
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "status": "COMPLETE",
+      "std": 0.0062499940395355225,
+      "values": [
+        0.987500011920929,
+        0.987500011920929,
+        0.9750000238418579,
+        0.987500011920929
+      ]
+    },
+    {
+      "best_epochs": [
+        3,
+        1,
+        1,
+        1
+      ],
+      "candidate": "synthetic_laplacian",
+      "config": "configs/synthetic_laplacian_original.json",
+      "epochs": 200,
+      "expected_runs": 4,
+      "mean": 0.4749999940395355,
+      "mean_wall_clock_s": 135.46483939886093,
+      "missing_seeds": [],
+      "num_params": 3906,
+      "observed_runs": 4,
+      "resumed_runs": [],
+      "run_dirs": [
+        "synthetic_laplacian_seed0/run_20261108-132813",
+        "synthetic_laplacian_seed1/run_20261108-133043",
+        "synthetic_laplacian_seed2/run_20261108-133504",
+        "synthetic_laplacian_seed3/run_20261108-133804"
+      ],
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "status": "COMPLETE",
+      "std": 0.0,
+      "values": [
+        0.4749999940395355,
+        0.4749999940395355,
+        0.4749999940395355,
+        0.4749999940395355
+      ]
+    },
+    {
+      "best_epochs": [
+        2,
+        177,
+        156,
+        180
+      ],
+      "candidate": "synthetic_rrwp",
+      "config": "configs/synthetic_rrwp_original.json",
+      "epochs": 200,
+      "expected_runs": 4,
+      "mean": 0.8687499985098839,
+      "mean_wall_clock_s": 129.0960914492607,
+      "missing_seeds": [],
+      "num_params": 7074,
+      "observed_runs": 4,
+      "resumed_runs": [],
+      "run_dirs": [
+        "synthetic_rrwp_seed0/run_20261108-132813",
+        "synthetic_rrwp_seed1/run_20261108-133254",
+        "synthetic_rrwp_seed2/run_20261108-133544",
+        "synthetic_rrwp_seed3/run_20261108-133804"
+      ],
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "status": "COMPLETE",
+      "std": 0.26250000298023224,
+      "values": [
+        0.4749999940395355,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    {
+      "best_epochs": [
+        3,
+        1,
+        1,
+        2
+      ],
+      "candidate": "synthetic_gcn",
+      "config": "configs/synthetic_gcn_original.json",
+      "epochs": 200,
+      "expected_runs": 4,
+      "mean": 0.4749999940395355,
+      "mean_wall_clock_s": 132.74653381109238,
+      "missing_seeds": [],
+      "num_params": 3298,
+      "observed_runs": 4,
+      "resumed_runs": [],
+      "run_dirs": [
+        "synthetic_gcn_seed0/run_20261108-133034",
+        "synthetic_gcn_seed1/run_20261108-133314",
+        "synthetic_gcn_seed2/run_20261108-133544",
+        "synthetic_gcn_seed3/run_20261108-133814"
+      ],
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "status": "COMPLETE",
+      "std": 0.0,
+      "values": [
+        0.4749999940395355,
+        0.4749999940395355,
+        0.4749999940395355,
+        0.4749999940395355
+      ]
+    }
+  ],
+  "code_commit": "6c8861e93f56fccec9add8c3ac40c5084dbcf7c1",
+  "code_dirty": true,
+  "comparisons": [
+    {
+      "a": "synthetic_quantum",
+      "b": "synthetic_quantum_top3",
+      "margin_threshold": 0.012499988079071045,
+      "mean_margin_b_minus_a": -0.015624985098838806,
+      "num_pairs": 320,
+      "only_a_correct": 5,
+      "only_b_correct": 0,
+      "p_value": 0.0625,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "exact_mcnemar_pooled_predictions",
+      "verdict": "not distinguishable"
+    },
+    {
+      "a": "synthetic_quantum",
+      "b": "synthetic_laplacian",
+      "margin_threshold": 0.0,
+      "mean_margin_b_minus_a": -0.5250000059604645,
+      "num_pairs": 320,
+      "only_a_correct": 168,
+      "only_b_correct": 0,
+      "p_value": 5.345529420184391e-51,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "exact_mcnemar_pooled_predictions",
+      "verdict": "synthetic_quantum better"
+    },
+    {
+      "a": "synthetic_quantum",
+      "b": "synthetic_rrwp",
+      "margin_threshold": 0.5250000059604645,
+      "mean_margin_b_minus_a": -0.13125000149011612,
+      "num_pairs": 320,
+      "only_a_correct": 42,
+      "only_b_correct": 0,
+      "p_value": 4.547473508864641e-13,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "exact_mcnemar_pooled_predictions",
+      "verdict": "not distinguishable"
+    },
+    {
+      "a": "synthetic_quantum",
+      "b": "synthetic_gcn",
+      "margin_threshold": 0.0,
+      "mean_margin_b_minus_a": -0.5250000059604645,
+      "num_pairs": 320,
+      "only_a_correct": 168,
+      "only_b_correct": 0,
+      "p_value": 5.345529420184391e-51,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "exact_mcnemar_pooled_predictions",
+      "verdict": "synthetic_quantum better"
+    },
+    {
+      "a": "synthetic_quantum_top3",
+      "b": "synthetic_laplacian",
+      "margin_threshold": 0.012499988079071045,
+      "mean_margin_b_minus_a": -0.5093750208616257,
+      "num_pairs": 320,
+      "only_a_correct": 168,
+      "only_b_correct": 5,
+      "p_value": 2.096655508768743e-43,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "exact_mcnemar_pooled_predictions",
+      "verdict": "synthetic_quantum_top3 better"
+    },
+    {
+      "a": "synthetic_quantum_top3",
+      "b": "synthetic_rrwp",
+      "margin_threshold": 0.5250000059604645,
+      "mean_margin_b_minus_a": -0.11562501639127731,
+      "num_pairs": 320,
+      "only_a_correct": 42,
+      "only_b_correct": 5,
+      "p_value": 2.4579776436439715e-08,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "exact_mcnemar_pooled_predictions",
+      "verdict": "not distinguishable"
+    },
+    {
+      "a": "synthetic_quantum_top3",
+      "b": "synthetic_gcn",
+      "margin_threshold": 0.012499988079071045,
+      "mean_margin_b_minus_a": -0.5093750208616257,
+      "num_pairs": 320,
+      "only_a_correct": 168,
+      "only_b_correct": 5,
+      "p_value": 2.096655508768743e-43,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "exact_mcnemar_pooled_predictions",
+      "verdict": "synthetic_quantum_top3 better"
+    },
+    {
+      "a": "synthetic_laplacian",
+      "b": "synthetic_rrwp",
+      "margin_threshold": 0.5250000059604645,
+      "mean_margin_b_minus_a": 0.39375000447034836,
+      "num_pairs": 320,
+      "only_a_correct": 0,
+      "only_b_correct": 126,
+      "p_value": 2.350988701644575e-38,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "exact_mcnemar_pooled_predictions",
+      "verdict": "not distinguishable"
+    },
+    {
+      "a": "synthetic_laplacian",
+      "b": "synthetic_gcn",
+      "margin_threshold": 0.0,
+      "mean_margin_b_minus_a": 0.0,
+      "num_pairs": 320,
+      "only_a_correct": 0,
+      "only_b_correct": 0,
+      "p_value": 1.0,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "exact_mcnemar_pooled_predictions",
+      "verdict": "not distinguishable"
+    },
+    {
+      "a": "synthetic_rrwp",
+      "b": "synthetic_gcn",
+      "margin_threshold": 0.5250000059604645,
+      "mean_margin_b_minus_a": -0.39375000447034836,
+      "num_pairs": 320,
+      "only_a_correct": 126,
+      "only_b_correct": 0,
+      "p_value": 2.350988701644575e-38,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "exact_mcnemar_pooled_predictions",
+      "verdict": "not distinguishable"
+    }
+  ],
+  "direction": "maximize",
+  "excluded_runs": [],
+  "expected_runs": 20,
+  "metric": "test_acc",
+  "observed_runs": 20,
+  "schema_version": 1,
+  "sweep_id": "synthetic",
+  "tie_rule": "no winner unless the margin exceeds twice the larger seed standard deviation and an exact McNemar test on the pooled test predictions gives p < 0.05",
+  "verdict": "COMPLETE SWEEP"
+}
