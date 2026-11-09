@@ -1,0 +1,14 @@
+{
+  "coverage": {
+    "expected_runs": 420,
+    "observed_runs": 420,
+    "missing": [],
+    "non_finite": [],
+    "duplicates": 0,
+    "complete": true
+  },
+  "verdict": "COMPLETE SWEEP",
+  "tables": {
+    "baselines_vs_qnn": "E-F_baselines_baselines_vs_qnn.csv"
+  }
+}

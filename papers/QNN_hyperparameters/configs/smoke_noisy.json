@@ -1,0 +1,6 @@
+{
+  "description": "Tiny FakePerth noisy smoke run through Qiskit Aer: 20 train / 20 eval rows, 3 COBYLA iterations.",
+  "dataset": {"n_train": 20, "n_eval": 20},
+  "training": {"maxiter": 3},
+  "noise": {"enabled": true, "model": "FakePerth"}
+}

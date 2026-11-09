@@ -1,0 +1,67 @@
+{
+  "description": "E-C: faithful noiseless Rice PCA grid as executed by the author code: 84 circuits x {COBYLA 500 tol 0.1, SPSA 150, Nelder-Mead maxiter 300 / maxfev 1000} x {uniform arm = raw inputs, beta arm = MinMax inputs}, qiskit-default initial point, 1 seed = 504 runs. Compare per run with the released rice___*_pca_{uniform,beta}_results.csv by grid index.",
+  "mode": "sweep",
+  "sweep": {
+    "id": "E-C_rice_grid",
+    "output_dir": "outdir/sweeps/E-C_rice_grid",
+    "candidate_mode": "qnn",
+    "workers": 8,
+    "seeds": [
+      1
+    ],
+    "factors": [
+      {
+        "name": "arm",
+        "levels": [
+          {
+            "label": "uniformarm",
+            "set": {
+              "dataset.input_scaling": "raw",
+              "model.init": "qiskit_default"
+            }
+          },
+          {
+            "label": "betaarm",
+            "set": {
+              "dataset.input_scaling": "minmax",
+              "model.init": "qiskit_default"
+            }
+          }
+        ]
+      },
+      {
+        "name": "optimizer",
+        "levels": [
+          {
+            "label": "cobyla",
+            "set": {
+              "training.optimizer": "COBYLA",
+              "training.maxiter": 500,
+              "training.tol": 0.1
+            }
+          },
+          {
+            "label": "spsa",
+            "set": {
+              "training.optimizer": "SPSA",
+              "training.maxiter": 150
+            }
+          },
+          {
+            "label": "nm",
+            "set": {
+              "training.optimizer": "NelderMead",
+              "training.maxiter": 300,
+              "training.maxfev": 1000,
+              "training.tol": 0.1
+            }
+          }
+        ]
+      },
+      {
+        "name": "circuit",
+        "levels": "paper_grid"
+      }
+    ]
+  }
+}

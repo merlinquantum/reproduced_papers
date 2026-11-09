@@ -1,0 +1,115 @@
+{
+  "description": "E-P: Phase 4 photonic-native (MerLin) adaptation, not the paper. 2 datasets x {raw, MinMax} inputs x initial phases {MerLin default, beta (applied), zeros} x photons {2, 4} x reuploading depth {1, 2} x 3 seeds = 144 runs; 2d modes, mode-expectation readout + linear head, Adam 200 steps lr 0.05. See LOG.md 'Amendment - photonic-native design'.",
+  "mode": "sweep",
+  "training": {
+    "optimizer": "Adam",
+    "steps": 200,
+    "lr": 0.05
+  },
+  "sweep": {
+    "id": "E-P_photonic_mechanism",
+    "output_dir": "outdir/sweeps/E-P_photonic_mechanism",
+    "candidate_mode": "photonic",
+    "workers": 8,
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "factors": [
+      {
+        "name": "data",
+        "levels": [
+          {
+            "label": "rice",
+            "set": {
+              "dataset.name": "rice",
+              "dataset.preprocessing": "pca"
+            }
+          },
+          {
+            "label": "glass",
+            "set": {
+              "dataset.name": "glass",
+              "dataset.preprocessing": "lda"
+            }
+          }
+        ]
+      },
+      {
+        "name": "scaling",
+        "levels": [
+          {
+            "label": "raw",
+            "set": {
+              "dataset.input_scaling": "raw"
+            }
+          },
+          {
+            "label": "minmax",
+            "set": {
+              "dataset.input_scaling": "minmax"
+            }
+          }
+        ]
+      },
+      {
+        "name": "init",
+        "levels": [
+          {
+            "label": "default",
+            "set": {
+              "model.init": "merlin_default"
+            }
+          },
+          {
+            "label": "beta",
+            "set": {
+              "model.init": "beta"
+            }
+          },
+          {
+            "label": "zeros",
+            "set": {
+              "model.init": "zeros"
+            }
+          }
+        ]
+      },
+      {
+        "name": "photons",
+        "levels": [
+          {
+            "label": "n2",
+            "set": {
+              "photonic.photons": 2
+            }
+          },
+          {
+            "label": "n4",
+            "set": {
+              "photonic.photons": 4
+            }
+          }
+        ]
+      },
+      {
+        "name": "depth",
+        "levels": [
+          {
+            "label": "d1",
+            "set": {
+              "photonic.depth": 1
+            }
+          },
+          {
+            "label": "d2",
+            "set": {
+              "photonic.depth": 2
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "description": "E-D2 (gap diagnosis follow-up): E-D re-run with the author's scikit-learn 1.2.2 PCA sign convention (dataset.pca_signs = u_based). Same 12 circuits x {COBYLA 250 tol 0.1, SPSA 75} x {uniform arm, beta arm} x 1 seed = 48 runs, FakePerth noise; only the PCA component signs differ from E-D.",
+  "mode": "sweep",
+  "noise": {
+    "enabled": true,
+    "model": "FakePerth"
+  },
+  "sweep": {
+    "id": "E-D2_rice_noisy_author_signs",
+    "output_dir": "outdir/sweeps/E-D2_rice_noisy_author_signs",
+    "candidate_mode": "qnn",
+    "workers": 8,
+    "seeds": [
+      1
+    ],
+    "factors": [
+      {
+        "name": "arm",
+        "levels": [
+          {
+            "label": "uniformarm",
+            "set": {
+              "dataset.input_scaling": "raw",
+              "model.init": "qiskit_default",
+              "dataset.pca_signs": "u_based"
+            }
+          },
+          {
+            "label": "betaarm",
+            "set": {
+              "dataset.input_scaling": "minmax",
+              "model.init": "qiskit_default",
+              "dataset.pca_signs": "u_based"
+            }
+          }
+        ]
+      },
+      {
+        "name": "optimizer",
+        "levels": [
+          {
+            "label": "cobyla",
+            "set": {
+              "training.optimizer": "COBYLA",
+              "training.maxiter": 250,
+              "training.tol": 0.1
+            }
+          },
+          {
+            "label": "spsa",
+            "set": {
+              "training.optimizer": "SPSA",
+              "training.maxiter": 75
+            }
+          }
+        ]
+      },
+      {
+        "name": "circuit",
+        "levels": {
+          "paper_grid": [
+            0,
+            4,
+            24,
+            26,
+            31,
+            40,
+            44,
+            49,
+            55,
+            57,
+            65,
+            77
+          ]
+        }
+      }
+    ]
+  }
+}

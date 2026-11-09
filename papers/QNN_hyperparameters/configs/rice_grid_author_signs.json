@@ -1,0 +1,61 @@
+{
+  "description": "E-C2 (gap diagnosis): E-C beta arm (MinMax inputs, qiskit-default initial point) re-run with the author's scikit-learn 1.2.2 PCA sign convention (dataset.pca_signs = u_based); 84 circuits x {COBYLA 500 tol 0.1, SPSA 150, Nelder-Mead maxiter 300 / maxfev 1000} x 1 seed = 252 runs. Only the PCA component signs differ from E-C.",
+  "mode": "sweep",
+  "sweep": {
+    "id": "E-C2_rice_grid_author_signs",
+    "output_dir": "outdir/sweeps/E-C2_rice_grid_author_signs",
+    "candidate_mode": "qnn",
+    "workers": 8,
+    "seeds": [
+      1
+    ],
+    "factors": [
+      {
+        "name": "arm",
+        "levels": [
+          {
+            "label": "betaarm",
+            "set": {
+              "dataset.input_scaling": "minmax",
+              "dataset.pca_signs": "u_based",
+              "model.init": "qiskit_default"
+            }
+          }
+        ]
+      },
+      {
+        "name": "optimizer",
+        "levels": [
+          {
+            "label": "cobyla",
+            "set": {
+              "training.optimizer": "COBYLA",
+              "training.maxiter": 500,
+              "training.tol": 0.1
+            }
+          },
+          {
+            "label": "spsa",
+            "set": {
+              "training.optimizer": "SPSA",
+              "training.maxiter": 150
+            }
+          },
+          {
+            "label": "nm",
+            "set": {
+              "training.optimizer": "NelderMead",
+              "training.maxiter": 300,
+              "training.maxfev": 1000,
+              "training.tol": 0.1
+            }
+          }
+        ]
+      },
+      {
+        "name": "circuit",
+        "levels": "paper_grid"
+      }
+    ]
+  }
+}

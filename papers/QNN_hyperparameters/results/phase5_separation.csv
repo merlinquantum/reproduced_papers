@@ -1,0 +1,7 @@
+data,system_a,system_b,test_mean_a_minus_b,one_test_sample,two_x_larger_sd,separated
+rice,qubit QNN (E-B),classical (E-F),-0.024800000000000044,0.004,0.009082339395160743,True
+rice,qubit QNN (E-B),"photonic MerLin (E-P, adaptation)",-0.009333333333333416,0.004,0.012220201853215614,False
+rice,classical (E-F),"photonic MerLin (E-P, adaptation)",0.015466666666666629,0.004,0.012220201853215614,True
+glass,qubit QNN (E-B),classical (E-F),-0.09457364341085278,0.023255813953488372,0.13426750446270372,False
+glass,qubit QNN (E-B),"photonic MerLin (E-P, adaptation)",-0.1162790697674419,0.023255813953488372,0.13426750446270372,False
+glass,classical (E-F),"photonic MerLin (E-P, adaptation)",-0.02170542635658912,0.023255813953488372,0.07104768519311377,False

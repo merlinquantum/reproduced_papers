@@ -1,0 +1,16 @@
+{
+  "coverage": {
+    "expected_runs": 252,
+    "observed_runs": 252,
+    "missing": [],
+    "non_finite": [],
+    "duplicates": 0,
+    "complete": true
+  },
+  "verdict": "COMPLETE SWEEP",
+  "tables": {
+    "agreement": "E-C2_rice_grid_author_signs_agreement.csv",
+    "author_tests": "E-C2_rice_grid_author_signs_author_tests.csv",
+    "per_config": "E-C2_rice_grid_author_signs_per_config.csv"
+  }
+}

@@ -1,0 +1,107 @@
+{
+  "description": "E-B: does the reported 'beta initialization' effect come from input scaling or from the initial point? 2 datasets x {raw, MinMax} inputs x {qiskit default U[0,1), fitted beta (applied), zeros (applied)} x 4 circuits x {COBYLA, SPSA} x 3 seeds = 288 runs. Budgets as executed by the author code (Rice/Glass noiseless: COBYLA 500 tol 0.1, SPSA 150).",
+  "mode": "sweep",
+  "sweep": {
+    "id": "E-B_mechanism",
+    "output_dir": "outdir/sweeps/E-B_mechanism",
+    "candidate_mode": "qnn",
+    "workers": 8,
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "factors": [
+      {
+        "name": "data",
+        "levels": [
+          {
+            "label": "rice",
+            "set": {
+              "dataset.name": "rice",
+              "dataset.preprocessing": "pca"
+            }
+          },
+          {
+            "label": "glass",
+            "set": {
+              "dataset.name": "glass",
+              "dataset.preprocessing": "lda"
+            }
+          }
+        ]
+      },
+      {
+        "name": "scaling",
+        "levels": [
+          {
+            "label": "raw",
+            "set": {
+              "dataset.input_scaling": "raw"
+            }
+          },
+          {
+            "label": "minmax",
+            "set": {
+              "dataset.input_scaling": "minmax"
+            }
+          }
+        ]
+      },
+      {
+        "name": "init",
+        "levels": [
+          {
+            "label": "default",
+            "set": {
+              "model.init": "qiskit_default"
+            }
+          },
+          {
+            "label": "beta",
+            "set": {
+              "model.init": "beta"
+            }
+          },
+          {
+            "label": "zeros",
+            "set": {
+              "model.init": "zeros"
+            }
+          }
+        ]
+      },
+      {
+        "name": "circuit",
+        "levels": {
+          "paper_grid": [
+            31,
+            40,
+            4,
+            57
+          ]
+        }
+      },
+      {
+        "name": "optimizer",
+        "levels": [
+          {
+            "label": "cobyla",
+            "set": {
+              "training.optimizer": "COBYLA",
+              "training.maxiter": 500,
+              "training.tol": 0.1
+            }
+          },
+          {
+            "label": "spsa",
+            "set": {
+              "training.optimizer": "SPSA",
+              "training.maxiter": 150
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

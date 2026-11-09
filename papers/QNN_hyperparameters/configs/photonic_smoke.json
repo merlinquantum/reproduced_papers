@@ -1,0 +1,20 @@
+{
+  "description": "Phase 4 photonic smoke run (MerLin adaptation, not the paper): Rice PCA(7) MinMax, 14 modes / 2 photons, reuploading depth 2, MerLin default phases, Adam 5 steps on 40 train / 40 eval rows.",
+  "mode": "photonic",
+  "dataset": {
+    "n_train": 40,
+    "n_eval": 40
+  },
+  "model": {
+    "init": "merlin_default"
+  },
+  "photonic": {
+    "photons": 2,
+    "depth": 2
+  },
+  "training": {
+    "optimizer": "Adam",
+    "steps": 5,
+    "lr": 0.05
+  }
+}

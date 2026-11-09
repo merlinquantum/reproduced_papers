@@ -1,0 +1,10 @@
+{
+  "description": "Tiny QNN smoke run: 40 train / 40 eval rows, 5 COBYLA iterations.",
+  "dataset": {
+    "n_train": 40,
+    "n_eval": 40
+  },
+  "training": {
+    "maxiter": 5
+  }
+}

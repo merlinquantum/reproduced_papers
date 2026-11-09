@@ -1,0 +1,16 @@
+{
+  "coverage": {
+    "expected_runs": 48,
+    "observed_runs": 48,
+    "missing": [],
+    "non_finite": [],
+    "duplicates": 0,
+    "complete": true
+  },
+  "verdict": "COMPLETE SWEEP",
+  "tables": {
+    "agreement": "E-D_rice_noisy_agreement.csv",
+    "noise_effect": "E-D_rice_noisy_noise_effect.csv",
+    "per_config": "E-D_rice_noisy_per_config.csv"
+  }
+}

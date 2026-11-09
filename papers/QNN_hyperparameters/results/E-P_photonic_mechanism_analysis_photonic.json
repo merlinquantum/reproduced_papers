@@ -1,0 +1,17 @@
+{
+  "coverage": {
+    "expected_runs": 144,
+    "observed_runs": 144,
+    "missing": [],
+    "non_finite": [],
+    "duplicates": 0,
+    "complete": true
+  },
+  "verdict": "COMPLETE SWEEP",
+  "tables": {
+    "cell_means_val": "E-P_photonic_mechanism_cell_means_val.csv",
+    "cell_means_photons_val": "E-P_photonic_mechanism_cell_means_photons_val.csv",
+    "effects_val": "E-P_photonic_mechanism_effects_val.csv",
+    "effects_test": "E-P_photonic_mechanism_effects_test.csv"
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "description": "E-F: classical baselines on the exact QNN inputs (same 400 train / 250 val / 250 test rows and PCA/LDA features), raw and MinMax, 3 models, 10 seeds. Rice has no LDA (author choice).",
+  "mode": "sweep",
+  "sweep": {
+    "id": "E-F_baselines",
+    "output_dir": "outdir/sweeps/E-F_baselines",
+    "candidate_mode": "baseline",
+    "workers": 8,
+    "seeds": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "factors": [
+      {
+        "name": "data",
+        "levels": [
+          {
+            "label": "rice-pca",
+            "set": {
+              "dataset.name": "rice",
+              "dataset.preprocessing": "pca"
+            }
+          },
+          {
+            "label": "glass-pca",
+            "set": {
+              "dataset.name": "glass",
+              "dataset.preprocessing": "pca"
+            }
+          },
+          {
+            "label": "glass-lda",
+            "set": {
+              "dataset.name": "glass",
+              "dataset.preprocessing": "lda"
+            }
+          },
+          {
+            "label": "cover-pca",
+            "set": {
+              "dataset.name": "cover_type",
+              "dataset.preprocessing": "pca"
+            }
+          },
+          {
+            "label": "cover-lda",
+            "set": {
+              "dataset.name": "cover_type",
+              "dataset.preprocessing": "lda"
+            }
+          },
+          {
+            "label": "kdd-pca",
+            "set": {
+              "dataset.name": "kdd_cup",
+              "dataset.preprocessing": "pca"
+            }
+          },
+          {
+            "label": "kdd-lda",
+            "set": {
+              "dataset.name": "kdd_cup",
+              "dataset.preprocessing": "lda"
+            }
+          }
+        ]
+      },
+      {
+        "name": "scaling",
+        "levels": [
+          {
+            "label": "raw",
+            "set": {
+              "dataset.input_scaling": "raw"
+            }
+          },
+          {
+            "label": "minmax",
+            "set": {
+              "dataset.input_scaling": "minmax"
+            }
+          }
+        ]
+      },
+      {
+        "name": "model",
+        "levels": [
+          {
+            "label": "lr",
+            "set": {
+              "baseline.model": "logistic_regression"
+            }
+          },
+          {
+            "label": "svm",
+            "set": {
+              "baseline.model": "rbf_svm"
+            }
+          },
+          {
+            "label": "mlp",
+            "set": {
+              "baseline.model": "mlp"
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

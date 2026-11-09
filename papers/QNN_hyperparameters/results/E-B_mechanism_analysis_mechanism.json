@@ -1,0 +1,17 @@
+{
+  "coverage": {
+    "expected_runs": 288,
+    "observed_runs": 288,
+    "missing": [],
+    "non_finite": [],
+    "duplicates": 0,
+    "complete": true
+  },
+  "verdict": "COMPLETE SWEEP",
+  "tables": {
+    "cell_means_val": "E-B_mechanism_cell_means_val.csv",
+    "cell_means_test": "E-B_mechanism_cell_means_test.csv",
+    "effects_val": "E-B_mechanism_effects_val.csv",
+    "effects_test": "E-B_mechanism_effects_test.csv"
+  }
+}

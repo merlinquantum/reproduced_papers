@@ -1,0 +1,138 @@
+{
+  "description": "QNN hyperparameter study runner (Herbst, De Maio, Brandic, IEEE QCE 2024)",
+  "arguments": [
+    {
+      "flags": [
+        "--dataset"
+      ],
+      "help": "Dataset key (rice, glass, cover_type, kdd_cup)",
+      "type": "str",
+      "choices": [
+        "rice",
+        "glass",
+        "cover_type",
+        "kdd_cup"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.name"
+      }
+    },
+    {
+      "flags": [
+        "--preprocessing"
+      ],
+      "help": "Dimensionality reduction (pca: 7 components; lda: min(7, n_classes - 1))",
+      "type": "str",
+      "choices": [
+        "pca",
+        "lda"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.preprocessing"
+      }
+    },
+    {
+      "flags": [
+        "--optimizer"
+      ],
+      "help": "Classical optimizer (COBYLA, SPSA, NelderMead; Adam for photonic runs only)",
+      "type": "str",
+      "choices": [
+        "COBYLA",
+        "SPSA",
+        "NelderMead",
+        "Adam"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.optimizer"
+      }
+    },
+    {
+      "flags": [
+        "--maxiter"
+      ],
+      "help": "Override the optimizer iteration budget (as executed: see configs)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.maxiter"
+      }
+    },
+    {
+      "flags": [
+        "--init"
+      ],
+      "help": "Initial point: qiskit_default (what the author runs used), or an applied uniform, beta, beta_mu, normal_beta, normal, zeros; photonic runs: merlin_default, beta or zeros",
+      "type": "str",
+      "choices": [
+        "qiskit_default",
+        "uniform",
+        "beta",
+        "beta_mu",
+        "normal_beta",
+        "normal",
+        "zeros",
+        "merlin_default"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.init"
+      }
+    },
+    {
+      "flags": [
+        "--mode"
+      ],
+      "help": "qnn, photonic (Phase 4 MerLin adaptation), baseline, reanalysis or sweep",
+      "type": "str",
+      "choices": [
+        "qnn",
+        "photonic",
+        "baseline",
+        "reanalysis",
+        "sweep"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "mode"
+      }
+    },
+    {
+      "flags": [
+        "--input-scaling"
+      ],
+      "help": "raw reduced features, or MinMax to [0, 1] (the author's beta-arm preprocessing)",
+      "type": "str",
+      "choices": [
+        "raw",
+        "minmax"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.input_scaling"
+      }
+    },
+    {
+      "flags": [
+        "--workers"
+      ],
+      "help": "Parallel worker processes for a sweep",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "sweep.workers"
+      }
+    }
+  ]
+}
