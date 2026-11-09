@@ -1,0 +1,56 @@
+{
+    "description": "Phase 04 MerLin adaptation of Fig. 3a (sigma=3): same data, init, estimator, K/Z key chain and Adam as fig3a_bs_original, in PyTorch on the MerLin backend (torch Haar/QR); deployment samples from the MerLin engine's GPU Clifford sampler (CUDA).",
+    "experiment": {
+        "name": "fig3a_bs_merlin",
+        "paper_reference": "Fig. 3a (MerLin adaptation)"
+    },
+    "dataset": {
+        "name": "boson_sampling",
+        "m": 256,
+        "n": 16,
+        "n_train": 5000,
+        "n_test": 5000,
+        "input_state": "middle_compact",
+        "unitary_seed": 2603,
+        "sample_seed": 8793
+    },
+    "model": {
+        "ansatz": "haar",
+        "butterfly_variant": "reference",
+        "input_state": "middle_alternating",
+        "photon_model": "indistinguishable",
+        "backend": "merlin"
+    },
+    "kernel": {
+        "type": "gaussian",
+        "sigma": 3.0
+    },
+    "init": {
+        "strategy": "identity",
+        "perturbation": 0.01
+    },
+    "training": {
+        "steps": 2000,
+        "learning_rate": 0.01,
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "convergence_interval": 200,
+        "log_every": 1
+    },
+    "evaluation": {
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "sample_metrics": true,
+        "num_model_samples": 2000,
+        "baselines": [
+            "random",
+            "marginal",
+            "rbm",
+            "test_to_test"
+        ],
+        "rbm": {
+            "score_sigma": 3.0
+        },
+        "sampler": "merlin_clifford"
+    }
+}

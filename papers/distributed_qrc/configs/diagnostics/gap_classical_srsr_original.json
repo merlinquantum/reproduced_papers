@@ -1,0 +1,11 @@
+{
+  "description": "Gap diagnosis B: classical reservoir + linear ridge only, paper grid of srsr, for many seeds (seed spread of the paper's baseline).",
+  "experiment": {
+    "id": "GAP-CLASSICAL-SRSR",
+    "variant": "original",
+    "architecture": "srsr",
+    "sizes": [10, 20, 40, 15, 30, 60, 25, 50],
+    "reservoir_types": ["classical"],
+    "readout_types": ["linear"]
+  }
+}

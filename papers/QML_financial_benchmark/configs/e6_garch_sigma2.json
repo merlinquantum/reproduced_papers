@@ -1,0 +1,20 @@
+{
+  "description": "Ambiguity A1: GARCH(1,1) forecasting RV_{t+1} with sigma^2_{t+1} alone (likely paper reading) next to the D20 completion with the four known squared returns. Same data, refit schedule and test window as e6_original; no tuning.",
+  "task": "volatility",
+  "volatility": {
+    "dataset": {
+      "ticker": "^GSPC",
+      "start": "2005-01-01",
+      "end": "2024-12-31",
+      "return_lags": 5,
+      "rv_lags": 5,
+      "initial_train_days": 720,
+      "refit_every": 120,
+      "max_train_days": null,
+      "batch_size": 256
+    },
+    "models": ["garch", "garch_sigma2"],
+    "qsvr": {"angle_scale": 3.141592653589793, "layers": [0], "topologies": ["ring"], "rotation_seed": 1234, "amplitude_betas": [1]},
+    "tuning": {"n_trials": 1, "tune_every_n_refits": 1, "validation_fraction": 0.2, "C": [0.01, 100.0], "epsilon": [0.001, 1.0], "rbf_wide_gamma": [0.001, 100.0], "sampler_seed": 0}
+  }
+}

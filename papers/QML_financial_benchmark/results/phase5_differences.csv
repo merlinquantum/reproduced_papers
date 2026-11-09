@@ -1,0 +1,98 @@
+claim,setting,model,comparison,difference,ci_low,ci_high,p_value,ensemble_p,source
+C2,KCHOL 3-D lagged,QNN,leak_free:qnn - leak_free:ann,0.0044937511029824,-0.023079629617526,0.0320671318234909,0.6743714939942718,0.5,e1_kchol_statistics.csv
+C2,KCHOL 3-D lagged,QNN,leak_free:qnn - leak_free:ann_parameter_matched,0.0055622402977651,-0.0086361076075063,0.0197605882030366,0.3378871702981103,0.486,e1_kchol_statistics.csv
+C2,KCHOL 3-D lagged,QNN,leak_free:qnn - logistic_regression,0.0173396865123292,0.0062170997341039,0.0284622732905546,0.012365558303132,0.1545,e1_kchol_statistics.csv
+C2,KCHOL 3-D same-day (diagnostic),QNN,leak_free:qnn - leak_free:ann,-0.0189536506714155,-0.0332037122736976,-0.0047035890691334,0.0209657391486778,0.0015,e1_kchol_sameday_statistics.csv
+C2,KCHOL 3-D same-day (diagnostic),QNN,leak_free:qnn - leak_free:ann_parameter_matched,-0.001655676950474,-0.0195880088463719,0.0162766549454237,0.8103273793564314,0.3325,e1_kchol_sameday_statistics.csv
+C2,KCHOL 3-D same-day (diagnostic),QNN,leak_free:qnn - logistic_regression,0.0150968218061638,0.001325214208627,0.0288684294037007,0.0382664665875429,0.0005,e1_kchol_sameday_statistics.csv
+C3,GARAN 3-D lagged,QNN,leak_free:qnn - leak_free:ann,-0.0182092377789542,-0.0551900864229009,0.0187716108649924,0.2433802285273582,0.1035,e1_turkish_rest_statistics.csv
+C3,GARAN 3-D lagged,QNN,leak_free:qnn - leak_free:ann_parameter_matched,0.0007075131154641,-0.0202627052975964,0.0216777315285248,0.9298723859680929,0.319,e1_turkish_rest_statistics.csv
+C3,GARAN 3-D lagged,QNN,leak_free:qnn - logistic_regression,-0.0095377901846594,-0.0375235728409003,0.0184479924715814,0.3976079505695226,0.1935,e1_turkish_rest_statistics.csv
+C3,TCELL 3-D lagged,QNN,leak_free:qnn - leak_free:ann,0.0151046667946994,-0.0015574246788707,0.0317667582682696,0.0655711133782353,0.222,e1_turkish_rest_statistics.csv
+C3,TCELL 3-D lagged,QNN,leak_free:qnn - leak_free:ann_parameter_matched,0.0084213558671019,-0.0048331976055329,0.0216759093397368,0.1524979094601909,0.8785,e1_turkish_rest_statistics.csv
+C3,TCELL 3-D lagged,QNN,leak_free:qnn - logistic_regression,0.0051565200691376,-0.0073019762831018,0.0176150164213772,0.3145306557874454,0.903,e1_turkish_rest_statistics.csv
+C3,TUPRS 3-D lagged,QNN,leak_free:qnn - leak_free:ann,-0.0297366946778711,-0.0786489124640779,0.0191755231083356,0.1666894515864164,0.2235,e1_turkish_rest_statistics.csv
+C3,TUPRS 3-D lagged,QNN,leak_free:qnn - leak_free:ann_parameter_matched,-0.0468619447779112,-0.0737419188191742,-0.0199819707366481,0.008397692331197,0.1035,e1_turkish_rest_statistics.csv
+C3,TUPRS 3-D lagged,QNN,leak_free:qnn - logistic_regression,0.0150236094437774,-0.0117011282853007,0.0417483471728556,0.1935895498645403,0.2595,e1_turkish_rest_statistics.csv
+C3,ULKER 3-D lagged,QNN,leak_free:qnn - leak_free:ann,0.0012849850378454,-0.029631172182215,0.0322011422579059,0.913690109591003,0.4975,e1_turkish_rest_statistics.csv
+C3,ULKER 3-D lagged,QNN,leak_free:qnn - leak_free:ann_parameter_matched,0.0092109263733977,-0.0146910809166227,0.0331129336634181,0.3449149123879398,0.879,e1_turkish_rest_statistics.csv
+C3,ULKER 3-D lagged,QNN,leak_free:qnn - logistic_regression,0.0049111071994366,-0.0156107652324618,0.025432979631335,0.5427578462103577,0.8585,e1_turkish_rest_statistics.csv
+C3,S&P 500 7-D,QNN,leak_free:qnn - leak_free:ann,0.0004888888888889,-0.0148690561284546,0.0158468339062325,0.9338207988513127,0.485,e2_spx_statistics.csv
+C3,S&P 500 7-D,QNN,leak_free:qnn - leak_free:ann_parameter_matched,-0.0027809523809523,-0.0326240672824695,0.0270621625205649,0.8086155432654825,0.038,e2_spx_statistics.csv
+C3,S&P 500 7-D,QNN,leak_free:qnn - logistic_regression,-0.0099978835978834,-0.0199011801134728,-9.4587082294071e-05,0.0486643796740404,0.178,e2_spx_statistics.csv
+C3,S&P 500 7-D,photonic QNN (MerLin adaptation),leak_free:qnn - leak_free:ann,-0.0123089947089947,-0.0355823874045109,0.0109643979865214,0.215908273471997,0.0475,e2_merlin_statistics.csv
+C3,S&P 500 7-D,photonic QNN (MerLin adaptation),leak_free:qnn - leak_free:ann_parameter_matched,-0.0239132275132275,-0.0313474624541113,-0.0164789925723436,0.0008692237589297,0.009,e2_merlin_statistics.csv
+C3,S&P 500 7-D,photonic QNN (MerLin adaptation),leak_free:qnn - logistic_regression,-0.022495238095238,-0.0291050146489104,-0.0158854615415655,0.000699566392708,0.033,e2_merlin_statistics.csv
+C1,AAPL 64-D Table V timing,QNN,leak_free:qnn - leak_free:ann,-0.0186448442445443,-0.0281641749086893,-0.0091255135803993,0.0055502735371317,0.137,e3_tablev_aapl_statistics.csv
+C1,AAPL 64-D Table V timing,QNN,leak_free:qnn - leak_free:ann_parameter_matched,-0.0193111777444611,-0.0288159785230605,-0.0098063769658616,0.0048619688332508,0.112,e3_tablev_aapl_statistics.csv
+C1,AAPL 64-D Table V timing,QNN,leak_free:qnn - logistic_regression,-0.0177744461102781,-0.0276382934785706,-0.0079105987419856,0.0074740499621407,0.2105,e3_tablev_aapl_statistics.csv
+C1,AAPL 64-D Table V timing,photonic QNN (MerLin adaptation),leak_free:qnn - leak_free:ann,-0.0059262035648842,-0.0123515297997252,0.0004991226699568,0.0625870669808475,0.2355,e3_tablev_merlin_statistics.csv
+C1,AAPL 64-D Table V timing,photonic QNN (MerLin adaptation),leak_free:qnn - leak_free:ann_parameter_matched,-0.0033691487589538,-0.0093571913474678,0.0026188938295601,0.1932823161287599,0.697,e3_tablev_merlin_statistics.csv
+C1,AAPL 64-D Table V timing,photonic QNN (MerLin adaptation),leak_free:qnn - logistic_regression,-0.0046226886556721,-0.0098338488970298,0.0005884715856856,0.0694734686597813,0.754,e3_tablev_merlin_statistics.csv
+C1,AAPL 64-D strict timing,QNN,leak_free:qnn - leak_free:ann,0.0299350324837581,-0.0049022975676585,0.0647723625351748,0.0755161104804456,0.0235,e3_aapl_statistics.csv
+C1,AAPL 64-D strict timing,QNN,leak_free:qnn - leak_free:ann_parameter_matched,0.028623188405797,-0.0172999106121344,0.0745462874237286,0.1585866082603849,0.0245,e3_aapl_statistics.csv
+C1,AAPL 64-D strict timing,QNN,leak_free:qnn - logistic_regression,0.0364671830751291,0.0047205893825226,0.0682137767677356,0.0332387148857479,0.0625,e3_aapl_statistics.csv
+C3,BA 64-D strict timing,QNN,leak_free:qnn - leak_free:ann,0.0674553322166387,0.0486065215435865,0.0863041428896909,0.0041910785871375,0.045,e3_us_rest_statistics.csv
+C3,BA 64-D strict timing,QNN,leak_free:qnn - leak_free:ann_parameter_matched,0.0204738972640982,-0.0923130172116357,0.1332608117398322,0.516546437665407,0.197,e3_us_rest_statistics.csv
+C3,BA 64-D strict timing,QNN,leak_free:qnn - logistic_regression,-0.0009561697375767,-0.0603211659993679,0.0584088265242143,0.951055372224725,0.8925,e3_us_rest_statistics.csv
+C3,GILD 64-D strict timing,QNN,leak_free:qnn - leak_free:ann,0.0458508032712025,-0.0717678134875944,0.1634694200299996,0.2354846568347564,0.152,e3_us_rest_statistics.csv
+C3,GILD 64-D strict timing,QNN,leak_free:qnn - leak_free:ann_parameter_matched,0.0232471252438872,-0.1693175092605627,0.2158117597483372,0.6552261897614267,0.742,e3_us_rest_statistics.csv
+C3,GILD 64-D strict timing,QNN,leak_free:qnn - logistic_regression,0.0112707044709203,-0.1136070084612086,0.1361484174030493,0.7352095701212746,0.981,e3_us_rest_statistics.csv
+C3,DVN 64-D strict timing,QNN,leak_free:qnn - leak_free:ann,0.0084444721425901,-0.1494110738073951,0.1663000180925753,0.8393588591060811,0.125,e3_us_rest_statistics.csv
+C3,DVN 64-D strict timing,QNN,leak_free:qnn - leak_free:ann_parameter_matched,0.0069003005248799,-0.064276804936077,0.0780774059858368,0.7170986235775463,0.5685,e3_us_rest_statistics.csv
+C3,DVN 64-D strict timing,QNN,leak_free:qnn - logistic_regression,0.0221169692689075,-0.0474402835318203,0.0916742220696354,0.3047068065226879,0.1745,e3_us_rest_statistics.csv
+C3,LNC 64-D strict timing,QNN,leak_free:qnn - leak_free:ann,-0.0119047619047618,-0.1333592476750297,0.1095497238655059,0.7142224433335016,0.1725,e3_us_rest_statistics.csv
+C3,LNC 64-D strict timing,QNN,leak_free:qnn - leak_free:ann_parameter_matched,0.013550980799889,-0.1105589147715844,0.1376608763713626,0.6847495439187555,0.5295,e3_us_rest_statistics.csv
+C3,LNC 64-D strict timing,QNN,leak_free:qnn - logistic_regression,-0.0001663547515075,-0.1168029233498458,0.1164702138468306,0.9956607199050208,0.4045,e3_us_rest_statistics.csv
+C5,S&P 500 regime F1,QLSTM,auc:qlstm - auc:lstm (sharpe),-0.4643835335911943,-1.0677404744195056,0.1389734072371171,0.099467776511347,,e5_trading_comparisons.csv
+C6,S&P 500 regime F1,QLSTM,auc:qlstm - auc:lstm (auc),-0.0343782456802946,-0.06867376340946703,-8.27279511221718e-05,0.049681361068475,,e5_trading_comparisons.csv
+C5,S&P 500 regime F1,QLSTM,auc:qlstm - auc:lstm_parameter_matched (sharpe),-0.1922416653686851,-0.5298429762838195,0.14535964554644926,0.1890905829769661,,e5_trading_comparisons.csv
+C6,S&P 500 regime F1,QLSTM,auc:qlstm - auc:lstm_parameter_matched (auc),-0.0008560727661851,-0.04721120533552655,0.04549905980315635,0.9615712834376764,,e5_trading_comparisons.csv
+C5,S&P 500 regime F2,QLSTM,auc:qlstm - auc:lstm (sharpe),0.0632932530459126,-0.9831748725705104,1.1097613786623355,0.8748090752680295,,e5_trading_comparisons.csv
+C6,S&P 500 regime F2,QLSTM,auc:qlstm - auc:lstm (auc),-0.0040130291068964,-0.008411945874077873,0.0003858876602850737,0.0644943099763083,,e5_trading_comparisons.csv
+C5,S&P 500 regime F2,QLSTM,auc:qlstm - auc:lstm_parameter_matched (sharpe),-0.0473292443214967,-0.6446937358359945,0.5500352471930012,0.8366845568303823,,e5_trading_comparisons.csv
+C6,S&P 500 regime F2,QLSTM,auc:qlstm - auc:lstm_parameter_matched (auc),-0.002694072719104,-0.01229646953249438,0.00690832409428638,0.4795765900667176,,e5_trading_comparisons.csv
+C5,S&P 500 regime F3,QLSTM,auc:qlstm - auc:lstm (sharpe),0.08855964106005,-1.0662521050104237,1.2433713871305236,0.841826361677668,,e5_trading_comparisons.csv
+C6,S&P 500 regime F3,QLSTM,auc:qlstm - auc:lstm (auc),0.0349926395289298,0.005298058896504868,0.06468722016135474,0.0307517957556385,,e5_trading_comparisons.csv
+C5,S&P 500 regime F3,QLSTM,auc:qlstm - auc:lstm_parameter_matched (sharpe),0.6269723117953543,-0.30361913044902467,1.5575637540397334,0.1347860125970385,,e5_trading_comparisons.csv
+C6,S&P 500 regime F3,QLSTM,auc:qlstm - auc:lstm_parameter_matched (auc),0.0394601254480286,-0.0013344469044912488,0.08025469780054845,0.0549314468156188,,e5_trading_comparisons.csv
+C5,S&P 500 regime F4,QLSTM,auc:qlstm - auc:lstm (sharpe),-0.0675837713739032,-0.2511586334528614,0.115991090705055,0.3645615954400623,,e5_trading_comparisons.csv
+C6,S&P 500 regime F4,QLSTM,auc:qlstm - auc:lstm (auc),-0.0161275707054617,-0.030117144750585943,-0.002137996660337458,0.0328929662657824,,e5_trading_comparisons.csv
+C5,S&P 500 regime F4,QLSTM,auc:qlstm - auc:lstm_parameter_matched (sharpe),-0.0023184365496094,-0.5064575906697685,0.5018207175705497,0.9904256176696534,,e5_trading_comparisons.csv
+C6,S&P 500 regime F4,QLSTM,auc:qlstm - auc:lstm_parameter_matched (auc),-0.0162783618278998,-0.03197064195097622,-0.0005860817048233789,0.0450276390821438,,e5_trading_comparisons.csv
+C7/C8/C10,RV AAPL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(persistence); negative = QSVR better,-0.0464814230116648,,,1.756386561968526e-06,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV AAPL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(har); negative = QSVR better,-0.011035475482037427,,,0.11229012394115,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV AAPL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(garch); negative = QSVR better,0.019296941365445797,,,1.1326080229245861e-07,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV AAPL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_linear); negative = QSVR better,-0.0840157555818628,,,0.0058709415117734,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV AAPL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_poly); negative = QSVR better,-0.403882749262646,,,0.0745455890674626,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV AAPL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_rbf); negative = QSVR better,0.0011635005329688752,,,0.7408487337117646,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV AAPL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_rbf_wide); negative = QSVR better,-0.009374093518611737,,,0.3655407938884929,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV AAPL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(garch_sigma2); negative = QSVR better,-0.15467350971489857,,,0.0,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GARAN,QSVR angle,QLIKE(qsvr_angle) - QLIKE(persistence); negative = QSVR better,-0.07559012193028014,,,0.001579330416078,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GARAN,QSVR angle,QLIKE(qsvr_angle) - QLIKE(har); negative = QSVR better,-0.021285046073749925,,,6.225708837348519e-11,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GARAN,QSVR angle,QLIKE(qsvr_angle) - QLIKE(garch); negative = QSVR better,0.009582826823365309,,,1.360172862785447e-06,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GARAN,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_linear); negative = QSVR better,-2.4244667472292623,,,0.2548815830486877,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GARAN,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_poly); negative = QSVR better,-0.11877832401559374,,,0.0150350991696384,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GARAN,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_rbf); negative = QSVR better,0.002504224110204234,,,0.0030359952683294,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GARAN,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_rbf_wide); negative = QSVR better,0.0019609430735725297,,,0.1419647705812805,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GARAN,QSVR angle,QLIKE(qsvr_angle) - QLIKE(garch_sigma2); negative = QSVR better,-0.14715575108543,,,0.0,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GSPC,QSVR angle,QLIKE(qsvr_angle) - QLIKE(persistence); negative = QSVR better,-0.029037357988242363,,,0.0089529843348505,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GSPC,QSVR angle,QLIKE(qsvr_angle) - QLIKE(har); negative = QSVR better,0.006016001695412498,,,0.4703262058431192,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GSPC,QSVR angle,QLIKE(qsvr_angle) - QLIKE(garch); negative = QSVR better,0.042347347699921656,,,4.331793146405971e-08,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GSPC,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_linear); negative = QSVR better,-0.0030601514018080422,,,0.770043185744373,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GSPC,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_poly); negative = QSVR better,-3.4906007304799784,,,0.0048951825642227,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GSPC,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_rbf); negative = QSVR better,0.004906369509814823,,,0.0274697968552417,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GSPC,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_rbf_wide); negative = QSVR better,0.006238754483744557,,,0.0091470481454292,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GSPC,QSVR angle,QLIKE(qsvr_angle) - QLIKE(garch_sigma2); negative = QSVR better,-0.09651799697167895,,,0.0,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV KCHOL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(persistence); negative = QSVR better,-0.06986822743288368,,,0.0013434826944895,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV KCHOL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(har); negative = QSVR better,-0.023977907012683985,,,0.2127780903507969,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV KCHOL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(garch); negative = QSVR better,0.021860707288843706,,,0.2433168511544892,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV KCHOL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_linear); negative = QSVR better,-0.04272677127772706,,,0.0595698038859897,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV KCHOL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_poly); negative = QSVR better,-0.0038037903904051262,,,0.8447481255345912,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV KCHOL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_rbf); negative = QSVR better,0.017973643681343354,,,0.3379130474524725,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV KCHOL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(svr_rbf_wide); negative = QSVR better,0.014790868117072975,,,0.4377745692060972,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV KCHOL,QSVR angle,QLIKE(qsvr_angle) - QLIKE(garch_sigma2); negative = QSVR better,-0.14133013041431397,,,1.5853984791647237e-12,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV AAPL,photonic kernel,QLIKE(qsvr_angle) - QLIKE(photonic_kernel); negative = QSVR better,-0.015747587656915307,,,8.572529462647083e-05,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GARAN,photonic kernel,QLIKE(qsvr_angle) - QLIKE(photonic_kernel); negative = QSVR better,-0.03620347536852009,,,0.0512991944376919,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV GSPC,photonic kernel,QLIKE(qsvr_angle) - QLIKE(photonic_kernel); negative = QSVR better,-0.003776682573636947,,,0.2885931480748365,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv
+C7/C8/C10,RV KCHOL,photonic kernel,QLIKE(qsvr_angle) - QLIKE(photonic_kernel); negative = QSVR better,-0.005628499483204763,,,0.7252665848054827,,e6_with_garch_sigma2.csv / e6_merlin_vs_qubit.csv

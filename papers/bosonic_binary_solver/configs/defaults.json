@@ -1,0 +1,12 @@
+{
+  "description": "Smoke configuration: tiny, runs in well under a minute, exercises every code path",
+  "seed": 42,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "device": "cpu",
+  "problem": {"family": "knapsack", "m": 10, "instances": 2, "instance_seed_base": 0},
+  "circuit": {"delays": [1, 3, 9]},
+  "training": {"updates": 10, "samples": 10, "lr_theta": 0.01, "lr_alpha": 0.05, "shift": 1.5707963267948966, "shift_scale": 1.0},
+  "method": {"name": "bbs", "source": "boson", "rate_scale": 1.0},
+  "logging": {"level": "info", "save_config_snapshot": true}
+}

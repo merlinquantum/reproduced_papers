@@ -1,0 +1,20 @@
+{
+  "description": "E2 classical context reference B4a: 1-13-1 tanh MLP (40 parameters vs 39 for the TF QNN) on Omega_d = {1, 1.2, 3}, same iterations and batch size.",
+  "dataset": {
+    "frequencies": [
+      1.0,
+      1.2,
+      3.0
+    ]
+  },
+  "training": {
+    "iterations": 6000,
+    "batch_size": 2
+  },
+  "model": {
+    "family": "mlp",
+    "hidden_sizes": [
+      13
+    ]
+  }
+}

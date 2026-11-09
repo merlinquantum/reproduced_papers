@@ -1,0 +1,38 @@
+{
+  "description": "Appendix C MNIST controlled comparison: RRWP plus 1-CQRW, four seeds.",
+  "feasibility": {
+    "status": "resource_intensive"
+  },
+  "dataset": "mnist",
+  "dataset_kwargs": {},
+  "model": "grit",
+  "encoding": "rrwp+cqrw1",
+  "rrwp_dim": 18,
+  "qpe_dim": 18,
+  "qpe_initial_distribution": "local",
+  "qpe_min_time": 0.1,
+  "qpe_max_time": 3.141592653589793,
+  "seeds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "seed": 0,
+  "node_dim": 52,
+  "depth": 3,
+  "num_heads": 4,
+  "num_classes": 10,
+  "head": "graph_class",
+  "pooling": "mean",
+  "dropout": 0,
+  "attention_dropout": 0.5,
+  "epochs": 200,
+  "batch_size": 16,
+  "lr": 0.001,
+  "weight_decay": 0.00001,
+  "warmup_epochs": 5,
+  "minimum_lr": 0.000001,
+  "parameter_budget": 105000,
+  "device": "cpu"
+}

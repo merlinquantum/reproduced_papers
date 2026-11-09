@@ -1,0 +1,21 @@
+{
+  "description": "Quick CPU smoke of the MerLin photonic adaptation on PneumoniaMNIST.",
+  "scope": "merlin_photonic_adaptation",
+  "seed": 0,
+  "dtype": "float32",
+  "device": "cpu",
+  "outdir": "outdir",
+  "data_root": "../../data",
+  "dataset": {
+    "filename": "pneumoniamnist_train.pkl",
+    "download_if_missing": true
+  },
+  "experiment": {
+    "pca_dim": 2,
+    "circuit_seed": 0,
+    "max_samples": 100
+  },
+  "logging": {
+    "level": "info"
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "sweep_id": "e2_fig2b",
+  "description": "E2 / Fig. 2b-c: FF vs TF vs FF+S (+ classical references) on {1,1.2,3}, paper settings; plus N=4 variants (A1).",
+  "candidates": [
+    {
+      "name": "ff",
+      "config": "configs/fig2b_ff_original.json"
+    },
+    {
+      "name": "tf",
+      "config": "configs/fig2b_tf_original.json"
+    },
+    {
+      "name": "ffs",
+      "config": "configs/fig2b_ffs_original.json"
+    },
+    {
+      "name": "mlp",
+      "config": "configs/fig2b_mlp_classical.json"
+    },
+    {
+      "name": "fourier",
+      "config": "configs/fig2b_fourier_classical.json"
+    },
+    {
+      "name": "ff_n4",
+      "config": "configs/fig2b_ff_original.json",
+      "overrides": {
+        "model.n_qubits": 4
+      }
+    },
+    {
+      "name": "tf_n4",
+      "config": "configs/fig2b_tf_original.json",
+      "overrides": {
+        "model.n_qubits": 4
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "max_workers": 6,
+  "selection": {
+    "metric": "train_mse",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}

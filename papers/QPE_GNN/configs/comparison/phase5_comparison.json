@@ -1,0 +1,359 @@
+{
+  "spec_version": 1,
+  "description": "Phase 5 comparison table spec, per the Phase 5 Comparison Plan (LOG.md, 2026-11-09T11:00+01:00). Numbers are read from the named artifacts; only paper values live here.",
+  "systems": [
+    {
+      "claim": "C1",
+      "system": "GRIT RRWP",
+      "role": "paper baseline",
+      "provenance": "paper Table 1 (reported)",
+      "scope": "paper (2000 epochs)",
+      "matching": "paper protocol",
+      "status": "reference only; budget differs from local runs",
+      "source": "paper",
+      "metric_name": "test_mae",
+      "paper_value": 0.06,
+      "paper_std": 0.002,
+      "num_params": null
+    },
+    {
+      "claim": "C1",
+      "system": "GRIT RRWP+1-CQRW",
+      "role": "paper method",
+      "provenance": "paper Table 1 (reported)",
+      "scope": "paper (2000 epochs)",
+      "matching": "paper protocol",
+      "status": "reference only; budget differs from local runs",
+      "source": "paper",
+      "metric_name": "test_mae",
+      "paper_value": 0.058,
+      "paper_std": 0.002,
+      "num_params": null
+    },
+    {
+      "claim": "C1",
+      "system": "GRIT RRWP+2-QiRW",
+      "role": "paper method",
+      "provenance": "paper Table 1 (reported)",
+      "scope": "paper (2000 epochs)",
+      "matching": "paper protocol",
+      "status": "reference only; budget differs from local runs",
+      "source": "paper",
+      "metric_name": "test_mae",
+      "paper_value": 0.059,
+      "paper_std": 0.004,
+      "num_params": null
+    },
+    {
+      "claim": "C1",
+      "system": "zinc_rrwp",
+      "role": "paper baseline (reproduced)",
+      "provenance": "local, reproduced-papers-1",
+      "scope": "partial (200 of 2000 epochs, 4 seeds)",
+      "matching": "identical GRIT, data, schedule, 200 epochs, seeds 0-3",
+      "status": "COMMENSURABLE",
+      "source": "sweep",
+      "summary": "results/zinc_reduced/sweep_summary.json",
+      "candidate": "zinc_rrwp"
+    },
+    {
+      "claim": "C1",
+      "system": "zinc_rrwp41",
+      "role": "width control (Phase 1 plan)",
+      "provenance": "local, reproduced-papers-1",
+      "scope": "partial (200 of 2000 epochs, 4 seeds)",
+      "matching": "identical GRIT, data, schedule, 200 epochs, seeds 0-3; PE width matched (41 channels)",
+      "status": "COMMENSURABLE",
+      "source": "sweep",
+      "summary": "results/zinc_reduced/sweep_summary.json",
+      "candidate": "zinc_rrwp41"
+    },
+    {
+      "claim": "C1",
+      "system": "zinc_cqrw1",
+      "role": "paper method (reproduced)",
+      "provenance": "local, reproduced-papers-1",
+      "scope": "partial (200 of 2000 epochs, 4 seeds)",
+      "matching": "identical GRIT, data, schedule, 200 epochs, seeds 0-3",
+      "status": "COMMENSURABLE",
+      "source": "sweep",
+      "summary": "results/zinc_reduced/sweep_summary.json",
+      "candidate": "zinc_cqrw1"
+    },
+    {
+      "claim": "C1",
+      "system": "zinc_qirw2",
+      "role": "paper method (reproduced)",
+      "provenance": "local, reproduced-papers-1",
+      "scope": "partial (200 of 2000 epochs, 4 seeds)",
+      "matching": "identical GRIT, data, schedule, 200 epochs, seeds 0-3",
+      "status": "COMMENSURABLE",
+      "source": "sweep",
+      "summary": "results/zinc_reduced/sweep_summary.json",
+      "candidate": "zinc_qirw2"
+    },
+    {
+      "claim": "P2",
+      "system": "zinc_photon2",
+      "role": "MerLin adaptation (simulated)",
+      "provenance": "local, merlin-ai (CUDA 12.6)",
+      "scope": "partial (200 of 2000 epochs, 4 seeds), cross-machine",
+      "matching": "identical GRIT, data, schedule, 200 epochs, seeds 0-3; other machine and code state",
+      "status": "PARTIALLY_COMMENSURABLE (cross-machine, user override 2026-11-09)",
+      "source": "sweep",
+      "summary": "results/zinc_photonic/sweep_summary.json",
+      "candidate": "zinc_photon2"
+    },
+    {
+      "claim": "C2",
+      "system": "two_particle_xy",
+      "role": "paper method (reproduced)",
+      "provenance": "local CPU",
+      "scope": "paper-accurate",
+      "matching": "same 25 graphs, 5 permutations, tolerance 1e-9",
+      "status": "COMMENSURABLE",
+      "source": "srg",
+      "metrics": "results/srg/srg_metrics.json",
+      "method": "two_particle_xy",
+      "run_status": "outdir/run_20261108-140202/run_status.json"
+    },
+    {
+      "claim": "C2",
+      "system": "rrwp",
+      "role": "paper baseline (reproduced)",
+      "provenance": "local CPU",
+      "scope": "paper-accurate",
+      "matching": "same 25 graphs, 5 permutations, tolerance 1e-9",
+      "status": "COMMENSURABLE",
+      "source": "srg",
+      "metrics": "results/srg/srg_metrics.json",
+      "method": "rrwp",
+      "run_status": "outdir/run_20261108-140202/run_status.json"
+    },
+    {
+      "claim": "C2",
+      "system": "ising_p2_linked",
+      "role": "paper method, labelled proxy (parameters unpublished)",
+      "provenance": "local CPU",
+      "scope": "paper-accurate",
+      "matching": "same 25 graphs, 5 permutations, tolerance 1e-9",
+      "status": "PARTIALLY_COMMENSURABLE (proxy, not the paper's circuit)",
+      "source": "srg",
+      "metrics": "results/srg/srg_metrics.json",
+      "method": "ising_p2_linked",
+      "run_status": "outdir/run_20261108-140202/run_status.json"
+    },
+    {
+      "claim": "P1",
+      "system": "photon2_threshold",
+      "role": "MerLin adaptation (simulated)",
+      "provenance": "local CPU",
+      "scope": "paper protocol, simulated ideal photons",
+      "matching": "same graphs, permutations, tolerance as C2",
+      "status": "COMMENSURABLE",
+      "source": "srg",
+      "metrics": "results/srg_photonic/srg_metrics.json",
+      "method": "photon2_threshold",
+      "run_status": "outdir/run_20261108-214848/run_status.json"
+    },
+    {
+      "claim": "P1",
+      "system": "photon3_threshold",
+      "role": "MerLin adaptation (simulated)",
+      "provenance": "local CPU",
+      "scope": "paper protocol, simulated ideal photons",
+      "matching": "same graphs, permutations, tolerance as C2",
+      "status": "COMMENSURABLE",
+      "source": "srg",
+      "metrics": "results/srg_photonic/srg_metrics.json",
+      "method": "photon3_threshold",
+      "run_status": "outdir/run_20261108-214848/run_status.json"
+    },
+    {
+      "claim": "C3",
+      "system": "synthetic_quantum",
+      "role": "paper method (reproduced)",
+      "provenance": "local, reproduced-papers-1",
+      "scope": "paper protocol, 4 seeds",
+      "matching": "same 800 graphs and split, 200 epochs, constant lr 1e-3",
+      "status": "COMMENSURABLE",
+      "source": "sweep",
+      "summary": "results/synthetic_degree_comparison/sweep_summary.json",
+      "candidate": "synthetic_quantum"
+    },
+    {
+      "claim": "C3",
+      "system": "synthetic_laplacian",
+      "role": "paper baseline (reproduced, iso-parameter)",
+      "provenance": "local, reproduced-papers-1",
+      "scope": "paper protocol, 4 seeds",
+      "matching": "same 800 graphs and split, 200 epochs, constant lr 1e-3; 3,906 params",
+      "status": "COMMENSURABLE",
+      "source": "sweep",
+      "summary": "results/synthetic_degree_comparison/sweep_summary.json",
+      "candidate": "synthetic_laplacian"
+    },
+    {
+      "claim": "C3",
+      "system": "synthetic_rrwp",
+      "role": "paper baseline (reproduced)",
+      "provenance": "local, reproduced-papers-1",
+      "scope": "paper protocol, 4 seeds",
+      "matching": "same 800 graphs and split, 200 epochs, constant lr 1e-3; GatedGCN 7,074 params",
+      "status": "COMMENSURABLE",
+      "source": "sweep",
+      "summary": "results/synthetic_degree_comparison/sweep_summary.json",
+      "candidate": "synthetic_rrwp"
+    },
+    {
+      "claim": "C3",
+      "system": "synthetic_gcn",
+      "role": "no-encoding control",
+      "provenance": "local, reproduced-papers-1",
+      "scope": "paper protocol, 4 seeds",
+      "matching": "same 800 graphs and split, 200 epochs, constant lr 1e-3; 3,298 params",
+      "status": "COMMENSURABLE",
+      "source": "sweep",
+      "summary": "results/synthetic_degree_comparison/sweep_summary.json",
+      "candidate": "synthetic_gcn"
+    },
+    {
+      "claim": "C3",
+      "system": "synthetic_degree",
+      "role": "additional fair baseline (Phase 5, degree confounder)",
+      "provenance": "local, reproduced-papers-1",
+      "scope": "paper protocol, 4 seeds",
+      "matching": "same 800 graphs and split, 200 epochs, constant lr 1e-3; 3,906 params, same model as quantum",
+      "status": "COMMENSURABLE (newer code state, additive branch)",
+      "source": "sweep",
+      "summary": "results/synthetic_degree_comparison/sweep_summary.json",
+      "candidate": "synthetic_degree"
+    },
+    {
+      "claim": "C3",
+      "system": "synthetic_rrwp_cosine",
+      "role": "Phase 3 diagnostic (cosine lr decay)",
+      "provenance": "local, reproduced-papers-1",
+      "scope": "paper protocol, 4 seeds",
+      "matching": "as synthetic_rrwp but cosine lr decay to 1e-6",
+      "status": "diagnostic only: different schedule from the frozen protocol",
+      "source": "sweep",
+      "summary": "results/synthetic_d2_lr_sensitivity/sweep_summary.json",
+      "candidate": "synthetic_rrwp_cosine"
+    }
+  ],
+  "comparisons": [
+    {
+      "claim": "C1",
+      "summary": "results/zinc_reduced/sweep_summary.json",
+      "a": "zinc_rrwp",
+      "b": "zinc_cqrw1",
+      "commensurability": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "claim": "C1",
+      "summary": "results/zinc_reduced/sweep_summary.json",
+      "a": "zinc_rrwp41",
+      "b": "zinc_cqrw1",
+      "commensurability": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "claim": "C1",
+      "summary": "results/zinc_reduced/sweep_summary.json",
+      "a": "zinc_rrwp",
+      "b": "zinc_qirw2",
+      "commensurability": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "claim": "C1",
+      "summary": "results/zinc_reduced/sweep_summary.json",
+      "a": "zinc_rrwp41",
+      "b": "zinc_qirw2",
+      "commensurability": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "claim": "P2",
+      "summary": "results/zinc_photonic/sweep_summary.json",
+      "a": "zinc_rrwp",
+      "b": "zinc_photon2",
+      "commensurability": "PARTIALLY_COMMENSURABLE",
+      "note": "cross-machine; user override 2026-11-09"
+    },
+    {
+      "claim": "P2",
+      "summary": "results/zinc_photonic/sweep_summary.json",
+      "a": "zinc_rrwp41",
+      "b": "zinc_photon2",
+      "commensurability": "PARTIALLY_COMMENSURABLE",
+      "note": "cross-machine; user override 2026-11-09"
+    },
+    {
+      "claim": "P2",
+      "summary": "results/zinc_photonic/sweep_summary.json",
+      "a": "zinc_cqrw1",
+      "b": "zinc_photon2",
+      "commensurability": "PARTIALLY_COMMENSURABLE",
+      "note": "cross-machine; user override 2026-11-09"
+    },
+    {
+      "claim": "P2",
+      "summary": "results/zinc_photonic/sweep_summary.json",
+      "a": "zinc_qirw2",
+      "b": "zinc_photon2",
+      "commensurability": "PARTIALLY_COMMENSURABLE",
+      "note": "cross-machine; user override 2026-11-09"
+    },
+    {
+      "claim": "C3",
+      "summary": "results/synthetic_degree_comparison/sweep_summary.json",
+      "a": "synthetic_quantum",
+      "b": "synthetic_degree",
+      "commensurability": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "claim": "C3",
+      "summary": "results/synthetic_degree_comparison/sweep_summary.json",
+      "a": "synthetic_quantum",
+      "b": "synthetic_laplacian",
+      "commensurability": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "claim": "C3",
+      "summary": "results/synthetic_degree_comparison/sweep_summary.json",
+      "a": "synthetic_quantum",
+      "b": "synthetic_rrwp",
+      "commensurability": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "claim": "C3",
+      "summary": "results/synthetic_degree_comparison/sweep_summary.json",
+      "a": "synthetic_quantum",
+      "b": "synthetic_gcn",
+      "commensurability": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "claim": "C3",
+      "summary": "results/synthetic_degree_comparison/sweep_summary.json",
+      "a": "synthetic_degree",
+      "b": "synthetic_laplacian",
+      "commensurability": "COMMENSURABLE",
+      "note": ""
+    },
+    {
+      "claim": "C3",
+      "summary": "results/synthetic_degree_comparison/sweep_summary.json",
+      "a": "synthetic_degree",
+      "b": "synthetic_gcn",
+      "commensurability": "COMMENSURABLE",
+      "note": ""
+    }
+  ]
+}

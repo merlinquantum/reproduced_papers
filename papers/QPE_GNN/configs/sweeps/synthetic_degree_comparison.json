@@ -1,0 +1,75 @@
+{
+  "sweep_id": "synthetic_degree_comparison",
+  "description": "Analysis plan only (not launched), fixed in the Phase 5 Comparison Plan 2026-11-09T11:00+01:00 before any degree-feature run: combines the Phase 3 synthetic sweep (outdir/sweep_synthetic) with the Phase 5 degree control (outdir/sweep_synthetic_degree), all on reproduced-papers-1. Amended 2026-11-09T11:13+01:00 (technical, after the degree result): added synthetic_quantum_top3 because the summariser requires every run in the sweep folders to be in the plan; the decision rule is unchanged.",
+  "machine": "reproduced-papers-1",
+  "metric": "test_acc",
+  "direction": "maximize",
+  "split": "test (10% of the 800 generated graphs, split seed 1729)",
+  "selection_rule": "none: fixed configurations. The C3 quantum advantage survives the degree control if synthetic_quantum is better than synthetic_degree under the tie rule; a tie or a degree win means a trivial classical feature recovers it at identical capacity.",
+  "max_epochs": 200,
+  "checkpoint_rule": "model with the highest validation accuracy over the 200 epochs, evaluated once on the test split",
+  "aggregation": "mean and sample standard deviation over the four seeds",
+  "tie_rule": "no winner unless the margin exceeds twice the larger seed standard deviation and an exact McNemar test on the pooled test predictions gives p < 0.05",
+  "entries": [
+    {
+      "name": "synthetic_quantum",
+      "config": "configs/synthetic_quantum_original.json",
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "synthetic_quantum_top3",
+      "config": "configs/synthetic_quantum_top3.json",
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "synthetic_laplacian",
+      "config": "configs/synthetic_laplacian_original.json",
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "synthetic_rrwp",
+      "config": "configs/synthetic_rrwp_original.json",
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "synthetic_gcn",
+      "config": "configs/synthetic_gcn_original.json",
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "synthetic_degree",
+      "config": "configs/synthetic_degree_classical.json",
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    }
+  ]
+}

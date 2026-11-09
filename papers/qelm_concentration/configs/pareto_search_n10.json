@@ -1,0 +1,72 @@
+{
+  "description": "E1: optuna NSGA-II search at 10 qubits / 8 layers (paper Fig. 2 validation searches 6/8/10/12 q with 4/4/8/8 layers). Objectives (all maximised, averaged over 10 realisations): cumulative NARMA R^2 for n = 1..10 (the paper's text says 1..5, but its Fig. 2a scores exceed 5; see LOG.md; the text definition is recomputed from per-order R^2) noiseless and with N(0, 10^-1.5) noise (std reading), mean minimal MPS bond dimension at F >= 1 - 5e-4 over 10 windows, and mean variability over Unif(-1,1) inputs. Table I is trial 0. Search ranges and budget are ours (unstated in the paper). Local tier.",
+  "task": "pareto_search",
+  "reservoir": {
+    "n_qubits": 10,
+    "n_layers": 8,
+    "input_shift": 4,
+    "chunk_size": 512
+  },
+  "dataset": {
+    "name": "narma",
+    "narma": {
+      "orders": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ]
+    }
+  },
+  "pareto_search": {
+    "sampler": "nsga2",
+    "population_size": 50,
+    "n_trials": 500,
+    "n_realisations": 10,
+    "feature_set": "tuning",
+    "noise": {
+      "kind": "gaussian",
+      "std": 0.03162277660168379
+    },
+    "bond_windows": 10,
+    "fidelity_threshold": 0.9995,
+    "variability_samples": 200,
+    "search_space": {
+      "input_strength": [
+        0.01,
+        2.0
+      ],
+      "b_mean": [
+        0.0,
+        1.5707963267948966
+      ],
+      "b_std": [
+        0.0,
+        0.3
+      ],
+      "h_mean": [
+        0.1,
+        1.5707963267948966
+      ],
+      "h_std": [
+        0.0,
+        0.3
+      ],
+      "J_mean": [
+        0.0,
+        1.5707963267948966
+      ],
+      "J_std": [
+        0.0,
+        0.3
+      ]
+    },
+    "score_max_order": 10
+  }
+}

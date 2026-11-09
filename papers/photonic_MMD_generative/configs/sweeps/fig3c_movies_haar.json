@@ -1,0 +1,128 @@
+{
+    "sweep_id": "fig3c_movies_haar",
+    "description": "Fig. 3c at paper settings (|K|=2000, |Z|=5000, 2000 steps, window 200): movies, Haar; 4 inits x sigma {1.5, 2.5, 3.5}; seeds 0-4.",
+    "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ],
+    "candidates": [
+        {
+            "label": "data_dependent_sigma1.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "data_dependent",
+                "kernel.sigma": 1.5,
+                "evaluation.rbm.score_sigma": 1.5
+            }
+        },
+        {
+            "label": "identity_sigma1.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "identity",
+                "kernel.sigma": 1.5,
+                "evaluation.rbm.score_sigma": 1.5
+            }
+        },
+        {
+            "label": "random_sigma1.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "random",
+                "kernel.sigma": 1.5,
+                "evaluation.rbm.score_sigma": 1.5
+            }
+        },
+        {
+            "label": "weak_unbiased_sigma1.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "weak_unbiased",
+                "kernel.sigma": 1.5,
+                "evaluation.rbm.score_sigma": 1.5
+            }
+        },
+        {
+            "label": "data_dependent_sigma2.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "data_dependent",
+                "kernel.sigma": 2.5,
+                "evaluation.rbm.score_sigma": 2.5
+            }
+        },
+        {
+            "label": "identity_sigma2.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "identity",
+                "kernel.sigma": 2.5,
+                "evaluation.rbm.score_sigma": 2.5
+            }
+        },
+        {
+            "label": "random_sigma2.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "random",
+                "kernel.sigma": 2.5,
+                "evaluation.rbm.score_sigma": 2.5
+            }
+        },
+        {
+            "label": "weak_unbiased_sigma2.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "weak_unbiased",
+                "kernel.sigma": 2.5,
+                "evaluation.rbm.score_sigma": 2.5
+            }
+        },
+        {
+            "label": "data_dependent_sigma3.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "data_dependent",
+                "kernel.sigma": 3.5,
+                "evaluation.rbm.score_sigma": 3.5
+            }
+        },
+        {
+            "label": "identity_sigma3.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "identity",
+                "kernel.sigma": 3.5,
+                "evaluation.rbm.score_sigma": 3.5
+            }
+        },
+        {
+            "label": "random_sigma3.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "random",
+                "kernel.sigma": 3.5,
+                "evaluation.rbm.score_sigma": 3.5
+            }
+        },
+        {
+            "label": "weak_unbiased_sigma3.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "weak_unbiased",
+                "kernel.sigma": 3.5,
+                "evaluation.rbm.score_sigma": 3.5
+            }
+        }
+    ],
+    "metric": "primary: sample_metrics.<model>.walsh_mmd; also test_mmd_estimator and gaussian_mmd_raw/binarized",
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final parameters",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "differences within one pooled std are reported as not separated",
+    "selection": "none (comparison sweep)"
+}

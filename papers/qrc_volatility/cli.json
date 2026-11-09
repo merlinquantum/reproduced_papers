@@ -1,0 +1,175 @@
+{
+  "description": "QRC realized-volatility forecasting reproduction (arXiv:2505.13933)",
+  "arguments": [
+    {
+      "flags": [
+        "--experiment"
+      ],
+      "help": "Experiment to run",
+      "type": "str",
+      "choices": [
+        "paper_table2",
+        "reservoir_instance_sweep",
+        "feature_selection_sweep",
+        "photonic"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment"
+      }
+    },
+    {
+      "flags": [
+        "--n-qubits"
+      ],
+      "help": "Total reservoir qubits (n1 input + n2 hidden)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "quantum_reservoir.n_qubits_total"
+      }
+    },
+    {
+      "flags": [
+        "--tau"
+      ],
+      "help": "Reservoir evolution time tau (paper: tau = 1/v)",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "quantum_reservoir.evolution_time_tau"
+      }
+    },
+    {
+      "flags": [
+        "--ridge-delta"
+      ],
+      "help": "Ridge regularisation delta for the readout (paper: 1e-8)",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "quantum_reservoir.ridge_delta"
+      }
+    },
+    {
+      "flags": [
+        "--n-lags"
+      ],
+      "help": "Memory depth k of the input sequence (paper: 3)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.n_lags"
+      }
+    },
+    {
+      "flags": [
+        "--horizons"
+      ],
+      "help": "Comma-separated forecast horizons S (paper: 1,5)",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.horizons"
+      }
+    },
+    {
+      "flags": [
+        "--n-out-of-sample"
+      ],
+      "help": "Number of rolling out-of-sample forecasts (paper: 245)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.n_out_of_sample"
+      }
+    },
+    {
+      "flags": [
+        "--n-instances"
+      ],
+      "help": "Number of reservoir instances in the instance sweep (paper: 100)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "instance_sweep.n_instances"
+      }
+    },
+    {
+      "flags": [
+        "--coupling-source"
+      ],
+      "help": "Use the authors' saved coupling matrices or freshly drawn ones",
+      "type": "str",
+      "choices": [
+        "authors",
+        "fresh"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "instance_sweep.coupling_source"
+      }
+    },
+    {
+      "flags": [
+        "--selection-split"
+      ],
+      "help": "Split used for model/instance/feature selection. 'test' reproduces the paper's protocol and leaks the out-of-sample window",
+      "type": "str",
+      "choices": [
+        "validation",
+        "test"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.selection_split"
+      }
+    },
+    {
+      "flags": [
+        "--max-features"
+      ],
+      "help": "Maximum feature-set size explored by forward selection (paper: 10)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "feature_selection.max_features"
+      }
+    },
+    {
+      "flags": [
+        "--mcs-reps"
+      ],
+      "help": "Bootstrap replications for the Model Confidence Set (paper code: 10000)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.mcs.reps"
+      }
+    },
+    {
+      "flags": [
+        "--n-validation"
+      ],
+      "help": "Length in months of the leakage-free validation window carved out of the training sample",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.n_validation"
+      }
+    }
+  ]
+}

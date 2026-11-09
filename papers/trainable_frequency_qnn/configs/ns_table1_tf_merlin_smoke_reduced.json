@@ -1,0 +1,41 @@
+{
+  "description": "Navier-Stokes photonic smoke run (reduced): the E6 photonic TF model for 3 iterations, evaluated at t = 0 and 0.5 only. Checks the MerLin DQC pipeline end to end; not a result. MerLin photonic ADAPTATION.",
+  "task": "navier_stokes",
+  "dataset": {
+    "name": "cylinder_wake",
+    "file": "cylinder_nektar_wake/cylinder_nektar_wake.mat",
+    "time_window": [
+      0.0,
+      5.5
+    ],
+    "reynolds": 100.0,
+    "coordinate_transform": "raw",
+    "data_stride": 10,
+    "evaluation_times": [
+      0.0,
+      0.5
+    ]
+  },
+  "evaluation": {
+    "batch_size": 5000,
+    "table_times": [
+      0.5
+    ]
+  },
+  "training": {
+    "iterations": 3,
+    "batch_size": 600,
+    "lr": 0.01
+  },
+  "model": {
+    "family": "merlin_qnn",
+    "n_modes": 6,
+    "n_photons": 3,
+    "layout": "ns_parallel",
+    "encoding_modes_per_input": 2,
+    "feature_map": "simple",
+    "frequency_mode": "trainable",
+    "frequency_init": 1.0,
+    "readout": "threshold_clicks"
+  }
+}

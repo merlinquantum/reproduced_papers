@@ -1,0 +1,226 @@
+[
+  {
+    "merlin": "haar_merlin",
+    "jax": "haar",
+    "metric": "test_mmd_estimator",
+    "merlin_mean": 0.0006202137637809196,
+    "merlin_std": 4.290584513172775e-05,
+    "jax_mean": 0.0006202137637813809,
+    "jax_std": 4.2905845131529446e-05,
+    "n": [
+      5,
+      5
+    ],
+    "delta": -4.613280243925821e-16,
+    "se": 2.7136039110078666e-05,
+    "preserved": true
+  },
+  {
+    "merlin": "haar_merlin",
+    "jax": "haar",
+    "metric": "model.walsh_mmd",
+    "merlin_mean": 0.0007031555940970193,
+    "merlin_std": 0.00013293676602708966,
+    "jax_mean": 0.0006851480425212305,
+    "jax_std": 8.453444159717174e-05,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 1.8007551575788846e-05,
+    "se": 7.045318385692278e-05,
+    "preserved": true
+  },
+  {
+    "merlin": "haar_merlin",
+    "jax": "haar",
+    "metric": "model.gaussian_mmd_raw",
+    "merlin_mean": 0.0006908889003173324,
+    "merlin_std": 6.728275924484723e-05,
+    "jax_mean": 0.000621568779585191,
+    "jax_std": 5.7544055943520754e-05,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 6.93201207321414e-05,
+    "se": 3.959365622427694e-05,
+    "preserved": true
+  },
+  {
+    "merlin": "haar_merlin",
+    "jax": "haar",
+    "metric": "model.gaussian_mmd_binarized",
+    "merlin_mean": 0.0006275179561812782,
+    "merlin_std": 6.081063134141951e-05,
+    "jax_mean": 0.0005738765347530151,
+    "jax_std": 6.502798693082365e-05,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 5.364142142826316e-05,
+    "se": 3.981600675210261e-05,
+    "preserved": true
+  },
+  {
+    "merlin": "haar_merlin",
+    "jax": "haar",
+    "metric": "final_train_mmd_estimate",
+    "merlin_mean": 0.0005154124512809445,
+    "merlin_std": 0.00020070201272474306,
+    "jax_mean": 0.0005154124512806924,
+    "jax_std": 0.00020070201272484527,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 2.520770051028798e-16,
+    "se": 0.00012693509823808927,
+    "preserved": true
+  },
+  {
+    "merlin": "haar_merlin",
+    "jax": "haar",
+    "metric": "steps_run",
+    "merlin_mean": 797.4,
+    "merlin_std": 70.44004542871903,
+    "jax_mean": 797.4,
+    "jax_std": 70.44004542871903,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 0.0,
+    "se": 44.550196408096795,
+    "preserved": null
+  },
+  {
+    "merlin": "haar_merlin",
+    "jax": "haar",
+    "metric": "seconds_per_step",
+    "merlin_mean": 0.19853506445922303,
+    "merlin_std": 0.0003415656597313722,
+    "jax_mean": 0.14819847609493925,
+    "jax_std": 0.0005256689639961119,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 0.050336588364283785,
+    "se": 0.00028035511752649465,
+    "preserved": null
+  },
+  {
+    "merlin": "merlin_mesh",
+    "jax": "clements",
+    "metric": "test_mmd_estimator",
+    "merlin_mean": 0.056935609501399566,
+    "merlin_std": 0.009763184750374219,
+    "jax_mean": 0.012253071410715556,
+    "jax_std": 0.0014763341035085567,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 0.04468253809068401,
+    "se": 0.004415865461155313,
+    "preserved": false
+  },
+  {
+    "merlin": "merlin_mesh",
+    "jax": "clements",
+    "metric": "model.walsh_mmd",
+    "merlin_mean": 0.05898426818329161,
+    "merlin_std": 0.009675126082562099,
+    "jax_mean": 0.013545730737968952,
+    "jax_std": 0.0013594948626586515,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 0.045438537445322655,
+    "se": 0.004369354437329814,
+    "preserved": false
+  },
+  {
+    "merlin": "merlin_mesh",
+    "jax": "clements",
+    "metric": "model.gaussian_mmd_raw",
+    "merlin_mean": 0.061475060564711595,
+    "merlin_std": 0.01113887363937823,
+    "jax_mean": 0.01474118676865055,
+    "jax_std": 0.001366487433466886,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 0.046733873796061046,
+    "se": 0.005018800531199823,
+    "preserved": false
+  },
+  {
+    "merlin": "merlin_mesh",
+    "jax": "clements",
+    "metric": "model.gaussian_mmd_binarized",
+    "merlin_mean": 0.06013211110787631,
+    "merlin_std": 0.011391140193785128,
+    "jax_mean": 0.013128784676747163,
+    "jax_std": 0.001214226331629699,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 0.047003326431129144,
+    "se": 0.005123132254761534,
+    "preserved": false
+  },
+  {
+    "merlin": "merlin_mesh",
+    "jax": "clements",
+    "metric": "final_train_mmd_estimate",
+    "merlin_mean": 0.05790289507210959,
+    "merlin_std": 0.011539351561839698,
+    "jax_mean": 0.012478230099031765,
+    "jax_std": 0.0012944264256616804,
+    "n": [
+      5,
+      5
+    ],
+    "delta": 0.04542466497307783,
+    "se": 0.005192921610022311,
+    "preserved": false
+  },
+  {
+    "merlin": "merlin_mesh",
+    "jax": "clements",
+    "metric": "steps_run",
+    "merlin_mean": 1526.8,
+    "merlin_std": 267.87347759716715,
+    "jax_mean": 1608.0,
+    "jax_std": 232.13358223230003,
+    "n": [
+      5,
+      5
+    ],
+    "delta": -81.20000000000005,
+    "se": 158.51952561120035,
+    "preserved": null
+  },
+  {
+    "merlin": "merlin_mesh",
+    "jax": "clements",
+    "metric": "seconds_per_step",
+    "merlin_mean": 0.2709434770570418,
+    "merlin_std": 0.0011613487152402685,
+    "jax_mean": 0.39771499417709105,
+    "jax_std": 0.000516643244405066,
+    "n": [
+      5,
+      5
+    ],
+    "delta": -0.12677151712004925,
+    "se": 0.0005684454380817239,
+    "preserved": null
+  }
+]

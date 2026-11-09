@@ -1,0 +1,25 @@
+{
+  "description": "Phase 4 photonic control at full scale: the MerLin adaptation with no interferometer (click probabilities of the amplitude-encoded 4-photon, 14-mode state), T in {96,192,336,720}, seeds 2021-2023, Table 1 budget.",
+  "sweep_id": "merlin_control",
+  "max_epochs": 100,
+  "entries": [
+    {
+      "name": "identity_interferometer_merlin",
+      "config": "configs/ablation_identity_interferometer_merlin.json",
+      "seeds": [
+        2021,
+        2022,
+        2023
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        192,
+        336,
+        720
+      ]
+    }
+  ]
+}

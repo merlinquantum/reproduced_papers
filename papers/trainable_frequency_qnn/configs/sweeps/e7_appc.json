@@ -1,0 +1,35 @@
+{
+  "sweep_id": "e7_appc",
+  "description": "E7 / App. C, Table II: over-parameterised TF vs FF (N=4, serial FM, 804 ansatz params per QNN), paper settings, 10 paired seeds.",
+  "candidates": [
+    {
+      "name": "ff",
+      "config": "configs/ns_appc_ff_original.json"
+    },
+    {
+      "name": "tf",
+      "config": "configs/ns_appc_tf_original.json"
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "max_workers": 4,
+  "selection": {
+    "metric": "final_loss",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}

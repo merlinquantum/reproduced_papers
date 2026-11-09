@@ -1,0 +1,86 @@
+{
+  "description": "A-01 (training): as training_iris_original but every model initialized from U[-1,1]^d, the paper's Theta.",
+  "experiment": {
+    "name": "training_iris_paper_domain",
+    "kind": "training"
+  },
+  "dataset": {
+    "name": "iris_binary",
+    "batch_size": null
+  },
+  "training": {
+    "iterations": 100,
+    "lr": 0.1,
+    "seeds": {
+      "start": 0,
+      "count": 100
+    },
+    "finite_difference_step": 1e-10,
+    "log_every": 1,
+    "loss_threshold": 0.3,
+    "fisher_rao": true,
+    "fisher_chunk_size": 100
+  },
+  "models": [
+    {
+      "name": "qnn",
+      "type": "qubit",
+      "n_qubits": 4,
+      "feature_map": "zz",
+      "feature_map_reps": 2,
+      "ansatz_reps": 1,
+      "feature_entanglement": "full",
+      "ansatz_entanglement": "full",
+      "hadamard_every_rep": true,
+      "training": {
+        "optimizer": "qiskit_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": -1.0,
+          "high": 1.0
+        }
+      }
+    },
+    {
+      "name": "easy_qnn",
+      "type": "qubit",
+      "n_qubits": 4,
+      "feature_map": "z",
+      "feature_map_reps": 1,
+      "ansatz_reps": 1,
+      "feature_entanglement": "full",
+      "ansatz_entanglement": "full",
+      "hadamard_every_rep": true,
+      "training": {
+        "optimizer": "qiskit_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": -1.0,
+          "high": 1.0
+        }
+      }
+    },
+    {
+      "name": "classical_41112",
+      "type": "classical",
+      "sizes": [
+        4,
+        1,
+        1,
+        1,
+        2
+      ],
+      "activation": "leaky_relu",
+      "head": "softmax",
+      "bias": false,
+      "training": {
+        "optimizer": "torch_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": -1.0,
+          "high": 1.0
+        }
+      }
+    }
+  ]
+}

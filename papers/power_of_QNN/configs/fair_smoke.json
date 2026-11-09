@@ -1,0 +1,89 @@
+{
+  "description": "Phase 05 smoke run: two models, two learning rates, two seeds, three iterations on the Iris 1/2 split.",
+  "experiment": {
+    "name": "fair_smoke",
+    "kind": "fair_comparison"
+  },
+  "dataset": {
+    "name": "iris_pair",
+    "classes": [
+      1,
+      2
+    ],
+    "split_seed": 0,
+    "per_class": {
+      "train": 30,
+      "validation": 10,
+      "test": 10
+    },
+    "batch_size": null
+  },
+  "training": {
+    "iterations": 3,
+    "lr": 0.1,
+    "finite_difference_step": 1e-10,
+    "log_every": 1,
+    "loss_threshold": 0.3
+  },
+  "comparison": {
+    "lr_grid": [
+      0.03,
+      0.1
+    ],
+    "selection_seeds": {
+      "start": 0,
+      "count": 2
+    },
+    "final_seeds": {
+      "start": 100,
+      "count": 2
+    },
+    "tie_tolerance": 0.005,
+    "splits": [
+      "train",
+      "validation",
+      "test"
+    ],
+    "selection_split": "validation"
+  },
+  "models": [
+    {
+      "name": "Q2_d8",
+      "type": "qubit",
+      "n_qubits": 4,
+      "feature_map": "zz",
+      "feature_map_reps": 2,
+      "ansatz_reps": 1,
+      "feature_entanglement": "full",
+      "ansatz_entanglement": "full",
+      "hadamard_every_rep": true,
+      "training": {
+        "optimizer": "torch_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": -1.0,
+          "high": 1.0
+        }
+      }
+    },
+    {
+      "name": "classical_42",
+      "type": "classical",
+      "sizes": [
+        4,
+        2
+      ],
+      "activation": "leaky_relu",
+      "head": "softmax",
+      "bias": false,
+      "training": {
+        "optimizer": "torch_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": -1.0,
+          "high": 1.0
+        }
+      }
+    }
+  ]
+}

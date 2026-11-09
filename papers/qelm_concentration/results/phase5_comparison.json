@@ -1,0 +1,2542 @@
+{
+  "protocol": "LOG.md, Phase 5 Comparison Plan \u2014 2026-10-28T14:23Z (+ amendment 14:25Z)",
+  "landsat": [
+    {
+      "system": "qubit N=16 (min-max)",
+      "kind": "qubit QELM",
+      "readout": "w1_et_scaled",
+      "n_features": 48,
+      "input_scaling": "minmax",
+      "qelm_f1_macro": {
+        "mean": 0.7190553662478305,
+        "std": 0.02936301927455585,
+        "n": 5
+      },
+      "runs": 45,
+      "expected_runs": 45,
+      "primary": {
+        "baseline_f1_macro": {
+          "mean": 0.7874239996209893,
+          "std": 0.013154011538747824,
+          "n": 5
+        },
+        "paired": {
+          "n": 5,
+          "mean_difference": -0.06836863337315877,
+          "stderr": 0.012900476155045049,
+          "n_positive": 0,
+          "tie_tolerance": 0.01,
+          "verdict": "baseline clearly above"
+        }
+      },
+      "comparisons": {
+        "fourier|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.7874239996209893,
+            "std": 0.013154011538747824,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.06836863337315877,
+            "stderr": 0.012900476155045049,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "fourier|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.7870256437255595,
+            "std": 0.013105488847107308,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.06797027747772896,
+            "stderr": 0.01324636544010321,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "tanh|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.7412816221419015,
+            "std": 0.019260809926277617,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.022226255894070946,
+            "stderr": 0.011583157089277488,
+            "n_positive": 1,
+            "tie_tolerance": 0.01,
+            "verdict": "no clear separation"
+          }
+        },
+        "tanh|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.7494603003045189,
+            "std": 0.02307032250548313,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.03040493405668836,
+            "stderr": 0.00757841127218778,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        }
+      },
+      "status": "COMMENSURABLE"
+    },
+    {
+      "system": "qubit N=16 (min-max)",
+      "kind": "qubit QELM",
+      "readout": "w2_et_scaled",
+      "n_features": 120,
+      "input_scaling": "minmax",
+      "qelm_f1_macro": {
+        "mean": 0.719524365092803,
+        "std": 0.029143726105578863,
+        "n": 5
+      },
+      "runs": 45,
+      "expected_runs": 45,
+      "primary": {
+        "baseline_f1_macro": {
+          "mean": 0.8162464097103438,
+          "std": 0.022601614231546448,
+          "n": 5
+        },
+        "paired": {
+          "n": 5,
+          "mean_difference": -0.09672204461754072,
+          "stderr": 0.00771175462864776,
+          "n_positive": 0,
+          "tie_tolerance": 0.01,
+          "verdict": "baseline clearly above"
+        }
+      },
+      "comparisons": {
+        "fourier|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.8162464097103438,
+            "std": 0.022601614231546448,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.09672204461754072,
+            "stderr": 0.00771175462864776,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "fourier|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.8196058196037012,
+            "std": 0.023896559432969075,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.10008145451089809,
+            "stderr": 0.007989463050636478,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "tanh|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.7812457244107535,
+            "std": 0.01573108877518352,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.06172135931795035,
+            "stderr": 0.011706520005121233,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "tanh|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.7927127348771239,
+            "std": 0.014597374255088665,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.07318836978432089,
+            "stderr": 0.015549972060756902,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        }
+      },
+      "status": "COMMENSURABLE"
+    },
+    {
+      "system": "qubit N=24 (min-max)",
+      "kind": "qubit QELM",
+      "readout": "w1_et_scaled",
+      "n_features": 72,
+      "input_scaling": "minmax",
+      "qelm_f1_macro": {
+        "mean": 0.7371249203136319,
+        "std": 0.018760438095230852,
+        "n": 5
+      },
+      "runs": 45,
+      "expected_runs": 45,
+      "primary": {
+        "baseline_f1_macro": {
+          "mean": 0.80097186469559,
+          "std": 0.02797886402624763,
+          "n": 5
+        },
+        "paired": {
+          "n": 5,
+          "mean_difference": -0.06384694438195819,
+          "stderr": 0.0072386084925559315,
+          "n_positive": 0,
+          "tie_tolerance": 0.01,
+          "verdict": "baseline clearly above"
+        }
+      },
+      "comparisons": {
+        "fourier|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.80097186469559,
+            "std": 0.02797886402624763,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.06384694438195819,
+            "stderr": 0.0072386084925559315,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "fourier|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.8034224036553465,
+            "std": 0.02969443552058635,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.06629748334171455,
+            "stderr": 0.008057476287086187,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "tanh|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.7644011966559376,
+            "std": 0.016633698079547888,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.027276276342305762,
+            "stderr": 0.006786793933039283,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "tanh|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.775388196851004,
+            "std": 0.022220461858675405,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.03826327653737218,
+            "stderr": 0.00334516394878099,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        }
+      },
+      "status": "COMMENSURABLE"
+    },
+    {
+      "system": "qubit N=24 (min-max)",
+      "kind": "qubit QELM",
+      "readout": "w2_et_scaled",
+      "n_features": 180,
+      "input_scaling": "minmax",
+      "qelm_f1_macro": {
+        "mean": 0.740708403488085,
+        "std": 0.026946610330680118,
+        "n": 5
+      },
+      "runs": 45,
+      "expected_runs": 45,
+      "primary": {
+        "baseline_f1_macro": {
+          "mean": 0.8311122602499316,
+          "std": 0.023783866005047744,
+          "n": 5
+        },
+        "paired": {
+          "n": 5,
+          "mean_difference": -0.09040385676184656,
+          "stderr": 0.006621681549952607,
+          "n_positive": 0,
+          "tie_tolerance": 0.01,
+          "verdict": "baseline clearly above"
+        }
+      },
+      "comparisons": {
+        "fourier|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.8311122602499316,
+            "std": 0.023783866005047744,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.09040385676184656,
+            "stderr": 0.006621681549952607,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "fourier|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.8314343258197493,
+            "std": 0.024718198862905202,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.0907259223316643,
+            "stderr": 0.006590772174627686,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "tanh|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.7820186660534686,
+            "std": 0.014977426011900736,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.041310262565383615,
+            "stderr": 0.008367218089410888,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "tanh|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.8004062373701336,
+            "std": 0.019861903520085645,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.05969783388204861,
+            "stderr": 0.008283955875894412,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        }
+      },
+      "status": "COMMENSURABLE"
+    },
+    {
+      "system": "qubit N=16 (z-score)",
+      "kind": "qubit QELM",
+      "readout": "w1_et_scaled",
+      "n_features": 48,
+      "input_scaling": "standard",
+      "qelm_f1_macro": {
+        "mean": 0.7759295094189761,
+        "std": 0.025681978822976584,
+        "n": 5
+      },
+      "runs": 45,
+      "expected_runs": 45,
+      "primary": {
+        "baseline_f1_macro": {
+          "mean": 0.7498017271464172,
+          "std": 0.019989960943604636,
+          "n": 5
+        },
+        "paired": {
+          "n": 5,
+          "mean_difference": 0.026127782272558943,
+          "stderr": 0.007474617384279653,
+          "n_positive": 4,
+          "tie_tolerance": 0.01,
+          "verdict": "QELM clearly above"
+        }
+      },
+      "comparisons": {
+        "fourier|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.7498017271464172,
+            "std": 0.019989960943604636,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.026127782272558943,
+            "stderr": 0.007474617384279653,
+            "n_positive": 4,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        },
+        "fourier|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.7507961142441547,
+            "std": 0.01975743857081046,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.025133395174821428,
+            "stderr": 0.007237649896866627,
+            "n_positive": 4,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        },
+        "tanh|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.7841449630581107,
+            "std": 0.016419233760190173,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.008215453639134517,
+            "stderr": 0.010802168533667354,
+            "n_positive": 2,
+            "tie_tolerance": 0.01,
+            "verdict": "no clear separation"
+          }
+        },
+        "tanh|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.7864636839324357,
+            "std": 0.015724512293391116,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.010534174513459482,
+            "stderr": 0.009462615892848284,
+            "n_positive": 2,
+            "tie_tolerance": 0.01,
+            "verdict": "no clear separation"
+          }
+        }
+      },
+      "status": "COMMENSURABLE"
+    },
+    {
+      "system": "qubit N=16 (z-score)",
+      "kind": "qubit QELM",
+      "readout": "w2_et_scaled",
+      "n_features": 120,
+      "input_scaling": "standard",
+      "qelm_f1_macro": {
+        "mean": 0.791294892186517,
+        "std": 0.02796886712643217,
+        "n": 5
+      },
+      "runs": 45,
+      "expected_runs": 45,
+      "primary": {
+        "baseline_f1_macro": {
+          "mean": 0.8132688946706128,
+          "std": 0.02614442917179361,
+          "n": 5
+        },
+        "paired": {
+          "n": 5,
+          "mean_difference": -0.0219740024840956,
+          "stderr": 0.01315979849083447,
+          "n_positive": 1,
+          "tie_tolerance": 0.01,
+          "verdict": "no clear separation"
+        }
+      },
+      "comparisons": {
+        "fourier|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.8132688946706128,
+            "std": 0.02614442917179361,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.0219740024840956,
+            "stderr": 0.01315979849083447,
+            "n_positive": 1,
+            "tie_tolerance": 0.01,
+            "verdict": "no clear separation"
+          }
+        },
+        "fourier|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.8126403451305751,
+            "std": 0.02600146599557098,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.021345452944057985,
+            "stderr": 0.013411912972601756,
+            "n_positive": 1,
+            "tie_tolerance": 0.01,
+            "verdict": "no clear separation"
+          }
+        },
+        "tanh|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.8165566115011661,
+            "std": 0.013354832969599589,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.025261719314649066,
+            "stderr": 0.007846520880838696,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "tanh|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.8196727686575551,
+            "std": 0.018940843027309504,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.028377876471037976,
+            "stderr": 0.005850302553700048,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        }
+      },
+      "status": "COMMENSURABLE"
+    },
+    {
+      "system": "qubit N=24 (z-score)",
+      "kind": "qubit QELM",
+      "readout": "w1_et_scaled",
+      "n_features": 72,
+      "input_scaling": "standard",
+      "qelm_f1_macro": {
+        "mean": 0.7883998254367104,
+        "std": 0.022863648886906326,
+        "n": 5
+      },
+      "runs": 45,
+      "expected_runs": 45,
+      "primary": {
+        "baseline_f1_macro": {
+          "mean": 0.783104476123556,
+          "std": 0.025930669957701033,
+          "n": 5
+        },
+        "paired": {
+          "n": 5,
+          "mean_difference": 0.0052953493131543405,
+          "stderr": 0.0034578273581274605,
+          "n_positive": 3,
+          "tie_tolerance": 0.01,
+          "verdict": "no clear separation"
+        }
+      },
+      "comparisons": {
+        "fourier|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.783104476123556,
+            "std": 0.025930669957701033,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.0052953493131543405,
+            "stderr": 0.0034578273581274605,
+            "n_positive": 3,
+            "tie_tolerance": 0.01,
+            "verdict": "no clear separation"
+          }
+        },
+        "fourier|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.7831386734367377,
+            "std": 0.02685181970478792,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.0052611519999726354,
+            "stderr": 0.0035755707821104395,
+            "n_positive": 3,
+            "tie_tolerance": 0.01,
+            "verdict": "no clear separation"
+          }
+        },
+        "tanh|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.7995021357986669,
+            "std": 0.027982970779975577,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.01110231036195659,
+            "stderr": 0.005442845756981292,
+            "n_positive": 1,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "tanh|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.7982419940955122,
+            "std": 0.025101756840278593,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.009842168658801831,
+            "stderr": 0.004343453914331606,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "no clear separation"
+          }
+        }
+      },
+      "status": "COMMENSURABLE"
+    },
+    {
+      "system": "qubit N=24 (z-score)",
+      "kind": "qubit QELM",
+      "readout": "w2_et_scaled",
+      "n_features": 180,
+      "input_scaling": "standard",
+      "qelm_f1_macro": {
+        "mean": 0.8044896959036585,
+        "std": 0.025906130703800875,
+        "n": 5
+      },
+      "runs": 45,
+      "expected_runs": 45,
+      "primary": {
+        "baseline_f1_macro": {
+          "mean": 0.8254943092774598,
+          "std": 0.023655891466563286,
+          "n": 5
+        },
+        "paired": {
+          "n": 5,
+          "mean_difference": -0.02100461337380106,
+          "stderr": 0.009171562201626926,
+          "n_positive": 1,
+          "tie_tolerance": 0.01,
+          "verdict": "baseline clearly above"
+        }
+      },
+      "comparisons": {
+        "fourier|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.8254943092774598,
+            "std": 0.023655891466563286,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.02100461337380106,
+            "stderr": 0.009171562201626926,
+            "n_positive": 1,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "fourier|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.8250302427722283,
+            "std": 0.023309072749230983,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.020540546868569542,
+            "stderr": 0.00932094309209864,
+            "n_positive": 1,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "tanh|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.8290023706932443,
+            "std": 0.017886725565609524,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.024512674789585808,
+            "stderr": 0.006160812362109356,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        },
+        "tanh|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.8276663974818053,
+            "std": 0.021420000519475322,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.023176701578146774,
+            "stderr": 0.004274271078112949,
+            "n_positive": 0,
+            "tie_tolerance": 0.01,
+            "verdict": "baseline clearly above"
+          }
+        }
+      },
+      "status": "COMMENSURABLE"
+    },
+    {
+      "system": "photonic 16/4",
+      "kind": "MerLin adaptation",
+      "readout": "w1_et_scaled",
+      "n_features": 16,
+      "input_scaling": "standard",
+      "qelm_f1_macro": {
+        "mean": 0.7359880504091246,
+        "std": 0.035925549122724956,
+        "n": 5
+      },
+      "runs": 45,
+      "expected_runs": 45,
+      "primary": {
+        "baseline_f1_macro": {
+          "mean": 0.6005261196598661,
+          "std": 0.032644990223156194,
+          "n": 5
+        },
+        "paired": {
+          "n": 5,
+          "mean_difference": 0.1354619307492586,
+          "stderr": 0.018089113278029843,
+          "n_positive": 5,
+          "tie_tolerance": 0.01,
+          "verdict": "QELM clearly above"
+        }
+      },
+      "comparisons": {
+        "fourier|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.6005261196598661,
+            "std": 0.032644990223156194,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.1354619307492586,
+            "stderr": 0.018089113278029843,
+            "n_positive": 5,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        },
+        "fourier|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.6006464777563887,
+            "std": 0.03293287439317943,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.13534157265273614,
+            "stderr": 0.016766034808630356,
+            "n_positive": 5,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        },
+        "tanh|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.6825327987584595,
+            "std": 0.03638868219694231,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.053455251650665225,
+            "stderr": 0.00545118121289443,
+            "n_positive": 5,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        },
+        "tanh|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.6815584996861492,
+            "std": 0.0344925514394554,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.054429550722975485,
+            "stderr": 0.007997394540238517,
+            "n_positive": 5,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        }
+      },
+      "status": "COMMENSURABLE"
+    },
+    {
+      "system": "photonic 16/4",
+      "kind": "MerLin adaptation",
+      "readout": "w2_et_scaled",
+      "n_features": 24,
+      "input_scaling": "standard",
+      "qelm_f1_macro": {
+        "mean": 0.7485005778839262,
+        "std": 0.03583632214802947,
+        "n": 5
+      },
+      "runs": 45,
+      "expected_runs": 45,
+      "primary": {
+        "baseline_f1_macro": {
+          "mean": 0.6627160012002739,
+          "std": 0.03057210281173553,
+          "n": 5
+        },
+        "paired": {
+          "n": 5,
+          "mean_difference": 0.08578457668365227,
+          "stderr": 0.007661272344904681,
+          "n_positive": 5,
+          "tie_tolerance": 0.01,
+          "verdict": "QELM clearly above"
+        }
+      },
+      "comparisons": {
+        "fourier|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.6627160012002739,
+            "std": 0.03057210281173553,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.08578457668365227,
+            "stderr": 0.007661272344904681,
+            "n_positive": 5,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        },
+        "fourier|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.6639206422778263,
+            "std": 0.028360184994040333,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.0845799356060998,
+            "stderr": 0.00860273535373583,
+            "n_positive": 5,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        },
+        "tanh|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.7357236886287316,
+            "std": 0.030561600332616002,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.01277688925519449,
+            "stderr": 0.010908665551493156,
+            "n_positive": 3,
+            "tie_tolerance": 0.01,
+            "verdict": "no clear separation"
+          }
+        },
+        "tanh|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.7338959028283464,
+            "std": 0.02946497231498449,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.014604675055579719,
+            "stderr": 0.013329551744679785,
+            "n_positive": 4,
+            "tie_tolerance": 0.01,
+            "verdict": "no clear separation"
+          }
+        }
+      },
+      "status": "COMMENSURABLE"
+    },
+    {
+      "system": "photonic 24/6",
+      "kind": "MerLin adaptation",
+      "readout": "w1_et_scaled",
+      "n_features": 24,
+      "input_scaling": "standard",
+      "qelm_f1_macro": {
+        "mean": 0.7549813613255578,
+        "std": 0.026462251862029926,
+        "n": 5
+      },
+      "runs": 45,
+      "expected_runs": 45,
+      "primary": {
+        "baseline_f1_macro": {
+          "mean": 0.6627160012002739,
+          "std": 0.03057210281173553,
+          "n": 5
+        },
+        "paired": {
+          "n": 5,
+          "mean_difference": 0.09226536012528397,
+          "stderr": 0.008905418589575009,
+          "n_positive": 5,
+          "tie_tolerance": 0.01,
+          "verdict": "QELM clearly above"
+        }
+      },
+      "comparisons": {
+        "fourier|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.6627160012002739,
+            "std": 0.03057210281173553,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.09226536012528397,
+            "stderr": 0.008905418589575009,
+            "n_positive": 5,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        },
+        "fourier|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.6639206422778263,
+            "std": 0.028360184994040333,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.0910607190477315,
+            "stderr": 0.008451789366133545,
+            "n_positive": 5,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        },
+        "tanh|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.7357236886287316,
+            "std": 0.030561600332616002,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.01925767269682619,
+            "stderr": 0.015509142782133986,
+            "n_positive": 3,
+            "tie_tolerance": 0.01,
+            "verdict": "no clear separation"
+          }
+        },
+        "tanh|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.7338959028283464,
+            "std": 0.02946497231498449,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.02108545849721142,
+            "stderr": 0.01637991058808637,
+            "n_positive": 4,
+            "tie_tolerance": 0.01,
+            "verdict": "no clear separation"
+          }
+        }
+      },
+      "status": "COMMENSURABLE"
+    },
+    {
+      "system": "photonic 24/6",
+      "kind": "MerLin adaptation",
+      "readout": "w2_et_scaled",
+      "n_features": 36,
+      "input_scaling": "standard",
+      "qelm_f1_macro": {
+        "mean": 0.7765657246915229,
+        "std": 0.030177744879425275,
+        "n": 5
+      },
+      "runs": 45,
+      "expected_runs": 45,
+      "primary": {
+        "baseline_f1_macro": {
+          "mean": 0.723077981084697,
+          "std": 0.027984355783880522,
+          "n": 5
+        },
+        "paired": {
+          "n": 5,
+          "mean_difference": 0.053487743606825844,
+          "stderr": 0.012868879604388414,
+          "n_positive": 5,
+          "tie_tolerance": 0.01,
+          "verdict": "QELM clearly above"
+        }
+      },
+      "comparisons": {
+        "fourier|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.723077981084697,
+            "std": 0.027984355783880522,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.053487743606825844,
+            "stderr": 0.012868879604388414,
+            "n_positive": 5,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        },
+        "fourier|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.7233315745224601,
+            "std": 0.028934876202343744,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.053234150169062674,
+            "stderr": 0.012679204518779201,
+            "n_positive": 5,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        },
+        "tanh|noise=0.01": {
+          "baseline_f1_macro": {
+            "mean": 0.7494000696303715,
+            "std": 0.02085487641984481,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.027165655061151227,
+            "stderr": 0.008784934075053093,
+            "n_positive": 5,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        },
+        "tanh|noise=0.0": {
+          "baseline_f1_macro": {
+            "mean": 0.7493014107630336,
+            "std": 0.023341558220127095,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.02726431392848927,
+            "stderr": 0.009044909021734883,
+            "n_positive": 4,
+            "tie_tolerance": 0.01,
+            "verdict": "QELM clearly above"
+          }
+        }
+      },
+      "status": "COMMENSURABLE"
+    }
+  ],
+  "landsat_classical": [
+    {
+      "machine": "laptop",
+      "run": "outdir/run_20261023-172941",
+      "input_scaling": "minmax",
+      "input_scaling_inferred": true,
+      "wall_clock_s": 438.0,
+      "references": {
+        "ridge (untuned, raw)": {
+          "mean": 0.5875028544834732,
+          "std": 0.0280920177093591,
+          "n": 5
+        },
+        "knn (untuned, raw)": {
+          "mean": 0.8098082652250493,
+          "std": 0.03214409980570011,
+          "n": 5
+        },
+        "svm_rbf (untuned, raw)": {
+          "mean": 0.8421959244997428,
+          "std": 0.031894285976430625,
+          "n": 5
+        },
+        "decision_tree (untuned, raw)": {
+          "mean": 0.7675012008232996,
+          "std": 0.030059173667834112,
+          "n": 5
+        },
+        "random_forest (untuned, raw)": {
+          "mean": 0.856034430131548,
+          "std": 0.026036650013337364,
+          "n": 5
+        },
+        "mlp (untuned, raw)": {
+          "mean": 0.8347373364130171,
+          "std": 0.02367435380873488,
+          "n": 5
+        },
+        "adaboost (untuned, raw)": {
+          "mean": 0.7110501315859459,
+          "std": 0.05186492539658424,
+          "n": 5
+        },
+        "naive_bayes (untuned, raw)": {
+          "mean": 0.7511242198389915,
+          "std": 0.029485820062374286,
+          "n": 5
+        },
+        "qda (untuned, raw)": {
+          "mean": 0.727400584424338,
+          "std": 0.024402591349460316,
+          "n": 5
+        },
+        "random_forest (tuned, raw)": {
+          "mean": 0.8621186225861764,
+          "std": 0.030426560812744842,
+          "n": 5
+        },
+        "knn (tuned, raw)": {
+          "mean": 0.8044215472526522,
+          "std": 0.030691088749665328,
+          "n": 5
+        },
+        "svm_rbf (tuned, raw)": {
+          "mean": 0.8428983149003736,
+          "std": 0.026824217056895392,
+          "n": 5
+        },
+        "ridge degree-2 (702 features)": {
+          "mean": 0.7488202249619827,
+          "std": 0.017063448811629633,
+          "n": 5
+        }
+      },
+      "elm": {
+        "tanh|n_features=48|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7239233934344259,
+            "1": 0.7259129600578165,
+            "2": 0.7518205667774983,
+            "3": 0.7861911353020882,
+            "4": 0.7594534459507657
+          },
+          "f1_macro": {
+            "mean": 0.7494603003045189,
+            "std": 0.02307032250548313,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=48|noise_std=0.01": {
+          "split_means": {
+            "0": 0.729393928272018,
+            "1": 0.7243063732640933,
+            "2": 0.7328597728463104,
+            "3": 0.7780818298524594,
+            "4": 0.7417662064746263
+          },
+          "f1_macro": {
+            "mean": 0.7412816221419015,
+            "std": 0.019260809926277617,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=120|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7843346950850317,
+            "1": 0.7926300278862229,
+            "2": 0.770911948330452,
+            "3": 0.802272873627321,
+            "4": 0.813414129456592
+          },
+          "f1_macro": {
+            "mean": 0.7927127348771239,
+            "std": 0.014597374255088665,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=120|noise_std=0.01": {
+          "split_means": {
+            "0": 0.777594141773084,
+            "1": 0.754361071554054,
+            "2": 0.7811251715964344,
+            "3": 0.800529070372368,
+            "4": 0.7926191667578267
+          },
+          "f1_macro": {
+            "mean": 0.7812457244107535,
+            "std": 0.01573108877518352,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=72|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7477624080660846,
+            "1": 0.7566362664787086,
+            "2": 0.7719946774040295,
+            "3": 0.807478726182144,
+            "4": 0.7930689061240536
+          },
+          "f1_macro": {
+            "mean": 0.775388196851004,
+            "std": 0.022220461858675405,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=72|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7451313730553496,
+            "1": 0.7504446756962887,
+            "2": 0.7743092214344561,
+            "3": 0.7910144196465015,
+            "4": 0.7611062934470922
+          },
+          "f1_macro": {
+            "mean": 0.7644011966559376,
+            "std": 0.016633698079547888,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=180|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7787124010165374,
+            "1": 0.7924688320019602,
+            "2": 0.7861304374628073,
+            "3": 0.8340031791207089,
+            "4": 0.810716337248654
+          },
+          "f1_macro": {
+            "mean": 0.8004062373701336,
+            "std": 0.019861903520085645,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=180|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7732508954657523,
+            "1": 0.7656539874492504,
+            "2": 0.7710609526005775,
+            "3": 0.8017398349080497,
+            "4": 0.7983876598437128
+          },
+          "f1_macro": {
+            "mean": 0.7820186660534686,
+            "std": 0.014977426011900736,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=48|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7818851728401093,
+            "1": 0.7802482818226236,
+            "2": 0.7779933637093396,
+            "3": 0.813079153497284,
+            "4": 0.7819222467584411
+          },
+          "f1_macro": {
+            "mean": 0.7870256437255595,
+            "std": 0.013105488847107308,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=48|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7817181780724737,
+            "1": 0.7782827448580055,
+            "2": 0.7779933637093396,
+            "3": 0.813079153497284,
+            "4": 0.7860465579678438
+          },
+          "f1_macro": {
+            "mean": 0.7874239996209893,
+            "std": 0.013154011538747824,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=120|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7851858781353377,
+            "1": 0.8051150806132074,
+            "2": 0.8201938639780147,
+            "3": 0.8558632010805196,
+            "4": 0.8316710742114263
+          },
+          "f1_macro": {
+            "mean": 0.8196058196037012,
+            "std": 0.023896559432969075,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=120|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7866125943145567,
+            "1": 0.7964765626099469,
+            "2": 0.8179070383527925,
+            "3": 0.8485647790629964,
+            "4": 0.8316710742114263
+          },
+          "f1_macro": {
+            "mean": 0.8162464097103438,
+            "std": 0.022601614231546448,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=72|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7914874938923582,
+            "1": 0.7670747124085072,
+            "2": 0.7826041002282872,
+            "3": 0.845857382486913,
+            "4": 0.8300883292606666
+          },
+          "f1_macro": {
+            "mean": 0.8034224036553465,
+            "std": 0.02969443552058635,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=72|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7898803695266131,
+            "1": 0.7650013173145171,
+            "2": 0.7833496339291717,
+            "3": 0.8401919368214674,
+            "4": 0.826436065886181
+          },
+          "f1_macro": {
+            "mean": 0.80097186469559,
+            "std": 0.02797886402624763,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=180|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7972018800914634,
+            "1": 0.8148067939357251,
+            "2": 0.8423860843849466,
+            "3": 0.8699671547368729,
+            "4": 0.8328097159497382
+          },
+          "f1_macro": {
+            "mean": 0.8314343258197493,
+            "std": 0.024718198862905202,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=180|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7958418970513547,
+            "1": 0.8174431667841362,
+            "2": 0.8429278786762757,
+            "3": 0.8665386427881527,
+            "4": 0.8328097159497382
+          },
+          "f1_macro": {
+            "mean": 0.8311122602499316,
+            "std": 0.023783866005047744,
+            "n": 5
+          },
+          "n_inits": 3
+        }
+      }
+    },
+    {
+      "machine": "laptop",
+      "run": "outdir/landsat_classical_standard/run_20261028-152509",
+      "input_scaling": "standard",
+      "input_scaling_inferred": false,
+      "wall_clock_s": 457.0,
+      "references": {
+        "ridge (untuned, raw)": {
+          "mean": 0.5875028544834732,
+          "std": 0.0280920177093591,
+          "n": 5
+        },
+        "knn (untuned, raw)": {
+          "mean": 0.8098082652250493,
+          "std": 0.03214409980570011,
+          "n": 5
+        },
+        "svm_rbf (untuned, raw)": {
+          "mean": 0.8421959244997428,
+          "std": 0.031894285976430625,
+          "n": 5
+        },
+        "decision_tree (untuned, raw)": {
+          "mean": 0.7675012008232996,
+          "std": 0.030059173667834112,
+          "n": 5
+        },
+        "random_forest (untuned, raw)": {
+          "mean": 0.856034430131548,
+          "std": 0.026036650013337364,
+          "n": 5
+        },
+        "mlp (untuned, raw)": {
+          "mean": 0.8347373364130171,
+          "std": 0.02367435380873488,
+          "n": 5
+        },
+        "adaboost (untuned, raw)": {
+          "mean": 0.7110501315859459,
+          "std": 0.05186492539658424,
+          "n": 5
+        },
+        "naive_bayes (untuned, raw)": {
+          "mean": 0.7511242198389915,
+          "std": 0.029485820062374286,
+          "n": 5
+        },
+        "qda (untuned, raw)": {
+          "mean": 0.727400584424338,
+          "std": 0.024402591349460316,
+          "n": 5
+        },
+        "random_forest (tuned, raw)": {
+          "mean": 0.8621186225861764,
+          "std": 0.030426560812744842,
+          "n": 5
+        },
+        "knn (tuned, raw)": {
+          "mean": 0.8044215472526522,
+          "std": 0.030691088749665328,
+          "n": 5
+        },
+        "svm_rbf (tuned, raw)": {
+          "mean": 0.8428983149003736,
+          "std": 0.026824217056895392,
+          "n": 5
+        },
+        "ridge degree-2 (702 features)": {
+          "mean": 0.7488202249619827,
+          "std": 0.017063448811629633,
+          "n": 5
+        }
+      },
+      "elm": {
+        "tanh|n_features=16|noise_std=0.0": {
+          "split_means": {
+            "0": 0.6288001924799795,
+            "1": 0.6536860905567287,
+            "2": 0.7104065808806878,
+            "3": 0.7178285916158341,
+            "4": 0.697071042897516
+          },
+          "f1_macro": {
+            "mean": 0.6815584996861492,
+            "std": 0.0344925514394554,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=16|noise_std=0.01": {
+          "split_means": {
+            "0": 0.63375535142842,
+            "1": 0.6450860899717442,
+            "2": 0.708126678713143,
+            "3": 0.726003234408901,
+            "4": 0.6996926392700891
+          },
+          "f1_macro": {
+            "mean": 0.6825327987584595,
+            "std": 0.03638868219694231,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=24|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7158412759130955,
+            "1": 0.6872893277917701,
+            "2": 0.7714346219772211,
+            "3": 0.7417208298255741,
+            "4": 0.7531934586340711
+          },
+          "f1_macro": {
+            "mean": 0.7338959028283464,
+            "std": 0.02946497231498449,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=24|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7196613139876863,
+            "1": 0.683332894640719,
+            "2": 0.7669028084097382,
+            "3": 0.7538879384937531,
+            "4": 0.7548334876117614
+          },
+          "f1_macro": {
+            "mean": 0.7357236886287316,
+            "std": 0.030561600332616002,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=36|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7095668860020922,
+            "1": 0.7553671480395896,
+            "2": 0.753491446523009,
+            "3": 0.7821579231642625,
+            "4": 0.7459236500862145
+          },
+          "f1_macro": {
+            "mean": 0.7493014107630336,
+            "std": 0.023341558220127095,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=36|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7206716961464323,
+            "1": 0.7503958436034449,
+            "2": 0.7530458718096633,
+            "3": 0.7843010662366702,
+            "4": 0.7385858703556473
+          },
+          "f1_macro": {
+            "mean": 0.7494000696303715,
+            "std": 0.02085487641984481,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=48|noise_std=0.0": {
+          "split_means": {
+            "0": 0.778252908515101,
+            "1": 0.7769041045432313,
+            "2": 0.7902787130299403,
+            "3": 0.815413704858348,
+            "4": 0.7714689887155576
+          },
+          "f1_macro": {
+            "mean": 0.7864636839324357,
+            "std": 0.015724512293391116,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=48|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7835305334528035,
+            "1": 0.769688515003916,
+            "2": 0.7869741109002107,
+            "3": 0.8132403325349382,
+            "4": 0.7672913233986849
+          },
+          "f1_macro": {
+            "mean": 0.7841449630581107,
+            "std": 0.016419233760190173,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=72|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7568943946696621,
+            "1": 0.809363972912438,
+            "2": 0.7964243801976942,
+            "3": 0.8342696158493962,
+            "4": 0.7942576068483703
+          },
+          "f1_macro": {
+            "mean": 0.7982419940955122,
+            "std": 0.025101756840278593,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=72|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7520670596476564,
+            "1": 0.8141964475337738,
+            "2": 0.7941675868262257,
+            "3": 0.8371932353921335,
+            "4": 0.7998863495935452
+          },
+          "f1_macro": {
+            "mean": 0.7995021357986669,
+            "std": 0.027982970779975577,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=120|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7910310533740672,
+            "1": 0.8118742661502186,
+            "2": 0.8362820571552745,
+            "3": 0.8444225151282142,
+            "4": 0.814753951480001
+          },
+          "f1_macro": {
+            "mean": 0.8196727686575551,
+            "std": 0.018940843027309504,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=120|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7956579694487521,
+            "1": 0.8112471525469876,
+            "2": 0.8316435015415496,
+            "3": 0.8304045358040217,
+            "4": 0.8138298981645198
+          },
+          "f1_macro": {
+            "mean": 0.8165566115011661,
+            "std": 0.013354832969599589,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=180|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7961706489423709,
+            "1": 0.8228027498150233,
+            "2": 0.8290733062345018,
+            "3": 0.8633858219174368,
+            "4": 0.826899460499694
+          },
+          "f1_macro": {
+            "mean": 0.8276663974818053,
+            "std": 0.021420000519475322,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "tanh|n_features=180|noise_std=0.01": {
+          "split_means": {
+            "0": 0.806342551377234,
+            "1": 0.8188265308400223,
+            "2": 0.8326161275323516,
+            "3": 0.8600851250801252,
+            "4": 0.8271415186364889
+          },
+          "f1_macro": {
+            "mean": 0.8290023706932443,
+            "std": 0.017886725565609524,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=16|noise_std=0.0": {
+          "split_means": {
+            "0": 0.5643398913010585,
+            "1": 0.5923394878062576,
+            "2": 0.5709913059485097,
+            "3": 0.6236680193803199,
+            "4": 0.6518936843457971
+          },
+          "f1_macro": {
+            "mean": 0.6006464777563887,
+            "std": 0.03293287439317943,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=16|noise_std=0.01": {
+          "split_means": {
+            "0": 0.5648842633929889,
+            "1": 0.5973235698148368,
+            "2": 0.5687925560401107,
+            "3": 0.6192284423545361,
+            "4": 0.6524017666968579
+          },
+          "f1_macro": {
+            "mean": 0.6005261196598661,
+            "std": 0.032644990223156194,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=24|noise_std=0.0": {
+          "split_means": {
+            "0": 0.6362244130697522,
+            "1": 0.635873908178989,
+            "2": 0.6831028085501751,
+            "3": 0.7089545323029708,
+            "4": 0.6554475492872444
+          },
+          "f1_macro": {
+            "mean": 0.6639206422778263,
+            "std": 0.028360184994040333,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=24|noise_std=0.01": {
+          "split_means": {
+            "0": 0.6325556744010136,
+            "1": 0.630324607433815,
+            "2": 0.6831028085501751,
+            "3": 0.7103489548064873,
+            "4": 0.6572479608098781
+          },
+          "f1_macro": {
+            "mean": 0.6627160012002739,
+            "std": 0.03057210281173553,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=36|noise_std=0.0": {
+          "split_means": {
+            "0": 0.6699774219714264,
+            "1": 0.7308103865837307,
+            "2": 0.7466787851090267,
+            "3": 0.7501630175335916,
+            "4": 0.7190282614145254
+          },
+          "f1_macro": {
+            "mean": 0.7233315745224601,
+            "std": 0.028934876202343744,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=36|noise_std=0.01": {
+          "split_means": {
+            "0": 0.6710556144302341,
+            "1": 0.7308103865837307,
+            "2": 0.7466787851090267,
+            "3": 0.7471791136167875,
+            "4": 0.719666005683706
+          },
+          "f1_macro": {
+            "mean": 0.723077981084697,
+            "std": 0.027984355783880522,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=48|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7148071207102805,
+            "1": 0.7568627669199297,
+            "2": 0.7574583066733614,
+            "3": 0.7747726029927113,
+            "4": 0.7500797739244907
+          },
+          "f1_macro": {
+            "mean": 0.7507961142441547,
+            "std": 0.01975743857081046,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=48|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7141280699169442,
+            "1": 0.7568627669199297,
+            "2": 0.757092954252729,
+            "3": 0.7745169901532362,
+            "4": 0.746407854489247
+          },
+          "f1_macro": {
+            "mean": 0.7498017271464172,
+            "std": 0.019989960943604636,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=72|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7427715263318847,
+            "1": 0.7704617840000938,
+            "2": 0.783224725044001,
+            "3": 0.8239809790156,
+            "4": 0.7952543527921091
+          },
+          "f1_macro": {
+            "mean": 0.7831386734367377,
+            "std": 0.02685181970478792,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=72|noise_std=0.01": {
+          "split_means": {
+            "0": 0.745401501064218,
+            "1": 0.7701663820732173,
+            "2": 0.782765277119836,
+            "3": 0.8239809790156,
+            "4": 0.7932082413449087
+          },
+          "f1_macro": {
+            "mean": 0.783104476123556,
+            "std": 0.025930669957701033,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=120|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7843643415151235,
+            "1": 0.8165437398889046,
+            "2": 0.7833719774911012,
+            "3": 0.8510861887381771,
+            "4": 0.8278354780195691
+          },
+          "f1_macro": {
+            "mean": 0.8126403451305751,
+            "std": 0.02600146599557098,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=120|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7849558618183274,
+            "1": 0.8153656005877612,
+            "2": 0.7849500388894975,
+            "3": 0.8532374940379083,
+            "4": 0.8278354780195691
+          },
+          "f1_macro": {
+            "mean": 0.8132688946706128,
+            "std": 0.02614442917179361,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=180|noise_std=0.0": {
+          "split_means": {
+            "0": 0.7885003886665688,
+            "1": 0.8472716784797568,
+            "2": 0.8066063116071568,
+            "3": 0.843932248683733,
+            "4": 0.8388405864239253
+          },
+          "f1_macro": {
+            "mean": 0.8250302427722283,
+            "std": 0.023309072749230983,
+            "n": 5
+          },
+          "n_inits": 3
+        },
+        "fourier|n_features=180|noise_std=0.01": {
+          "split_means": {
+            "0": 0.7885921621014221,
+            "1": 0.8472716784797568,
+            "2": 0.8066063116071568,
+            "3": 0.8461608077750372,
+            "4": 0.8388405864239253
+          },
+          "f1_macro": {
+            "mean": 0.8254943092774598,
+            "std": 0.023655891466563286,
+            "n": 5
+          },
+          "n_inits": 3
+        }
+      }
+    }
+  ],
+  "shots": [
+    {
+      "photonic": "photonic 16/4",
+      "qubit": "qubit N=16 (z-score)",
+      "shots": 100,
+      "photonic_f1": {
+        "mean": 0.6518867165100328,
+        "std": 0.0334687446990571,
+        "n": 5
+      },
+      "qubit_f1": {
+        "mean": 0.23945925438677063,
+        "std": 0.005272276859178014,
+        "n": 5
+      },
+      "paired": {
+        "n": 5,
+        "mean_difference": 0.41242746212326215,
+        "stderr": 0.016555947683574847,
+        "n_positive": 5,
+        "tie_tolerance": 0.01,
+        "verdict": "QELM clearly above"
+      },
+      "status": "PARTIALLY_COMMENSURABLE"
+    },
+    {
+      "photonic": "photonic 16/4",
+      "qubit": "qubit N=16 (z-score)",
+      "shots": 1000,
+      "photonic_f1": {
+        "mean": 0.7193228838387966,
+        "std": 0.03638813357264692,
+        "n": 5
+      },
+      "qubit_f1": {
+        "mean": 0.47485994943367216,
+        "std": 0.010161931120136575,
+        "n": 5
+      },
+      "paired": {
+        "n": 5,
+        "mean_difference": 0.2444629344051245,
+        "stderr": 0.01590214431152283,
+        "n_positive": 5,
+        "tie_tolerance": 0.01,
+        "verdict": "QELM clearly above"
+      },
+      "status": "PARTIALLY_COMMENSURABLE"
+    },
+    {
+      "photonic": "photonic 16/4",
+      "qubit": "qubit N=16 (z-score)",
+      "shots": 10000,
+      "photonic_f1": {
+        "mean": 0.7360120302244988,
+        "std": 0.036323783757979115,
+        "n": 5
+      },
+      "qubit_f1": {
+        "mean": 0.6736695795850849,
+        "std": 0.020881823219349976,
+        "n": 5
+      },
+      "paired": {
+        "n": 5,
+        "mean_difference": 0.06234245063941377,
+        "stderr": 0.009752914887142389,
+        "n_positive": 5,
+        "tie_tolerance": 0.01,
+        "verdict": "QELM clearly above"
+      },
+      "status": "PARTIALLY_COMMENSURABLE"
+    },
+    {
+      "photonic": "photonic 16/4",
+      "qubit": "qubit N=16 (z-score)",
+      "shots": 100000,
+      "photonic_f1": {
+        "mean": 0.736564797521478,
+        "std": 0.03530588668710961,
+        "n": 5
+      },
+      "qubit_f1": {
+        "mean": 0.7663327676320479,
+        "std": 0.028797188767031044,
+        "n": 5
+      },
+      "paired": {
+        "n": 5,
+        "mean_difference": -0.029767970110570086,
+        "stderr": 0.009404175242267896,
+        "n_positive": 0,
+        "tie_tolerance": 0.01,
+        "verdict": "baseline clearly above"
+      },
+      "status": "PARTIALLY_COMMENSURABLE"
+    },
+    {
+      "photonic": "photonic 24/6",
+      "qubit": "qubit N=24 (z-score)",
+      "shots": 100,
+      "photonic_f1": {
+        "mean": 0.6938832332137135,
+        "std": 0.034050484234017055,
+        "n": 5
+      },
+      "qubit_f1": {
+        "mean": 0.2769601486829093,
+        "std": 0.010113964457608366,
+        "n": 5
+      },
+      "paired": {
+        "n": 5,
+        "mean_difference": 0.4169230845308042,
+        "stderr": 0.016531055188132235,
+        "n_positive": 5,
+        "tie_tolerance": 0.01,
+        "verdict": "QELM clearly above"
+      },
+      "status": "PARTIALLY_COMMENSURABLE"
+    },
+    {
+      "photonic": "photonic 24/6",
+      "qubit": "qubit N=24 (z-score)",
+      "shots": 1000,
+      "photonic_f1": {
+        "mean": 0.7391807499773291,
+        "std": 0.02543485245022292,
+        "n": 5
+      },
+      "qubit_f1": {
+        "mean": 0.5269119490406187,
+        "std": 0.013391842726479334,
+        "n": 5
+      },
+      "paired": {
+        "n": 5,
+        "mean_difference": 0.21226880093671047,
+        "stderr": 0.01210823881410326,
+        "n_positive": 5,
+        "tie_tolerance": 0.01,
+        "verdict": "QELM clearly above"
+      },
+      "status": "PARTIALLY_COMMENSURABLE"
+    },
+    {
+      "photonic": "photonic 24/6",
+      "qubit": "qubit N=24 (z-score)",
+      "shots": 10000,
+      "photonic_f1": {
+        "mean": 0.7523591380475045,
+        "std": 0.024874555222615388,
+        "n": 5
+      },
+      "qubit_f1": {
+        "mean": 0.7167289345423333,
+        "std": 0.01570892367490241,
+        "n": 5
+      },
+      "paired": {
+        "n": 5,
+        "mean_difference": 0.03563020350517132,
+        "stderr": 0.006447990548554749,
+        "n_positive": 5,
+        "tie_tolerance": 0.01,
+        "verdict": "QELM clearly above"
+      },
+      "status": "PARTIALLY_COMMENSURABLE"
+    },
+    {
+      "photonic": "photonic 24/6",
+      "qubit": "qubit N=24 (z-score)",
+      "shots": 100000,
+      "photonic_f1": {
+        "mean": 0.7543048729338897,
+        "std": 0.027319111679619458,
+        "n": 5
+      },
+      "qubit_f1": {
+        "mean": 0.788925020700703,
+        "std": 0.023747343919866847,
+        "n": 5
+      },
+      "paired": {
+        "n": 5,
+        "mean_difference": -0.03462014776681346,
+        "stderr": 0.007986757892214901,
+        "n_positive": 0,
+        "tie_tolerance": 0.01,
+        "verdict": "baseline clearly above"
+      },
+      "status": "PARTIALLY_COMMENSURABLE"
+    }
+  ],
+  "narma": [
+    {
+      "label": "qubit N=16",
+      "kind": "qubit QELM",
+      "machine": "laptop",
+      "run": "outdir/narma_n16/run_20261026-094003",
+      "window": 8,
+      "wall_clock_s": 698.0,
+      "qelm_n_features": 192,
+      "qelm_runs": 15,
+      "qelm_cumulative_r2": {
+        "mean": 7.583205130781326,
+        "std": 0.06822253623174891,
+        "n": 5
+      },
+      "comparisons": {
+        "matched_elm": {
+          "n_features": 192,
+          "cumulative_r2": {
+            "mean": 7.708024197930195,
+            "std": 0.07467150388183269,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.12481906714886719,
+            "stderr": 0.003974618197869196,
+            "n_positive": 0,
+            "tie_tolerance": 0.07708024197930195,
+            "verdict": "baseline clearly above"
+          },
+          "status": "COMMENSURABLE"
+        },
+        "raw_window": {
+          "n_features": 8,
+          "cumulative_r2": {
+            "mean": 6.7662719193112295,
+            "std": 0.11858606564666707,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.8169332114700965,
+            "stderr": 0.0557477977163232,
+            "n_positive": 5,
+            "tie_tolerance": 0.0676627191931123,
+            "verdict": "QELM clearly above"
+          },
+          "status": "COMMENSURABLE"
+        },
+        "degree2_window": {
+          "n_features": 44,
+          "cumulative_r2": {
+            "mean": 7.795861673240649,
+            "std": 0.05055452623323492,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.212656542459324,
+            "stderr": 0.012545085844102386,
+            "n_positive": 0,
+            "tie_tolerance": 0.07795861673240649,
+            "verdict": "baseline clearly above"
+          },
+          "status": "COMMENSURABLE"
+        },
+        "esn": {
+          "n_features": 400,
+          "cumulative_r2": {
+            "mean": 7.955391788060291,
+            "std": 0.01120129934732462,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.3721866572789644,
+            "stderr": 0.029561130421755528,
+            "n_positive": 0,
+            "tie_tolerance": 0.07955391788060291,
+            "verdict": "baseline clearly above"
+          },
+          "status": "REFERENCE (true memory)"
+        }
+      }
+    },
+    {
+      "label": "qubit N=24",
+      "kind": "qubit QELM",
+      "machine": "gpu-reproduced-papers-2",
+      "run": "outdir/narma_n24/run_20261027-120754",
+      "window": 12,
+      "wall_clock_s": 17442.0,
+      "qelm_n_features": 288,
+      "qelm_runs": 15,
+      "qelm_cumulative_r2": {
+        "mean": 10.857774612477563,
+        "std": 0.15102990271563663,
+        "n": 5
+      },
+      "comparisons": {
+        "matched_elm": {
+          "n_features": 288,
+          "cumulative_r2": {
+            "mean": 11.122583374496042,
+            "std": 0.2084385066730107,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.26480876201847714,
+            "stderr": 0.05358137251144649,
+            "n_positive": 0,
+            "tie_tolerance": 0.11122583374496042,
+            "verdict": "baseline clearly above"
+          },
+          "status": "COMMENSURABLE"
+        },
+        "raw_window": {
+          "n_features": 12,
+          "cumulative_r2": {
+            "mean": 9.923235720048757,
+            "std": 0.22557845614656616,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.934538892428808,
+            "stderr": 0.07578559881847981,
+            "n_positive": 5,
+            "tie_tolerance": 0.09923235720048756,
+            "verdict": "QELM clearly above"
+          },
+          "status": "COMMENSURABLE"
+        },
+        "degree2_window": {
+          "n_features": 90,
+          "cumulative_r2": {
+            "mean": 11.320589380394148,
+            "std": 0.16159853247877762,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.4628147679165835,
+            "stderr": 0.027795119956778896,
+            "n_positive": 0,
+            "tie_tolerance": 0.11320589380394148,
+            "verdict": "baseline clearly above"
+          },
+          "status": "COMMENSURABLE"
+        },
+        "esn": {
+          "n_features": 400,
+          "cumulative_r2": {
+            "mean": 11.529938455357982,
+            "std": 0.13377038077745268,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.6721638428804176,
+            "stderr": 0.05341769785074793,
+            "n_positive": 0,
+            "tie_tolerance": 0.11529938455357983,
+            "verdict": "baseline clearly above"
+          },
+          "status": "REFERENCE (true memory)"
+        }
+      }
+    },
+    {
+      "label": "photonic 16/4",
+      "kind": "MerLin adaptation",
+      "machine": "laptop",
+      "run": "outdir/merlin_narma_m16/run_20261028-121446",
+      "window": 8,
+      "wall_clock_s": 143.0,
+      "qelm_n_features": 31,
+      "qelm_runs": 15,
+      "qelm_cumulative_r2": {
+        "mean": 7.000476455755906,
+        "std": 0.08898016690070719,
+        "n": 5
+      },
+      "comparisons": {
+        "matched_elm": {
+          "n_features": 31,
+          "cumulative_r2": {
+            "mean": 7.145921271910933,
+            "std": 0.052231438882078526,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.14544481615502763,
+            "stderr": 0.04122249651102663,
+            "n_positive": 0,
+            "tie_tolerance": 0.07145921271910934,
+            "verdict": "baseline clearly above"
+          },
+          "status": "COMMENSURABLE"
+        },
+        "raw_window": {
+          "n_features": 8,
+          "cumulative_r2": {
+            "mean": 6.7662719193112295,
+            "std": 0.11858606564666707,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": 0.2342045364446756,
+            "stderr": 0.028002550599429517,
+            "n_positive": 5,
+            "tie_tolerance": 0.0676627191931123,
+            "verdict": "QELM clearly above"
+          },
+          "status": "COMMENSURABLE"
+        },
+        "degree2_window": {
+          "n_features": 44,
+          "cumulative_r2": {
+            "mean": 7.795861673240649,
+            "std": 0.05055452623323492,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.7953852174847448,
+            "stderr": 0.04399361541561915,
+            "n_positive": 0,
+            "tie_tolerance": 0.07795861673240649,
+            "verdict": "baseline clearly above"
+          },
+          "status": "COMMENSURABLE"
+        },
+        "esn": {
+          "n_features": 400,
+          "cumulative_r2": {
+            "mean": 7.955391788060291,
+            "std": 0.01120129934732462,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.9549153323043852,
+            "stderr": 0.04279699432155574,
+            "n_positive": 0,
+            "tie_tolerance": 0.07955391788060291,
+            "verdict": "baseline clearly above"
+          },
+          "status": "REFERENCE (true memory)"
+        }
+      }
+    },
+    {
+      "label": "photonic 24/6",
+      "kind": "MerLin adaptation",
+      "machine": "laptop",
+      "run": "outdir/merlin_narma_m24/run_20261028-121449",
+      "window": 12,
+      "wall_clock_s": 1775.0,
+      "qelm_n_features": 47,
+      "qelm_runs": 15,
+      "qelm_cumulative_r2": {
+        "mean": 9.874910941711175,
+        "std": 0.2686104166274002,
+        "n": 5
+      },
+      "comparisons": {
+        "matched_elm": {
+          "n_features": 47,
+          "cumulative_r2": {
+            "mean": 10.063316468200469,
+            "std": 0.19439606358102368,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.18840552648929537,
+            "stderr": 0.04484396550670566,
+            "n_positive": 0,
+            "tie_tolerance": 0.10063316468200469,
+            "verdict": "baseline clearly above"
+          },
+          "status": "COMMENSURABLE"
+        },
+        "raw_window": {
+          "n_features": 12,
+          "cumulative_r2": {
+            "mean": 9.923235720048755,
+            "std": 0.22557845614656616,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -0.048324778337581975,
+            "stderr": 0.04597138304933879,
+            "n_positive": 2,
+            "tie_tolerance": 0.09923235720048755,
+            "verdict": "no clear separation"
+          },
+          "status": "COMMENSURABLE"
+        },
+        "degree2_window": {
+          "n_features": 90,
+          "cumulative_r2": {
+            "mean": 11.320589380394148,
+            "std": 0.16159853247877762,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -1.445678438682974,
+            "stderr": 0.07219949474256745,
+            "n_positive": 0,
+            "tie_tolerance": 0.11320589380394148,
+            "verdict": "baseline clearly above"
+          },
+          "status": "COMMENSURABLE"
+        },
+        "esn": {
+          "n_features": 400,
+          "cumulative_r2": {
+            "mean": 11.529938440459478,
+            "std": 0.13377039379031835,
+            "n": 5
+          },
+          "paired": {
+            "n": 5,
+            "mean_difference": -1.6550274987483025,
+            "stderr": 0.07396992871618945,
+            "n_positive": 0,
+            "tie_tolerance": 0.11529938440459478,
+            "verdict": "baseline clearly above"
+          },
+          "status": "REFERENCE (true memory)"
+        }
+      }
+    }
+  ],
+  "wall_clock": [
+    {
+      "run": "outdir/run_20261023-173640",
+      "workload": "Landsat qubit QELM qubit N=16 (min-max) (all readouts and sweeps)",
+      "machine": "laptop",
+      "seconds": 1923.0
+    },
+    {
+      "run": "outdir/landsat_n24_eval/run_20261026-094113+outdir/landsat_n24_remainder/run_20261026-084131",
+      "workload": "Landsat qubit QELM qubit N=24 (min-max) (all readouts and sweeps)",
+      "machine": "gpu-reproduced-papers-2",
+      "seconds": 30846.0
+    },
+    {
+      "run": "outdir/landsat_n16_standard/run_20261026-155536",
+      "workload": "Landsat qubit QELM qubit N=16 (z-score) (all readouts and sweeps)",
+      "machine": "laptop",
+      "seconds": 2764.0
+    },
+    {
+      "run": "outdir/landsat_n24_standard/run_20261026-171518",
+      "workload": "Landsat qubit QELM qubit N=24 (z-score) (all readouts and sweeps)",
+      "machine": "gpu-reproduced-papers-2",
+      "seconds": 66032.0
+    },
+    {
+      "run": "outdir/merlin_landsat_m16/run_20261028-121441",
+      "workload": "Landsat MerLin adaptation photonic 16/4 (all readouts and sweeps)",
+      "machine": "laptop",
+      "seconds": 82.0
+    },
+    {
+      "run": "outdir/merlin_landsat_m24/run_20261028-121443",
+      "workload": "Landsat MerLin adaptation photonic 24/6 (all readouts and sweeps)",
+      "machine": "laptop",
+      "seconds": 2670.0
+    },
+    {
+      "run": "outdir/run_20261023-172941",
+      "workload": "Landsat classical baselines (minmax)",
+      "machine": "laptop",
+      "seconds": 438.0
+    },
+    {
+      "run": "outdir/landsat_classical_standard/run_20261028-152509",
+      "workload": "Landsat classical baselines (standard)",
+      "machine": "laptop",
+      "seconds": 457.0
+    },
+    {
+      "run": "outdir/narma_n16/run_20261026-094003",
+      "workload": "NARMA qubit QELM qubit N=16 (QELM 3 conditions + baselines)",
+      "machine": "laptop",
+      "seconds": 698.0
+    },
+    {
+      "run": "outdir/narma_n24/run_20261027-120754",
+      "workload": "NARMA qubit QELM qubit N=24 (QELM 3 conditions + baselines)",
+      "machine": "gpu-reproduced-papers-2",
+      "seconds": 17442.0
+    },
+    {
+      "run": "outdir/merlin_narma_m16/run_20261028-121446",
+      "workload": "NARMA MerLin adaptation photonic 16/4 (QELM 3 conditions + baselines)",
+      "machine": "laptop",
+      "seconds": 143.0
+    },
+    {
+      "run": "outdir/merlin_narma_m24/run_20261028-121449",
+      "workload": "NARMA MerLin adaptation photonic 24/6 (QELM 3 conditions + baselines)",
+      "machine": "laptop",
+      "seconds": 1775.0
+    }
+  ],
+  "paper_reported": {
+    "QELM w2 ET-cut scaled (124 q, 930 features)": 0.83,
+    "QELM w1 ET scaled (124 q, 372 features)": 0.812,
+    "RF (untuned)": 0.84,
+    "kNN (untuned)": 0.834,
+    "MLP (untuned)": 0.83,
+    "RBF-SVM (untuned)": 0.809,
+    "Ridge on raw features": 0.608
+  }
+}

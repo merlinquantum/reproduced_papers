@@ -1,0 +1,57 @@
+{
+    "sweep_id": "fig3b_sushi",
+    "description": "Fig. 3b: sushi m=100, n=10, Gaussian sigma=3, near-identity; ansatz Clements, 3-MZI, butterfly (original code, non-unitary at m=100), butterfly corrected, Haar; seeds 0-4.",
+    "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ],
+    "candidates": [
+        {
+            "label": "clements",
+            "config": "configs/fig3b_sushi_original.json",
+            "overrides": {
+                "model.ansatz": "clements"
+            }
+        },
+        {
+            "label": "mzi3",
+            "config": "configs/fig3b_sushi_original.json",
+            "overrides": {
+                "model.ansatz": "mzi3"
+            }
+        },
+        {
+            "label": "butterfly_reference",
+            "config": "configs/fig3b_sushi_original.json",
+            "overrides": {
+                "model.ansatz": "butterfly",
+                "model.butterfly_variant": "reference"
+            }
+        },
+        {
+            "label": "butterfly_corrected",
+            "config": "configs/fig3b_sushi_original.json",
+            "overrides": {
+                "model.ansatz": "butterfly",
+                "model.butterfly_variant": "corrected"
+            }
+        },
+        {
+            "label": "haar",
+            "config": "configs/fig3b_sushi_original.json",
+            "overrides": {
+                "model.ansatz": "haar"
+            }
+        }
+    ],
+    "metric": "primary: sample_metrics.<model>.walsh_mmd (same kernel operators for every model); also test_mmd_estimator (paper protocol) and gaussian_mmd_raw/binarized for Gaussian kernels",
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final parameters",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "differences within one pooled std are reported as not separated",
+    "selection": "none (comparison sweep)"
+}

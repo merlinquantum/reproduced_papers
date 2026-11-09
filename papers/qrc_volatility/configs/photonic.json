@@ -1,0 +1,6 @@
+{
+  "description": "MerLin photonic adaptation: 10 modes, 3 photons, frozen Haar mesh, three sequential lag-encoding blocks, per-mode photon-number readout. PQR1 mirrors QR1 (10 readout features); PQR2 mirrors QR2's two-readout ensemble (20 features). The encoding scale has no paper-specified photonic value, so it is swept over pi/{1,2,4,8}; the (scale, instance) pair is selected jointly by MSE on the leakage-free validation window, with the best-on-test candidate also reported.",
+  "experiment": "photonic",
+  "evaluation": {"horizons": [1, 5]},
+  "photonic": {"n_instances": 25, "encoding_scale_divisors": [1, 2, 4, 8]}
+}

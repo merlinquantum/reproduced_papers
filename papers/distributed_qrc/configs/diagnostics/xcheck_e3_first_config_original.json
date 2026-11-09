@@ -1,0 +1,15 @@
+{
+  "description": "Machine-equivalence cross-check: the first configuration of E3 (srmr, seed 0, all 9 cells, full-n kernels) run locally, to compare with the GPU sweep values.",
+  "experiment": {
+    "id": "XCHECK-E3",
+    "variant": "original",
+    "architecture": "srmr",
+    "sizes": [[10, 2]],
+    "reservoir_types": ["classical", "quantum_ideal", "quantum_noisy"],
+    "readout_types": ["linear", "quantum_kernel_ideal", "quantum_kernel_noisy"]
+  },
+  "readout": {
+    "kernel_selection_subsample": 8000,
+    "kernel_fit_subsample": null
+  }
+}

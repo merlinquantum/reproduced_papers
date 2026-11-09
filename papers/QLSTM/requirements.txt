@@ -4,5 +4,8 @@ pennylane
 scipy
 scikit-learn
 matplotlib
-merlinquantum
+# lib/photonic_quantum_cell.py uses the pre-0.4 MerLin API (MeasurementStrategy.MODE_EXPECTATIONS);
+# MerLin 0.3.2 needs a Perceval that still has perceval.runtime.session (1.3.x removed it).
+merlinquantum==0.3.2
+perceval-quandela==1.2.4
 pytest

@@ -1,0 +1,34 @@
+{
+    "sweep_id": "fig3b_sushi_merlin",
+    "description": "Phase 04 M1/M2: Fig. 3b on the MerLin backend, Haar (torch) and MerLin mesh, seeds 0-4; compare Haar with fig3b_sushi haar (JAX).",
+    "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ],
+    "candidates": [
+        {
+            "label": "haar_merlin",
+            "config": "configs/fig3b_sushi_merlin.json",
+            "overrides": {
+                "model.ansatz": "haar"
+            }
+        },
+        {
+            "label": "merlin_mesh",
+            "config": "configs/fig3b_sushi_merlin.json",
+            "overrides": {
+                "model.ansatz": "merlin_mesh"
+            }
+        }
+    ],
+    "metric": "primary: sample_metrics.model.walsh_mmd and test_mmd_estimator, compared with the Phase 03 JAX sweep (|\u0394mean| \u2264 2 SE); M3: noise_study[].exact_mmd",
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final parameters",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "within 2 standard errors = preserved / not separated",
+    "selection": "none (comparison sweep)"
+}
