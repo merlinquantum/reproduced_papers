@@ -1,0 +1,49 @@
+{
+  "description": "Gap diagnostic D4 (re-uploading): E5 at 16 qubits with 144 layers (36 encoding layers x 8 blocks, input shift 8), so each of the 36 raw Landsat features is uploaded 8 times (paper at 124 q: about 15.5; landsat_readouts_reduced_n16.json: 2). Splits 0-1, reservoir 0, shot seed 0, 1e5 shots, headline readouts only. Preliminary (2 realisations).",
+  "reservoir": {
+    "n_qubits": 16,
+    "n_layers": 144,
+    "input_shift": 8,
+    "chunk_size": 64
+  },
+  "landsat_readouts": {
+    "split_seeds": [
+      0,
+      1
+    ],
+    "reservoir_seeds": [
+      0
+    ],
+    "shot_seeds": [
+      0
+    ],
+    "headline_shots": 100000,
+    "nsr_cutoff": 1.0,
+    "readouts": [
+      "w1_x_unit",
+      "w1_pauli_unit",
+      "w1_pauli_scaled",
+      "w1_et_scaled",
+      "w2_pauli_unit",
+      "w2_pauli_scaled",
+      "w2_et_unit",
+      "w2_et_scaled",
+      "w2_etcut_scaled"
+    ],
+    "cutoff_sweep": {
+      "cutoffs": [],
+      "readouts": []
+    },
+    "train_size_sweep": {
+      "sizes": [],
+      "resamples": 1,
+      "readout": "w1_pauli_scaled"
+    },
+    "shots_sweep": {
+      "shots": [],
+      "readout": "w1_pauli_scaled"
+    },
+    "save_probabilities": true,
+    "realisations": null
+  }
+}

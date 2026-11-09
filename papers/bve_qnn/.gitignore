@@ -1,0 +1,12 @@
+# Runtime outputs from `implementation.py --paper bve_qnn`
+outdir/
+results/run_*/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Local env
+.venv

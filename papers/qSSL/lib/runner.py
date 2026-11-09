@@ -15,6 +15,7 @@ from torchsummary import summary
 from lib.data_utils import load_finetuning_data, load_transformed_data
 from lib.model import QSSL
 from lib.training_utils import (
+    disable_qiskit_statevector_capture,
     linear_evaluation,
     save_results_to_json,
     train,
@@ -50,6 +51,11 @@ def _build_args(cfg: dict[str, Any]) -> SimpleNamespace:
             if training_cfg.get("max_steps") is None
             else int(training_cfg.get("max_steps"))
         ),
+        "total_steps": (
+            None
+            if training_cfg.get("total_steps") is None
+            else int(training_cfg.get("total_steps"))
+        ),
         "le_max_steps": (
             None
             if training_cfg.get("le_max_steps") is None
@@ -57,6 +63,7 @@ def _build_args(cfg: dict[str, Any]) -> SimpleNamespace:
         ),
         "width": int(model_cfg.get("width", 8)),
         "loss_dim": int(model_cfg.get("loss_dim", 128)),
+        "projection_head": bool(model_cfg.get("projection_head", True)),
         "batch_norm": bool(model_cfg.get("batch_norm", False)),
         "temperature": float(model_cfg.get("temperature", 0.07)),
         "modes": int(model_cfg.get("modes", 10)),
@@ -69,6 +76,7 @@ def _build_args(cfg: dict[str, Any]) -> SimpleNamespace:
         "shots": int(model_cfg.get("shots", 100)),
         "q_backend": str(model_cfg.get("q_backend", "qasm_simulator")),
         "save_dhs": bool(model_cfg.get("save_dhs", False)),
+        "dhs_freq": int(model_cfg.get("dhs_freq", 1)),
         "device": str(cfg.get("device", "cpu")),
         "merlin": backend == "merlin",
         "qiskit": backend == "qiskit",
@@ -114,11 +122,25 @@ def run_qssl_experiment(cfg: dict[str, Any], run_dir: Path) -> None:
     LOGGER.info("Starting SSL training for %s epochs", args.epochs)
     model, ssl_losses = train(model, ssl_loader, str(run_dir), args)
 
+    if args.qiskit:
+        disable_qiskit_statevector_capture(model)
+        LOGGER.info("Disabled Qiskit statevector capture after SSL training")
+
     LOGGER.info("Building frozen model for linear evaluation")
-    frozen_model = nn.Sequential(
+    frozen_representation_layers = [
         model.backbone,
         model.comp,
-        model.representation_network,
+    ]
+    if model.batch_norm:
+        frozen_representation_layers.append(model.bn)
+    frozen_representation_layers.extend(
+        [
+            model.quantum_input_preprocessor,
+            model.representation_network,
+        ]
+    )
+    frozen_model = nn.Sequential(
+        *frozen_representation_layers,
         nn.Linear(model.rep_net_output_size, args.classes),
     )
     frozen_model.requires_grad_(False)

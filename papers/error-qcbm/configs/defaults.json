@@ -1,0 +1,14 @@
+{
+  "description": "Small offline MerLin environment check; no training or remote submission",
+  "task": "check_environment",
+  "seed": 42,
+  "dtype": "float64",
+  "device": "cpu",
+  "outdir": "outdir",
+  "checks": {
+    "atol": 1e-06
+  },
+  "logging": {
+    "level": "info"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "description": "MerLin adaptation (phase 04), tuning sweep M0: SRSR 10, photonic reservoir, linear and photonic-kernel readouts, full-n kernels. Not the paper's method.",
+  "experiment": {
+    "id": "P1-MERLIN",
+    "variant": "merlin",
+    "architecture": "srsr",
+    "sizes": [10],
+    "reservoir_types": ["photonic"],
+    "readout_types": ["linear", "photonic_kernel"]
+  },
+  "readout": {"kernel_selection_subsample": 8000, "kernel_fit_subsample": null}
+}

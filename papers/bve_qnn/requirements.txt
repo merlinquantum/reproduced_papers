@@ -1,0 +1,8 @@
+# Core dependency — perceval-quandela, torch and numpy are pulled transitively
+merlinquantum>=0.4.0
+pytest
+
+# Only needed to reproduce the paper's Mollweide-projection figure
+# (papers/bve_qnn/utils/plot_mollweide.py)
+matplotlib>=3.8
+cartopy>=0.22

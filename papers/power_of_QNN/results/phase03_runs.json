@@ -1,0 +1,14 @@
+{
+  "reference_check": "outdir/run_20261020-183432",
+  "effdim_d40_original": "outdir/run_20261021-072045",
+  "effdim_d40_paper_domain": "outdir/run_20261021-072513",
+  "effdim_d40_easy_ry": "outdir/run_20261021-072633",
+  "spectrum_scaling_original": "outdir/run_20261021-072834",
+  "sensitivity_classical": "outdir/run_20261021-072254",
+  "topology_search_d40_classical": "outdir/run_20261021-072213",
+  "topology_search_d40_relu_classical": "outdir/run_20261021-072754",
+  "training_iris_original": "outdir/run_20261021-072313",
+  "training_iris_finite_difference": "outdir/run_20261021-072342",
+  "training_iris_paper_domain": "outdir/run_20261021-072410",
+  "generalisation_original": "outdir/run_20261021-072438"
+}

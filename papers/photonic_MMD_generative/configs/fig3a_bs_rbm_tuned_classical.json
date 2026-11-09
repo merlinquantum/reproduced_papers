@@ -1,0 +1,38 @@
+{
+    "description": "Phase 5 B6 (added fair baseline, not a paper setting): tuned RBM on the Fig. 3a boson-sampling data, trained on binarized samples; grid hidden {64, 256, 512 (iso-parameter)} x lr {1e-2, 1e-3}, Gibbs {10, 100, 1000}; selection per sigma on a 1000-sample validation split of train; refit on full train; test metrics with the Fig. 3a kernel operators. Protocol: LOG.md 'Phase 5 Comparison Plan'.",
+    "experiment": {
+        "name": "fig3a_bs_rbm_tuned",
+        "paper_reference": "Fig. 3a (added baseline B6)"
+    },
+    "dataset": {
+        "name": "boson_sampling",
+        "m": 256,
+        "n": 16,
+        "n_train": 5000,
+        "n_test": 5000,
+        "input_state": "middle_compact",
+        "unitary_seed": 2603,
+        "sample_seed": 8793
+    },
+    "model": {
+        "backend": "rbm_tuned"
+    },
+    "kernel": {
+        "type": "gaussian",
+        "sigma": 3.0
+    },
+    "tuning": {
+        "sigmas": [2.0, 3.0, 4.5],
+        "hidden_units": [64, 256, 512],
+        "learning_rates": [0.01, 0.001],
+        "gibbs_steps": [10, 100, 1000],
+        "batch_size": 64,
+        "n_iter": 2000,
+        "validation_size": 1000,
+        "split_seed": 20261015,
+        "num_samples": 2000
+    },
+    "evaluation": {
+        "n_operators": 2000
+    }
+}

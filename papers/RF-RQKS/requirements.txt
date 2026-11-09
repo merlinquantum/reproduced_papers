@@ -1,0 +1,5 @@
+merlinquantum==0.4.1
+scipy
+matplotlib
+pytest
+qiskit

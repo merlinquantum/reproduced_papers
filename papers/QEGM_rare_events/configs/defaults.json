@@ -1,0 +1,46 @@
+{
+  "description": "Default smoke configuration: small GMM, short training, all variants. Sized to finish well inside the 120 s smoke-test budget on modest CPUs.",
+  "seed": 42,
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "dataset": {
+    "name": "gmm3",
+    "n_samples": 1024,
+    "means": [-3.0, 0.0, 3.0],
+    "stds": [1.0, 0.7071067811865476, 1.224744871391589],
+    "weights": [0.15, 0.7, 0.15],
+    "tail_threshold": 1.5,
+    "val_fraction": 0.15,
+    "test_fraction": 0.15
+  },
+  "model": {
+    "latent_dim": 4,
+    "hidden_dim": 32,
+    "vqc": {
+      "n_qubits": 4,
+      "n_layers": 3
+    },
+    "merlin": {
+      "n_modes": 6,
+      "n_photons": 3,
+      "encoding_scale": 3.141592653589793
+    }
+  },
+  "training": {
+    "epochs": 15,
+    "batch_size": 64,
+    "lr": 0.005,
+    "lambda_rec": 1.0,
+    "lambda_tail": 2.0,
+    "lambda_kld": 0.5,
+    "seeds": "42",
+    "models": "vae,qegm,qegm_merlin"
+  },
+  "evaluation": {
+    "n_generated": 2048,
+    "n_tail_bins": 20,
+    "tail_kl_eps": 0.0001
+  },
+  "logging": {"level": "info", "save_config_snapshot": true}
+}

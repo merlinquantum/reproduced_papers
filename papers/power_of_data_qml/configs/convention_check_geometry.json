@@ -1,0 +1,202 @@
+{
+  "description": "EXP-AMB stage A (label-free): effective dimension d and geometric difference g for QK and PQK (gamma scale 1) vs the journal Source Data, n=3-8, seeds 0-2. Factorial: input_scale {1,0.5,0.3,0.2,0.15,0.1} x structure {baseline, E2 pair coefficient 1, E3 on n qubits, E3 time (n+1)/3}. Selection rule (predeclared): per (quantity, embedding), smallest mean relative error over n=3-8.",
+  "experiment": "convention_check",
+  "study": {
+    "embeddings": [
+      "E1",
+      "E2",
+      "E3"
+    ],
+    "system_sizes": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "components": [
+      "dimension_geometry"
+    ],
+    "cv_system_sizes": []
+  },
+  "models": {
+    "grid": "paper",
+    "protocols": [
+      "paper"
+    ],
+    "n_jobs": 8,
+    "include_polynomial_extension": false
+  },
+  "convention_check": {
+    "variants": [
+      {
+        "name": "scale1_baseline",
+        "conventions": {
+          "input_scale": 1.0
+        }
+      },
+      {
+        "name": "scale1_e2pair1",
+        "conventions": {
+          "e2_pair_coefficient": 1.0,
+          "input_scale": 1.0
+        }
+      },
+      {
+        "name": "scale1_e3regn",
+        "conventions": {
+          "e3_register": "n",
+          "input_scale": 1.0
+        }
+      },
+      {
+        "name": "scale1_e3time",
+        "conventions": {
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 1.0
+        }
+      },
+      {
+        "name": "scale0.5_baseline",
+        "conventions": {
+          "input_scale": 0.5
+        }
+      },
+      {
+        "name": "scale0.5_e2pair1",
+        "conventions": {
+          "e2_pair_coefficient": 1.0,
+          "input_scale": 0.5
+        }
+      },
+      {
+        "name": "scale0.5_e3regn",
+        "conventions": {
+          "e3_register": "n",
+          "input_scale": 0.5
+        }
+      },
+      {
+        "name": "scale0.5_e3time",
+        "conventions": {
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.5
+        }
+      },
+      {
+        "name": "scale0.3_baseline",
+        "conventions": {
+          "input_scale": 0.3
+        }
+      },
+      {
+        "name": "scale0.3_e2pair1",
+        "conventions": {
+          "e2_pair_coefficient": 1.0,
+          "input_scale": 0.3
+        }
+      },
+      {
+        "name": "scale0.3_e3regn",
+        "conventions": {
+          "e3_register": "n",
+          "input_scale": 0.3
+        }
+      },
+      {
+        "name": "scale0.3_e3time",
+        "conventions": {
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.3
+        }
+      },
+      {
+        "name": "scale0.2_baseline",
+        "conventions": {
+          "input_scale": 0.2
+        }
+      },
+      {
+        "name": "scale0.2_e2pair1",
+        "conventions": {
+          "e2_pair_coefficient": 1.0,
+          "input_scale": 0.2
+        }
+      },
+      {
+        "name": "scale0.2_e3regn",
+        "conventions": {
+          "e3_register": "n",
+          "input_scale": 0.2
+        }
+      },
+      {
+        "name": "scale0.2_e3time",
+        "conventions": {
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.2
+        }
+      },
+      {
+        "name": "scale0.15_baseline",
+        "conventions": {
+          "input_scale": 0.15
+        }
+      },
+      {
+        "name": "scale0.15_e2pair1",
+        "conventions": {
+          "e2_pair_coefficient": 1.0,
+          "input_scale": 0.15
+        }
+      },
+      {
+        "name": "scale0.15_e3regn",
+        "conventions": {
+          "e3_register": "n",
+          "input_scale": 0.15
+        }
+      },
+      {
+        "name": "scale0.15_e3time",
+        "conventions": {
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.15
+        }
+      },
+      {
+        "name": "scale0.1_baseline",
+        "conventions": {
+          "input_scale": 0.1
+        }
+      },
+      {
+        "name": "scale0.1_e2pair1",
+        "conventions": {
+          "e2_pair_coefficient": 1.0,
+          "input_scale": 0.1
+        }
+      },
+      {
+        "name": "scale0.1_e3regn",
+        "conventions": {
+          "e3_register": "n",
+          "input_scale": 0.1
+        }
+      },
+      {
+        "name": "scale0.1_e3time",
+        "conventions": {
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.1
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "sampling_rate_hz": 61440000.0,
+  "iq_points_per_sample": 1300000,
+  "bandwidth_hz": 48000000.0,
+  "stft_window_length": 3250,
+  "stft_nfft": 8192,
+  "stft_overlap_ratio": 0.25,
+  "spectrogram_height": 400,
+  "spectrogram_width": 400,
+  "train_source_samples": 400,
+  "test_source_samples": 105,
+  "jsr_db_values": [-10, -8, -6, -4, -2, 0, 2, 5],
+  "minimum_anomaly_fraction": 0.1,
+  "maximum_anomaly_fraction": 1.0,
+  "hopping_bandwidth_hz": [1000000.0, 6000000.0],
+  "hopping_dwell_fraction": [0.02, 0.1],
+  "iq_dtype": "int32",
+  "output_dtype": "float32",
+  "seed": 42
+}

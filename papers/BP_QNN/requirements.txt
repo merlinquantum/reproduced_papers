@@ -1,0 +1,4 @@
+merlinquantum
+matplotlib>=3.7
+-e git+https://github.com/mit-han-lab/torchquantum.git#egg=torchquantum
+pytest

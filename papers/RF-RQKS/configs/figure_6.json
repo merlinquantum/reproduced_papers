@@ -1,0 +1,27 @@
+{
+  "description": "Figure 6: direct versus photonic readout comparison",
+  "experiment": "readout_comparison",
+  "data_source": "representation",
+  "representation_path": "representations/dct128x128_36_lte_1",
+  "validation_fraction": 0.2,
+  "standardization_batch_size": 64,
+  "sampler": "photonic",
+  "device": "cpu",
+  "seed": 42,
+  "batch_size": 32,
+  "readout_c": 0.8,
+  "readout_max_iter": 10000,
+  "scale_sampled_features": false,
+  "kernel_components": 64,
+  "kernel_gamma": 1.0,
+  "maximum_output_features": 50000000,
+  "model": {
+    "photon_count": 5,
+    "mode_count": 12,
+    "depth": 1,
+    "episode_count": 256,
+    "encoding_strategy": "L2",
+    "entangling_strategy": "V1",
+    "same_haar": true
+  }
+}

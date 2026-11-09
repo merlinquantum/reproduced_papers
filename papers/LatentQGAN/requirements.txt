@@ -1,0 +1,7 @@
+merlinquantum>=0.3.2
+qiskit>=1.0
+qiskit-aer>=0.13
+torchvision>=0.15
+scipy>=1.11
+matplotlib>=3.7
+pytest>=7.0

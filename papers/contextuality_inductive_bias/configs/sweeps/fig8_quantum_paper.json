@@ -1,0 +1,120 @@
+{
+  "sweep_id": "fig8_quantum_paper",
+  "description": "E1 / Fig. 8 quantum models under protocol paper (pi/2 on train and test): biased L1/L2, generic (Fig. 10 CNOTs) L1/L2, generic (author-code CNOTs, D3) L1/L2; seeds 0-19; 2000 Adam steps lr 1e-3.",
+  "base_config": "configs/fig8_biased_quantum_original.json",
+  "grid": [
+    {
+      "--model": "biased_quantum",
+      "--layers": 1
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 2
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 1,
+      "--cnot-pattern": "paper"
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 2,
+      "--cnot-pattern": "paper"
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 1,
+      "--cnot-pattern": "code"
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 2,
+      "--cnot-pattern": "code"
+    }
+  ],
+  "repetitions": [
+    {
+      "--seed": 0
+    },
+    {
+      "--seed": 1
+    },
+    {
+      "--seed": 2
+    },
+    {
+      "--seed": 3
+    },
+    {
+      "--seed": 4
+    },
+    {
+      "--seed": 5
+    },
+    {
+      "--seed": 6
+    },
+    {
+      "--seed": 7
+    },
+    {
+      "--seed": 8
+    },
+    {
+      "--seed": 9
+    },
+    {
+      "--seed": 10
+    },
+    {
+      "--seed": 11
+    },
+    {
+      "--seed": 12
+    },
+    {
+      "--seed": 13
+    },
+    {
+      "--seed": 14
+    },
+    {
+      "--seed": 15
+    },
+    {
+      "--seed": 16
+    },
+    {
+      "--seed": 17
+    },
+    {
+      "--seed": 18
+    },
+    {
+      "--seed": 19
+    }
+  ],
+  "progress_total": 2000,
+  "plan": {
+    "metrics": [
+      "final.test_kl",
+      "min_test_kl.test_kl",
+      "min_test_kl.step",
+      "final.train_nll",
+      "last_step_objective",
+      "train_seconds"
+    ],
+    "direction": "minimize",
+    "split": "test (fixed seeded set, seed 2302, n = 10000)",
+    "checkpoint": "final step 2000 (no early stopping), as in Fig. 8; min_test_kl reported as a secondary, test-selected view",
+    "aggregation": "per candidate: mean and sample std (ddof = 1) over seeds; min and max also reported",
+    "tie_tolerance": "n/a (descriptive sweep)",
+    "selection_rule": "none: descriptive comparison of model classes; no candidate is selected",
+    "note": "Primary E1 evidence (verdict protocol)."
+  },
+  "fixed_args": {
+    "--protocol": "paper",
+    "--experiment-id": "E1_fig8_quantum_paper"
+  },
+  "max_workers": 6
+}

@@ -1,0 +1,21 @@
+{
+  "model": "quantum",
+  "digit": 0,
+  "T": 5,
+  "N": 4,
+  "NA": 1,
+  "L": 7,
+  "ae_epochs": 40,
+  "ae_lr": 0.05,
+  "ae_batch_size": 20,
+  "ae_data_size": 20000,
+  "gan_iterations": 1000,
+  "gen_lr": 0.3,
+  "disc_lr": 0.01,
+  "gan_batch_size": 8,
+  "eval_every": 100,
+  "n_samples_eval": 256,
+  "n_samples_real": 256,
+  "device": "cpu",
+  "_comment": "Reduced-compute reproduction. AE: SGD 40 epochs on 20k images (paper: 100 epochs full MNIST). QGAN: 1000 iters batch 8 (paper: 490 iters batch 1). AE cache is shared across all variants/digits."
+}

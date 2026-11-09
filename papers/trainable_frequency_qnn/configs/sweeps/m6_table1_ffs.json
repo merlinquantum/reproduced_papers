@@ -1,0 +1,26 @@
+{
+  "sweep_id": "m6_table1_ffs",
+  "description": "Phase 4 MerLin adaptation of E6 / Table I: photonic FFS.",
+  "candidates": [
+    {
+      "name": "ffs",
+      "config": "configs/ns_table1_ffs_merlin.json"
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "max_workers": 4,
+  "selection": {
+    "metric": "final_loss",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}

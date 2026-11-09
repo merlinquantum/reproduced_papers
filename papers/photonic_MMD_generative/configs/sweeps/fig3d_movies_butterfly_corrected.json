@@ -1,0 +1,138 @@
+{
+    "sweep_id": "fig3d_movies_butterfly_corrected",
+    "description": "Fig. 3d diagnostic for D3: as fig3d_movies_butterfly_reference with the corrected (unitary) butterfly; seeds 0-2.",
+    "seeds": [
+        0,
+        1,
+        2
+    ],
+    "candidates": [
+        {
+            "label": "data_dependent_sigma1.5",
+            "config": "configs/fig3d_movies_original.json",
+            "overrides": {
+                "init.strategy": "data_dependent",
+                "kernel.sigma": 1.5,
+                "evaluation.rbm.score_sigma": 1.5,
+                "model.butterfly_variant": "corrected"
+            }
+        },
+        {
+            "label": "identity_sigma1.5",
+            "config": "configs/fig3d_movies_original.json",
+            "overrides": {
+                "init.strategy": "identity",
+                "kernel.sigma": 1.5,
+                "evaluation.rbm.score_sigma": 1.5,
+                "model.butterfly_variant": "corrected"
+            }
+        },
+        {
+            "label": "random_sigma1.5",
+            "config": "configs/fig3d_movies_original.json",
+            "overrides": {
+                "init.strategy": "random",
+                "kernel.sigma": 1.5,
+                "evaluation.rbm.score_sigma": 1.5,
+                "model.butterfly_variant": "corrected"
+            }
+        },
+        {
+            "label": "weak_unbiased_sigma1.5",
+            "config": "configs/fig3d_movies_original.json",
+            "overrides": {
+                "init.strategy": "weak_unbiased",
+                "kernel.sigma": 1.5,
+                "evaluation.rbm.score_sigma": 1.5,
+                "model.butterfly_variant": "corrected"
+            }
+        },
+        {
+            "label": "data_dependent_sigma2.5",
+            "config": "configs/fig3d_movies_original.json",
+            "overrides": {
+                "init.strategy": "data_dependent",
+                "kernel.sigma": 2.5,
+                "evaluation.rbm.score_sigma": 2.5,
+                "model.butterfly_variant": "corrected"
+            }
+        },
+        {
+            "label": "identity_sigma2.5",
+            "config": "configs/fig3d_movies_original.json",
+            "overrides": {
+                "init.strategy": "identity",
+                "kernel.sigma": 2.5,
+                "evaluation.rbm.score_sigma": 2.5,
+                "model.butterfly_variant": "corrected"
+            }
+        },
+        {
+            "label": "random_sigma2.5",
+            "config": "configs/fig3d_movies_original.json",
+            "overrides": {
+                "init.strategy": "random",
+                "kernel.sigma": 2.5,
+                "evaluation.rbm.score_sigma": 2.5,
+                "model.butterfly_variant": "corrected"
+            }
+        },
+        {
+            "label": "weak_unbiased_sigma2.5",
+            "config": "configs/fig3d_movies_original.json",
+            "overrides": {
+                "init.strategy": "weak_unbiased",
+                "kernel.sigma": 2.5,
+                "evaluation.rbm.score_sigma": 2.5,
+                "model.butterfly_variant": "corrected"
+            }
+        },
+        {
+            "label": "data_dependent_sigma3.5",
+            "config": "configs/fig3d_movies_original.json",
+            "overrides": {
+                "init.strategy": "data_dependent",
+                "kernel.sigma": 3.5,
+                "evaluation.rbm.score_sigma": 3.5,
+                "model.butterfly_variant": "corrected"
+            }
+        },
+        {
+            "label": "identity_sigma3.5",
+            "config": "configs/fig3d_movies_original.json",
+            "overrides": {
+                "init.strategy": "identity",
+                "kernel.sigma": 3.5,
+                "evaluation.rbm.score_sigma": 3.5,
+                "model.butterfly_variant": "corrected"
+            }
+        },
+        {
+            "label": "random_sigma3.5",
+            "config": "configs/fig3d_movies_original.json",
+            "overrides": {
+                "init.strategy": "random",
+                "kernel.sigma": 3.5,
+                "evaluation.rbm.score_sigma": 3.5,
+                "model.butterfly_variant": "corrected"
+            }
+        },
+        {
+            "label": "weak_unbiased_sigma3.5",
+            "config": "configs/fig3d_movies_original.json",
+            "overrides": {
+                "init.strategy": "weak_unbiased",
+                "kernel.sigma": 3.5,
+                "evaluation.rbm.score_sigma": 3.5,
+                "model.butterfly_variant": "corrected"
+            }
+        }
+    ],
+    "metric": "primary: sample_metrics.<model>.walsh_mmd; also test_mmd_estimator and gaussian_mmd_raw/binarized",
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final parameters",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "differences within one pooled std are reported as not separated",
+    "selection": "none (comparison sweep)"
+}

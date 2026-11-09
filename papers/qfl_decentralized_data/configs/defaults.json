@@ -1,0 +1,48 @@
+{
+    "description": "E1 binary MNIST 0 vs 9, VQTN, 2 clients, paper settings (B=20, E=1, 20 rounds); inferred values are listed in LOG.md",
+
+    "seed": 42,
+    "dtype": "float32",
+    "outdir": "outdir",
+    "device": "cpu",
+
+    "experiment": "e1_vqtn_0v9",
+    "label": "paper-accurate settings, inferred circuit and partition",
+
+    "dataset": {
+        "name": "mnist",
+        "subdir": "qfl_decentralized_data/mnist/raw",
+        "classes": [0, 9],
+        "data_seed": 0,
+        "validation_fraction": 0.0,
+        "max_train_samples": null,
+        "max_test_samples": null,
+        "feature_scaling": "none"
+    },
+    "model": {
+        "name": "vqtn",
+        "init_std": 0.1,
+        "layers": 1,
+        "encoding_scale": 1.0,
+        "encoding_gate": "rz",
+        "readout": "root_marginal",
+        "hidden": 0
+    },
+    "federation": {
+        "mode": "federated",
+        "rounds": 20,
+        "local_epochs": 1,
+        "n_clients": 2,
+        "clients_per_round": "all",
+        "server_lr": 1.0,
+        "partition": "noniid",
+        "dirichlet_alpha": 0.5,
+        "min_client_size": 50
+    },
+    "training": {
+        "optimizer": "adam",
+        "lr": 0.05,
+        "batch_size": 20
+    },
+    "logging": {"level": "info", "save_config_snapshot": true}
+}

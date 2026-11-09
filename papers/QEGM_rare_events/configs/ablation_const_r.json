@@ -1,0 +1,12 @@
+{
+  "description": "Ablation: constant-r variant alongside the gate / photonic / VAE variants. If gate ≈ const, Eq. 7 is provably inert.",
+  "training": {
+    "seeds": "0,1,2",
+    "epochs": 60,
+    "lambda_tail": 2.0,
+    "models": "vae,qegm,qegm_merlin,qegm_const"
+  },
+  "dataset": {
+    "n_samples": 2048
+  }
+}

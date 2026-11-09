@@ -1,0 +1,15 @@
+{
+  "ann_11": {
+    "epochs_run": 43,
+    "test_auc": 0.8191808524823326
+  },
+  "bayes_auc": 0.8255366905195787,
+  "qnn_hybrid_mq_q3_L2": {
+    "epochs_run": 58,
+    "test_auc": 0.8193253033468155
+  },
+  "qnn_mq_q3_L2": {
+    "epochs_run": 48,
+    "test_auc": 0.82056980310236
+  }
+}

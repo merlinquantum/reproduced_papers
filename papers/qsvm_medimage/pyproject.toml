@@ -1,0 +1,68 @@
+[project]
+name = "qml-medimage"
+version = "0.1.0"
+description = "CPU-compatible reproduction adaptation of the QML-MedImage research code"
+requires-python = ">=3.10"
+authors = [{ name = "Sebastian Cajas", email = "sebasmos@mit.edu" }]
+dependencies = [
+    "numpy>=2.2.6",
+    "torch>=2.0,<2.13",
+    "scikit-learn>=1.7.2,<1.10",
+    "merlinquantum==0.4.0",
+    "qiskit==1.2.4",
+    "tabulate==0.9.0",
+    "pandas==2.2.2",
+    "pyarrow>=15.0.0",
+    "matplotlib==3.10.0",
+    "joblib==1.4.2",
+    "scipy==1.14.1"
+]
+
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: Free For Non-Commercial Use",
+    "Natural Language :: English",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+keywords = ["quantum machine learning", "vector embeddings", "SVM"]
+
+[project.urls]
+Repository = "https://github.com/merlinquantum/reproduced_papers"
+"Original Repository" = "https://github.com/sebasmos/qml-medimage"
+"Reproduction Collection" = "https://github.com/merlinquantum/reproduced_papers"
+Paper = "https://arxiv.org/abs/2604.24597"
+Dataset = "https://huggingface.co/datasets/MITCriticalData/qml-mimic-cxr-embeddings"
+"Original Bug Tracker" = "https://github.com/sebasmos/qml-medimage/issues"
+
+[project.optional-dependencies]
+dev = ["ruff", "pytest>=7.0"]
+gpu = [
+    "cuquantum==24.8.0.2",
+    "cuquantum-python==24.8.0.2",
+]
+hpc = ["mpi4py==4.0.3"]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["qve"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+markers = [
+    "gpu: marks tests as requiring GPU (skipped without GPU access)",
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]

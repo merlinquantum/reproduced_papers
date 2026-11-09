@@ -1,0 +1,31 @@
+{
+  "description": "Retry of the table1 runs that did not finish before launch 20261106-105341-reproduced-papers-1 hit its 4 h limit (6 cut off, 4 never started). Same configs, seeds and budget as table1.json; run_seeds keeps each run's original repetition index.",
+  "sweep_id": "table1_leftovers",
+  "max_epochs": 100,
+  "entries": [
+    {
+      "name": "qultsf",
+      "config": "configs/table1_qultsf_original.json",
+      "seeds": [2021, 2022, 2023],
+      "run_seeds": [2023],
+      "sequence_lengths": [336],
+      "prediction_horizons": [96, 192, 336, 720]
+    },
+    {
+      "name": "nlinear",
+      "config": "configs/table1_nlinear_classical.json",
+      "seeds": [2021, 2022, 2023],
+      "run_seeds": [2023],
+      "sequence_lengths": [336],
+      "prediction_horizons": [336, 720]
+    },
+    {
+      "name": "dlinear",
+      "config": "configs/table1_dlinear_classical.json",
+      "seeds": [2021, 2022, 2023],
+      "run_seeds": [2023],
+      "sequence_lengths": [336],
+      "prediction_horizons": [96, 192, 336, 720]
+    }
+  ]
+}

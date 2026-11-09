@@ -1,0 +1,13 @@
+{
+  "description": "Small explanatory photonic Fig. 3 analogue",
+  "experiment": "fig3_merlin",
+  "backend": "merlin",
+  "qubits": [2, 3, 4],
+  "layers": [1],
+  "computation_spaces": ["fock", "unbunched", "dual_rail"],
+  "theta_initializations": ["arcsin"],
+  "samples": 4,
+  "seed": 7,
+  "dtype": "float32",
+  "plot": true
+}

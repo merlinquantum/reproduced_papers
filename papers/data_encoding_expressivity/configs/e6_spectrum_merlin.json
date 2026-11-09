@@ -1,0 +1,171 @@
+{
+  "description": "Phase 4 MerLin ADAPTATION, E6 (claim C7 and the photonic form of C1/C4/C6): FFT support of random MerLin models vs the spectrum predicted from the photon-number generator. FOCK: single-mode encoding n = 1..4 (degree n); re-uploading n = 2, L = 1..3 (degree 2L); encoding 2 of 4 modes (degree still n = 2); encoding all modes (global phase, constant). UNBUNCHED contrast (postselected, renormalised): expected not band-limited.",
+  "experiment": "photonic_spectrum",
+  "photonic_spectrum": {
+    "fft_tolerance": 1e-09,
+    "random_draws": 5,
+    "init_high": 6.283185307179586,
+    "grid_points": 128,
+    "cases": [
+      {
+        "name": "fock_n1_single_mode",
+        "n_photons": 1,
+        "n_modes": 2,
+        "encoded_modes": [
+          0
+        ],
+        "encoding_layers": 1,
+        "encoding_scaling": 1.0,
+        "computation_space": "fock",
+        "expect_band_limited": true,
+        "mode_scales": [
+          1.0
+        ],
+        "phase_screens": false,
+        "readout": "threshold_mode0"
+      },
+      {
+        "name": "fock_n2_single_mode",
+        "n_photons": 2,
+        "n_modes": 3,
+        "encoded_modes": [
+          0
+        ],
+        "encoding_layers": 1,
+        "encoding_scaling": 1.0,
+        "computation_space": "fock",
+        "expect_band_limited": true,
+        "mode_scales": [
+          1.0
+        ],
+        "phase_screens": false,
+        "readout": "threshold_mode0"
+      },
+      {
+        "name": "fock_n3_single_mode",
+        "n_photons": 3,
+        "n_modes": 4,
+        "encoded_modes": [
+          0
+        ],
+        "encoding_layers": 1,
+        "encoding_scaling": 1.0,
+        "computation_space": "fock",
+        "expect_band_limited": true,
+        "mode_scales": [
+          1.0
+        ],
+        "phase_screens": false,
+        "readout": "threshold_mode0"
+      },
+      {
+        "name": "fock_n4_single_mode",
+        "n_photons": 4,
+        "n_modes": 5,
+        "encoded_modes": [
+          0
+        ],
+        "encoding_layers": 1,
+        "encoding_scaling": 1.0,
+        "computation_space": "fock",
+        "expect_band_limited": true,
+        "mode_scales": [
+          1.0
+        ],
+        "phase_screens": false,
+        "readout": "threshold_mode0"
+      },
+      {
+        "name": "fock_n2_reupload_L2",
+        "n_photons": 2,
+        "n_modes": 3,
+        "encoded_modes": [
+          0
+        ],
+        "encoding_layers": 2,
+        "encoding_scaling": 1.0,
+        "computation_space": "fock",
+        "expect_band_limited": true,
+        "mode_scales": [
+          1.0
+        ],
+        "phase_screens": false,
+        "readout": "threshold_mode0"
+      },
+      {
+        "name": "fock_n2_reupload_L3",
+        "n_photons": 2,
+        "n_modes": 3,
+        "encoded_modes": [
+          0
+        ],
+        "encoding_layers": 3,
+        "encoding_scaling": 1.0,
+        "computation_space": "fock",
+        "expect_band_limited": true,
+        "mode_scales": [
+          1.0
+        ],
+        "phase_screens": false,
+        "readout": "threshold_mode0"
+      },
+      {
+        "name": "fock_n2_two_of_four_modes",
+        "n_photons": 2,
+        "n_modes": 4,
+        "encoded_modes": [
+          0,
+          1
+        ],
+        "encoding_layers": 1,
+        "encoding_scaling": 1.0,
+        "computation_space": "fock",
+        "expect_band_limited": true,
+        "mode_scales": [
+          1.0,
+          1.0
+        ],
+        "phase_screens": false,
+        "readout": "threshold_mode0"
+      },
+      {
+        "name": "fock_n2_all_modes_global_phase",
+        "n_photons": 2,
+        "n_modes": 3,
+        "encoded_modes": [
+          0,
+          1,
+          2
+        ],
+        "encoding_layers": 1,
+        "encoding_scaling": 1.0,
+        "computation_space": "fock",
+        "expect_band_limited": true,
+        "mode_scales": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "phase_screens": false,
+        "readout": "threshold_mode0"
+      },
+      {
+        "name": "unbunched_n2_single_mode",
+        "n_photons": 2,
+        "n_modes": 3,
+        "encoded_modes": [
+          0
+        ],
+        "encoding_layers": 1,
+        "encoding_scaling": 1.0,
+        "computation_space": "unbunched",
+        "expect_band_limited": false,
+        "mode_scales": [
+          1.0
+        ],
+        "phase_screens": false,
+        "readout": "threshold_mode0"
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "description": "Real-data extension ablation: S&P 500 log-returns with the tail-aware loss removed (lambda_tail = 0). The gate VQC is proxied by qegm_const: sp500_ablations.json established the two as statistically indistinguishable on this dataset (tail KL 1.599 +- 0.057 vs 1.606 +- 0.064) at ~240x the compute.",
+  "training": {
+    "seeds": "0,1,2",
+    "epochs": 60,
+    "lambda_tail": 0.0,
+    "models": "vae,qegm_merlin,qegm_const"
+  },
+  "dataset": {
+    "name": "sp500",
+    "csv_path": "../../data/QEGM_rare_events/sp500_daily_logreturns_1990_2022.csv",
+    "tail_quantile": 0.05
+  }
+}

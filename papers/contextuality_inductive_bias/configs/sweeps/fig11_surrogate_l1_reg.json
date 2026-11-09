@@ -1,0 +1,47 @@
+{
+  "sweep_id": "fig11_surrogate_l1_reg",
+  "description": "E3 / Fig. 11: surrogate L = 1, L2 strength in {0, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1}, protocols paper and code, seed 0, 1000 SGD steps lr 1e-3.",
+  "base_config": "configs/fig11_surrogate_l1_reg_original.json",
+  "axes": {
+    "--protocol": [
+      "paper",
+      "code"
+    ],
+    "--l2": [
+      0.0,
+      1e-05,
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      1.0
+    ]
+  },
+  "repetitions": [
+    {
+      "--seed": 0
+    }
+  ],
+  "progress_total": 1000,
+  "plan": {
+    "metrics": [
+      "final.test_kl",
+      "min_test_kl.test_kl",
+      "min_test_kl.step",
+      "final.train_nll",
+      "last_step_objective",
+      "train_seconds"
+    ],
+    "direction": "minimize",
+    "split": "test (fixed seeded set, seed 2302, n = 10000)",
+    "checkpoint": "final step 1000, as in Fig. 11; min_test_kl reported as a secondary, test-selected view",
+    "aggregation": "per candidate: mean and sample std (ddof = 1) over seeds; min and max also reported",
+    "tie_tolerance": "n/a (descriptive sweep)",
+    "selection_rule": "none: descriptive comparison of model classes; no candidate is selected",
+    "note": "Reduced override: 1 seed per strength; declared in 01-plan."
+  },
+  "fixed_args": {
+    "--experiment-id": "E3_fig11_surrogate_l1_reg"
+  },
+  "max_workers": 2
+}

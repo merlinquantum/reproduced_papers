@@ -1,0 +1,24 @@
+{
+    "description": "Paper-accurate Poisson 1D QPINN run (Table V).",
+    "experiment": "poisson_qpinn",
+    "seed": 42,
+    "dtype": "float64",
+    "device": "cpu",
+    "outdir": "outdir",
+    "model": {
+        "n_qumodes": 2,
+        "n_multi_layers": 4,
+        "n_single_layers": 4,
+        "cutoff": 10,
+        "active_sd": 0.001,
+        "passive_sd": 0.1
+    },
+    "training": {
+        "epochs": 5000,
+        "lr": 0.01,
+        "collocation_points": 258,
+        "lambdas": {"pde": 0.25, "bc": 0.25, "consistency": 0.25, "trace": 0.25},
+        "log_every": 100
+    },
+    "logging": {"level": "info", "save_config_snapshot": true}
+}

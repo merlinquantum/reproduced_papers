@@ -1,0 +1,123 @@
+{
+  "description": "Power of data in quantum machine learning (Huang et al. 2021) reproduction runner",
+  "arguments": [
+    {
+      "flags": [
+        "--experiment"
+      ],
+      "help": "Experiment: study, training_size, convention_check, or photonic_scaling",
+      "type": "str",
+      "choices": [
+        "study",
+        "training_size",
+        "convention_check",
+        "photonic_scaling"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment"
+      }
+    },
+    {
+      "flags": [
+        "--system-sizes"
+      ],
+      "help": "Comma-separated system sizes n (number of PCA features)",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "study.system_sizes"
+      }
+    },
+    {
+      "flags": [
+        "--seeds"
+      ],
+      "help": "Comma-separated seeds (independent runs)",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "study.seeds"
+      }
+    },
+    {
+      "flags": [
+        "--cv-system-sizes"
+      ],
+      "help": "Comma-separated system sizes at which the 5-fold CV protocol also runs",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "study.cv_system_sizes"
+      }
+    },
+    {
+      "flags": [
+        "--quantum-kernel-max-qubits"
+      ],
+      "help": "Largest register for the fidelity quantum kernel (needs all states in memory)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "study.quantum_kernel_max_qubits"
+      }
+    },
+    {
+      "flags": [
+        "--grid"
+      ],
+      "help": "Hyperparameter grids: paper (App. J) or smoke (tiny, tests only)",
+      "type": "str",
+      "choices": [
+        "paper",
+        "smoke"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "models.grid"
+      }
+    },
+    {
+      "flags": [
+        "--n-jobs"
+      ],
+      "help": "Parallel joblib workers for model fitting",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "models.n_jobs"
+      }
+    },
+    {
+      "flags": [
+        "--batch-memory-mb"
+      ],
+      "help": "Memory budget per simulated batch of statevectors",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "simulation.batch_memory_mb"
+      }
+    },
+    {
+      "flags": [
+        "--photonic-max-photons"
+      ],
+      "help": "Cap on the photon number of the photonic embeddings (k = min(floor(m/2), cap))",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "photonic.max_photons"
+      }
+    }
+  ]
+}

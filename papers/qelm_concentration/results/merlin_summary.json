@@ -1,0 +1,834 @@
+{
+  "landsat": {
+    "16/4": {
+      "photonic_run": "outdir/merlin_landsat_m16/run_20261028-121441",
+      "qubit_run": "outdir/landsat_n16_standard/run_20261026-155536",
+      "hardware": {
+        "computation_space": "FOCK",
+        "detector_model": "threshold (ideal, every mode)",
+        "encoding": "beam-splitter angle theta = angle_scale * input_strength * u",
+        "input_state": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "measurement_strategy": "MeasurementStrategy.probs(FOCK) with threshold detectors",
+        "n_layers": 36,
+        "n_modes": 16,
+        "n_photons": 4,
+        "postselection": "none",
+        "simulator": "MerLin analytic simulation (CPU)"
+      },
+      "readouts": {
+        "w1_click_scaled": {
+          "f1_macro_mean": 0.7354652006707505,
+          "f1_macro_std": 0.040041067662793105,
+          "n_features": 16.0
+        },
+        "w1_click_unit": {
+          "f1_macro_mean": 0.7348528301154854,
+          "f1_macro_std": 0.04108777712731874,
+          "n_features": 16.0
+        },
+        "w1_et_scaled": {
+          "f1_macro_mean": 0.7359880504091246,
+          "f1_macro_std": 0.04100891001159282,
+          "n_features": 16.0
+        },
+        "w1_et_unit": {
+          "f1_macro_mean": 0.7348528301154854,
+          "f1_macro_std": 0.04108777712731874,
+          "n_features": 16.0
+        },
+        "w1_etcut_scaled": {
+          "f1_macro_mean": 0.7359880504091246,
+          "f1_macro_std": 0.04100891001159282,
+          "n_features": 16.0
+        },
+        "w1_etcut_unit": {
+          "f1_macro_mean": 0.7348528301154854,
+          "f1_macro_std": 0.04108777712731874,
+          "n_features": 16.0
+        },
+        "w2_click_scaled": {
+          "f1_macro_mean": 0.7501125287036258,
+          "f1_macro_std": 0.04096295503018294,
+          "n_features": 24.0
+        },
+        "w2_click_unit": {
+          "f1_macro_mean": 0.7483310977196914,
+          "f1_macro_std": 0.03871829744697947,
+          "n_features": 24.0
+        },
+        "w2_et_scaled": {
+          "f1_macro_mean": 0.7485005778839263,
+          "f1_macro_std": 0.03901319181150754,
+          "n_features": 24.0
+        },
+        "w2_et_unit": {
+          "f1_macro_mean": 0.7480097000901281,
+          "f1_macro_std": 0.03892830178421009,
+          "n_features": 24.0
+        },
+        "w2_etcut_scaled": {
+          "f1_macro_mean": 0.7485005778839263,
+          "f1_macro_std": 0.03901319181150754,
+          "n_features": 24.0
+        },
+        "w2_etcut_unit": {
+          "f1_macro_mean": 0.7480097000901281,
+          "f1_macro_std": 0.03892830178421009,
+          "n_features": 24.0
+        }
+      },
+      "qubit_readouts": {
+        "w1_et_scaled": 0.7759295094189762,
+        "w1_et_unit": 0.7769155293865868,
+        "w1_etcut_scaled": 0.7759295094189762,
+        "w1_etcut_unit": 0.7769155293865868,
+        "w1_pauli_scaled": 0.7749180570800732,
+        "w1_pauli_unit": 0.7762989927070679,
+        "w1_x_scaled": 0.6608895857199925,
+        "w1_x_unit": 0.653063571563304,
+        "w2_et_scaled": 0.791294892186517,
+        "w2_et_unit": 0.7954027404189732,
+        "w2_etcut_scaled": 0.7869426280205112,
+        "w2_etcut_unit": 0.7868947189074313,
+        "w2_pauli_scaled": 0.7907703410359902,
+        "w2_pauli_unit": 0.7947040303246922,
+        "w2_x_scaled": 0.7098244829863382,
+        "w2_x_unit": 0.7122414067824413
+      },
+      "criterion": {
+        "rule": "best photonic w2 ET within 0.05 F1 of qubit w2 ET",
+        "photonic_best": "w2_et_scaled",
+        "photonic_f1": 0.7485005778839263,
+        "qubit_f1": 0.7954027404189732,
+        "difference": -0.046902162535046865,
+        "preserved": true
+      },
+      "paired_differences": {
+        "w2_et_scaled - w2_click_scaled": {
+          "mean": -0.0016119508196995788,
+          "stderr": 0.0007340414418989022,
+          "n": 45,
+          "a_better": 10,
+          "b_better": 21
+        },
+        "w1_et_scaled - w1_click_scaled": {
+          "mean": 0.0005228497383742944,
+          "stderr": 0.0006429911504483859,
+          "n": 45,
+          "a_better": 8,
+          "b_better": 5
+        },
+        "w2_etcut_scaled - w2_et_scaled": {
+          "mean": 0.0,
+          "stderr": 0.0,
+          "n": 45,
+          "a_better": 0,
+          "b_better": 0
+        },
+        "w2_click_scaled - w2_click_unit": {
+          "mean": 0.0017814309839342649,
+          "stderr": 0.000781121447730581,
+          "n": 45,
+          "a_better": 23,
+          "b_better": 9
+        },
+        "w2_et_scaled - w2_et_unit": {
+          "mean": 0.0004908777937978565,
+          "stderr": 0.000696620690102945,
+          "n": 45,
+          "a_better": 12,
+          "b_better": 8
+        },
+        "w2_click_unit - w1_click_unit": {
+          "mean": 0.013478267604205871,
+          "stderr": 0.0025353883286475696,
+          "n": 45,
+          "a_better": 33,
+          "b_better": 12
+        }
+      },
+      "cutoff_retained_w2_etcut_scaled": {
+        "readout=w2_etcut_scaled|nsr_cutoff=0.01": 24.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=0.03": 24.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=0.1": 24.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=0.3": 24.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=1.0": 24.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=10.0": 24.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=100.0": 24.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=3.0": 24.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=30.0": 24.0
+      },
+      "shots_curve": {
+        "100.0": 0.6518867165100328,
+        "1000.0": 0.7193228838387965,
+        "10000.0": 0.7360120302244988,
+        "100000.0": 0.7365647975214782
+      },
+      "qubit_shots_curve": {
+        "100.0": 0.2394592543867707,
+        "1000.0": 0.47485994943367216,
+        "10000.0": 0.6736695795850849,
+        "100000.0": 0.7663327676320477
+      },
+      "train_size_curve": {
+        "10.0": 0.3290128164838641,
+        "25.0": 0.5565366744787219,
+        "50.0": 0.6369721780664412,
+        "100.0": 0.6830524153609725,
+        "200.0": 0.7138590768285363,
+        "400.0": 0.7264656155386714,
+        "688.0": 0.7290147676253745
+      }
+    },
+    "24/6": {
+      "photonic_run": "outdir/merlin_landsat_m24/run_20261028-121443",
+      "qubit_run": "outdir/landsat_n24_standard/run_20261026-171518",
+      "hardware": {
+        "computation_space": "FOCK",
+        "detector_model": "threshold (ideal, every mode)",
+        "encoding": "beam-splitter angle theta = angle_scale * input_strength * u",
+        "input_state": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "measurement_strategy": "MeasurementStrategy.probs(FOCK) with threshold detectors",
+        "n_layers": 36,
+        "n_modes": 24,
+        "n_photons": 6,
+        "postselection": "none",
+        "simulator": "MerLin analytic simulation (CPU)"
+      },
+      "readouts": {
+        "w1_click_scaled": {
+          "f1_macro_mean": 0.7550815727612453,
+          "f1_macro_std": 0.028911357053361418,
+          "n_features": 24.0
+        },
+        "w1_click_unit": {
+          "f1_macro_mean": 0.7536132320431428,
+          "f1_macro_std": 0.02828737952449852,
+          "n_features": 24.0
+        },
+        "w1_et_scaled": {
+          "f1_macro_mean": 0.7549813613255577,
+          "f1_macro_std": 0.02852007150312102,
+          "n_features": 24.0
+        },
+        "w1_et_unit": {
+          "f1_macro_mean": 0.7536132320431428,
+          "f1_macro_std": 0.02828737952449852,
+          "n_features": 24.0
+        },
+        "w1_etcut_scaled": {
+          "f1_macro_mean": 0.7549813613255577,
+          "f1_macro_std": 0.02852007150312102,
+          "n_features": 24.0
+        },
+        "w1_etcut_unit": {
+          "f1_macro_mean": 0.7536132320431428,
+          "f1_macro_std": 0.02828737952449852,
+          "n_features": 24.0
+        },
+        "w2_click_scaled": {
+          "f1_macro_mean": 0.7798464691335648,
+          "f1_macro_std": 0.032150068601692276,
+          "n_features": 36.0
+        },
+        "w2_click_unit": {
+          "f1_macro_mean": 0.7755871309535214,
+          "f1_macro_std": 0.029846257181134848,
+          "n_features": 36.0
+        },
+        "w2_et_scaled": {
+          "f1_macro_mean": 0.776565724691523,
+          "f1_macro_std": 0.03241346374778447,
+          "n_features": 36.0
+        },
+        "w2_et_unit": {
+          "f1_macro_mean": 0.7756541652009995,
+          "f1_macro_std": 0.03270573489082968,
+          "n_features": 36.0
+        },
+        "w2_etcut_scaled": {
+          "f1_macro_mean": 0.776565724691523,
+          "f1_macro_std": 0.03241346374778447,
+          "n_features": 36.0
+        },
+        "w2_etcut_unit": {
+          "f1_macro_mean": 0.7756541652009995,
+          "f1_macro_std": 0.03270573489082968,
+          "n_features": 36.0
+        }
+      },
+      "qubit_readouts": {
+        "w1_et_scaled": 0.7883998254367103,
+        "w1_et_unit": 0.7915590807246625,
+        "w1_etcut_scaled": 0.7883998254367103,
+        "w1_etcut_unit": 0.7915590807246625,
+        "w1_pauli_scaled": 0.7854973973867762,
+        "w1_pauli_unit": 0.7899679490371214,
+        "w1_x_scaled": 0.7253364694489863,
+        "w1_x_unit": 0.7214159180029462,
+        "w2_et_scaled": 0.8044896959036587,
+        "w2_et_unit": 0.8100478093683021,
+        "w2_etcut_scaled": 0.8019120786231951,
+        "w2_etcut_unit": 0.806536785742165,
+        "w2_pauli_scaled": 0.8065960534859193,
+        "w2_pauli_unit": 0.8097670672178323,
+        "w2_x_scaled": 0.7537871388631856,
+        "w2_x_unit": 0.7551415961400506
+      },
+      "criterion": {
+        "rule": "best photonic w2 ET within 0.05 F1 of qubit w2 ET",
+        "photonic_best": "w2_et_scaled",
+        "photonic_f1": 0.776565724691523,
+        "qubit_f1": 0.8100478093683021,
+        "difference": -0.033482084676779156,
+        "preserved": true
+      },
+      "paired_differences": {
+        "w2_et_scaled - w2_click_scaled": {
+          "mean": -0.003280744442041894,
+          "stderr": 0.0008451126042741302,
+          "n": 45,
+          "a_better": 7,
+          "b_better": 21
+        },
+        "w1_et_scaled - w1_click_scaled": {
+          "mean": -0.00010021143568748553,
+          "stderr": 0.000553317116856954,
+          "n": 45,
+          "a_better": 5,
+          "b_better": 5
+        },
+        "w2_etcut_scaled - w2_et_scaled": {
+          "mean": 0.0,
+          "stderr": 0.0,
+          "n": 45,
+          "a_better": 0,
+          "b_better": 0
+        },
+        "w2_click_scaled - w2_click_unit": {
+          "mean": 0.004259338180043295,
+          "stderr": 0.0010729729366276415,
+          "n": 45,
+          "a_better": 25,
+          "b_better": 10
+        },
+        "w2_et_scaled - w2_et_unit": {
+          "mean": 0.0009115594905232912,
+          "stderr": 0.0012576078451116122,
+          "n": 45,
+          "a_better": 17,
+          "b_better": 13
+        },
+        "w2_click_unit - w1_click_unit": {
+          "mean": 0.02197389891037864,
+          "stderr": 0.002641399762158415,
+          "n": 45,
+          "a_better": 42,
+          "b_better": 3
+        }
+      },
+      "cutoff_retained_w2_etcut_scaled": {
+        "readout=w2_etcut_scaled|nsr_cutoff=0.01": 34.733333333333334,
+        "readout=w2_etcut_scaled|nsr_cutoff=0.03": 36.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=0.1": 36.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=0.3": 36.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=1.0": 36.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=10.0": 36.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=100.0": 36.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=3.0": 36.0,
+        "readout=w2_etcut_scaled|nsr_cutoff=30.0": 36.0
+      },
+      "shots_curve": {
+        "100.0": 0.6938832332137136,
+        "1000.0": 0.7391807499773292,
+        "10000.0": 0.7523591380475048,
+        "100000.0": 0.7543048729338897
+      },
+      "qubit_shots_curve": {
+        "100.0": 0.27696014868290936,
+        "1000.0": 0.5269119490406187,
+        "10000.0": 0.7167289345423332,
+        "100000.0": 0.788925020700703
+      },
+      "train_size_curve": {
+        "10.0": 0.3648283677062757,
+        "25.0": 0.604305159946957,
+        "50.0": 0.6782832277357428,
+        "100.0": 0.7113987278087083,
+        "200.0": 0.7365263603145705,
+        "400.0": 0.7478713299991657,
+        "688.0": 0.7532994302017051
+      }
+    }
+  },
+  "narma": {
+    "16/4": {
+      "photonic_run": "outdir/merlin_narma_m16/run_20261028-121446",
+      "qubit_run": "outdir/narma_n16/run_20261026-094003",
+      "hardware": {
+        "computation_space": "FOCK",
+        "detector_model": "threshold (ideal, every mode)",
+        "encoding": "beam-splitter angle theta = angle_scale * input_strength * u",
+        "input_state": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "measurement_strategy": "MeasurementStrategy.probs(FOCK) with threshold detectors",
+        "n_layers": 8,
+        "n_modes": 16,
+        "n_photons": 4,
+        "postselection": "none",
+        "simulator": "MerLin analytic simulation (CPU)"
+      },
+      "window": 8,
+      "cumulative_r2": {
+        "degree2_window|none": 7.795861673240649,
+        "esn|none": 7.955391788060291,
+        "matched_elm|none": 7.145921271910933,
+        "qelm|exact": 7.180643782402796,
+        "qelm|gaussian_std_10^-1.5": 3.5026205592153,
+        "qelm|shots_1e5": 7.000476455755906,
+        "raw_window|none": 6.7662719193112295
+      },
+      "qubit_cumulative_r2": {
+        "degree2_window|none": 7.795861673240649,
+        "esn|none": 7.955391788060291,
+        "matched_elm|none": 7.708024197930195,
+        "qelm|exact": 7.7652983144912335,
+        "qelm|gaussian_std_10^-1.5": 6.9157667722086735,
+        "qelm|shadow_1e5_shots": 7.5832051307813275,
+        "raw_window|none": 6.7662719193112295
+      },
+      "criterion": {
+        "rule": "photonic 1e5-shot cumulative R^2 within 10% of qubit 1e5-shot, memory edge at n = L",
+        "relative_difference": -0.07684464088410871,
+        "r2_at_L": 0.82516356662123,
+        "r2_at_L_plus_1": 0.24832749879344032,
+        "edge_drop": 0.5768360678277897,
+        "preserved": true
+      }
+    },
+    "24/6": {
+      "photonic_run": "outdir/merlin_narma_m24/run_20261028-121449",
+      "qubit_run": "outdir/narma_n24/run_20261027-120754",
+      "hardware": {
+        "computation_space": "FOCK",
+        "detector_model": "threshold (ideal, every mode)",
+        "encoding": "beam-splitter angle theta = angle_scale * input_strength * u",
+        "input_state": [
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "measurement_strategy": "MeasurementStrategy.probs(FOCK) with threshold detectors",
+        "n_layers": 12,
+        "n_modes": 24,
+        "n_photons": 6,
+        "postselection": "none",
+        "simulator": "MerLin analytic simulation (CPU)"
+      },
+      "window": 12,
+      "cumulative_r2": {
+        "degree2_window|none": 11.320589380394148,
+        "esn|none": 11.529938440459478,
+        "matched_elm|none": 10.063316468200469,
+        "qelm|exact": 9.956729901657788,
+        "qelm|gaussian_std_10^-1.5": 4.016478625602614,
+        "qelm|shots_1e5": 9.874910941711175,
+        "raw_window|none": 9.923235720048755
+      },
+      "qubit_cumulative_r2": {
+        "degree2_window|none": 11.320589380394148,
+        "esn|none": 11.529938455357982,
+        "matched_elm|none": 11.122583374496042,
+        "qelm|exact": 11.193048984375398,
+        "qelm|gaussian_std_10^-1.5": 9.781496359136204,
+        "qelm|shadow_1e5_shots": 10.857774612477563,
+        "raw_window|none": 9.923235720048757
+      },
+      "criterion": {
+        "rule": "photonic 1e5-shot cumulative R^2 within 10% of qubit 1e5-shot, memory edge at n = L",
+        "relative_difference": -0.09052164977129831,
+        "r2_at_L": 0.6250593263109246,
+        "r2_at_L_plus_1": 0.1717301302921334,
+        "edge_drop": 0.45332919601879124,
+        "preserved": true
+      }
+    }
+  },
+  "concentration": {
+    "run": "outdir/merlin_concentration/run_20261028-121440",
+    "hardware": {
+      "computation_space": "FOCK",
+      "detector_model": "threshold (ideal, every mode)",
+      "encoding": "beam-splitter angle theta = angle_scale * input_strength * u",
+      "input_state": "one photon every n_modes / n_photons modes from mode 0",
+      "measurement_strategy": "MeasurementStrategy.probs(FOCK) with threshold detectors",
+      "n_layers": "per record",
+      "n_modes": "per record",
+      "n_photons": "per record",
+      "postselection": "none",
+      "simulator": "MerLin analytic simulation (CPU)"
+    },
+    "summary": {
+      "balanced|modes=12|photons=3|n_layers=16": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0015883645764186206,
+        "w1_variability_mean_std": 6.428221838951706e-05,
+        "w2_variability_mean_avg": 9.526558789947863e-05,
+        "w2_variability_mean_std": 4.8559084839620845e-06
+      },
+      "balanced|modes=12|photons=3|n_layers=4": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0009507229845499156,
+        "w1_variability_mean_std": 5.612364124208564e-06,
+        "w2_variability_mean_avg": 6.137355087104417e-05,
+        "w2_variability_mean_std": 2.936653156841872e-06
+      },
+      "balanced|modes=12|photons=3|n_layers=8": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0011609581956654133,
+        "w1_variability_mean_std": 3.0368965741422827e-05,
+        "w2_variability_mean_avg": 5.03374832835313e-05,
+        "w2_variability_mean_std": 1.618269033857667e-06
+      },
+      "balanced|modes=16|photons=4|n_layers=16": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0016389726268151619,
+        "w1_variability_mean_std": 1.4386559588433675e-05,
+        "w2_variability_mean_avg": 0.0001292153157190399,
+        "w2_variability_mean_std": 2.2043689101731387e-06
+      },
+      "balanced|modes=16|photons=4|n_layers=4": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0010190457222771703,
+        "w1_variability_mean_std": 9.742798878798821e-06,
+        "w2_variability_mean_avg": 8.00077503229555e-05,
+        "w2_variability_mean_std": 1.9979825430451236e-06
+      },
+      "balanced|modes=16|photons=4|n_layers=8": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.001207141296923925,
+        "w1_variability_mean_std": 1.9044606439211703e-05,
+        "w2_variability_mean_avg": 5.4999099239119736e-05,
+        "w2_variability_mean_std": 4.988790911156927e-07
+      },
+      "balanced|modes=24|photons=6|n_layers=16": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0011050296930843692,
+        "w1_variability_mean_std": 2.3908467995184505e-05,
+        "w2_variability_mean_avg": 8.66652678622582e-05,
+        "w2_variability_mean_std": 1.4263167853412029e-06
+      },
+      "balanced|modes=24|photons=6|n_layers=4": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0011130744590912161,
+        "w1_variability_mean_std": 1.965367036626926e-05,
+        "w2_variability_mean_avg": 9.71262892472393e-05,
+        "w2_variability_mean_std": 1.8670868838603996e-06
+      },
+      "balanced|modes=24|photons=6|n_layers=8": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0012480671299002861,
+        "w1_variability_mean_std": 2.8894480233439825e-05,
+        "w2_variability_mean_avg": 6.63948255695559e-05,
+        "w2_variability_mean_std": 1.909850300180928e-06
+      },
+      "balanced|modes=8|photons=2|n_layers=16": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0029272852418311124,
+        "w1_variability_mean_std": 0.00012750813320684809,
+        "w2_variability_mean_avg": 0.00015762246999872974,
+        "w2_variability_mean_std": 1.556771757221881e-05
+      },
+      "balanced|modes=8|photons=2|n_layers=4": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0007680429493647237,
+        "w1_variability_mean_std": 1.627811220844639e-05,
+        "w2_variability_mean_avg": 2.7951838720501867e-05,
+        "w2_variability_mean_std": 5.729779779131627e-07
+      },
+      "balanced|modes=8|photons=2|n_layers=8": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0011395262725495718,
+        "w1_variability_mean_std": 3.2691265537699416e-05,
+        "w2_variability_mean_avg": 4.795736247781816e-05,
+        "w2_variability_mean_std": 4.105526206879531e-06
+      },
+      "haar|modes=12|photons=3|n_layers=16": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0008441598365070774,
+        "w1_variability_mean_std": 0.00018844526253791285,
+        "w2_variability_mean_avg": 8.090535483873396e-05,
+        "w2_variability_mean_std": 8.213679711546373e-06
+      },
+      "haar|modes=12|photons=3|n_layers=4": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0002716681065172464,
+        "w1_variability_mean_std": 6.014881027321485e-05,
+        "w2_variability_mean_avg": 1.8398740901247986e-05,
+        "w2_variability_mean_std": 4.517196549799383e-06
+      },
+      "haar|modes=12|photons=3|n_layers=8": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.00046053401781708084,
+        "w1_variability_mean_std": 9.828976881774469e-05,
+        "w2_variability_mean_avg": 3.879398310203697e-05,
+        "w2_variability_mean_std": 6.520209578325519e-06
+      },
+      "haar|modes=16|photons=4|n_layers=16": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0005663956509033384,
+        "w1_variability_mean_std": 6.227142978214542e-05,
+        "w2_variability_mean_avg": 4.572938507572279e-05,
+        "w2_variability_mean_std": 5.80477129162907e-06
+      },
+      "haar|modes=16|photons=4|n_layers=4": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0001578995706583025,
+        "w1_variability_mean_std": 3.604638293110539e-05,
+        "w2_variability_mean_avg": 1.1189351477744428e-05,
+        "w2_variability_mean_std": 6.201177845459495e-07
+      },
+      "haar|modes=16|photons=4|n_layers=8": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0003642495731157245,
+        "w1_variability_mean_std": 0.00010127241456670719,
+        "w2_variability_mean_avg": 3.438947361722853e-05,
+        "w2_variability_mean_std": 1.171549450481964e-05
+      },
+      "haar|modes=24|photons=6|n_layers=16": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0003746408595164804,
+        "w1_variability_mean_std": 4.4581213482192284e-05,
+        "w2_variability_mean_avg": 2.9966163478450016e-05,
+        "w2_variability_mean_std": 1.9117107141204218e-06
+      },
+      "haar|modes=24|photons=6|n_layers=4": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.00010003230632972716,
+        "w1_variability_mean_std": 5.304042632703706e-07,
+        "w2_variability_mean_avg": 7.501403174966488e-06,
+        "w2_variability_mean_std": 7.063727473782016e-08
+      },
+      "haar|modes=24|photons=6|n_layers=8": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.00021067434051145464,
+        "w1_variability_mean_std": 1.4741121568728342e-05,
+        "w2_variability_mean_avg": 1.5923221480620753e-05,
+        "w2_variability_mean_std": 7.481830057922309e-07
+      },
+      "haar|modes=8|photons=2|n_layers=16": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0011917496496564551,
+        "w1_variability_mean_std": 0.00011443580078102004,
+        "w2_variability_mean_avg": 0.00011515942532013402,
+        "w2_variability_mean_std": 3.0079349110971974e-05
+      },
+      "haar|modes=8|photons=2|n_layers=4": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0005984514936923538,
+        "w1_variability_mean_std": 0.00021373012141417407,
+        "w2_variability_mean_avg": 4.2569052871545546e-05,
+        "w2_variability_mean_std": 1.8459464139724105e-05
+      },
+      "haar|modes=8|photons=2|n_layers=8": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.000743254768800415,
+        "w1_variability_mean_std": 0.00025390272236366115,
+        "w2_variability_mean_avg": 0.00011720526051950469,
+        "w2_variability_mean_std": 5.1430647222243885e-05
+      },
+      "table_I_mapped|modes=12|photons=3|n_layers=16": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.002434652377613082,
+        "w1_variability_mean_std": 6.7325763173145e-05,
+        "w2_variability_mean_avg": 0.0001621018784796545,
+        "w2_variability_mean_std": 5.735580440548969e-06
+      },
+      "table_I_mapped|modes=12|photons=3|n_layers=4": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0016410539335290732,
+        "w1_variability_mean_std": 4.6287508118888205e-05,
+        "w2_variability_mean_avg": 0.00014193934400947466,
+        "w2_variability_mean_std": 1.5375830889387256e-05
+      },
+      "table_I_mapped|modes=12|photons=3|n_layers=8": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.002270729395046663,
+        "w1_variability_mean_std": 3.132466308597198e-05,
+        "w2_variability_mean_avg": 0.00020890717436888734,
+        "w2_variability_mean_std": 1.8620778495861093e-05
+      },
+      "table_I_mapped|modes=16|photons=4|n_layers=16": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0023397391461894676,
+        "w1_variability_mean_std": 0.00011652822271592947,
+        "w2_variability_mean_avg": 0.00015463493142233388,
+        "w2_variability_mean_std": 2.3634497028020376e-05
+      },
+      "table_I_mapped|modes=16|photons=4|n_layers=4": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0015691425648614449,
+        "w1_variability_mean_std": 3.3083835538061185e-05,
+        "w2_variability_mean_avg": 0.00015260706902461144,
+        "w2_variability_mean_std": 1.0522210936225526e-05
+      },
+      "table_I_mapped|modes=16|photons=4|n_layers=8": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.002117777111856303,
+        "w1_variability_mean_std": 4.996877116071546e-05,
+        "w2_variability_mean_avg": 0.00018275464908319583,
+        "w2_variability_mean_std": 1.2399889721060965e-05
+      },
+      "table_I_mapped|modes=24|photons=6|n_layers=16": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0017648628187306031,
+        "w1_variability_mean_std": 0.0001586982370817372,
+        "w2_variability_mean_avg": 0.00013789262426583667,
+        "w2_variability_mean_std": 6.647228196151652e-06
+      },
+      "table_I_mapped|modes=24|photons=6|n_layers=4": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0014621635073638832,
+        "w1_variability_mean_std": 5.5621601638454607e-05,
+        "w2_variability_mean_avg": 0.00015539692296313122,
+        "w2_variability_mean_std": 1.698993267124354e-05
+      },
+      "table_I_mapped|modes=24|photons=6|n_layers=8": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0019432115731034102,
+        "w1_variability_mean_std": 6.621526273269418e-05,
+        "w2_variability_mean_avg": 0.00017399992809348077,
+        "w2_variability_mean_std": 1.5859726526406492e-05
+      },
+      "table_I_mapped|modes=8|photons=2|n_layers=16": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.004004029717328504,
+        "w1_variability_mean_std": 0.0003172916054191116,
+        "w2_variability_mean_avg": 0.00025276212971114907,
+        "w2_variability_mean_std": 4.518507019878265e-05
+      },
+      "table_I_mapped|modes=8|photons=2|n_layers=4": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0017987023910053682,
+        "w1_variability_mean_std": 0.0001064960187677075,
+        "w2_variability_mean_avg": 0.00014776720911265648,
+        "w2_variability_mean_std": 2.8578819674536666e-05
+      },
+      "table_I_mapped|modes=8|photons=2|n_layers=8": {
+        "n": 3,
+        "w1_variability_mean_avg": 0.0028254880442281946,
+        "w1_variability_mean_std": 0.00020614835241832027,
+        "w2_variability_mean_avg": 0.00028696185230944624,
+        "w2_variability_mean_std": 4.922964670681179e-05
+      }
+    },
+    "criterion": {
+      "rule": "at the deepest layer count and largest size, mapped Table I variability exceeds balanced and Haar for every seed (w1 and w2), and Haar variability decreases with mode count",
+      "largest_modes": 24,
+      "deepest_layers": 16,
+      "ordering_per_seed": {
+        "seed 0|w1": true,
+        "seed 0|w2": true,
+        "seed 1|w1": true,
+        "seed 1|w2": true,
+        "seed 2|w1": true,
+        "seed 2|w2": true
+      },
+      "haar_trend_vs_modes": {
+        "w1": [
+          0.0011917496496564551,
+          0.0008441598365070774,
+          0.0005663956509033384,
+          0.0003746408595164804
+        ],
+        "w2": [
+          0.00011515942532013402,
+          8.090535483873396e-05,
+          4.572938507572279e-05,
+          2.9966163478450016e-05
+        ]
+      },
+      "haar_decreasing": true,
+      "preserved": true
+    }
+  }
+}

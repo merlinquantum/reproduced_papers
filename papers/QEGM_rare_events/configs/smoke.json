@@ -1,0 +1,14 @@
+{
+  "description": "Tiny smoke run used by tests and CI.",
+  "training": {
+    "epochs": 2,
+    "seeds": "0",
+    "models": "vae,qegm,qegm_merlin"
+  },
+  "dataset": {
+    "n_samples": 256
+  },
+  "evaluation": {
+    "n_generated": 512
+  }
+}

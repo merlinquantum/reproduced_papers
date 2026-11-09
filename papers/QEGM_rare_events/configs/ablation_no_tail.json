@@ -1,0 +1,12 @@
+{
+  "description": "Ablation: λ_tail = 0. Confirms whether the hybrid tail-aware loss carries the metric.",
+  "training": {
+    "seeds": "0,1,2",
+    "epochs": 60,
+    "lambda_tail": 0.0,
+    "models": "vae,qegm,qegm_merlin"
+  },
+  "dataset": {
+    "n_samples": 2048
+  }
+}

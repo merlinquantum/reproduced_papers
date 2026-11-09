@@ -1,0 +1,42 @@
+{
+    "description": "Table 1 reproduction: QMKL vs GFM vs GQC per-sample inference-latency benchmark (Section 2, Motivation). Not part of the MoE headline pipeline -- see lib/latency_benchmark.py for the protocol and documented assumptions.",
+    "task": "latency_benchmark",
+    "seed": 42,
+    "dtype": "float32",
+    "outdir": "outdir",
+    "device": "cpu",
+    "dataset": {
+        "n_samples": 10000,
+        "test_fraction": 0.1,
+        "train_balance_per_class": 90
+    },
+    "pca": {
+        "n_components": 2
+    },
+    "gqc_model": {
+        "n_qubits": 6,
+        "backend": "gate",
+        "autoencoder": {
+            "hidden_dims": [
+                256,
+                128,
+                64
+            ]
+        },
+        "vqc": {
+            "n_layers": 6
+        },
+        "head": {
+            "hidden_dim": 8
+        }
+    },
+    "benchmark": {
+        "n_runs": 5,
+        "n_reps": 10,
+        "batch_size": 50
+    },
+    "logging": {
+        "level": "info",
+        "save_config_snapshot": true
+    }
+}

@@ -1,0 +1,19 @@
+{
+    "description": "Smoke overlay on defaults: adds the RBM baseline with a short fit, so every code path runs once.",
+    "experiment": {
+        "name": "smoke",
+        "paper_reference": "none (pipeline check)"
+    },
+    "evaluation": {
+        "baselines": [
+            "random",
+            "marginal",
+            "rbm",
+            "test_to_test"
+        ],
+        "rbm": {
+            "n_iter": 20,
+            "mmd_samples": 200
+        }
+    }
+}

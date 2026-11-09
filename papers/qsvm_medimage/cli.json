@@ -1,0 +1,37 @@
+{
+  "description": "CPU MerLin fidelity-kernel adaptation for qsvm_medimage.",
+  "arguments": [
+    {
+      "flags": ["--pca-dim"],
+      "help": "Number of PCA components encoded by the photonic feature map",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiment.pca_dim"}
+    },
+    {
+      "flags": ["--circuit-seed"],
+      "help": "Seed for the fixed random photonic feature map",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiment.circuit_seed"}
+    },
+    {
+      "flags": ["--max-samples"],
+      "help": "Maximum number of PneumoniaMNIST samples",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "experiment.max_samples"}
+    },
+    {
+      "flags": ["--fix-leakage"],
+      "help": "Fit MinMaxScaler on train only instead of train plus held-out data",
+      "action": "store_true",
+      "default": false,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.fix_leakage",
+        "value": true
+      }
+    }
+  ]
+}

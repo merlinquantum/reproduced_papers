@@ -1,0 +1,22 @@
+{
+  "model": "classical",
+  "digit": 0,
+  "T": 5,
+  "N": 4,
+  "NA": 1,
+  "L": 7,
+  "classical_hidden_dim": 2,
+  "ae_epochs": 40,
+  "ae_lr": 0.05,
+  "ae_batch_size": 20,
+  "ae_data_size": 20000,
+  "gan_iterations": 1000,
+  "gen_lr": 0.3,
+  "disc_lr": 0.01,
+  "gan_batch_size": 8,
+  "eval_every": 100,
+  "n_samples_eval": 256,
+  "n_samples_real": 256,
+  "device": "cpu",
+  "_comment": "Fair classical baseline: 2-layer MLP generator (~162 params, close to 140 quantum). Same reduced AE as mnist_reduced.json."
+}

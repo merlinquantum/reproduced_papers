@@ -1,0 +1,10 @@
+{
+  "description": "Barren-plateau gradient-variance reproduction",
+  "arguments": [
+    {"flags": ["--experiment"], "help": "Experiment: fig3_gb, fig4_gb, or fig3_merlin", "type": "str", "default": null, "apply": {"kind": "config_path", "path": "experiment"}},
+    {"flags": ["--samples"], "help": "Random circuit samples per point", "type": "int", "default": null, "apply": {"kind": "config_path", "path": "samples"}},
+    {"flags": ["--qubits"], "help": "Comma-separated qubit counts", "type": "str", "default": null, "apply": {"kind": "config_path", "path": "qubits"}},
+    {"flags": ["--layers"], "help": "Comma-separated layer counts", "type": "str", "default": null, "apply": {"kind": "config_path", "path": "layers"}},
+    {"flags": ["--plot"], "help": "Write PDF and PNG plots", "type": "bool", "default": null, "apply": {"kind": "config_path", "path": "plot"}}
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "description": "Gap diagnostic D1 on the D5 shallow run (20 layers, N = 16): exact-probability vs 1e5-shot readouts on its 2 saved realisations (outdir/gap_shallow_l20/run_20261026-154522).",
+  "task": "landsat_gap_diagnostics",
+  "reservoir": {
+    "n_qubits": 16,
+    "n_layers": 20,
+    "input_shift": 8,
+    "chunk_size": 64
+  },
+  "landsat_gap_diagnostics": {
+    "split_seeds": [
+      0,
+      1
+    ],
+    "realisations": null,
+    "reservoir_seeds": [
+      0
+    ],
+    "probability_sources": [
+      "outdir/gap_shallow_l20/run_20261026-154522"
+    ],
+    "shots": 100000,
+    "readouts": [
+      "w1_x_unit",
+      "w1_pauli_unit",
+      "w1_pauli_scaled",
+      "w1_et_scaled",
+      "w2_x_unit",
+      "w2_pauli_unit",
+      "w2_pauli_scaled",
+      "w2_et_unit",
+      "w2_etcut_scaled"
+    ]
+  }
+}

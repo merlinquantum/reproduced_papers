@@ -1,0 +1,12 @@
+{
+    "description": "E1 reduced smoke run: 3 rounds on a 2000-image training subset (NOT paper-accurate)",
+    "experiment": "e1_vqtn_0v9_reduced",
+    "label": "reduced smoke run",
+    "dataset": {
+        "max_train_samples": 2000,
+        "max_test_samples": 500
+    },
+    "federation": {
+        "rounds": 3
+    }
+}

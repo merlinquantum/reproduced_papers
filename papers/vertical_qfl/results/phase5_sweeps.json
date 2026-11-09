@@ -1,0 +1,66 @@
+{
+  "systems": {
+    "gate": {
+      "E1": "outdir/sweep_e1_8clients_20261016-161327_e1",
+      "E2": "outdir/sweep_e2_1client_20261016-164104_e2",
+      "E3": "outdir/sweep_e3_8x1client_20261016-164705_e3",
+      "E4": "outdir/sweep_e4_2x4clients_20261017-195148_e4"
+    },
+    "photonic_h": {
+      "E1": "outdir/sweep_e1p_8clients_merlin_head_20261020-115926_p5",
+      "E2": "outdir/sweep_e2p_1client_merlin_head_20261020-121619_p6",
+      "E3": "outdir/sweep_e3p_8x1client_merlin_head_20261020-121957_p7",
+      "E4": "outdir/sweep_e4p_2x4clients_merlin_head_20261020-123648_p8"
+    },
+    "photonic_f": {
+      "E1": "outdir/sweep_e1p_8clients_merlin_photonic_20261020-125406_p9",
+      "E2": "outdir/sweep_e2p_1client_merlin_photonic_20261020-131110_p10",
+      "E3": "outdir/sweep_e3p_8x1client_merlin_photonic_20261020-131447_p11",
+      "E4": "outdir/sweep_e4p_2x4clients_merlin_photonic_20261020-133821_p12"
+    },
+    "classical_gate": {
+      "all": "outdir/sweep_classical_20261020-144839_cg"
+    },
+    "classical_photonic_h": {
+      "all": "outdir/sweep_classical_20261020-145256_ch"
+    },
+    "classical_photonic_f": {
+      "all": "outdir/sweep_classical_20261020-145713_cf"
+    },
+    "classical_central": {
+      "all": "outdir/sweep_classical_20261020-150131_cz"
+    }
+  },
+  "roles": {
+    "gate": "reproduced paper method",
+    "photonic_h": "MerLin adaptation (head)",
+    "photonic_f": "MerLin adaptation (fully photonic)",
+    "classical_gate": "fair classical baseline (gate-matched)",
+    "classical_photonic_h": "fair classical baseline (H-matched)",
+    "classical_photonic_f": "fair classical baseline (F-matched)",
+    "classical_central": "centralised reference (no federation)"
+  },
+  "scopes": {
+    "gate": "paper-accurate, 1 seed/distribution",
+    "photonic_h": "adaptation, simulator, tuned",
+    "photonic_f": "adaptation, simulator, tuned",
+    "classical_gate": "lr validation-selected, 3 seeds",
+    "classical_photonic_h": "lr validation-selected, 3 seeds",
+    "classical_photonic_f": "lr validation-selected, 3 seeds",
+    "classical_central": "lr validation-selected, 3 seeds"
+  },
+  "pairs": [
+    [
+      "gate",
+      "classical_gate"
+    ],
+    [
+      "photonic_h",
+      "classical_photonic_h"
+    ],
+    [
+      "photonic_f",
+      "classical_photonic_f"
+    ]
+  ]
+}

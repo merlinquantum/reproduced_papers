@@ -1,0 +1,16 @@
+{
+    "description": "E2 4-class MNIST (2, 3, 6, 7), VQTN, 4 clients, 20 rounds, B=20, E=1",
+    "experiment": "e2_vqtn_4class",
+    "label": "paper-accurate settings, inferred circuit and partition",
+    "dataset": {
+        "classes": [
+            2,
+            3,
+            6,
+            7
+        ]
+    },
+    "federation": {
+        "n_clients": 4
+    }
+}

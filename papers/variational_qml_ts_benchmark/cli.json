@@ -1,0 +1,29 @@
+{
+  "description": "Variational QML time-series benchmark reproduction runner (arXiv:2504.12416)",
+  "arguments": [
+    {"flags": ["--model"], "help": "Model: mlp|rnn|lstm|vqc|qrnn|qlstm|le_qlstm|photonic|photonic_reservoir|photonic_memristor",
+     "type": "str", "default": null, "apply": {"kind": "config_path", "path": "model.name"}},
+    {"flags": ["--ansatz"], "help": "Ansatz / architecture string (e.g. relu_16, paper_rivera-ruiz_with_inputlayer_2, ruexp_..., paper_no_reset, original_2, layers_1)",
+     "type": "str", "default": null, "apply": {"kind": "config_path", "path": "model.params.ansatz"}},
+    {"flags": ["--num-qubits"], "help": "Number of qubits (quantum models)",
+     "type": "int", "default": null, "apply": {"kind": "config_path", "path": "model.params.num_qubits"}},
+    {"flags": ["--hidden-size"], "help": "Hidden size / hidden qubits depending on model",
+     "type": "int", "default": null, "apply": {"kind": "config_path", "path": "model.params.hidden_size"}},
+    {"flags": ["--bugfix"], "help": "Enable documented bug fixes over the original code",
+     "type": "bool", "default": null, "apply": {"kind": "config_path", "path": "model.params.bugfix"}},
+    {"flags": ["--dataset"], "help": "Dataset: mackey_1000|henon_1000|lorenz_1000",
+     "type": "str", "default": null, "apply": {"kind": "config_path", "path": "dataset.name"}},
+    {"flags": ["--sequence-length"], "help": "Sliding-window sequence length l (4|8|16)",
+     "type": "int", "default": null, "apply": {"kind": "config_path", "path": "dataset.sequence_length"}},
+    {"flags": ["--prediction-step"], "help": "Prediction horizon k",
+     "type": "int", "default": null, "apply": {"kind": "config_path", "path": "dataset.prediction_step"}},
+    {"flags": ["--batch-size"], "help": "Batch size",
+     "type": "int", "default": null, "apply": {"kind": "config_path", "path": "dataset.batch_size"}},
+    {"flags": ["--epochs"], "help": "Max epoch cap (reduced-compute). Null = train to convergence.",
+     "type": "int", "default": null, "apply": {"kind": "config_path", "path": "training.epochs"}},
+    {"flags": ["--lr"], "help": "Adam learning rate",
+     "type": "float", "default": null, "apply": {"kind": "config_path", "path": "training.lr"}},
+    {"flags": ["--use-convergence"], "help": "Use the paper's validation-plateau convergence criterion",
+     "type": "bool", "default": null, "apply": {"kind": "config_path", "path": "training.use_convergence"}}
+  ]
+}
