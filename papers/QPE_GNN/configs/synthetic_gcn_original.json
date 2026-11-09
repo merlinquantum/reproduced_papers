@@ -14,7 +14,7 @@
       2,
       2
     ],
-    "cache_path": "../../data/QPE_GNN/synthetic/gcn_original.pt"
+    "cache_path": "synthetic/gcn_original.pt"
   },
   "split_seed": 1729,
   "model": "gcn",
@@ -37,5 +37,7 @@
     1,
     2,
     3
-  ]
+  ],
+  "minimum_lr": 0.001,
+  "warmup_epochs": 0
 }

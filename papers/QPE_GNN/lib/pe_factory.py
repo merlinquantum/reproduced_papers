@@ -16,6 +16,7 @@ from collections.abc import Sequence
 import numpy as np
 import torch
 
+from .photonic import photonic_walk_features
 from .qpe import (
     cqrw_features,
     ground_state_correlation_eigvecs,
@@ -50,7 +51,7 @@ def _pe_for_one_graph(
         for k in range(K):
             P[k] = np.outer(feats[:, k], feats[:, k])
         return P
-    if encoding in {"rrwp+cqrw1", "rrwp+qirw2"}:
+    if encoding in {"rrwp+cqrw1", "rrwp+qirw2", "rrwp+photon2"}:
         if rrwp_dim is None or qpe_dim is None:
             raise ValueError(
                 f"{encoding} requires separate rrwp_dim and qpe_dim values"
@@ -58,10 +59,18 @@ def _pe_for_one_graph(
         if rrwp_dim + qpe_dim != K:
             raise ValueError("combined positional-encoding dimensions do not sum to K")
         rrwp_features = rrwp(A, rrwp_dim)
-        if encoding == "rrwp+cqrw1":
+        if encoding in {"rrwp+cqrw1", "rrwp+photon2"}:
             if times is None or len(times) != qpe_dim:
-                raise ValueError("rrwp+cqrw1 requires one time per QPE channel")
+                raise ValueError(f"{encoding} requires one time per QPE channel")
+        if encoding == "rrwp+cqrw1":
             quantum_features = cqrw_features(A, 1, times)
+        elif encoding == "rrwp+photon2":
+            # Phase 4 MerLin adaptation: two photons, threshold detection
+            # postselected on two clicks, closed-form 2x2 permanents (checked
+            # against MerLin at the start of every run, see lib/runner.py).
+            quantum_features = photonic_walk_features(
+                A, times, n_photons=2, detection="threshold", backend="permanent"
+            )
         else:
             quantum_features = qirw_features(A, 2, num_features=qpe_dim)
         return np.concatenate([rrwp_features, quantum_features], axis=0)

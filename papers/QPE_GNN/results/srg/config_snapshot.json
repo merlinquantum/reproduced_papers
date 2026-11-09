@@ -1,0 +1,41 @@
+{
+  "seed": 0,
+  "dtype": null,
+  "device": "cpu",
+  "logging": {
+    "level": "info"
+  },
+  "data_root": "/mnt/c/Users/BenjaminSTOTT/PycharmProjects/reproduced_papers/.worktrees/pr-112/data",
+  "description": "Section 4.3 experiment on all 25 paper SRGs with five isomorphic controls per graph. Catalogs are read from <data_root>/QPE_GNN/srg/ (relative srg_data_directory).",
+  "feasibility": {
+    "status": "supported"
+  },
+  "dataset": "ladder_concat",
+  "dataset_kwargs": {
+    "per_class": 16,
+    "length_range": [
+      3,
+      5
+    ],
+    "seed": 0
+  },
+  "model": "grit_lite",
+  "encoding": "qirw2",
+  "pe_dim": 8,
+  "node_dim": 16,
+  "depth": 1,
+  "num_heads": 2,
+  "num_classes": 2,
+  "head": "graph_class",
+  "epochs": 4,
+  "batch_size": 8,
+  "lr": 0.001,
+  "train_frac": 0.8,
+  "val_frac": 0.1,
+  "experiment": "srg_paper",
+  "srg_data_directory": "srg",
+  "evolution_time": 1.0,
+  "rrwp_steps": 20,
+  "isomorphic_permutations": 5,
+  "tolerance": 1e-09
+}

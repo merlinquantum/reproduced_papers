@@ -7,6 +7,7 @@ from pathlib import Path
 
 import networkx as nx
 import numpy as np
+import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -15,6 +16,7 @@ from lib.data import (  # noqa: E402
     LadderConcatDataset,
     RandomGraphRegression,
     adj_from_record,
+    build_dataloader,
     collate_pad,
     rook_graph,
     srg_pairs,
@@ -101,3 +103,66 @@ def test_random_graph_regression_valid():
         eigs = np.sort(np.linalg.eigvalsh(L))
         assert label > 0
         np.testing.assert_allclose(label, eigs[1], atol=1e-9)
+
+
+def test_build_dataloader_yields_one_padded_batch_per_split():
+    cfg = {
+        "dataset": "ladder_concat",
+        "dataset_kwargs": {"per_class": 16, "length_range": [3, 5], "seed": 0},
+        "model": "grit_lite",
+        "batch_size": 8,
+        "train_frac": 0.8,
+        "val_frac": 0.1,
+        "split_seed": 0,
+    }
+    sizes = {}
+    for split in ("train", "val", "test"):
+        loader = build_dataloader(cfg, split=split)
+        batch = next(iter(loader))
+        batch_size, max_nodes = batch["mask"].shape
+        assert batch["A"].shape == (batch_size, max_nodes, max_nodes)
+        assert batch["label"].shape == (batch_size,)
+        assert batch_size == min(8, len(loader.dataset))
+        sizes[split] = len(loader.dataset)
+    assert sizes == {"train": 25, "val": 3, "test": 4}
+    with pytest.raises(ValueError, match="split must be one of"):
+        build_dataloader(cfg, split="validation")
+
+
+def test_ladder_cache_round_trip_leaves_no_partial_file(tmp_path):
+    cache_path = tmp_path / "synthetic" / "ladder.pt"
+    built = LadderConcatDataset(
+        per_class=4, length_range=(3, 5), seed=0, cache_path=cache_path
+    )
+    loaded = LadderConcatDataset(
+        per_class=4, length_range=(3, 5), seed=0, cache_path=cache_path
+    )
+    assert [r.label for r in loaded.records] == [r.label for r in built.records]
+    assert sorted(path.name for path in cache_path.parent.iterdir()) == ["ladder.pt"]
+    with pytest.raises(ValueError, match="cache metadata mismatch"):
+        LadderConcatDataset(
+            per_class=4, length_range=(3, 5), seed=1, cache_path=cache_path
+        )
+
+
+def test_quantum_eigenvector_truncation_keeps_width_and_zeroes_the_rest():
+    kwargs = {
+        "per_class": 3,
+        "length_range": (5, 7),
+        "seed": 0,
+        "node_encoding": "quantum",
+    }
+    full = LadderConcatDataset(**kwargs)
+    truncated = LadderConcatDataset(**kwargs, quantum_eigenvectors=3)
+    for full_record, truncated_record in zip(full.records, truncated.records):
+        full_features = np.asarray(full_record.node_features)
+        truncated_features = np.asarray(truncated_record.node_features)
+        assert (
+            truncated_features.shape
+            == full_features.shape
+            == (full_record.num_nodes, 20)
+        )
+        np.testing.assert_array_equal(truncated_features[:, :3], full_features[:, :3])
+        assert np.all(truncated_features[:, 3:] == 0)
+    with pytest.raises(ValueError, match="quantum_eigenvectors"):
+        LadderConcatDataset(per_class=1, length_range=(5, 5), quantum_eigenvectors=3)

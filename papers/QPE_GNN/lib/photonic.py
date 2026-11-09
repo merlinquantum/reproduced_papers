@@ -1,248 +1,402 @@
-"""MerLin photonic adaptation of the quantum positional encodings.
+"""Photonic (MerLin) adaptation of the paper's quantum-walk encodings.
 
-Why this is a natural photonic mapping
---------------------------------------
+This module is a Phase 4 adaptation, not part of the original reproduction.
 
-The XY hamiltonian on N qubits restricted to the k-particle subspace is
-unitarily equivalent to a *passive linear-optical interferometer* on N modes
-with k indistinguishable photons:
+Mapping
+-------
+The single-particle sector of the paper's XY Hamiltonian is ``2A`` (one
+``XX + YY`` hop per edge), so the 1-CQRW propagator is ``U(t) = exp(-i 2A t)``.
+A passive linear-optical interferometer on N modes applies exactly this
+unitary to every photon. One photon injected in mode ``i`` therefore gives the
+1-CQRW feature ``|U_ji|^2`` (:func:`photonic_cqrw_features`).
 
-- the k-particle subspace ↔ Fock space with exactly k photons in N modes,
-- ``e^{-iH_XY t}`` ↔ a unitary linear-optical transformation U(t) on the modes,
-- expectation values of one-body operators ↔ photon counting on modes.
+With n >= 2 indistinguishable photons the interferometer realises a
+*non-interacting* bosonic walk; the paper's two-particle walk is interacting
+(hard-core). The only nonlinearity linear optics offers here is the
+measurement: threshold detectors with postselection on n clicks keep the
+collision-free outcomes and renormalise them (MerLin
+``ComputationSpace.UNBUNCHED``). Number-resolving detection without
+postselection keeps every outcome (``ComputationSpace.FOCK``).
 
-In other words, computing a 1-CQRW feature on a graph G is exactly equivalent
-to evolving a single photon through an interferometer whose single-mode
-Hamiltonian is the adjacency matrix of G. We use MerLin's
-``CircuitBuilder``/``QuantumLayer`` to realise this evolution and read out the
-node-occupation probabilities, which form the positional-encoding tensor.
+Feature
+-------
+:func:`photonic_walk_covariance` computes the statistic the paper's SRG
+experiment uses for the interacting walk
+(``lib.srg.two_particle_walk_correlations``): the output occupation covariance
+averaged over every collision-free input (one photon per input mode),
 
-Two layers are provided:
+    C_ij = mean_s E[n_i n_j | s] - mean_s E[n_i | s] E[n_j | s].
 
-- :class:`PhotonicXYWalk` — direct construction of the unitary
-  ``U = e^{-i A t}`` (with ``A`` the adjacency matrix of the input graph)
-  via MerLin's ``CircuitBuilder.add_unitary`` (when available) or via Perceval's
-  free-form ``Circuit.add(component=...)``. We compute photonic probabilities
-  for arbitrary input states and read the marginals.
-
-- :class:`PhotonicMZIWalk` — trainable photonic baseline: a fixed-topology
-  MZI mesh whose phases are *learned* to approximate the QPE-derived attention
-  bias. This is the photonic analogue of the "trainable" branch in Fig. 1c.
-
-Note on photon counts: for ``k=1`` we use a one-hot Fock input. For ``k=2`` we
-use a two-hot input. With ``computation_space=UNBUNCHED`` the readout is the
-distribution over which modes are occupied — exactly what the paper measures.
+Backends
+--------
+``"merlin"`` builds a MerLin ``QuantumLayer`` around a Perceval ``Unitary``
+component (a graph-dependent interferometer has no CircuitBuilder primitive)
+and pushes every input state through it as a batch of one-hot amplitude
+vectors. ``"permanent"`` evaluates the same probabilities in closed form from
+2x2 permanents; it supports one or two photons and is used for the ZINC
+positional encodings, where one MerLin layer per graph and time would dominate
+run time. Tests and each ZINC run check the two backends against each other.
 """
 
 from __future__ import annotations
 
 from collections.abc import Sequence
+from itertools import combinations
 
 import numpy as np
 
-# We use perceval directly for the per-graph unitary construction so we can
-# inject an *arbitrary* unitary U(t) corresponding to ``e^{-i A t}``, which
-# MerLin's higher-level CircuitBuilder cannot express for graph-dependent A
-# without manual mesh tuning. This is the case where source-inspection is
-# justified by the cookbook policy.
-import torch
-import torch.nn as nn
+DETECTIONS = ("threshold", "pnr")
+PARTICLES = ("bosons", "distinguishable")
+BACKENDS = ("merlin", "permanent")
 
 
 def adjacency_matrix(num_nodes: int, edges: Sequence[tuple[int, int]]) -> np.ndarray:
-    A = np.zeros((num_nodes, num_nodes), dtype=np.float64)
-    for i, j in edges:
-        A[i, j] = 1.0
-        A[j, i] = 1.0
-    return A
-
-
-def graph_unitary(A: np.ndarray, t: float, hamiltonian: str = "xy") -> np.ndarray:
-    """Unitary corresponding to the interferometer for graph ``A`` at time ``t``.
-
-    Conventions
-    -----------
-    For ``hamiltonian="xy"`` we use ``U = exp(-i (2A) t)``, matching the XY
-    hamiltonian on the 1-particle subspace from the paper (XX+YY = 2A).
-    For ``hamiltonian="adj"`` we use ``U = exp(-i A t)``, i.e. drop the factor
-    of two — useful for comparing alternative photonic conventions.
-    """
-    if hamiltonian == "xy":
-        H = 2.0 * A
-    elif hamiltonian == "adj":
-        H = A
-    else:
-        raise ValueError(f"unknown hamiltonian: {hamiltonian}")
-    eigvals, eigvecs = np.linalg.eigh(H)
-    phase = np.exp(-1j * t * eigvals)
-    return (eigvecs * phase) @ eigvecs.conj().T
-
-
-def photonic_node_marginals(A: np.ndarray, t: float, k: int) -> np.ndarray:
-    """k-photon node-occupation distribution after evolving |1..1, 0..0> by U(t).
-
-    Returns an (N, N) matrix whose row i (here all rows are equal because of
-    a fixed input state choice) gives the probability of finding photons at
-    each output mode after the interferometer.
-
-    We use a localised input |e_i> ⊗ ... for each i to get a per-node feature,
-    matching the per-row interpretation of the paper's CQRW feature tensor.
-    """
-    N = A.shape[0]
-    U = graph_unitary(A, t)
-    out = np.zeros((N, N), dtype=np.float64)
-    if k == 1:
-        # Per-input mode i, the photon distribution at mode j is |U_{ji}|^2.
-        out = np.abs(U) ** 2  # (j, i)
-        out = out.T  # (i, j) — same convention as cqrw_features.
-    elif k == 2:
-        # Use the (k=2) permanent formula for two indistinguishable photons:
-        # P(modes a, b | input modes i, j) = |perm(U[[a,b], [i,j]])|^2 / norm.
-        # Computing all pairs is O(N^4). For node-level marginals, sum b out.
-        # We average over i != j initial pairs to get per-node features.
-        accum = np.zeros(N, dtype=np.float64)
-        for i in range(N):
-            for j in range(i + 1, N):
-                # Photon-distribution over modes (a, b) with a < b plus a=b.
-                # Marginalise: probability mode m is occupied.
-                marg = np.zeros(N, dtype=np.float64)
-                for m in range(N):
-                    # Probability of finding a photon at mode m.
-                    # Sum over the partner mode m'.
-                    p_marg = 0.0
-                    for mp in range(N):
-                        if m == mp:
-                            # both photons at m: |perm[[U[m,i], U[m,j]],
-                            #                              [U[m,i], U[m,j]]]|^2 / 2
-                            val = U[m, i] * U[m, j] + U[m, j] * U[m, i]
-                            p_marg += np.abs(val) ** 2 / 2.0
-                        elif m < mp:
-                            val = U[m, i] * U[mp, j] + U[m, j] * U[mp, i]
-                            p_marg += np.abs(val) ** 2
-                    marg[m] = p_marg
-                # marg should sum to 2 (two photons); normalise to per-mode prob.
-                marg = marg / max(marg.sum(), 1e-12)
-                accum += marg
-        accum /= N * (N - 1) // 2
-        # Each row of `out` is the same (graph-level marginal). Per-node
-        # variants would split by initial localisation.
-        out = np.broadcast_to(accum, (N, N)).copy()
-    else:
-        raise NotImplementedError("k must be 1 or 2 for photonic_node_marginals")
-    return out
-
-
-def photonic_cqrw_features(A: np.ndarray, k: int, times: Sequence[float]) -> np.ndarray:
-    """k-photon analogue of `lib.qpe.cqrw_features`.
-
-    Returns (K, N, N) tensor of photonic marginals computed via interferometer
-    unitaries. For k=1 the result is *identical* to ``cqrw_features(A, 1, t)``
-    — the photonic implementation literally is the CQRW. For k=2 the photonic
-    bunched/unbunched statistics introduce a permanent-based correction that
-    differs from the (non-photonic) Bose-Hubbard hopping in `cqrw_features`,
-    which is the scientifically interesting deviation we want to study.
-    """
-    return np.stack([photonic_node_marginals(A, float(t), k) for t in times], axis=0)
-
-
-# ---------------------------------------------------------------------------
-# MerLin layer: a small trainable photonic mesh used to refine a graph-based
-# PE on a chip-friendly architecture.
-# ---------------------------------------------------------------------------
-
-
-class PhotonicMZIReadout(nn.Module):
-    """Standalone trainable readout backed by MerLin's analytic simulator.
-
-    Pattern A from MERLIN_COOKBOOK.md (scalar-in scalar-out): callers can apply
-    the same quantum layer to each node or graph feature vector. Integration
-    with :class:`lib.model.GRITLite` is intentionally left to the caller.
+    """Build a symmetric 0/1 adjacency matrix from an edge list.
 
     Parameters
     ----------
-    n_modes : int
-        Number of optical modes. Default value is 6.
-    n_photons : int
-        Number of photons placed in alternating input modes. Default value is 3.
-    device : torch.device | None
-        Device used by the MerLin simulator. Default value is None.
-    dtype : torch.dtype | None
-        Floating-point precision used by the MerLin simulator. Default value is
-        None.
-    n_phase_error_samples : int
-        Number of analytic unitary samples used when phase-error noise is
-        configured. Default value is 1.
+    num_nodes : int
+        Number of graph nodes (optical modes).
+    edges : Sequence[tuple[int, int]]
+        Undirected edges.
+
+    Returns
+    -------
+    numpy.ndarray
+        Adjacency matrix with shape ``(num_nodes, num_nodes)``.
+    """
+    adjacency = np.zeros((num_nodes, num_nodes), dtype=np.float64)
+    for i, j in edges:
+        adjacency[i, j] = 1.0
+        adjacency[j, i] = 1.0
+    return adjacency
+
+
+def graph_unitary(
+    adjacency: np.ndarray, t: float, hamiltonian: str = "xy"
+) -> np.ndarray:
+    """Interferometer unitary of a graph at evolution time ``t``.
+
+    Parameters
+    ----------
+    adjacency : numpy.ndarray
+        Symmetric adjacency matrix with shape ``(N, N)``.
+    t : float
+        Evolution time.
+    hamiltonian : str
+        ``"xy"`` uses ``exp(-i 2A t)``, the paper's single-particle XY
+        propagator; ``"adj"`` uses ``exp(-i A t)``. Default value is ``"xy"``.
+
+    Returns
+    -------
+    numpy.ndarray
+        Complex unitary with shape ``(N, N)``; symmetric because ``A`` is.
 
     Raises
     ------
     ValueError
-        If the photon count cannot fit in alternating modes or the phase-error
-        sample count is not positive.
+        If ``hamiltonian`` is unknown.
     """
+    if hamiltonian == "xy":
+        generator = 2.0 * adjacency
+    elif hamiltonian == "adj":
+        generator = adjacency
+    else:
+        raise ValueError(f"unknown hamiltonian: {hamiltonian}")
+    eigenvalues, eigenvectors = np.linalg.eigh(generator)
+    return (eigenvectors * np.exp(-1j * t * eigenvalues)) @ eigenvectors.conj().T
 
-    def __init__(
-        self,
-        n_modes: int = 6,
-        n_photons: int = 3,
-        device: torch.device | None = None,
-        dtype: torch.dtype | None = None,
-        n_phase_error_samples: int = 1,
-    ):
-        super().__init__()
-        import merlin as ml  # local import keeps the module optional
 
-        if n_photons > (n_modes + 1) // 2:
-            raise ValueError("n_modes must provide one alternating mode per photon")
-        if n_phase_error_samples < 1:
-            raise ValueError("n_phase_error_samples must be positive")
+def photonic_cqrw_features(
+    adjacency: np.ndarray, k: int, times: Sequence[float]
+) -> np.ndarray:
+    """Single-photon interferometer walk, identical to the paper's 1-CQRW.
 
-        builder = ml.CircuitBuilder(n_modes=n_modes)
-        builder.add_entangling_layer()
-        builder.add_angle_encoding(modes=list(range(n_modes // 2)), scale=float(np.pi))
-        builder.add_entangling_layer()
-        input_state = [0] * n_modes
-        for i in range(n_photons):
-            input_state[2 * i] = 1
-        measurement_strategy = ml.MeasurementStrategy.probs(
-            ml.ComputationSpace.UNBUNCHED
+    Parameters
+    ----------
+    adjacency : numpy.ndarray
+        Adjacency matrix with shape ``(N, N)``.
+    k : int
+        Photon number; only 1 is defined here (the multi-photon statistic is
+        :func:`photonic_walk_covariance`).
+    times : Sequence[float]
+        Evolution times.
+
+    Returns
+    -------
+    numpy.ndarray
+        ``P[t, i, j] = |U(t)_{ji}|^2`` with shape ``(len(times), N, N)``.
+
+    Raises
+    ------
+    ValueError
+        If ``k`` is not 1.
+    """
+    if k != 1:
+        raise ValueError(
+            "photonic_cqrw_features is the single-photon walk; use "
+            "photonic_walk_covariance for two or more photons"
         )
-        self.qlayer = ml.QuantumLayer(
-            input_size=n_modes // 2,
-            builder=builder,
-            input_state=input_state,
-            n_photons=n_photons,
-            measurement_strategy=measurement_strategy,
-            device=device,
-            dtype=dtype,
-            n_phase_error_samples=n_phase_error_samples,
-        )
-        self.execution_scope = "standalone_analytic_simulator"
-        self.computation_space = "unbunched"
-        self.n_phase_error_samples = n_phase_error_samples
-        self.input_dim = n_modes // 2
-        self.head = nn.Linear(self.qlayer.output_size, 1)
+    return np.stack(
+        [(np.abs(graph_unitary(adjacency, float(t))) ** 2).T for t in times], axis=0
+    )
 
-    def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """Args:
-            x: (B, D) per-graph or per-node feature vector with D == input_dim.
-        Returns:
-            (B, 1) photonic-readout scalar.
-        """
-        if x.shape[-1] != self.input_dim:
-            # Pad or truncate to the expected input dim.
-            B = x.shape[0]
-            pad = torch.zeros((B, self.input_dim), device=x.device, dtype=x.dtype)
-            d = min(x.shape[-1], self.input_dim)
-            pad[:, :d] = x[:, :d]
-            x = pad
-        probs = self.qlayer(x)
-        return self.head(probs)
+
+def _check_options(
+    n_photons: int, detection: str, particles: str, backend: str
+) -> None:
+    if detection not in DETECTIONS:
+        raise ValueError(f"detection must be one of {DETECTIONS}, got {detection!r}")
+    if particles not in PARTICLES:
+        raise ValueError(f"particles must be one of {PARTICLES}, got {particles!r}")
+    if backend not in BACKENDS:
+        raise ValueError(f"backend must be one of {BACKENDS}, got {backend!r}")
+    if n_photons < 1:
+        raise ValueError("n_photons must be positive")
+    if backend == "permanent" and n_photons > 2:
+        raise ValueError("the permanent backend supports one or two photons")
+    if backend == "merlin" and particles != "bosons":
+        raise ValueError(
+            "MerLin simulates indistinguishable photons only; use the permanent "
+            "backend for distinguishable photons"
+        )
+
+
+def _covariance_from_distribution(
+    occupation: np.ndarray, probabilities: np.ndarray
+) -> np.ndarray:
+    """Average occupation covariance over inputs.
+
+    ``occupation`` has shape (outcomes, modes); ``probabilities`` has shape
+    (outcomes, inputs) with one column per input state.
+    """
+    marginals = occupation.T @ probabilities  # E[n_i | s], shape (modes, inputs)
+    mean_outcome = probabilities.mean(axis=1)
+    second_moment = (occupation.T * mean_outcome) @ occupation
+    return second_moment - marginals @ marginals.T / probabilities.shape[1]
+
+
+def _permanent_distribution(
+    unitary: np.ndarray, n_photons: int, detection: str, particles: str
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Closed-form outcome distribution for every collision-free input.
+
+    Returns ``(occupation, probabilities, success)`` where ``success`` is the
+    collision-free probability of each input (1 for number-resolving
+    detection, which keeps every outcome).
+    """
+    num_modes = unitary.shape[0]
+    if n_photons == 1:
+        probabilities = np.abs(unitary) ** 2  # rows: output mode, cols: input mode
+        return np.eye(num_modes), probabilities, np.ones(num_modes)
+    pairs = np.asarray(list(combinations(range(num_modes), 2)))
+    first, second = pairs[:, 0], pairs[:, 1]
+    # Rows index the output pair (i, j), columns the input pair (a, b).
+    u_ia = unitary[np.ix_(first, first)]
+    u_jb = unitary[np.ix_(second, second)]
+    u_ib = unitary[np.ix_(first, second)]
+    u_ja = unitary[np.ix_(second, first)]
+    # ``bunched[m, s]`` is the probability that both photons of input s leave
+    # in mode m.
+    if particles == "bosons":
+        collision_free = np.abs(u_ia * u_jb + u_ib * u_ja) ** 2
+        # Amplitude of |2_m> is sqrt(2) U_ma U_mb, so P = 2 |U_ma U_mb|^2.
+        bunched = 2.0 * np.abs(unitary[:, first] * unitary[:, second]) ** 2
+    else:
+        collision_free = (
+            np.abs(u_ia) ** 2 * np.abs(u_jb) ** 2
+            + np.abs(u_ib) ** 2 * np.abs(u_ja) ** 2
+        )
+        # Photon 1 and photon 2 both in m: |U_ma|^2 |U_mb|^2.
+        bunched = np.abs(unitary[:, first]) ** 2 * np.abs(unitary[:, second]) ** 2
+    pair_occupation = np.zeros((len(pairs), num_modes))
+    pair_occupation[np.arange(len(pairs)), first] = 1.0
+    pair_occupation[np.arange(len(pairs)), second] = 1.0
+    success = collision_free.sum(axis=0)
+    if detection == "threshold":
+        return pair_occupation, collision_free / success, success
+    occupation = np.vstack([pair_occupation, 2.0 * np.eye(num_modes)])
+    probabilities = np.vstack([collision_free, bunched])
+    return occupation, probabilities, np.ones(len(pairs))
+
+
+def _merlin_probabilities(
+    unitary: np.ndarray, n_photons: int, space_name: str
+) -> tuple[list[tuple[int, ...]], np.ndarray]:
+    """Push every collision-free input through a MerLin layer of ``unitary``.
+
+    Returns the outcome keys and the probabilities with shape
+    (outcomes, inputs), inputs in ``itertools.combinations`` order.
+    """
+    import merlin as ml
+    import perceval as pcvl
+    import torch
+
+    num_modes = unitary.shape[0]
+    circuit = pcvl.Circuit(num_modes)
+    circuit.add(0, pcvl.Unitary(pcvl.Matrix(unitary)))
+    layer = ml.QuantumLayer(
+        circuit=circuit,
+        n_photons=n_photons,
+        input_state=[1] * n_photons + [0] * (num_modes - n_photons),
+        measurement_strategy=ml.MeasurementStrategy.probs(
+            computation_space=getattr(ml.ComputationSpace, space_name)
+        ),
+        dtype=torch.float64,
+    )
+    keys = [tuple(int(count) for count in key) for key in layer.output_keys]
+    key_index = {key: index for index, key in enumerate(keys)}
+    inputs = [
+        tuple(1 if mode in chosen else 0 for mode in range(num_modes))
+        for chosen in combinations(range(num_modes), n_photons)
+    ]
+    # Batched one-hot complex amplitudes (cookbook Pattern C, Form 2): each
+    # row is one collision-free input state in the layer's own basis.
+    amplitudes = torch.zeros(len(inputs), len(keys), dtype=torch.complex128)
+    for row, state in enumerate(inputs):
+        amplitudes[row, key_index[state]] = 1.0
+    with torch.no_grad():
+        probabilities = layer(amplitudes).double().numpy().T
+    return keys, probabilities
+
+
+def _merlin_distribution(
+    unitary: np.ndarray, n_photons: int, detection: str, need_success: bool
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """MerLin outcome distribution for every collision-free input state."""
+    if detection == "pnr":
+        keys, probabilities = _merlin_probabilities(unitary, n_photons, "FOCK")
+        return (
+            np.asarray(keys, dtype=np.float64),
+            probabilities,
+            np.ones(probabilities.shape[1]),
+        )
+    # UNBUNCHED is threshold detection postselected on n clicks: the
+    # collision-free outcomes, renormalised per input.
+    keys, probabilities = _merlin_probabilities(unitary, n_photons, "UNBUNCHED")
+    success = np.full(probabilities.shape[1], np.nan)
+    if need_success:
+        # The postselection success rate is the collision-free mass of the
+        # unpostselected (FOCK) distribution.
+        fock_keys, fock_probabilities = _merlin_probabilities(
+            unitary, n_photons, "FOCK"
+        )
+        collision_free = np.asarray([max(key) <= 1 for key in fock_keys])
+        success = fock_probabilities[collision_free].sum(axis=0)
+    return np.asarray(keys, dtype=np.float64), probabilities, success
+
+
+def photonic_walk_covariance(
+    adjacency: np.ndarray,
+    t: float,
+    n_photons: int = 2,
+    detection: str = "threshold",
+    particles: str = "bosons",
+    backend: str = "merlin",
+    return_success: bool = False,
+) -> np.ndarray | tuple[np.ndarray, float]:
+    """Occupation covariance of an n-photon walk through the graph interferometer.
+
+    Parameters
+    ----------
+    adjacency : numpy.ndarray
+        Symmetric adjacency matrix with shape ``(N, N)`` (one mode per node).
+    t : float
+        Evolution time of ``U(t) = exp(-i 2A t)``.
+    n_photons : int
+        Photons injected one per mode, in every collision-free input. Default
+        value is 2.
+    detection : str
+        ``"threshold"``: threshold detectors, postselected on ``n_photons``
+        clicks (MerLin ``UNBUNCHED``). ``"pnr"``: number-resolving detectors,
+        no postselection (MerLin ``FOCK``). Default value is ``"threshold"``.
+    particles : str
+        ``"bosons"`` (indistinguishable photons) or ``"distinguishable"`` (a
+        no-interference control, permanent backend only). Default value is
+        ``"bosons"``.
+    backend : str
+        ``"merlin"`` or ``"permanent"`` (closed form, one or two photons).
+        Default value is ``"merlin"``.
+    return_success : bool
+        Also return the mean postselection success rate over inputs (1 for
+        number-resolving detection). With the MerLin threshold backend this
+        runs an extra FOCK pass. Default value is False.
+
+    Returns
+    -------
+    numpy.ndarray or tuple[numpy.ndarray, float]
+        Covariance matrix with shape ``(N, N)``, and the mean success rate when
+        ``return_success`` is True.
+
+    Raises
+    ------
+    ValueError
+        If an option is unknown or unsupported by the chosen backend, or the
+        graph has fewer modes than photons.
+    """
+    _check_options(n_photons, detection, particles, backend)
+    if adjacency.shape[0] < n_photons:
+        raise ValueError("the graph needs at least one mode per photon")
+    unitary = graph_unitary(adjacency, float(t))
+    if backend == "merlin":
+        occupation, probabilities, success = _merlin_distribution(
+            unitary, n_photons, detection, need_success=return_success
+        )
+    else:
+        occupation, probabilities, success = _permanent_distribution(
+            unitary, n_photons, detection, particles
+        )
+    covariance = _covariance_from_distribution(occupation, probabilities)
+    if return_success:
+        return covariance, float(np.mean(success))
+    return covariance
+
+
+def photonic_walk_features(
+    adjacency: np.ndarray,
+    times: Sequence[float],
+    n_photons: int = 2,
+    detection: str = "threshold",
+    backend: str = "permanent",
+) -> np.ndarray:
+    """Stack photonic walk covariances over evolution times.
+
+    Parameters
+    ----------
+    adjacency : numpy.ndarray
+        Adjacency matrix with shape ``(N, N)``.
+    times : Sequence[float]
+        Evolution times, one channel each.
+    n_photons : int
+        Photon number. Default value is 2.
+    detection : str
+        ``"threshold"`` or ``"pnr"``. Default value is ``"threshold"``.
+    backend : str
+        ``"permanent"`` or ``"merlin"``. Default value is ``"permanent"``.
+
+    Returns
+    -------
+    numpy.ndarray
+        Feature tensor with shape ``(len(times), N, N)``.
+    """
+    return np.stack(
+        [
+            photonic_walk_covariance(
+                adjacency, t, n_photons=n_photons, detection=detection, backend=backend
+            )
+            for t in times
+        ],
+        axis=0,
+    )
 
 
 __all__ = [
+    "BACKENDS",
+    "DETECTIONS",
+    "PARTICLES",
     "adjacency_matrix",
     "graph_unitary",
-    "photonic_node_marginals",
     "photonic_cqrw_features",
-    "PhotonicMZIReadout",
+    "photonic_walk_covariance",
+    "photonic_walk_features",
 ]

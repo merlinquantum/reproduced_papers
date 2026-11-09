@@ -1,0 +1,54 @@
+{
+  "candidates": [
+    {
+      "best_epochs": [
+        174,
+        171,
+        161,
+        195
+      ],
+      "candidate": "zinc_photon2",
+      "config": "configs/zinc_photon2_reduced.json",
+      "epochs": 200,
+      "expected_runs": 4,
+      "mean": 0.08424146590742748,
+      "mean_wall_clock_s": 18393.15512573719,
+      "missing_seeds": [],
+      "num_params": 476033,
+      "observed_runs": 4,
+      "resumed_runs": [],
+      "run_dirs": [
+        "zinc_photon2_seed0/run_20261108-205945",
+        "zinc_photon2_seed1/run_20261108-205945",
+        "zinc_photon2_seed2/run_20261108-205945",
+        "zinc_photon2_seed3/run_20261108-205945"
+      ],
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "status": "COMPLETE",
+      "std": 0.004619120687800512,
+      "values": [
+        0.07831652325764299,
+        0.0829849661514163,
+        0.088709265565034,
+        0.08695510865561665
+      ]
+    }
+  ],
+  "code_commit": "6c8861e93f56fccec9add8c3ac40c5084dbcf7c1",
+  "code_dirty": true,
+  "comparisons": [],
+  "direction": "minimize",
+  "excluded_runs": [],
+  "expected_runs": 4,
+  "metric": "test_mae",
+  "observed_runs": 4,
+  "schema_version": 1,
+  "sweep_id": "zinc_photon2_reduced",
+  "tie_rule": "no winner unless the margin exceeds twice the larger seed standard deviation and a Wilcoxon signed-rank test on seed-averaged per-graph absolute errors gives p < 0.05",
+  "verdict": "COMPLETE SWEEP"
+}

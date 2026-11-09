@@ -407,10 +407,17 @@ def test_runner_selects_on_validation_and_evaluates_test_last(monkeypatch, tmp_p
 
     monkeypatch.setattr(runner, "_train_one_epoch", fake_train)
 
-    def fake_eval(model, loader, *args, **kwargs):
+    def fake_eval(model, loader, *args, return_outputs=False, **kwargs):
         label = loader.dataset[0][2]
         evaluation_labels.append(label)
-        return {"loss": 0.2, "acc": 0.8 if label == 1 else 0.6}
+        metrics = {"loss": 0.2, "acc": 0.8 if label == 1 else 0.6}
+        if not return_outputs:
+            return metrics
+        # The runner saves per-graph test outputs for paired statistical tests.
+        return metrics, {
+            "labels": torch.tensor([label]).numpy(),
+            "predictions": torch.tensor([label]).numpy(),
+        }
 
     monkeypatch.setattr(runner, "_eval", fake_eval)
     config = {

@@ -16,14 +16,16 @@ Four families:
 
 from __future__ import annotations
 
+import os
 from collections.abc import Sequence
 from dataclasses import dataclass
+from functools import partial
 from pathlib import Path
 
 import networkx as nx
 import numpy as np
 import torch
-from torch.utils.data import Dataset
+from torch.utils.data import DataLoader, Dataset
 
 
 @dataclass
@@ -143,7 +145,18 @@ class LadderConcatDataset(Dataset):
         pe_dim: int = 20,
         crossing_range: tuple[int, int] = (2, 9),
         cache_path: str | Path | None = None,
+        quantum_eigenvectors: int | None = None,
     ):
+        # ``quantum_eigenvectors`` keeps only the leading correlation
+        # eigenvectors of the quantum encoding and zeroes the remaining
+        # ``pe_dim`` columns, so a control keeps the model's input width.
+        if quantum_eigenvectors is not None and (
+            node_encoding != "quantum" or not 1 <= quantum_eigenvectors <= pe_dim
+        ):
+            raise ValueError(
+                "quantum_eigenvectors needs node_encoding='quantum' and a value "
+                "between 1 and pe_dim"
+            )
         if length_range[0] < 3 or length_range[0] > length_range[1]:
             raise ValueError("length_range must be increasing and start at 3 or above")
         if crossing_range[0] < 1 or crossing_range[0] > crossing_range[1]:
@@ -156,6 +169,8 @@ class LadderConcatDataset(Dataset):
             "pe_dim": pe_dim,
             "crossing_range": tuple(crossing_range),
         }
+        if quantum_eigenvectors is not None:
+            cache_metadata["quantum_eigenvectors"] = quantum_eigenvectors
         if cache_path is not None and Path(cache_path).is_file():
             cached_dataset = torch.load(cache_path, weights_only=False)
             if cached_dataset.get("metadata") != cache_metadata:
@@ -191,7 +206,12 @@ class LadderConcatDataset(Dataset):
             graph_labels.append((n, edges, 1))
         permutation = rng.permutation(len(graph_labels))
         self.records = [
-            self._make_record(*graph_labels[index], node_encoding, pe_dim)
+            self._make_record(
+                *graph_labels[index],
+                node_encoding,
+                pe_dim,
+                quantum_eigenvectors=quantum_eigenvectors,
+            )
             for index in permutation
         ]
         self.feature_schema = {
@@ -205,14 +225,20 @@ class LadderConcatDataset(Dataset):
         if cache_path is not None:
             cache_path = Path(cache_path)
             cache_path.parent.mkdir(parents=True, exist_ok=True)
+            # Parallel sweep workers may build the same cache; write to a
+            # private file and rename, so readers never see a partial file.
+            partial_path = cache_path.with_name(
+                f"{cache_path.name}.partial-{os.getpid()}"
+            )
             torch.save(
                 {
                     "metadata": cache_metadata,
                     "records": self.records,
                     "feature_schema": self.feature_schema,
                 },
-                cache_path,
+                partial_path,
             )
+            os.replace(partial_path, cache_path)
 
     @staticmethod
     def _make_record(
@@ -221,6 +247,7 @@ class LadderConcatDataset(Dataset):
         label: int,
         node_encoding: str,
         pe_dim: int,
+        quantum_eigenvectors: int | None = None,
     ) -> GraphRecord:
         """Construct one encoded synthetic graph record."""
         from .qpe import (
@@ -232,8 +259,15 @@ class LadderConcatDataset(Dataset):
         adjacency = adj_from_record(num_nodes, edges)
         if node_encoding == "quantum":
             features = ladder_ground_state_correlation_eigvecs(num_nodes, edges, pe_dim)
+            if quantum_eigenvectors is not None:
+                features[:, quantum_eigenvectors:] = 0.0
         elif node_encoding == "laplacian":
             features = laplacian_eigenvectors(adjacency, pe_dim)
+        elif node_encoding == "degree":
+            # Phase 5 confounder control, not a paper encoding.
+            from .classical_baseline import degree_one_hot_features
+
+            features = degree_one_hot_features(adjacency, pe_dim)
         elif node_encoding == "rrwp":
             features = np.ones((num_nodes, 1), dtype=np.float64)
             edge_features = rrwp_edge_features(adjacency, edges, pe_dim)
@@ -773,3 +807,73 @@ def collate_pad(
         "label": label_tensor,
         "n": torch.tensor(ns),
     }
+
+
+SPLITS = ("train", "val", "test")
+
+
+def build_dataloaders(cfg: dict) -> dict[str, DataLoader]:
+    """Build the train, validation and test loaders of one experiment.
+
+    The datasets come from the runner's split logic: official splits for the
+    PyG benchmarks, a deterministic ``split_seed`` split for generated
+    datasets. Only the training loader shuffles, so validation and test
+    outputs keep a fixed graph order across runs and candidates.
+
+    Parameters
+    ----------
+    cfg : dict
+        Resolved experiment configuration; benchmark datasets and relative
+        data paths need ``data_root`` (set by the shared runtime from
+        ``--data-root`` or ``DATA_DIR``).
+
+    Returns
+    -------
+    dict[str, torch.utils.data.DataLoader]
+        Loaders keyed by ``"train"``, ``"val"`` and ``"test"``.
+    """
+    # Imported here: the runner imports this module, and tests replace
+    # ``runner._build_datasets``, so it is looked up at call time.
+    from . import runner
+
+    datasets = runner._build_datasets(cfg)
+    batch_size = cfg.get("batch_size", 16)
+    collate_function = (
+        partial(collate_pad, include_dense_graph=False)
+        if cfg["model"] in {"gcn", "gated_gcn"}
+        else collate_pad
+    )
+    return {
+        split: DataLoader(
+            dataset,
+            batch_size=batch_size,
+            shuffle=split == "train",
+            collate_fn=collate_function,
+        )
+        for split, dataset in zip(SPLITS, datasets, strict=True)
+    }
+
+
+def build_dataloader(cfg: dict, split: str) -> DataLoader:
+    """Build the loader of one split; see :func:`build_dataloaders`.
+
+    Parameters
+    ----------
+    cfg : dict
+        Resolved experiment configuration.
+    split : str
+        ``"train"``, ``"val"`` or ``"test"``.
+
+    Returns
+    -------
+    torch.utils.data.DataLoader
+        Loader yielding padded batches from :func:`collate_pad`.
+
+    Raises
+    ------
+    ValueError
+        If ``split`` is not one of the three splits.
+    """
+    if split not in SPLITS:
+        raise ValueError(f"split must be one of {SPLITS}, got {split!r}")
+    return build_dataloaders(cfg)[split]

@@ -14,7 +14,7 @@
       2,
       2
     ],
-    "cache_path": "../../data/QPE_GNN/synthetic/rrwp_original.pt"
+    "cache_path": "synthetic/rrwp_original.pt"
   },
   "split_seed": 1729,
   "model": "gated_gcn",
@@ -39,5 +39,7 @@
     1,
     2,
     3
-  ]
+  ],
+  "minimum_lr": 0.001,
+  "warmup_epochs": 0
 }

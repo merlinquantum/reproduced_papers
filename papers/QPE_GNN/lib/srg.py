@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from pathlib import Path
 
 import networkx as nx
@@ -209,6 +210,53 @@ def rrwp_correlation(adjacency: np.ndarray, num_steps: int) -> np.ndarray:
     return np.tensordot(channel_weights, features, axes=(0, 0))
 
 
+def _evaluate_srg_method(
+    feature_function: Callable[[np.ndarray], np.ndarray],
+    adjacency_matrices: list[np.ndarray],
+    random_generator: np.random.Generator,
+    isomorphic_permutations: int,
+    tolerance: float,
+) -> dict:
+    """Pairwise distances and isomorphic controls for one method and family.
+
+    Controls draw ``isomorphic_permutations`` permutations per graph, in graph
+    order, from ``random_generator``; callers must evaluate methods in a fixed
+    order so the controls are reproducible.
+    """
+    features = [feature_function(adjacency) for adjacency in adjacency_matrices]
+    num_graphs = len(features)
+    distances = np.zeros((num_graphs, num_graphs), dtype=np.float64)
+    for first_index in range(num_graphs):
+        for second_index in range(first_index):
+            distance = sorted_correlation_distance(
+                features[first_index], features[second_index]
+            )
+            distances[first_index, second_index] = distance
+            distances[second_index, first_index] = distance
+    control_distances = []
+    for adjacency, original_feature in zip(adjacency_matrices, features):
+        for _ in range(isomorphic_permutations):
+            permutation = random_generator.permutation(adjacency.shape[0])
+            permuted_feature = feature_function(
+                adjacency[np.ix_(permutation, permutation)]
+            )
+            control_distances.append(
+                sorted_correlation_distance(original_feature, permuted_feature)
+            )
+    upper_triangle = distances[np.triu_indices(num_graphs, k=1)]
+    return {
+        "distance_matrix": distances.tolist(),
+        "distinguished_pairs": int((upper_triangle > tolerance).sum()),
+        "total_pairs": int(len(upper_triangle)),
+        "minimum_nonisomorphic_distance": float(upper_triangle.min()),
+        "maximum_nonisomorphic_distance": float(upper_triangle.max()),
+        "maximum_isomorphic_control_distance": float(
+            max(control_distances, default=0.0)
+        ),
+        "controls_pass": bool(max(control_distances, default=0.0) <= tolerance),
+    }
+
+
 def run_srg_paper_experiment(config: dict, run_directory: str | Path) -> dict:
     """Run both SRG families and their random-isomorphism controls.
 
@@ -252,66 +300,151 @@ def run_srg_paper_experiment(config: dict, run_directory: str | Path) -> dict:
             "the Ising evolution parameters needed for exact correlators."
         ),
     }
+    evolution_time = float(config["evolution_time"])
+    rrwp_steps = int(config["rrwp_steps"])
+    method_functions = {
+        "ising_p2_linked": ising_p2_linked_correlations,
+        "two_particle_xy": lambda adjacency: two_particle_walk_correlations(
+            adjacency, evolution_time
+        ),
+        "rrwp": lambda adjacency: rrwp_correlation(adjacency, rrwp_steps),
+    }
     for family_name, adjacency_matrices in families.items():
-        method_features = {
-            "ising_p2_linked": [
-                ising_p2_linked_correlations(adjacency)
-                for adjacency in adjacency_matrices
-            ],
-            "two_particle_xy": [
-                two_particle_walk_correlations(
-                    adjacency, float(config["evolution_time"])
-                )
-                for adjacency in adjacency_matrices
-            ],
-            "rrwp": [
-                rrwp_correlation(adjacency, int(config["rrwp_steps"]))
-                for adjacency in adjacency_matrices
-            ],
+        output["families"][family_name] = {
+            method_name: _evaluate_srg_method(
+                feature_function,
+                adjacency_matrices,
+                random_generator,
+                config["isomorphic_permutations"],
+                tolerance,
+            )
+            for method_name, feature_function in method_functions.items()
         }
-        family_output: dict[str, object] = {}
-        for method_name, features in method_features.items():
-            num_graphs = len(features)
-            distances = np.zeros((num_graphs, num_graphs), dtype=np.float64)
-            for first_index in range(num_graphs):
-                for second_index in range(first_index):
-                    distance = sorted_correlation_distance(
-                        features[first_index], features[second_index]
-                    )
-                    distances[first_index, second_index] = distance
-                    distances[second_index, first_index] = distance
-            control_distances = []
-            for adjacency, original_feature in zip(adjacency_matrices, features):
-                for _ in range(config["isomorphic_permutations"]):
-                    permutation = random_generator.permutation(adjacency.shape[0])
-                    permuted_adjacency = adjacency[np.ix_(permutation, permutation)]
-                    if method_name == "two_particle_xy":
-                        permuted_feature = two_particle_walk_correlations(
-                            permuted_adjacency, float(config["evolution_time"])
-                        )
-                    elif method_name == "rrwp":
-                        permuted_feature = rrwp_correlation(
-                            permuted_adjacency, int(config["rrwp_steps"])
-                        )
-                    else:
-                        permuted_feature = ising_p2_linked_correlations(
-                            permuted_adjacency
-                        )
-                    control_distances.append(
-                        sorted_correlation_distance(original_feature, permuted_feature)
-                    )
-            upper_triangle = distances[np.triu_indices(num_graphs, k=1)]
-            family_output[method_name] = {
-                "distance_matrix": distances.tolist(),
-                "distinguished_pairs": int((upper_triangle > tolerance).sum()),
-                "total_pairs": int(len(upper_triangle)),
-                "minimum_nonisomorphic_distance": float(upper_triangle.min()),
-                "maximum_nonisomorphic_distance": float(upper_triangle.max()),
-                "maximum_isomorphic_control_distance": float(
-                    max(control_distances, default=0.0)
+
+    run_directory = Path(run_directory)
+    run_directory.mkdir(parents=True, exist_ok=True)
+    output_path = run_directory / "srg_metrics.json"
+    output_path.write_text(json.dumps(output, indent=2) + "\n")
+    return output
+
+
+_PHOTONIC_METHOD_KEYS = {"name", "n_photons", "detection", "particles", "backend"}
+
+
+def run_srg_photonic_experiment(config: dict, run_directory: str | Path) -> dict:
+    """Run the Sec. 4.3 protocol on photonic walk features (Phase 4 adaptation).
+
+    Every method in ``config["photonic_methods"]`` computes
+    :func:`lib.photonic.photonic_walk_covariance` per graph; the paper's
+    interacting two-particle walk is evaluated in the same run as the
+    reference (method ``"two_particle_xy"``, evaluated first). Distances,
+    tolerance and isomorphic controls follow :func:`run_srg_paper_experiment`.
+
+    Parameters
+    ----------
+    config : dict
+        Needs ``srg_data_directory``, ``evolution_time``,
+        ``isomorphic_permutations`` (5), ``tolerance``, ``seed`` and
+        ``photonic_methods``: a list of objects with ``name``, ``n_photons``,
+        ``detection``, ``particles`` and ``backend``.
+    run_directory : str | pathlib.Path
+        Output directory for ``srg_metrics.json``.
+
+    Returns
+    -------
+    dict
+        Per family and method: distance matrix, distinguished pairs, control
+        maxima, mean postselection success rate on the catalog graphs, the
+        photonic settings and wall-clock seconds.
+
+    Raises
+    ------
+    ValueError
+        If a required entry is missing, a method entry is malformed or a
+        method name repeats the reference name.
+    """
+    import json
+    import time
+
+    from .photonic import photonic_walk_covariance
+
+    required = {
+        "srg_data_directory",
+        "evolution_time",
+        "isomorphic_permutations",
+        "tolerance",
+        "seed",
+        "photonic_methods",
+    }
+    missing = required - set(config)
+    if missing:
+        raise ValueError(f"missing SRG config entries: {', '.join(sorted(missing))}")
+    if config["isomorphic_permutations"] != 5:
+        raise ValueError("the paper SRG experiment requires five isomorphic controls")
+    methods = config["photonic_methods"]
+    names = [method.get("name") for method in methods]
+    for method in methods:
+        if set(method) != _PHOTONIC_METHOD_KEYS:
+            raise ValueError(
+                f"photonic method entries need exactly {sorted(_PHOTONIC_METHOD_KEYS)}, "
+                f"got {sorted(method)}"
+            )
+    if len(set(names)) != len(names) or "two_particle_xy" in names:
+        raise ValueError(
+            "photonic method names must be unique and not 'two_particle_xy'"
+        )
+
+    families = load_srg_catalogs(config["srg_data_directory"])
+    random_generator = np.random.default_rng(config["seed"])
+    tolerance = float(config["tolerance"])
+    evolution_time = float(config["evolution_time"])
+    output: dict[str, object] = {
+        "seed": int(config["seed"]),
+        "tolerance": tolerance,
+        "evolution_time": evolution_time,
+        "interferometer": "U(t) = exp(-i 2 A t), one mode per node",
+        "photonic_methods": methods,
+        "families": {},
+    }
+    for family_name, adjacency_matrices in families.items():
+        start = time.perf_counter()
+        family_output = {
+            "two_particle_xy": _evaluate_srg_method(
+                lambda adjacency: two_particle_walk_correlations(
+                    adjacency, evolution_time
                 ),
-                "controls_pass": bool(max(control_distances, default=0.0) <= tolerance),
-            }
+                adjacency_matrices,
+                random_generator,
+                config["isomorphic_permutations"],
+                tolerance,
+            )
+        }
+        family_output["two_particle_xy"]["wall_clock_s"] = time.perf_counter() - start
+        for method in methods:
+            settings = {key: method[key] for key in _PHOTONIC_METHOD_KEYS - {"name"}}
+            start = time.perf_counter()
+            summary = _evaluate_srg_method(
+                lambda adjacency, settings=settings: photonic_walk_covariance(
+                    adjacency, evolution_time, **settings
+                ),
+                adjacency_matrices,
+                random_generator,
+                config["isomorphic_permutations"],
+                tolerance,
+            )
+            summary["mean_postselection_success"] = float(
+                np.mean(
+                    [
+                        photonic_walk_covariance(
+                            adjacency, evolution_time, return_success=True, **settings
+                        )[1]
+                        for adjacency in adjacency_matrices
+                    ]
+                )
+            )
+            summary["settings"] = settings
+            summary["wall_clock_s"] = time.perf_counter() - start
+            family_output[method["name"]] = summary
         output["families"][family_name] = family_output
 
     run_directory = Path(run_directory)

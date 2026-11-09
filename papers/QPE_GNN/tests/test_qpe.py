@@ -20,6 +20,7 @@ from lib.qpe import (  # noqa: E402
     cqrw_features,
     ground_state_correlation_eigvecs,
     ising_ground_state,
+    ladder_ground_state_correlation_eigvecs,
     ladder_ising_ground_states,
     qirw_features,
     rrwp,
@@ -266,3 +267,34 @@ def test_type2_figure_ground_state_count():
     num_nodes, edges = make_type2(7)
     # Figure 7 lists nine states after identifying the global spin reversal.
     assert len(ladder_ising_ground_states(num_nodes, edges)) == 18
+
+
+@pytest.mark.parametrize("second_type", ["type1", "type2"])
+def test_ladder_correlation_features_are_the_nonzero_eigenvectors(second_type):
+    from lib.data import concat_pair, make_type0, make_type1, make_type2
+
+    length = 9
+    first = make_type0(length)
+    second = (
+        make_type1(length, [2, 6]) if second_type == "type1" else make_type2(length)
+    )
+    num_nodes, edges = concat_pair(*first, *second)
+    states = ladder_ising_ground_states(num_nodes, edges)
+    correlation = states.T @ states / len(states)
+    eigenvalues = np.linalg.eigvalsh(correlation)[::-1]
+    rank = int(np.sum(eigenvalues > 1e-10 * eigenvalues[0]))
+
+    features = ladder_ground_state_correlation_eigvecs(num_nodes, edges, 20)
+
+    assert features.shape == (num_nodes, 20)
+    assert rank < 20
+    # Columns beyond the rank carry no graph information and must be zero.
+    assert np.all(features[:, rank:] == 0)
+    leading = features[:, :rank]
+    np.testing.assert_allclose(leading.T @ leading, np.eye(rank), atol=1e-10)
+    np.testing.assert_allclose(
+        correlation @ leading, leading * eigenvalues[:rank], atol=1e-10
+    )
+    # Fixed sign: the largest-magnitude entry of every column is positive.
+    largest = leading[np.argmax(np.abs(leading), axis=0), np.arange(rank)]
+    assert np.all(largest > 0)

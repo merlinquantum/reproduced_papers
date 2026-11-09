@@ -1,0 +1,2 @@
+candidate,status,observed_runs,expected_runs,mean_test_mae,std_test_mae,num_params,epochs,mean_wall_clock_s
+zinc_photon2,COMPLETE,4,4,0.08424146590742748,0.004619120687800512,476033,200,18393.15512573719

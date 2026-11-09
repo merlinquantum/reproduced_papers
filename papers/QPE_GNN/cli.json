@@ -21,7 +21,7 @@
       "flags": ["--encoding"],
       "help": "Positional encoding used by the model",
       "type": "str",
-      "choices": ["rrwp", "cqrw1", "qirw2", "ground_state_corr", "laplacian", "rrwp_node", "rrwp_edge", "none", "rrwp+cqrw1", "rrwp+qirw2"],
+      "choices": ["rrwp", "cqrw1", "qirw2", "ground_state_corr", "laplacian", "degree", "rrwp_node", "rrwp_edge", "none", "rrwp+cqrw1", "rrwp+qirw2", "rrwp+photon2"],
       "default": null,
       "apply": {"kind": "config_path", "path": "encoding"}
     },
@@ -272,6 +272,41 @@
       "type": "bool",
       "default": null,
       "apply": {"kind": "config_path", "path": "dataset_kwargs.subset"}
+    },
+    {
+      "flags": ["--checkpoint-every"],
+      "help": "Write checkpoint.pt every N epochs (0 disables checkpoints)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "checkpoint_every"}
+    },
+    {
+      "flags": ["--resume-from"],
+      "help": "checkpoint.pt of an interrupted run of the same experiment to resume",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "resume_from"}
+    },
+    {
+      "flags": ["--sweep-id"],
+      "help": "Sweep identifier recorded in run_status.json (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "sweep.sweep_id"}
+    },
+    {
+      "flags": ["--sweep-candidate"],
+      "help": "Sweep candidate name recorded in run_status.json (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "sweep.candidate"}
+    },
+    {
+      "flags": ["--repetition"],
+      "help": "Repetition index of this run within its sweep candidate (set by utils/run_sweep.py)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "sweep.repetition"}
     }
   ]
 }

@@ -501,6 +501,18 @@ def ladder_ground_state_correlation_eigvecs(
 ) -> np.ndarray:
     """Compute ladder correlation eigenvectors without forming ``2**N`` states.
 
+    The correlation matrix of the uniform mixture of ground states is
+    ``C = S.T @ S / m`` for the ``m x N`` matrix ``S`` of ground-state spin
+    vectors, so its rank is at most ``m`` and in practice much lower (3 or 4
+    for the Appendix D.2 ladders). Only eigenvectors with a non-zero
+    eigenvalue describe the graph; columns beyond the numerical rank are
+    zero-padded instead of being filled with an arbitrary null-space basis.
+
+    The eigenvectors are obtained exactly from the smaller of the two Gram
+    matrices (``S @ S.T`` when ``m <= N``, else ``S.T @ S``), and each column
+    is given a fixed sign (its largest-magnitude entry positive), so the
+    features are deterministic across machines.
+
     Parameters
     ----------
     num_nodes : int
@@ -513,34 +525,37 @@ def ladder_ground_state_correlation_eigvecs(
     Returns
     -------
     numpy.ndarray
-        Node features with shape ``(num_nodes, num_features)``.
+        Node features with shape ``(num_nodes, num_features)``; columns
+        beyond the rank of ``C`` are zero.
     """
     ground_states = ladder_ising_ground_states(num_nodes, edges)
-    # C = S.T @ S / m. Apply C implicitly so long ladders never allocate the
-    # dense N x N matrix and a moderately degenerate manifold does not trigger
-    # a cubic SVD in the number of states.
-    from scipy.sparse.linalg import LinearOperator, eigsh
-
     num_states = len(ground_states)
-    correlation_operator = LinearOperator(
-        shape=(num_nodes, num_nodes),
-        matvec=lambda vector: ground_states.T @ (ground_states @ vector) / num_states,
-        matmat=lambda matrix: ground_states.T @ (ground_states @ matrix) / num_states,
-        dtype=np.float64,
-    )
-    available_features = min(num_features, num_nodes - 1, num_states)
-    _, features = eigsh(
-        correlation_operator,
-        k=available_features,
-        which="LM",
-        v0=np.linspace(1.0, 2.0, num_nodes),
-    )
-    features = features[:, ::-1].copy()
-    if available_features < num_features:
-        features = np.pad(
-            features,
-            ((0, 0), (0, num_features - available_features)),
+    if num_states <= num_nodes:
+        eigenvalues, state_vectors = np.linalg.eigh(
+            ground_states @ ground_states.T / num_states
         )
+        order = np.argsort(eigenvalues)[::-1]
+        eigenvalues, state_vectors = eigenvalues[order], state_vectors[:, order]
+        nonzero = eigenvalues > 1e-10 * eigenvalues[0]
+        # Map eigenvectors of S S^T / m to eigenvectors of S^T S / m.
+        eigenvectors = (ground_states.T @ state_vectors[:, nonzero]) / np.sqrt(
+            eigenvalues[nonzero] * num_states
+        )
+    else:
+        eigenvalues, eigenvectors = np.linalg.eigh(
+            ground_states.T @ ground_states / num_states
+        )
+        order = np.argsort(eigenvalues)[::-1]
+        eigenvalues, eigenvectors = eigenvalues[order], eigenvectors[:, order]
+        nonzero = eigenvalues > 1e-10 * eigenvalues[0]
+        eigenvectors = eigenvectors[:, nonzero]
+    eigenvectors = eigenvectors[:, :num_features]
+    largest_entries = eigenvectors[
+        np.argmax(np.abs(eigenvectors), axis=0), np.arange(eigenvectors.shape[1])
+    ]
+    eigenvectors = eigenvectors * np.where(largest_entries < 0, -1.0, 1.0)
+    features = np.zeros((num_nodes, num_features), dtype=np.float64)
+    features[:, : eigenvectors.shape[1]] = eigenvectors
     return features
 
 
