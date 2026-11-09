@@ -1,0 +1,321 @@
+{
+  "sweep_dir": "S3_spsa_grid_surrogate_20261023-161206",
+  "selection": {
+    "aggregation": "single seed (seed 0)",
+    "checkpoint": "final_epoch",
+    "direction": "minimize",
+    "metric": "final_epoch.proxy_objective",
+    "split": "val (fixed first 1024 images, SPSA proxy)",
+    "tie_break": "spec_order",
+    "tie_tolerance": 0.002
+  },
+  "coverage": "COMPLETE SWEEP",
+  "generated_at": "2026-10-23T16:23:14Z",
+  "generator": "papers/photonic_QKD/utils/run_sweep.py --summarize",
+  "invalid_runs": [],
+  "rows": [
+    {
+      "candidate": "a0.01_c0.05",
+      "expected_runs": 1,
+      "final_epoch.parameter_norm": {
+        "mean": 15.667889628698864,
+        "n": 1,
+        "std": null,
+        "values": [
+          15.667889628698864
+        ]
+      },
+      "final_epoch.proxy_objective": {
+        "mean": 0.16100245714187622,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.16100245714187622
+        ]
+      },
+      "final_evaluation.test_accuracy": {
+        "mean": 98.75,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.75
+        ]
+      },
+      "final_evaluation.val_accuracy": {
+        "mean": 98.48,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.48
+        ]
+      },
+      "proxy_objective_delta_first_minus_final": {
+        "mean": 0.574898436665535,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.574898436665535
+        ]
+      },
+      "seeds": [
+        0
+      ],
+      "status": "COMPLETE",
+      "successful_runs": 1
+    },
+    {
+      "candidate": "a0.01_c0.2",
+      "expected_runs": 1,
+      "final_epoch.parameter_norm": {
+        "mean": 13.072404832272415,
+        "n": 1,
+        "std": null,
+        "values": [
+          13.072404832272415
+        ]
+      },
+      "final_epoch.proxy_objective": {
+        "mean": 0.1506796833127737,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.1506796833127737
+        ]
+      },
+      "final_evaluation.test_accuracy": {
+        "mean": 98.61,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.61
+        ]
+      },
+      "final_evaluation.val_accuracy": {
+        "mean": 98.46,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.46
+        ]
+      },
+      "proxy_objective_delta_first_minus_final": {
+        "mean": 0.573950806632638,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.573950806632638
+        ]
+      },
+      "seeds": [
+        0
+      ],
+      "status": "COMPLETE",
+      "successful_runs": 1
+    },
+    {
+      "candidate": "a0.05_c0.05",
+      "expected_runs": 1,
+      "final_epoch.parameter_norm": {
+        "mean": 16.738296509633514,
+        "n": 1,
+        "std": null,
+        "values": [
+          16.738296509633514
+        ]
+      },
+      "final_epoch.proxy_objective": {
+        "mean": 0.1529222521930933,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.1529222521930933
+        ]
+      },
+      "final_evaluation.test_accuracy": {
+        "mean": 98.79,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.79
+        ]
+      },
+      "final_evaluation.val_accuracy": {
+        "mean": 98.88,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.88
+        ]
+      },
+      "proxy_objective_delta_first_minus_final": {
+        "mean": 0.5648411270231009,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.5648411270231009
+        ]
+      },
+      "seeds": [
+        0
+      ],
+      "status": "COMPLETE",
+      "successful_runs": 1
+    },
+    {
+      "candidate": "a0.05_c0.2",
+      "expected_runs": 1,
+      "final_epoch.parameter_norm": {
+        "mean": 16.940155427219,
+        "n": 1,
+        "std": null,
+        "values": [
+          16.940155427219
+        ]
+      },
+      "final_epoch.proxy_objective": {
+        "mean": 0.1371399499475956,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.1371399499475956
+        ]
+      },
+      "final_evaluation.test_accuracy": {
+        "mean": 98.69,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.69
+        ]
+      },
+      "final_evaluation.val_accuracy": {
+        "mean": 98.62,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.62
+        ]
+      },
+      "proxy_objective_delta_first_minus_final": {
+        "mean": 0.5691624693572521,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.5691624693572521
+        ]
+      },
+      "seeds": [
+        0
+      ],
+      "status": "COMPLETE",
+      "successful_runs": 1
+    },
+    {
+      "candidate": "a0.2_c0.05",
+      "expected_runs": 1,
+      "final_epoch.parameter_norm": {
+        "mean": 21.07444419312218,
+        "n": 1,
+        "std": null,
+        "values": [
+          21.07444419312218
+        ]
+      },
+      "final_epoch.proxy_objective": {
+        "mean": 0.13775121979415417,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.13775121979415417
+        ]
+      },
+      "final_evaluation.test_accuracy": {
+        "mean": 98.81,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.81
+        ]
+      },
+      "final_evaluation.val_accuracy": {
+        "mean": 98.72,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.72
+        ]
+      },
+      "proxy_objective_delta_first_minus_final": {
+        "mean": 0.6091247368603945,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.6091247368603945
+        ]
+      },
+      "seeds": [
+        0
+      ],
+      "status": "COMPLETE",
+      "successful_runs": 1
+    },
+    {
+      "candidate": "a0.2_c0.2",
+      "expected_runs": 1,
+      "final_epoch.parameter_norm": {
+        "mean": 21.07444419312218,
+        "n": 1,
+        "std": null,
+        "values": [
+          21.07444419312218
+        ]
+      },
+      "final_epoch.proxy_objective": {
+        "mean": 0.14663533307611942,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.14663533307611942
+        ]
+      },
+      "final_evaluation.test_accuracy": {
+        "mean": 98.66,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.66
+        ]
+      },
+      "final_evaluation.val_accuracy": {
+        "mean": 98.64,
+        "n": 1,
+        "std": null,
+        "values": [
+          98.64
+        ]
+      },
+      "proxy_objective_delta_first_minus_final": {
+        "mean": 0.5438043680042028,
+        "n": 1,
+        "std": null,
+        "values": [
+          0.5438043680042028
+        ]
+      },
+      "seeds": [
+        0
+      ],
+      "status": "COMPLETE",
+      "successful_runs": 1
+    }
+  ],
+  "selected_candidates": [
+    "a0.05_c0.2"
+  ],
+  "selection_scope": "complete sweep",
+  "sweep_id": "S3_spsa_grid_surrogate",
+  "tied_within_tolerance": [
+    "a0.05_c0.2",
+    "a0.2_c0.05"
+  ]
+}

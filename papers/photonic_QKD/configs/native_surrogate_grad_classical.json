@@ -1,0 +1,22 @@
+{
+  "description": "Phase 4 N3: classical counterpart of N1: cos(G phi + b) generator, dim(phi)=45, trained by autograd, phi ~ U[-pi, pi], no EMA.",
+  "task": "student",
+  "teacher": {
+    "widths": [
+      64,
+      128,
+      128
+    ],
+    "dropout": 0.25,
+    "checkpoint": "<<RESULT_PATH>>"
+  },
+  "_comment_teacher_checkpoint": "Replace with the outdir run directory (or its teacher.pt) of a task=teacher run on the same dataset, split_seed and widths, or pass --teacher-path.",
+  "conditioning": {
+    "source": "surrogate_native",
+    "theta_init_mode": "uniform",
+    "ema": {
+      "enabled": false,
+      "beta": 0.9
+    }
+  }
+}

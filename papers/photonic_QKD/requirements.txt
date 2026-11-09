@@ -1,0 +1,8 @@
+# photonic_QKD (PQKD) dependencies
+torch>=2.4
+torchvision
+numpy
+matplotlib
+perceval-quandela>=1.2,<1.3
+merlinquantum==0.4.2
+pytest

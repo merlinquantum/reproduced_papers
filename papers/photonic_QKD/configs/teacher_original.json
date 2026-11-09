@@ -1,0 +1,7 @@
+{
+  "description": "Paper-accurate teacher budget: 100 epochs (Table 1 / Supp. Note 8).",
+  "task": "teacher",
+  "training": {
+    "epochs": 100
+  }
+}

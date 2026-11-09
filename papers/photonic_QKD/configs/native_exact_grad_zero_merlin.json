@@ -1,0 +1,22 @@
+{
+  "description": "Phase 4 N2 (MerLin-native): as N1 with the paper's theta = 0 initialisation.",
+  "task": "student",
+  "teacher": {
+    "widths": [
+      64,
+      128,
+      128
+    ],
+    "dropout": 0.25,
+    "checkpoint": "<<RESULT_PATH>>"
+  },
+  "_comment_teacher_checkpoint": "Replace with the outdir run directory (or its teacher.pt) of a task=teacher run on the same dataset, split_seed and widths, or pass --teacher-path.",
+  "conditioning": {
+    "source": "photonic_native",
+    "theta_init_mode": "constant",
+    "ema": {
+      "enabled": false,
+      "beta": 0.9
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "description": "Phase 4 P0: paper-faithful PQKD reference (theta = 0, SPSA a=0.01 c=0.2, S=200, EMA 0.9) at 4 photons. 4 photons in 16 modes, one every 4 modes (2 per 8-mode half): Fock space 3,876 states (8 photons: 490,314).",
+  "task": "student",
+  "teacher": {
+    "widths": [
+      64,
+      128,
+      128
+    ],
+    "dropout": 0.25,
+    "checkpoint": "<<RESULT_PATH>>"
+  },
+  "_comment_teacher_checkpoint": "Replace with the outdir run directory (or its teacher.pt) of a task=teacher run on the same dataset, split_seed and widths, or pass --teacher-path.",
+  "spsa": {
+    "a": 0.01,
+    "c": 0.2
+  },
+  "photonic": {
+    "n_modes": 16,
+    "input_state": [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0
+    ]
+  }
+}

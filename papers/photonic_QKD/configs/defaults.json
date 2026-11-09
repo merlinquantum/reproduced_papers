@@ -1,0 +1,102 @@
+{
+  "description": "PQKD defaults: MNIST teacher (64,128,128) with paper hyperparameters at the reduced 30-epoch budget (paper: 100). Student keys hold the planned PQKD defaults.",
+  "task": "teacher",
+  "seed": 0,
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "dataset": {
+    "name": "mnist",
+    "train_size": 45000,
+    "val_size": 5000,
+    "split_seed": 0,
+    "batch_size": 64,
+    "eval_batch_size": 512,
+    "max_train_samples": null,
+    "max_eval_samples": null,
+    "synthetic": {
+      "test_size": 10000,
+      "blob_sigma": 1.6,
+      "jitter_sigma": 0.8,
+      "pixel_sigma": 0.05
+    }
+  },
+  "teacher": {
+    "widths": [
+      64,
+      128,
+      128
+    ],
+    "dropout": 0.25,
+    "checkpoint": null
+  },
+  "student": {
+    "variant": "dictionary",
+    "compressed_layers": [
+      true,
+      true,
+      false
+    ],
+    "ranks": [
+      4,
+      4,
+      4
+    ]
+  },
+  "conditioning": {
+    "source": "photonic",
+    "feature_dim": 512,
+    "theta_dim": 45,
+    "theta_init": 0.0,
+    "theta_init_mode": "constant",
+    "shots": 200,
+    "gamma": 1.0,
+    "std_eps": 0.001,
+    "reference_evaluations": 32,
+    "native_lr": 0.001,
+    "ema": {
+      "enabled": true,
+      "beta": 0.9
+    }
+  },
+  "photonic": {
+    "n_modes": 16,
+    "input_state": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0
+    ]
+  },
+  "spsa": {
+    "updates_per_epoch": 10,
+    "a": 0.05,
+    "c": 0.2,
+    "theta_max": 3.141592653589793,
+    "val_batches": 4,
+    "val_batch_size": 256
+  },
+  "training": {
+    "epochs": 30,
+    "lr": 0.001,
+    "temperature": 3.0,
+    "hard_label_weight": 0.5
+  },
+  "logging": {
+    "level": "info",
+    "save_feature_trace": true
+  },
+  "resume_from": null
+}

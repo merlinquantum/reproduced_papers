@@ -1,0 +1,17 @@
+{
+  "description": "B2: dictionary-only student, mixing tensor M trained directly (more parameters than PQKD).",
+  "task": "student",
+  "teacher": {
+    "widths": [
+      64,
+      128,
+      128
+    ],
+    "dropout": 0.25,
+    "checkpoint": "<<RESULT_PATH>>"
+  },
+  "_comment_teacher_checkpoint": "Replace with the outdir run directory (or its teacher.pt) of a task=teacher run on the same dataset, split_seed and widths, or pass --teacher-path.",
+  "student": {
+    "variant": "dictionary_trainable"
+  }
+}

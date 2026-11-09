@@ -1,0 +1,15 @@
+{
+  "sweep_id": "smoke_student_sweep",
+  "description": "Coordinator smoke test: 2-epoch students on 512 MNIST images using the smoke teacher sweep (V5).",
+  "fixed_args": ["--config", "configs/smoke_student.json"],
+  "candidates": [
+    {"name": "photonic", "args": ["--conditioning", "photonic"]},
+    {"name": "surrogate", "args": ["--conditioning", "surrogate"]}
+  ],
+  "seeds": [0, 1],
+  "max_parallel": 2,
+  "threads_per_run": 4,
+  "teacher_sweep": "papers/photonic_QKD/outdir/sweeps/smoke_teacher_sweep_20261023-144251",
+  "selection": {"metric": "final_epoch.proxy_objective", "direction": "minimize", "split": "val (first 1024 images)", "checkpoint": "final_epoch", "aggregation": "mean over seeds", "tie_tolerance": 0.002, "tie_break": "spec_order"},
+  "report_metrics": ["final_epoch.proxy_objective", "final_evaluation.test_accuracy", "parameters.compression_overall"]
+}

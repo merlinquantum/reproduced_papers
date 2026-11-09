@@ -1,0 +1,97 @@
+{
+  "sweep_dir": "S1_teacher_mnist_30ep_20261023-145803",
+  "selection": {
+    "aggregation": "mean over seeds",
+    "checkpoint": "best_val_epoch",
+    "direction": "maximize",
+    "metric": "best_checkpoint.test_accuracy",
+    "split": "test",
+    "tie_break": "spec_order",
+    "tie_tolerance": 0.0
+  },
+  "coverage": "COMPLETE SWEEP",
+  "generated_at": "2026-10-23T14:11:11Z",
+  "generator": "papers/photonic_QKD/utils/run_sweep.py --summarize",
+  "invalid_runs": [],
+  "rows": [
+    {
+      "best_checkpoint.epoch": {
+        "mean": 26.333333333333332,
+        "n": 3,
+        "std": 1.5275252316519468,
+        "values": [
+          26.0,
+          28.0,
+          25.0
+        ]
+      },
+      "best_checkpoint.test_accuracy": {
+        "mean": 99.29,
+        "n": 3,
+        "std": 0.00999999999999801,
+        "values": [
+          99.29,
+          99.3,
+          99.28
+        ]
+      },
+      "best_checkpoint.val_accuracy": {
+        "mean": 99.17999999999999,
+        "n": 3,
+        "std": 0.03464101615137886,
+        "values": [
+          99.16,
+          99.16,
+          99.22
+        ]
+      },
+      "best_checkpoint.val_cross_entropy": {
+        "mean": 0.03030029607613881,
+        "n": 3,
+        "std": 0.003141672557818861,
+        "values": [
+          0.03323755970001221,
+          0.03067542896270752,
+          0.026987899565696718
+        ]
+      },
+      "candidate": "teacher_64_128_128",
+      "expected_runs": 3,
+      "final_epoch.train_accuracy": {
+        "mean": 99.60666666666667,
+        "n": 3,
+        "std": 0.029397236789608473,
+        "values": [
+          99.59555555555555,
+          99.64,
+          99.58444444444444
+        ]
+      },
+      "final_epoch.val_accuracy": {
+        "mean": 99.03333333333335,
+        "n": 3,
+        "std": 0.09018499505646148,
+        "values": [
+          98.94,
+          99.04,
+          99.12
+        ]
+      },
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "status": "COMPLETE",
+      "successful_runs": 3
+    }
+  ],
+  "selected_candidates": [
+    "teacher_64_128_128"
+  ],
+  "selection_scope": "complete sweep",
+  "sweep_id": "S1_teacher_mnist_30ep",
+  "tied_within_tolerance": [
+    "teacher_64_128_128"
+  ]
+}

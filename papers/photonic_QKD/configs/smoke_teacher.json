@@ -1,0 +1,11 @@
+{
+  "description": "Smoke: 1-epoch teacher on 512 MNIST images (infrastructure check only, V5).",
+  "task": "teacher",
+  "dataset": {
+    "max_train_samples": 512,
+    "max_eval_samples": 512
+  },
+  "training": {
+    "epochs": 1
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "sweep_id": "smoke_teacher_sweep",
+  "description": "Coordinator smoke test: 1-epoch teachers on 512 MNIST images (V5).",
+  "fixed_args": ["--config", "configs/smoke_teacher.json"],
+  "candidates": [{"name": "teacher_smoke", "args": []}],
+  "seeds": [0, 1],
+  "max_parallel": 2,
+  "threads_per_run": 4,
+  "teacher_sweep": null,
+  "selection": {"metric": "best_checkpoint.val_accuracy", "direction": "maximize", "split": "val", "checkpoint": "best_val_epoch", "aggregation": "mean over seeds", "tie_tolerance": 0.0, "tie_break": "spec_order"},
+  "report_metrics": ["best_checkpoint.val_accuracy", "best_checkpoint.test_accuracy"]
+}

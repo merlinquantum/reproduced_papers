@@ -1,0 +1,16 @@
+{
+  "sweep_id": "smoke_phase4_stop_resume",
+  "description": "Phase 4 smoke (V5): one F arm (SPSA, random theta) and one N arm (native exact feature, autograd) on 512 MNIST images, 6 epochs, stopped gracefully mid-run and resumed to test checkpointing end to end.",
+  "fixed_args": ["--config", "configs/smoke_student.json", "--epochs", "6"],
+  "candidates": [
+    {"name": "F1_smoke", "args": ["--conditioning", "photonic", "--theta-init-mode", "uniform", "--spsa-a", "0.01", "--spsa-c", "0.2"]},
+    {"name": "N1_smoke", "args": ["--conditioning", "photonic_native", "--theta-init-mode", "uniform", "--ema", "false"]}
+  ],
+  "seeds": [0],
+  "run_order": "seed_major",
+  "max_parallel": 2,
+  "threads_per_run": 4,
+  "teacher_sweep": "papers/photonic_QKD/outdir/sweeps/smoke_teacher_sweep_20261023-144251",
+  "selection": {"metric": "final_evaluation.test_accuracy", "direction": "maximize", "split": "test", "checkpoint": "final_epoch", "aggregation": "single seed", "tie_tolerance": 0.0, "tie_break": "report_all"},
+  "report_metrics": ["final_evaluation.test_accuracy", "final_epoch.parameter_norm"]
+}
