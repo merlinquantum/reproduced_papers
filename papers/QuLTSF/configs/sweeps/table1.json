@@ -1,0 +1,95 @@
+{
+  "description": "E1+E2 (paper Table 1): QuLTSF and the linear baselines on one pipeline and budget, L=336, T in {96,192,336,720}, seeds 2021-2023; persistence once per horizon (deterministic).",
+  "sweep_id": "table1",
+  "max_epochs": 100,
+  "entries": [
+    {
+      "name": "qultsf",
+      "config": "configs/table1_qultsf_original.json",
+      "seeds": [
+        2021,
+        2022,
+        2023
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        192,
+        336,
+        720
+      ]
+    },
+    {
+      "name": "linear",
+      "config": "configs/table1_linear_classical.json",
+      "seeds": [
+        2021,
+        2022,
+        2023
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        192,
+        336,
+        720
+      ]
+    },
+    {
+      "name": "nlinear",
+      "config": "configs/table1_nlinear_classical.json",
+      "seeds": [
+        2021,
+        2022,
+        2023
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        192,
+        336,
+        720
+      ]
+    },
+    {
+      "name": "dlinear",
+      "config": "configs/table1_dlinear_classical.json",
+      "seeds": [
+        2021,
+        2022,
+        2023
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        192,
+        336,
+        720
+      ]
+    },
+    {
+      "name": "persistence",
+      "config": "configs/table1_persistence_classical.json",
+      "seeds": [
+        2021
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        192,
+        336,
+        720
+      ]
+    }
+  ]
+}
