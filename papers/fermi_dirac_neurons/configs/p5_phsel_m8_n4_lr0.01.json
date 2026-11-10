@@ -1,0 +1,69 @@
+{
+  "description": "Phase 5 stage A (MerLin adaptation): four photonic models with Adam at learning rate 0.01, N=4 photons in m=8 modes, interferometer data, 20 % selection split",
+  "experiment": {
+    "task": "photonic_train",
+    "id": "p5_phsel_m8_n4_lr0.01"
+  },
+  "physics": {
+    "temperature": 2.0
+  },
+  "photonic": {
+    "n_modes": 8,
+    "n_photons": 4,
+    "target_range": 2.0,
+    "train_states": {
+      "set": "haar_interferometer",
+      "n_states": 330
+    },
+    "validation_states": {
+      "set": "haar_interferometer",
+      "n_states": 500
+    },
+    "evaluation": {
+      "readouts": [
+        "pnr",
+        "threshold",
+        "unbunched"
+      ],
+      "shots": [
+        100,
+        1000
+      ]
+    },
+    "selection_fraction": 0.2
+  },
+  "models": [
+    {
+      "name": "photonic_tanh",
+      "kind": "merlin_passive",
+      "activation": "tanh"
+    },
+    {
+      "name": "photonic_linear",
+      "kind": "merlin_passive",
+      "activation": "linear"
+    },
+    {
+      "name": "photon_count_tanh",
+      "kind": "photon_count"
+    },
+    {
+      "name": "correlation_tanh",
+      "kind": "correlation"
+    }
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 0.01,
+    "epochs": 2000,
+    "eval_every": 100,
+    "init_low": -0.5,
+    "init_high": 0.5,
+    "phase_init": [
+      0.0,
+      6.283185307179586
+    ],
+    "optimizer": "adam",
+    "on_nonfinite": "freeze"
+  }
+}

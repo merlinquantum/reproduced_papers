@@ -1,0 +1,30 @@
+{
+  "sweep_id": "p5_photonic_select_v1",
+  "description": "Phase 5 stage A (MerLin adaptation): 3 sizes x 4 Adam learning rates, seeds 0-2.",
+  "configs": [
+    "p5_phsel_m4_n2_lr0.003",
+    "p5_phsel_m4_n2_lr0.01",
+    "p5_phsel_m4_n2_lr0.03",
+    "p5_phsel_m4_n2_lr0.1",
+    "p5_phsel_m6_n3_lr0.003",
+    "p5_phsel_m6_n3_lr0.01",
+    "p5_phsel_m6_n3_lr0.03",
+    "p5_phsel_m6_n3_lr0.1",
+    "p5_phsel_m8_n4_lr0.003",
+    "p5_phsel_m8_n4_lr0.01",
+    "p5_phsel_m8_n4_lr0.03",
+    "p5_phsel_m8_n4_lr0.1"
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "max_workers": 1,
+  "plan": {
+    "decision_rule": "see LOG.md 'Phase 5 Comparison Plan \u2014 2026-11-10T13:44:36Z'",
+    "selection": "none in the coordinator (utils/select_p5.py applies the frozen rule)",
+    "expected_runs": 36,
+    "memory_budget_gib": 0.8
+  }
+}

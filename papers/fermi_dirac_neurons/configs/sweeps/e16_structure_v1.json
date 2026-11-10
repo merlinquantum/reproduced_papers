@@ -1,0 +1,46 @@
+{
+  "sweep_id": "e16_structure_v1",
+  "description": "E16a and E16c: Pauli strings needed (n = 9, 10, all 9 term sets) and gradient variance of the random sets (n = 9, 10).",
+  "configs": [
+    "e16_grad_ctxrand0_10q",
+    "e16_grad_ctxrand0_9q",
+    "e16_grad_ctxrand1_10q",
+    "e16_grad_ctxrand1_9q",
+    "e16_grad_ctxrand2_10q",
+    "e16_grad_ctxrand2_9q",
+    "e16_grad_ncrand0_10q",
+    "e16_grad_ncrand0_9q",
+    "e16_grad_ncrand1_10q",
+    "e16_grad_ncrand1_9q",
+    "e16_grad_ncrand2_10q",
+    "e16_grad_ncrand2_9q",
+    "e16_pauli_ctxrand0_10q",
+    "e16_pauli_ctxrand0_9q",
+    "e16_pauli_ctxrand1_10q",
+    "e16_pauli_ctxrand1_9q",
+    "e16_pauli_ctxrand2_10q",
+    "e16_pauli_ctxrand2_9q",
+    "e16_pauli_ising_10q",
+    "e16_pauli_ising_9q",
+    "e16_pauli_ising_x0_10q",
+    "e16_pauli_ising_x0_9q",
+    "e16_pauli_ncrand0_10q",
+    "e16_pauli_ncrand0_9q",
+    "e16_pauli_ncrand1_10q",
+    "e16_pauli_ncrand1_9q",
+    "e16_pauli_ncrand2_10q",
+    "e16_pauli_ncrand2_9q",
+    "e16_pauli_tfim_10q",
+    "e16_pauli_tfim_9q"
+  ],
+  "seeds": [
+    0
+  ],
+  "max_workers": 3,
+  "plan": {
+    "decision_rule": "see LOG.md 'Pre-declared design: E16' (E16a bootstrap slope of log10 gap ratio over n = 4..10; E16c weighted slopes, class difference > 2 combined SE)",
+    "selection": "none",
+    "expected_runs": 30,
+    "memory_budget_gib": 4
+  }
+}

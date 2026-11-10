@@ -1,0 +1,1592 @@
+{
+  "sweep_dir": "papers/fermi_dirac_neurons/outdir/sweeps/p4_kerr_v1",
+  "simulator": "dense numpy Fock-space diagonalization (not MerLin)",
+  "slopes": [
+    {
+      "kerr": 0.0,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.005480967676597062,
+        0.00472282484934213,
+        0.00514156942436333,
+        0.005462216115956989,
+        0.004380626503482833
+      ],
+      "slope_log_var_per_log_d": -0.04329890325629093,
+      "slope_se": 0.07491942171742026,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.003816707410113842,
+        0.0032329118534077605,
+        0.003942084696100192,
+        0.003516356607067416,
+        0.003827547233058293
+      ],
+      "slope_log_var_per_log_d": 0.01316218190125329,
+      "slope_se": 0.05467020629328025,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.005480967676597062,
+        0.0032329118534077605,
+        0.0028731545299407356,
+        0.002242106511920256
+      ],
+      "slope_log_var_per_log_d": -0.16138552554688457,
+      "slope_se": 0.03232393541709027,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "fock_first",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.0014321957165916387,
+        0.0014236325338182966,
+        0.0012799470407028862,
+        0.001306210532194041,
+        0.0013307346663354166
+      ],
+      "slope_log_var_per_log_d": -0.04746983496830115,
+      "slope_se": 0.05203901835001101,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "fock_first",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.0012794592066976418,
+        0.0012504558399447597,
+        0.001176164187683438,
+        0.001340465393942564,
+        0.0011151410716169975
+      ],
+      "slope_log_var_per_log_d": -0.02632750205753953,
+      "slope_se": 0.038471765087697174,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "fock_first",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.0014321957165916387,
+        0.0012504558399447597,
+        0.0009869329518805048,
+        0.0008079988780981368
+      ],
+      "slope_log_var_per_log_d": -0.1099304951146225,
+      "slope_se": 0.022745801061061634,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.021478331598225944,
+        0.006598175707485457,
+        0.002948293039918102,
+        0.0017768247917026633,
+        0.0010419553597161642
+      ],
+      "slope_log_var_per_log_d": -1.4640341017656313,
+      "slope_se": 0.061307917798158654,
+      "verdict": "faster than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.015211473706542368,
+        0.004022531919060376,
+        0.0012774322022880973,
+        0.0007426724593001556,
+        0.00033545436281809117
+      ],
+      "slope_log_var_per_log_d": -1.3048672246538502,
+      "slope_se": 0.04383535817970284,
+      "verdict": "faster than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.021478331598225944,
+        0.004022531919060376,
+        0.0010470204535186242,
+        0.00033234277942152034
+      ],
+      "slope_log_var_per_log_d": -0.7915857770390122,
+      "slope_se": 0.02657596438436156,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "haar_full",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.008384754412437636,
+        0.002737114402914644,
+        0.0014476584470776422,
+        0.0006761826246038952,
+        0.0004171700771036443
+      ],
+      "slope_log_var_per_log_d": -1.4543112470804718,
+      "slope_se": 0.07028647859809901,
+      "verdict": "faster than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "haar_full",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.007322756260959163,
+        0.0017158408619248422,
+        0.0006493913261621549,
+        0.00026878778068313585,
+        0.00013805163329597993
+      ],
+      "slope_log_var_per_log_d": -1.3628976809857187,
+      "slope_se": 0.04666143536137085,
+      "verdict": "faster than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "haar_full",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.008384754412437636,
+        0.0017158408619248422,
+        0.00042179660535430374,
+        0.00018606270020800277
+      ],
+      "slope_log_var_per_log_d": -0.7036635668840134,
+      "slope_se": 0.02683561569796726,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.025584244991189508,
+        0.012355389101341843,
+        0.00886846520847297,
+        0.005788442211088076,
+        0.004774232349278034
+      ],
+      "slope_log_var_per_log_d": -0.8225470461721927,
+      "slope_se": 0.056525699295155454,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.01704368508691945,
+        0.013830323957799836,
+        0.009539913034705066,
+        0.006866472229303022,
+        0.004943532079829493
+      ],
+      "slope_log_var_per_log_d": -0.4315376749888794,
+      "slope_se": 0.04685486739251903,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.025584244991189508,
+        0.013830323957799836,
+        0.008665869469363994,
+        0.005830900206207299
+      ],
+      "slope_log_var_per_log_d": -0.27910644363740394,
+      "slope_se": 0.02431788548455647,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.009525193939259186,
+        0.00646248247674108,
+        0.004346879885298457,
+        0.0024891948548935107,
+        0.0024724574155261738
+      ],
+      "slope_log_var_per_log_d": -0.7268851046699081,
+      "slope_se": 0.06087818427389857,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.008542343771858231,
+        0.005646464697622014,
+        0.004502372445912208,
+        0.003227488494680855,
+        0.0026663195039951623
+      ],
+      "slope_log_var_per_log_d": -0.4010164790710202,
+      "slope_se": 0.039958424964408414,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.0,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.009525193939259186,
+        0.005646464697622014,
+        0.004172394010768638,
+        0.0031404398605841535
+      ],
+      "slope_log_var_per_log_d": -0.20806095583479256,
+      "slope_se": 0.02240888071003616,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.007066670245010129,
+        0.00777094386882792,
+        0.00786214923280781,
+        0.008575167151499452,
+        0.006751841157324536
+      ],
+      "slope_log_var_per_log_d": 0.030765742379869288,
+      "slope_se": 0.06473015379490589,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.009332127228457455,
+        0.009995554921277553,
+        0.009275676406870294,
+        0.007512894752642038,
+        0.00981720441380274
+      ],
+      "slope_log_var_per_log_d": -0.020661562347734197,
+      "slope_se": 0.04010842153630456,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.007066670245010129,
+        0.009995554921277553,
+        0.009070102221129164,
+        0.00787497612861237
+      ],
+      "slope_log_var_per_log_d": 0.0037877894356606046,
+      "slope_se": 0.021660093491557415,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "fock_first",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.0017384680873371102,
+        0.0019830128468792617,
+        0.0021081725714889657,
+        0.001958248434249805,
+        0.001707683671522653
+      ],
+      "slope_log_var_per_log_d": 0.00304052640425434,
+      "slope_se": 0.05046026763587792,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "fock_first",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.002545765699166189,
+        0.002374673703797449,
+        0.0025244612194059513,
+        0.0028372944743228017,
+        0.0020649926068724306
+      ],
+      "slope_log_var_per_log_d": -0.02581943842111012,
+      "slope_se": 0.04010441253997103,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "fock_first",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.0017384680873371102,
+        0.002374673703797449,
+        0.002381965272820355,
+        0.002582098106554421
+      ],
+      "slope_log_var_per_log_d": 0.06852510079536689,
+      "slope_se": 0.021469688758397092,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.020777140486530767,
+        0.00657025130182868,
+        0.002905831205747751,
+        0.001748726685732237,
+        0.0010240604312663575
+      ],
+      "slope_log_var_per_log_d": -1.4598786081764028,
+      "slope_se": 0.06075520756783222,
+      "verdict": "faster than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.01498986826526288,
+        0.0038023457211229343,
+        0.0013448232092469858,
+        0.0007332892278492279,
+        0.0003384991132777132
+      ],
+      "slope_log_var_per_log_d": -1.2890382213431915,
+      "slope_se": 0.04389732876437418,
+      "verdict": "faster than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.020777140486530767,
+        0.0038023457211229343,
+        0.0011888698420263702,
+        0.0005791519075246625
+      ],
+      "slope_log_var_per_log_d": -0.6758717083642816,
+      "slope_se": 0.023904345137247696,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_full",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.00834653653626893,
+        0.0027152864849445393,
+        0.0014245929870272246,
+        0.0006705866982814533,
+        0.0004125465504563803
+      ],
+      "slope_log_var_per_log_d": -1.4572569061445473,
+      "slope_se": 0.07066703299065455,
+      "verdict": "faster than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_full",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.00737439591169021,
+        0.0016969015862845025,
+        0.0006333160243656851,
+        0.0002553036262662706,
+        0.00013874203826380084
+      ],
+      "slope_log_var_per_log_d": -1.3717844474065701,
+      "slope_se": 0.04567106725497829,
+      "verdict": "faster than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_full",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.00834653653626893,
+        0.0016969015862845025,
+        0.00038218393828963715,
+        0.00022736377225024852
+      ],
+      "slope_log_var_per_log_d": -0.6688993806752328,
+      "slope_se": 0.027704455986666016,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.025027339725264452,
+        0.012278879628143773,
+        0.008728627126575697,
+        0.005781577391378538,
+        0.004752823076582003
+      ],
+      "slope_log_var_per_log_d": -0.8127753245363316,
+      "slope_se": 0.057139847304711805,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.017875668208106894,
+        0.012922896513002644,
+        0.009043486802764596,
+        0.006596689759023363,
+        0.004859050116170402
+      ],
+      "slope_log_var_per_log_d": -0.4473692385699005,
+      "slope_se": 0.04440227143606294,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.025027339725264452,
+        0.012922896513002644,
+        0.007827373523369489,
+        0.005257693355106153
+      ],
+      "slope_log_var_per_log_d": -0.29475585383313024,
+      "slope_se": 0.023912608241478856,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.009463083083428392,
+        0.006425562920151085,
+        0.004333245026362686,
+        0.002468432815246541,
+        0.0024466913839121768
+      ],
+      "slope_log_var_per_log_d": -0.7289745075981602,
+      "slope_se": 0.06058560597419958,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.00834719160188533,
+        0.005417094414731386,
+        0.004407842485164115,
+        0.0031413064251723023,
+        0.0026635230596040215
+      ],
+      "slope_log_var_per_log_d": -0.39398544801875635,
+      "slope_se": 0.04147681349472214,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.009463083083428392,
+        0.005417094414731386,
+        0.0038845274154089763,
+        0.0027660042188031165
+      ],
+      "slope_log_var_per_log_d": -0.22872924958845287,
+      "slope_se": 0.02165051360629239,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.01979017342365003,
+        0.0215694386797769,
+        0.021516602504959247,
+        0.02126093661676055,
+        0.019413539248899964
+      ],
+      "slope_log_var_per_log_d": 0.0003450403529370316,
+      "slope_se": 0.040306386976355496,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.006208903984064191,
+        0.005575841633815626,
+        0.0058984424976130405,
+        0.0052478756030527,
+        0.006491530993217465
+      ],
+      "slope_log_var_per_log_d": 0.003358269703824801,
+      "slope_se": 0.031177707334931408,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.01979017342365003,
+        0.005575841633815626,
+        0.0008989116381477025,
+        9.460365920770303e-05
+      ],
+      "slope_log_var_per_log_d": -0.9531367361545096,
+      "slope_se": 0.02361607616420968,
+      "verdict": "consistent with 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "fock_first",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.0018753682850794445,
+        0.0020747119650217426,
+        0.0024285103925543233,
+        0.002471224796439172,
+        0.0020039126145109908
+      ],
+      "slope_log_var_per_log_d": 0.09007930536133824,
+      "slope_se": 0.05431153440721129,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "fock_first",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.00036327264023574483,
+        0.00030477314413763525,
+        0.000344201963480062,
+        0.00038433594218126326,
+        0.00033014843367316454
+      ],
+      "slope_log_var_per_log_d": 0.004492295090076759,
+      "slope_se": 0.04558699995059471,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "fock_first",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.0018753682850794445,
+        0.00030477314413763525,
+        0.00010201820578495495,
+        1.6730008246095664e-05
+      ],
+      "slope_log_var_per_log_d": -0.858320649432215,
+      "slope_se": 0.03075902858043093,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.015827923351587826,
+        0.0056195287935269095,
+        0.002467395737708689,
+        0.0015356425906977245,
+        0.0009088271680315843
+      ],
+      "slope_log_var_per_log_d": -1.38863097949546,
+      "slope_se": 0.060641347455271936,
+      "verdict": "faster than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.007329853821728514,
+        0.002480436684310955,
+        0.0011030135451552139,
+        0.0006017087684212267,
+        0.0003142452814441674
+      ],
+      "slope_log_var_per_log_d": -1.0703557334051474,
+      "slope_se": 0.04486424906848236,
+      "verdict": "consistent with 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.015827923351587826,
+        0.002480436684310955,
+        0.0007841209058772288,
+        0.00031489499986024416
+      ],
+      "slope_log_var_per_log_d": -0.7190903674120339,
+      "slope_se": 0.021675035433362442,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_full",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.008207454953851914,
+        0.002686933293337079,
+        0.0013238173665779552,
+        0.0006608360820282462,
+        0.00038259588916002545
+      ],
+      "slope_log_var_per_log_d": -1.4801292395050052,
+      "slope_se": 0.07344421801357083,
+      "verdict": "faster than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_full",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.007379662769414828,
+        0.0014271429314348352,
+        0.0005958693259767642,
+        0.00023180275446943677,
+        0.00012759899595980124
+      ],
+      "slope_log_var_per_log_d": -1.3861218456812407,
+      "slope_se": 0.049177322359452276,
+      "verdict": "faster than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_full",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.008207454953851914,
+        0.0014271429314348352,
+        0.00028319744094502963,
+        0.00010113441188103291
+      ],
+      "slope_log_var_per_log_d": -0.8091245814915833,
+      "slope_se": 0.028947989137397438,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.01935834794291397,
+        0.010139227854832782,
+        0.007418421375477928,
+        0.00519139216609212,
+        0.004313347225828883
+      ],
+      "slope_log_var_per_log_d": -0.7369007742705376,
+      "slope_se": 0.05666304825064141,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.008858483643601589,
+        0.00672587724895448,
+        0.005817270369368336,
+        0.004412681368606352,
+        0.0036217912138098037
+      ],
+      "slope_log_var_per_log_d": -0.30242591538224506,
+      "slope_se": 0.04417506622445009,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.01935834794291397,
+        0.00672587724895448,
+        0.0031238654881946292,
+        0.001540427740348959
+      ],
+      "slope_log_var_per_log_d": -0.47483232286699373,
+      "slope_se": 0.023073321659312657,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=2",
+      "dimensions": [
+        10,
+        21,
+        36,
+        55,
+        78
+      ],
+      "variances": [
+        0.009201571578114322,
+        0.0059954395816146705,
+        0.004223841379662578,
+        0.0023653286974193995,
+        0.0023429035494820856
+      ],
+      "slope_log_var_per_log_d": -0.7234500702000677,
+      "slope_se": 0.06279787803601898,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=3",
+      "dimensions": [
+        20,
+        56,
+        120,
+        220,
+        364
+      ],
+      "variances": [
+        0.007381101870080948,
+        0.00481146177481316,
+        0.0037535259848129666,
+        0.0026013438167952346,
+        0.0022896363341627962
+      ],
+      "slope_log_var_per_log_d": -0.41033710976504856,
+      "slope_se": 0.03837058534301572,
+      "verdict": "slower than 1/d"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "quantity": "output",
+      "family": "N=m/2",
+      "dimensions": [
+        10,
+        56,
+        330,
+        2002
+      ],
+      "variances": [
+        0.009201571578114322,
+        0.00481146177481316,
+        0.002923393807568693,
+        0.0015581726834952344
+      ],
+      "slope_log_var_per_log_d": -0.33094522198746423,
+      "slope_se": 0.02301111305069862,
+      "verdict": "slower than 1/d"
+    }
+  ],
+  "X2c": [
+    {
+      "kerr": 0.5,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "family": "N=2",
+      "slope_difference": 0.07406464563616022,
+      "combined_se": 0.09900965892671701,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "family": "N=3",
+      "slope_difference": -0.033823744248987486,
+      "combined_se": 0.06780499195696228,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "family": "N=m/2",
+      "slope_difference": 0.16517331498254517,
+      "combined_se": 0.038910107310456375,
+      "verdict": "changes the decay"
+    },
+    {
+      "kerr": 0.5,
+      "input": "fock_first",
+      "parameter": "n0",
+      "family": "N=2",
+      "slope_difference": 0.05051036137255549,
+      "combined_se": 0.0724865369618194,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "fock_first",
+      "parameter": "n0",
+      "family": "N=3",
+      "slope_difference": 0.0005080636364294122,
+      "combined_se": 0.05557374032885622,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "fock_first",
+      "parameter": "n0",
+      "family": "N=m/2",
+      "slope_difference": 0.17845559590998938,
+      "combined_se": 0.03127809139464611,
+      "verdict": "changes the decay"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "family": "N=2",
+      "slope_difference": 0.004155493589228509,
+      "combined_se": 0.08631254851616975,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "family": "N=3",
+      "slope_difference": 0.01582900331065873,
+      "combined_se": 0.06203639334608673,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "family": "N=m/2",
+      "slope_difference": 0.11571406867473066,
+      "combined_se": 0.03574492410678069,
+      "verdict": "changes the decay"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_full",
+      "parameter": "n0",
+      "family": "N=2",
+      "slope_difference": -0.002945659064075512,
+      "combined_se": 0.09966954713162536,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_full",
+      "parameter": "n0",
+      "family": "N=3",
+      "slope_difference": -0.0088867664208514,
+      "combined_se": 0.06529269434011849,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_full",
+      "parameter": "n0",
+      "family": "N=m/2",
+      "slope_difference": 0.034764186208780634,
+      "combined_se": 0.03857054771980949,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "family": "N=2",
+      "slope_difference": 0.009771721635861041,
+      "combined_se": 0.0803748519800324,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "family": "N=3",
+      "slope_difference": -0.015831563581021113,
+      "combined_se": 0.06455184201130401,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "family": "N=m/2",
+      "slope_difference": -0.0156494101957263,
+      "combined_se": 0.03410531318358541,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "family": "N=2",
+      "slope_difference": -0.0020894029282521043,
+      "combined_se": 0.08588811892076645,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "family": "N=3",
+      "slope_difference": 0.007031031052263881,
+      "combined_se": 0.05759341788183978,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 0.5,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "family": "N=m/2",
+      "slope_difference": -0.020668293753660305,
+      "combined_se": 0.03115931119413397,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 2.0,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "family": "N=2",
+      "slope_difference": 0.043643943609227964,
+      "combined_se": 0.08507364210823692,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 2.0,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "family": "N=3",
+      "slope_difference": -0.009803912197428488,
+      "combined_se": 0.0629355296379752,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 2.0,
+      "input": "fock_first",
+      "parameter": "X0,1",
+      "family": "N=m/2",
+      "slope_difference": -0.791751210607625,
+      "combined_se": 0.04003193542962887,
+      "verdict": "changes the decay"
+    },
+    {
+      "kerr": 2.0,
+      "input": "fock_first",
+      "parameter": "n0",
+      "family": "N=2",
+      "slope_difference": 0.13754914032963939,
+      "combined_se": 0.07521836345267344,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 2.0,
+      "input": "fock_first",
+      "parameter": "n0",
+      "family": "N=3",
+      "slope_difference": 0.03081979714761629,
+      "combined_se": 0.0596510793989386,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 2.0,
+      "input": "fock_first",
+      "parameter": "n0",
+      "family": "N=m/2",
+      "slope_difference": -0.7483901543175925,
+      "combined_se": 0.03825557874508186,
+      "verdict": "changes the decay"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "family": "N=2",
+      "slope_difference": 0.07540312227017121,
+      "combined_se": 0.08623244056581487,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "family": "N=3",
+      "slope_difference": 0.23451149124870274,
+      "combined_se": 0.06272431323834213,
+      "verdict": "changes the decay"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_full",
+      "parameter": "X0,1",
+      "family": "N=m/2",
+      "slope_difference": 0.07249540962697831,
+      "combined_se": 0.03429415466222154,
+      "verdict": "changes the decay"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_full",
+      "parameter": "n0",
+      "family": "N=2",
+      "slope_difference": -0.02581799242453342,
+      "combined_se": 0.10165747504903884,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_full",
+      "parameter": "n0",
+      "family": "N=3",
+      "slope_difference": -0.02322416469552202,
+      "combined_se": 0.06779158195844728,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_full",
+      "parameter": "n0",
+      "family": "N=m/2",
+      "slope_difference": -0.10546101460756985,
+      "combined_se": 0.03947323580589596,
+      "verdict": "changes the decay"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "family": "N=2",
+      "slope_difference": 0.08564627190165508,
+      "combined_se": 0.08003658986901463,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "family": "N=3",
+      "slope_difference": 0.12911175960663435,
+      "combined_se": 0.06439576907146226,
+      "verdict": "changes the decay"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_interferometer",
+      "parameter": "X0,1",
+      "family": "N=m/2",
+      "slope_difference": -0.19572587922958978,
+      "combined_se": 0.033522197523940894,
+      "verdict": "changes the decay"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "family": "N=2",
+      "slope_difference": 0.0034350344698403923,
+      "combined_se": 0.08746271666437916,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "family": "N=3",
+      "slope_difference": -0.009320630694028331,
+      "combined_se": 0.055398353271572165,
+      "verdict": "not distinguishable"
+    },
+    {
+      "kerr": 2.0,
+      "input": "haar_interferometer",
+      "parameter": "n0",
+      "family": "N=m/2",
+      "slope_difference": -0.12288426615267167,
+      "combined_se": 0.03211960862944415,
+      "verdict": "changes the decay"
+    }
+  ]
+}

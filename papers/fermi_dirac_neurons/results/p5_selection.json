@@ -1,0 +1,5500 @@
+{
+  "qubit_sweep_dir": "papers/fermi_dirac_neurons/outdir/sweeps/p5_select_v1",
+  "photonic_sweep_dir": "papers/fermi_dirac_neurons/outdir/sweeps/p5_photonic_select_v1",
+  "stage_a_seeds": {
+    "qubit": [
+      0,
+      1,
+      2
+    ],
+    "photonic": [
+      0,
+      1,
+      2
+    ]
+  },
+  "coordinator_status": {
+    "qubit": "FAILED",
+    "photonic": "COMPLETED"
+  },
+  "qubit": [
+    {
+      "task": "fig7_softplus_2q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.1,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.1659582170676708,
+          "per_seed": [
+            -1.2389232791278886,
+            0.7395552025888918,
+            -1.1659582170676708
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.718013208505827,
+          "per_seed": [
+            -1.96150684116129,
+            0.8838343004793959,
+            -1.718013208505827
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.1882661100211593,
+          "per_seed": [
+            -2.4848049991491186,
+            0.9085025926010694,
+            -2.1882661100211593
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -2.1428160290447167,
+          "per_seed": [
+            -2.1428160290447167,
+            0.9085971590220169,
+            -2.349231192442201
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -2.1218614347591527,
+          "per_seed": [
+            -2.1218614347591527,
+            0.908597159034394,
+            -2.3547850123765635
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -2.1218597254073734,
+          "per_seed": [
+            -2.1218597254073734,
+            0.9085971590343965,
+            -2.3547850412405724
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -2.1218597254073694,
+          "per_seed": [
+            -2.1218597254073694,
+            0.8042528188494494,
+            -2.3547850412405746
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -2.1218597254073677,
+          "per_seed": [
+            -2.1218597254073677,
+            0.9938783839468245,
+            -2.3547850412405755
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.44366745380424033,
+          "per_seed": [
+            -0.44366745380424033,
+            0.9938783839468245,
+            -1.3839492389409325
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_softplus_2q",
+      "model": "b3_quantum_linear",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.01,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -2.1027687126975914,
+          "per_seed": [
+            -2.1027687126975914,
+            1.0105937498866384,
+            -2.401038325939652
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -2.1027584774372303,
+          "per_seed": [
+            -2.1027584774372303,
+            1.011081672548126,
+            -2.401088591046268
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.1027584774372303,
+          "per_seed": [
+            -2.1027584774372303,
+            1.0110816728554037,
+            -2.401088591046269
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -2.10275847743723,
+          "per_seed": [
+            -2.10275847743723,
+            1.0110816728554064,
+            -2.4010885910462703
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 100.76274910159876,
+          "per_seed": [
+            77.02359301228454,
+            166.9028784814604,
+            100.76274910159876
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_softplus_2q",
+      "model": "classical_im",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.3,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.07568449599992,
+          "per_seed": [
+            -1.07568449599992,
+            0.2898134608951376,
+            -1.1814029086537627
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.5342185564268191,
+          "per_seed": [
+            -1.5342185564268191,
+            0.29332176844772556,
+            -1.7132856483572239
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.8186632780817693,
+          "per_seed": [
+            -1.8186632780817693,
+            0.29332556406014004,
+            -1.8845533915530683
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -1.954757811762111,
+          "per_seed": [
+            -1.954757811762111,
+            0.2933255640601374,
+            -1.9799423713840223
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -1.7304135318554765,
+          "per_seed": [
+            -1.7304135318554765,
+            0.29332556406013555,
+            -2.0407344014808855
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -1.5924630204950745,
+          "per_seed": [
+            -1.5924630204950745,
+            0.29332556406013577,
+            -2.0423379371382255
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -1.5739957598481538,
+          "per_seed": [
+            -1.5739957598481538,
+            0.18659731813463282,
+            -2.042337975460498
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -1.5739681238363652,
+          "per_seed": [
+            -1.5739681238363652,
+            0.9938783839468245,
+            -2.042337975460495
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 0.4679571791098933,
+          "per_seed": [
+            -0.6101234336874176,
+            0.9938783839468245,
+            0.4679571791098933
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_softplus_2q",
+      "model": "quantum_tfim",
+      "status": "SELECTED",
+      "selected_learning_rate": 1.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.2166947507854082,
+          "per_seed": [
+            -1.2306974440595277,
+            0.43147500424229324,
+            -1.2166947507854082
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.750426180864583,
+          "per_seed": [
+            -1.7576169336040859,
+            0.12341629699331474,
+            -1.750426180864583
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.456975925012274,
+          "per_seed": [
+            -2.456975925012274,
+            -0.6872728709823248,
+            -2.5199937102994197
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -3.57253693914935,
+          "per_seed": [
+            -3.57253693914935,
+            -0.9041760921485982,
+            -3.8987539697864926
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -4.721258985918583,
+          "per_seed": [
+            -4.721258985918583,
+            -0.9051519033687572,
+            -5.969526718684744
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -4.682129571199944,
+          "per_seed": [
+            -4.682129571199944,
+            -0.9051519033725055,
+            -5.9603599743582345
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -4.6820709800398435,
+          "per_seed": [
+            -4.6820709800398435,
+            0.6595521928150454,
+            -5.960359904718387
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -1.6476557704718264,
+          "per_seed": [
+            -1.6476557704718264,
+            0.9938783839468245,
+            -5.960359904718051
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.38315072863024174,
+          "per_seed": [
+            -0.442067079548145,
+            0.9938783839468245,
+            -0.38315072863024174
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_softplus_7q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.03,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.2671999692022586,
+          "per_seed": [
+            0.8465196406962303,
+            1.2671999692022586,
+            1.6514226387021766
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.1950037654594163,
+          "per_seed": [
+            0.6192348352447951,
+            1.1950037654594163,
+            1.4566874434631516
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.2244102009763858,
+          "per_seed": [
+            0.5685828000774734,
+            1.2244102009763858,
+            1.3243826501059675
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.2731290305100766,
+          "per_seed": [
+            0.7693949716741049,
+            1.2731290305100766,
+            1.2747247673482625
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.270453066882819,
+          "per_seed": [
+            0.8742479407635582,
+            1.2769757792985086,
+            1.270453066882819
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.27045189631977,
+          "per_seed": [
+            0.8817008251438693,
+            1.2770360775611127,
+            1.27045189631977
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.4015915460284252,
+          "per_seed": [
+            0.8850516871011201,
+            1.7934718568916546,
+            1.4015915460284252
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 2.1709316781203034,
+          "per_seed": [
+            1.5724995762484801,
+            2.1709316781203034,
+            2.3731341600828504
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 2.1709316781203034,
+          "per_seed": [
+            1.5724995762484801,
+            2.1709316781203034,
+            2.3731341600828504
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_softplus_7q",
+      "model": "b3_quantum_linear",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.01,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.5625227345807136,
+          "per_seed": [
+            1.1151044502080356,
+            1.5625227345807136,
+            1.808263995188147
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.5625227755807467,
+          "per_seed": [
+            1.115104449624992,
+            1.5625227755807467,
+            1.8082639816073
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.5625227755807491,
+          "per_seed": [
+            1.115104449624992,
+            1.5625227755807491,
+            1.8082639816072996
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.56252277558075,
+          "per_seed": [
+            1.115104449624992,
+            1.56252277558075,
+            1.8082639816072994
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 59.302529676618285,
+          "per_seed": [
+            59.302529676618285,
+            32.93942033376261,
+            82.59478374226715
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_softplus_7q",
+      "model": "classical_im",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.03,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.6831281410274639,
+          "per_seed": [
+            1.334581193132372,
+            1.6831281410274639,
+            1.9849506404617518
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.677623713416567,
+          "per_seed": [
+            1.324614404676804,
+            1.677623713416567,
+            1.944627814339968
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.684536836602751,
+          "per_seed": [
+            1.3230492437976242,
+            1.684536836602751,
+            1.925409800519684
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.7003180316757456,
+          "per_seed": [
+            1.3553246663412137,
+            1.7003180316757456,
+            1.9214880554087241
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.7038403561390558,
+          "per_seed": [
+            1.3770614209843106,
+            1.7038403561390558,
+            1.921343148952161
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.7038405546854678,
+          "per_seed": [
+            1.3812875026966456,
+            1.7038405546854678,
+            1.9213431461836075
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.7964387897528415,
+          "per_seed": [
+            1.4201203455742253,
+            1.7964387897528415,
+            1.9944236295643651
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 2.1709316781203034,
+          "per_seed": [
+            1.5692879216029592,
+            2.1709316781203034,
+            2.3731341600828504
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 2.1709316781203034,
+          "per_seed": [
+            1.5724995762484801,
+            2.1709316781203034,
+            2.3731341600828504
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_softplus_7q",
+      "model": "quantum_tfim",
+      "status": "SELECTED",
+      "selected_learning_rate": 1.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.2650284486850683,
+          "per_seed": [
+            0.9380571472965098,
+            1.2650284486850683,
+            1.7059276364041225
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.0862181581524029,
+          "per_seed": [
+            0.7377150243405792,
+            1.0862181581524029,
+            1.525981725845837
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 0.7737389672219671,
+          "per_seed": [
+            0.43920057891556363,
+            0.7737389672219671,
+            1.2828294091774493
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 0.4849957842875207,
+          "per_seed": [
+            0.11685893685704499,
+            0.4849957842875207,
+            1.039839562776946
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 0.43958997980357317,
+          "per_seed": [
+            -0.18357840833453082,
+            0.43958997980357317,
+            0.7736676836362384
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 0.46200349072986036,
+          "per_seed": [
+            -0.21692860963717348,
+            0.46200349072986036,
+            0.5993517276998841
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 0.46385740486488247,
+          "per_seed": [
+            -0.12951504653251783,
+            0.46385740486488247,
+            0.5470509418193146
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 2.170638691426077,
+          "per_seed": [
+            1.5769356538141075,
+            2.170638691426077,
+            2.3731341583981385
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 2.1706679753223805,
+          "per_seed": [
+            1.5724995762484801,
+            2.1706679753223805,
+            2.3731341600828504
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_tanh_2q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 3.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.9271326646404283,
+          "per_seed": [
+            -2.6125092575990156,
+            -0.9911754755373784,
+            -1.9271326646404283
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -2.1927931801993084,
+          "per_seed": [
+            -2.314382855752545,
+            -0.9075456504693074,
+            -2.1927931801993084
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.2118435502708613,
+          "per_seed": [
+            -2.2551655647114304,
+            -0.8909751590721962,
+            -2.2118435502708613
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -2.2118458962707073,
+          "per_seed": [
+            -2.2551129404003123,
+            -0.8909265140519744,
+            -2.2118458962707073
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -2.211845896270711,
+          "per_seed": [
+            -2.2551129404002226,
+            -0.890926514056081,
+            -2.211845896270711
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -2.211845896270712,
+          "per_seed": [
+            -2.2551129404002204,
+            -0.8909265140560813,
+            -2.211845896270712
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -1.3043018636881534,
+          "per_seed": [
+            -1.3043018636881534,
+            -0.5752218251201934,
+            -1.5922420435315767
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -0.7155387646435076,
+          "per_seed": [
+            -0.2411127099112534,
+            -0.7155387646435076,
+            -0.8680833516079332
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.5895897026008486,
+          "per_seed": [
+            -0.5895897026008486,
+            -0.7145424378967153,
+            -0.4809839295844513
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_tanh_2q",
+      "model": "b3_quantum_linear",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.01,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -2.1728634808479605,
+          "per_seed": [
+            -2.1728634808479605,
+            -0.7479156539672474,
+            -2.257384118376538
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -2.17284537149909,
+          "per_seed": [
+            -2.17284537149909,
+            -0.7468907647394744,
+            -2.2574138103687083
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.172845371499088,
+          "per_seed": [
+            -2.172845371499088,
+            -0.7468907640941816,
+            -2.2574138103687127
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -2.1728453714990876,
+          "per_seed": [
+            -2.1728453714990876,
+            -0.7468907640941793,
+            -2.257413810368715
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 103.00214023357962,
+          "per_seed": [
+            76.80904852814433,
+            163.88396796440662,
+            103.00214023357962
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_tanh_2q",
+      "model": "classical_im",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.1,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.597814171794826,
+          "per_seed": [
+            -1.9690121924837973,
+            -1.0394919319905422,
+            -1.597814171794826
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.7793538892046377,
+          "per_seed": [
+            -1.969620700826369,
+            -1.0387998932734812,
+            -1.7793538892046377
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.8197498956827087,
+          "per_seed": [
+            -1.8197498956827087,
+            -1.0387955974598606,
+            -1.9480974951359187
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -1.703731809917597,
+          "per_seed": [
+            -1.703731809917597,
+            -1.0387955974598493,
+            -1.9580731429806253
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -1.679302439712408,
+          "per_seed": [
+            -1.679302439712408,
+            -1.0387955974598488,
+            -1.9580751779317407
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -1.6791714212739632,
+          "per_seed": [
+            -1.6791714212739632,
+            -1.0387955974598488,
+            -1.9580751779317462
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -1.2457290374615682,
+          "per_seed": [
+            -1.2457290374615682,
+            -0.9720701985431713,
+            -1.6531861010571958
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -0.4809883066446964,
+          "per_seed": [
+            0.0006608335279387064,
+            -0.5645756644775267,
+            -0.4809883066446964
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.5895897026024285,
+          "per_seed": [
+            -0.5895897026024285,
+            -0.7145424379564634,
+            -0.4809839295844513
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_tanh_2q",
+      "model": "quantum_tfim",
+      "status": "SELECTED",
+      "selected_learning_rate": 3.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -2.138601014166744,
+          "per_seed": [
+            -2.317660724111645,
+            -0.9788216862301315,
+            -2.138601014166744
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -2.9451231357178558,
+          "per_seed": [
+            -3.026637413753757,
+            -1.4939245167216304,
+            -2.9451231357178558
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -4.1925632953700465,
+          "per_seed": [
+            -4.1925632953700465,
+            -2.443399530763524,
+            -4.570084597329812
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -6.122116143157326,
+          "per_seed": [
+            -6.122116143157326,
+            -3.915096437073774,
+            -8.171589887777218
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -11.836071835382938,
+          "per_seed": [
+            -11.836071835382938,
+            -7.762808379771883,
+            -20.505535984007107
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -28.162337842882476,
+          "per_seed": [
+            -28.162337842882476,
+            -18.4612983750222,
+            -32.63617826831827
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -2.2300973004046316,
+          "per_seed": [
+            -2.2300973004046316,
+            -30.923902797202715,
+            -1.867796169774987
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -1.8925203201303944,
+          "per_seed": [
+            -1.8925203201303944,
+            -1.6794578392929174,
+            -2.100274627807772
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -1.5058024532890397,
+          "per_seed": [
+            -1.5058024532890397,
+            -1.3791517490366756,
+            -1.8411543681091527
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_tanh_7q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 3.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -2.117096799225833,
+          "per_seed": [
+            -2.117096799225833,
+            -2.1014810787988076,
+            -2.3552217778764692
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -3.1069851302743805,
+          "per_seed": [
+            -2.7907830499983963,
+            -3.1069851302743805,
+            -3.3515730725707362
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -3.26231482842636,
+          "per_seed": [
+            -2.8522596097976205,
+            -3.26231482842636,
+            -3.386234692900047
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -3.2626166208726874,
+          "per_seed": [
+            -2.8523390647778055,
+            -3.2626166208726874,
+            -3.3862358784437543
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -3.262616620898235,
+          "per_seed": [
+            -2.852339064819737,
+            -3.262616620898235,
+            -3.386235878443768
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -3.2626166208982395,
+          "per_seed": [
+            -2.8523390648197378,
+            -3.2626166208982395,
+            -3.3862358784437676
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -1.3211735444790444,
+          "per_seed": [
+            -1.3869522409444048,
+            -1.3211735444790444,
+            -1.3012607331058421
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -0.6759142975775533,
+          "per_seed": [
+            -0.6189489814232674,
+            -0.8254783254332589,
+            -0.6759142975775533
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.6348083532738319,
+          "per_seed": [
+            -0.6348083532738319,
+            -0.6678069251567972,
+            -0.5449996524714368
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_tanh_7q",
+      "model": "b3_quantum_linear",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.01,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.8530137743349653,
+          "per_seed": [
+            -1.7320148250885652,
+            -1.8913773171697241,
+            -1.8530137743349653
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.8530137159844986,
+          "per_seed": [
+            -1.7320149537630936,
+            -1.8913773632064583,
+            -1.8530137159844986
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.853013715984497,
+          "per_seed": [
+            -1.7320149537630953,
+            -1.8913773632064588,
+            -1.853013715984497
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -1.8530137159844966,
+          "per_seed": [
+            -1.732014953763096,
+            -1.8913773632064588,
+            -1.8530137159844966
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 56.57046054188414,
+          "per_seed": [
+            56.57046054188414,
+            30.652517681723616,
+            80.23725201583326
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_tanh_7q",
+      "model": "classical_im",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.03,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -0.8722790643966214,
+          "per_seed": [
+            -0.778068145987019,
+            -0.96321399560109,
+            -0.8722790643966214
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -0.8804110965247528,
+          "per_seed": [
+            -0.7824200292536942,
+            -0.9933635486977915,
+            -0.8804110965247528
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -0.8803940494016586,
+          "per_seed": [
+            -0.7820364318577807,
+            -0.9961322384237332,
+            -0.8803940494016586
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -0.8803940303393291,
+          "per_seed": [
+            -0.7820289578598272,
+            -0.9961489486655094,
+            -0.8803940303393291
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -0.8803940303393291,
+          "per_seed": [
+            -0.7820289578324977,
+            -0.9961489486839065,
+            -0.8803940303393291
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -0.8803940303393291,
+          "per_seed": [
+            -0.7820289578324977,
+            -0.9961489486839066,
+            -0.8803940303393291
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -0.7891148926160977,
+          "per_seed": [
+            -0.7704519839155057,
+            -0.8839928159634319,
+            -0.7891148926160977
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -0.6616279682315349,
+          "per_seed": [
+            -0.6616279682315349,
+            -0.8649630166073994,
+            -0.6566910002541927
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.5981202093947773,
+          "per_seed": [
+            -0.4206477025230798,
+            -0.6988615737441195,
+            -0.5981202093947773
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig7_tanh_7q",
+      "model": "quantum_tfim",
+      "status": "SELECTED",
+      "selected_learning_rate": 10.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.6893624310780286,
+          "per_seed": [
+            -1.637529903529003,
+            -1.6893624310780286,
+            -1.7933274966607424
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -2.165749243943892,
+          "per_seed": [
+            -2.0838130781343063,
+            -2.165749243943892,
+            -2.3040032678138864
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.8202915210679453,
+          "per_seed": [
+            -2.645108532423643,
+            -2.8202915210679453,
+            -2.9992779109135856
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -3.6528831787024765,
+          "per_seed": [
+            -3.2943238281785376,
+            -3.6528831787024765,
+            -3.919262519467248
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -5.307233410677476,
+          "per_seed": [
+            -4.369195280988314,
+            -5.307233410677476,
+            -5.881551312520395
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -9.14181693328816,
+          "per_seed": [
+            -6.329606341186654,
+            -9.14181693328816,
+            -10.727660054497829
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -22.71826107513434,
+          "per_seed": [
+            -12.498136157369725,
+            -22.71826107513434,
+            -27.976416655390135
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -3.1741862478628247,
+          "per_seed": [
+            -21.73759992693066,
+            -2.9202322270207146,
+            -3.1741862478628247
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -1.9832193778642664,
+          "per_seed": [
+            -2.498372324960396,
+            -1.9832193778642664,
+            -1.9704407542558278
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_2q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 100.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.2322397713576971,
+          "per_seed": [
+            1.2322397713576971,
+            1.2184768418105818,
+            1.3498520475586775
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.0194751270365088,
+          "per_seed": [
+            1.0194751270365088,
+            1.009100998444869,
+            1.1087354224389312
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 0.6928147467532054,
+          "per_seed": [
+            0.6928147467532054,
+            0.6861836209351497,
+            0.7507082175017126
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 0.452998303198592,
+          "per_seed": [
+            0.452998303198592,
+            0.45110136533533024,
+            0.49733052445515513
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 0.2897842497320259,
+          "per_seed": [
+            0.28887142983712444,
+            0.2897842497320259,
+            0.32341744199837613
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 0.19767389765909388,
+          "per_seed": [
+            0.19623795108530018,
+            0.19767389765909388,
+            0.22228681816241364
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 0.1324036988991396,
+          "per_seed": [
+            0.1308728849796905,
+            0.1324036988991396,
+            0.14882086270694678
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 0.09408589920383043,
+          "per_seed": [
+            0.09077978552560964,
+            0.09408589920383043,
+            0.10352554104004268
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 0.0670042911359893,
+          "per_seed": [
+            0.05991703508104328,
+            0.0670042911359893,
+            0.0689773696561031
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_2q",
+      "model": "classical_fcim",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.03,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.3737262581494112,
+          "per_seed": [
+            1.3742193598618686,
+            1.3737262581494112,
+            1.3524630376517157
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.339898415212351,
+          "per_seed": [
+            1.3376739679225798,
+            1.3680068637685436,
+            1.339898415212351
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.341110195439699,
+          "per_seed": [
+            1.3306775170369511,
+            1.3685807974290758,
+            1.341110195439699
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.3411870097453877,
+          "per_seed": [
+            1.3306004222991703,
+            1.3685933187725432,
+            1.3411870097453877
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.341187011104552,
+          "per_seed": [
+            1.3306004216187663,
+            1.3685933187618957,
+            1.341187011104552
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.341187011104552,
+          "per_seed": [
+            1.3306004216187663,
+            1.3685933187618957,
+            1.341187011104552
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.341187011104552,
+          "per_seed": [
+            1.3306004216187663,
+            1.3685933187618957,
+            1.341187011104552
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 2.158804976322755,
+          "per_seed": [
+            2.158804976322755,
+            1.9233862746703267,
+            2.2376747523997897
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 12.394159574346979,
+          "per_seed": [
+            14.481101090691848,
+            8.738473365712718,
+            12.394159574346979
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_2q",
+      "model": "quantum_heisenberg",
+      "status": "SELECTED",
+      "selected_learning_rate": 10.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.2861747818249685,
+          "per_seed": [
+            1.2789524476063459,
+            1.2861747818249685,
+            1.3037697135179254
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.241664428795655,
+          "per_seed": [
+            1.241664428795655,
+            1.2374597411883892,
+            1.2666988642111272
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.2372668898096828,
+          "per_seed": [
+            1.2372668898096828,
+            1.2311961707406922,
+            1.267697432668608
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.237247512546998,
+          "per_seed": [
+            1.237247512546998,
+            1.2311231180917648,
+            1.2679479423736262
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.2372475091472777,
+          "per_seed": [
+            1.2372475091472777,
+            1.2311231125064923,
+            1.267947958350474
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.2372475091472785,
+          "per_seed": [
+            1.2372475091472785,
+            1.2311231125064923,
+            1.2679479583504742
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.2372475091472772,
+          "per_seed": [
+            1.2372475091472772,
+            1.231123112506492,
+            1.267947958350474
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 2.8569025252859204,
+          "per_seed": [
+            3.11902063163201,
+            2.8569025252859204,
+            2.787073864353844
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 7.987754888758406,
+          "per_seed": [
+            7.27175611898503,
+            11.765622560590627,
+            7.987754888758406
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_3q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 100.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.3221732592961346,
+          "per_seed": [
+            1.2532434931812444,
+            1.3221732592961346,
+            1.3370854486359354
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.1783191132748587,
+          "per_seed": [
+            1.1261784800265884,
+            1.1783191132748587,
+            1.1810101998658646
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 0.8701451782631449,
+          "per_seed": [
+            0.8584306168345697,
+            0.8869439435864092,
+            0.8701451782631449
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 0.583290468826291,
+          "per_seed": [
+            0.583290468826291,
+            0.6102984750614119,
+            0.5738122319338367
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 0.36883642004127504,
+          "per_seed": [
+            0.36883642004127504,
+            0.40674532571639493,
+            0.3500164005005283
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 0.24874562270720077,
+          "per_seed": [
+            0.24874562270720077,
+            0.29004910898752734,
+            0.22723223551752408
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 0.16530172771774992,
+          "per_seed": [
+            0.16530172771774992,
+            0.20420695990829965,
+            0.14553044244142302
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 0.11350770313680425,
+          "per_seed": [
+            0.11350770313680425,
+            0.15038752228641994,
+            0.09803806684763745
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 0.07462232945189085,
+          "per_seed": [
+            0.07462232945189085,
+            0.11073800043371466,
+            0.06299940971683213
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_3q",
+      "model": "classical_fcim",
+      "status": "SELECTED",
+      "selected_learning_rate": 1.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.3885221450660445,
+          "per_seed": [
+            1.3848752052717592,
+            1.3971827143807007,
+            1.3885221450660445
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.3793185753240347,
+          "per_seed": [
+            1.3626985447225248,
+            1.3837900243458978,
+            1.3793185753240347
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.378313116237015,
+          "per_seed": [
+            1.359437918369166,
+            1.3829211752430184,
+            1.378313116237015
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.3783081908733918,
+          "per_seed": [
+            1.359420561564871,
+            1.3829283991087389,
+            1.3783081908733918
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.3783081908516865,
+          "per_seed": [
+            1.359420561563828,
+            1.3829283991729904,
+            1.3783081908516865
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.3783081908516865,
+          "per_seed": [
+            1.359420561563828,
+            1.3829283991729904,
+            1.3783081908516865
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.3783081908516865,
+          "per_seed": [
+            1.359420561563828,
+            1.3829283991729904,
+            1.3783081908516865
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 2.954109953173119,
+          "per_seed": [
+            2.5082648934004377,
+            2.954109953173119,
+            2.958763849329424
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 12.515442405568876,
+          "per_seed": [
+            14.139863524269021,
+            12.268960445845778,
+            12.515442405568876
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_3q",
+      "model": "quantum_heisenberg",
+      "status": "SELECTED",
+      "selected_learning_rate": 10.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.3446255166552503,
+          "per_seed": [
+            1.347058761797269,
+            1.3392490013510714,
+            1.3446255166552503
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.3120084443782574,
+          "per_seed": [
+            1.3120084443782574,
+            1.315135593431648,
+            1.3113616144495053
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.3074470673222782,
+          "per_seed": [
+            1.3061281128394397,
+            1.31576369576254,
+            1.3074470673222782
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.307430418721302,
+          "per_seed": [
+            1.3060750863331405,
+            1.3158481283411927,
+            1.307430418721302
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.3074304181714642,
+          "per_seed": [
+            1.3060750855395045,
+            1.3158481297977627,
+            1.3074304181714642
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.307430418171464,
+          "per_seed": [
+            1.3060750855395047,
+            1.315848129797764,
+            1.307430418171464
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.3074304181714633,
+          "per_seed": [
+            1.3060750855395045,
+            1.3158481297977638,
+            1.3074304181714633
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 3.0710443721050003,
+          "per_seed": [
+            2.647957445871141,
+            3.1831243153094655,
+            3.0710443721050003
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 10.142821695494364,
+          "per_seed": [
+            10.197262278085734,
+            10.142821695494364,
+            9.330199424620496
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_4q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 100.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.3596585564910801,
+          "per_seed": [
+            1.3413899204639048,
+            1.3823504065001868,
+            1.3596585564910801
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.280184095516962,
+          "per_seed": [
+            1.2630225372210626,
+            1.2935860124081537,
+            1.280184095516962
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.0686714081729283,
+          "per_seed": [
+            1.0619002046779342,
+            1.0686714081729283,
+            1.07647181438626
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 0.7858686596769036,
+          "per_seed": [
+            0.7858686596769036,
+            0.7692939794901617,
+            0.7961661812928302
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 0.5172211819468061,
+          "per_seed": [
+            0.5172211819468061,
+            0.4886793172574013,
+            0.5243462861056084
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 0.35028447820242264,
+          "per_seed": [
+            0.35028447820242264,
+            0.31726194873908276,
+            0.3611606513782135
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 0.23409522807109162,
+          "per_seed": [
+            0.23409522807109162,
+            0.19389053594935937,
+            0.24640526671560165
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 0.16666784953614946,
+          "per_seed": [
+            0.16666784953614946,
+            0.12010055660209602,
+            0.17518566395559343
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 0.12002280148843031,
+          "per_seed": [
+            0.12002280148843031,
+            0.06868433772812768,
+            0.12146602809050097
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_4q",
+      "model": "classical_fcim",
+      "status": "SELECTED",
+      "selected_learning_rate": 1.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.3935844348605735,
+          "per_seed": [
+            1.3935844348605735,
+            1.386678179894521,
+            1.4000623947794328
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.3792584385339621,
+          "per_seed": [
+            1.3807922389147262,
+            1.3726695170425953,
+            1.3792584385339621
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.3762848811037136,
+          "per_seed": [
+            1.3802426295421464,
+            1.3732025366477383,
+            1.3762848811037136
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.3762688794448485,
+          "per_seed": [
+            1.3802531090807617,
+            1.3732327950309096,
+            1.3762688794448485
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.3762688794305136,
+          "per_seed": [
+            1.3802531091172694,
+            1.3732327951225654,
+            1.3762688794305136
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.3762688794305136,
+          "per_seed": [
+            1.3802531091172692,
+            1.3732327951225654,
+            1.3762688794305136
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.3762688794305136,
+          "per_seed": [
+            1.3802531091172692,
+            1.3732327951225654,
+            1.3762688794305136
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 2.913217029491321,
+          "per_seed": [
+            3.3573582460282374,
+            2.913217029491321,
+            2.8496685513756246
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 11.19880442159445,
+          "per_seed": [
+            8.78294806447851,
+            11.697463742947257,
+            11.19880442159445
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_4q",
+      "model": "quantum_heisenberg",
+      "status": "SELECTED",
+      "selected_learning_rate": 1.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.3831238344614722,
+          "per_seed": [
+            1.3831238344614722,
+            1.380939435652321,
+            1.3846477102160515
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.3538277412277062,
+          "per_seed": [
+            1.355574112807673,
+            1.3498889298810965,
+            1.3538277412277062
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.3500665701597918,
+          "per_seed": [
+            1.3524162513635893,
+            1.3464187552260731,
+            1.3500665701597918
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.3500477494700596,
+          "per_seed": [
+            1.3524076317636828,
+            1.3464168087095807,
+            1.3500477494700596
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.3500477493510092,
+          "per_seed": [
+            1.3524076317515827,
+            1.3464168087773376,
+            1.3500477493510092
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.3500477493510092,
+          "per_seed": [
+            1.3524076317515825,
+            1.346416808777337,
+            1.3500477493510092
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.3500477493510092,
+          "per_seed": [
+            1.3524076317515832,
+            1.3464168087773367,
+            1.3500477493510092
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 3.1805320039461904,
+          "per_seed": [
+            3.1805320039461904,
+            3.2147440357272816,
+            3.0495629975807903
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 10.29408978369479,
+          "per_seed": [
+            11.539979557597494,
+            10.29408978369479,
+            9.017250825284894
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_5q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 100.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.3718451485322822,
+          "per_seed": [
+            1.3703971117561595,
+            1.3901152286353988,
+            1.3718451485322822
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.323826724625232,
+          "per_seed": [
+            1.3222485419541534,
+            1.3404786660198973,
+            1.323826724625232
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.1842741863424497,
+          "per_seed": [
+            1.1806842427136925,
+            1.1952867141006096,
+            1.1842741863424497
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 0.9398439528533937,
+          "per_seed": [
+            0.9279729642995583,
+            0.9398439528533937,
+            0.9404173854550615
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 0.6272715425058076,
+          "per_seed": [
+            0.6122941617631138,
+            0.6272715425058076,
+            0.6397795990235285
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 0.4189894390494494,
+          "per_seed": [
+            0.3997648294608645,
+            0.4189894390494494,
+            0.4374531908822918
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 0.27631938651112803,
+          "per_seed": [
+            0.25405337276777834,
+            0.27631938651112803,
+            0.29598606152240775
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 0.19483312904327604,
+          "per_seed": [
+            0.17282608045545866,
+            0.19483312904327604,
+            0.21258722899012839
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 0.13505950325365454,
+          "per_seed": [
+            0.11807543813221212,
+            0.13505950325365454,
+            0.15532518734719525
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_5q",
+      "model": "classical_fcim",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.1,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.4032255044196345,
+          "per_seed": [
+            1.4024917842652427,
+            1.411851998763661,
+            1.4032255044196345
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.380709063130861,
+          "per_seed": [
+            1.3831423501053148,
+            1.380709063130861,
+            1.3806753408990682
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.37960998770779,
+          "per_seed": [
+            1.3805246956061537,
+            1.3781640870409535,
+            1.37960998770779
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.3796279032695093,
+          "per_seed": [
+            1.3805093663246835,
+            1.3781675987424178,
+            1.3796279032695093
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.3796279033382703,
+          "per_seed": [
+            1.380509366265914,
+            1.3781675987409936,
+            1.3796279033382703
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.3796279033382706,
+          "per_seed": [
+            1.3805093662659143,
+            1.3781675987409936,
+            1.3796279033382706
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.3796279033382706,
+          "per_seed": [
+            1.380509366265914,
+            1.3781675987409936,
+            1.3796279033382706
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 3.205162906915993,
+          "per_seed": [
+            3.0215000321874523,
+            3.3323700843457127,
+            3.205162906915993
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 10.618735618138786,
+          "per_seed": [
+            10.407009031590574,
+            10.618735618138786,
+            12.11987905190314
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_5q",
+      "model": "quantum_heisenberg",
+      "status": "SELECTED",
+      "selected_learning_rate": 1.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.395474703175055,
+          "per_seed": [
+            1.4056818026019564,
+            1.395474703175055,
+            1.3935460529046488
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.367058168058567,
+          "per_seed": [
+            1.36894168402408,
+            1.366599207016605,
+            1.367058168058567
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.365320308658344,
+          "per_seed": [
+            1.365320308658344,
+            1.3647474569904512,
+            1.3663916501856384
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.3653146835856778,
+          "per_seed": [
+            1.3653146835856778,
+            1.3647606506524896,
+            1.3664266486347487
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.3653146835234828,
+          "per_seed": [
+            1.3653146835234828,
+            1.3647606506990186,
+            1.3664266488275785
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.3653146835234828,
+          "per_seed": [
+            1.3653146835234828,
+            1.3647606506990184,
+            1.366426648827578
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.3653146835234828,
+          "per_seed": [
+            1.3653146835234828,
+            1.364760650699018,
+            1.3664266488275785
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 3.339254616505932,
+          "per_seed": [
+            3.263902709329625,
+            3.339254616505932,
+            3.3487291864704902
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 8.921790964374312,
+          "per_seed": [
+            8.117330438447514,
+            12.495153456146962,
+            8.921790964374312
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_6q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 100.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.3807431942811705,
+          "per_seed": [
+            1.3807431942811705,
+            1.4063068258577454,
+            1.3725761710933597
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.358046334584893,
+          "per_seed": [
+            1.358046334584893,
+            1.3822582034159103,
+            1.3482536585220413
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.2853440283114554,
+          "per_seed": [
+            1.2853440283114554,
+            1.3051721725349594,
+            1.2705571982400223
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.1240405702287568,
+          "per_seed": [
+            1.1240405702287568,
+            1.1341992784508763,
+            1.0993679668251304
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 0.8299435814251263,
+          "per_seed": [
+            0.8334078658915542,
+            0.8299435814251263,
+            0.7953099145521976
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 0.5643248919440217,
+          "per_seed": [
+            0.572394787808083,
+            0.5643248919440217,
+            0.5273216017435564
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 0.36406289285999593,
+          "per_seed": [
+            0.3749562015699535,
+            0.36406289285999593,
+            0.32510950201325545
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 0.2497321575840948,
+          "per_seed": [
+            0.2674572711363129,
+            0.2497321575840948,
+            0.21082140434426827
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 0.16926223046443659,
+          "per_seed": [
+            0.19163741120414304,
+            0.16926223046443659,
+            0.13559196605781118
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_6q",
+      "model": "classical_fcim",
+      "status": "SELECTED",
+      "selected_learning_rate": 1.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.412198376718701,
+          "per_seed": [
+            1.4076626017023592,
+            1.413593000090986,
+            1.412198376718701
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.385795728197156,
+          "per_seed": [
+            1.3858100093475194,
+            1.3852568858437486,
+            1.385795728197156
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.3833852198754943,
+          "per_seed": [
+            1.3833852198754943,
+            1.3826667381577447,
+            1.3838168797541903
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.383379445159716,
+          "per_seed": [
+            1.383379445159716,
+            1.3826673677129988,
+            1.383827400329376
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.383379445144806,
+          "per_seed": [
+            1.383379445144806,
+            1.3826673677176298,
+            1.3838274003774365
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.383379445144806,
+          "per_seed": [
+            1.383379445144806,
+            1.3826673677176298,
+            1.3838274003774362
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.3833794451448063,
+          "per_seed": [
+            1.3833794451448063,
+            1.3826673677176298,
+            1.3838274003774362
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 3.5237245006549793,
+          "per_seed": [
+            3.484255220068719,
+            3.5237245006549793,
+            3.5265330867348057
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 11.724190976800092,
+          "per_seed": [
+            10.258173815229942,
+            11.724190976800092,
+            13.221809965252353
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_6q",
+      "model": "quantum_heisenberg",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.1,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.4187168684757467,
+          "per_seed": [
+            1.417549277915541,
+            1.4187168684757467,
+            1.419004386634528
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.3801777411972038,
+          "per_seed": [
+            1.3801777411972038,
+            1.3799203006722867,
+            1.380242754868918
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.3770362811002417,
+          "per_seed": [
+            1.3778540181506975,
+            1.3770362811002417,
+            1.3764549315361045
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.3770519530877399,
+          "per_seed": [
+            1.3778714580839848,
+            1.3770519530877399,
+            1.3764500500707162
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.3770519531594678,
+          "per_seed": [
+            1.3778714581098974,
+            1.3770519531594678,
+            1.3764500500418806
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.377051953159468,
+          "per_seed": [
+            1.3778714581098974,
+            1.377051953159468,
+            1.3764500500418806
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.3770519531594678,
+          "per_seed": [
+            1.3778714581098972,
+            1.3770519531594678,
+            1.3764500500418815
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 3.331448741454567,
+          "per_seed": [
+            3.2509669994284884,
+            3.331448741454567,
+            3.429184945227661
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 11.494763090583877,
+          "per_seed": [
+            10.351855285029945,
+            11.494763090583877,
+            12.774693864439907
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_7q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 100.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.3820474058187253,
+          "per_seed": [
+            1.3820474058187253,
+            1.3940540618146264,
+            1.3725919883431865
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.370203692167525,
+          "per_seed": [
+            1.370203692167525,
+            1.3823275320665136,
+            1.3609499996631873
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.330570612292808,
+          "per_seed": [
+            1.330570612292808,
+            1.3430947190533642,
+            1.3220432184875026
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.2313549128833037,
+          "per_seed": [
+            1.2313549128833037,
+            1.2449427954101975,
+            1.2250100801825619
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 0.998758096001338,
+          "per_seed": [
+            0.9977796892519513,
+            1.014260362172124,
+            0.998758096001338
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 0.7280822345351677,
+          "per_seed": [
+            0.714103053511835,
+            0.7354665668770448,
+            0.7280822345351677
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 0.4846494283425749,
+          "per_seed": [
+            0.455640197245908,
+            0.4846494283425749,
+            0.48821319702332305
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 0.33383233677643437,
+          "per_seed": [
+            0.2977361453913867,
+            0.33383233677643437,
+            0.3471477607997839
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 0.23071710554408462,
+          "per_seed": [
+            0.19128228808692158,
+            0.23071710554408462,
+            0.24839270829038873
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_7q",
+      "model": "classical_fcim",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.3,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.4317941848623175,
+          "per_seed": [
+            1.4280041669258086,
+            1.4317941848623175,
+            1.4366777943328088
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.389321834763439,
+          "per_seed": [
+            1.389321834763439,
+            1.3892751822418696,
+            1.3896278765384116
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.3850175510606846,
+          "per_seed": [
+            1.3852560171806227,
+            1.3843136382707977,
+            1.3850175510606846
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.385015244171016,
+          "per_seed": [
+            1.3852499948604735,
+            1.384298561532526,
+            1.385015244171016
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.3850152441781551,
+          "per_seed": [
+            1.3852499948427441,
+            1.3842985614897674,
+            1.3850152441781551
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.3850152441781551,
+          "per_seed": [
+            1.3852499948427444,
+            1.3842985614897674,
+            1.3850152441781551
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.3850152441781551,
+          "per_seed": [
+            1.3852499948427441,
+            1.3842985614897674,
+            1.3850152441781551
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 3.2464226142767885,
+          "per_seed": [
+            3.2466215202507973,
+            3.026331848438364,
+            3.2464226142767885
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 11.085885775235905,
+          "per_seed": [
+            11.02949101328096,
+            11.085885775235905,
+            11.985959207703775
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig8_logistic_7q",
+      "model": "quantum_heisenberg",
+      "status": "SELECTED",
+      "selected_learning_rate": 10.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": 1.4397902901980515,
+          "per_seed": [
+            1.4397902901980515,
+            1.4355146873415137,
+            1.4413128561472113
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": 1.3877948453973246,
+          "per_seed": [
+            1.388233985068672,
+            1.3871884993101697,
+            1.3877948453973246
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": 1.3820450616917044,
+          "per_seed": [
+            1.3819416232390411,
+            1.3820450616917044,
+            1.3821638326209442
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": 1.3820363334638737,
+          "per_seed": [
+            1.3819194306161529,
+            1.3820363334638737,
+            1.3821533397798977
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": 1.3820363334396757,
+          "per_seed": [
+            1.3819194305560716,
+            1.3820363334396757,
+            1.382153339734177
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": 1.3820363334396755,
+          "per_seed": [
+            1.3819194305560711,
+            1.3820363334396755,
+            1.3821533397341772
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": 1.3820363334396752,
+          "per_seed": [
+            1.3819194305560711,
+            1.3820363334396752,
+            1.3821533397341765
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": 3.478708848567618,
+          "per_seed": [
+            3.478708848567618,
+            3.5889539817749343,
+            3.3951662576388677
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": 11.28959531863298,
+          "per_seed": [
+            11.28959531863298,
+            12.838506622725742,
+            10.627944885345622
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_heis_2q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 10.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.4539341845935994,
+          "per_seed": [
+            -0.5890159850768139,
+            -1.6861559598174705,
+            -1.4539341845935994
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.3777597783942617,
+          "per_seed": [
+            -0.6238200068730503,
+            -1.7935374085971043,
+            -1.3777597783942617
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.252386611376222,
+          "per_seed": [
+            -0.6761812869068115,
+            -2.0383611082329587,
+            -1.252386611376222
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -1.1680084740577532,
+          "per_seed": [
+            -0.6850674842066449,
+            -2.140943955315869,
+            -1.1680084740577532
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -1.1793731158211829,
+          "per_seed": [
+            -0.6850976985269852,
+            -1.9862475334582794,
+            -1.1793731158211829
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -1.2398953326645605,
+          "per_seed": [
+            -0.68509769852705,
+            -1.9677709677775925,
+            -1.2398953326645605
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -1.47191102341111,
+          "per_seed": [
+            -0.6140860019796917,
+            -1.967749656750948,
+            -1.47191102341111
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -0.08794544423846518,
+          "per_seed": [
+            -0.07959788405278936,
+            -1.470464016687565,
+            -0.08794544423846518
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.14789730961560166,
+          "per_seed": [
+            0.00973873940056144,
+            -0.16116861471986654,
+            -0.14789730961560166
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_heis_2q",
+      "model": "classical_fcim",
+      "status": "SELECTED",
+      "selected_learning_rate": 30.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.0349561809461054,
+          "per_seed": [
+            -0.8561738123612957,
+            -1.0349561809461054,
+            -2.600646182866683
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.0349566317571974,
+          "per_seed": [
+            -0.872154133472469,
+            -1.0349566317571974,
+            -2.2937520445786426
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.034956631757203,
+          "per_seed": [
+            -0.8722820018594816,
+            -1.034956631757203,
+            -2.289034932791469
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -1.0349566317572045,
+          "per_seed": [
+            -0.8722820018651746,
+            -1.0349566317572045,
+            -2.289034928934445
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -1.034956631757205,
+          "per_seed": [
+            -0.8722820018651767,
+            -1.034956631757205,
+            -2.289034928934374
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -1.0349566317572052,
+          "per_seed": [
+            -0.8722820018651771,
+            -1.0349566317572052,
+            -2.2890349289343543
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -1.0349566317572052,
+          "per_seed": [
+            -0.7824769164971597,
+            -1.0349566317572052,
+            -2.2890349289343455
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -1.4662726592407112,
+          "per_seed": [
+            -1.1240924573160103,
+            -1.4662726592407112,
+            -1.8939451584175295
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.9706615760263221,
+          "per_seed": [
+            -0.9706615760263221,
+            -1.4608475817743933,
+            -0.6359094658365396
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_heis_2q",
+      "model": "quantum_heis_linear",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.01,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.5200386893043416,
+          "per_seed": [
+            -0.8410760156610384,
+            -1.8799076195391333,
+            -1.5200386893043416
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.4264242211854357,
+          "per_seed": [
+            -0.7531581352804763,
+            -1.9571187305134161,
+            -1.4264242211854357
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.318846475828449,
+          "per_seed": [
+            -0.7462995743021608,
+            -2.3951208729898084,
+            -1.318846475828449
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -1.1820603162927912,
+          "per_seed": [
+            -0.7462986989284252,
+            -2.549548372230574,
+            -1.1820603162927912
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -0.8680477630119027,
+          "per_seed": [
+            -0.746298698928436,
+            -2.5529571747299187,
+            -0.8680477630119027
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_heis_2q",
+      "model": "quantum_heis_tanh",
+      "status": "SELECTED",
+      "selected_learning_rate": 10.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.2794670933412304,
+          "per_seed": [
+            -0.8084050481458775,
+            -1.2794670933412304,
+            -2.327743353241921
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.333443845492215,
+          "per_seed": [
+            -1.0922459932877158,
+            -1.333443845492215,
+            -3.073886669281594
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.3948086686440675,
+          "per_seed": [
+            -2.3948086686440675,
+            -1.6134820681947923,
+            -3.330527388282784
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -2.70968782680329,
+          "per_seed": [
+            -2.70968782680329,
+            -2.146243028801304,
+            -3.2261870124641807
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -2.5452814192695277,
+          "per_seed": [
+            -2.5452814192695277,
+            -2.5241045555330337,
+            -4.038426270374345
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -2.963184208998834,
+          "per_seed": [
+            -2.028137415619334,
+            -2.963184208998834,
+            -6.3010820384921695
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -12.017158712070412,
+          "per_seed": [
+            -15.514657533157102,
+            -1.2796628728580572,
+            -12.017158712070412
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -1.9947098857960688,
+          "per_seed": [
+            -1.9947098857960688,
+            -1.3983342965791166,
+            -2.7078782256804654
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -1.5083762055762966,
+          "per_seed": [
+            -0.8530856767924703,
+            -1.5083762055762966,
+            -2.591991300446322
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_heis_3q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.03,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.6339786118037423,
+          "per_seed": [
+            -1.8280203787454599,
+            -1.6339786118037423,
+            -0.7943155019262546
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.670518476652787,
+          "per_seed": [
+            -2.023545883817038,
+            -1.670518476652787,
+            -0.8486874894044049
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.6624275270966207,
+          "per_seed": [
+            -2.057869006183872,
+            -1.6624275270966207,
+            -0.8992661773977066
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -1.6510088062645314,
+          "per_seed": [
+            -2.0604270958292297,
+            -1.6510088062645314,
+            -0.9260413717618912
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -1.6483396185168961,
+          "per_seed": [
+            -2.05928091421118,
+            -1.6483396185168961,
+            -0.9275840339071304
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -1.6483330644241552,
+          "per_seed": [
+            -2.059279355502041,
+            -1.6483330644241552,
+            -0.9275840991682925
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -1.6506258108989729,
+          "per_seed": [
+            -2.0287057510277746,
+            -1.6506258108989729,
+            -0.9890007816041838
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -0.7565591309675967,
+          "per_seed": [
+            -0.7565591309675967,
+            -0.835152987697016,
+            -0.42838269927450445
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.16867327090412204,
+          "per_seed": [
+            -0.39097844936863674,
+            -0.16867327090412204,
+            -0.007244118122780515
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_heis_3q",
+      "model": "classical_fcim",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.01,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.1764820417111819,
+          "per_seed": [
+            -1.2876790465408543,
+            -1.1764820417111819,
+            -0.7975451800498875
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.176430474606042,
+          "per_seed": [
+            -1.262558863036419,
+            -1.176430474606042,
+            -0.7964511034352288
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.1764304868946645,
+          "per_seed": [
+            -1.2599972791907996,
+            -1.1764304868946645,
+            -0.7964510947298352
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -1.1764304868946642,
+          "per_seed": [
+            -1.259997091070208,
+            -1.1764304868946642,
+            -0.7964510947298306
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -1.1764304868946642,
+          "per_seed": [
+            -1.259997091070204,
+            -1.1764304868946642,
+            -0.796451094729829
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -1.1764304868946642,
+          "per_seed": [
+            -1.2599970910702025,
+            -1.1764304868946642,
+            -0.7964510947298284
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -1.1003071896287366,
+          "per_seed": [
+            -1.2513143721004312,
+            -1.1003071896287366,
+            -0.698389723986475
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -0.791217312288927,
+          "per_seed": [
+            -0.791217312288927,
+            -0.7904832506414948,
+            -1.1988702915558294
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.6362197905083307,
+          "per_seed": [
+            -0.20201129668159637,
+            -1.0738316903177374,
+            -0.6362197905083307
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_heis_3q",
+      "model": "quantum_heis_linear",
+      "status": "SELECTED",
+      "selected_learning_rate": 1.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.3414482551465539,
+          "per_seed": [
+            -1.3414482551465539,
+            -1.5133254509531195,
+            -0.6893651498078848
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.3583619848165467,
+          "per_seed": [
+            -1.3583619848165467,
+            -1.5074682968283988,
+            -0.6867706472882437
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.3649403523156214,
+          "per_seed": [
+            -1.3649403523156214,
+            -1.5038700118128738,
+            -0.6836986207809782
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -1.3651785765119935,
+          "per_seed": [
+            -1.3651785765119935,
+            -1.5036272979058072,
+            -0.6836497632562238
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -1.365178656540824,
+          "per_seed": [
+            -1.365178656540824,
+            -1.503627170521312,
+            -0.6836497630807116
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_heis_3q",
+      "model": "quantum_heis_tanh",
+      "status": "SELECTED",
+      "selected_learning_rate": 10.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.484512240250402,
+          "per_seed": [
+            -2.1022219918396265,
+            -1.484512240250402,
+            -1.3386119165777586
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.9532252798871652,
+          "per_seed": [
+            -2.302738152443725,
+            -1.4895464628722317,
+            -1.9532252798871652
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.323387748970558,
+          "per_seed": [
+            -2.393902723268488,
+            -1.5508894908390527,
+            -2.323387748970558
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -2.643284861200836,
+          "per_seed": [
+            -2.8688900277929363,
+            -1.6380149227958285,
+            -2.643284861200836
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -3.2219298272313672,
+          "per_seed": [
+            -3.8735847688634713,
+            -1.7765343401200682,
+            -3.2219298272313672
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -3.863079608725316,
+          "per_seed": [
+            -4.2590252935881905,
+            -2.189702049921961,
+            -3.863079608725316
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -5.129219167415675,
+          "per_seed": [
+            -5.129219167415675,
+            -2.653787839352644,
+            -6.086292570113463
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -4.524586758456278,
+          "per_seed": [
+            -7.9553397105435355,
+            -4.47193819348954,
+            -4.524586758456278
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -2.0648476278904293,
+          "per_seed": [
+            -2.3958454554133,
+            -0.6053170282309659,
+            -2.0648476278904293
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_tfim_2q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 3.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -2.210321680255215,
+          "per_seed": [
+            -2.2631708663670076,
+            -0.8949706103278833,
+            -2.210321680255215
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -2.2118458924606936,
+          "per_seed": [
+            -2.255113308822738,
+            -0.8909277214978755,
+            -2.2118458924606936
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.2118458962706957,
+          "per_seed": [
+            -2.2551129404002532,
+            -0.8909265140560826,
+            -2.2118458962706957
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -2.2118458962707073,
+          "per_seed": [
+            -2.255112940400231,
+            -0.8909265140560813,
+            -2.2118458962707073
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -2.211845896270711,
+          "per_seed": [
+            -2.2551129404002226,
+            -0.890926514056081,
+            -2.211845896270711
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -2.211845896270712,
+          "per_seed": [
+            -2.2551129404002204,
+            -0.890926514056081,
+            -2.211845896270712
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -1.1907117229972426,
+          "per_seed": [
+            -1.1988511179509742,
+            -1.0687110197473422,
+            -1.1907117229972426
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -0.8047513017393808,
+          "per_seed": [
+            -0.5895946879042905,
+            -0.8047513017393808,
+            -0.9508430491916069
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.5895897025998866,
+          "per_seed": [
+            -0.5895897025998866,
+            -0.7147009214491654,
+            -0.4809839295844513
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_tfim_2q",
+      "model": "classical_ising",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.01,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.8387468999695684,
+          "per_seed": [
+            -1.9993792512727255,
+            -1.0387956117059933,
+            -1.8387468999695684
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.7985715589801194,
+          "per_seed": [
+            -1.7985715589801194,
+            -1.038795597459853,
+            -1.9562554763126203
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.6860692896900604,
+          "per_seed": [
+            -1.6860692896900604,
+            -1.03879559745985,
+            -1.95807517727254
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -1.6791757570893022,
+          "per_seed": [
+            -1.6791757570893022,
+            -1.038795597459849,
+            -1.9580751779317227
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -1.679171421227054,
+          "per_seed": [
+            -1.679171421227054,
+            -1.0387955974598488,
+            -1.9580751779317407
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -1.6791714212270357,
+          "per_seed": [
+            -1.6791714212270357,
+            -1.0387955974598488,
+            -1.9580751779317462
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -1.1885059628366679,
+          "per_seed": [
+            -1.1885059628366679,
+            -0.9726471778821374,
+            -2.4439074834092454
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -0.5547683466724568,
+          "per_seed": [
+            -0.5547683466724568,
+            -0.6429621995546121,
+            -0.3221767487106163
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.5895897026094852,
+          "per_seed": [
+            -0.5895897026094852,
+            -0.714542437896167,
+            -0.4809839295844513
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_tfim_2q",
+      "model": "quantum_tfim_linear",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.3,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -2.1728453714990796,
+          "per_seed": [
+            -2.1728453714990796,
+            -0.7468907640942102,
+            -2.257413810368694
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -2.172845371499083,
+          "per_seed": [
+            -2.172845371499083,
+            -0.7468907640941888,
+            -2.2574138103687096
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.1728453714990845,
+          "per_seed": [
+            -2.1728453714990845,
+            -0.7468907640941812,
+            -2.2574138103687145
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -2.1728453714990876,
+          "per_seed": [
+            -2.1728453714990876,
+            -0.746890764094179,
+            -2.257413810368716
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_tfim_2q",
+      "model": "quantum_tfim_tanh",
+      "status": "SELECTED",
+      "selected_learning_rate": 3.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -3.4552041128556397,
+          "per_seed": [
+            -3.4552041128556397,
+            -1.8405331867032502,
+            -3.4934072169655983
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -4.74867124468812,
+          "per_seed": [
+            -4.74867124468812,
+            -2.8866322583015234,
+            -5.504493560778876
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -7.770484371538063,
+          "per_seed": [
+            -7.770484371538063,
+            -5.062452406511302,
+            -11.662546644188856
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -15.849024765246025,
+          "per_seed": [
+            -15.849024765246025,
+            -10.408718731155957,
+            -28.728283432901986
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -30.029796903207664,
+          "per_seed": [
+            -30.029796903207664,
+            -28.250881890073817,
+            -30.05576020192915
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -31.344908109943443,
+          "per_seed": [
+            -31.344908109943443,
+            -29.652301508563284,
+            -32.63617826831827
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -2.230097300404652,
+          "per_seed": [
+            -2.230097300404652,
+            -31.203030951418864,
+            -1.867796169774987
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -1.9223392095797713,
+          "per_seed": [
+            -1.9223392095797713,
+            -1.9334570345212416,
+            -0.8029792674557101
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -1.5058025387451521,
+          "per_seed": [
+            -1.5058025387451521,
+            -1.3791526268604992,
+            -2.0321996140991514
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_tfim_3q",
+      "model": "b2_pauli_features",
+      "status": "SELECTED",
+      "selected_learning_rate": 3.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.607643348580574,
+          "per_seed": [
+            -1.326273806107146,
+            -1.607643348580574,
+            -2.6964500373900413
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -2.103769153248722,
+          "per_seed": [
+            -1.1114481118894322,
+            -2.103769153248722,
+            -2.7075980670952156
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.202626378975539,
+          "per_seed": [
+            -1.0787789512506027,
+            -2.202626378975539,
+            -2.707527426298297
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -2.2027918382234217,
+          "per_seed": [
+            -1.0786730920669747,
+            -2.2027918382234217,
+            -2.7075274262939932
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -2.202791838225226,
+          "per_seed": [
+            -1.07867309205707,
+            -2.202791838225226,
+            -2.707527426293991
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -2.2027918382252643,
+          "per_seed": [
+            -1.0786730920570589,
+            -2.2027918382252643,
+            -2.7075274262939897
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -0.9332895127511908,
+          "per_seed": [
+            -0.690313824200587,
+            -1.2121959409154621,
+            -0.9332895127511908
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -0.43980291498784213,
+          "per_seed": [
+            -0.43980291498784213,
+            -0.11442802647617624,
+            -0.8140484616255768
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.3659659495068722,
+          "per_seed": [
+            -0.3252805822601254,
+            -0.8063029817259529,
+            -0.3659659495068722
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_tfim_3q",
+      "model": "classical_ising",
+      "status": "SELECTED",
+      "selected_learning_rate": 3.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -0.5286683972111804,
+          "per_seed": [
+            -1.6654400869339006,
+            -0.4282367267218721,
+            -0.5286683972111804
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -0.5313368597312312,
+          "per_seed": [
+            -1.6143493323385782,
+            -0.42781700344243884,
+            -0.5313368597312312
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -0.5313380375497687,
+          "per_seed": [
+            -1.613481793621852,
+            -0.42781694280842375,
+            -0.5313380375497687
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -0.5313380375497707,
+          "per_seed": [
+            -1.6134817930404257,
+            -0.4278169428084232,
+            -0.5313380375497707
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -0.5313380375497714,
+          "per_seed": [
+            -1.61348179304041,
+            -0.427816942808423,
+            -0.5313380375497714
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -0.5313380375497715,
+          "per_seed": [
+            -1.6134817930404062,
+            -0.4278169428084229,
+            -0.5313380375497715
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -0.4525765524592658,
+          "per_seed": [
+            -0.4525765524592658,
+            -0.3641862415274213,
+            -0.5006464148182264
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -0.30235266715978026,
+          "per_seed": [
+            -0.30235266715978026,
+            -0.3505248046467137,
+            -0.20095706544831185
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -0.3441434000378298,
+          "per_seed": [
+            -0.6175561403137705,
+            -0.3441434000378298,
+            0.2648395804350182
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_tfim_3q",
+      "model": "quantum_tfim_linear",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.3,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.9750719622296573,
+          "per_seed": [
+            -1.9750719622296573,
+            -1.3872663548800108,
+            -1.9799814761669188
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.975071962229708,
+          "per_seed": [
+            -1.975071962229708,
+            -1.3872664902240812,
+            -1.979981476166961
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.9750719622297241,
+          "per_seed": [
+            -1.9750719622297241,
+            -1.387266490224103,
+            -1.9799814761669752
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -1.9750719622297286,
+          "per_seed": [
+            -1.9750719622297286,
+            -1.3872664902241076,
+            -1.9799814761669758
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": false,
+          "median_selection_metric": null,
+          "per_seed": [
+            NaN,
+            NaN,
+            NaN
+          ]
+        }
+      ]
+    },
+    {
+      "task": "fig9_tfim_3q",
+      "model": "quantum_tfim_tanh",
+      "status": "SELECTED",
+      "selected_learning_rate": 3.0,
+      "candidates": [
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -2.8468033046635917,
+          "per_seed": [
+            -3.3552392752403177,
+            -1.307615783093505,
+            -2.8468033046635917
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -4.4164184175093,
+          "per_seed": [
+            -4.568507243907626,
+            -1.8076057978366358,
+            -4.4164184175093
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -6.798288271862727,
+          "per_seed": [
+            -6.798288271862727,
+            -2.4979236816047257,
+            -8.727100938048249
+          ]
+        },
+        {
+          "learning_rate": 0.3,
+          "eligible": true,
+          "median_selection_metric": -12.196007993994831,
+          "per_seed": [
+            -12.196007993994831,
+            -3.33189071495419,
+            -20.80462674151441
+          ]
+        },
+        {
+          "learning_rate": 1.0,
+          "eligible": true,
+          "median_selection_metric": -29.36238633535996,
+          "per_seed": [
+            -30.161962004242014,
+            -4.864754768782017,
+            -29.36238633535996
+          ]
+        },
+        {
+          "learning_rate": 3.0,
+          "eligible": true,
+          "median_selection_metric": -30.982965754542924,
+          "per_seed": [
+            -30.982965754542924,
+            -8.20063314893318,
+            -31.148333148206834
+          ]
+        },
+        {
+          "learning_rate": 10.0,
+          "eligible": true,
+          "median_selection_metric": -30.21567243174749,
+          "per_seed": [
+            -30.21567243174749,
+            -19.635121999930746,
+            -30.25042308524416
+          ]
+        },
+        {
+          "learning_rate": 30.0,
+          "eligible": true,
+          "median_selection_metric": -2.069190422616245,
+          "per_seed": [
+            -2.069190422616245,
+            -1.649693428756071,
+            -2.4115369246663283
+          ]
+        },
+        {
+          "learning_rate": 100.0,
+          "eligible": true,
+          "median_selection_metric": -1.3978444499925615,
+          "per_seed": [
+            -1.2984221324816798,
+            -1.3978444499925615,
+            -1.837833151859061
+          ]
+        }
+      ]
+    }
+  ],
+  "photonic": [
+    {
+      "task": "m4_n2",
+      "model": "correlation_tanh",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.1,
+      "candidates": [
+        {
+          "learning_rate": 0.003,
+          "eligible": true,
+          "median_selection_metric": -2.0545185526941125,
+          "per_seed": [
+            -2.0545185526941125,
+            -2.6740363058188024,
+            -1.1044277251280155
+          ]
+        },
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -2.107516014970405,
+          "per_seed": [
+            -2.107516014970405,
+            -3.1151537433584755,
+            -1.1422762424178072
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -2.3010509264054955,
+          "per_seed": [
+            -2.3010509264054955,
+            -3.1610453411654027,
+            -1.1828476538768955
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.453558440495816,
+          "per_seed": [
+            -2.453558440495816,
+            -3.3784154961230963,
+            -1.19777940659857
+          ]
+        }
+      ]
+    },
+    {
+      "task": "m4_n2",
+      "model": "photon_count_tanh",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.003,
+      "candidates": [
+        {
+          "learning_rate": 0.003,
+          "eligible": true,
+          "median_selection_metric": -1.098860410069082,
+          "per_seed": [
+            -1.098860410069082,
+            -0.7709110643595092,
+            -1.1384455313354713
+          ]
+        },
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -0.8678168563475663,
+          "per_seed": [
+            -1.0974584233426599,
+            -0.7483155991818606,
+            -0.8678168563475663
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -0.7384375796098218,
+          "per_seed": [
+            -0.8293330416824695,
+            -0.7384375796098218,
+            -0.7186408114504673
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -0.735421159019257,
+          "per_seed": [
+            -0.7611486862435276,
+            -0.735421159019257,
+            -0.6564400659019117
+          ]
+        }
+      ]
+    },
+    {
+      "task": "m4_n2",
+      "model": "photonic_linear",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.03,
+      "candidates": [
+        {
+          "learning_rate": 0.003,
+          "eligible": true,
+          "median_selection_metric": -1.2428585086887654,
+          "per_seed": [
+            -1.2428585086887654,
+            -2.456278081587725,
+            -1.1250600388558138
+          ]
+        },
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.426472948924,
+          "per_seed": [
+            -1.6319018768233324,
+            -1.426472948924,
+            -1.37443925148342
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.497151024017945,
+          "per_seed": [
+            -2.418203421103701,
+            -1.497151024017945,
+            -1.4224984018206455
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.3139779297854444,
+          "per_seed": [
+            -0.6493266676969379,
+            -1.9222282509097761,
+            -1.3139779297854444
+          ]
+        }
+      ]
+    },
+    {
+      "task": "m4_n2",
+      "model": "photonic_tanh",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.003,
+      "candidates": [
+        {
+          "learning_rate": 0.003,
+          "eligible": true,
+          "median_selection_metric": -1.6499304816641391,
+          "per_seed": [
+            -1.9331218414386266,
+            -1.6499304816641391,
+            -1.1373154500861853
+          ]
+        },
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.6356755163093586,
+          "per_seed": [
+            -2.464428788986644,
+            -1.6356755163093586,
+            -1.0943989718002196
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.5348946098897651,
+          "per_seed": [
+            -2.4220907005631624,
+            -1.5348946098897651,
+            -1.0384477476559062
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -0.838398790334482,
+          "per_seed": [
+            -0.7418595523663817,
+            -2.009594788163661,
+            -0.838398790334482
+          ]
+        }
+      ]
+    },
+    {
+      "task": "m6_n3",
+      "model": "correlation_tanh",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.03,
+      "candidates": [
+        {
+          "learning_rate": 0.003,
+          "eligible": true,
+          "median_selection_metric": -2.0578133813868873,
+          "per_seed": [
+            -1.528548706453095,
+            -2.2538690005098565,
+            -2.0578133813868873
+          ]
+        },
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -2.101532853414514,
+          "per_seed": [
+            -1.5094135243285705,
+            -2.2782062214166894,
+            -2.101532853414514
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -2.101597691541152,
+          "per_seed": [
+            -1.5094119496878229,
+            -2.2780667935672305,
+            -2.101597691541152
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.1015598295383744,
+          "per_seed": [
+            -1.5196548562140957,
+            -2.2784732442168685,
+            -2.1015598295383744
+          ]
+        }
+      ]
+    },
+    {
+      "task": "m6_n3",
+      "model": "photon_count_tanh",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.003,
+      "candidates": [
+        {
+          "learning_rate": 0.003,
+          "eligible": true,
+          "median_selection_metric": -1.6091777303945398,
+          "per_seed": [
+            -1.4554556204668836,
+            -1.6874000702711875,
+            -1.6091777303945398
+          ]
+        },
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.5874154744268698,
+          "per_seed": [
+            -1.4118836466870992,
+            -1.678470447390407,
+            -1.5874154744268698
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.5905679602527805,
+          "per_seed": [
+            -1.3973166711291578,
+            -1.5905679602527805,
+            -1.5931507411271397
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.5796120372510039,
+          "per_seed": [
+            -1.3948246837724405,
+            -1.5796120372510039,
+            -1.6015448802087846
+          ]
+        }
+      ]
+    },
+    {
+      "task": "m6_n3",
+      "model": "photonic_linear",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.1,
+      "candidates": [
+        {
+          "learning_rate": 0.003,
+          "eligible": true,
+          "median_selection_metric": -1.9809239142645871,
+          "per_seed": [
+            -1.4202553799471136,
+            -2.0723538966508,
+            -1.9809239142645871
+          ]
+        },
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.9240757398877084,
+          "per_seed": [
+            -1.7627432841939954,
+            -1.9240757398877084,
+            -2.0983022166445497
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.9404091135668653,
+          "per_seed": [
+            -1.575680005790737,
+            -1.9404091135668653,
+            -2.052930090895338
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.195250579792218,
+          "per_seed": [
+            -1.2995194576147686,
+            -2.335987612013363,
+            -2.195250579792218
+          ]
+        }
+      ]
+    },
+    {
+      "task": "m6_n3",
+      "model": "photonic_tanh",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.1,
+      "candidates": [
+        {
+          "learning_rate": 0.003,
+          "eligible": true,
+          "median_selection_metric": -2.2810315725690735,
+          "per_seed": [
+            -2.2104809888661783,
+            -2.499058957610488,
+            -2.2810315725690735
+          ]
+        },
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -2.683292314376549,
+          "per_seed": [
+            -1.8909421790691325,
+            -2.7668612465718847,
+            -2.683292314376549
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -2.752758598426276,
+          "per_seed": [
+            -1.9820172427571494,
+            -2.752758598426276,
+            -3.3213139401662533
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -3.212786937708064,
+          "per_seed": [
+            -1.9699576678162865,
+            -3.30441126099622,
+            -3.212786937708064
+          ]
+        }
+      ]
+    },
+    {
+      "task": "m8_n4",
+      "model": "correlation_tanh",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.1,
+      "candidates": [
+        {
+          "learning_rate": 0.003,
+          "eligible": true,
+          "median_selection_metric": -2.9655610413221125,
+          "per_seed": [
+            -2.9655610413221125,
+            -2.903785211491073,
+            -2.990456720862493
+          ]
+        },
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -2.965561041653139,
+          "per_seed": [
+            -2.965561041653139,
+            -2.9037850369362648,
+            -2.9967719129536534
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -2.9655609594614334,
+          "per_seed": [
+            -2.9655609594614334,
+            -2.903785036936265,
+            -2.9969515404132427
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.9665330007831625,
+          "per_seed": [
+            -2.9665330007831625,
+            -2.903789601887884,
+            -2.9982958477477157
+          ]
+        }
+      ]
+    },
+    {
+      "task": "m8_n4",
+      "model": "photon_count_tanh",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.003,
+      "candidates": [
+        {
+          "learning_rate": 0.003,
+          "eligible": true,
+          "median_selection_metric": -1.490494855287514,
+          "per_seed": [
+            -1.490494855287514,
+            -1.4466962625238935,
+            -1.7893095301482067
+          ]
+        },
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -1.4854964469785217,
+          "per_seed": [
+            -1.4854964469785217,
+            -1.434793625664619,
+            -1.802665747453903
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -1.480463929313454,
+          "per_seed": [
+            -1.480463929313454,
+            -1.4317371892509518,
+            -1.791658013451568
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -1.4778429115758303,
+          "per_seed": [
+            -1.4778429115758303,
+            -1.4273314720089547,
+            -1.780457629672695
+          ]
+        }
+      ]
+    },
+    {
+      "task": "m8_n4",
+      "model": "photonic_linear",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.1,
+      "candidates": [
+        {
+          "learning_rate": 0.003,
+          "eligible": true,
+          "median_selection_metric": -2.8048252856804807,
+          "per_seed": [
+            -2.704915095848796,
+            -2.8048252856804807,
+            -3.142186269856029
+          ]
+        },
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -2.8816503250288994,
+          "per_seed": [
+            -2.8719099920554876,
+            -2.8816503250288994,
+            -3.16465047765867
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -2.870086512519216,
+          "per_seed": [
+            -2.868031138212647,
+            -2.870086512519216,
+            -3.1944461992203377
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -2.901962944758905,
+          "per_seed": [
+            -2.901962944758905,
+            -2.853486595166657,
+            -3.209907171264377
+          ]
+        }
+      ]
+    },
+    {
+      "task": "m8_n4",
+      "model": "photonic_tanh",
+      "status": "SELECTED",
+      "selected_learning_rate": 0.1,
+      "candidates": [
+        {
+          "learning_rate": 0.003,
+          "eligible": true,
+          "median_selection_metric": -2.708580565990135,
+          "per_seed": [
+            -2.708580565990135,
+            -2.4109990885009713,
+            -2.781755443538317
+          ]
+        },
+        {
+          "learning_rate": 0.01,
+          "eligible": true,
+          "median_selection_metric": -3.3369797815851325,
+          "per_seed": [
+            -3.3369797815851325,
+            -2.984042089234676,
+            -3.446023687267803
+          ]
+        },
+        {
+          "learning_rate": 0.03,
+          "eligible": true,
+          "median_selection_metric": -3.6223364187225826,
+          "per_seed": [
+            -3.6223364187225826,
+            -3.5364747352266592,
+            -3.9230829357462547
+          ]
+        },
+        {
+          "learning_rate": 0.1,
+          "eligible": true,
+          "median_selection_metric": -3.8604499597512443,
+          "per_seed": [
+            -3.825473424063089,
+            -3.8604499597512443,
+            -4.52362093856869
+          ]
+        }
+      ]
+    }
+  ]
+}

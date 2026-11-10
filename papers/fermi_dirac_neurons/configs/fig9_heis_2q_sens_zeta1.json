@@ -1,0 +1,56 @@
+{
+  "description": "Fig. 9c sensitivity: target coefficients zeta ~ U[-1, 1] instead of U[-2, 2]",
+  "experiment": {
+    "task": "train",
+    "id": "fig9_heis_2q_sens_zeta1"
+  },
+  "data": {
+    "n_qubits": 2,
+    "train_states": {
+      "set": "code_squared_loss"
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "regression",
+    "target": {
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "low": -1.0,
+      "high": 1.0,
+      "function": "tanh"
+    }
+  },
+  "models": [
+    {
+      "name": "quantum_heis_tanh",
+      "kind": "hamiltonian",
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "activation": "tanh"
+    },
+    {
+      "name": "quantum_heis_linear",
+      "kind": "hamiltonian",
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "activation": "linear"
+    },
+    {
+      "name": "classical_fcim",
+      "kind": "hamiltonian",
+      "term_set": "fcim",
+      "include_identity": false,
+      "activation": "tanh"
+    }
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 0.1,
+    "epochs": 10000,
+    "eval_every": 1000,
+    "init_low": -0.5,
+    "init_high": 0.5
+  }
+}

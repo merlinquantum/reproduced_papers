@@ -1,0 +1,37 @@
+{
+  "description": "E12a (extension X3, amended): Kirby-Love flag of the support of phi(H) vs T for random noncontextual and contextual 2-local sets",
+  "experiment": {
+    "task": "contextuality_scan",
+    "id": "e12_invariance"
+  },
+  "contextuality": {
+    "temperatures": {
+      "low": 0.03,
+      "high": 100.0,
+      "count": 25
+    },
+    "invariance": {
+      "n_qubits": [
+        3,
+        4
+      ],
+      "sets_per_kind": 20,
+      "sizes": [
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "locality": 2,
+      "activations": [
+        "tanh",
+        "softplus",
+        "silu"
+      ],
+      "epsilon": 1e-08,
+      "theta_range": 1.0
+    },
+    "graded": null
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "sweep_id": "e8_classical_data_v1",
+  "description": "E8 (claim C8): basis-state (classical) vs Haar (quantum) training data, same count; validation on 500 Haar states.",
+  "configs": [
+    "e8_fig7_tanh_2q_basis",
+    "e8_fig7_tanh_2q_haar",
+    "e8_fig7_tanh_7q_basis",
+    "e8_fig7_tanh_7q_haar",
+    "e8_fig8_logistic_3q_basis",
+    "e8_fig8_logistic_3q_haar",
+    "e8_fig8_logistic_5q_basis",
+    "e8_fig8_logistic_5q_haar",
+    "e8_fig8_logistic_7q_basis",
+    "e8_fig8_logistic_7q_haar"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "max_workers": 3,
+  "plan": {
+    "metrics": "final training loss; validation MSE (Fig. 7) or validation accuracy, linear rule (Fig. 8)",
+    "comparison_rule": "paired by seed, quantum minus commuting model, two-sided Wilcoxon over 10 seeds, tolerances 0.1 decade / 1 point",
+    "decision_rule": "C8 supported if the advantage is significant with Haar training data and a tie or reversed with basis-state training data",
+    "selection": "none",
+    "expected_runs": 100,
+    "memory_budget_gib": 4
+  }
+}

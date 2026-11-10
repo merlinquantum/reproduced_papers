@@ -1,0 +1,50 @@
+{
+  "description": "E11 (extension X1): Fig. 7a protocol (tanh, TFIM vs IM), 2 qubits, haar training states",
+  "experiment": {
+    "task": "train",
+    "id": "e11_tanh_2q_haar"
+  },
+  "data": {
+    "n_qubits": 2,
+    "train_states": {
+      "set": "haar",
+      "n_states": 13
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "regression",
+    "target": {
+      "term_set": "tfim",
+      "include_identity": true,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "tanh"
+    }
+  },
+  "models": [
+    {
+      "name": "quantum_tfim",
+      "kind": "hamiltonian",
+      "term_set": "tfim",
+      "include_identity": true,
+      "activation": "tanh"
+    },
+    {
+      "name": "classical_im",
+      "kind": "hamiltonian",
+      "term_set": "ising",
+      "include_identity": true,
+      "activation": "tanh"
+    }
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 0.1,
+    "epochs": 2000,
+    "eval_every": 500,
+    "init_low": -0.5,
+    "init_high": 0.5
+  }
+}

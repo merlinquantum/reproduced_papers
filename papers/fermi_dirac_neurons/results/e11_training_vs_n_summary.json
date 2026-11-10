@@ -1,0 +1,355 @@
+{
+  "sweep_dir": "papers/fermi_dirac_neurons/outdir/sweeps/e11_training_vs_n_v4",
+  "rows": [
+    {
+      "n_qubits": 2,
+      "state_set": "code",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.08426590954106988,
+        "train_loss_min": 0.06185830202616611,
+        "train_loss_max": 0.1284511138397845,
+        "validation_mse_median": 0.05661369272858626
+      },
+      "quantum_tfim": {
+        "train_loss_median": 3.2652387337902724e-05,
+        "train_loss_min": 9.40761735989603e-06,
+        "train_loss_max": 0.00032029974800033487,
+        "validation_mse_median": 1.899429516940599e-05
+      },
+      "quantum_advantage_decades_median": 3.5948229348596112,
+      "seeds_favouring_quantum": 5
+    },
+    {
+      "n_qubits": 2,
+      "state_set": "haar",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.035262043817274165,
+        "train_loss_min": 0.02871475764153551,
+        "train_loss_max": 0.0856148975754151,
+        "validation_mse_median": 0.05986144464072049
+      },
+      "quantum_tfim": {
+        "train_loss_median": 0.000221783272293302,
+        "train_loss_min": 1.564340283115396e-05,
+        "train_loss_max": 0.0010616332915069336,
+        "validation_mse_median": 0.0005192735847213819
+      },
+      "quantum_advantage_decades_median": 2.2013786937929094,
+      "seeds_favouring_quantum": 5
+    },
+    {
+      "n_qubits": 3,
+      "state_set": "code",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.13505680388585337,
+        "train_loss_min": 0.0926394987343477,
+        "train_loss_max": 0.16334792582399102,
+        "validation_mse_median": 0.03971642581643644
+      },
+      "quantum_tfim": {
+        "train_loss_median": 0.0002882841430183256,
+        "train_loss_min": 5.502936243435931e-05,
+        "train_loss_max": 0.0004960128138439265,
+        "validation_mse_median": 0.00010378415915562669
+      },
+      "quantum_advantage_decades_median": 2.61515205011055,
+      "seeds_favouring_quantum": 5
+    },
+    {
+      "n_qubits": 3,
+      "state_set": "haar",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.028927924899456777,
+        "train_loss_min": 0.011293485269463341,
+        "train_loss_max": 0.04643718455133777,
+        "validation_mse_median": 0.053690741787825104
+      },
+      "quantum_tfim": {
+        "train_loss_median": 0.0006877226404166123,
+        "train_loss_min": 0.0004483681906512331,
+        "train_loss_max": 0.0017863485316517915,
+        "validation_mse_median": 0.0013560322918823163
+      },
+      "quantum_advantage_decades_median": 1.578261848590534,
+      "seeds_favouring_quantum": 5
+    },
+    {
+      "n_qubits": 4,
+      "state_set": "code",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.11587564320692964,
+        "train_loss_min": 0.08352940663594802,
+        "train_loss_max": 0.15479171584065082,
+        "validation_mse_median": 0.01836255999227336
+      },
+      "quantum_tfim": {
+        "train_loss_median": 0.0004320188870238301,
+        "train_loss_min": 0.0002275175740096057,
+        "train_loss_max": 0.0006906553834827078,
+        "validation_mse_median": 8.912495243667213e-05
+      },
+      "quantum_advantage_decades_median": 2.4658082707939526,
+      "seeds_favouring_quantum": 5
+    },
+    {
+      "n_qubits": 4,
+      "state_set": "haar",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.01357543282207678,
+        "train_loss_min": 0.010059751147751152,
+        "train_loss_max": 0.022510789180791135,
+        "validation_mse_median": 0.01892883350780414
+      },
+      "quantum_tfim": {
+        "train_loss_median": 0.0013832829793565978,
+        "train_loss_min": 0.0012011575856305167,
+        "train_loss_max": 0.002240639449503621,
+        "validation_mse_median": 0.0024692013812953506
+      },
+      "quantum_advantage_decades_median": 0.9229872492105757,
+      "seeds_favouring_quantum": 5
+    },
+    {
+      "n_qubits": 5,
+      "state_set": "code",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.10454427736373396,
+        "train_loss_min": 0.05077805228326648,
+        "train_loss_max": 0.14421385119376065,
+        "validation_mse_median": 0.008416151251523278
+      },
+      "quantum_tfim": {
+        "train_loss_median": 0.0006602571183785997,
+        "train_loss_min": 0.0005669149376215557,
+        "train_loss_max": 0.0009705300904653096,
+        "validation_mse_median": 0.00010486026519854041
+      },
+      "quantum_advantage_decades_median": 2.1374796996831282,
+      "seeds_favouring_quantum": 5
+    },
+    {
+      "n_qubits": 5,
+      "state_set": "haar",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.008037694048950583,
+        "train_loss_min": 0.004522958059978472,
+        "train_loss_max": 0.01094136321821214,
+        "validation_mse_median": 0.010834580814779544
+      },
+      "quantum_tfim": {
+        "train_loss_median": 0.0019757389081560815,
+        "train_loss_min": 0.0016801173122287624,
+        "train_loss_max": 0.0024119348449769557,
+        "validation_mse_median": 0.0022970636578336784
+      },
+      "quantum_advantage_decades_median": 0.6094019184762867,
+      "seeds_favouring_quantum": 5
+    },
+    {
+      "n_qubits": 6,
+      "state_set": "code",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.11922226610105309,
+        "train_loss_min": 0.1095142852873096,
+        "train_loss_max": 0.13508465855455767,
+        "validation_mse_median": 0.004727725028124989
+      },
+      "quantum_tfim": {
+        "train_loss_median": 0.0008932552459067922,
+        "train_loss_min": 0.0006343056103126553,
+        "train_loss_max": 0.0015416372532226334,
+        "validation_mse_median": 7.75261025744896e-05
+      },
+      "quantum_advantage_decades_median": 2.1253817969600446,
+      "seeds_favouring_quantum": 5
+    },
+    {
+      "n_qubits": 6,
+      "state_set": "haar",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.006158902250161809,
+        "train_loss_min": 0.004524548458064317,
+        "train_loss_max": 0.006391439438133706,
+        "validation_mse_median": 0.006233733714945837
+      },
+      "quantum_tfim": {
+        "train_loss_median": 0.002247747065429948,
+        "train_loss_min": 0.001755942812307125,
+        "train_loss_max": 0.002411307211061955,
+        "validation_mse_median": 0.0024557048876773344
+      },
+      "quantum_advantage_decades_median": 0.41106487622116594,
+      "seeds_favouring_quantum": 5
+    },
+    {
+      "n_qubits": 7,
+      "state_set": "code",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.12694963947055637,
+        "train_loss_min": 0.11125148241109872,
+        "train_loss_max": 0.1504723687982838,
+        "validation_mse_median": 0.002586906691346321
+      },
+      "quantum_tfim": {
+        "train_loss_median": 0.0010571485981179009,
+        "train_loss_min": 0.0006523523638916489,
+        "train_loss_max": 0.002053079529251455,
+        "validation_mse_median": 5.864017217754108e-05
+      },
+      "quantum_advantage_decades_median": 2.0691131370121036,
+      "seeds_favouring_quantum": 5
+    },
+    {
+      "n_qubits": 7,
+      "state_set": "haar",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.003969188682672781,
+        "train_loss_min": 0.00358398481562737,
+        "train_loss_max": 0.004537963788515884,
+        "validation_mse_median": 0.00423680403851872
+      },
+      "quantum_tfim": {
+        "train_loss_median": 0.0020513073354540747,
+        "train_loss_min": 0.0019777131401767364,
+        "train_loss_max": 0.0023540106631790673,
+        "validation_mse_median": 0.002203405309923855
+      },
+      "quantum_advantage_decades_median": 0.2866710113226407,
+      "seeds_favouring_quantum": 5
+    },
+    {
+      "n_qubits": 8,
+      "state_set": "code",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.12908965461897048,
+        "train_loss_min": 0.10843122927604372,
+        "train_loss_max": 0.16898794535837044,
+        "validation_mse_median": 0.0012895388211659818
+      },
+      "quantum_tfim": {
+        "train_loss_median": 0.0011548643024744515,
+        "train_loss_min": 0.000927064775527025,
+        "train_loss_max": 0.002250698946685711,
+        "validation_mse_median": 4.2546417360502e-05
+      },
+      "quantum_advantage_decades_median": 2.0087417901806575,
+      "seeds_favouring_quantum": 5
+    },
+    {
+      "n_qubits": 8,
+      "state_set": "haar",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "classical_im": {
+        "train_loss_median": 0.002823232127199678,
+        "train_loss_min": 0.002612086153160864,
+        "train_loss_max": 0.0034108400817907713,
+        "validation_mse_median": 0.0029573820585746713
+      },
+      "quantum_tfim": {
+        "train_loss_median": 0.0017875456958181186,
+        "train_loss_min": 0.0016153443347177345,
+        "train_loss_max": 0.0018850654186625525,
+        "validation_mse_median": 0.0018298929476509489
+      },
+      "quantum_advantage_decades_median": 0.19848943479322978,
+      "seeds_favouring_quantum": 5
+    }
+  ]
+}

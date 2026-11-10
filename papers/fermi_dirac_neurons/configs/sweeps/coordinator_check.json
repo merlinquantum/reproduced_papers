@@ -1,0 +1,8 @@
+{
+  "sweep_id": "coordinator_check",
+  "description": "Coordinator self-test before the paper sweep: two fast configs x two seeds.",
+  "configs": ["fig9_tfim_2q_sens_eta03", "fig8_logistic_2q_original"],
+  "seeds": [0, 1],
+  "max_workers": 4,
+  "plan": {"purpose": "infrastructure check only; results not used"}
+}

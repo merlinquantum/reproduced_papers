@@ -1,0 +1,38 @@
+{
+  "data": {
+    "n_qubits": 4,
+    "train_states": {
+      "set": "haar",
+      "n_states": 1000
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "sign_linear",
+    "target": {
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "linear"
+    },
+    "selection_fraction": 0.2
+  },
+  "description": "Phase 5 B4 reference for fig8_logistic_4q: ridge / logistic regression on Pauli expectations",
+  "experiment": {
+    "task": "linear_reference",
+    "id": "p5_ref_fig8_logistic_4q"
+  },
+  "linear_reference": {
+    "max_weights": [
+      2
+    ],
+    "regularization": [
+      1e-06,
+      0.0001,
+      0.01,
+      1.0
+    ]
+  }
+}

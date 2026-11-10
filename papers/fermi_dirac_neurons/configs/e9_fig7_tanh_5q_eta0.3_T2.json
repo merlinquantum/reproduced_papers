@@ -1,0 +1,52 @@
+{
+  "description": "E9a: fig7_tanh_5q original protocol with learning rate 0.3 and temperature 2",
+  "experiment": {
+    "task": "train",
+    "id": "e9_fig7_tanh_5q_eta0.3_T2"
+  },
+  "data": {
+    "n_qubits": 5,
+    "train_states": {
+      "set": "code_squared_loss"
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "regression",
+    "target": {
+      "term_set": "tfim",
+      "include_identity": true,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "tanh"
+    }
+  },
+  "models": [
+    {
+      "name": "quantum_tfim",
+      "kind": "hamiltonian",
+      "term_set": "tfim",
+      "include_identity": true,
+      "activation": "tanh"
+    },
+    {
+      "name": "classical_im",
+      "kind": "hamiltonian",
+      "term_set": "ising",
+      "include_identity": true,
+      "activation": "tanh"
+    }
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 0.3,
+    "epochs": 2000,
+    "eval_every": 100,
+    "init_low": -0.5,
+    "init_high": 0.5
+  },
+  "physics": {
+    "temperature": 2.0
+  }
+}

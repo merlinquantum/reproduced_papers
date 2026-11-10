@@ -1,0 +1,31 @@
+{
+  "sweep_id": "p4_learning_v1",
+  "description": "Phase 4 P4-L: photonic Fermi-Dirac neuron (MerLin) vs photon-count, correlation and linear baselines, (m, N) = (4,2), (6,3), (8,4), haar and fock training data.",
+  "configs": [
+    "p4_learn_m4_n2_fock",
+    "p4_learn_m4_n2_haar",
+    "p4_learn_m6_n3_fock",
+    "p4_learn_m6_n3_haar",
+    "p4_learn_m8_n4_fock",
+    "p4_learn_m8_n4_haar"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "max_workers": 3,
+  "plan": {
+    "decision_rule": "see LOG.md 'Phase 4 Adaptation Plan \u2014 2026-11-10T12:30:08Z' (paired photonic_tanh advantages, Wilcoxon, 0.1-decade tolerance; preservation criteria (i)-(iii))",
+    "selection": "none",
+    "expected_runs": 60,
+    "memory_budget_gib": 2.0
+  }
+}

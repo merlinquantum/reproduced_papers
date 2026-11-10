@@ -1,0 +1,26 @@
+{
+  "description": "Phase 4 smoke of photonic_gradient_variance (m = 3, N = 2, 5 draws; not a result)",
+  "experiment": {
+    "task": "photonic_gradient_variance",
+    "id": "p4_grad_smoke"
+  },
+  "photonic_gradient_variance": {
+    "n_modes": 3,
+    "n_photons": 2,
+    "draws": 5,
+    "energy_ranges": [
+      0.5,
+      3.141592653589793
+    ],
+    "temperatures": [
+      0.5,
+      2.0
+    ],
+    "inputs": [
+      "fock_first",
+      "haar_interferometer",
+      "haar_full"
+    ],
+    "target_range": 2.0
+  }
+}

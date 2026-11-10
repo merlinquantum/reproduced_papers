@@ -1,0 +1,65 @@
+{
+  "description": "Phase 5 stage A: fig7_softplus_2q (original protocol) with B1, B2, B3 at learning rate 30, 20 % of the training states held out for selection",
+  "experiment": {
+    "task": "train",
+    "id": "p5_sel_fig7_softplus_2q_eta30"
+  },
+  "data": {
+    "n_qubits": 2,
+    "train_states": {
+      "set": "code_squared_loss"
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "regression",
+    "target": {
+      "term_set": "tfim",
+      "include_identity": true,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "exp"
+    },
+    "selection_fraction": 0.2
+  },
+  "models": [
+    {
+      "name": "quantum_tfim",
+      "kind": "hamiltonian",
+      "term_set": "tfim",
+      "include_identity": true,
+      "activation": "softplus_code"
+    },
+    {
+      "name": "classical_im",
+      "kind": "hamiltonian",
+      "term_set": "ising",
+      "include_identity": true,
+      "activation": "softplus_code"
+    },
+    {
+      "name": "b2_pauli_features",
+      "kind": "pauli_features",
+      "term_set": "tfim",
+      "include_identity": true,
+      "activation": "softplus_code"
+    },
+    {
+      "name": "b3_quantum_linear",
+      "kind": "pauli_features",
+      "term_set": "tfim",
+      "include_identity": true,
+      "activation": "linear"
+    }
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 30,
+    "epochs": 2000,
+    "eval_every": 100,
+    "init_low": -0.5,
+    "init_high": 0.5,
+    "on_nonfinite": "freeze"
+  }
+}

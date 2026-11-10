@@ -1,0 +1,37 @@
+{
+  "data": {
+    "n_qubits": 2,
+    "train_states": {
+      "set": "code_squared_loss"
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "regression",
+    "target": {
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "tanh"
+    },
+    "selection_fraction": 0.2
+  },
+  "description": "Phase 5 B4 reference for fig9_heis_2q: ridge / logistic regression on Pauli expectations",
+  "experiment": {
+    "task": "linear_reference",
+    "id": "p5_ref_fig9_heis_2q"
+  },
+  "linear_reference": {
+    "max_weights": [
+      2
+    ],
+    "regularization": [
+      1e-06,
+      0.0001,
+      0.01,
+      1.0
+    ]
+  }
+}

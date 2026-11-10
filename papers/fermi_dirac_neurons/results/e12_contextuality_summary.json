@@ -1,0 +1,6166 @@
+{
+  "sweep_dir": "papers/fermi_dirac_neurons/outdir/sweeps/e12_contextuality_v1",
+  "invariance": [
+    {
+      "n_qubits": 3,
+      "set_kind": "contextual",
+      "activation": "silu",
+      "sets": 20,
+      "changed": 0,
+      "examples": []
+    },
+    {
+      "n_qubits": 3,
+      "set_kind": "contextual",
+      "activation": "softplus",
+      "sets": 20,
+      "changed": 0,
+      "examples": []
+    },
+    {
+      "n_qubits": 3,
+      "set_kind": "contextual",
+      "activation": "tanh",
+      "sets": 20,
+      "changed": 0,
+      "examples": []
+    },
+    {
+      "n_qubits": 3,
+      "set_kind": "noncontextual",
+      "activation": "silu",
+      "sets": 20,
+      "changed": 0,
+      "examples": []
+    },
+    {
+      "n_qubits": 3,
+      "set_kind": "noncontextual",
+      "activation": "softplus",
+      "sets": 20,
+      "changed": 0,
+      "examples": []
+    },
+    {
+      "n_qubits": 3,
+      "set_kind": "noncontextual",
+      "activation": "tanh",
+      "sets": 20,
+      "changed": 0,
+      "examples": []
+    },
+    {
+      "n_qubits": 4,
+      "set_kind": "contextual",
+      "activation": "silu",
+      "sets": 20,
+      "changed": 0,
+      "examples": []
+    },
+    {
+      "n_qubits": 4,
+      "set_kind": "contextual",
+      "activation": "softplus",
+      "sets": 20,
+      "changed": 0,
+      "examples": []
+    },
+    {
+      "n_qubits": 4,
+      "set_kind": "contextual",
+      "activation": "tanh",
+      "sets": 20,
+      "changed": 1,
+      "examples": [
+        {
+          "labels": [
+            "XIIZ",
+            "IIIX",
+            "YIIX",
+            "XYII"
+          ],
+          "support_sizes": [
+            2,
+            3,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4,
+            4
+          ],
+          "temperatures": [
+            0.03,
+            0.042063738523100275,
+            0.05897860328465834,
+            0.08269535156745106,
+            0.11594918818030374,
+            0.16257521111940154,
+            0.2279507056954777,
+            0.319615296017692,
+            0.4481404746557164,
+            0.6283487915845367,
+            0.8810233090172661,
+            1.2353044701086286,
+            1.7320508075688767,
+            2.428551075943397,
+            3.4051312482825633,
+            4.77441834881986,
+            6.694329500821692,
+            9.38628419033467,
+            13.16074012952492,
+            18.452997719293638,
+            25.873402367724445,
+            36.27773439663083,
+            50.865904462345334,
+            71.32033683483647,
+            100.0
+          ]
+        }
+      ]
+    },
+    {
+      "n_qubits": 4,
+      "set_kind": "noncontextual",
+      "activation": "silu",
+      "sets": 20,
+      "changed": 0,
+      "examples": []
+    },
+    {
+      "n_qubits": 4,
+      "set_kind": "noncontextual",
+      "activation": "softplus",
+      "sets": 20,
+      "changed": 0,
+      "examples": []
+    },
+    {
+      "n_qubits": 4,
+      "set_kind": "noncontextual",
+      "activation": "tanh",
+      "sets": 20,
+      "changed": 0,
+      "examples": []
+    }
+  ],
+  "graded": [
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20091508571622352
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20485121238372117
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2097557232118366
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21175716110302056
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22701685248089198
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22370425088570578
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21847374096838512
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21131098127669679
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20313100116150257
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.19543723317980732
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.19480345912862818
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20256633561568615
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2141651740963978
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21545581969607797
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22872727533301562
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.23738250286075302
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2320102560589215
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22934172938352976
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22789213132092068
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22712574320992268
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22672757466655502
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 14.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22652276507432983
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 14.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22641798088046283
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 12.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22636452173733002
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 10.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22633728791103447
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20091508571622352
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20485121238372117
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2097557232118366
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21175716110302056
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22701685248089198
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22370425088570578
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21847374096838512
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21131098127669679
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20313100116150257
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.19543723317980732
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.19480345912862818
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20256633561568615
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2141651740963978
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21545581969607797
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22872727533301562
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2373825313999931
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2320102560589215
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22934172938352976
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 14.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22789213132092068
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 13.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22712574320992268
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 11.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2267274543729672
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22652253585498905
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22641788160801823
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22636449670957964
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22633728219121418
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20091508571622352
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20485121238372117
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2097557232118366
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21175716110302056
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22701685248089198
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22370366853104906
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21847374096838512
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21131098127669679
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20313108266363716
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.19543908507104463
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.19480345912862818
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20256633561568615
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2141651740963978
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21545330413586333
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22872727533301562
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 14.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2373858499006819
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 12.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2320056238212453
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 10.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22932947297625872
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22787064262368079
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2271200942087509
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22672610107423147
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22652238220719156
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22641788160801823
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22636449670957964
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.22633728219121418
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4060323911763392
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4060323911644716
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.40603238358299376
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4060315890058172
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4060089258274037
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4057607551814703
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.39357584972959286
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.39411522648743424
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3963330971108861
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3885506809066775
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.38619829744930895
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3737002379536903
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3548035985039598
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3612814435136846
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.36297321443387975
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3556104496960322
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.34799127435484406
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3438180670785383
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3393253569604556
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 62.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.33630125391005455
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 62.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.33571425129414667
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 60.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.33586737098150277
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 56.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.34068772013352266
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 51.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3406508047095097
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 42.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.34063232952481254
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.40603238705111366
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.40603238703924605
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.40603237945779314
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.40603158488562163
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4060089219016966
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.40576075309540316
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.39357584972959286
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.39411522648743424
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3963330508581703
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3885506592608086
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.38619828637282155
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3737002461472914
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 63.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3548035970774287
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 62.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3612814169581046
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 62.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3629732228768144
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 62.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3556104496960322
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 62.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3479912173689704
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 61.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.34381798472063324
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 59.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.33932521492891454
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 54.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3363010259433132
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 46.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.33571378239402716
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 38.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.33586654647668374
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 24.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.34068696745814575
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 15.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.34065027743890375
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.34063219756013136
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 60.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.40601964572196403
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 60.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.406019645710127
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 60.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.40601963814778486
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 59.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4060188455014313
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 59.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4059962341506153
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 59.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4057485523298787
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 59.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3935713342142186
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 59.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3941084267332397
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 59.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3963281485673809
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 59.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3885372608693182
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 59.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3861969576505899
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 58.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.37369504586714525
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 59.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.35479892300010374
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 57.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.36127757693439055
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 55.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3629657174664658
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 53.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.35558386130615877
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 49.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3479604420779703
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 41.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.34376100326296805
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 29.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.339278797773735
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 19.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3362375522648291
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3356869334193664
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3358601719412033
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3406856837316122
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.34065027743890375
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.34063219756013136
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5136074105190915
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5136074104910209
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.511927355045634
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5072474550918309
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5034504738988367
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5006182474478482
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.49847410865160613
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.49025351555204516
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4831688771178141
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.47069798086972625
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.45837161372618945
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.454159177199464
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4173793349038618
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4042325242641086
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 255.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3925877443649138
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 254.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3812529729743195
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 253.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.382084924652078
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 251.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3933297176853925
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 245.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.384331367670122
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 235.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3835826144390903
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 225.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.38268699364012937
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 210.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3822550354787114
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 196.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.382042687538507
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 170.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3819367756394385
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 130.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.38188346183640776
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 253.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.513607390550981
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 253.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5136073905229057
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 253.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5119273427818424
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 253.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5072474535208376
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 253.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5034504842294976
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 254.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5006182686541608
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 253.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.49847408483025824
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 253.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4902534764075481
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 252.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.48316882544531736
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 253.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4706979219773865
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 252.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.458371605817019
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 252.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.45415907642214026
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 251.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.417379300881717
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 250.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.40423237582486965
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 248.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.39258767349037405
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 246.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3812528288027055
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 237.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3820840979329776
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 225.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.39332841145871783
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 207.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.38433032520154475
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 188.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3835815138201424
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 151.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.38268553457728127
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 109.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3822524873118321
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 61.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.382040338811134
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 26.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.38193536130792377
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 21.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3818830923057029
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 236.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5135757464016856
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 235.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5135757463736034
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 234.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5119033882474998
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 232.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5072087269186532
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 233.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5034240269434553
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 232.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.5005848787988322
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 230.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.49844799037022675
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 229.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.49022212861205217
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 230.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4831429431143112
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 229.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.47065685173209265
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 227.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.45833943273980293
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 225.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4541185380527709
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 218.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4172845185024718
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 211.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4041209361187005
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 198.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3924537905162952
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 176.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.38105998266507796
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 150.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3818517223156609
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 117.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.39312803776221505
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 77.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.38405841472904284
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 40.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.38336275997951896
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 21.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.38260521981495366
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 21.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3822333122682155
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 21.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.38203696136213927
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 21.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3819352865292933
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 21.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.3818830923057029
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 1022.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 1022.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 1022.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 1021.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 1021.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 1022.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 1021.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 1021.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 1021.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 1021.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 1021.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 1021.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 1021.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 1018.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 1018.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 1012.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 1003.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 980.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 922.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 805.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 680.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 611.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 544.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 454.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 352.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 1008.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 1007.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 1007.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 1007.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 1007.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 1008.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 1006.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 1006.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 1005.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 1004.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 999.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 996.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 991.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 983.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 969.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 923.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 861.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 742.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 601.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 491.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 402.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 299.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 162.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4481280268766556
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 60.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.44781383316705703
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 27.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.44765462482277707
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 865.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 866.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 865.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 861.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 863.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 864.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 864.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 857.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 847.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 840.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 820.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 787.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 745.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 696.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 584.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 481.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 386.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 291.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 201.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": null
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 102.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4516076898472164
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 35.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.44967805700836366
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 27.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.44865864654232746
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 27.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.44811257808570243
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 27.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4478122530236177
+    },
+    {
+      "family": "heisenberg",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 27.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.4476547184753751
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.0001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 4.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 3.5,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 2,
+      "epsilon": 0.01,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 3.0,
+      "noncontextual_draws": 20,
+      "median_contextual_fraction": 0.0
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.012289000569199127
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.01228900056911919
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.01228900049201992
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.01228898963704933
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 9.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.01228860310588703
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.012283765296284999
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.012260777816221424
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.012432269650377137
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.012878696768574782
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.014150036926836362
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.017562319072935317
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.025247930190141654
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.032883399344850794
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03396941872632758
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03618593791069963
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03587651999105862
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 9.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03470945152004695
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.034089281033347296
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03376449106391499
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03359644985737231
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.033510177502889815
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 7.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03346607934605739
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 6.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03344358953468046
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 6.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.033432134982550266
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.0001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.033426307579988046
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.012289000569199127
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.01228900056911919
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.01228900049201992
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.01228898963704933
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.01228860310588703
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 9.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.012283766608904567
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.012260782804299986
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.012432269650377137
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.012878696768574782
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.014150036926836362
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.017562319072935317
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.025247930190141654
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.032883399344850794
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.033969422822129836
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 9.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03618593791069963
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03587643918542188
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03470932947346289
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 8.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03408927194553657
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 7.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.033764299211088256
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 6.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03359623161943859
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03350999612097677
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03346604314488216
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.033443582219551515
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03343213702688752
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03342630808450925
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 8.5,
+      "noncontextual_draws": 1,
+      "median_contextual_fraction": 0.012243266561928201
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 8.5,
+      "noncontextual_draws": 1,
+      "median_contextual_fraction": 0.012243266561787869
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 8.5,
+      "noncontextual_draws": 1,
+      "median_contextual_fraction": 0.012243266415674692
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 8.5,
+      "noncontextual_draws": 1,
+      "median_contextual_fraction": 0.01224324503639762
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 8.5,
+      "noncontextual_draws": 1,
+      "median_contextual_fraction": 0.01224248192792099
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 1,
+      "median_contextual_fraction": 0.01223279695065066
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 9.5,
+      "noncontextual_draws": 1,
+      "median_contextual_fraction": 0.012244948382102883
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 9.5,
+      "noncontextual_draws": 1,
+      "median_contextual_fraction": 0.012432563151964615
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 9.5,
+      "noncontextual_draws": 1,
+      "median_contextual_fraction": 0.01287913851845851
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.014150614905392156
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.017557296275757583
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.025243242426569834
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03287796451841363
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 8.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03394292897427453
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 7.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03616467920963795
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 6.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.035839724084529734
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 6.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.034698651972742245
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.034079540882439696
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03376244670458767
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03359619794935215
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.033510112648905466
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03346606260980317
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03344358727741792
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03343213702688752
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 3,
+      "epsilon": 0.01,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 5.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.03342630808450925
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 32.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.0796930450662719
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 32.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07968960112634565
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 32.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07963617796914801
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 32.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07928506042971667
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 32.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07808444057215713
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 32.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07564631540382788
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 32.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07254509734435349
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 32.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06790914600397285
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 32.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06588644048453657
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 32.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06579566411797533
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 32.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06782716093723884
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 32.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07369770994593772
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 31.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07235813308551814
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 30.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06911007363085453
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 29.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07248649797569595
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 28.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07416805586764691
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 27.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07523375151483358
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 24.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07586809745774287
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 22.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07622323728625896
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 22.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07641380431328881
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 21.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07651353505654213
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 19.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.0765650256196761
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 17.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07659141386966956
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 13.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07660488961560608
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.0001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 10.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07661175788780322
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 31.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07969302107518361
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 30.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07968957713525737
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 30.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07963615397806223
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 30.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07928503643925167
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 31.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07808441661246823
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 32.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07564629189624306
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 31.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07254507638114521
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 31.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06790914600397285
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 31.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06588644048453657
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 31.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06579563700794328
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 30.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06782714629804626
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 30.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07369768853421815
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 29.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07235778778164326
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 26.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06910998375741606
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 25.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07248622302580832
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 23.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07416770615310919
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 21.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07523338868280688
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 19.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07586792601334275
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 18.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07622293196510782
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 14.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07641344706028108
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 12.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07651292676586818
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 10.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.0765648417212717
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 8.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07659131596495133
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 7.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07660487556498596
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 7.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07661175667289694
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 25.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07967537518492562
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 25.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.0796719314083284
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 25.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07961851031792666
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 25.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07926739910590352
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 26.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07806676419666297
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 26.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07562860788078607
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 26.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07251715459495905
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 26.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06789830673135278
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 25.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06586846962715415
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 23.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06573898676073225
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 22.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06777988324434514
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 22.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07367493673446163
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 20.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.0723183119849557
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 19.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.06907782980719346
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 17.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07244961700822111
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 15.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07412516468884522
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 13.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07520146420979945
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 10.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07582880702409361
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07620197728842687
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 7.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07640897371794197
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 7.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.0765125642347384
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 7.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07656477216771457
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 7.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.0765913505231764
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 7.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07660487556498596
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 4,
+      "epsilon": 0.01,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 7.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.07661175667289694
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 122.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2124789194906398
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 122.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21038468880559402
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 122.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2078067705924725
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 122.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2055791648435124
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 123.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20291760903617362
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 123.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20077032703054415
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 124.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1962895008203407
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 124.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1929264315734155
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 123.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1819562788497469
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 120.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.17567270800265578
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 118.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.17189368181179432
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 114.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.16910749814954906
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 108.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.16427057456544014
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 104.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15970761944239775
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 94.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15799362449791143
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 86.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15373489643881294
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 76.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15136791125674198
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 65.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15059685777980153
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 55.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1504499836797934
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 49.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15047166750990693
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 47.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15051384025928688
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 42.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15054434202538064
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 37.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1505623383617885
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 31.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15057214999646235
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.0001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 20.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15057731827860632
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 104.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21247845021374795
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 108.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2103835621750712
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 110.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2078057894649099
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 110.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20557821614403404
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 110.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20291641584798942
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 108.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2007685675978403
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 110.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.19628820802260583
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 109.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1929248533011345
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 108.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.18195399650793165
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 104.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1756716334014375
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 100.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1718922538202417
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 92.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1691064786686604
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 86.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.16426885934512447
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 79.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15970560724128002
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 69.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15799241961656552
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 60.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1537339164557514
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 53.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15136652684312607
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 46.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15059633166062553
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 40.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1504496388463354
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 36.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1504702833260153
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 27.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1505122401643193
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 18.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15054290510967866
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 13.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1505614946251908
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1505719658776361
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.001,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1505772833996592
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.03,
+      "draws": 20,
+      "median_support_size": 70.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.212427499169642
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.042063738523100275,
+      "draws": 20,
+      "median_support_size": 70.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.21033939488750586
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.05897860328465834,
+      "draws": 20,
+      "median_support_size": 71.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20771023407348116
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.08269535156745106,
+      "draws": 20,
+      "median_support_size": 76.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20544122527563968
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.11594918818030374,
+      "draws": 20,
+      "median_support_size": 75.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.20280535229434477
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.16257521111940154,
+      "draws": 20,
+      "median_support_size": 74.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.2006796695528501
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.2279507056954777,
+      "draws": 20,
+      "median_support_size": 71.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.19612818427266543
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.319615296017692,
+      "draws": 20,
+      "median_support_size": 70.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1927614933899297
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.4481404746557164,
+      "draws": 20,
+      "median_support_size": 69.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.18182475481099664
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.6283487915845367,
+      "draws": 20,
+      "median_support_size": 68.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.17556958709921028
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 0.8810233090172661,
+      "draws": 20,
+      "median_support_size": 62.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.17162644327243265
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 1.2353044701086286,
+      "draws": 20,
+      "median_support_size": 58.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.16888266885407915
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 1.7320508075688767,
+      "draws": 20,
+      "median_support_size": 52.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.16407331445247886
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 2.428551075943397,
+      "draws": 20,
+      "median_support_size": 47.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1595247464502712
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 3.4051312482825633,
+      "draws": 20,
+      "median_support_size": 42.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15785446644637174
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 4.77441834881986,
+      "draws": 20,
+      "median_support_size": 35.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15357010262404241
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 6.694329500821692,
+      "draws": 20,
+      "median_support_size": 29.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15119967106597615
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 9.38628419033467,
+      "draws": 20,
+      "median_support_size": 20.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15043325349065456
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 13.16074012952492,
+      "draws": 20,
+      "median_support_size": 16.5,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1503293560618858
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 18.452997719293638,
+      "draws": 20,
+      "median_support_size": 11.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15041975183999007
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 25.873402367724445,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15050267099990688
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 36.27773439663083,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1505414013245025
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 50.865904462345334,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.15056157701942308
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 71.32033683483647,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1505719658776361
+    },
+    {
+      "family": "tfim",
+      "n_qubits": 5,
+      "epsilon": 0.01,
+      "temperature": 100.0,
+      "draws": 20,
+      "median_support_size": 9.0,
+      "noncontextual_draws": 0,
+      "median_contextual_fraction": 0.1505772833996592
+    }
+  ]
+}

@@ -1,0 +1,203 @@
+{
+  "description": "E16b: Fig. 7a protocol with teacher term set ctxrand2 (tanh target, zeta ~ U[-2, 2]), all 9 term sets as students, 7 qubits",
+  "experiment": {
+    "task": "train",
+    "id": "e16_teach_ctxrand2_7q"
+  },
+  "data": {
+    "n_qubits": 7,
+    "train_states": {
+      "set": "code_squared_loss"
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "regression",
+    "target": {
+      "term_set": "explicit",
+      "include_identity": false,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "tanh",
+      "term_labels": [
+        "IYIIIXI",
+        "IIIYXII",
+        "XIZIIII",
+        "IIZZIII",
+        "IIYIYII",
+        "YIIIXII",
+        "IIIZIYI",
+        "IIIIIYY",
+        "YIIIIIY",
+        "IIXIZII",
+        "IIIIIIZ",
+        "ZIIIIXI",
+        "IIIXZII"
+      ]
+    }
+  },
+  "models": [
+    {
+      "name": "student_ising",
+      "kind": "hamiltonian",
+      "term_set": "ising",
+      "include_identity": false,
+      "activation": "tanh"
+    },
+    {
+      "name": "student_ising_x0",
+      "kind": "hamiltonian",
+      "term_set": "ising_x0",
+      "include_identity": false,
+      "activation": "tanh"
+    },
+    {
+      "name": "student_tfim",
+      "kind": "hamiltonian",
+      "term_set": "tfim",
+      "include_identity": false,
+      "activation": "tanh"
+    },
+    {
+      "name": "student_ncrand0",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "IXIIIZI",
+        "IIIIZYI",
+        "IIIIIIY",
+        "YIIYIII",
+        "IIYIIIY",
+        "IIIYIIY",
+        "YIIIIIY",
+        "IIYIZII",
+        "IXIYIII",
+        "IIIIZIY",
+        "IIIYZII",
+        "IXIIIII",
+        "IXIIZII"
+      ]
+    },
+    {
+      "name": "student_ctxrand0",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "IZIIIII",
+        "IIYIYII",
+        "IIXIZII",
+        "IIIZIIY",
+        "IIIIXIX",
+        "XIZIIII",
+        "ZIIIIYI",
+        "IIXIIXI",
+        "XIIIZII",
+        "IIIZIIX",
+        "IIZZIII",
+        "YIIIXII",
+        "IXIIIIX"
+      ]
+    },
+    {
+      "name": "student_ncrand1",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "ZIIIZII",
+        "YIIIIIZ",
+        "XIIIZII",
+        "IZIXIII",
+        "IZIIIIZ",
+        "IIIXIZI",
+        "IIIXIII",
+        "IIXIIIZ",
+        "IIIIIZZ",
+        "IIXIIII",
+        "IIIIIIZ",
+        "YIIIXII",
+        "IZIIIZI"
+      ]
+    },
+    {
+      "name": "student_ctxrand1",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "IYYIIII",
+        "IIIIZIX",
+        "IIIYXII",
+        "IIIIIIX",
+        "IZIIIZI",
+        "IIIZIXI",
+        "XIIIIXI",
+        "IZIZIII",
+        "YIIIIIX",
+        "IIIIZIZ",
+        "IIIYIYI",
+        "IIYIYII",
+        "IIYIIXI"
+      ]
+    },
+    {
+      "name": "student_ncrand2",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "XIIZIII",
+        "XIIYIII",
+        "IIIXIIZ",
+        "IIYIIZI",
+        "IYYIIII",
+        "IIYIZII",
+        "IIIIIZI",
+        "XIYIIII",
+        "XYIIIII",
+        "IYIIIIZ",
+        "XIIIIII",
+        "IIIIZZI",
+        "IIYIIIZ"
+      ]
+    },
+    {
+      "name": "student_ctxrand2",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "IYIIIXI",
+        "IIIYXII",
+        "XIZIIII",
+        "IIZZIII",
+        "IIYIYII",
+        "YIIIXII",
+        "IIIZIYI",
+        "IIIIIYY",
+        "YIIIIIY",
+        "IIXIZII",
+        "IIIIIIZ",
+        "ZIIIIXI",
+        "IIIXZII"
+      ]
+    }
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 0.1,
+    "epochs": 2000,
+    "eval_every": 100,
+    "init_low": -0.5,
+    "init_high": 0.5
+  }
+}

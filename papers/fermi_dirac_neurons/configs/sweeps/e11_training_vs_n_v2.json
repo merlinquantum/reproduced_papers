@@ -1,0 +1,47 @@
+{
+  "sweep_id": "e11_training_vs_n_v2",
+  "description": "E11 (extension X1): Fig. 7a protocol training success vs qubit count n = 2..9, code and Haar training states. Relaunch of e11_training_vs_n_v1 (interrupted by memory exhaustion) with memory-budget scheduling.",
+  "configs": [
+    "e11_tanh_9q_code",
+    "e11_tanh_9q_haar",
+    "e11_tanh_8q_code",
+    "e11_tanh_8q_haar",
+    "e11_tanh_7q_code",
+    "e11_tanh_7q_haar",
+    "e11_tanh_6q_code",
+    "e11_tanh_6q_haar",
+    "e11_tanh_5q_code",
+    "e11_tanh_5q_haar",
+    "e11_tanh_4q_code",
+    "e11_tanh_4q_haar",
+    "e11_tanh_3q_code",
+    "e11_tanh_3q_haar",
+    "e11_tanh_2q_code",
+    "e11_tanh_2q_haar"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "max_workers": 6,
+  "attempts_used": {
+    "e11_tanh_9q_code__s0": 1,
+    "e11_tanh_9q_code__s1": 1,
+    "e11_tanh_9q_code__s2": 1,
+    "e11_tanh_9q_code__s3": 1,
+    "e11_tanh_9q_code__s4": 1,
+    "e11_tanh_9q_haar__s0": 1
+  },
+  "plan": {
+    "expected_runs": 80,
+    "metrics": "training squared loss logged at epoch 2000 and validation MSE on 500 Haar states, per model",
+    "aggregation": "median and min-max over seeds 0-4 per (n, state set, model); log10 loss vs n",
+    "comparison_rule": "paired by seed, quantum minus IM in log10 loss; with 5 pairs a two-sided Wilcoxon cannot reach p < 0.05 (minimum 0.0625), so only medians and the number of seeds favouring each model are reported, no significance claim",
+    "selection": "none",
+    "relaunch_of": "e11_training_vs_n_v1",
+    "memory_budget_gib": 10
+  }
+}

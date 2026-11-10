@@ -1,0 +1,56 @@
+{
+  "description": "Fig. 7d: squared loss, softplus, TFIM vs IM, 7 qubits, paper-text protocol (states p. 21, target Eq. (120))",
+  "experiment": {
+    "task": "train",
+    "id": "fig7_softplus_7q_papertext"
+  },
+  "data": {
+    "n_qubits": 7,
+    "train_states": {
+      "set": "paper_squared_loss",
+      "p_values": [
+        0.1,
+        0.25,
+        0.5,
+        0.75,
+        0.9
+      ]
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "regression",
+    "target": {
+      "term_set": "tfim",
+      "include_identity": true,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "softplus"
+    }
+  },
+  "models": [
+    {
+      "name": "quantum_tfim",
+      "kind": "hamiltonian",
+      "term_set": "tfim",
+      "include_identity": true,
+      "activation": "softplus"
+    },
+    {
+      "name": "classical_im",
+      "kind": "hamiltonian",
+      "term_set": "ising",
+      "include_identity": true,
+      "activation": "softplus"
+    }
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 0.1,
+    "epochs": 2000,
+    "eval_every": 100,
+    "init_low": -0.5,
+    "init_high": 0.5
+  }
+}

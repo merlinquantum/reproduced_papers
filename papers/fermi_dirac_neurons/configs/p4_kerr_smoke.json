@@ -1,0 +1,28 @@
+{
+  "description": "Phase 4 smoke of kerr_gradient_variance (m = 3, N = 2, 5 draws; not a result)",
+  "experiment": {
+    "task": "kerr_gradient_variance",
+    "id": "p4_kerr_smoke"
+  },
+  "kerr_gradient_variance": {
+    "n_modes": 3,
+    "n_photons": 2,
+    "draws": 5,
+    "init_range": 0.5,
+    "kerr": [
+      0.0,
+      0.5,
+      2.0
+    ],
+    "temperature": 2.0,
+    "inputs": [
+      "fock_first",
+      "haar_interferometer",
+      "haar_full"
+    ],
+    "parameters": [
+      "n0",
+      "X0,1"
+    ]
+  }
+}

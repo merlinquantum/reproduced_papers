@@ -1,0 +1,45 @@
+{
+  "description": "E10 (extension X1): gradient variance, tfim, 5 qubits, theta ~ U[-a, a] with a = 0.5",
+  "experiment": {
+    "task": "gradient_variance",
+    "id": "e10_tfim_5q_a05"
+  },
+  "gradient_variance": {
+    "term_set": "tfim",
+    "include_identity": false,
+    "n_qubits": 5,
+    "init_range": 0.5,
+    "temperatures": {
+      "fixed": [
+        0.25,
+        0.5,
+        1.0,
+        2.0,
+        4.0
+      ],
+      "sqrt_n_factors": [
+        0.5,
+        1.0
+      ]
+    },
+    "inputs": [
+      "zero",
+      "product",
+      "ghz",
+      "haar",
+      "ginibre"
+    ],
+    "parameter_positions": [
+      "first",
+      "middle",
+      "last"
+    ],
+    "draws": 200,
+    "target_range": 2.0,
+    "data_variance_check": {
+      "temperature": 2.0,
+      "parameter_position": "first",
+      "n_states": 2000
+    }
+  }
+}
