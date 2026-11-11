@@ -104,6 +104,30 @@ Place configuration files in `configs/`.
 
 **Placeholder guard:** If any config value still contains a `<<...>>` placeholder (e.g., `"teacher_path": "<<TEACHER_PATH>>"`), the shared runner aborts early with a clear error. Replace these placeholders with real paths/values before launching a run.
 
+## Data
+
+- **Source.** The paper uses daily city air-quality data from India's Central Pollution Control Board (CPCB,
+  <https://cpcb.nic.in/>), Bengaluru, 2015-2020, accessed by the authors on 2020-11-04. No public historical
+  download of that extract was found on the CPCB portal, so this reproduction uses the community mirror
+  "Air Quality Data in India (2015 - 2020)" (Kaggle `rohanrao/air-quality-data-in-india`, version 12, last updated
+  2020-07-28, CC0: Public Domain), which states CPCB as its origin. Only `city_day.csv` is kept, unmodified, at
+  `data/QKLSTM/air_quality_india/city_day.csv`; provenance and SHA-256 are in `SOURCE.md` beside it.
+- **Substitute status.** Same source institution and period, but a third-party extract: the paper's own file cannot
+  be compared with it, so small differences in values or coverage cannot be excluded. Results are labelled
+  accordingly.
+- **File.** 2,574,056 bytes, 29,531 rows, 26 cities; columns City, Date, PM2.5, PM10, NO, NO2, NOx, NH3, CO, SO2,
+  O3, Benzene, Toluene, Xylene, AQI, AQI_Bucket.
+- **Bengaluru series.** 2,009 daily rows, 2015-01-01 to 2020-07-01, every calendar day present once.
+  Missing fraction per column: PM2.5 7.3%, PM10 17.9%, NO 0.3%, NO2 0.3%, NOx 0.2%, NH3 10.1%, CO 0.6%, SO2 0.3%,
+  O3 7.2%, Benzene 13.2%, Toluene 4.6%, Xylene 100%, AQI 4.9%. PM10 starts on 2015-11-07, PM2.5 on 2015-03-20 and
+  AQI on 2015-03-21; the other columns start on 2015-01-01. 1,368 of the 2,009 days have all eleven features.
+- **Features.** Xylene has no value for Bengaluru, which matches the paper's exclusion of it. The eleven features
+  used are PM2.5, PM10, NO, NO2, NOx, NH3, CO, SO2, O3, Benzene and Toluene (the paper names nine of them; Benzene
+  and Toluene are inferred as the remaining two). The target is AQI.
+- **Preprocessing** (paper Eqs. 2-3, details reconstructed): per-feature outliers with |z| > 3 are removed and
+  missing values are linearly interpolated in time; leading gaps are filled from the first valid value; days
+  without an AQI value are not used as targets. The configuration keys are documented under Configuration.
+
 ## Results and Analysis
 
 - Where results are stored, how to reproduce key figures/tables
