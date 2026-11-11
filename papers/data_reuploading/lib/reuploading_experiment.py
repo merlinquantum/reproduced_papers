@@ -455,8 +455,9 @@ class ReUploadCircuitModelTwoMode:
 
 class MerlinReuploadingClassifier(BaseEstimator, ClassifierMixin):
     """
-    __init__(dimension, num_layers, design)
-      - architecture ONLY
+    __init__(dimension, num_layers, design, alpha, device)
+      - architecture ONLY; device is the torch device of the circuit and the
+        training tensors (the runtime's `device` key, "cpu" by default)
 
     fit(...):
       - max_epochs, learning_rate, batch_size, patience, tau, track_history (training hyperparams)
@@ -467,7 +468,12 @@ class MerlinReuploadingClassifier(BaseEstimator, ClassifierMixin):
     """
 
     def __init__(
-        self, dimension: int, num_layers: int = 1, design: str = "AA", alpha=np.pi / 4
+        self,
+        dimension: int,
+        num_layers: int = 1,
+        design: str = "AA",
+        alpha=np.pi / 4,
+        device: str = "cpu",
     ):
         if dimension <= 0 or num_layers <= 0:
             raise ValueError("dimension and num_layers must be positive.")
@@ -504,7 +510,10 @@ class MerlinReuploadingClassifier(BaseEstimator, ClassifierMixin):
                 return p10.unsqueeze(-1)  # (N,1)
 
         self.quantum_model = QuantumModule(quantum_layer, self.alpha)
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        # Taken from the config, not from torch.cuda.is_available(): on a GPU
+        # host the QuantumLayer output stayed on cpu while the labels moved to
+        # cuda, and the Fisher loss failed (run 20261111_181004).
+        self.device = torch.device(device)
         self.quantum_model.to(self.device)
 
         self.classifier_ = LDA1DHead()

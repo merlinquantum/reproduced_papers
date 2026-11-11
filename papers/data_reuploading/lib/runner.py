@@ -79,6 +79,7 @@ def run_train_eval(cfg: dict[str, Any], run_dir: Path) -> None:
                 num_layers=num_layers,
                 design="AA",
                 alpha=alpha,
+                device=cfg["device"],
             )
 
             model.fit(X_tr, y_tr, tau=tau, **training_params)
