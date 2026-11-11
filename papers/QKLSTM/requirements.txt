@@ -1,0 +1,6 @@
+# QKLSTM dependencies (scaffold; extended as the implementation lands)
+# merlinquantum pinned exactly: results must be reproducible (0.4.1, the version workflow/MERLIN_COOKBOOK.md is tested on)
+merlinquantum==0.4.1
+torch
+pytest
+numpy
