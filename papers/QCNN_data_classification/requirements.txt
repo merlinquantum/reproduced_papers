@@ -1,5 +1,5 @@
 # Photonic / quantum stack
-merlinquantum
+merlinquantum<0.4
 
 # Core scientific stack
 scipy

@@ -1,4 +1,4 @@
-merlinquantum>=0.3.2
+merlinquantum>=0.3.2,<0.4
 qiskit>=1.0
 qiskit-aer>=0.13
 torchvision>=0.15

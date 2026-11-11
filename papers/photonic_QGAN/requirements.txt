@@ -1,4 +1,4 @@
-merlinquantum
+merlinquantum<0.4
 matplotlib
 scikit-image
 loguru

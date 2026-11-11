@@ -1,4 +1,4 @@
-merlinquantum
+merlinquantum<0.4
 -e git+https://github.com/mit-han-lab/torchquantum.git#egg=torchquantum
 pytest
 regex

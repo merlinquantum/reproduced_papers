@@ -1,4 +1,4 @@
-merlinquantum
+merlinquantum<0.4
 pytest
 regex
 pennylane
