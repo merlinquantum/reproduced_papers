@@ -2,7 +2,7 @@
 # Covers all three VQC backends: gate (PennyLane), photonic (MerLin), and the
 # parameter-matched classical ablation.
 pennylane
-merlinquantum==0.4.1
+merlinquantum<0.4
 xgboost
 scikit-learn
 numpy
