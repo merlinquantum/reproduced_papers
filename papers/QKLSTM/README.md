@@ -127,6 +127,10 @@ Place configuration files in `configs/`.
 - **Preprocessing** (paper Eqs. 2-3, details reconstructed): per-feature outliers with |z| > 3 are removed and
   missing values are linearly interpolated in time; leading gaps are filled from the first valid value; days
   without an AQI value are not used as targets. The configuration keys are documented under Configuration.
+- **Test window (scope label).** The test set is 2020, as in the paper's Fig. 3, but the file ends on 2020-07-01:
+  our test window is 2020-01-01 to 2020-07-01, at most 183 days, fewer once days without an AQI value are dropped.
+  It includes India's COVID-19 lockdown (from 2020-03-25), a change in emissions not seen in the training years.
+  The paper's extract may cover more of 2020, so test metrics are compared with the paper's under this label.
 
 ## Results and Analysis
 
