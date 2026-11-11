@@ -3,6 +3,6 @@ matplotlib
 pandas
 pytest
 seaborn
-merlinquantum
+merlinquantum<0.4
 notebook
 kaggle
