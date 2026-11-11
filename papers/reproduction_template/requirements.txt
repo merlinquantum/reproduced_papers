@@ -7,3 +7,5 @@
 torch
 pytest
 numpy
+# the shared runtime (runtime_lib) imports merlin at start-up; pinned exactly so results reproduce
+merlinquantum==0.4.1
