@@ -1,0 +1,93 @@
+{
+  "description": "Distributed secure kernel-based QML (arXiv 2408.10265) reproduction runner",
+  "arguments": [
+    {
+      "flags": [
+        "--protocol"
+      ],
+      "help": "Evaluation protocol: 'paper' (authors' pipeline) or 'corrected' (oversampling and selection inside training folds)",
+      "type": "str",
+      "choices": [
+        "paper",
+        "corrected"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.protocol"
+      }
+    },
+    {
+      "flags": [
+        "--n-splits"
+      ],
+      "help": "Number of stratified cross-validation folds (paper: 5)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.n_splits"
+      }
+    },
+    {
+      "flags": [
+        "--cv-random-state"
+      ],
+      "help": "Random state of the StratifiedKFold shuffling (paper: 0)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.cv_random_state"
+      }
+    },
+    {
+      "flags": [
+        "--sweep-id"
+      ],
+      "help": "Sweep identifier (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "sweep_id"
+      }
+    },
+    {
+      "flags": [
+        "--run-id"
+      ],
+      "help": "Run identifier within a sweep (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "run_id"
+      }
+    },
+    {
+      "flags": [
+        "--repetition"
+      ],
+      "help": "Repetition index within a sweep (set by utils/run_sweep.py)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "repetition"
+      }
+    },
+    {
+      "flags": [
+        "--candidate-config"
+      ],
+      "help": "Candidate config path within a sweep (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "candidate.config"
+      }
+    }
+  ]
+}

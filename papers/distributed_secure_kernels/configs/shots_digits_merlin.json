@@ -1,0 +1,73 @@
+{
+  "seed": 0,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "device": "cpu",
+  "logging": {
+    "level": "info"
+  },
+  "description": "MerLin adaptation (not the paper's method), Fig. 4: photonic swap test on Digits (12-mode registers, 2 photons each), 128 / 256 / 512 / 1,024 shots, paper protocol.",
+  "experiment": {
+    "id": "shots_digits_merlin",
+    "kind": "accuracy"
+  },
+  "dataset": {
+    "name": "digits",
+    "oversample_ratio": null,
+    "subset_size": 100,
+    "scaling": "standard",
+    "protocol": "paper",
+    "_comment_scaling": "Authors' digits.py divides pixels by 16 and then applies StandardScaler (inherited from wine.py); the division has no effect after standardisation."
+  },
+  "evaluation": {
+    "n_splits": 5,
+    "cv_random_state": 0,
+    "kernel_pca": false,
+    "kpca_components": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "inner_splits": 5,
+    "C_grid": [
+      0.01,
+      0.0316,
+      0.1,
+      0.316,
+      1.0,
+      3.16,
+      10.0,
+      31.6,
+      100.0
+    ]
+  },
+  "methods": [
+    {
+      "name": "merlin_photonic_swap_test_128_shots",
+      "kernel": "photonic_swap_test",
+      "shots": 128,
+      "exactness_tolerance": 1e-06
+    },
+    {
+      "name": "merlin_photonic_swap_test_256_shots",
+      "kernel": "photonic_swap_test",
+      "shots": 256,
+      "exactness_tolerance": 1e-06
+    },
+    {
+      "name": "merlin_photonic_swap_test_512_shots",
+      "kernel": "photonic_swap_test",
+      "shots": 512,
+      "exactness_tolerance": 1e-06
+    },
+    {
+      "name": "merlin_photonic_swap_test_1024_shots",
+      "kernel": "photonic_swap_test",
+      "shots": 1024,
+      "exactness_tolerance": 1e-06
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "setting": "Wine, kernel SVM",
+    "gate_seed_mean": 0.8957142857142857,
+    "gate_seed_std": 0.009042462001670944,
+    "merlin_seed_mean": 0.9085221674876849,
+    "merlin_seed_std": 0.013363743056465012,
+    "delta": 0.012807881773399199,
+    "two_sigma_pooled": 0.022819103730465827,
+    "preserved": true
+  },
+  {
+    "setting": "Parkinson's, kernel SVM",
+    "gate_seed_mean": 0.7556756756756757,
+    "gate_seed_std": 0.03469652689929223,
+    "merlin_seed_mean": 0.7639260312944524,
+    "merlin_seed_std": 0.019060264091930606,
+    "delta": 0.008250355618776628,
+    "two_sigma_pooled": 0.05598468801605397,
+    "preserved": true
+  },
+  {
+    "setting": "Parkinson's, kernel PCA",
+    "gate_seed_mean": 0.700199146514936,
+    "gate_seed_std": 0.04665030914211896,
+    "merlin_seed_mean": 0.7064580369843527,
+    "merlin_seed_std": 0.04471219641944686,
+    "delta": 0.006258890469416745,
+    "two_sigma_pooled": 0.09138306026508922,
+    "preserved": true
+  },
+  {
+    "setting": "Framingham, kernel SVM",
+    "gate_seed_mean": 0.639252744861601,
+    "gate_seed_std": 0.010065362552269454,
+    "merlin_seed_mean": 0.6322211846197086,
+    "merlin_seed_std": 0.011065658996731061,
+    "delta": -0.007031560241892443,
+    "two_sigma_pooled": 0.02115468422551201,
+    "preserved": true
+  },
+  {
+    "setting": "Framingham, kernel PCA",
+    "gate_seed_mean": 0.6249384238314127,
+    "gate_seed_std": 0.0,
+    "merlin_seed_mean": 0.6249384238314127,
+    "merlin_seed_std": 0.0,
+    "delta": 0.0,
+    "two_sigma_pooled": 0.0,
+    "preserved": true
+  },
+  {
+    "setting": "Digits, 128 shots",
+    "gate_seed_mean": 0.7600000000000001,
+    "gate_seed_std": 0.05099019513592789,
+    "merlin_seed_mean": 0.728,
+    "merlin_seed_std": 0.05449770637375487,
+    "delta": -0.03200000000000014,
+    "two_sigma_pooled": 0.10554619841567014,
+    "preserved": true
+  },
+  {
+    "setting": "Digits, 256 shots",
+    "gate_seed_mean": 0.7780000000000001,
+    "gate_seed_std": 0.013038404810405309,
+    "merlin_seed_mean": 0.766,
+    "merlin_seed_std": 0.03435112807463537,
+    "delta": -0.012000000000000122,
+    "two_sigma_pooled": 0.05196152422706637,
+    "preserved": true
+  },
+  {
+    "setting": "Digits, 512 shots",
+    "gate_seed_mean": 0.788,
+    "gate_seed_std": 0.02588435821108959,
+    "merlin_seed_mean": 0.8,
+    "merlin_seed_std": 0.01870828693386971,
+    "delta": 0.01200000000000001,
+    "two_sigma_pooled": 0.045166359162544883,
+    "preserved": true
+  },
+  {
+    "setting": "Digits, 1024 shots",
+    "gate_seed_mean": 0.7879999999999999,
+    "gate_seed_std": 0.00836660026534071,
+    "merlin_seed_mean": 0.82,
+    "merlin_seed_std": 0.018708286933869694,
+    "delta": 0.03200000000000003,
+    "two_sigma_pooled": 0.028982753492378832,
+    "preserved": false
+  }
+]

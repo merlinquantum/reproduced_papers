@@ -1,0 +1,67 @@
+{
+  "seed": 0,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "device": "cpu",
+  "logging": {
+    "level": "info"
+  },
+  "description": "Table 1, wine: paper protocol, the paper's three columns (classical linear, centralised quantum, distributed quantum; 1,024 shots, no noise).",
+  "experiment": {
+    "id": "accuracy_wine_original",
+    "kind": "accuracy"
+  },
+  "dataset": {
+    "name": "wine",
+    "oversample_ratio": null,
+    "subset_size": 0.8,
+    "scaling": "standard",
+    "protocol": "paper"
+  },
+  "evaluation": {
+    "n_splits": 5,
+    "cv_random_state": 0,
+    "kernel_pca": false,
+    "kpca_components": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "inner_splits": 5,
+    "C_grid": [
+      0.01,
+      0.0316,
+      0.1,
+      0.316,
+      1.0,
+      3.16,
+      10.0,
+      31.6,
+      100.0
+    ]
+  },
+  "methods": [
+    {
+      "name": "classical_linear",
+      "kernel": "linear",
+      "_comment": "Paper's 'Centralised Classical' column: linear SVM on standardised features"
+    },
+    {
+      "name": "quantum_centralised",
+      "kernel": "swap_test",
+      "circuit": "centralised",
+      "noise_level": 0,
+      "shots": 1024
+    },
+    {
+      "name": "quantum_distributed",
+      "kernel": "swap_test",
+      "circuit": "distributed",
+      "noise_level": 0,
+      "shots": 1024
+    }
+  ]
+}

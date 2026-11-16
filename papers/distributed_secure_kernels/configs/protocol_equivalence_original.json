@@ -1,0 +1,21 @@
+{
+  "seed": 0,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "device": "cpu",
+  "logging": {
+    "level": "info"
+  },
+  "description": "App. A / Sec. 6.3: per-shot Aer runs of the authors' distributed and centralised circuits (Qiskit 2.x port) against the exact probabilities used by the accuracy runs; client-bit uniformity.",
+  "experiment": {
+    "id": "protocol_equivalence_original",
+    "kind": "protocol",
+    "n_qubits": 2,
+    "n_pairs": 20,
+    "shots": 1024,
+    "noise_rates": [
+      0.01,
+      0.05
+    ]
+  }
+}

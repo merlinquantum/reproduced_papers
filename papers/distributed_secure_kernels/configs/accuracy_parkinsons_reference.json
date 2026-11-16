@@ -1,0 +1,62 @@
+{
+  "seed": 0,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "device": "cpu",
+  "logging": {
+    "level": "info"
+  },
+  "description": "Table 1, parkinsons: paper protocol, additional references (exact swap-test kernel, exact cosine kernel, majority class).",
+  "experiment": {
+    "id": "accuracy_parkinsons_reference",
+    "kind": "accuracy"
+  },
+  "dataset": {
+    "name": "parkinsons",
+    "oversample_ratio": 0.6,
+    "subset_size": 0.8,
+    "scaling": "standard",
+    "protocol": "paper"
+  },
+  "evaluation": {
+    "n_splits": 5,
+    "cv_random_state": 0,
+    "kernel_pca": true,
+    "kpca_components": [
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "inner_splits": 5,
+    "C_grid": [
+      0.01,
+      0.0316,
+      0.1,
+      0.316,
+      1.0,
+      3.16,
+      10.0,
+      31.6,
+      100.0
+    ]
+  },
+  "methods": [
+    {
+      "name": "exact_squared_overlap",
+      "kernel": "squared_overlap",
+      "_comment": "Swap-test kernel with infinite shots and no noise (classically computable)"
+    },
+    {
+      "name": "exact_cosine",
+      "kernel": "cosine",
+      "_comment": "The 'linear kernel' the paper names: x.y / (||x|| ||y||)"
+    },
+    {
+      "name": "majority_class",
+      "kernel": "majority"
+    }
+  ]
+}
