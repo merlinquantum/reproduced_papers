@@ -1,6 +1,6 @@
 """Our generator and featurizer against the authors' release (seed 12345).
 
-Skipped when the release is not under the data root (see LOG.md "Data Acquisition Log").
+Skipped when the release is not under the data root (README, section Data, gives the download command).
 """
 
 from __future__ import annotations

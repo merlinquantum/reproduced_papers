@@ -6,7 +6,7 @@ Usage (from the repository root)::
 
 Writes ``sweep_summary.json`` and ``sweep_summary.md`` in the sweep directory.
 
-Rules (frozen in LOG.md "Fair Baseline Plan"):
+Rules, fixed before the sweeps were run:
 
 * metric: test MSE at the ``reg`` selected on validation data (``validation``), and,
   reported separately, at the test-selected ``reg`` (the authors' Fig. 4 rule);
