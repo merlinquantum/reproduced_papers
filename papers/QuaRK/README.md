@@ -199,11 +199,11 @@ The two models differ because the authors' code draws independent noise for each
 
 | Paper's claim | What we find (5 seeds) | Verdict |
 |---|---|---|
-| Relaxing λ_reg drives the training MSE to numerical zero (Fig. 2) | Reproduced: at most 6·10⁻²¹ at λ_reg = 10⁻¹². Every Matérn-kernel model does the same, classical ones included (at most 10⁻¹²) | Supported; not specific to the quantum reservoir |
+| Relaxing λ_reg drives the training MSE to numerical zero (Fig. 2) | Reproduced: at most 6·10⁻²¹ at λ_reg = 10⁻¹². Every Matérn-kernel model does the same, classical ones included (at most 1.1·10⁻¹¹) | Supported; not specific to the quantum reservoir |
 | The test MSE decreases as N grows (Fig. 4) | It falls at every step from N = 100 to 8000, in every seed, on the three tasks | Supported |
 | … with "the same 1/√N shape" | Slope of log test MSE against log N, from N = 500 to 8000: −0.46 on F1 (95 % interval −0.55 to −0.37), −0.09 on F2 and on F3 ([figure](results/training_size_seeds.png)); 1/√N is a slope of −0.5 | Holds for F1 only |
 | The ranking F1 < F2 < F3 mirrors how hard the labels are | The ranking holds in 5 of 5 seeds, but for every model, including the linear ridge that solves F1 and F2 exactly. With F1 as the text defines it, a one-step forecast, it holds for QuaRK in 3 of 5 seeds, and in none after normalization | Partially supported |
-| Generalization bound (Theorem 2) | At N = 8000 the bound is at least 1,400 times the measured gap between test and training MSE, even with choices that favour it. The authors' tuning picks ν = 0.5 for F2 and F3, outside the theorem's ν > 1 | Far from the measured errors; not checked as mathematics |
+| Generalization bound (Theorem 2) | At N = 8000, on the paper's three tasks, the bound is at least 1,400 times the measured gap between test and training MSE, even with choices that favour it. The authors' tuning picks ν = 0.5 for F2 and F3, outside the theorem's ν > 1 | Far from the measured errors; not checked as mathematics |
 
 **Result:** the test error does fall with N, but only one of the three curves has the 1/√N shape, the task ranking follows from how linear each label is, and the bound is more than a thousand times looser than the measured gap.
 
