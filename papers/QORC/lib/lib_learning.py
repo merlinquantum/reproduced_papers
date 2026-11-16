@@ -24,7 +24,7 @@ def affiche_tag_heure(logger):
     import time
     from datetime import datetime, timezone
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(timezone.utc)  # noqa: UP017
     logger.info(
         "tag heure: {} ({})".format(now.strftime("%Y-%m-%d_%H:%M:%S"), time.time())
     )
