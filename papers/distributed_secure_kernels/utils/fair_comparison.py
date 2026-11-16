@@ -307,25 +307,35 @@ def build(paths: dict[str, Path]) -> dict:
     }
 
 
+# Readable model names for the markdown tables (the JSON keeps the codes).
+MODEL_LABELS = {
+    "kernel_svm": "kernel SVM",
+    "kernel_pca_nested_cv": "kernel PCA",
+    "kernel_pca_best_on_test_folds": "kernel PCA",
+}
+
+
 def _markdown(report: dict) -> str:
     lines = [
         "Corrected protocol (oversampling and selection inside training folds), stratified 5-fold CV, mean ± std over seeds 0-4. "
         "Accuracy is the primary metric; balanced accuracy is needed for Framingham (majority rate 0.847). "
-        "Quantum values come from an exact simulation, MerLin values from MerLin simulation; nothing ran on hardware.",
+        "Quantum values come from an exact simulation, MerLin values from MerLin simulation; nothing ran on hardware. "
+        "All rows use the same samples, folds, preprocessing, C grid and inner cross-validation.",
         "",
-        "| Dataset | Model | System | Role | Runs | Accuracy | Balanced accuracy | Resources per outer fold | Median s per seed | Status |",
-        "|---|---|---|---|---:|---:|---:|---|---:|---|",
+        "| Dataset | Model | System | Role | Runs | Accuracy | Balanced accuracy | Resources per outer fold | Median s per seed |",
+        "|---|---|---|---|---|---:|---:|---|---:|",
     ]
     for s in report["systems"]:
         if "accuracy" not in s:
             lines.append(
-                f"| {s['dataset']} | {s['model']} | {s['label']} | {s['role']} | — | — | — | — | — | {s['status']} |"
+                f"| {s['dataset']} | {MODEL_LABELS[s['model']]} | {s['label']} | {s['role']} "
+                f"| {s['status'].removeprefix('N/A — ')} | — | — | — | — |"
             )
             continue
         lines.append(
-            f"| {s['dataset']} | {s['model']} | {s['label']} | {s['role']} | {s['runs']} "
+            f"| {s['dataset']} | {MODEL_LABELS[s['model']]} | {s['label']} | {s['role']} | {s['runs']} "
             f"| {s['accuracy']:.4f} ± {s['accuracy_seed_std']:.4f} | {s['balanced_accuracy']:.4f} ± {s['balanced_accuracy_seed_std']:.4f} "
-            f"| {s['resources']} | {s['median_seconds_per_seed']:.1f} | {s['status']} |"
+            f"| {s['resources']} | {s['median_seconds_per_seed']:.1f} |"
         )
     lines += [
         "",
@@ -336,18 +346,18 @@ def _markdown(report: dict) -> str:
     ]
     for p in report["pairwise"]:
         lines.append(
-            f"| {p['dataset']} | {p['model']} | {p['first']} | {p['second']} | {p['metric']} | {p['delta']:+.4f} | {p['two_sigma_pooled']:.4f} | {p['verdict']} |"
+            f"| {p['dataset']} | {MODEL_LABELS[p['model']]} | {p['first']} | {p['second']} | {p['metric']} | {p['delta']:+.4f} | {p['two_sigma_pooled']:.4f} | {p['verdict']} |"
         )
     lines += [
         "",
-        "Paper protocol (the paper's own comparison, whose protocol leaks; see the README, 'Fair Baselines'):",
+        "Paper protocol (the paper's own comparison, whose protocol leaks; see docs/protocols.md):",
         "",
         "| Dataset | Model | Linear SVM | Distributed quantum | MerLin | Quantum − linear | 2 σ pooled | Verdict |",
         "|---|---|---:|---:|---:|---:|---:|---|",
     ]
     for p in report["paper_protocol"]:
         lines.append(
-            f"| {p['dataset']} | {p['model']} | {p['linear_svm']:.4f} ± {p['linear_svm_seed_std']:.4f} | {p['distributed_quantum']:.4f} ± {p['distributed_quantum_seed_std']:.4f} "
+            f"| {p['dataset']} | {MODEL_LABELS[p['model']]} | {p['linear_svm']:.4f} ± {p['linear_svm_seed_std']:.4f} | {p['distributed_quantum']:.4f} ± {p['distributed_quantum_seed_std']:.4f} "
             f"| {p['merlin']:.4f} ± {p['merlin_seed_std']:.4f} | {p['delta_quantum_minus_linear']:+.4f} | {p['two_sigma_pooled']:.4f} | {p['verdict']} |"
         )
     return "\n".join(lines) + "\n"

@@ -13,7 +13,7 @@ The authors evaluate each kernel by stratified 5-fold cross-validation on a fixe
 
 ## Our two protocols
 
-- **`paper`** reproduces these four steps, to compare with Table 1: `lib/data.py:246` (oversampling of the whole dataset), `lib/data.py:272` (scaler on the subset), `lib/evaluation.py::paper_kernel_svm` and `paper_kernel_pca` (kernel PCA on all samples, best component count on the test folds, line 130).
+- **`paper`** reproduces these four steps, to compare with Table 1: `lib/data.py:222` (oversampling of the whole dataset), `lib/data.py:245` (scaler on the subset), `lib/evaluation.py::paper_kernel_svm` and `paper_kernel_pca` (kernel PCA on all samples, best component count on the test folds, line 130).
 - **`corrected`** fits everything on the training folds only (`lib/evaluation.py::corrected_cv`): scaler (line 226), oversampling of training rows only (lines 234-238), C chosen by an inner 5-fold cross-validation (line 221), kernel PCA and its component count chosen the same way (`_corrected_kernel_pca_fold`). It is needed to tune the classical SVMs fairly. For Framingham the C grid stops at 10, for runtime (`configs/accuracy_framingham_corrected.json`).
 
 ## Both protocols lead to the same conclusion
