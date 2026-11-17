@@ -1,0 +1,31 @@
+{
+  "description": "E5: platform B3 with U_0 chosen from 200 Haar candidates per seed by closeness to the designed kernel (no paper data used).",
+  "experiment": "platform_kernel",
+  "validity": "substitute-data (selected Haar U_0)",
+  "platform_kernel": {
+    "platform": "B3",
+    "kernel_kind": "overlap",
+    "u0": {
+      "strategy": "max_design_agreement",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "n_candidates": 200
+    },
+    "paper_reference": {
+      "digitized_keys": [
+        "fig4b_B3_simulated",
+        "fig4b_B3_experimental"
+      ]
+    }
+  }
+}

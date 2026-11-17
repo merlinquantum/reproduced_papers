@@ -1,0 +1,35 @@
+{
+  "description": "MerLin adaptation (Phase 4), not the Phase 3 reproduction. E1: platform A [6,2,2,3] ideal kernel vs the values printed in Fig. 3b. Exact MerLin backend (partial measurement, FOCK).",
+  "experiment": "platform_kernel",
+  "validity": "simulation of the paper circuit (MerLin exact backend)",
+  "platform_kernel": {
+    "platform": "A",
+    "kernel_kind": "overlap",
+    "paper_reference": {
+      "entries": [
+        [
+          0,
+          1,
+          0.298
+        ],
+        [
+          0,
+          2,
+          0.966
+        ],
+        [
+          1,
+          2,
+          0.331
+        ]
+      ],
+      "tolerance": 0.002
+    },
+    "simulations": [
+      {
+        "label": "merlin",
+        "backend": "merlin"
+      }
+    ]
+  }
+}

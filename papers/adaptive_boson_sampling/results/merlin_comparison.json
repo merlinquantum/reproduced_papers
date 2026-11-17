@@ -1,0 +1,606 @@
+{
+  "validity": "MerLin adaptation (Phase 4) vs Phase 3 numpy reference",
+  "kernels": [
+    {
+      "merlin_run": "outdir/run_20261105-095246",
+      "reference_run": "outdir/run_20261104-231525",
+      "max_abs_difference": {
+        "fixed": 2.55351295663786e-15
+      },
+      "tolerance": 1e-09,
+      "pass": true
+    },
+    {
+      "merlin_run": "outdir/run_20261105-095248",
+      "reference_run": "outdir/run_20261104-231529",
+      "max_abs_difference": {
+        "fixed": 3.83026943495679e-15
+      },
+      "tolerance": 1e-09,
+      "pass": true
+    },
+    {
+      "merlin_run": "outdir/run_20261105-095251",
+      "reference_run": "outdir/run_20261105-084912",
+      "max_abs_difference": {
+        "designed": 0.0,
+        "u0_seed_0": 1.7763568394002505e-15,
+        "u0_seed_1": 1.1102230246251565e-15,
+        "u0_seed_2": 1.3322676295501878e-15,
+        "u0_seed_3": 1.3322676295501878e-15,
+        "u0_seed_4": 1.5543122344752192e-15
+      },
+      "tolerance": 1e-09,
+      "pass": true
+    },
+    {
+      "merlin_run": "outdir/run_20261105-095324",
+      "reference_run": "outdir/run_20261105-084944",
+      "max_abs_difference": {
+        "designed": 0.0,
+        "u0_seed_0": 8.881784197001252e-16,
+        "u0_seed_1": 7.771561172376096e-16,
+        "u0_seed_2": 1.1102230246251565e-15,
+        "u0_seed_3": 1.3322676295501878e-15,
+        "u0_seed_4": 1.4988010832439613e-15
+      },
+      "tolerance": 1e-09,
+      "pass": true
+    }
+  ],
+  "classification": [
+    {
+      "merlin_run": "outdir/run_20261105-095713",
+      "reference_run": "outdir/run_20261105-085018",
+      "rows": [
+        {
+          "model": "B2_qubit_fitted_u0",
+          "arm": "paper",
+          "n_instances": 5,
+          "mean_test_accuracy_merlin": 0.7553333333333334,
+          "mean_test_accuracy_numpy": 0.7553333333333334,
+          "max_abs_instance_difference": 0.0
+        },
+        {
+          "model": "B2_qubit_fitted_u0",
+          "arm": "tuned",
+          "n_instances": 5,
+          "mean_test_accuracy_merlin": 0.812,
+          "mean_test_accuracy_numpy": 0.812,
+          "max_abs_instance_difference": 0.0
+        },
+        {
+          "model": "B3_qutrit_fitted_u0",
+          "arm": "paper",
+          "n_instances": 5,
+          "mean_test_accuracy_merlin": 0.7613333333333334,
+          "mean_test_accuracy_numpy": 0.7613333333333334,
+          "max_abs_instance_difference": 0.0
+        },
+        {
+          "model": "B3_qutrit_fitted_u0",
+          "arm": "tuned",
+          "n_instances": 5,
+          "mean_test_accuracy_merlin": 0.7586666666666668,
+          "mean_test_accuracy_numpy": 0.7586666666666668,
+          "max_abs_instance_difference": 0.0
+        }
+      ],
+      "tolerance": 1e-12,
+      "pass": true
+    },
+    {
+      "merlin_run": "outdir/run_20261105-100053",
+      "reference_run": "outdir/run_20261105-085130",
+      "rows": [
+        {
+          "model": "B2_qubit_alternative",
+          "arm": "paper",
+          "n_instances": 250,
+          "mean_test_accuracy_merlin": 0.8200666666666667,
+          "mean_test_accuracy_numpy": 0.8200666666666667,
+          "max_abs_instance_difference": 0.0
+        },
+        {
+          "model": "B3_qutrit_alternative",
+          "arm": "paper",
+          "n_instances": 250,
+          "mean_test_accuracy_merlin": 0.8148133333333333,
+          "mean_test_accuracy_numpy": 0.8148266666666667,
+          "max_abs_instance_difference": 0.0033333333333335213
+        }
+      ],
+      "tolerance": 1e-12,
+      "pass": false
+    }
+  ],
+  "noisy": [
+    {
+      "run": "outdir/run_20261105-095357",
+      "platform": "B1",
+      "instances": [
+        {
+          "u0_seed": null,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_i1.0_g0.0_pnr",
+            "noise": {
+              "detection": "pnr",
+              "g2": 0.0,
+              "indistinguishability": 1.0
+            }
+          },
+          "kernel_min": 0.004213613085713566,
+          "kernel_mean": 0.48294764676263313,
+          "vs_digitized": {
+            "fig3e_B1_experimental": {
+              "max_abs_error": 0.8507018563096524,
+              "mean_abs_error": 0.3316230312830827,
+              "pearson_r": -0.00883105103301496
+            },
+            "fig3e_B1_theoretical": {
+              "max_abs_error": 0.9467852090128349,
+              "mean_abs_error": 0.3562646311965551,
+              "pearson_r": -0.11994438881346212
+            }
+          }
+        },
+        {
+          "u0_seed": null,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_i1.0_g0.0_threshold",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.0,
+              "indistinguishability": 1.0
+            }
+          },
+          "kernel_min": 0.004213613085713566,
+          "kernel_mean": 0.48294764676263313,
+          "vs_digitized": {
+            "fig3e_B1_experimental": {
+              "max_abs_error": 0.8507018563096524,
+              "mean_abs_error": 0.3316230312830827,
+              "pearson_r": -0.00883105103301496
+            },
+            "fig3e_B1_theoretical": {
+              "max_abs_error": 0.9467852090128349,
+              "mean_abs_error": 0.3562646311965551,
+              "pearson_r": -0.11994438881346212
+            }
+          }
+        },
+        {
+          "u0_seed": null,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_i1.0_g0.02_pnr",
+            "noise": {
+              "detection": "pnr",
+              "g2": 0.02,
+              "indistinguishability": 1.0
+            }
+          },
+          "kernel_min": 0.004213613085713738,
+          "kernel_mean": 0.4829476471324651,
+          "vs_digitized": {
+            "fig3e_B1_experimental": {
+              "max_abs_error": 0.8507018563096526,
+              "mean_abs_error": 0.3316230308552282,
+              "pearson_r": -0.008831050370399298
+            },
+            "fig3e_B1_theoretical": {
+              "max_abs_error": 0.9467852089685177,
+              "mean_abs_error": 0.35626463085015075,
+              "pearson_r": -0.11994438906192839
+            }
+          }
+        },
+        {
+          "u0_seed": null,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_i1.0_g0.02_threshold",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.02,
+              "indistinguishability": 1.0
+            }
+          },
+          "kernel_min": 0.04456347500815212,
+          "kernel_mean": 0.4993353600973045,
+          "vs_digitized": {
+            "fig3e_B1_experimental": {
+              "max_abs_error": 0.8102895231484757,
+              "mean_abs_error": 0.31307775858072506,
+              "pearson_r": 0.0035347192177929364
+            },
+            "fig3e_B1_theoretical": {
+              "max_abs_error": 0.8882629256444787,
+              "mean_abs_error": 0.33969293661208844,
+              "pearson_r": -0.10898621453547133
+            }
+          }
+        },
+        {
+          "u0_seed": null,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_i0.83_g0.0_pnr",
+            "noise": {
+              "detection": "pnr",
+              "g2": 0.0,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.050126686828085534,
+          "kernel_mean": 0.5863582533822367,
+          "vs_digitized": {
+            "fig3e_B1_experimental": {
+              "max_abs_error": 0.7714554992270318,
+              "mean_abs_error": 0.2655124688516855,
+              "pearson_r": -0.013974145004495078
+            },
+            "fig3e_B1_theoretical": {
+              "max_abs_error": 0.7819371393538995,
+              "mean_abs_error": 0.30332905791431714,
+              "pearson_r": -0.09820861254115874
+            }
+          }
+        },
+        {
+          "u0_seed": null,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_i0.83_g0.0_threshold",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.0,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.050126686828085534,
+          "kernel_mean": 0.5863582533822367,
+          "vs_digitized": {
+            "fig3e_B1_experimental": {
+              "max_abs_error": 0.7714554992270318,
+              "mean_abs_error": 0.2655124688516855,
+              "pearson_r": -0.013974145004495078
+            },
+            "fig3e_B1_theoretical": {
+              "max_abs_error": 0.7819371393538995,
+              "mean_abs_error": 0.30332905791431714,
+              "pearson_r": -0.09820861254115874
+            }
+          }
+        },
+        {
+          "u0_seed": null,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_i0.83_g0.02_pnr",
+            "noise": {
+              "detection": "pnr",
+              "g2": 0.02,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.05012668735852973,
+          "kernel_mean": 0.5863582523646257,
+          "vs_digitized": {
+            "fig3e_B1_experimental": {
+              "max_abs_error": 0.771455502575822,
+              "mean_abs_error": 0.26551246947560836,
+              "pearson_r": -0.013974146961325333
+            },
+            "fig3e_B1_theoretical": {
+              "max_abs_error": 0.7819371427026897,
+              "mean_abs_error": 0.3033290581495701,
+              "pearson_r": -0.09820861192471426
+            }
+          }
+        },
+        {
+          "u0_seed": null,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_i0.83_g0.02_threshold",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.02,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.050410704803238914,
+          "kernel_mean": 0.5974124407688759,
+          "vs_digitized": {
+            "fig3e_B1_experimental": {
+              "max_abs_error": 0.758006329981094,
+              "mean_abs_error": 0.26297287356409743,
+              "pearson_r": -0.013047907711921441
+            },
+            "fig3e_B1_theoretical": {
+              "max_abs_error": 0.7684879701079617,
+              "mean_abs_error": 0.2998868299186296,
+              "pearson_r": -0.08998188477087965
+            }
+          }
+        }
+      ]
+    },
+    {
+      "run": "outdir/run_20261105-095447",
+      "platform": "B2",
+      "instances": [
+        {
+          "u0_seed": 0,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_paper_source",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.02,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.10270905247276532,
+          "kernel_mean": 0.697008362730543,
+          "vs_digitized": {
+            "fig4a_B2_experimental": {
+              "max_abs_error": 0.10524475111320192,
+              "mean_abs_error": 0.023438974660920417,
+              "pearson_r": 0.993050460145959
+            },
+            "fig4a_B2_simulated": {
+              "max_abs_error": 0.06628514071212588,
+              "mean_abs_error": 0.019831235524275802,
+              "pearson_r": 0.9966163982259303
+            }
+          }
+        },
+        {
+          "u0_seed": 1,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_paper_source",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.02,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.07315471640423155,
+          "kernel_mean": 0.7114328483487139,
+          "vs_digitized": {
+            "fig4a_B2_experimental": {
+              "max_abs_error": 0.10417574930960771,
+              "mean_abs_error": 0.030701039712289956,
+              "pearson_r": 0.9890921359477641
+            },
+            "fig4a_B2_simulated": {
+              "max_abs_error": 0.03675935808559061,
+              "mean_abs_error": 0.007593467621099383,
+              "pearson_r": 0.9992134826673964
+            }
+          }
+        },
+        {
+          "u0_seed": 2,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_paper_source",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.02,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.05405895479308808,
+          "kernel_mean": 0.7035032516768195,
+          "vs_digitized": {
+            "fig4a_B2_experimental": {
+              "max_abs_error": 0.16104552594653176,
+              "mean_abs_error": 0.03574713667315745,
+              "pearson_r": 0.9815054777539283
+            },
+            "fig4a_B2_simulated": {
+              "max_abs_error": 0.08312344802445393,
+              "mean_abs_error": 0.015002503328693033,
+              "pearson_r": 0.9966519345872351
+            }
+          }
+        },
+        {
+          "u0_seed": 3,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_paper_source",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.02,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.08410289970002796,
+          "kernel_mean": 0.6926050770668342,
+          "vs_digitized": {
+            "fig4a_B2_experimental": {
+              "max_abs_error": 0.11812558147693719,
+              "mean_abs_error": 0.02338672036112588,
+              "pearson_r": 0.9922145181711934
+            },
+            "fig4a_B2_simulated": {
+              "max_abs_error": 0.05563211031758364,
+              "mean_abs_error": 0.017934984980910357,
+              "pearson_r": 0.9986069242620831
+            }
+          }
+        },
+        {
+          "u0_seed": 4,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_paper_source",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.02,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.10877553392377504,
+          "kernel_mean": 0.6976238987774636,
+          "vs_digitized": {
+            "fig4a_B2_experimental": {
+              "max_abs_error": 0.12225326918611712,
+              "mean_abs_error": 0.02583483915266177,
+              "pearson_r": 0.9908895619825241
+            },
+            "fig4a_B2_simulated": {
+              "max_abs_error": 0.05882707359767403,
+              "mean_abs_error": 0.014620745193756893,
+              "pearson_r": 0.9985756524639402
+            }
+          }
+        }
+      ]
+    },
+    {
+      "run": "outdir/run_20261105-095544",
+      "platform": "B3",
+      "instances": [
+        {
+          "u0_seed": 0,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_paper_source",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.02,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.048445064370777384,
+          "kernel_mean": 0.4961595865589369,
+          "vs_digitized": {
+            "fig4b_B3_experimental": {
+              "max_abs_error": 0.22252465201238342,
+              "mean_abs_error": 0.06440012689817068,
+              "pearson_r": 0.9627321825889141
+            },
+            "fig4b_B3_simulated": {
+              "max_abs_error": 0.3199146423299142,
+              "mean_abs_error": 0.05538446598950914,
+              "pearson_r": 0.9629188942679562
+            }
+          }
+        },
+        {
+          "u0_seed": 1,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_paper_source",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.02,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.07262861242724927,
+          "kernel_mean": 0.4965104315242321,
+          "vs_digitized": {
+            "fig4b_B3_experimental": {
+              "max_abs_error": 0.19489890929994502,
+              "mean_abs_error": 0.056327767133401464,
+              "pearson_r": 0.9742422691508503
+            },
+            "fig4b_B3_simulated": {
+              "max_abs_error": 0.2736385243507157,
+              "mean_abs_error": 0.04505846783470242,
+              "pearson_r": 0.9797511397610531
+            }
+          }
+        },
+        {
+          "u0_seed": 2,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_paper_source",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.02,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.07098678272506659,
+          "kernel_mean": 0.5198409669164098,
+          "vs_digitized": {
+            "fig4b_B3_experimental": {
+              "max_abs_error": 0.37789541243800395,
+              "mean_abs_error": 0.08189640800743672,
+              "pearson_r": 0.9501157930106752
+            },
+            "fig4b_B3_simulated": {
+              "max_abs_error": 0.37030001362340337,
+              "mean_abs_error": 0.07225113899190287,
+              "pearson_r": 0.9475892383703656
+            }
+          }
+        },
+        {
+          "u0_seed": 3,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_paper_source",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.02,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.03826259805228978,
+          "kernel_mean": 0.4939927442254016,
+          "vs_digitized": {
+            "fig4b_B3_experimental": {
+              "max_abs_error": 0.28931997154390593,
+              "mean_abs_error": 0.0659223822200324,
+              "pearson_r": 0.9614177247089714
+            },
+            "fig4b_B3_simulated": {
+              "max_abs_error": 0.3230180041779024,
+              "mean_abs_error": 0.05773300636418964,
+              "pearson_r": 0.9583721191581431
+            }
+          }
+        },
+        {
+          "u0_seed": 4,
+          "simulation": {
+            "backend": "merlin_noisy",
+            "label": "noisy_paper_source",
+            "noise": {
+              "detection": "threshold",
+              "g2": 0.02,
+              "indistinguishability": 0.83
+            }
+          },
+          "kernel_min": 0.04958177224215898,
+          "kernel_mean": 0.49871427371758703,
+          "vs_digitized": {
+            "fig4b_B3_experimental": {
+              "max_abs_error": 0.2173949509881945,
+              "mean_abs_error": 0.06556284698122207,
+              "pearson_r": 0.9658663733690463
+            },
+            "fig4b_B3_simulated": {
+              "max_abs_error": 0.29613456603896515,
+              "mean_abs_error": 0.052759078738524236,
+              "pearson_r": 0.9713476347625434
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "exact_backend_preserves_phase3": false
+}

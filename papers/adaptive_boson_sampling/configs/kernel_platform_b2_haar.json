@@ -1,0 +1,31 @@
+{
+  "description": "E4: platform B2 kernels with 10 Haar-random U_0 (paper U_0 unpublished) vs Fig. 4 (digitised).",
+  "experiment": "platform_kernel",
+  "validity": "substitute-data (Haar-random U_0)",
+  "platform_kernel": {
+    "platform": "B2",
+    "kernel_kind": "overlap",
+    "u0": {
+      "strategy": "seed",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "n_candidates": 1
+    },
+    "paper_reference": {
+      "digitized_keys": [
+        "fig4a_B2_simulated",
+        "fig4a_B2_experimental"
+      ]
+    }
+  }
+}

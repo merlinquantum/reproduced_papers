@@ -1,0 +1,56 @@
+{
+  "fig3e_B1_experimental": {
+    "colorbar_value_range": [
+      0.21474989373181153,
+      0.9924875911454065
+    ],
+    "max_abs_asymmetry": 0.014674296177615176,
+    "max_abs_diagonal_minus_one": 0.0075124088545934775,
+    "source": "data/adaptive_boson_sampling/sources/figures/Figure3.png"
+  },
+  "fig3e_B1_theoretical": {
+    "colorbar_value_range": [
+      0.21474989373181153,
+      0.9924875911454065
+    ],
+    "max_abs_asymmetry": 0.008385312101494291,
+    "max_abs_diagonal_minus_one": 0.0075124088545934775,
+    "source": "data/adaptive_boson_sampling/sources/figures/Figure3.png"
+  },
+  "fig4a_B2_experimental": {
+    "colorbar_value_range": [
+      0.08701298701298765,
+      0.9987012987012993
+    ],
+    "max_abs_asymmetry": 0.0,
+    "max_abs_diagonal_minus_one": 0.003896103896103398,
+    "source": "data/adaptive_boson_sampling/sources/figures/Figure4.png"
+  },
+  "fig4a_B2_simulated": {
+    "colorbar_value_range": [
+      0.08701298701298765,
+      0.9987012987012993
+    ],
+    "max_abs_asymmetry": 0.0,
+    "max_abs_diagonal_minus_one": 0.003896103896103398,
+    "source": "data/adaptive_boson_sampling/sources/figures/Figure4.png"
+  },
+  "fig4b_B3_experimental": {
+    "colorbar_value_range": [
+      0.08215579834943032,
+      0.9902860252683208
+    ],
+    "max_abs_asymmetry": 0.0,
+    "max_abs_diagonal_minus_one": 0.009713974731679231,
+    "source": "data/adaptive_boson_sampling/sources/figures/Figure4.png"
+  },
+  "fig4b_B3_simulated": {
+    "colorbar_value_range": [
+      0.08215579834943032,
+      0.9902860252683208
+    ],
+    "max_abs_asymmetry": 0.0,
+    "max_abs_diagonal_minus_one": 0.009713974731679231,
+    "source": "data/adaptive_boson_sampling/sources/figures/Figure4.png"
+  }
+}

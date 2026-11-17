@@ -1,0 +1,10 @@
+{
+  "description": "Smoke run: 3 partitions, both arms, one quantum and one classical model.",
+  "evaluation": {
+    "n_partitions": 3,
+    "arms": [
+      "paper",
+      "tuned"
+    ]
+  }
+}

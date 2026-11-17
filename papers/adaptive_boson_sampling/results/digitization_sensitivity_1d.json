@@ -1,0 +1,165 @@
+{
+  "validity": "substitute-data (digitised paper kernels)",
+  "kernels": {
+    "fig4a_B2_experimental": {
+      "paper_accuracy": 0.9,
+      "protocol_grid": {
+        "runner_seeds/C=1": 0.37333333333333335,
+        "runner_seeds/C=50": 0.8033333333333336,
+        "runner_seeds/C=1000": 0.8800000000000001,
+        "sklearn_seeds/C=1": 0.3766666666666667,
+        "sklearn_seeds/C=50": 0.8400000000000002,
+        "sklearn_seeds/C=1000": 0.88,
+        "sklearn_stratified/C=1": 0.5633333333333334,
+        "sklearn_stratified/C=50": 0.8466666666666667,
+        "sklearn_stratified/C=1000": 0.8800000000000001,
+        "global_rng/C=1": 0.3366666666666667,
+        "global_rng/C=50": 0.8066666666666665,
+        "global_rng/C=1000": 0.87
+      },
+      "perturbation_sklearn_seeds_C50": {
+        "0.01": {
+          "mean": 0.8604666666666665,
+          "std": 0.051371798960081774,
+          "p05": 0.7865000000000001,
+          "p95": 0.9334999999999999,
+          "fraction_at_or_above_paper": 0.3
+        },
+        "0.02": {
+          "mean": 0.8381000000000001,
+          "std": 0.06912026150083547,
+          "p05": 0.7365,
+          "p95": 0.9701666666666666,
+          "fraction_at_or_above_paper": 0.19
+        },
+        "0.04": {
+          "mean": 0.8270000000000001,
+          "std": 0.08167370958430563,
+          "p05": 0.6961666666666669,
+          "p95": 0.97,
+          "fraction_at_or_above_paper": 0.19
+        }
+      }
+    },
+    "fig4a_B2_simulated": {
+      "paper_accuracy": 0.9,
+      "protocol_grid": {
+        "runner_seeds/C=1": 0.3666666666666667,
+        "runner_seeds/C=50": 0.7633333333333335,
+        "runner_seeds/C=1000": 0.7500000000000001,
+        "sklearn_seeds/C=1": 0.35333333333333333,
+        "sklearn_seeds/C=50": 0.7633333333333334,
+        "sklearn_seeds/C=1000": 0.7500000000000001,
+        "sklearn_stratified/C=1": 0.5366666666666667,
+        "sklearn_stratified/C=50": 0.7566666666666667,
+        "sklearn_stratified/C=1000": 0.75,
+        "global_rng/C=1": 0.3366666666666667,
+        "global_rng/C=50": 0.7333333333333334,
+        "global_rng/C=1000": 0.73
+      },
+      "perturbation_sklearn_seeds_C50": {
+        "0.01": {
+          "mean": 0.8033,
+          "std": 0.039925562050527275,
+          "p05": 0.7533333333333334,
+          "p95": 0.877,
+          "fraction_at_or_above_paper": 0.02
+        },
+        "0.02": {
+          "mean": 0.7939333333333335,
+          "std": 0.06340750574270983,
+          "p05": 0.7033333333333336,
+          "p95": 0.9111666666666667,
+          "fraction_at_or_above_paper": 0.07
+        },
+        "0.04": {
+          "mean": 0.7932000000000001,
+          "std": 0.08485403060279363,
+          "p05": 0.6793333333333335,
+          "p95": 0.9573333333333333,
+          "fraction_at_or_above_paper": 0.17
+        }
+      }
+    },
+    "fig4b_B3_experimental": {
+      "paper_accuracy": 0.8,
+      "protocol_grid": {
+        "runner_seeds/C=1": 0.7666666666666667,
+        "runner_seeds/C=50": 0.7733333333333335,
+        "runner_seeds/C=1000": 0.7733333333333335,
+        "sklearn_seeds/C=1": 0.75,
+        "sklearn_seeds/C=50": 0.7733333333333334,
+        "sklearn_seeds/C=1000": 0.7733333333333334,
+        "sklearn_stratified/C=1": 0.7666666666666667,
+        "sklearn_stratified/C=50": 0.7633333333333334,
+        "sklearn_stratified/C=1000": 0.7633333333333334,
+        "global_rng/C=1": 0.7133333333333333,
+        "global_rng/C=50": 0.7566666666666668,
+        "global_rng/C=1000": 0.7566666666666668
+      },
+      "perturbation_sklearn_seeds_C50": {
+        "0.01": {
+          "mean": 0.7807333333333334,
+          "std": 0.009989669186722689,
+          "p05": 0.7666666666666667,
+          "p95": 0.79,
+          "fraction_at_or_above_paper": 0.02
+        },
+        "0.02": {
+          "mean": 0.7750333333333335,
+          "std": 0.03181912616844554,
+          "p05": 0.7230000000000001,
+          "p95": 0.8369999999999999,
+          "fraction_at_or_above_paper": 0.14
+        },
+        "0.04": {
+          "mean": 0.7678666666666666,
+          "std": 0.05758226438511399,
+          "p05": 0.6730000000000002,
+          "p95": 0.8569999999999999,
+          "fraction_at_or_above_paper": 0.32
+        }
+      }
+    },
+    "fig4b_B3_simulated": {
+      "paper_accuracy": 0.8,
+      "protocol_grid": {
+        "runner_seeds/C=1": 0.7633333333333334,
+        "runner_seeds/C=50": 0.7833333333333335,
+        "runner_seeds/C=1000": 0.7833333333333335,
+        "sklearn_seeds/C=1": 0.7766666666666667,
+        "sklearn_seeds/C=50": 0.7633333333333333,
+        "sklearn_seeds/C=1000": 0.7633333333333333,
+        "sklearn_stratified/C=1": 0.8166666666666669,
+        "sklearn_stratified/C=50": 0.7433333333333333,
+        "sklearn_stratified/C=1000": 0.7433333333333333,
+        "global_rng/C=1": 0.74,
+        "global_rng/C=50": 0.7400000000000001,
+        "global_rng/C=1000": 0.7400000000000001
+      },
+      "perturbation_sklearn_seeds_C50": {
+        "0.01": {
+          "mean": 0.7699333333333334,
+          "std": 0.016010518428105313,
+          "p05": 0.7333333333333334,
+          "p95": 0.7866666666666667,
+          "fraction_at_or_above_paper": 0.02
+        },
+        "0.02": {
+          "mean": 0.7544333333333334,
+          "std": 0.04139556247464929,
+          "p05": 0.69,
+          "p95": 0.8238333333333332,
+          "fraction_at_or_above_paper": 0.16
+        },
+        "0.04": {
+          "mean": 0.7450666666666667,
+          "std": 0.0607869824802748,
+          "p05": 0.6366666666666667,
+          "p95": 0.8368333333333332,
+          "fraction_at_or_above_paper": 0.25
+        }
+      }
+    }
+  }
+}

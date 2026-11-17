@@ -1,0 +1,40 @@
+{
+  "description": "MerLin adaptation (Phase 4), not the Phase 3 reproduction. E9: platform B2 with U_0 fitted to the digitised fig4a simulated panel, under the imperfect-source model (indistinguishability 0.83, g2 0.02, threshold post-selection) with simulated tomography.",
+  "experiment": "platform_kernel",
+  "validity": "substitute-data (U_0 fitted to digitised fig4a simulated panel; MerLin noisy backend)",
+  "platform_kernel": {
+    "platform": "B2",
+    "kernel_kind": "fidelity",
+    "u0": {
+      "strategy": "fit_digitized",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "n_candidates": 8,
+      "target_key": "fig4a_B2_simulated",
+      "n_steps": 1500,
+      "learning_rate": 0.05
+    },
+    "paper_reference": {
+      "digitized_keys": [
+        "fig4a_B2_simulated",
+        "fig4a_B2_experimental"
+      ]
+    },
+    "simulations": [
+      {
+        "label": "noisy_paper_source",
+        "backend": "merlin_noisy",
+        "noise": {
+          "indistinguishability": 0.83,
+          "g2": 0.02,
+          "detection": "threshold"
+        }
+      }
+    ]
+  }
+}

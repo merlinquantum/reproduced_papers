@@ -1,0 +1,147 @@
+{
+  "validity": "simulation of the published B1 circuit vs digitised Fig. 3e",
+  "digitised_theoretical": {
+    "min": 0.21474989373181153,
+    "mean": 0.5767358311417945
+  },
+  "source_model": [
+    {
+      "gram_overlap": 1.0,
+      "hom_visibility": 1.0,
+      "vs_theoretical": {
+        "pearson_r": -0.11994438941759378,
+        "mean_abs_error": 0.35626463085351057,
+        "kernel_min": 0.004213613085713417,
+        "kernel_mean": 0.4829476461584398
+      },
+      "vs_experimental": {
+        "pearson_r": -0.008831051422018616,
+        "mean_abs_error": 0.33162303095476225,
+        "kernel_min": 0.004213613085713417,
+        "kernel_mean": 0.4829476461584398
+      }
+    },
+    {
+      "gram_overlap": 0.95,
+      "hom_visibility": 0.9025,
+      "vs_theoretical": {
+        "pearson_r": -0.1063671485474088,
+        "mean_abs_error": 0.3127697844695358,
+        "kernel_min": 0.050126687388186805,
+        "kernel_mean": 0.5560294727755855
+      },
+      "vs_experimental": {
+        "pearson_r": 0.0017722067410654557,
+        "mean_abs_error": 0.27650245579235316,
+        "kernel_min": 0.050126687388186805,
+        "kernel_mean": 0.5560294727755855
+      }
+    },
+    {
+      "gram_overlap": 0.911,
+      "hom_visibility": 0.829921,
+      "vs_theoretical": {
+        "pearson_r": -0.0981991267247537,
+        "mean_abs_error": 0.3033207132419683,
+        "kernel_min": 0.05012668752226502,
+        "kernel_mean": 0.5863867200922577
+      },
+      "vs_experimental": {
+        "pearson_r": -0.013990608075022162,
+        "mean_abs_error": 0.26550670335004967,
+        "kernel_min": 0.05012668752226502,
+        "kernel_mean": 0.5863867200922577
+      }
+    },
+    {
+      "gram_overlap": 0.83,
+      "hom_visibility": 0.6889,
+      "vs_theoretical": {
+        "pearson_r": -0.0808495228410741,
+        "mean_abs_error": 0.29589609875975925,
+        "kernel_min": 0.0501266874660624,
+        "kernel_mean": 0.6264802077851973
+      },
+      "vs_experimental": {
+        "pearson_r": -0.037938425494121554,
+        "mean_abs_error": 0.25913429792986586,
+        "kernel_min": 0.0501266874660624,
+        "kernel_mean": 0.6264802077851973
+      }
+    },
+    {
+      "gram_overlap": 0.7,
+      "hom_visibility": 0.48999999999999994,
+      "vs_theoretical": {
+        "pearson_r": -0.061437705525394834,
+        "mean_abs_error": 0.298623249638485,
+        "kernel_min": 0.05012668740276752,
+        "kernel_mean": 0.6594534234966561
+      },
+      "vs_experimental": {
+        "pearson_r": -0.05564415066410243,
+        "mean_abs_error": 0.2612440627749929,
+        "kernel_min": 0.05012668740276752,
+        "kernel_mean": 0.6594534234966561
+      }
+    }
+  ],
+  "conventions_tested": 176,
+  "conventions_matching_platform_a": [
+    {
+      "splitter": "symmetric",
+      "phase_arm": "top",
+      "phase_sign": 1,
+      "theta_meaning": "theta",
+      "phase_shifter_position": "top",
+      "adaptive_offset": 0.0,
+      "transposed": false,
+      "platform_a_max_error_sorted": 0.0006340411315624572,
+      "b1_pearson_r_identity_order": -0.1199443891891189
+    },
+    {
+      "splitter": "symmetric",
+      "phase_arm": "top",
+      "phase_sign": -1,
+      "theta_meaning": "theta",
+      "phase_shifter_position": "top",
+      "adaptive_offset": 0.0,
+      "transposed": false,
+      "platform_a_max_error_sorted": 0.0006340411315625682,
+      "b1_pearson_r_identity_order": -0.1199443891891189
+    },
+    {
+      "splitter": "rotation",
+      "phase_arm": "top",
+      "phase_sign": 1,
+      "theta_meaning": "theta",
+      "phase_shifter_position": "top",
+      "adaptive_offset": 0.0,
+      "transposed": false,
+      "platform_a_max_error_sorted": 0.0006340411315621797,
+      "b1_pearson_r_identity_order": -0.11994438918911911
+    },
+    {
+      "splitter": "rotation",
+      "phase_arm": "top",
+      "phase_sign": -1,
+      "theta_meaning": "theta",
+      "phase_shifter_position": "top",
+      "adaptive_offset": 0.0,
+      "transposed": false,
+      "platform_a_max_error_sorted": 0.0006340411315621797,
+      "b1_pearson_r_identity_order": -0.11994438918911911
+    }
+  ],
+  "best_b1_r_any_convention": {
+    "splitter": "symmetric",
+    "phase_arm": "top",
+    "phase_sign": 1,
+    "theta_meaning": "theta/2",
+    "phase_shifter_position": "bottom",
+    "adaptive_offset": 0.0,
+    "transposed": false,
+    "platform_a_max_error_sorted": 0.1905801668674439,
+    "b1_pearson_r_identity_order": 0.22582717887849427
+  }
+}

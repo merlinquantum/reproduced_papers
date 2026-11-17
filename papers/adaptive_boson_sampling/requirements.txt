@@ -1,0 +1,15 @@
+# Core numerics and the kernel SVM
+numpy
+scipy
+scikit-learn
+# Figures written by runs; Pillow reads paper figures in utils/digitize_figures.py
+matplotlib
+Pillow
+# Required by the shared runtime's dtype handling (runtime_lib/dtypes.py)
+torch
+# Cross-check of Fock amplitudes in tests/test_fock.py, and the Phase 4 MerLin
+# adaptation (lib/abs_merlin.py). Phase 4 ran on a MerLin 0.5.0.dev0 development
+# checkout; the latest PyPI release is 0.4.2 (untested here).
+perceval-quandela
+merlinquantum
+pytest

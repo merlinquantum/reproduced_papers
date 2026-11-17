@@ -1,0 +1,52 @@
+{
+  "description": "MerLin adaptation (Phase 4) smoke run: 3 partitions, both arms, B2 Haar U_0 seed 0 with the exact and noisy MerLin backends.",
+  "validity": "substitute-data (simulated kernels, Haar-random U_0; MerLin backends)",
+  "models": [
+    {
+      "label": "B2_qubit_haar_u0_merlin",
+      "kind": "abs_simulated",
+      "platform": "B2",
+      "kernel_kind": "overlap",
+      "u0": {
+        "strategy": "seed",
+        "seeds": [
+          0
+        ],
+        "n_candidates": 1
+      },
+      "assignment": "identity",
+      "simulation": {
+        "backend": "merlin"
+      }
+    },
+    {
+      "label": "B2_qubit_haar_u0_merlin_noisy",
+      "kind": "abs_simulated",
+      "platform": "B2",
+      "kernel_kind": "fidelity",
+      "u0": {
+        "strategy": "seed",
+        "seeds": [
+          0
+        ],
+        "n_candidates": 1
+      },
+      "assignment": "identity",
+      "simulation": {
+        "backend": "merlin_noisy",
+        "noise": {
+          "indistinguishability": 0.83,
+          "g2": 0.02,
+          "detection": "threshold"
+        }
+      }
+    }
+  ],
+  "evaluation": {
+    "n_partitions": 3,
+    "arms": [
+      "paper",
+      "tuned"
+    ]
+  }
+}

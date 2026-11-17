@@ -1,0 +1,186 @@
+{
+  "description": "E8 (haar): make_moons(200, noise 0.1) + K-means(15), arc-ordered cluster assignment, 3 data seeds x 3 K-means seeds.",
+  "experiment": "classification",
+  "validity": "substitute-data (regenerated moons; seeds and cluster assignment unpublished)",
+  "dataset": {
+    "name": "moons_kmeans",
+    "n_samples": 200,
+    "noise": 0.1,
+    "data_seed": 0,
+    "n_clusters": 15,
+    "kmeans_seed": 0,
+    "assignment": "arc_order",
+    "assignment_seed": 0
+  },
+  "dataset_repetitions": [
+    {
+      "data_seed": 0,
+      "kmeans_seed": 0
+    },
+    {
+      "data_seed": 0,
+      "kmeans_seed": 1
+    },
+    {
+      "data_seed": 0,
+      "kmeans_seed": 2
+    },
+    {
+      "data_seed": 1,
+      "kmeans_seed": 0
+    },
+    {
+      "data_seed": 1,
+      "kmeans_seed": 1
+    },
+    {
+      "data_seed": 1,
+      "kmeans_seed": 2
+    },
+    {
+      "data_seed": 2,
+      "kmeans_seed": 0
+    },
+    {
+      "data_seed": 2,
+      "kmeans_seed": 1
+    },
+    {
+      "data_seed": 2,
+      "kmeans_seed": 2
+    }
+  ],
+  "models": [
+    {
+      "label": "B2_qubit_haar_u0",
+      "kind": "abs_simulated",
+      "platform": "B2",
+      "kernel_kind": "overlap",
+      "u0": {
+        "strategy": "seed",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "n_candidates": 1
+      },
+      "assignment": "identity"
+    },
+    {
+      "label": "B3_qutrit_haar_u0",
+      "kind": "abs_simulated",
+      "platform": "B3",
+      "kernel_kind": "overlap",
+      "u0": {
+        "strategy": "seed",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "n_candidates": 1
+      },
+      "assignment": "identity"
+    },
+    {
+      "label": "B2_qubit_designed_u0",
+      "kind": "abs_simulated",
+      "platform": "B2",
+      "kernel_kind": "overlap",
+      "u0": {
+        "strategy": "max_design_agreement",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "n_candidates": 200
+      },
+      "assignment": "identity"
+    },
+    {
+      "label": "B3_qutrit_designed_u0",
+      "kind": "abs_simulated",
+      "platform": "B3",
+      "kernel_kind": "overlap",
+      "u0": {
+        "strategy": "max_design_agreement",
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ],
+        "n_candidates": 200
+      },
+      "assignment": "identity"
+    }
+  ],
+  "evaluation": {
+    "n_partitions": 100,
+    "test_fraction": 0.2,
+    "svm_C": 50,
+    "arms": [
+      "paper",
+      "tuned"
+    ],
+    "tuning": {
+      "C_grid": [
+        0.1,
+        1,
+        10,
+        50,
+        100
+      ],
+      "gamma_grid": [
+        0.001,
+        0.00316228,
+        0.01,
+        0.0316228,
+        0.1,
+        0.316228,
+        1.0,
+        3.16228,
+        10.0
+      ],
+      "degree_grid": [
+        2,
+        3,
+        4
+      ],
+      "knn_grid": [
+        1,
+        3,
+        5
+      ]
+    }
+  }
+}

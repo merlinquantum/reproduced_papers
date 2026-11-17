@@ -1,0 +1,121 @@
+{
+  "validity": "simulation of the published B1 circuit vs digitised Fig. 3e",
+  "digitised_floor": 0.21474989373181153,
+  "identity_order": {
+    "mean_abs_error": 0.32634894610805626,
+    "pearson_r": -0.12299108546293851
+  },
+  "best_structured_orders": [
+    {
+      "pair_order": "colex",
+      "detector_relabel": [
+        2,
+        3,
+        0,
+        1,
+        5,
+        4
+      ],
+      "mean_abs_error": 0.19431362665798052,
+      "pearson_r": 0.5584557795624328
+    },
+    {
+      "pair_order": "colex",
+      "detector_relabel": [
+        3,
+        2,
+        0,
+        1,
+        5,
+        4
+      ],
+      "mean_abs_error": 0.1968172699461789,
+      "pearson_r": 0.5484501095625264
+    },
+    {
+      "pair_order": "colex",
+      "detector_relabel": [
+        3,
+        0,
+        1,
+        5,
+        4,
+        2
+      ],
+      "mean_abs_error": 0.20595829506677943,
+      "pearson_r": 0.5128217127348088
+    },
+    {
+      "pair_order": "lex",
+      "detector_relabel": [
+        4,
+        5,
+        1,
+        0,
+        3,
+        2
+      ],
+      "mean_abs_error": 0.21804106556922193,
+      "pearson_r": 0.40791447270085135
+    },
+    {
+      "pair_order": "lex",
+      "detector_relabel": [
+        5,
+        4,
+        2,
+        3,
+        0,
+        1
+      ],
+      "mean_abs_error": 0.22218121561758472,
+      "pearson_r": 0.4200207075482621
+    }
+  ],
+  "best_general_order": {
+    "order": [
+      7,
+      8,
+      4,
+      13,
+      12,
+      11,
+      0,
+      2,
+      6,
+      5,
+      1,
+      10,
+      14,
+      3,
+      9
+    ],
+    "mean_abs_error": 0.09683685661603146,
+    "pearson_r": 0.9195893241646075
+  },
+  "random_qubit_control_general_order": {
+    "order": [
+      7,
+      12,
+      5,
+      11,
+      2,
+      10,
+      4,
+      9,
+      8,
+      13,
+      3,
+      14,
+      6,
+      1,
+      0
+    ],
+    "mean_abs_error": 0.13725468699448257,
+    "pearson_r": 0.7547168783694054
+  },
+  "paper_theoretical_vs_experimental": {
+    "mean_abs_error": 0.14272999098472064,
+    "pearson_r": 0.7095584803534324
+  }
+}

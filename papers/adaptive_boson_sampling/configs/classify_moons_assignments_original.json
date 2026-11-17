@@ -1,0 +1,153 @@
+{
+  "description": "E8 sensitivity: digitised paper kernels under the kmeans_label assignment and 20 random cluster-to-outcome assignments (data seed 0, K-means seed 0).",
+  "experiment": "classification",
+  "validity": "substitute-data (digitised paper kernels)",
+  "dataset": {
+    "name": "moons_kmeans",
+    "n_samples": 200,
+    "noise": 0.1,
+    "data_seed": 0,
+    "n_clusters": 15,
+    "kmeans_seed": 0,
+    "assignment": "arc_order",
+    "assignment_seed": 0
+  },
+  "dataset_repetitions": [
+    {
+      "assignment": "arc_order"
+    },
+    {
+      "assignment": "kmeans_label"
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 0
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 1
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 2
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 3
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 4
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 5
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 6
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 7
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 8
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 9
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 10
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 11
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 12
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 13
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 14
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 15
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 16
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 17
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 18
+    },
+    {
+      "assignment": "random",
+      "assignment_seed": 19
+    }
+  ],
+  "models": [
+    {
+      "label": "B2_qubit_experimental_fig4a",
+      "kind": "abs_digitized",
+      "key": "fig4a_B2_experimental"
+    },
+    {
+      "label": "B3_qutrit_experimental_fig4b",
+      "kind": "abs_digitized",
+      "key": "fig4b_B3_experimental"
+    }
+  ],
+  "evaluation": {
+    "n_partitions": 100,
+    "test_fraction": 0.2,
+    "svm_C": 50,
+    "arms": [
+      "paper"
+    ],
+    "tuning": {
+      "C_grid": [
+        0.1,
+        1,
+        10,
+        50,
+        100
+      ],
+      "gamma_grid": [
+        0.001,
+        0.00316228,
+        0.01,
+        0.0316228,
+        0.1,
+        0.316228,
+        1.0,
+        3.16228,
+        10.0
+      ],
+      "degree_grid": [
+        2,
+        3,
+        4
+      ],
+      "knn_grid": [
+        1,
+        3,
+        5
+      ]
+    }
+  }
+}

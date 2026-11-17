@@ -1,0 +1,83 @@
+{
+  "description": "E7/C4: 1D accuracy over 50 alternative outcome assignments (SI Note 4) for design-selected B2/B3 U_0 (seed 0).",
+  "experiment": "classification",
+  "validity": "substitute-data (simulated kernels, selected Haar U_0)",
+  "dataset": {
+    "name": "nonlinear_1d",
+    "n_points": 15
+  },
+  "models": [
+    {
+      "label": "B2_qubit_alternative",
+      "kind": "abs_simulated",
+      "platform": "B2",
+      "kernel_kind": "overlap",
+      "u0": {
+        "strategy": "max_design_agreement",
+        "seeds": [
+          0
+        ],
+        "n_candidates": 200
+      },
+      "assignment": {
+        "n_assignments": 50,
+        "seed": 0
+      }
+    },
+    {
+      "label": "B3_qutrit_alternative",
+      "kind": "abs_simulated",
+      "platform": "B3",
+      "kernel_kind": "overlap",
+      "u0": {
+        "strategy": "max_design_agreement",
+        "seeds": [
+          0
+        ],
+        "n_candidates": 200
+      },
+      "assignment": {
+        "n_assignments": 50,
+        "seed": 0
+      }
+    }
+  ],
+  "evaluation": {
+    "n_partitions": 100,
+    "test_fraction": 0.2,
+    "svm_C": 50,
+    "arms": [
+      "paper"
+    ],
+    "tuning": {
+      "C_grid": [
+        0.1,
+        1,
+        10,
+        50,
+        100
+      ],
+      "gamma_grid": [
+        0.001,
+        0.00316228,
+        0.01,
+        0.0316228,
+        0.1,
+        0.316228,
+        1.0,
+        3.16228,
+        10.0
+      ],
+      "degree_grid": [
+        2,
+        3,
+        4
+      ],
+      "knn_grid": [
+        1,
+        3,
+        5
+      ]
+    }
+  }
+}

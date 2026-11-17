@@ -1,0 +1,35 @@
+{
+  "description": "MerLin adaptation (Phase 4), not the Phase 3 reproduction. E4 (Phase 03 rerun): platform B2 with U_0 fitted by gradient descent to the digitised fig4a simulated kernel (5 pool seeds x 8 random starts), to test whether one interferometer reproduces the paper panel. Exact MerLin backend (partial measurement, FOCK).",
+  "experiment": "platform_kernel",
+  "validity": "substitute-data (U_0 fitted to digitised fig4a simulated panel; MerLin exact backend)",
+  "platform_kernel": {
+    "platform": "B2",
+    "kernel_kind": "overlap",
+    "u0": {
+      "strategy": "fit_digitized",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "n_candidates": 8,
+      "target_key": "fig4a_B2_simulated",
+      "n_steps": 1500,
+      "learning_rate": 0.05
+    },
+    "paper_reference": {
+      "digitized_keys": [
+        "fig4a_B2_simulated",
+        "fig4a_B2_experimental"
+      ]
+    },
+    "simulations": [
+      {
+        "label": "merlin",
+        "backend": "merlin"
+      }
+    ]
+  }
+}

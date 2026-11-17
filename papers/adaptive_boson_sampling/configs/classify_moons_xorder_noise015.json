@@ -1,0 +1,114 @@
+{
+  "description": "E8 diagnosis (Phase 03 rerun): make_moons(200, noise 0.15) + K-means(15), clusters assigned to outcomes in order of centroid x-coordinate, 3 data seeds x 3 K-means seeds.",
+  "experiment": "classification",
+  "validity": "substitute-data (regenerated moons; assignment rule x_order is a diagnosis candidate, the paper's rule is unpublished)",
+  "dataset": {
+    "name": "moons_kmeans",
+    "n_samples": 200,
+    "noise": 0.15,
+    "data_seed": 0,
+    "n_clusters": 15,
+    "kmeans_seed": 0,
+    "assignment": "x_order",
+    "assignment_seed": 0
+  },
+  "dataset_repetitions": [
+    {
+      "data_seed": 0,
+      "kmeans_seed": 0
+    },
+    {
+      "data_seed": 0,
+      "kmeans_seed": 1
+    },
+    {
+      "data_seed": 0,
+      "kmeans_seed": 2
+    },
+    {
+      "data_seed": 1,
+      "kmeans_seed": 0
+    },
+    {
+      "data_seed": 1,
+      "kmeans_seed": 1
+    },
+    {
+      "data_seed": 1,
+      "kmeans_seed": 2
+    },
+    {
+      "data_seed": 2,
+      "kmeans_seed": 0
+    },
+    {
+      "data_seed": 2,
+      "kmeans_seed": 1
+    },
+    {
+      "data_seed": 2,
+      "kmeans_seed": 2
+    }
+  ],
+  "models": [
+    {
+      "label": "B2_qubit_experimental_fig4a",
+      "kind": "abs_digitized",
+      "key": "fig4a_B2_experimental"
+    },
+    {
+      "label": "B3_qutrit_experimental_fig4b",
+      "kind": "abs_digitized",
+      "key": "fig4b_B3_experimental"
+    },
+    {
+      "label": "B2_qubit_simulated_fig4a",
+      "kind": "abs_digitized",
+      "key": "fig4a_B2_simulated"
+    },
+    {
+      "label": "B3_qutrit_simulated_fig4b",
+      "kind": "abs_digitized",
+      "key": "fig4b_B3_simulated"
+    }
+  ],
+  "evaluation": {
+    "n_partitions": 100,
+    "test_fraction": 0.2,
+    "svm_C": 50,
+    "arms": [
+      "paper",
+      "tuned"
+    ],
+    "tuning": {
+      "C_grid": [
+        0.1,
+        1,
+        10,
+        50,
+        100
+      ],
+      "gamma_grid": [
+        0.001,
+        0.00316228,
+        0.01,
+        0.0316228,
+        0.1,
+        0.316228,
+        1.0,
+        3.16228,
+        10.0
+      ],
+      "degree_grid": [
+        2,
+        3,
+        4
+      ],
+      "knn_grid": [
+        1,
+        3,
+        5
+      ]
+    }
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "validity": "substitute-data",
+  "one_d_digitized_vs_paper": {
+    "B2_qubit_experimental_fig4a": {
+      "mean_test_accuracy": 0.8033333333333336,
+      "standard_error": 0.01840741079473443,
+      "paper_accuracy": 0.9,
+      "gap": 0.09666666666666646,
+      "gap_in_standard_errors": 5.251508087944592
+    },
+    "B2_qubit_simulated_fig4a": {
+      "mean_test_accuracy": 0.7633333333333335,
+      "standard_error": 0.021343747458109495,
+      "paper_accuracy": 0.9,
+      "gap": 0.1366666666666665,
+      "gap_in_standard_errors": 6.4031242374328405
+    },
+    "B3_qutrit_experimental_fig4b": {
+      "mean_test_accuracy": 0.7733333333333335,
+      "standard_error": 0.02501626855628871,
+      "paper_accuracy": 0.8,
+      "gap": 0.026666666666666505,
+      "gap_in_standard_errors": 1.0659729930011048
+    },
+    "B3_qutrit_simulated_fig4b": {
+      "mean_test_accuracy": 0.7833333333333335,
+      "standard_error": 0.02339098217557457,
+      "paper_accuracy": 0.8,
+      "gap": 0.016666666666666496,
+      "gap_in_standard_errors": 0.712525303194418
+    }
+  },
+  "moons_qutrit_vs_qubit_random_assignments": {
+    "qubit_model": "B2_qubit_experimental_fig4a",
+    "qutrit_model": "B3_qutrit_experimental_fig4b",
+    "n_random_assignments": 20,
+    "mean_qubit": 0.5604875,
+    "mean_qutrit": 0.7912125,
+    "mean_difference_qutrit_minus_qubit": 0.23072499999999999,
+    "std_difference": 0.12395459960468552,
+    "n_qutrit_better": 19,
+    "paired_t_statistic": 8.324286242769439,
+    "paired_t_pvalue": 9.242329231075304e-08,
+    "structured_variants": {
+      "arc_order": {
+        "qubit": 1.0,
+        "qutrit": 1.0
+      },
+      "kmeans_label": {
+        "qubit": 0.5627500000000001,
+        "qutrit": 0.6637499999999998
+      }
+    }
+  },
+  "alternative_kernels_1d": {
+    "B2_qubit_alternative": {
+      "n_kernels": 250,
+      "mean": 0.8200666666666667,
+      "min": 0.5533333333333333,
+      "max": 0.9966666666666667,
+      "fraction_in_paper_range": 0.824
+    },
+    "B3_qutrit_alternative": {
+      "n_kernels": 250,
+      "mean": 0.8148266666666667,
+      "min": 0.5533333333333335,
+      "max": 1.0,
+      "fraction_in_paper_range": 0.812
+    }
+  },
+  "moons_x_order_paired": {
+    "outdir/run_20261105-085258": {
+      "n_variants": 9,
+      "mean_qubit": 0.6138611111111111,
+      "mean_qutrit": 0.86325,
+      "mean_difference_qutrit_minus_qubit": 0.24938888888888883,
+      "std_difference": 0.1318076908268676,
+      "n_qutrit_better": 9,
+      "paired_t_statistic": 5.676198877115603,
+      "paired_t_pvalue": 0.00046703939563754734
+    },
+    "outdir/run_20261105-085344": {
+      "n_variants": 9,
+      "mean_qubit": 0.6568611111111111,
+      "mean_qutrit": 0.8117500000000001,
+      "mean_difference_qutrit_minus_qubit": 0.15488888888888885,
+      "std_difference": 0.11824809136350195,
+      "n_qutrit_better": 9,
+      "paired_t_statistic": 3.929591262815841,
+      "paired_t_pvalue": 0.004359189131320866
+    }
+  },
+  "sources": {
+    "digitized_1d": "outdir/run_20261104-231701",
+    "assignments": "outdir/run_20261104-232529",
+    "alternatives": "outdir/run_20261105-085130",
+    "x_order": [
+      "outdir/run_20261105-085258",
+      "outdir/run_20261105-085344"
+    ]
+  }
+}

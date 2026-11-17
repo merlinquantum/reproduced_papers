@@ -1,0 +1,35 @@
+{
+  "u0_pool_seed": 2,
+  "partition_seed": 88,
+  "numpy": {
+    "decision_values": [
+      0.1276281465316198,
+      0.0005060151062108442,
+      0.26440033157679876
+    ],
+    "predictions": [
+      1,
+      1,
+      1
+    ]
+  },
+  "merlin": {
+    "decision_values": [
+      0.12734627690938205,
+      -1.6755268033019632e-06,
+      0.2648397946632568
+    ],
+    "predictions": [
+      1,
+      -1,
+      1
+    ]
+  },
+  "true_labels": [
+    1,
+    1,
+    -1
+  ],
+  "max_abs_kernel_difference": 9.992007221626409e-16,
+  "libsvm_stopping_tolerance": 0.001
+}

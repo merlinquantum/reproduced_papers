@@ -1,0 +1,63 @@
+{
+  "description": "Adaptive Boson Sampling quantum-kernel SVM reproduction (Hoch et al., Nat. Commun. 16, 902, 2025). Experiments are selected by config (see configs/); these flags override single values.",
+  "arguments": [
+    {
+      "flags": [
+        "--n-partitions"
+      ],
+      "help": "Number of random 80/20 train/test partitions to average over (classification)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.n_partitions"
+      }
+    },
+    {
+      "flags": [
+        "--svm-c"
+      ],
+      "help": "SVM soft-margin C for the paper arm (paper: lambda = 50)",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.svm_C"
+      }
+    },
+    {
+      "flags": [
+        "--platform"
+      ],
+      "help": "Platform simulated by a platform_kernel experiment (A, B1, B2, B3)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "platform_kernel.platform"
+      },
+      "choices": [
+        "A",
+        "B1",
+        "B2",
+        "B3"
+      ]
+    },
+    {
+      "flags": [
+        "--kernel"
+      ],
+      "help": "Kernel estimator of a platform_kernel experiment: overlap (pure-state squared overlap) or fidelity (Uhlmann fidelity)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "platform_kernel.kernel_kind"
+      },
+      "choices": [
+        "overlap",
+        "fidelity"
+      ]
+    }
+  ]
+}

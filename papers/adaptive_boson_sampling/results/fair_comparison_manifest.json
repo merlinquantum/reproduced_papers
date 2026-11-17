@@ -1,0 +1,62 @@
+{
+  "protocol": "LOG.md, Phase 5 Comparison Plan (2026-11-05T14:45:11Z)",
+  "conditions": [
+    {
+      "name": "1d",
+      "description": "E6: 15-point 1D set, digitised Fig. 4 kernels and fitted-U_0 simulated kernels vs classical models on x and on the outcome index.",
+      "paper": {"qubit_B2": 0.90, "qutrit_B3": 0.80},
+      "arms": ["paper", "tuned"],
+      "expected_variants": 1,
+      "abs_runs": ["outdir/run_20261104-231701", "outdir/run_20261105-085018"],
+      "merlin_runs": ["outdir/run_20261105-095713"],
+      "baseline_runs": ["outdir/run_20261104-231709"]
+    },
+    {
+      "name": "moons_xorder_noise0.1",
+      "description": "E8: make_moons(200, noise 0.1) + K-means(15), centroid-x assignment, 3 data x 3 K-means seeds.",
+      "paper": {"qubit_B2": 0.65, "qutrit_B3": 0.90},
+      "arms": ["paper", "tuned"],
+      "expected_variants": 9,
+      "variant_filter": {"assignment": "x_order"},
+      "abs_runs": ["outdir/run_20261105-085258"],
+      "merlin_runs": ["outdir/run_20261105-100508"],
+      "baseline_runs": ["outdir/run_20261105-154638"]
+    },
+    {
+      "name": "moons_xorder_noise0.15",
+      "description": "E8: as above at noise 0.15.",
+      "paper": {"qubit_B2": 0.65, "qutrit_B3": 0.90},
+      "arms": ["paper", "tuned"],
+      "expected_variants": 9,
+      "abs_runs": ["outdir/run_20261105-085344"],
+      "merlin_runs": [],
+      "baseline_runs": ["outdir/run_20261105-155312"]
+    },
+    {
+      "name": "moons_random_assignments",
+      "description": "E8: make_moons(200, noise 0.1) + K-means(15), data seed 0, K-means seed 0, 20 random cluster-to-outcome assignments.",
+      "paper": {"qubit_B2": 0.65, "qutrit_B3": 0.90},
+      "arms": ["paper"],
+      "expected_variants": 20,
+      "variant_filter": {"assignment": "random"},
+      "abs_runs": ["outdir/run_20261104-232529"],
+      "merlin_runs": [],
+      "baseline_runs": ["outdir/run_20261105-160002"]
+    },
+    {
+      "name": "moons_arc_order",
+      "description": "E8: make_moons(200, noise 0.1) + K-means(15), arc-order assignment, 3 data x 3 K-means seeds.",
+      "paper": {"qubit_B2": 0.65, "qutrit_B3": 0.90},
+      "arms": ["paper", "tuned"],
+      "expected_variants": 9,
+      "variant_filter": {"assignment": "arc_order"},
+      "abs_runs": ["outdir/run_20261104-231756"],
+      "merlin_runs": ["outdir/run_20261105-100508"],
+      "baseline_runs": ["outdir/run_20261104-231840"]
+    }
+  ],
+  "alternatives": {
+    "paper": "about 50 kernels per platform, 1D accuracy about 0.73-1.0",
+    "runs": ["outdir/run_20261105-085130", "outdir/run_20261105-100053", "outdir/run_20261104-231744"]
+  }
+}

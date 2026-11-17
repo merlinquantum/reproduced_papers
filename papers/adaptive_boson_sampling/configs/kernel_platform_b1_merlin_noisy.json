@@ -1,0 +1,89 @@
+{
+  "description": "MerLin adaptation (Phase 4), not the Phase 3 reproduction. E9/E3: B1 kernel under the imperfect-source model (Perceval NoiseModel) with simulated tomography; grid over indistinguishability {1, 0.83} x g2 {0, 0.02} x detection {pnr, threshold}.",
+  "experiment": "platform_kernel",
+  "validity": "simulation of the paper circuit with an imperfect-source model (MerLin noisy backend)",
+  "platform_kernel": {
+    "platform": "B1",
+    "kernel_kind": "fidelity",
+    "paper_reference": {
+      "digitized_keys": [
+        "fig3e_B1_theoretical",
+        "fig3e_B1_experimental"
+      ]
+    },
+    "simulations": [
+      {
+        "label": "noisy_i1.0_g0.0_pnr",
+        "backend": "merlin_noisy",
+        "noise": {
+          "indistinguishability": 1.0,
+          "g2": 0.0,
+          "detection": "pnr"
+        }
+      },
+      {
+        "label": "noisy_i1.0_g0.0_threshold",
+        "backend": "merlin_noisy",
+        "noise": {
+          "indistinguishability": 1.0,
+          "g2": 0.0,
+          "detection": "threshold"
+        }
+      },
+      {
+        "label": "noisy_i1.0_g0.02_pnr",
+        "backend": "merlin_noisy",
+        "noise": {
+          "indistinguishability": 1.0,
+          "g2": 0.02,
+          "detection": "pnr"
+        }
+      },
+      {
+        "label": "noisy_i1.0_g0.02_threshold",
+        "backend": "merlin_noisy",
+        "noise": {
+          "indistinguishability": 1.0,
+          "g2": 0.02,
+          "detection": "threshold"
+        }
+      },
+      {
+        "label": "noisy_i0.83_g0.0_pnr",
+        "backend": "merlin_noisy",
+        "noise": {
+          "indistinguishability": 0.83,
+          "g2": 0.0,
+          "detection": "pnr"
+        }
+      },
+      {
+        "label": "noisy_i0.83_g0.0_threshold",
+        "backend": "merlin_noisy",
+        "noise": {
+          "indistinguishability": 0.83,
+          "g2": 0.0,
+          "detection": "threshold"
+        }
+      },
+      {
+        "label": "noisy_i0.83_g0.02_pnr",
+        "backend": "merlin_noisy",
+        "noise": {
+          "indistinguishability": 0.83,
+          "g2": 0.02,
+          "detection": "pnr"
+        }
+      },
+      {
+        "label": "noisy_i0.83_g0.02_threshold",
+        "backend": "merlin_noisy",
+        "noise": {
+          "indistinguishability": 0.83,
+          "g2": 0.02,
+          "detection": "threshold"
+        }
+      }
+    ]
+  }
+}

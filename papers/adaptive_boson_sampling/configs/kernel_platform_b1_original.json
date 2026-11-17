@@ -1,0 +1,15 @@
+{
+  "description": "E3: platform B1 [8,3,2,15] ideal kernel vs the Fig. 3e heatmaps (digitised; the paper's 'theoretical' panel includes source imperfections).",
+  "experiment": "platform_kernel",
+  "validity": "simulation of the fully specified paper circuit; reference digitised (substitute-data)",
+  "platform_kernel": {
+    "platform": "B1",
+    "kernel_kind": "overlap",
+    "paper_reference": {
+      "digitized_keys": [
+        "fig3e_B1_theoretical",
+        "fig3e_B1_experimental"
+      ]
+    }
+  }
+}

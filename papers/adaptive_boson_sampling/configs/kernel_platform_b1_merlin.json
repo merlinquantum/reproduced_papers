@@ -1,0 +1,21 @@
+{
+  "description": "MerLin adaptation (Phase 4), not the Phase 3 reproduction. E3: platform B1 [8,3,2,15] ideal kernel vs the Fig. 3e heatmaps (digitised; the paper's 'theoretical' panel includes source imperfections). Exact MerLin backend (partial measurement, FOCK).",
+  "experiment": "platform_kernel",
+  "validity": "simulation of the paper circuit (MerLin exact backend)",
+  "platform_kernel": {
+    "platform": "B1",
+    "kernel_kind": "overlap",
+    "paper_reference": {
+      "digitized_keys": [
+        "fig3e_B1_theoretical",
+        "fig3e_B1_experimental"
+      ]
+    },
+    "simulations": [
+      {
+        "label": "merlin",
+        "backend": "merlin"
+      }
+    ]
+  }
+}
