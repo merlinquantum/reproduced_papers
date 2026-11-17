@@ -1,4 +1,4 @@
-"""Fig. 3: predicted and true labels on the first 50 training windows, one panel per task.
+"""Fig. 4: predicted and true labels on the first 50 training windows, one panel per task.
 
 Predictions come from the kernel ridge fit at the tuning ridge (10⁻⁶) on the full
 training set, as in the authors' figure.
@@ -67,12 +67,12 @@ def main() -> int:
     ]
     fig.legend(handles=handles, loc="upper right", ncol=2, fontsize=8, frameon=False)
     fig.suptitle(
-        f"Fit on training windows at λ_reg = 10⁻⁶ (paper Fig. 3) · {args.label}",
+        f"Fit on training windows at λ_reg = 10⁻⁶ (paper Fig. 4) · {args.label}",
         x=0.01,
         ha="left",
         fontsize=10,
     )
-    saved = save(fig, args.run_dir, "fig3_fit_examples")
+    saved = save(fig, args.run_dir, "fig4_fit_examples")
     print("\n".join(str(p) for p in saved))
     return 0
 

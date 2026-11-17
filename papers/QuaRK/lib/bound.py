@@ -1,4 +1,4 @@
-"""Terms of the generalization bound of Theorem 2 (paper Eq. 17), for a fitted readout.
+"""Terms of the generalization bound of Theorem 2 (paper Eq. 26), for a fitted readout.
 
 Inputs we must choose, because the paper gives no numbers:
 
@@ -27,7 +27,7 @@ def generalization_bound_terms(
     max_contraction: float,
     window: int,
 ) -> dict:
-    """Return the three terms of Eq. (17) and their sum.
+    """Return the three terms of Eq. (26) and their sum.
 
     The window-truncation term needs ``nu > 1`` (Matérn twice differentiable at 0);
     for ``nu <= 1`` it and the total are ``None``.

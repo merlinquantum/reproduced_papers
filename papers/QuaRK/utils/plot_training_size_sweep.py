@@ -1,4 +1,4 @@
-"""Fig. 4: test MSE against the number of training windows, one panel per task.
+"""Fig. 5: test MSE against the number of training windows, one panel per task.
 
 Shows both ridge selections of the run: on validation data (our protocol) and on
 the test set (the authors' rule). The release overlay marks the authors' values.
@@ -86,12 +86,12 @@ def main() -> int:
     for ax in axes[:, 0]:
         ax.set_ylabel("Test MSE (2000 windows)")
     fig.suptitle(
-        f"Test MSE vs training-set size (paper Fig. 4) · {args.label}",
+        f"Test MSE vs training-set size (paper Fig. 5) · {args.label}",
         x=0.01,
         ha="left",
         fontsize=10,
     )
-    saved = save(fig, args.run_dir, "fig4_training_size_sweep")
+    saved = save(fig, args.run_dir, "fig5_training_size_sweep")
     print("\n".join(str(p) for p in saved))
     return 0
 

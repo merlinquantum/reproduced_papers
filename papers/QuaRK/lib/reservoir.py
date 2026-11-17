@@ -51,7 +51,7 @@ def _rz(angle: float) -> np.ndarray:
 
 
 def ising_unitary(num_qubits, zz_angles, x_angles, z_angles) -> np.ndarray:
-    """Fixed reservoir unitary ``W`` of Eq. (8): R_zz on the ring, then R_z, then R_x."""
+    """Fixed reservoir unitary ``W`` of Eq. (11): R_zz on the ring, then R_z, then R_x."""
     dim = 2**num_qubits
     bits = (np.arange(dim)[:, None] >> np.arange(num_qubits)[None, :]) & 1
     spins = 1 - 2 * bits  # Z eigenvalue of each qubit in each basis state
@@ -123,7 +123,7 @@ def draw_reservoir_parameters(
 
 
 def contraction_channel(rho: np.ndarray, contraction: float) -> np.ndarray:
-    """Reset-rate channel ``lambda * rho + (1 - lambda) |+><+|`` (Eq. 9), batched."""
+    """Reset-rate channel ``lambda * rho + (1 - lambda) |+><+|`` (Eq. 12), batched."""
     dim = rho.shape[-1]
     return contraction * rho + (1.0 - contraction) / dim
 

@@ -1,11 +1,11 @@
-"""Compare a seed-12345 QuaRK run with the authors' released run behind Figs. 2-4.
+"""Compare a seed-12345 QuaRK run with the authors' released run behind Figs. 3-5.
 
 Checks, task by task (current-point readout, exponential fading, Volterra):
 
 * the tuned Matérn kernel (nu, xi) against ``model/meta.json``;
-* Fig. 2: the training and test MSE over the 26 ridge values against ``reg_sweep.npz``
+* Fig. 3: the training and test MSE over the 26 ridge values against ``reg_sweep.npz``
   (training MSE below ``ROUNDING_LEVEL`` is compared in absolute terms);
-* Fig. 4: the test MSE over the 10 training sizes and the ridge used, with the ridge
+* Fig. 5: the test MSE over the 10 training sizes and the ridge used, with the ridge
   chosen on the test set (the authors' rule), against ``artifacts/train_size_sweep.pkl``
   (read with an unpickler that only accepts numpy arrays);
 * the features, if the run saved them, against ``Phi_full`` (both rounded to float32,
@@ -67,12 +67,12 @@ def main() -> int:
             "xi_relative_difference": abs(kernel["xi"] - theirs["xi"]) / theirs["xi"],
             # Below ROUNDING_LEVEL the training MSE is floating-point noise (interpolation
             # regime), so compare it in absolute terms there.
-            "fig2_training_mse_max_relative_difference_above_rounding_level": (
+            "fig3_training_mse_max_relative_difference_above_rounding_level": (
                 max_relative_difference(
                     sweep[f"{task}__mse_train"][above], release["mse_train"][i][above]
                 )
             ),
-            "fig2_training_mse_max_abs_difference_below_rounding_level": float(
+            "fig3_training_mse_max_abs_difference_below_rounding_level": float(
                 np.max(
                     np.abs(
                         sweep[f"{task}__mse_train"][~above]
@@ -80,17 +80,17 @@ def main() -> int:
                     )
                 )
             ),
-            "fig2_test_mse_max_relative_difference": max_relative_difference(
+            "fig3_test_mse_max_relative_difference": max_relative_difference(
                 sweep[f"{task}__mse_test"], release_test_curve[i]
             ),
-            "fig2_training_mse_at_largest_ridge": {
+            "fig3_training_mse_at_largest_ridge": {
                 "ours": float(sweep[f"{task}__mse_train"][-1]),
                 "release": float(release["mse_train"][i][-1]),
             },
-            "fig4_test_mse_max_relative_difference": max_relative_difference(
+            "fig5_test_mse_max_relative_difference": max_relative_difference(
                 sizes[f"{task}__test__mse_test"], release["size_mse_test"][i]
             ),
-            "fig4_test_mse_first_last": {
+            "fig5_test_mse_first_last": {
                 "ours": [
                     float(sizes[f"{task}__test__mse_test"][0]),
                     float(sizes[f"{task}__test__mse_test"][-1]),
@@ -100,7 +100,7 @@ def main() -> int:
                     float(release["size_mse_test"][i][-1]),
                 ],
             },
-            "fig4_ridge": {
+            "fig5_ridge": {
                 "ours": selection["reg"],
                 "release": release["lambda_regs"][i],
             },

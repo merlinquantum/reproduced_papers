@@ -9,7 +9,7 @@ Writes ``sweep_summary.json`` and ``sweep_summary.md`` in the sweep directory.
 Rules, fixed before the sweeps were run:
 
 * metric: test MSE at the ``reg`` selected on validation data (``validation``), and,
-  reported separately, at the test-selected ``reg`` (the authors' Fig. 4 rule);
+  reported separately, at the test-selected ``reg`` (the authors' Fig. 5 rule);
 * aggregation: mean and sample standard deviation over seeds;
 * comparison against the reference candidate, per task: paired difference
   ``delta = MSE(reference) - MSE(other)`` over the shared seeds, with

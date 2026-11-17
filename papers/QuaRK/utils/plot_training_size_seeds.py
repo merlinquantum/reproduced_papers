@@ -1,6 +1,6 @@
 """QuaRK's normalized test MSE against the number of training windows, over all seeds.
 
-Multi-seed version of the paper's Fig. 4 for the model at the paper settings, with the
+Multi-seed version of the paper's Fig. 5 for the model at the paper settings, with the
 ridge chosen on validation data. Thin lines are seeds, thick lines their mean; the gray
 line has the slope -0.5 of the paper's "1/sqrt(N) shape", drawn through the mean of the
 first task at the smallest N of the slope fit. The labels give the mean slope fitted
@@ -93,7 +93,7 @@ def main() -> int:
     ax.set_xlabel("Number of training windows N (log scale)")
     ax.set_ylabel("Normalized test MSE (log scale)")
     ax.set_title(
-        "QuaRK test error against N (paper Fig. 4), ridge chosen on validation data; "
+        "QuaRK test error against N (paper Fig. 5), ridge chosen on validation data; "
         f"thin lines are seeds\n{args.label}",
         fontsize=9.5,
         loc="left",

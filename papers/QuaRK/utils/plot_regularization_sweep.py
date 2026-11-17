@@ -1,4 +1,4 @@
-"""Fig. 2: training MSE against the ridge regularization, one line per task.
+"""Fig. 3: training MSE against the ridge regularization, one line per task.
 
 Usage (from the repository root)::
 
@@ -88,14 +88,14 @@ def main() -> int:
     ax.set_xlabel("Ridge regularization λ_reg (Gram diagonal + λ_reg)")
     ax.set_ylabel("Training MSE")
     ax.set_title(
-        f"Training MSE vs regularization (paper Fig. 2) · {args.label}",
+        f"Training MSE vs regularization (paper Fig. 3) · {args.label}",
         fontsize=10,
         loc="left",
     )
     ax.set_xlim(grid[0] / 3, grid[-1] * 2000)
     ax.set_ylim(bottom=-0.02)
     ax.legend(loc="upper left", fontsize=8)
-    saved = save(fig, args.run_dir, "fig2_regularization_sweep")
+    saved = save(fig, args.run_dir, "fig3_regularization_sweep")
     print("\n".join(str(p) for p in saved))
     print(
         "max training MSE at the smallest λ_reg:",

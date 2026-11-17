@@ -94,10 +94,10 @@ def load_release(release_run: Path) -> dict:
     with (release_run / "artifacts" / "train_size_sweep.pkl").open("rb") as handle:
         sizes = _NumpyOnlyUnpickler(handle).load()
     ordered = sorted(sizes)
-    # Fig. 4 uses one ridge per task at every N; check it rather than assume it.
+    # Fig. 5 uses one ridge per task at every N; check it rather than assume it.
     ridges = np.array([sizes[n]["lambda_regs"] for n in ordered])
     if not np.all(ridges == ridges[0]):
-        raise ValueError("the release's Fig. 4 ridge changes with N")
+        raise ValueError("the release's Fig. 5 ridge changes with N")
     return {
         "reg_grid": sweep["reg_grid"],
         "mse_train": sweep["mse_train"],

@@ -1,8 +1,8 @@
 {
   "paper_items": [
     {
-      "item": "Readout tuning (Sec. 4.2): Mat\u00e9rn \u03bd and \u03be, F1 / F2 / F3",
-      "claim": "none: the setting behind Figs. 2\u20134",
+      "item": "Readout tuning (App. B.3): Mat\u00e9rn \u03bd and \u03be, F1 / F2 / F3",
+      "claim": "none: the setting behind Figs. 3\u20135",
       "paper": "(5, 17.496) / (0.5, 17.016) / (0.5, 15.392)",
       "ours": "same \u03bd",
       "delta": "\u03be: 1.0e-09 relative",
@@ -14,7 +14,7 @@
       "comment": "\u03bd chosen in {0.5, 1.5, 2.5, 5} on validation data"
     },
     {
-      "item": "Fig. 2, F1: training MSE against \u03bb_reg",
+      "item": "Fig. 3, F1: training MSE against \u03bb_reg",
       "claim": "relaxing \u03bb_reg drives the training MSE to numerical zero",
       "paper": "0.4736 at \u03bb_reg = 10\u2075; 8.7e-26 at 10\u207b\u00b9\u00b2",
       "ours": "same at seed 12345; 5 seeds: at most 4.5e-25 at 10\u207b\u00b9\u00b2",
@@ -27,7 +27,7 @@
       "comment": "QuaRK's transition: \u03bb_reg = 10\u207b\u00b9 to 1 over the seeds (code's units, K + \u03bb_reg\u00b7I)"
     },
     {
-      "item": "Fig. 2, F2: training MSE against \u03bb_reg",
+      "item": "Fig. 3, F2: training MSE against \u03bb_reg",
       "claim": "relaxing \u03bb_reg drives the training MSE to numerical zero",
       "paper": "0.9378 at \u03bb_reg = 10\u2075; 1.5e-24 at 10\u207b\u00b9\u00b2",
       "ours": "same at seed 12345; 5 seeds: at most 2.6e-24 at 10\u207b\u00b9\u00b2",
@@ -40,7 +40,7 @@
       "comment": "QuaRK's transition: \u03bb_reg = 0.05 to 10\u207b\u00b9 over the seeds (code's units, K + \u03bb_reg\u00b7I)"
     },
     {
-      "item": "Fig. 2, F3: training MSE against \u03bb_reg",
+      "item": "Fig. 3, F3: training MSE against \u03bb_reg",
       "claim": "relaxing \u03bb_reg drives the training MSE to numerical zero",
       "paper": "1.269 at \u03bb_reg = 10\u2075; 1.7e-24 at 10\u207b\u00b9\u00b2",
       "ours": "same at seed 12345; 5 seeds: at most 5.6e-21 at 10\u207b\u00b9\u00b2",
@@ -53,20 +53,20 @@
       "comment": "QuaRK's transition: \u03bb_reg = 10\u207b\u00b3 to 10\u207b\u00b9 over the seeds (code's units, K + \u03bb_reg\u00b7I)"
     },
     {
-      "item": "Fig. 3: predicted and true labels, 50 training windows",
+      "item": "Fig. 4: predicted and true labels, 50 training windows",
       "claim": "at a small \u03bb_reg the predictions follow the training labels",
       "paper": "figure only, no number",
       "ours": "largest absolute error, F1 / F2 / F3: 8.8e-07 / 3.3e-06 / 3.8e-06",
       "delta": "N/A: no paper number",
       "metric": "N/A",
       "trend": "yes: below 1 % of the labels' spread",
-      "support": "supported (as Fig. 2)",
+      "support": "supported (as Fig. 3)",
       "seeds": "1",
       "scope": "paper-accurate settings, single seed",
       "comment": "fit at the tuning ridge 10\u207b\u2076 on the full training set, as in the authors' figure"
     },
     {
-      "item": "Fig. 4, F1: test MSE against N",
+      "item": "Fig. 5, F1: test MSE against N",
       "claim": "the test MSE decreases with N, with the same 1/\u221aN shape for the three tasks",
       "paper": "0.08882 at N = 100, 0.004306 at N = 8000",
       "ours": "same at seed 12345; 5 seeds at N = 8000: 0.00834 \u00b1 0.0062; slope -0.458 (95 % interval -0.551 to -0.366)",
@@ -79,7 +79,7 @@
       "comment": "slope of log test MSE against log N over N = 500\u20138000; choosing \u03bb_reg on the test set (authors) instead of validation data (ours) changes QuaRK's test MSE by at most 1.7%"
     },
     {
-      "item": "Fig. 4, F2: test MSE against N",
+      "item": "Fig. 5, F2: test MSE against N",
       "claim": "the test MSE decreases with N, with the same 1/\u221aN shape for the three tasks",
       "paper": "0.7153 at N = 100, 0.4491 at N = 8000",
       "ours": "same at seed 12345; 5 seeds at N = 8000: 0.464 \u00b1 0.14; slope -0.0918 (95 % interval -0.118 to -0.0659)",
@@ -92,7 +92,7 @@
       "comment": "slope of log test MSE against log N over N = 500\u20138000; choosing \u03bb_reg on the test set (authors) instead of validation data (ours) changes QuaRK's test MSE by at most 1.7%"
     },
     {
-      "item": "Fig. 4, F3: test MSE against N",
+      "item": "Fig. 5, F3: test MSE against N",
       "claim": "the test MSE decreases with N, with the same 1/\u221aN shape for the three tasks",
       "paper": "0.9361 at N = 100, 0.6508 at N = 8000",
       "ours": "same at seed 12345; 5 seeds at N = 8000: 0.751 \u00b1 0.18; slope -0.0855 (95 % interval -0.115 to -0.0563)",
@@ -105,7 +105,7 @@
       "comment": "slope of log test MSE against log N over N = 500\u20138000; choosing \u03bb_reg on the test set (authors) instead of validation data (ours) changes QuaRK's test MSE by at most 1.7%"
     },
     {
-      "item": "Sec. 4.3: ranking of the three tasks",
+      "item": "Sec. 4.2.2: ranking of the three tasks",
       "claim": "test MSE F1 < F2 < F3 mirrors how hard the labels are",
       "paper": "0.004306 < 0.4491 < 0.6508 at N = 8000",
       "ours": "QuaRK: 5/5 seeds on test MSE, 3/5 normalized; with F1 as written (forecast): 3/5 and 0/5",
@@ -159,7 +159,7 @@
       "comment": "2 SE rule: F1 photonic lower, interval contains 0 (4/5 seeds); F2 photonic lower, interval contains 0 (5/5 seeds); F3 not separated (4/5 seeds)"
     },
     {
-      "item": "Fig. 2: training MSE at \u03bb_reg = 10\u207b\u00b9\u00b2, every photonic configuration (counterpart: QuaRK, exact and shadows)",
+      "item": "Fig. 3: training MSE at \u03bb_reg = 10\u207b\u00b9\u00b2, every photonic configuration (counterpart: QuaRK, exact and shadows)",
       "claim": "relaxing \u03bb_reg drives the training MSE to numerical zero",
       "paper": "at most 1.1e-11",
       "ours": "at most 3.7e-17",
@@ -172,7 +172,7 @@
       "comment": "as for QuaRK, every Mat\u00e9rn-kernel model interpolates"
     },
     {
-      "item": "Fig. 4: test MSE against N, every photonic configuration (counterpart: QuaRK, exact and shadows)",
+      "item": "Fig. 5: test MSE against N, every photonic configuration (counterpart: QuaRK, exact and shadows)",
       "claim": "the test MSE decreases with N, with a 1/\u221aN shape",
       "paper": "slopes F1 / F2 / F3: exact -1.36 / -0.162 / -0.16; shadows -0.287 / -0.0681 / -0.0652",
       "ours": "slopes: exact -1.18 / -0.128 / -0.121; 1000 shots -0.306 / -0.0711 / -0.0589",

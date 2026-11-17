@@ -601,10 +601,10 @@ def main() -> int:
         "systems": system_rows(runs, dirs, expected),
         "paper_reported": {
             task: {
-                "release": release["tasks"][task]["fig4_test_mse_first_last"][
+                "release": release["tasks"][task]["fig5_test_mse_first_last"][
                     "release"
                 ][-1],
-                "ours": release["tasks"][task]["fig4_test_mse_first_last"]["ours"][-1],
+                "ours": release["tasks"][task]["fig5_test_mse_first_last"]["ours"][-1],
             }
             for task in PAPER_TASKS
         },

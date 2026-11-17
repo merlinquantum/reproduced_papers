@@ -20,15 +20,15 @@ The data are synthetic: windows of 25 steps of a 3-dimensional VARMA(3,3) proces
 - **F3, Volterra**: an exponentially weighted sum plus a quadratic term.
 
 The paper's own takeaways (Sec. 4, paraphrased):
-- past a clear transition, relaxing the readout regularization λ_reg drives the training error to numerical zero (Figs. 2 and 3);
-- the test error decreases as the number of training windows N grows, and the three curves decay like 1/√N (Fig. 4);
+- past a clear transition, relaxing the readout regularization λ_reg drives the training error to numerical zero (Figs. 3 and 4);
+- the test error decreases as the number of training windows N grows, and the three curves decay like 1/√N (Fig. 5);
 - the ranking of the test errors, F1 < F2 < F3, mirrors how hard the three labels are to learn.
 
 It also proves a generalization bound for windows drawn from a weakly dependent (β-mixing) process (Theorem 2). It reports no baseline, no seeds and no error bars.
 
 ## Reproduction Scope (including Updates and Deviations)
 
-- **Reproduced:** the paper's three experiments (Figs. 2–4) on the authors' released dataset at their seed (12345), then on 5 seeds: 12345 and four new draws (1–4) made with the authors' procedure.
+- **Reproduced:** the paper's three experiments (Figs. 3–5) on the authors' released dataset at their seed (12345), then on 5 seeds: 12345 and four new draws (1–4) made with the authors' procedure.
 - **Added (ours):**
   - four classical baselines, run on the same windows and split: the same Matérn kernel ridge on the raw window, a linear ridge on the raw window, and an echo state network (315 units, like QuaRK's 315 features), untuned and tuned on 18 settings;
   - QuaRK with exact expectations (no shot noise) and with random-Pauli classical shadows;
@@ -42,7 +42,7 @@ It also proves a generalization bound for windows drawn from a weakly dependent 
 | F1 label | u · X(t+1), a one-step forecast | u · X(t), the last point of the window |
 | Shot noise | 1000 random-Pauli snapshots shared by all observables | independent noise on each of the 105 observables, 1000 shots each |
 | Ridge term | K + N·λ_reg·I | K + λ_reg·I |
-| λ_reg in Fig. 4 | one fixed, weak regularization | the value with the lowest test MSE (chosen on the test set) |
+| λ_reg in Fig. 5 | one fixed, weak regularization | the value with the lowest test MSE (chosen on the test set) |
 | Window spacing | stride 100 | stride 125 (gap 100) |
 | Kernel smoothness | ν > 1 (Theorem 2) | ν chosen in {0.5, 1.5, 2.5, 5} |
 
@@ -124,7 +124,7 @@ The sweeps are defined in `utils/sweep_specs/`. Paper-specific flags (`cli.json`
 
 ## Data
 
-The paper uses synthetic data only: windows of a VARMA(3,3) process passed through tanh, labelled by three functionals (paper Sec. 4.1 and App. B). The authors publish the exact dataset and the arrays behind Figs. 2–4 as `storage.zip` in release v1.0.0 of their repository. Every run generates its windows with `lib/data.py`, which replays the authors' generator (commit `8f02ff1`). At seed 12345 the result equals the released dataset, and the paper-setting configs check this whenever they run at that seed, so they need the release file (about 24 MB):
+The paper uses synthetic data only: windows of a VARMA(3,3) process passed through tanh, labelled by three functionals (paper Sec. 4.1 and App. B). The authors publish the exact dataset and the arrays behind Figs. 3–5 as `storage.zip` in release v1.0.0 of their repository. Every run generates its windows with `lib/data.py`, which replays the authors' generator (commit `8f02ff1`). At seed 12345 the result equals the released dataset, and the paper-setting configs check this whenever they run at that seed, so they need the release file (about 24 MB):
 
 ```bash
 # From the repository root
@@ -140,7 +140,7 @@ The data root is `data/` at the repository root, or `$DATA_DIR` when that variab
 | Path | Content |
 |---|---|
 | `data/synthetic/varma/N=10000__w=25__d=3__s=100/varma__e2_three__N=10000__w=25__d=3__s=100__seed=12345.npz` | `X`: 10,000 windows of 25 steps in 3 dimensions; `y`: the labels of the three tasks (3 × 10,000) |
-| `results/reg_sweep/c-shadows/full/N=10000__w=25__d=3__s=100/2026-02-02_14-02-13/` | The authors' run behind Figs. 2–4: features, train/test split, selected kernels, regularization sweep, training-size sweep |
+| `results/reg_sweep/c-shadows/full/N=10000__w=25__d=3__s=100/2026-02-02_14-02-13/` | The authors' run behind Figs. 3–5: features, train/test split, selected kernels, regularization sweep, training-size sweep |
 
 Limitations:
 - The release holds one draw of the data (seed 12345). Seeds 1–4 are new draws of the same generator, not the authors' files.
@@ -165,15 +165,15 @@ The authors publish the arrays behind their figures. On their dataset and seed, 
 | Quantity | Authors' release | This reproduction |
 |---|---|---|
 | Kernel chosen per task (ν, ξ): F1 / F2 / F3 | (5, 17.496) / (0.5, 17.016) / (0.5, 15.392) | same (ξ within 10⁻⁹) |
-| Fig. 2, training MSE at λ_reg = 10⁵: F1 / F2 / F3 | 0.4736 / 0.9378 / 1.2690 | same |
-| Fig. 4, test MSE from N = 100 to 8000, F1 | 0.0888 → 0.00431 | same |
-| Fig. 4, same, F2 | 0.715 → 0.449 | same |
-| Fig. 4, same, F3 | 0.936 → 0.651 | same |
-| Fig. 4, λ_reg used: F1 / F2 / F3 | 10⁻¹² / 0.005 / 10⁻¹² | same |
+| Fig. 3, training MSE at λ_reg = 10⁵: F1 / F2 / F3 | 0.4736 / 0.9378 / 1.2690 | same |
+| Fig. 5, test MSE from N = 100 to 8000, F1 | 0.0888 → 0.00431 | same |
+| Fig. 5, same, F2 | 0.715 → 0.449 | same |
+| Fig. 5, same, F3 | 0.936 → 0.651 | same |
+| Fig. 5, λ_reg used: F1 / F2 / F3 | 10⁻¹² / 0.005 / 10⁻¹² | same |
 
-**Result:** the features are identical, and every value of Figs. 2 and 4 agrees with the release within a relative difference of 1.5·10⁻⁹. The training MSE values below 10⁻¹⁰ are rounding noise; they agree within 10⁻²⁰.
+**Result:** the features are identical, and every value of Figs. 3 and 5 agrees with the release within a relative difference of 1.5·10⁻⁹. The training MSE values below 10⁻¹⁰ are rounding noise; they agree within 10⁻²⁰.
 
-Figures: [Fig. 2](results/fig2_regularization_sweep.png), [Fig. 3](results/fig3_fit_examples.png), [Fig. 4](results/fig4_training_size_sweep.png); crosses mark the release's values. These are single-seed figures (preliminary by our labelling rule); messages 2 to 4 use the 5 seeds.
+Figures: [Fig. 3](results/fig3_regularization_sweep.png), [Fig. 4](results/fig4_fit_examples.png), [Fig. 5](results/fig5_training_size_sweep.png); crosses mark the release's values. These are single-seed figures (preliminary by our labelling rule); messages 2 to 4 use the 5 seeds.
 
 ### 2. Every classical baseline has a lower test error than QuaRK
 
@@ -199,8 +199,8 @@ The two models differ because the authors' code draws independent noise for each
 
 | Paper's claim | What we find (5 seeds) | Verdict |
 |---|---|---|
-| Relaxing λ_reg drives the training MSE to numerical zero (Fig. 2) | Reproduced: at most 6·10⁻²¹ at λ_reg = 10⁻¹². Every Matérn-kernel model does the same, classical ones included (at most 1.1·10⁻¹¹) | Supported; not specific to the quantum reservoir |
-| The test MSE decreases as N grows (Fig. 4) | It falls at every step from N = 100 to 8000, in every seed, on the three tasks | Supported |
+| Relaxing λ_reg drives the training MSE to numerical zero (Fig. 3) | Reproduced: at most 6·10⁻²¹ at λ_reg = 10⁻¹². Every Matérn-kernel model does the same, classical ones included (at most 1.1·10⁻¹¹) | Supported; not specific to the quantum reservoir |
+| The test MSE decreases as N grows (Fig. 5) | It falls at every step from N = 100 to 8000, in every seed, on the three tasks | Supported |
 | … with "the same 1/√N shape" | Slope of log test MSE against log N, from N = 500 to 8000: −0.46 on F1 (95 % interval −0.55 to −0.37), −0.09 on F2 and on F3 ([figure](results/training_size_seeds.png)); 1/√N is a slope of −0.5 | Holds for F1 only |
 | The ranking F1 < F2 < F3 mirrors how hard the labels are | The ranking holds in 5 of 5 seeds, but for every model, including the linear ridge that solves F1 and F2 exactly. With F1 as the text defines it, a one-step forecast, it holds for QuaRK in 3 of 5 seeds, and in none after normalization | Partially supported |
 | Generalization bound (Theorem 2) | At N = 8000, on the paper's three tasks, the bound is at least 1,400 times the measured gap between test and training MSE, even with choices that favour it. The authors' tuning picks ν = 0.5 for F2 and F3, outside the theorem's ν > 1 | Far from the measured errors; not checked as mathematics |

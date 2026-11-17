@@ -21,7 +21,7 @@ Sources
 -------
 * Paper values: the authors' release, the run behind the paper's figures (seed 12345,
   ridge chosen on the test set); the paper prints no table.
-* Reproduced values: our run at the authors' seed (``--run``, Fig. 3 data) and the
+* Reproduced values: our run at the authors' seed (``--run``, Fig. 4 data) and the
   curated ``results/*.json`` files of ``compare_with_release.py``,
   ``report_statistics.py``, ``compare_photonic_with_quark.py`` and
   ``compare_fair_baselines.py``.
@@ -68,7 +68,7 @@ from summarize_sweep import summarize
 
 AGREEMENT = 1e-6
 INTERPOLATION_MAX = 1e-10
-# Fig. 3 counts as "predictions on the labels" below this fraction of the labels' spread.
+# Fig. 4 counts as "predictions on the labels" below this fraction of the labels' spread.
 FIT_FRACTION = 0.01
 SHORT = {
     "current_point_readout": "F1",
@@ -168,8 +168,8 @@ def paper_items(release_cmp: dict, release: dict, arrays: dict, stats: dict) -> 
     same_nu = all(tasks[t]["nu"]["ours"] == tasks[t]["nu"]["release"] for t in tasks)
     rows = [
         item(
-            item="Readout tuning (Sec. 4.2): Matérn ν and ξ, F1 / F2 / F3",
-            claim="none: the setting behind Figs. 2–4",
+            item="Readout tuning (App. B.3): Matérn ν and ξ, F1 / F2 / F3",
+            claim="none: the setting behind Figs. 3–5",
             paper=" / ".join(
                 f"({fmt(tasks[t]['nu']['release'])}, {tasks[t]['xi']['release']:.3f})"
                 for t in PAPER_TASKS
@@ -186,7 +186,7 @@ def paper_items(release_cmp: dict, release: dict, arrays: dict, stats: dict) -> 
     ]
     for i, task in enumerate(PAPER_TASKS):
         t = tasks[task]
-        above = t["fig2_training_mse_max_relative_difference_above_rounding_level"]
+        above = t["fig3_training_mse_max_relative_difference_above_rounding_level"]
         quark_max = interp[("quark", task)]["max_mse_train_at_smallest_reg"]
         release_min = float(release["mse_train"][i][0])
         classical_max = max(
@@ -197,10 +197,10 @@ def paper_items(release_cmp: dict, release: dict, arrays: dict, stats: dict) -> 
         both_zero = max(quark_max, release_min) <= INTERPOLATION_MAX
         rows.append(
             item(
-                item=f"Fig. 2, {SHORT[task]}: training MSE against λ_reg",
+                item=f"Fig. 3, {SHORT[task]}: training MSE against λ_reg",
                 claim="relaxing λ_reg drives the training MSE to numerical zero",
                 paper=(
-                    f"{fmt(t['fig2_training_mse_at_largest_ridge']['release'], 4)} at "
+                    f"{fmt(t['fig3_training_mse_at_largest_ridge']['release'], 4)} at "
                     f"λ_reg = {power_of_ten(grid[-1])}; {fmt(release_min, 2)} at "
                     f"{power_of_ten(grid[0])}"
                 ),
@@ -211,7 +211,7 @@ def paper_items(release_cmp: dict, release: dict, arrays: dict, stats: dict) -> 
                 delta=(
                     f"{fmt(above, 2)} relative where above "
                     f"{power_of_ten(INTERPOLATION_MAX)}; "
-                    f"{fmt(t['fig2_training_mse_max_abs_difference_below_rounding_level'], 2)} "
+                    f"{fmt(t['fig3_training_mse_max_abs_difference_below_rounding_level'], 2)} "
                     "absolute below"
                 ),
                 metric=agreement(above),
@@ -244,14 +244,14 @@ def paper_items(release_cmp: dict, release: dict, arrays: dict, stats: dict) -> 
     on_labels = max(fractions.values()) < FIT_FRACTION
     rows.append(
         item(
-            item="Fig. 3: predicted and true labels, 50 training windows",
+            item="Fig. 4: predicted and true labels, 50 training windows",
             claim="at a small λ_reg the predictions follow the training labels",
             paper="figure only, no number",
             ours=f"largest absolute error, F1 / F2 / F3: {per_task(errors, 2)}",
             delta="N/A: no paper number",
             metric="N/A",
             trend=("yes: below 1 % of the labels' spread" if on_labels else "no"),
-            support="supported (as Fig. 2)" if on_labels else "not supported",
+            support="supported (as Fig. 3)" if on_labels else "not supported",
             seeds="1",
             scope=single,
             comment="fit at the tuning ridge 10⁻⁶ on the full training set, as in the "
@@ -261,7 +261,7 @@ def paper_items(release_cmp: dict, release: dict, arrays: dict, stats: dict) -> 
     max_change = stats["reg_selection"]["QuaRK"]["max_relative_increase"]
     for task in PAPER_TASKS:
         t, d, m = tasks[task], decay[("quark", task)], main[("quark", task)]
-        first, last = t["fig4_test_mse_first_last"]["release"]
+        first, last = t["fig5_test_mse_first_last"]["release"]
         lo, hi = d["slope"]["ci95"]
         decreasing = d["decreasing_steps"] == d["total_steps"]
         if decreasing and d["ci_contains_minus_half"]:
@@ -272,7 +272,7 @@ def paper_items(release_cmp: dict, release: dict, arrays: dict, stats: dict) -> 
             support = "not supported"
         rows.append(
             item(
-                item=f"Fig. 4, {SHORT[task]}: test MSE against N",
+                item=f"Fig. 5, {SHORT[task]}: test MSE against N",
                 claim="the test MSE decreases with N, with the same 1/√N shape for "
                 "the three tasks",
                 paper=f"{fmt(first, 4)} at N = 100, {fmt(last, 4)} at N = 8000",
@@ -281,9 +281,9 @@ def paper_items(release_cmp: dict, release: dict, arrays: dict, stats: dict) -> 
                     f"slope {fmt(d['slope']['mean'])} (95 % interval {fmt(lo)} to "
                     f"{fmt(hi)})"
                 ),
-                delta=f"{fmt(t['fig4_test_mse_max_relative_difference'], 2)} relative",
+                delta=f"{fmt(t['fig5_test_mse_max_relative_difference'], 2)} relative",
                 metric=(
-                    f"{agreement(t['fig4_test_mse_max_relative_difference'])}; the "
+                    f"{agreement(t['fig5_test_mse_max_relative_difference'])}; the "
                     f"authors' seed ranks {m['paper_seed_rank']} of 5 (1 = lowest)"
                 ),
                 trend=(
@@ -309,10 +309,10 @@ def paper_items(release_cmp: dict, release: dict, arrays: dict, stats: dict) -> 
     )
     rows.append(
         item(
-            item="Sec. 4.3: ranking of the three tasks",
+            item="Sec. 4.2.2: ranking of the three tasks",
             claim="test MSE F1 < F2 < F3 mirrors how hard the labels are",
             paper=" < ".join(
-                fmt(tasks[t]["fig4_test_mse_first_last"]["release"][-1], 4)
+                fmt(tasks[t]["fig5_test_mse_first_last"]["release"][-1], 4)
                 for t in PAPER_TASKS
             )
             + " at N = 8000",
@@ -437,7 +437,7 @@ def photonic_items(photonic: dict, fair: dict) -> list:
     interpolating = min(b["interpolating_seeds"] for b in photonic_rows)
     rows.append(
         item(
-            item="Fig. 2: training MSE at λ_reg = 10⁻¹², every photonic configuration "
+            item="Fig. 3: training MSE at λ_reg = 10⁻¹², every photonic configuration "
             "(counterpart: QuaRK, exact and shadows)",
             claim="relaxing λ_reg drives the training MSE to numerical zero",
             paper=f"at most {fmt(quark_max, 2)}",
@@ -471,7 +471,7 @@ def photonic_items(photonic: dict, fair: dict) -> list:
     ]
     rows.append(
         item(
-            item="Fig. 4: test MSE against N, every photonic configuration "
+            item="Fig. 5: test MSE against N, every photonic configuration "
             "(counterpart: QuaRK, exact and shadows)",
             claim="the test MSE decreases with N, with a 1/√N shape",
             paper=(

@@ -1,4 +1,4 @@
-"""Matérn kernel ridge regression readout (paper Sec. 3.3, App. B.3).
+"""Matérn kernel ridge regression readout (paper Secs. 3.2.2 and 3.3, App. B.3).
 
 Follows the authors' ``src/models/kernel.py`` and ``qrc_matern_krr.py``:
 
@@ -40,7 +40,7 @@ def standardize(train: np.ndarray, *others: np.ndarray) -> list[np.ndarray]:
 
 
 def matern_from_distances(distances: np.ndarray, xi: float, nu: float) -> np.ndarray:
-    """Unit-variance Matérn kernel ``phi(d)`` of Eq. (10) from Euclidean distances."""
+    """Unit-variance Matérn kernel ``phi(d)`` of Eq. (17) from Euclidean distances."""
     # In-place operations keep at most two N x N temporaries alive.
     if nu == 0.5:
         kernel = distances * (-1.0 / xi)
@@ -174,7 +174,7 @@ def kernel_regularization_sweep(
 ):
     """Train, validation and test MSE of Matérn KRR for every ``reg`` in the grid.
 
-    Train and test MSE use the full training set (the paper's Fig. 2 and the
+    Train and test MSE use the full training set (the paper's Fig. 3 and the
     authors' ``sweep_regularization``). Validation MSE fits on the inner training
     rows and scores the inner validation rows of the tuning split.
 

@@ -4,11 +4,11 @@ A run builds the windows dataset, computes the features of one model (QuaRK, its
 photonic MerLin adaptation, or a classical baseline), then for every task:
 
 1. tunes the Matérn kernel on the training set (kernel models only);
-2. sweeps ``reg`` over the paper's grid (Fig. 2) and records train, validation and
+2. sweeps ``reg`` over the paper's grid (Fig. 3) and records train, validation and
    test MSE;
 3. selects ``reg`` twice: by validation MSE (our fair protocol) and by test MSE
-   (the authors' rule for Fig. 4, kept only to reproduce the figure);
-4. for each selection, sweeps the training-set size on a fixed test set (Fig. 4)
+   (the authors' rule for Fig. 5, kept only to reproduce the figure);
+4. for each selection, sweeps the training-set size on a fixed test set (Fig. 5)
    and, for QuaRK, evaluates the generalization-bound terms (Thm 2).
 
 Artifacts written to the run directory (paths relative to it):
@@ -155,7 +155,7 @@ def _evaluate_task(cfg, dataset, features, task_index, model_info, artifacts):
     tuning = readout["tuning"]
     labels = dataset.labels[task_index]
     # Training rows stay in the authors' order (their random permutation): the tuning
-    # split and the regularization sweep index into it, as in their code. Fig. 4 uses
+    # split and the regularization sweep index into it, as in their code. Fig. 5 uses
     # nested prefixes in time order, taken through ``chronological``.
     train_idx = dataset.train_idx
     chronological = np.argsort(train_idx)
@@ -177,7 +177,7 @@ def _evaluate_task(cfg, dataset, features, task_index, model_info, artifacts):
             reg_grid=reg_grid,
             tuning=tuning,
         )
-        # Fig. 3: fit at the tuning ridge on the full training set, first windows shown.
+        # Fig. 4: fit at the tuning ridge on the full training set, first windows shown.
         fit_train = gram @ solve_dual(gram, y_train, float(tuning["reg"]))
         shown = int(cfg["outputs"]["fit_examples"])
         artifacts[f"fit_examples/{task}/prediction"] = fit_train[:shown]
