@@ -1,0 +1,82 @@
+{
+  "description": "E1 added baseline: NN DQN on Frozen Lake, 4-bit input, one hidden layer of 5 ReLU units (49 params) vs PQC 5 layers (48 params). Not in the paper. Code-faithful: update_model_every 5 -> 1 (reference code fl_training.py: update_after = 1).",
+  "experiment": {
+    "id": "E1",
+    "arm": "mlp_5_codefaithful",
+    "label": "code-faithful"
+  },
+  "agents": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ]
+  },
+  "environment": {
+    "name": "FrozenLake-v1",
+    "is_slippery": false,
+    "max_episode_steps": 100,
+    "solve": {
+      "window": 100,
+      "mean_threshold": 1.0,
+      "min_episodes": 100
+    }
+  },
+  "model": {
+    "kind": "mlp",
+    "n_qubits": null,
+    "n_layers": null,
+    "ansatz": null,
+    "state_encoding": "basis_bits",
+    "encoding_activation": null,
+    "data_reuploading": null,
+    "train_input_weights": null,
+    "readout": null,
+    "train_output_weights": null,
+    "output_factor": null,
+    "theta_init": null,
+    "hidden_units": [
+      5
+    ]
+  },
+  "training": {
+    "max_episodes": 5000,
+    "gamma": 0.8,
+    "batch_size": 11,
+    "update_model_every": 1,
+    "update_target_every": 10,
+    "replay_capacity": 10000,
+    "replay_eviction": "random",
+    "replay_sampling": "without_replacement",
+    "loss_form": "vector_form",
+    "bootstrap_network": "target",
+    "terminal_mask": "terminated_or_truncated",
+    "learning_rates": {
+      "main": 0.001,
+      "input_weights": null,
+      "output_weights": null
+    },
+    "amsgrad_main": true,
+    "adam": {
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-07
+    },
+    "epsilon_greedy": {
+      "start": 1.0,
+      "decay": 0.99,
+      "min": 0.01
+    }
+  },
+  "evaluation": {
+    "greedy_episodes": 10,
+    "track_q_star_mae": true
+  }
+}

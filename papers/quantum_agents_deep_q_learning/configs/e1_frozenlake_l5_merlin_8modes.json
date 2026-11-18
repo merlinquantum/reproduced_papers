@@ -1,0 +1,97 @@
+{
+  "description": "Phase 4 MerLin design study: Frozen Lake, basis phases encoded once (paper's single encoding), 8 modes / 4 photons instead of 6 / 3; training identical to e1_frozenlake_l5_merlin.",
+  "experiment": {
+    "id": "E1",
+    "arm": "l5_merlin_8modes",
+    "label": "merlin-design-study"
+  },
+  "agents": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ]
+  },
+  "environment": {
+    "name": "FrozenLake-v1",
+    "is_slippery": false,
+    "max_episode_steps": 100,
+    "solve": {
+      "window": 100,
+      "mean_threshold": 1.0,
+      "min_episodes": 100
+    }
+  },
+  "model": {
+    "kind": "merlin",
+    "n_modes": 8,
+    "n_photons": 4,
+    "input_state": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1,
+      0
+    ],
+    "n_layers": 5,
+    "state_encoding": "basis_phase",
+    "data_reuploading": false,
+    "train_input_weights": false,
+    "train_output_weights": false,
+    "output_factor": 1.0,
+    "readout": "threshold_click",
+    "readout_modes": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "theta_init": {
+      "low": 0.0,
+      "high": 6.283185307179586
+    }
+  },
+  "training": {
+    "max_episodes": 5000,
+    "gamma": 0.8,
+    "batch_size": 11,
+    "update_model_every": 1,
+    "update_target_every": 10,
+    "replay_capacity": 10000,
+    "replay_eviction": "random",
+    "replay_sampling": "without_replacement",
+    "loss_form": "vector_form",
+    "bootstrap_network": "target",
+    "terminal_mask": "terminated_or_truncated",
+    "learning_rates": {
+      "main": 0.001,
+      "input_weights": null,
+      "output_weights": null
+    },
+    "amsgrad_main": true,
+    "adam": {
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-07
+    },
+    "epsilon_greedy": {
+      "start": 1.0,
+      "decay": 0.99,
+      "min": 0.01
+    }
+  },
+  "evaluation": {
+    "greedy_episodes": 10,
+    "track_q_star_mae": true
+  }
+}

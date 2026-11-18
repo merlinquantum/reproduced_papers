@@ -1,0 +1,78 @@
+{
+  "description": "Phase 5 selection grid (LOG.md, Phase 5 Comparison Plan): pqc_l25 from e4_cartpole_pqc_l25_codefaithful, batch 32, target update every 30; selection seeds 100-104.",
+  "experiment": {
+    "id": "E5-select",
+    "arm": "pqc_l25_b32_t30",
+    "label": "selection"
+  },
+  "agents": {
+    "seeds": [
+      100,
+      101,
+      102,
+      103,
+      104
+    ]
+  },
+  "environment": {
+    "name": "CartPole-v0",
+    "is_slippery": null,
+    "max_episode_steps": null,
+    "solve": {
+      "window": 100,
+      "mean_threshold": 195.0,
+      "min_episodes": 101
+    }
+  },
+  "model": {
+    "kind": "pqc",
+    "n_qubits": 4,
+    "n_layers": 25,
+    "ansatz": "ry_rz_cz_ring",
+    "state_encoding": "continuous_rx",
+    "encoding_activation": "arctan",
+    "data_reuploading": true,
+    "train_input_weights": true,
+    "readout": "cartpole_zz_pairs",
+    "train_output_weights": true,
+    "output_factor": 1.0,
+    "theta_init": {
+      "low": 0.0,
+      "high": 3.141592653589793
+    },
+    "hidden_units": null
+  },
+  "training": {
+    "max_episodes": 5000,
+    "gamma": 0.99,
+    "batch_size": 32,
+    "update_model_every": 10,
+    "update_target_every": 30,
+    "replay_capacity": null,
+    "replay_eviction": "fifo",
+    "replay_sampling": "with_replacement",
+    "loss_form": "action_only",
+    "bootstrap_network": "target",
+    "terminal_mask": "terminated_or_truncated",
+    "learning_rates": {
+      "main": 0.001,
+      "input_weights": 0.001,
+      "output_weights": 0.1
+    },
+    "amsgrad_main": true,
+    "adam": {
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-07
+    },
+    "epsilon_greedy": {
+      "start": 1.0,
+      "decay": 0.99,
+      "min": 0.01
+    }
+  },
+  "evaluation": {
+    "greedy_episodes": 10,
+    "track_q_star_mae": false
+  }
+}

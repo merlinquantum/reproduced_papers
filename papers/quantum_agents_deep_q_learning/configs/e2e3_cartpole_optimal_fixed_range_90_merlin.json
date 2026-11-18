@@ -1,0 +1,94 @@
+{
+  "description": "Phase 4 MerLin adaptation (linear optics, 6 modes, 3 photons, threshold detectors) of e2e3_cartpole_optimal_fixed_range_90_codefaithful: identical environment, training and evaluation settings; only the Q-function changes (LOG.md, Phase 4 Adaptation Plan).",
+  "experiment": {
+    "id": "E3",
+    "arm": "optimal_fixed_range_90_merlin",
+    "label": "merlin-adaptation"
+  },
+  "agents": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ]
+  },
+  "environment": {
+    "name": "CartPole-v0",
+    "is_slippery": null,
+    "max_episode_steps": null,
+    "solve": {
+      "window": 100,
+      "mean_threshold": 195.0,
+      "min_episodes": 101
+    }
+  },
+  "model": {
+    "kind": "merlin",
+    "n_modes": 6,
+    "n_photons": 3,
+    "input_state": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      0
+    ],
+    "n_layers": 5,
+    "state_encoding": "continuous_phase",
+    "data_reuploading": true,
+    "train_input_weights": true,
+    "train_output_weights": false,
+    "output_factor": 90.0,
+    "readout": "threshold_click",
+    "readout_modes": [
+      2,
+      3
+    ],
+    "theta_init": {
+      "low": 0.0,
+      "high": 6.283185307179586
+    },
+    "encoding_activation": "arctan"
+  },
+  "training": {
+    "max_episodes": 5000,
+    "gamma": 0.99,
+    "batch_size": 16,
+    "update_model_every": 1,
+    "update_target_every": 1,
+    "replay_capacity": null,
+    "replay_eviction": "fifo",
+    "replay_sampling": "with_replacement",
+    "loss_form": "action_only",
+    "bootstrap_network": "target",
+    "terminal_mask": "terminated_or_truncated",
+    "learning_rates": {
+      "main": 0.001,
+      "input_weights": 0.001,
+      "output_weights": 0.1
+    },
+    "amsgrad_main": true,
+    "adam": {
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-07
+    },
+    "epsilon_greedy": {
+      "start": 1.0,
+      "decay": 0.99,
+      "min": 0.01
+    }
+  },
+  "evaluation": {
+    "greedy_episodes": 10,
+    "track_q_star_mae": false
+  }
+}

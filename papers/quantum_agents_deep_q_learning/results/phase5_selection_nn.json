@@ -1,0 +1,232 @@
+{
+  "rule": "Rule (LOG.md, Phase 5 Comparison Plan): for each model, the metric is the\nmedian over the 5 selection agents (seeds 100-104) of the 0-based solve\nepisode index, unsolved agents censored at 5000; lower is better. Candidates\nwhose median is within 5% of the best median are tied; among tied candidates\nthe smaller batch size wins, then the smaller target-update interval.",
+  "models": {
+    "mlp_5_5": {
+      "candidates": [
+        {
+          "config": "e5_select_mlp_5_5_b16_t1_classical",
+          "batch_size": 16,
+          "update_target_every": 1,
+          "median_censored": 1837.0,
+          "mean_censored": 2727.0,
+          "solved": 3,
+          "censored_values": [
+            5000,
+            390,
+            1837,
+            5000,
+            1408
+          ],
+          "wall_clock_seconds": 265.40165516600246,
+          "run_dir": "outdir/batches/e5_select_nn/runs/e5_select_mlp_5_5_b16_t1_classical/run_20261117-151615"
+        },
+        {
+          "config": "e5_select_mlp_5_5_b16_t30_classical",
+          "batch_size": 16,
+          "update_target_every": 30,
+          "median_censored": 5000.0,
+          "mean_censored": 4088.4,
+          "solved": 1,
+          "censored_values": [
+            5000,
+            5000,
+            442,
+            5000,
+            5000
+          ],
+          "wall_clock_seconds": 251.80476379202446,
+          "run_dir": "outdir/batches/e5_select_nn/runs/e5_select_mlp_5_5_b16_t30_classical/run_20261117-151616"
+        },
+        {
+          "config": "e5_select_mlp_5_5_b32_t1_classical",
+          "batch_size": 32,
+          "update_target_every": 1,
+          "median_censored": 2222.0,
+          "mean_censored": 2661.0,
+          "solved": 3,
+          "censored_values": [
+            279,
+            804,
+            5000,
+            5000,
+            2222
+          ],
+          "wall_clock_seconds": 222.91081954198307,
+          "run_dir": "outdir/batches/e5_select_nn/runs/e5_select_mlp_5_5_b32_t1_classical/run_20261117-151617"
+        },
+        {
+          "config": "e5_select_mlp_5_5_b32_t30_classical",
+          "batch_size": 32,
+          "update_target_every": 30,
+          "median_censored": 5000.0,
+          "mean_censored": 3154.0,
+          "solved": 2,
+          "censored_values": [
+            259,
+            5000,
+            5000,
+            5000,
+            511
+          ],
+          "wall_clock_seconds": 197.71807195901056,
+          "run_dir": "outdir/batches/e5_select_nn/runs/e5_select_mlp_5_5_b32_t30_classical/run_20261117-152020"
+        },
+        {
+          "config": "e5_select_mlp_5_5_b64_t1_classical",
+          "batch_size": 64,
+          "update_target_every": 1,
+          "median_censored": 2557.0,
+          "mean_censored": 2755.0,
+          "solved": 3,
+          "censored_values": [
+            2557,
+            378,
+            840,
+            5000,
+            5000
+          ],
+          "wall_clock_seconds": 257.82599683399894,
+          "run_dir": "outdir/batches/e5_select_nn/runs/e5_select_mlp_5_5_b64_t1_classical/run_20261117-152050"
+        },
+        {
+          "config": "e5_select_mlp_5_5_b64_t30_classical",
+          "batch_size": 64,
+          "update_target_every": 30,
+          "median_censored": 1487.0,
+          "mean_censored": 1619.2,
+          "solved": 5,
+          "censored_values": [
+            354,
+            1487,
+            450,
+            2448,
+            3357
+          ],
+          "wall_clock_seconds": 157.25071929200203,
+          "run_dir": "outdir/batches/e5_select_nn/runs/e5_select_mlp_5_5_b64_t30_classical/run_20261117-152051"
+        }
+      ],
+      "best_median": 1487.0,
+      "tied_candidates": [
+        "e5_select_mlp_5_5_b64_t30_classical"
+      ],
+      "selected": "e5_select_mlp_5_5_b64_t30_classical",
+      "selected_batch_size": 64,
+      "selected_update_target_every": 30
+    },
+    "mlp_14_14": {
+      "candidates": [
+        {
+          "config": "e5_select_mlp_14_14_b16_t1_classical",
+          "batch_size": 16,
+          "update_target_every": 1,
+          "median_censored": 258.0,
+          "mean_censored": 1214.2,
+          "solved": 4,
+          "censored_values": [
+            377,
+            258,
+            236,
+            200,
+            5000
+          ],
+          "wall_clock_seconds": 205.2064981670119,
+          "run_dir": "outdir/batches/e5_select_nn/runs/e5_select_mlp_14_14_b16_t1_classical/run_20261117-152353"
+        },
+        {
+          "config": "e5_select_mlp_14_14_b16_t30_classical",
+          "batch_size": 16,
+          "update_target_every": 30,
+          "median_censored": 290.0,
+          "mean_censored": 553.4,
+          "solved": 5,
+          "censored_values": [
+            298,
+            244,
+            290,
+            202,
+            1733
+          ],
+          "wall_clock_seconds": 75.27741433298797,
+          "run_dir": "outdir/batches/e5_select_nn/runs/e5_select_mlp_14_14_b16_t30_classical/run_20261117-152353"
+        },
+        {
+          "config": "e5_select_mlp_14_14_b32_t1_classical",
+          "batch_size": 32,
+          "update_target_every": 1,
+          "median_censored": 214.0,
+          "mean_censored": 215.8,
+          "solved": 5,
+          "censored_values": [
+            208,
+            213,
+            218,
+            214,
+            226
+          ],
+          "wall_clock_seconds": 10.859413666010369,
+          "run_dir": "outdir/batches/e5_select_nn/runs/e5_select_mlp_14_14_b32_t1_classical/run_20261117-152525"
+        },
+        {
+          "config": "e5_select_mlp_14_14_b32_t30_classical",
+          "batch_size": 32,
+          "update_target_every": 30,
+          "median_censored": 295.0,
+          "mean_censored": 750.8,
+          "solved": 5,
+          "censored_values": [
+            295,
+            728,
+            194,
+            201,
+            2336
+          ],
+          "wall_clock_seconds": 114.39607508300105,
+          "run_dir": "outdir/batches/e5_select_nn/runs/e5_select_mlp_14_14_b32_t30_classical/run_20261117-152526"
+        },
+        {
+          "config": "e5_select_mlp_14_14_b64_t1_classical",
+          "batch_size": 64,
+          "update_target_every": 1,
+          "median_censored": 241.0,
+          "mean_censored": 1385.6,
+          "solved": 5,
+          "censored_values": [
+            2631,
+            208,
+            212,
+            241,
+            3636
+          ],
+          "wall_clock_seconds": 176.41840225001215,
+          "run_dir": "outdir/batches/e5_select_nn/runs/e5_select_mlp_14_14_b64_t1_classical/run_20261117-152557"
+        },
+        {
+          "config": "e5_select_mlp_14_14_b64_t30_classical",
+          "batch_size": 64,
+          "update_target_every": 30,
+          "median_censored": 217.0,
+          "mean_censored": 255.2,
+          "solved": 5,
+          "censored_values": [
+            187,
+            202,
+            315,
+            355,
+            217
+          ],
+          "wall_clock_seconds": 20.70046795901726,
+          "run_dir": "outdir/batches/e5_select_nn/runs/e5_select_mlp_14_14_b64_t30_classical/run_20261117-152729"
+        }
+      ],
+      "best_median": 214.0,
+      "tied_candidates": [
+        "e5_select_mlp_14_14_b32_t1_classical",
+        "e5_select_mlp_14_14_b64_t30_classical"
+      ],
+      "selected": "e5_select_mlp_14_14_b32_t1_classical",
+      "selected_batch_size": 32,
+      "selected_update_target_every": 1
+    }
+  }
+}

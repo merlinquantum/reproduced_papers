@@ -1,0 +1,231 @@
+{
+  "rule": "Rule (LOG.md, Phase 5 Comparison Plan): for each model, the metric is the\nmedian over the 5 selection agents (seeds 100-104) of the 0-based solve\nepisode index, unsolved agents censored at 5000; lower is better. Candidates\nwhose median is within 5% of the best median are tied; among tied candidates\nthe smaller batch size wins, then the smaller target-update interval.",
+  "models": {
+    "pqc_l5": {
+      "candidates": [
+        {
+          "config": "e5_select_pqc_l5_b16_t1",
+          "batch_size": 16,
+          "update_target_every": 1,
+          "median_censored": 327.0,
+          "mean_censored": 380.2,
+          "solved": 5,
+          "censored_values": [
+            646,
+            327,
+            226,
+            189,
+            513
+          ],
+          "wall_clock_seconds": 4899.495124370791,
+          "run_dir": "outdir/batches/e5_select_pqc/runs/e5_select_pqc_l5_b16_t1/run_20261117-141613"
+        },
+        {
+          "config": "e5_select_pqc_l5_b16_t30",
+          "batch_size": 16,
+          "update_target_every": 30,
+          "median_censored": 227.0,
+          "mean_censored": 230.6,
+          "solved": 5,
+          "censored_values": [
+            253,
+            264,
+            227,
+            187,
+            222
+          ],
+          "wall_clock_seconds": 1749.3635908630677,
+          "run_dir": "outdir/batches/e5_select_pqc/runs/e5_select_pqc_l5_b16_t30/run_20261117-141614"
+        },
+        {
+          "config": "e5_select_pqc_l5_b32_t1",
+          "batch_size": 32,
+          "update_target_every": 1,
+          "median_censored": 206.0,
+          "mean_censored": 238.6,
+          "solved": 5,
+          "censored_values": [
+            313,
+            203,
+            185,
+            286,
+            206
+          ],
+          "wall_clock_seconds": 2281.0595607827418,
+          "run_dir": "outdir/batches/e5_select_pqc/runs/e5_select_pqc_l5_b32_t1/run_20261117-144546"
+        },
+        {
+          "config": "e5_select_pqc_l5_b32_t30",
+          "batch_size": 32,
+          "update_target_every": 30,
+          "median_censored": 255.0,
+          "mean_censored": 306.8,
+          "solved": 5,
+          "censored_values": [
+            202,
+            263,
+            620,
+            194,
+            255
+          ],
+          "wall_clock_seconds": 4271.607316416223,
+          "run_dir": "outdir/batches/e5_select_pqc/runs/e5_select_pqc_l5_b32_t30/run_20261117-152349"
+        },
+        {
+          "config": "e5_select_pqc_l5_b64_t1",
+          "batch_size": 64,
+          "update_target_every": 1,
+          "median_censored": 221.0,
+          "mean_censored": 334.6,
+          "solved": 5,
+          "censored_values": [
+            200,
+            221,
+            810,
+            212,
+            230
+          ],
+          "wall_clock_seconds": 5065.14515837701,
+          "run_dir": "outdir/batches/e5_select_pqc/runs/e5_select_pqc_l5_b64_t1/run_20261117-152420"
+        },
+        {
+          "config": "e5_select_pqc_l5_b64_t30",
+          "batch_size": 64,
+          "update_target_every": 30,
+          "median_censored": 194.0,
+          "mean_censored": 220.6,
+          "solved": 5,
+          "censored_values": [
+            193,
+            256,
+            194,
+            266,
+            194
+          ],
+          "wall_clock_seconds": 1814.4466116419062,
+          "run_dir": "outdir/batches/e5_select_pqc/runs/e5_select_pqc_l5_b64_t30/run_20261117-153821"
+        }
+      ],
+      "best_median": 194.0,
+      "tied_candidates": [
+        "e5_select_pqc_l5_b64_t30"
+      ],
+      "selected": "e5_select_pqc_l5_b64_t30",
+      "selected_batch_size": 64,
+      "selected_update_target_every": 30
+    },
+    "pqc_l25": {
+      "candidates": [
+        {
+          "config": "e5_select_pqc_l25_b16_t1",
+          "batch_size": 16,
+          "update_target_every": 1,
+          "median_censored": 1073.0,
+          "mean_censored": 1037.0,
+          "solved": 5,
+          "censored_values": [
+            575,
+            446,
+            1874,
+            1217,
+            1073
+          ],
+          "wall_clock_seconds": 13971.190886364318,
+          "run_dir": "outdir/batches/e5_select_pqc/runs/e5_select_pqc_l25_b16_t1/run_20261117-141604"
+        },
+        {
+          "config": "e5_select_pqc_l25_b16_t30",
+          "batch_size": 16,
+          "update_target_every": 30,
+          "median_censored": 897.0,
+          "mean_censored": 739.2,
+          "solved": 5,
+          "censored_values": [
+            428,
+            897,
+            898,
+            540,
+            933
+          ],
+          "wall_clock_seconds": 9590.429976723623,
+          "run_dir": "outdir/batches/e5_select_pqc/runs/e5_select_pqc_l25_b16_t30/run_20261117-141605"
+        },
+        {
+          "config": "e5_select_pqc_l25_b32_t1",
+          "batch_size": 32,
+          "update_target_every": 1,
+          "median_censored": 304.0,
+          "mean_censored": 359.8,
+          "solved": 5,
+          "censored_values": [
+            241,
+            304,
+            275,
+            325,
+            654
+          ],
+          "wall_clock_seconds": 6407.68036497198,
+          "run_dir": "outdir/batches/e5_select_pqc/runs/e5_select_pqc_l25_b32_t1/run_20261117-141607"
+        },
+        {
+          "config": "e5_select_pqc_l25_b32_t30",
+          "batch_size": 32,
+          "update_target_every": 30,
+          "median_censored": 499.0,
+          "mean_censored": 509.0,
+          "solved": 5,
+          "censored_values": [
+            278,
+            481,
+            499,
+            763,
+            524
+          ],
+          "wall_clock_seconds": 7898.844257568009,
+          "run_dir": "outdir/batches/e5_select_pqc/runs/e5_select_pqc_l25_b32_t30/run_20261117-141608"
+        },
+        {
+          "config": "e5_select_pqc_l25_b64_t1",
+          "batch_size": 64,
+          "update_target_every": 1,
+          "median_censored": 437.0,
+          "mean_censored": 502.6,
+          "solved": 5,
+          "censored_values": [
+            229,
+            870,
+            563,
+            414,
+            437
+          ],
+          "wall_clock_seconds": 8734.872013806365,
+          "run_dir": "outdir/batches/e5_select_pqc/runs/e5_select_pqc_l25_b64_t1/run_20261117-141610"
+        },
+        {
+          "config": "e5_select_pqc_l25_b64_t30",
+          "batch_size": 64,
+          "update_target_every": 30,
+          "median_censored": 271.0,
+          "mean_censored": 302.0,
+          "solved": 5,
+          "censored_values": [
+            253,
+            320,
+            271,
+            270,
+            396
+          ],
+          "wall_clock_seconds": 3971.807786470279,
+          "run_dir": "outdir/batches/e5_select_pqc/runs/e5_select_pqc_l25_b64_t30/run_20261117-141611"
+        }
+      ],
+      "best_median": 271.0,
+      "tied_candidates": [
+        "e5_select_pqc_l25_b64_t30"
+      ],
+      "selected": "e5_select_pqc_l25_b64_t30",
+      "selected_batch_size": 64,
+      "selected_update_target_every": 30
+    }
+  }
+}

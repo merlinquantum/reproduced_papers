@@ -1,0 +1,83 @@
+{
+  "description": "E4 / Fig. 6b: Cart Pole NN DQN, hidden layers (15, 15) (Table 4). Code-faithful: replay_capacity 10000 -> unbounded (reference code: memory_length unset, deque(maxlen=None)).",
+  "experiment": {
+    "id": "E4",
+    "arm": "mlp_15_15_codefaithful",
+    "label": "code-faithful"
+  },
+  "agents": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ]
+  },
+  "environment": {
+    "name": "CartPole-v0",
+    "is_slippery": null,
+    "max_episode_steps": null,
+    "solve": {
+      "window": 100,
+      "mean_threshold": 195.0,
+      "min_episodes": 101
+    }
+  },
+  "model": {
+    "kind": "mlp",
+    "n_qubits": null,
+    "n_layers": null,
+    "ansatz": null,
+    "state_encoding": "raw",
+    "encoding_activation": null,
+    "data_reuploading": null,
+    "train_input_weights": null,
+    "readout": null,
+    "train_output_weights": null,
+    "output_factor": null,
+    "theta_init": null,
+    "hidden_units": [
+      15,
+      15
+    ]
+  },
+  "training": {
+    "max_episodes": 5000,
+    "gamma": 0.99,
+    "batch_size": 16,
+    "update_model_every": 1,
+    "update_target_every": 1,
+    "replay_capacity": null,
+    "replay_eviction": "fifo",
+    "replay_sampling": "with_replacement",
+    "loss_form": "action_only",
+    "bootstrap_network": "target",
+    "terminal_mask": "terminated_or_truncated",
+    "learning_rates": {
+      "main": 0.001,
+      "input_weights": 0.001,
+      "output_weights": 0.1
+    },
+    "amsgrad_main": true,
+    "adam": {
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-07
+    },
+    "epsilon_greedy": {
+      "start": 1.0,
+      "decay": 0.99,
+      "min": 0.01
+    }
+  },
+  "evaluation": {
+    "greedy_episodes": 10,
+    "track_q_star_mae": false
+  }
+}

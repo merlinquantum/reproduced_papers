@@ -1,0 +1,83 @@
+{
+  "description": "E3 / Figs. 4-5: Cart Pole PQC 5 layers, fixed output range [0, 180], optimal hyperparameters (Table 2). Code-faithful: replay_capacity 10000 -> unbounded (reference code: memory_length unset, deque(maxlen=None)). Diagnostic: encoding activation arctan -> tanh (reference code ScalableDataReuploadingController).",
+  "experiment": {
+    "id": "E3",
+    "arm": "optimal_fixed_range_180_codefaithful_tanh",
+    "label": "diagnostic"
+  },
+  "agents": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ]
+  },
+  "environment": {
+    "name": "CartPole-v0",
+    "is_slippery": null,
+    "max_episode_steps": null,
+    "solve": {
+      "window": 100,
+      "mean_threshold": 195.0,
+      "min_episodes": 101
+    }
+  },
+  "model": {
+    "kind": "pqc",
+    "n_qubits": 4,
+    "n_layers": 5,
+    "ansatz": "ry_rz_cz_ring",
+    "state_encoding": "continuous_rx",
+    "encoding_activation": "tanh",
+    "data_reuploading": true,
+    "train_input_weights": true,
+    "readout": "cartpole_zz_pairs",
+    "train_output_weights": false,
+    "output_factor": 180.0,
+    "theta_init": {
+      "low": 0.0,
+      "high": 3.141592653589793
+    },
+    "hidden_units": null
+  },
+  "training": {
+    "max_episodes": 5000,
+    "gamma": 0.99,
+    "batch_size": 16,
+    "update_model_every": 1,
+    "update_target_every": 1,
+    "replay_capacity": null,
+    "replay_eviction": "fifo",
+    "replay_sampling": "with_replacement",
+    "loss_form": "action_only",
+    "bootstrap_network": "target",
+    "terminal_mask": "terminated_or_truncated",
+    "learning_rates": {
+      "main": 0.001,
+      "input_weights": 0.001,
+      "output_weights": 0.1
+    },
+    "amsgrad_main": true,
+    "adam": {
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-07
+    },
+    "epsilon_greedy": {
+      "start": 1.0,
+      "decay": 0.99,
+      "min": 0.01
+    }
+  },
+  "evaluation": {
+    "greedy_episodes": 10,
+    "track_q_star_mae": false
+  }
+}

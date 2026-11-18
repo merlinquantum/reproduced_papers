@@ -1,0 +1,130 @@
+{
+  "protocol": {
+    "target": "Q* (gamma 0.8), 44 non-terminal pairs",
+    "optimizer": "Adam lr 0.02, 1500 full-batch steps, MSE",
+    "seeds": [
+      0,
+      1,
+      2
+    ]
+  },
+  "rows": {
+    "qubit code ansatz, 5 layers": {
+      "mae44": [
+        0.11076623130070962,
+        0.10106318435621167,
+        0.10422314371583424
+      ],
+      "argmax_agreement": [
+        0.45454545454545453,
+        0.9090909090909091,
+        0.5454545454545454
+      ],
+      "trainable_parameters": 48
+    },
+    "photonic planned (basis phases once), 5 layers": {
+      "mae44": [
+        0.1485288476281686,
+        0.1486400238955149,
+        0.14782798076412182
+      ],
+      "argmax_agreement": [
+        0.45454545454545453,
+        0.45454545454545453,
+        0.45454545454545453
+      ],
+      "trainable_parameters": 60
+    },
+    "photonic planned, 15 layers": {
+      "mae44": [
+        0.14864079605227498,
+        0.15368287924928895,
+        0.15007405792885686
+      ],
+      "argmax_agreement": [
+        0.45454545454545453,
+        0.45454545454545453,
+        0.45454545454545453
+      ],
+      "trainable_parameters": 160
+    },
+    "+ unbunched (post-selected) readout, 5 layers": {
+      "mae44": [
+        0.1308342958642034,
+        0.14403439085549719,
+        0.11634974791200853
+      ],
+      "argmax_agreement": [
+        0.5454545454545454,
+        0.7272727272727273,
+        0.6363636363636364
+      ],
+      "trainable_parameters": 60
+    },
+    "+ trainable output weights, 5 layers": {
+      "mae44": [
+        0.13488940558610113,
+        0.13868343747464368,
+        0.13489960626807604
+      ],
+      "argmax_agreement": [
+        0.36363636363636365,
+        0.45454545454545453,
+        0.36363636363636365
+      ],
+      "trainable_parameters": 64
+    },
+    "bits with trainable scale, encoded once, 5 layers": {
+      "mae44": [
+        0.1462267448311288,
+        0.1457483833320518,
+        0.13271429309881133
+      ],
+      "argmax_agreement": [
+        0.45454545454545453,
+        0.45454545454545453,
+        0.6363636363636364
+      ],
+      "trainable_parameters": 64
+    },
+    "bits with trainable scale, re-uploaded, 5 layers": {
+      "mae44": [
+        0.06822037746181792,
+        0.06640791032331393,
+        0.04641487821208941
+      ],
+      "argmax_agreement": [
+        0.8181818181818182,
+        0.9090909090909091,
+        0.9090909090909091
+      ],
+      "trainable_parameters": 80
+    },
+    "basis phases re-uploaded before every layer, 5 layers": {
+      "mae44": [
+        0.061737939013320274,
+        0.05834572021006377,
+        0.06357244511100589
+      ],
+      "argmax_agreement": [
+        0.9090909090909091,
+        0.9090909090909091,
+        0.7272727272727273
+      ],
+      "trainable_parameters": 60
+    },
+    "basis phases re-uploaded before every layer, 10 layers": {
+      "mae44": [
+        0.010213557552232133,
+        0.013657790381009121,
+        0.013209082001195211
+      ],
+      "argmax_agreement": [
+        0.9090909090909091,
+        0.9090909090909091,
+        0.8181818181818182
+      ],
+      "trainable_parameters": 110
+    }
+  }
+}

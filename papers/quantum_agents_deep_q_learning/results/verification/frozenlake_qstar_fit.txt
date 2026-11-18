@@ -1,0 +1,9 @@
+qubit code ansatz, 5 layers                                MAE44 [0.111, 0.101, 0.104] argmax [0.45, 0.91, 0.55] params 48
+photonic planned (basis phases once), 5 layers             MAE44 [0.149, 0.149, 0.148] argmax [0.45, 0.45, 0.45] params 60
+photonic planned, 15 layers                                MAE44 [0.149, 0.154, 0.15] argmax [0.45, 0.45, 0.45] params 160
++ unbunched (post-selected) readout, 5 layers              MAE44 [0.131, 0.144, 0.116] argmax [0.55, 0.73, 0.64] params 60
++ trainable output weights, 5 layers                       MAE44 [0.135, 0.139, 0.135] argmax [0.36, 0.45, 0.36] params 64
+bits with trainable scale, encoded once, 5 layers          MAE44 [0.146, 0.146, 0.133] argmax [0.45, 0.45, 0.64] params 64
+bits with trainable scale, re-uploaded, 5 layers           MAE44 [0.068, 0.066, 0.046] argmax [0.82, 0.91, 0.91] params 80
+basis phases re-uploaded before every layer, 5 layers      MAE44 [0.062, 0.058, 0.064] argmax [0.91, 0.91, 0.73] params 60
+basis phases re-uploaded before every layer, 10 layers     MAE44 [0.01, 0.014, 0.013] argmax [0.91, 0.91, 0.82] params 110

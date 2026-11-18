@@ -1,0 +1,118 @@
+{
+  "protocol": {
+    "steps": 1500,
+    "lr": 0.02,
+    "seeds": [
+      0,
+      1,
+      2
+    ]
+  },
+  "rows": {
+    "phase once, 6 modes / 3 photons, 5 layers (planned)": {
+      "mae44": [
+        0.1485288476281686,
+        0.1486400238955149,
+        0.14782798076412182
+      ],
+      "argmax_agreement": [
+        0.45454545454545453,
+        0.45454545454545453,
+        0.45454545454545453
+      ],
+      "trainable_parameters": 60,
+      "fock_outcomes": 41,
+      "ms_per_step_33_samples": 3.62860819400521
+    },
+    "phase once, 8 modes / 4 photons, 5 layers": {
+      "mae44": [
+        0.14713538936464718,
+        0.15357932375673994,
+        0.15378075367936433
+      ],
+      "argmax_agreement": [
+        0.45454545454545453,
+        0.5454545454545454,
+        0.45454545454545453
+      ],
+      "trainable_parameters": 84,
+      "fock_outcomes": 162,
+      "ms_per_step_33_samples": 5.853320750000421
+    },
+    "phase once, 8 modes / 4 photons, 10 layers": {
+      "mae44": [
+        0.14713550512670606,
+        0.15385280652386985,
+        0.1537692456805209
+      ],
+      "argmax_agreement": [
+        0.45454545454545453,
+        0.45454545454545453,
+        0.45454545454545453
+      ],
+      "trainable_parameters": 154,
+      "fock_outcomes": 162,
+      "ms_per_step_33_samples": 10.720024444007626
+    },
+    "phase once, 10 modes / 5 photons, 5 layers": {
+      "mae44": [
+        0.1482439220006378,
+        0.15376338375955614,
+        0.15399648735483482
+      ],
+      "argmax_agreement": [
+        0.5454545454545454,
+        0.45454545454545453,
+        0.45454545454545453
+      ],
+      "trainable_parameters": 108,
+      "fock_outcomes": 637,
+      "ms_per_step_33_samples": 16.483297889334306
+    },
+    "dual-rail input, 8 modes / 4 photons, 5 layers": {
+      "mae44": [
+        0.13536618269801232,
+        0.1337856811912125,
+        0.13539173342709931
+      ],
+      "argmax_agreement": [
+        0.6363636363636364,
+        0.8181818181818182,
+        0.6363636363636364
+      ],
+      "trainable_parameters": 84,
+      "fock_outcomes": 162,
+      "ms_per_step_33_samples": 7.12036869401345
+    },
+    "dual-rail input, 8 modes / 4 photons, 10 layers": {
+      "mae44": [
+        0.13588997758212262,
+        0.13537824863171474,
+        0.1353783965606567
+      ],
+      "argmax_agreement": [
+        0.5454545454545454,
+        0.6363636363636364,
+        0.6363636363636364
+      ],
+      "trainable_parameters": 154,
+      "fock_outcomes": 162,
+      "ms_per_step_33_samples": 11.999486610662037
+    },
+    "phase re-uploaded, 6 modes / 3 photons, 5 layers (reference)": {
+      "mae44": [
+        0.061737939013320274,
+        0.05834572021006377,
+        0.06357244511100589
+      ],
+      "argmax_agreement": [
+        0.9090909090909091,
+        0.9090909090909091,
+        0.7272727272727273
+      ],
+      "trainable_parameters": 60,
+      "fock_outcomes": 41,
+      "ms_per_step_33_samples": 4.700720972012884
+    }
+  }
+}

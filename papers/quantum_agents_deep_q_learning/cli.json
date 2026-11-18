@@ -1,0 +1,69 @@
+{
+  "description": "Quantum agents in the Gym (Skolik et al. 2022): DQN with PQC or NN Q-functions on Cart Pole and Frozen Lake",
+  "arguments": [
+    {
+      "flags": ["--seeds"],
+      "help": "Comma-separated agent seeds trained together in one process (one agent per seed)",
+      "type": "csv_int_list",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "agents.seeds"}
+    },
+    {
+      "flags": ["--max-episodes"],
+      "help": "Maximum training episodes per agent",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.max_episodes"}
+    },
+    {
+      "flags": ["--n-layers"],
+      "help": "Number of PQC layers (Fig. 1 layers)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.n_layers"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Replay batch size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.batch_size"}
+    },
+    {
+      "flags": ["--update-model-every"],
+      "help": "Environment steps between model updates ('update model' in Table 1)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.update_model_every"}
+    },
+    {
+      "flags": ["--update-target-every"],
+      "help": "Environment steps between target-network syncs ('update target model' in Table 1)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.update_target_every"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Learning rate of the variational (or NN) parameters (eta)",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.learning_rates.main"}
+    },
+    {
+      "flags": ["--encoding-activation"],
+      "help": "Input encoding angle map for continuous states",
+      "type": "str",
+      "choices": ["arctan", "tanh"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "model.encoding_activation"}
+    },
+    {
+      "flags": ["--greedy-eval-episodes"],
+      "help": "Greedy (epsilon = 0) evaluation episodes per agent after training",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "evaluation.greedy_episodes"}
+    }
+  ]
+}
