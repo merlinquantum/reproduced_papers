@@ -1,0 +1,82 @@
+{
+  "description": "E10 and the Landsat fair baselines on the same 5 splits as the QELM runs: paper Table A2 models (100 inits for stochastic ones), ridge on degree-2 features, matched-dimension random-feature ELMs (48 = 3N w1 and 120 = 15N/2 w2 at N=16; 72 and 180 at N=24) with and without feature noise, and tuned RF/kNN/SVM.",
+  "task": "landsat_classical",
+  "landsat_classical": {
+    "split_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "paper_baselines": [
+      "ridge",
+      "knn",
+      "svm_rbf",
+      "decision_tree",
+      "random_forest",
+      "mlp",
+      "adaboost",
+      "naive_bayes",
+      "qda"
+    ],
+    "n_inits": 100,
+    "matched_elm": {
+      "n_features": [
+        48,
+        120,
+        72,
+        180
+      ],
+      "families": [
+        "tanh",
+        "fourier"
+      ],
+      "feature_noise_std": [
+        0.0,
+        0.01
+      ],
+      "n_inits": 3,
+      "tanh_input_scale": 1.0,
+      "fourier_bandwidth": 2.0
+    },
+    "tuned_baselines": {
+      "validation_fraction": 0.2,
+      "grids": {
+        "random_forest": {
+          "n_estimators": [
+            100,
+            300
+          ],
+          "max_depth": [
+            null,
+            10,
+            20
+          ]
+        },
+        "knn": {
+          "n_neighbors": [
+            3,
+            5,
+            7,
+            11,
+            15
+          ]
+        },
+        "svm_rbf": {
+          "C": [
+            0.1,
+            1.0,
+            10.0,
+            100.0
+          ],
+          "gamma": [
+            "scale",
+            0.01,
+            0.1
+          ]
+        }
+      }
+    }
+  }
+}

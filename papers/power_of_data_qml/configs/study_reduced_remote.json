@@ -1,0 +1,45 @@
+{
+  "description": "Reduced study for gpu-reproduced-papers-1 (NVIDIA L4, 23 GB; partial): n=17-20, 10 seeds, paper grids, complex64 simulation on cuda:0. QK up to 21 qubits. Extend system_sizes once the smoke run measures L4 throughput.",
+  "dtype": "float32",
+  "device": "cuda:0",
+  "study": {
+    "embeddings": [
+      "E1",
+      "E2",
+      "E3"
+    ],
+    "system_sizes": [
+      17,
+      18,
+      19,
+      20
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "quantum_kernel_max_qubits": 21,
+    "cv_system_sizes": [
+      20
+    ]
+  },
+  "models": {
+    "grid": "paper",
+    "protocols": [
+      "paper",
+      "cv"
+    ],
+    "n_jobs": 8
+  },
+  "simulation": {
+    "batch_memory_mb": 4096
+  }
+}

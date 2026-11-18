@@ -1,0 +1,59 @@
+{
+  "description": "E6 / Table I, Fig. 4: FF (paper baseline B1) DQC model, two 6-qubit QNNs (psi, p), sDAQC CZ-ring HEA, L = 10 (1 + 8 + 1), parallel FM with re-upload, 5000 iterations, b_s = 600, lr 1e-2, raw coordinates (LOG.md A7).",
+  "task": "navier_stokes",
+  "dataset": {
+    "name": "cylinder_wake",
+    "file": "cylinder_nektar_wake/cylinder_nektar_wake.mat",
+    "time_window": [
+      0.0,
+      5.5
+    ],
+    "reynolds": 100.0,
+    "coordinate_transform": "raw",
+    "data_stride": 10,
+    "evaluation_times": [
+      0.0,
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0,
+      4.5,
+      5.0,
+      5.5
+    ]
+  },
+  "evaluation": {
+    "batch_size": 5000,
+    "table_times": [
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0,
+      4.5,
+      5.0,
+      5.5
+    ]
+  },
+  "training": {
+    "iterations": 5000,
+    "batch_size": 600,
+    "lr": 0.01
+  },
+  "model": {
+    "family": "qnn",
+    "n_qubits": 6,
+    "layout": "ns_parallel",
+    "n_layers": 10,
+    "entangler": "cz",
+    "feature_map": "simple",
+    "frequency_mode": "fixed"
+  }
+}

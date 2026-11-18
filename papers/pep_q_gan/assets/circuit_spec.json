@@ -1,0 +1,10 @@
+{
+  "schema": "merlin_fixed_entangling_layer_v1",
+  "modes": 32,
+  "layers": 1,
+  "circuit_seed": 42,
+  "model": "mzi",
+  "trainable": false,
+  "constructor": "merlin.CircuitBuilder.add_entangling_layer",
+  "phase_rule": "Independent uniform phases in [0, 2*pi); not Haar sampling"
+}

@@ -1,0 +1,42 @@
+# Environment `reproduction` (Python 3.14.3), 2026-10-12. Lower bounds = tested versions.
+# MerLin reproduction stack
+torch>=2.12.1
+# MerLin: public release. Training (haar and merlin_mesh ansatze), the M3 noise study and the
+# exact oracle run on it. Only the GPU Clifford sampler (--sampler merlin_clifford) and
+# utils/benchmark_*_backends.py need the MerLin benchmarking fork (merlinquantum 0.5.0.dev0,
+# merlin.photonic_engines); use --sampler perceval without it.
+merlinquantum>=0.4.2
+perceval-quandela>=1.2.1,<1.3
+numpy>=2.5.4
+scipy>=1.18.1
+pandas>=3.0.6
+matplotlib>=3.11.2
+tqdm>=4.70.1
+# Original JAX code (merlinquantum/generative_classical_training)
+# CUDA build on Linux GPU machines (remote runs), CPU build elsewhere
+jax>=0.11.2; sys_platform != "linux"
+jax[cuda12]>=0.11.2; sys_platform == "linux"
+jaxopt>=0.8.5
+optax>=0.2.8
+ray[tune]>=2.59.0
+tensorboardX>=2.6.5
+# Original data preparation
+ucimlrepo>=0.0.7
+kagglehub>=1.0.2
+cmapPy>=4.0.1
+# RBM baseline (lib/baselines.py): XanaduAI qml-benchmarks, GitHub only, pinned commit
+qml_benchmarks @ git+https://github.com/XanaduAI/qml-benchmarks@95e5a07e8e9e75ba7e24e67fb32b030112a1309a
+# PyPI deps of the GitHub packages iqpopt / qml_benchmarks
+pennylane>=0.45.1
+flax>=0.12.10
+cvxpy>=1.9.3
+numpyro>=0.22.0
+seaborn>=0.13.2
+scikit-learn>=1.9.1
+# Tooling
+pytest>=9.1.1
+ruff>=0.17.0
+ipykernel>=7.4.0
+jupyter>=1.1.1
+# Reading the paper PDF (Phase 01)
+pypdf>=6.20.0

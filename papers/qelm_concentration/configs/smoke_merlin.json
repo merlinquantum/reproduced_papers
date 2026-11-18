@@ -1,0 +1,61 @@
+{
+  "description": "Smoke run of the MerLin adaptation: 8 modes / 2 photons, 8 layers, 200-row Landsat subsample, 2000 shots, a subset of click readouts and tiny sweeps. Checks the pipeline and logging contract; not a result.",
+  "task": "landsat_readouts_merlin",
+  "dtype": "float32",
+  "merlin_reservoir": {
+    "n_modes": 8,
+    "n_photons": 2,
+    "n_layers": 8,
+    "encoding_period": 4,
+    "input_shift": 4,
+    "angle_scale": 2.0,
+    "chunk_size": 64
+  },
+  "dataset": {
+    "landsat": {
+      "n_subsample": 200
+    }
+  },
+  "landsat_readouts": {
+    "headline_shots": 2000,
+    "readouts": [
+      "w1_click_unit",
+      "w1_et_scaled",
+      "w2_click_scaled",
+      "w2_etcut_scaled"
+    ],
+    "cutoff_sweep": {
+      "cutoffs": [
+        1.0
+      ],
+      "readouts": [
+        "w2_etcut_scaled"
+      ]
+    },
+    "train_size_sweep": {
+      "sizes": [
+        20,
+        160
+      ],
+      "resamples": 2,
+      "readout": "w1_click_scaled"
+    },
+    "shots_sweep": {
+      "shots": [
+        100,
+        2000
+      ],
+      "readout": "w1_click_scaled"
+    },
+    "save_probabilities": false,
+    "split_seeds": [
+      0
+    ],
+    "reservoir_seeds": [
+      0
+    ],
+    "shot_seeds": [
+      0
+    ]
+  }
+}

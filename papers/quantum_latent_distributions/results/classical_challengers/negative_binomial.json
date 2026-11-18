@@ -1,0 +1,23 @@
+[
+  {
+    "target": "quantum",
+    "latent": "negative_binomial",
+    "seed": 0,
+    "l1_nearest_int": 0.0733533725142479,
+    "mean_total": 8.304620742797852
+  },
+  {
+    "target": "quantum",
+    "latent": "negative_binomial",
+    "seed": 1,
+    "l1_nearest_int": 0.06977079063653946,
+    "mean_total": 8.266634941101074
+  },
+  {
+    "target": "quantum",
+    "latent": "negative_binomial",
+    "seed": 2,
+    "l1_nearest_int": 0.0744917020201683,
+    "mean_total": 8.006834030151367
+  }
+]

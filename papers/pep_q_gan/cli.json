@@ -1,0 +1,236 @@
+{
+  "description": "MerLin one-layer fixed-Fock peptide GAN; default scope inspection",
+  "arguments": [
+    {
+      "flags": [
+        "--stage"
+      ],
+      "type": "str",
+      "default": null,
+      "help": "Inspect by default; expensive actions require an explicit stage",
+      "apply": {
+        "kind": "config_path",
+        "path": "stage"
+      },
+      "choices": [
+        "inspect",
+        "sample",
+        "train",
+        "prepare-data",
+        "evaluate"
+      ]
+    },
+    {
+      "flags": [
+        "--photons"
+      ],
+      "type": "csv_int_list",
+      "default": null,
+      "help": "Comma-separated photon counts",
+      "apply": {
+        "kind": "config_path",
+        "path": "sampling.photons"
+      }
+    },
+    {
+      "flags": [
+        "--samples"
+      ],
+      "type": "int",
+      "default": null,
+      "help": "Samples per photon count",
+      "apply": {
+        "kind": "config_path",
+        "path": "sampling.samples"
+      }
+    },
+    {
+      "flags": [
+        "--backend"
+      ],
+      "type": "str",
+      "default": null,
+      "help": "Selected production event sampler; MerLin builds the circuit",
+      "apply": {
+        "kind": "config_path",
+        "path": "sampling.backend"
+      },
+      "choices": [
+        "perceval"
+      ]
+    },
+    {
+      "flags": [
+        "--sampling-device"
+      ],
+      "type": "str",
+      "default": null,
+      "help": "cpu for the Perceval event sampler; independent of GAN --device",
+      "apply": {
+        "kind": "config_path",
+        "path": "sampling.device"
+      }
+    },
+    {
+      "flags": [
+        "--sampling-seed"
+      ],
+      "type": "int",
+      "default": null,
+      "help": "Event sampling RNG seed",
+      "apply": {
+        "kind": "config_path",
+        "path": "sampling.seed"
+      }
+    },
+    {
+      "flags": [
+        "--threads"
+      ],
+      "type": "int",
+      "default": null,
+      "help": "CPU thread limit for Torch and exqalibur",
+      "apply": {
+        "kind": "config_path",
+        "path": "sampling.threads"
+      }
+    },
+    {
+      "flags": [
+        "--circuit-seed"
+      ],
+      "type": "int",
+      "default": null,
+      "help": "Fixed MerLin circuit seed, separate from event/GAN seeds",
+      "apply": {
+        "kind": "config_path",
+        "path": "circuit.seed"
+      }
+    },
+    {
+      "flags": [
+        "--pool-root"
+      ],
+      "type": "path",
+      "default": null,
+      "help": "Optional stable pool location for verified reuse",
+      "apply": {
+        "kind": "config_path",
+        "path": "sampling.pool_root"
+      }
+    },
+    {
+      "flags": [
+        "--pool"
+      ],
+      "type": "path",
+      "default": null,
+      "help": "Completed matching Dist, Indist, or Gaussian pool",
+      "apply": {
+        "kind": "config_path",
+        "path": "training.pool"
+      }
+    },
+    {
+      "flags": [
+        "--prior-source"
+      ],
+      "type": "str",
+      "default": null,
+      "help": "Dist/Indist photonic condition or Gaussian reference",
+      "apply": {
+        "kind": "config_path",
+        "path": "training.prior_source"
+      },
+      "choices": [
+        "indist",
+        "dist",
+        "gaussian"
+      ]
+    },
+    {
+      "flags": [
+        "--dataset-root"
+      ],
+      "type": "path",
+      "default": null,
+      "help": "Directory containing HLA_pos9mers.txt and MHC_pseudo_HLA_only.dat",
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.root"
+      }
+    },
+    {
+      "flags": [
+        "--steps"
+      ],
+      "type": "int",
+      "default": null,
+      "help": "Generator update count",
+      "apply": {
+        "kind": "config_path",
+        "path": "training.steps"
+      }
+    },
+    {
+      "flags": [
+        "--batch-size"
+      ],
+      "type": "int",
+      "default": null,
+      "help": "GAN training batch size",
+      "apply": {
+        "kind": "config_path",
+        "path": "training.batch_size"
+      }
+    },
+    {
+      "flags": [
+        "--resume-dir"
+      ],
+      "type": "path",
+      "default": null,
+      "help": "Continue the same GAN run and pool from its saved checkpoint",
+      "apply": {
+        "kind": "config_path",
+        "path": "training.resume_dir"
+      }
+    },
+    {
+      "flags": [
+        "--generated-csv"
+      ],
+      "type": "path",
+      "default": null,
+      "help": "Existing generation-attempt CSV; no new generation",
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.input"
+      }
+    },
+    {
+      "flags": [
+        "--hla-file"
+      ],
+      "type": "path",
+      "default": null,
+      "help": "Pinned 131-HLA evaluation panel",
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.hla_file"
+      }
+    },
+    {
+      "flags": [
+        "--mhcflurry-models"
+      ],
+      "type": "path",
+      "default": null,
+      "help": "User-installed presentation models directory from the official 2.3.0 download",
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.models_dir"
+      }
+    }
+  ]
+}

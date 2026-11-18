@@ -1,0 +1,37 @@
+{
+  "description": "Beyond the paper. The paper's largest simulated size is m=30, where the Appendix B budget already covers only 0.2% of the space. At m=60 it covers 4e-12. No boson arm here -- the sampler costs 4.2x more per +4 modes and m=42 is the ceiling for a 30-instance arm. These interference-free arms are nearly free and map where the algorithm stops finding anything at all. Independent Bernoulli clicks at 1.15x the rate.",
+  "seed": 42,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "device": "cpu",
+  "problem": {
+    "family": "knapsack",
+    "m": 60,
+    "instances": 30,
+    "instance_seed_base": 0
+  },
+  "circuit": {
+    "delays": [
+      1,
+      3,
+      9
+    ]
+  },
+  "training": {
+    "updates": 200,
+    "samples": 50,
+    "lr_theta": 0.01,
+    "lr_alpha": 0.05,
+    "shift": 1.5707963267948966,
+    "shift_scale": 1.0
+  },
+  "method": {
+    "name": "bbs",
+    "source": "bernoulli",
+    "rate_scale": 1.15
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "description": "A-04: as training_iris_original but quantum gradients by forward finite differences with step 1e-10 (the authors' Qiskit gradient_num_diff).",
+  "experiment": {
+    "name": "training_iris_finite_difference",
+    "kind": "training"
+  },
+  "dataset": {
+    "name": "iris_binary",
+    "batch_size": null
+  },
+  "training": {
+    "iterations": 100,
+    "lr": 0.1,
+    "seeds": {
+      "start": 0,
+      "count": 100
+    },
+    "finite_difference_step": 1e-10,
+    "log_every": 1,
+    "loss_threshold": 0.3,
+    "fisher_rao": true,
+    "fisher_chunk_size": 100
+  },
+  "models": [
+    {
+      "name": "qnn",
+      "type": "qubit",
+      "n_qubits": 4,
+      "feature_map": "zz",
+      "feature_map_reps": 2,
+      "ansatz_reps": 1,
+      "feature_entanglement": "full",
+      "ansatz_entanglement": "full",
+      "hadamard_every_rep": true,
+      "training": {
+        "optimizer": "qiskit_adam",
+        "gradient": "finite_difference",
+        "init": {
+          "low": 0.0,
+          "high": 6.283185307179586
+        }
+      }
+    },
+    {
+      "name": "easy_qnn",
+      "type": "qubit",
+      "n_qubits": 4,
+      "feature_map": "z",
+      "feature_map_reps": 1,
+      "ansatz_reps": 1,
+      "feature_entanglement": "full",
+      "ansatz_entanglement": "full",
+      "hadamard_every_rep": true,
+      "training": {
+        "optimizer": "qiskit_adam",
+        "gradient": "finite_difference",
+        "init": {
+          "low": 0.0,
+          "high": 6.283185307179586
+        }
+      }
+    }
+  ]
+}

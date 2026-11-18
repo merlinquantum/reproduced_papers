@@ -1,0 +1,79 @@
+{
+  "description": "E3 (paper Figs 2-3), reduced: L in {48,96,192,504,720} x T in {96,720} for QuLTSF and the linear baselines, one seed (2021, the paper's seed); preliminary. L=336 comes from the table1 sweep.",
+  "sweep_id": "lookback",
+  "max_epochs": 100,
+  "entries": [
+    {
+      "name": "qultsf",
+      "config": "configs/table1_qultsf_original.json",
+      "seeds": [
+        2021
+      ],
+      "sequence_lengths": [
+        48,
+        96,
+        192,
+        504,
+        720
+      ],
+      "prediction_horizons": [
+        96,
+        720
+      ]
+    },
+    {
+      "name": "linear",
+      "config": "configs/table1_linear_classical.json",
+      "seeds": [
+        2021
+      ],
+      "sequence_lengths": [
+        48,
+        96,
+        192,
+        504,
+        720
+      ],
+      "prediction_horizons": [
+        96,
+        720
+      ]
+    },
+    {
+      "name": "nlinear",
+      "config": "configs/table1_nlinear_classical.json",
+      "seeds": [
+        2021
+      ],
+      "sequence_lengths": [
+        48,
+        96,
+        192,
+        504,
+        720
+      ],
+      "prediction_horizons": [
+        96,
+        720
+      ]
+    },
+    {
+      "name": "dlinear",
+      "config": "configs/table1_dlinear_classical.json",
+      "seeds": [
+        2021
+      ],
+      "sequence_lengths": [
+        48,
+        96,
+        192,
+        504,
+        720
+      ],
+      "prediction_horizons": [
+        96,
+        720
+      ]
+    }
+  ]
+}

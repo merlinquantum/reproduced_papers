@@ -1,0 +1,83 @@
+{
+  "description": "Lightweight smoke run: Task 1 on KCHOL.IS (3-D features), two QNN families at depth 1 and the paper's [3-11-1] ANN, 3 epochs. Not a paper result.",
+  "task": "directional",
+  "seed": 0,
+  "dtype": "float32",
+  "device": "cpu",
+  "num_threads": 4,
+  "outdir": "outdir",
+  "logging": {
+    "level": "info"
+  },
+  "directional": {
+    "dataset": {
+      "feature_set": "3d",
+      "ticker": "KCHOL.IS",
+      "feature_timing": "lagged",
+      "train_start": "2009-01-07",
+      "test_end": "2021-12-31",
+      "fold_boundaries": [
+        "2012-01-01",
+        "2014-01-01",
+        "2016-01-01",
+        "2018-01-01",
+        "2020-01-01"
+      ],
+      "validation_years": 2,
+      "early_stop_fraction": 0.1,
+      "batch_size": 32,
+      "loader_fold": 5
+    },
+    "models": {
+      "qnn": {
+        "backend": "statevector",
+        "families": [
+          "SQ",
+          "Hybrid-MQ"
+        ],
+        "n_qubits": [
+          3
+        ],
+        "layers": [
+          1
+        ],
+        "encoding": "angle",
+        "angle_scale": 3.141592653589793,
+        "topology": "chain"
+      },
+      "ann": {
+        "hidden_layer_options": [
+          [
+            11
+          ]
+        ],
+        "minmax_inputs": false
+      }
+    },
+    "training": {
+      "lr": 0.001,
+      "batch_size": 32,
+      "max_epochs": 3,
+      "patience": 30,
+      "class_weighting": "none"
+    },
+    "selection": {
+      "protocols": {
+        "leak_free": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "paper": [
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      "tie_tolerance": 0.0001
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "sweep_id": "synthetic_degree_smoke",
+  "description": "Smoke sweep for the Phase 5 degree-feature control (claim C3): seed 0, 2 epochs, on the machine of every compared synthetic run.",
+  "machine": "reproduced-papers-1",
+  "metric": "test_acc",
+  "direction": "maximize",
+  "split": "test (10% of the 800 generated graphs, split seed 1729)",
+  "selection_rule": "none",
+  "max_epochs": 2,
+  "checkpoint_rule": "model with the highest validation accuracy over the 2 epochs",
+  "aggregation": "single seed; smoke only, not a result",
+  "tie_rule": "not applied (one seed)",
+  "entries": [
+    {
+      "name": "synthetic_degree",
+      "config": "configs/synthetic_degree_classical.json",
+      "seeds": [
+        0
+      ],
+      "extra_args": [
+        "--epochs",
+        "2"
+      ]
+    }
+  ]
+}

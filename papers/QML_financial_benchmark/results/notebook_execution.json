@@ -1,0 +1,13 @@
+{
+  "command": ".venv/bin/python papers/QML_financial_benchmark/utils/execute_notebook.py",
+  "kernel": "python3 (repository .venv), fresh kernel per execution",
+  "started_utc": "2026-10-23T07:28:19Z",
+  "elapsed_seconds": 199.2,
+  "exit_status": 0,
+  "code_cells": 25,
+  "execution_counts_sequential": true,
+  "error_outputs": 0,
+  "stderr_outputs": 0,
+  "hardware": "arm64 Darwin 27.0.0, CPU only (no CUDA/MPS used)",
+  "python": "3.12.4"
+}

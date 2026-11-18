@@ -1,0 +1,61 @@
+{
+  "sweep_id": "control_iid_vqtn_0v9",
+  "purpose": "Control: hybrid VQTN on task 0 vs 9 with an i.i.d. equal-size partition at 2 and 16 clients, to show what the non-i.i.d. split costs",
+  "paper": "qfl_decentralized_data",
+  "base_config": "configs/e1_original.json",
+  "fixed_overrides": {
+    "dataset": {
+      "validation_fraction": 0.0
+    },
+    "model": {
+      "layers": 2,
+      "init_std": 0.1,
+      "readout": "z_head"
+    },
+    "training": {
+      "lr": 0.03
+    }
+  },
+  "candidates": [
+    {
+      "name": "task0v9_clients2_iid",
+      "overrides": {
+        "dataset.classes": [
+          0,
+          9
+        ],
+        "federation.n_clients": 2,
+        "federation.partition": "iid"
+      }
+    },
+    {
+      "name": "task0v9_clients16_iid",
+      "overrides": {
+        "dataset.classes": [
+          0,
+          9
+        ],
+        "federation.n_clients": 16,
+        "federation.partition": "iid"
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "workers": 3,
+  "threads_per_worker": 3,
+  "selection": {
+    "metric": "test_accuracy",
+    "split": "test",
+    "checkpoint": "last",
+    "direction": "maximize",
+    "aggregation": "mean",
+    "tie_tolerance": 0.005,
+    "tie_handling": "reporting runs: hyperparameters are fixed in advance, no candidate is selected; every mean +- std over 5 seeds is reported"
+  }
+}

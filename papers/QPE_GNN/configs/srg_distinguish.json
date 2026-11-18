@@ -1,0 +1,20 @@
+{
+  "description": "Binary classification on Rook(4) vs Shrikhande (srg(16,6,2,2)). Tests that QPE can distinguish non-isomorphic SRGs (Sec. 4.3, prop. 4.7).",
+  "dataset": "srg_pair",
+  "srg_index": 0,
+  "dataset_kwargs": {"n_per_class": 32},
+  "model": "grit_lite",
+  "encoding": "qirw2",
+  "pe_dim": 8,
+  "node_dim": 16,
+  "depth": 2,
+  "num_heads": 2,
+  "num_classes": 2,
+  "head": "graph_class",
+  "epochs": 12,
+  "batch_size": 8,
+  "lr": 1e-3,
+  "train_frac": 0.8,
+  "val_frac": 0.1,
+  "device": "cpu"
+}

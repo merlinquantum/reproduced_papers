@@ -1,0 +1,425 @@
+{
+  "experiment": "e1_8clients_merlin_tuning",
+  "runs": [
+    {
+      "best_epoch": 29,
+      "best_epoch_test_accuracy_selected_on_test": 0.7586206896551724,
+      "final_test_accuracy": 0.7398119122257053,
+      "final_test_loss": 1.2185160358871412,
+      "final_validation_accuracy": 0.6862745098039216,
+      "overrides": {
+        "client_encoding_scale": 0.19634954084936207,
+        "lr": 0.01
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 246.6442996250007
+    },
+    {
+      "best_epoch": 27,
+      "best_epoch_test_accuracy_selected_on_test": 0.7711598746081505,
+      "final_test_accuracy": 0.6426332288401254,
+      "final_test_loss": 1.341050964164136,
+      "final_validation_accuracy": 0.6196078431372549,
+      "overrides": {
+        "client_encoding_scale": 0.19634954084936207,
+        "lr": 0.01
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 249.4812109579998
+    },
+    {
+      "best_epoch": 1,
+      "best_epoch_test_accuracy_selected_on_test": 0.1974921630094044,
+      "final_test_accuracy": 0.12539184952978055,
+      "final_test_loss": 2.417811259206933,
+      "final_validation_accuracy": 0.12549019607843137,
+      "overrides": {
+        "client_encoding_scale": 0.19634954084936207,
+        "lr": 0.03
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 247.08386562500164
+    },
+    {
+      "best_epoch": 19,
+      "best_epoch_test_accuracy_selected_on_test": 0.15673981191222572,
+      "final_test_accuracy": 0.08463949843260188,
+      "final_test_loss": 2.378988355678451,
+      "final_validation_accuracy": 0.08235294117647059,
+      "overrides": {
+        "client_encoding_scale": 0.19634954084936207,
+        "lr": 0.03
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 246.63048075000006
+    },
+    {
+      "best_epoch": 8,
+      "best_epoch_test_accuracy_selected_on_test": 0.14733542319749215,
+      "final_test_accuracy": 0.10031347962382445,
+      "final_test_loss": 2.4029306154639745,
+      "final_validation_accuracy": 0.10588235294117647,
+      "overrides": {
+        "client_encoding_scale": 0.19634954084936207,
+        "lr": 0.1
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 246.61105612499887
+    },
+    {
+      "best_epoch": 4,
+      "best_epoch_test_accuracy_selected_on_test": 0.1536050156739812,
+      "final_test_accuracy": 0.06269592476489028,
+      "final_test_loss": 2.497107215809598,
+      "final_validation_accuracy": 0.10196078431372549,
+      "overrides": {
+        "client_encoding_scale": 0.19634954084936207,
+        "lr": 0.1
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 254.00294983300046
+    },
+    {
+      "best_epoch": 26,
+      "best_epoch_test_accuracy_selected_on_test": 0.7115987460815048,
+      "final_test_accuracy": 0.6802507836990596,
+      "final_test_loss": 1.168933772741814,
+      "final_validation_accuracy": 0.6352941176470588,
+      "overrides": {
+        "client_encoding_scale": 0.39269908169872414,
+        "lr": 0.01
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 256.31878787499954
+    },
+    {
+      "best_epoch": 29,
+      "best_epoch_test_accuracy_selected_on_test": 0.7962382445141066,
+      "final_test_accuracy": 0.7335423197492164,
+      "final_test_loss": 1.145702720809506,
+      "final_validation_accuracy": 0.7058823529411765,
+      "overrides": {
+        "client_encoding_scale": 0.39269908169872414,
+        "lr": 0.01
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 254.45165120899946
+    },
+    {
+      "best_epoch": 23,
+      "best_epoch_test_accuracy_selected_on_test": 0.16927899686520376,
+      "final_test_accuracy": 0.13166144200626959,
+      "final_test_loss": 2.2905109608808654,
+      "final_validation_accuracy": 0.1411764705882353,
+      "overrides": {
+        "client_encoding_scale": 0.39269908169872414,
+        "lr": 0.03
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 253.93669554199914
+    },
+    {
+      "best_epoch": 5,
+      "best_epoch_test_accuracy_selected_on_test": 0.21003134796238246,
+      "final_test_accuracy": 0.12225705329153605,
+      "final_test_loss": 2.3411136017324035,
+      "final_validation_accuracy": 0.10588235294117647,
+      "overrides": {
+        "client_encoding_scale": 0.39269908169872414,
+        "lr": 0.03
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 256.3247035000004
+    },
+    {
+      "best_epoch": 15,
+      "best_epoch_test_accuracy_selected_on_test": 0.16300940438871472,
+      "final_test_accuracy": 0.08463949843260188,
+      "final_test_loss": 2.4243027020397605,
+      "final_validation_accuracy": 0.10588235294117647,
+      "overrides": {
+        "client_encoding_scale": 0.39269908169872414,
+        "lr": 0.1
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 246.10300816700146
+    },
+    {
+      "best_epoch": 18,
+      "best_epoch_test_accuracy_selected_on_test": 0.15987460815047022,
+      "final_test_accuracy": 0.10658307210031348,
+      "final_test_loss": 2.418367009177851,
+      "final_validation_accuracy": 0.09019607843137255,
+      "overrides": {
+        "client_encoding_scale": 0.39269908169872414,
+        "lr": 0.1
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 247.34446662499977
+    },
+    {
+      "best_epoch": 24,
+      "best_epoch_test_accuracy_selected_on_test": 0.5924764890282131,
+      "final_test_accuracy": 0.5893416927899686,
+      "final_test_loss": 1.302715660262631,
+      "final_validation_accuracy": 0.5882352941176471,
+      "overrides": {
+        "client_encoding_scale": 0.7853981633974483,
+        "lr": 0.01
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 245.4106346669996
+    },
+    {
+      "best_epoch": 27,
+      "best_epoch_test_accuracy_selected_on_test": 0.6112852664576802,
+      "final_test_accuracy": 0.5893416927899686,
+      "final_test_loss": 1.3550242600396136,
+      "final_validation_accuracy": 0.611764705882353,
+      "overrides": {
+        "client_encoding_scale": 0.7853981633974483,
+        "lr": 0.01
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 246.29832650000026
+    },
+    {
+      "best_epoch": 18,
+      "best_epoch_test_accuracy_selected_on_test": 0.15987460815047022,
+      "final_test_accuracy": 0.0877742946708464,
+      "final_test_loss": 2.356090438029609,
+      "final_validation_accuracy": 0.10980392156862745,
+      "overrides": {
+        "client_encoding_scale": 0.7853981633974483,
+        "lr": 0.03
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 246.85038579200045
+    },
+    {
+      "best_epoch": 17,
+      "best_epoch_test_accuracy_selected_on_test": 0.15673981191222572,
+      "final_test_accuracy": 0.13166144200626959,
+      "final_test_loss": 2.348952505655797,
+      "final_validation_accuracy": 0.12156862745098039,
+      "overrides": {
+        "client_encoding_scale": 0.7853981633974483,
+        "lr": 0.03
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 204.93670225000096
+    },
+    {
+      "best_epoch": 7,
+      "best_epoch_test_accuracy_selected_on_test": 0.13479623824451412,
+      "final_test_accuracy": 0.10658307210031348,
+      "final_test_loss": 2.3803778143138348,
+      "final_validation_accuracy": 0.09803921568627451,
+      "overrides": {
+        "client_encoding_scale": 0.7853981633974483,
+        "lr": 0.1
+      },
+      "permutation_seed": 42,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 206.82164550000016
+    },
+    {
+      "best_epoch": 23,
+      "best_epoch_test_accuracy_selected_on_test": 0.13793103448275862,
+      "final_test_accuracy": 0.11912225705329153,
+      "final_test_loss": 2.420578313845452,
+      "final_validation_accuracy": 0.0784313725490196,
+      "overrides": {
+        "client_encoding_scale": 0.7853981633974483,
+        "lr": 0.1
+      },
+      "permutation_seed": 43,
+      "status": "COMPLETED",
+      "wall_clock_seconds": 204.55067504200088
+    }
+  ],
+  "selection": {
+    "candidates": [
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.6912225705329154,
+          "std_ddof1": 0.06871570600872402
+        },
+        "final_validation_accuracy": {
+          "mean": 0.6529411764705882,
+          "std_ddof1": 0.04714045207910316
+        },
+        "overrides": {
+          "client_encoding_scale": 0.19634954084936207,
+          "lr": 0.01
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.10501567398119122,
+          "std_ddof1": 0.02881626381011008
+        },
+        "final_validation_accuracy": {
+          "mean": 0.10392156862745097,
+          "std_ddof1": 0.030502645462949108
+        },
+        "overrides": {
+          "client_encoding_scale": 0.19634954084936207,
+          "lr": 0.03
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.08150470219435736,
+          "std_ddof1": 0.026599628132409313
+        },
+        "final_validation_accuracy": {
+          "mean": 0.10392156862745097,
+          "std_ddof1": 0.00277296776935901
+        },
+        "overrides": {
+          "client_encoding_scale": 0.19634954084936207,
+          "lr": 0.1
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.7068965517241379,
+          "std_ddof1": 0.03768280652091323
+        },
+        "final_validation_accuracy": {
+          "mean": 0.6705882352941177,
+          "std_ddof1": 0.04991341984846224
+        },
+        "overrides": {
+          "client_encoding_scale": 0.39269908169872414,
+          "lr": 0.01
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.12695924764890282,
+          "std_ddof1": 0.006649907033102323
+        },
+        "final_validation_accuracy": {
+          "mean": 0.12352941176470589,
+          "std_ddof1": 0.024956709924231088
+        },
+        "overrides": {
+          "client_encoding_scale": 0.39269908169872414,
+          "lr": 0.03
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.09561128526645768,
+          "std_ddof1": 0.015516449743905434
+        },
+        "final_validation_accuracy": {
+          "mean": 0.09803921568627451,
+          "std_ddof1": 0.01109187107743604
+        },
+        "overrides": {
+          "client_encoding_scale": 0.39269908169872414,
+          "lr": 0.1
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.5893416927899686,
+          "std_ddof1": 0.0
+        },
+        "final_validation_accuracy": {
+          "mean": 0.6000000000000001,
+          "std_ddof1": 0.016637806616154077
+        },
+        "overrides": {
+          "client_encoding_scale": 0.7853981633974483,
+          "lr": 0.01
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.10971786833855798,
+          "std_ddof1": 0.031032899487810857
+        },
+        "final_validation_accuracy": {
+          "mean": 0.11568627450980393,
+          "std_ddof1": 0.00831890330807703
+        },
+        "overrides": {
+          "client_encoding_scale": 0.7853981633974483,
+          "lr": 0.03
+        },
+        "successful_runs": 2
+      },
+      {
+        "expected_runs": 2,
+        "final_test_accuracy": {
+          "mean": 0.11285266457680251,
+          "std_ddof1": 0.0088665427108031
+        },
+        "final_validation_accuracy": {
+          "mean": 0.08823529411764705,
+          "std_ddof1": 0.01386483884679505
+        },
+        "overrides": {
+          "client_encoding_scale": 0.7853981633974483,
+          "lr": 0.1
+        },
+        "successful_runs": 2
+      }
+    ],
+    "rule": {
+      "aggregation": "mean over permutation seeds",
+      "direction": "maximize",
+      "metric": "final_validation_accuracy",
+      "tie_break_ascending": [
+        "lr",
+        "client_encoding_scale"
+      ],
+      "tie_tolerance": 0.005
+    },
+    "selected": {
+      "client_encoding_scale": 0.39269908169872414,
+      "lr": 0.01
+    },
+    "tied": [
+      {
+        "client_encoding_scale": 0.39269908169872414,
+        "lr": 0.01
+      }
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "description": "E1 (Table IX): 3-D momentum features on a Turkish stock (default KCHOL.IS; override with --ticker). Full QNN grid (4 families x L=1..6, 3 qubits, angle encoding) and ANN width grid; 5-fold walk-forward; leak-free and paper selection protocols.",
+  "directional": {
+    "models": {
+      "qnn": {"families": ["SQ", "MQ", "Hybrid-SQ", "Hybrid-MQ"], "n_qubits": [3], "layers": [1, 2, 3, 4, 5, 6]},
+      "ann": {"hidden_layer_options": [[4], [8], [11], [16], [32], [64], [8, 4], [16, 8], [32, 16], [64, 32]], "minmax_inputs": false}
+    },
+    "training": {"max_epochs": 300}
+  }
+}

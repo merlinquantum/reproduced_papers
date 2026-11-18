@@ -1,0 +1,10 @@
+{
+  "description": "Validate the Clifford & Clifford boson sampler against MerLin's exact Fock-space simulation, and check that the distinguishable-photon control differs only in the joint distribution.",
+
+  "experiment": "sampler_validation",
+  "sampler_validation": {
+    "modes": 6,
+    "photons": 3,
+    "sample_counts": [12500, 50000, 200000, 800000]
+  }
+}

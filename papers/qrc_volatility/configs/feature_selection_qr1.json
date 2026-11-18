@@ -1,0 +1,6 @@
+{
+  "description": "Reduced-scope reproduction of paper Fig. 6(a): wrapper forward selection for QR1 only, 13-column pool, up to 10 features, scored on the 245-month out-of-sample window (the paper's protocol, which selects on test data). Every candidate's leakage-free validation MSE is also recorded so both curves can be plotted from one sweep. QR2's Fig. 6(b) path is omitted for cost; see LOG.md deviation D8.",
+  "experiment": "feature_selection_sweep",
+  "evaluation": {"horizons": [1]},
+  "feature_selection": {"selection_split": "test", "max_features": 10, "variants": ["QR1"]}
+}

@@ -1,0 +1,35 @@
+outdir/
+models/*
+!models/.gitkeep
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+*.partial.npy
+# Do not redistribute a private NetMHCpan installation or model archive.
+netMHCpan*/
+netmhcpan*/
+tools/
+*.tar.gz
+
+# External reference data and MHCflurry resources are not release artifacts.
+data/
+model_data/
+*.download
+HLA_pos9mers.txt
+MHC_pseudo_HLA_only.dat
+unique_hla_allotypes.txt
+HLA_9mer_test.txt
+
+# Internal implementation records are maintained outside the release.
+STATUS.md
+FEEDBACK.md
+results/S[0-9]*/
+
+# Publish only final images and captions from experiment outputs.
+results/*.csv
+results/*.npz
+results/*.npy
+results/*.json
+*.pt
+*.pth
+*.ckpt

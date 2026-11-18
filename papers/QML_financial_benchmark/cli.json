@@ -1,0 +1,113 @@
+{
+  "description": "QML vs classical financial benchmark (arXiv:2601.03802): directional classification, live trading, volatility forecasting",
+  "arguments": [
+    {
+      "flags": [
+        "--ticker"
+      ],
+      "help": "Task 1 ticker, e.g. KCHOL.IS, AAPL or ^GSPC (directional.dataset.ticker)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "directional.dataset.ticker"
+      }
+    },
+    {
+      "flags": [
+        "--feature-timing"
+      ],
+      "help": "Task 1 3-D indicator timing: lagged (no look-ahead) or same_day (leakage diagnostic)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "directional.dataset.feature_timing"
+      }
+    },
+    {
+      "flags": [
+        "--regime"
+      ],
+      "help": "Task 2 S&P 500 regime: F1, F2, F3 or F4 (trading.dataset.regime)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "trading.dataset.regime"
+      }
+    },
+    {
+      "flags": [
+        "--split-mode"
+      ],
+      "help": "Task 2 split: history_then_regime (Fig. 6) or within_regime (text, 70/10/10/10 inside the regime)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "trading.dataset.split_mode"
+      }
+    },
+    {
+      "flags": [
+        "--vol-ticker"
+      ],
+      "help": "Task 3 ticker: ^GSPC, AAPL, GARAN.IS or KCHOL.IS (volatility.dataset.ticker)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "volatility.dataset.ticker"
+      }
+    },
+    {
+      "flags": [
+        "--num-threads"
+      ],
+      "help": "torch intra-op threads for this run",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "num_threads"
+      }
+    },
+    {
+      "flags": [
+        "--sweep-id"
+      ],
+      "help": "Sweep identifier recorded in run_status.json (set by utils/sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "sweep_id"
+      }
+    },
+    {
+      "flags": [
+        "--candidate"
+      ],
+      "help": "Candidate label recorded in run_status.json (set by utils/sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "candidate"
+      }
+    },
+    {
+      "flags": [
+        "--repetition"
+      ],
+      "help": "Repetition index recorded in run_status.json (set by utils/sweep.py)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "repetition"
+      }
+    }
+  ]
+}

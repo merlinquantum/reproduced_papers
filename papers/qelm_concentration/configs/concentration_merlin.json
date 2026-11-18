@@ -1,0 +1,76 @@
+{
+  "description": "Phase 4 MerLin adaptation of E1b: variability over u ~ Unif(-1,1)^(m/2) of per-mode click and neighbour coincidence probabilities, for sizes (modes, photons) 8/2, 12/3, 16/4, 24/6 and 4/8/16 layers. Settings: Table I mapped (b, h, a_in through BS<->RX, PS<->RZ; no ZZ), balanced beam splitters (b = pi/4, h = pi/8, no disorder; the 50:50 analogue of the dual-unitary point), and a Haar-random interferometer per dynamics layer. 3 seeds, 256 inputs.",
+  "task": "concentration_merlin",
+  "merlin_reservoir": {
+    "n_modes": 8,
+    "n_photons": 2,
+    "n_layers": 4,
+    "encoding_period": 4,
+    "input_shift": 4,
+    "angle_scale": 2.0,
+    "chunk_size": 32
+  },
+  "dataset": {
+    "name": "uniform_inputs"
+  },
+  "concentration_merlin": {
+    "sizes": [
+      [
+        8,
+        2
+      ],
+      [
+        12,
+        3
+      ],
+      [
+        16,
+        4
+      ],
+      [
+        24,
+        6
+      ]
+    ],
+    "n_layers": [
+      4,
+      8,
+      16
+    ],
+    "reservoir_seeds": [
+      0,
+      1,
+      2
+    ],
+    "n_samples": 256,
+    "parameter_settings": {
+      "table_I_mapped": {
+        "kind": "brickwall",
+        "input_strength": 0.2,
+        "b_mean": 0.707,
+        "b_std": 0.031,
+        "h_mean": 0.683,
+        "h_std": 0.034,
+        "h_min": 0.1
+      },
+      "balanced": {
+        "kind": "brickwall",
+        "input_strength": 0.2,
+        "b_mean": 0.7853981633974483,
+        "b_std": 0.0,
+        "h_mean": 0.39269908169872414,
+        "h_std": 0.0,
+        "h_min": 0.1
+      },
+      "haar": {
+        "kind": "haar",
+        "input_strength": 0.2,
+        "b_mean": 0.707,
+        "b_std": 0.031,
+        "h_mean": 0.683,
+        "h_std": 0.034,
+        "h_min": 0.1
+      }
+    }
+  }
+}

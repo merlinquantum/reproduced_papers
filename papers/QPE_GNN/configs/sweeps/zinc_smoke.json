@@ -1,0 +1,19 @@
+{
+  "sweep_id": "zinc_smoke",
+  "description": "Smoke sweep for the remote machine: the four reduced ZINC configs, seed 0, 3 epochs, run 4 at a time, to check the coordinator, GPU placement, parameter counts and per-epoch time under parallel load before zinc_reduced.json.",
+  "machine": "reproduced-papers-1",
+  "max_epochs": 3,
+  "metric": "test_mae",
+  "direction": "minimize",
+  "split": "test (official ZINC 12k subset, 1,000 graphs)",
+  "checkpoint_rule": "model with the lowest validation MAE over the 3 epochs",
+  "aggregation": "single seed; smoke only, not a result",
+  "tie_rule": "not applied (one seed)",
+  "selection_rule": "none",
+  "entries": [
+    {"name": "zinc_rrwp", "config": "configs/zinc_rrwp_reduced.json", "seeds": [0], "extra_args": ["--epochs", "3", "--warmup-epochs", "1", "--checkpoint-every", "1"]},
+    {"name": "zinc_cqrw1", "config": "configs/zinc_cqrw1_reduced.json", "seeds": [0], "extra_args": ["--epochs", "3", "--warmup-epochs", "1", "--checkpoint-every", "1"]},
+    {"name": "zinc_qirw2", "config": "configs/zinc_qirw2_reduced.json", "seeds": [0], "extra_args": ["--epochs", "3", "--warmup-epochs", "1", "--checkpoint-every", "1"]},
+    {"name": "zinc_rrwp41", "config": "configs/zinc_rrwp41_reduced.json", "seeds": [0], "extra_args": ["--epochs", "3", "--warmup-epochs", "1", "--checkpoint-every", "1"]}
+  ]
+}

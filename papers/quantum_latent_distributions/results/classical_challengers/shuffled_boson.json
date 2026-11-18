@@ -1,0 +1,23 @@
+[
+  {
+    "target": "quantum",
+    "latent": "shuffled_boson",
+    "seed": 0,
+    "l1_nearest_int": 0.08155036717653275,
+    "mean_total": 7.892337322235107
+  },
+  {
+    "target": "quantum",
+    "latent": "shuffled_boson",
+    "seed": 1,
+    "l1_nearest_int": 0.07523578405380249,
+    "mean_total": 8.242412567138672
+  },
+  {
+    "target": "quantum",
+    "latent": "shuffled_boson",
+    "seed": 2,
+    "l1_nearest_int": 0.0753958523273468,
+    "mean_total": 8.306224822998047
+  }
+]

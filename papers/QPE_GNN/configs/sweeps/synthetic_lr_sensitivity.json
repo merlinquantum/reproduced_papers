@@ -1,0 +1,25 @@
+{
+  "sweep_id": "synthetic_lr_sensitivity",
+  "description": "Gap diagnosis for claim C3 (user approved 2026-11-08): the synthetic RRWP GatedGCN with the PR's cosine learning-rate decay, same 4 seeds, dataset, split and model as candidate synthetic_rrwp of sweep synthetic (constant lr). Compared against that candidate's runs.",
+  "machine": "reproduced-papers-1",
+  "max_epochs": 200,
+  "metric": "test_acc",
+  "direction": "maximize",
+  "split": "test (10% of the 800 generated graphs, split seed 1729)",
+  "checkpoint_rule": "model with the highest validation accuracy over the 200 epochs, evaluated once on the test split",
+  "aggregation": "per-seed values, mean and sample standard deviation over the four seeds",
+  "tie_rule": "descriptive diagnostic: report per seed whether the run leaves chance (test accuracy above 0.6) and the first epoch with validation accuracy >= 0.95, next to the constant-lr runs of the same seed",
+  "selection_rule": "none",
+  "entries": [
+    {
+      "name": "synthetic_rrwp_cosine",
+      "config": "configs/synthetic_rrwp_cosine.json",
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ]
+    }
+  ]
+}

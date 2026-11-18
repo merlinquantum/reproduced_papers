@@ -1,0 +1,21 @@
+{
+  "description": "Phase 4 MerLin ADAPTATION (not the paper's model): 6 modes, N photons (default 2; --n-photons 3), U-z-U-z-U re-uploading, threshold detection with collision-free postselection; group readout P_k(+1) = 1/4 + 3/4 n_(G_k) / N (bias exact; provably noncontextual). Protocol paper, author training data, Adam lr 1e-3, 2000 steps.",
+  "experiment": {
+    "id": "fig8_photonic_group_merlin"
+  },
+  "data": {
+    "protocol": "paper"
+  },
+  "model": {
+    "kind": "photonic_merlin",
+    "readout": "group",
+    "n_photons": 2,
+    "layers": 2
+  },
+  "training": {
+    "steps": 2000,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "l2": 0.0
+  }
+}

@@ -1,0 +1,257 @@
+"""Speedup table and figure for the MMD-loss backend benchmark (utils/benchmark_mmd_backends.py).
+
+Usage (from the paper folder)::
+
+    python utils/plot_mmd_backends.py <label> --photons <run_dir> [<run_dir> ...] --modes <run_dir> [...]
+
+Several runs per sweep are merged (e.g. a main run plus an extension with more SLOS points); when
+two runs share a (route, m, n) point the record of the first run listed is kept.
+
+Reads each run's run_status.json and metrics.json (no logs). For every (m, n) and route:
+equal-precision time t* (time to estimate the loss with standard error eps = rel_eps * |L|; exact
+SLOS needs one evaluation) and the JAX speedup t*_route / t*_JAX; for the routes with a gradient
+(JAX, SLOS) also the forward+backward time and its speedup. Writes
+results/mmd_backend_benchmark_<label>.{json,md,png,pdf} and copies the figure into the first run.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+from plot_common import RESULTS_DIR, SERIES, TEXT, plt, save, style_axes
+
+ROUTES = {
+    "jax_gurvits": ("JAX Gurvits (this reproduction)", SERIES["model"][1], "o"),
+    "pe_gurvits": ("photonic_engines Gurvits estimator", SERIES["b5"][1], "s"),
+    "pe_slos_exact": ("photonic_engines SLOS (exact)", SERIES["rbm"][1], "^"),
+    "pe_sampler": ("photonic_engines Clifford sampler", SERIES["random"][1], "D"),
+}
+
+
+def load(run_dir: Path) -> dict:
+    status = json.loads((run_dir / "run_status.json").read_text())
+    if status["status"] != "COMPLETED":
+        raise ValueError(f"{run_dir.name} is {status['status']}")
+    return {
+        "run": run_dir.name,
+        "status": status,
+        **json.loads((run_dir / "metrics.json").read_text()),
+    }
+
+
+def use_exact_reference(records: list[dict], xkey: str, rel_eps: float) -> None:
+    """Where any merged run computed the exact SLOS loss, use it as the reference for every route
+    at that point: eps = rel_eps * |L_exact|, t* and z recomputed (runs merged from a main sweep and
+    an SLOS extension otherwise disagree on the reference)."""
+    exact = {r[xkey]: r["loss_mean"] for r in records if r["route"] == "pe_slos_exact"}
+    for r in records:
+        if r[xkey] not in exact:
+            continue
+        L = exact[r[xkey]]
+        r["loss_ref"], r["loss_ref_is_exact"], r["eps"] = L, True, rel_eps * abs(L)
+        if r["route"] == "pe_slos_exact":
+            r["seconds_at_eps"], r["z_vs_exact"] = r["seconds_forward"], None
+        else:
+            r["seconds_at_eps"] = r["seconds_forward"] * max(
+                1.0, (r["loss_se"] / r["eps"]) ** 2
+            )
+            r["z_vs_exact"] = (r["loss_mean"] - L) / (
+                r["loss_se"] / r["repeats"] ** 0.5
+            )
+
+
+def speedups(records: list[dict], xkey: str) -> None:
+    """Add t*_route / t*_JAX (forward) and t_grad,route / t_grad,JAX to every record."""
+    jax_ref = {r[xkey]: r for r in records if r["route"] == "jax_gurvits"}
+    for r in records:
+        ref = jax_ref[r[xkey]]
+        r["jax_speedup_equal_precision"] = r["seconds_at_eps"] / ref["seconds_at_eps"]
+        # Gradient at equal precision: the loss's SE scaling is used as the precision proxy for the
+        # gradient of the stochastic routes (exact SLOS needs one evaluation).
+        for q in (r, ref):
+            if q["seconds_grad"]:
+                q["seconds_grad_at_eps"] = q["seconds_grad"] * (
+                    1.0
+                    if q["route"] == "pe_slos_exact"
+                    else max(1.0, (q["loss_se"] / q["eps"]) ** 2)
+                )
+        r["jax_speedup_grad"] = (
+            r["seconds_grad_at_eps"] / ref["seconds_grad_at_eps"]
+            if r["seconds_grad"] and ref["seconds_grad"]
+            else None
+        )
+
+
+def fmt(x, spec=".3g"):
+    return "—" if x is None else format(x, spec)
+
+
+def main() -> None:
+    """Write the speedup tables and the two-sweep figure."""
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("label")
+    parser.add_argument("--photons", type=Path, nargs="+", required=True)
+    parser.add_argument("--modes", type=Path, nargs="+", required=True)
+    args = parser.parse_args()
+    runs = {}
+    for sweep, dirs in (("photons", args.photons), ("modes", args.modes)):
+        loaded = [load(d) for d in dirs]
+        seen, records = set(), []
+        for run in loaded:
+            for r in run["records"]:
+                key = (r["route"], r["m"], r["n"])
+                if key not in seen:
+                    seen.add(key)
+                    records.append(r)
+        runs[sweep] = {
+            "run": " + ".join(run["run"] for run in loaded),
+            "status": loaded[0]["status"],
+            "records": records,
+        }
+    env = runs["photons"]["status"]["environment"]
+    cfg = json.loads((args.photons[0] / "config_snapshot.json").read_text())
+
+    lines = [
+        f"# MMD-loss backends — {args.label}",
+        "",
+        f"Generated by `utils/plot_mmd_backends.py` from `{runs['photons']['run']}` and `{runs['modes']['run']}`. "
+        f"Device {env['device']}"
+        + (f" ({env['cuda_device']})" if env.get("cuda_device") else "")
+        + f"; torch {env['torch']}, jax {env['jax']}, merlin {env['merlin']}; complex128.",
+        "",
+        f"Task: one estimate of the paper's MMD² loss (Gaussian kernel σ = {cfg['sigma']}) for a Haar QCBM "
+        f"against {cfg['n_data']} boson-sampling data samples. Gurvits routes: K = {cfg['n_ops']} operators, "
+        f"Z = {cfg['n_z']} signs per estimate; sampler: {cfg['n_samples']} samples per estimate; "
+        f"{cfg['repeats']} repeats give the standard error (SE). Equal-precision time t* = t × (SE / ε)², "
+        f"ε = {cfg['rel_eps']:g} × |L| (L exact from SLOS where it ran, else the JAX mean); exact SLOS: one "
+        "evaluation. **JAX speedup = t*(route) / t*(JAX)**: > 1 means JAX is faster. Gradient: forward + "
+        "backward time (JAX and SLOS only; the photonic_engines Gurvits estimator and sampler have no "
+        "autograd). z = (mean − exact) / SE of the mean.",
+        "",
+    ]
+    fig, axes = plt.subplots(2, 2, figsize=(12, 8.5))
+    for row, (sweep, xkey, xlabel) in enumerate(
+        (("photons", "n", "photons n"), ("modes", "m", "modes m"))
+    ):
+        recs = runs[sweep]["records"]
+        use_exact_reference(recs, xkey, cfg["rel_eps"])
+        speedups(recs, xkey)
+        fixed = "m" if sweep == "photons" else "n"
+        fixed_value = ", ".join(str(v) for v in sorted({r[fixed] for r in recs}))
+        for col, (key, ylabel) in enumerate(
+            (
+                ("seconds_forward", "seconds per single loss estimate (raw)"),
+                (
+                    "jax_speedup_equal_precision",
+                    "JAX speedup over route (equal precision)",
+                ),
+            )
+        ):
+            ax = axes[row][col]
+            style_axes(ax)
+            for route, (label, color, marker) in ROUTES.items():
+                pts = sorted((r[xkey], r[key]) for r in recs if r["route"] == route)
+                if not pts or (col == 1 and route == "jax_gurvits"):
+                    continue
+                ax.plot(
+                    *zip(*pts),
+                    "-",
+                    color=color,
+                    marker=marker,
+                    markersize=5,
+                    linewidth=2,
+                    label=label,
+                )
+            if col == 0:
+                for route in ("jax_gurvits", "pe_slos_exact"):
+                    label, color, marker = ROUTES[route]
+                    pts = sorted(
+                        (r[xkey], r["seconds_grad"])
+                        for r in recs
+                        if r["route"] == route and r["seconds_grad"]
+                    )
+                    if pts:
+                        ax.plot(
+                            *zip(*pts),
+                            "--",
+                            color=color,
+                            marker=marker,
+                            markersize=4,
+                            linewidth=1.5,
+                            label=f"{label.split(' (')[0]}: forward + gradient",
+                        )
+            else:
+                ax.axhline(1.0, color=TEXT, linewidth=0.8, linestyle=":")
+                pts = sorted(
+                    (r[xkey], r["jax_speedup_grad"])
+                    for r in recs
+                    if r["route"] == "pe_slos_exact" and r["jax_speedup_grad"]
+                )
+                if pts:
+                    ax.plot(
+                        *zip(*pts),
+                        "--",
+                        color=ROUTES["pe_slos_exact"][1],
+                        marker="^",
+                        markersize=4,
+                        linewidth=1.5,
+                        label="photonic_engines SLOS: forward + gradient",
+                    )
+            ax.set_xscale("log", base=2)
+            ax.set_yscale("log")
+            ax.set_xlabel(xlabel, color=TEXT, fontsize=9)
+            ax.set_ylabel(ylabel, color=TEXT, fontsize=9)
+            ax.set_title(
+                f"{'photon' if sweep == 'photons' else 'mode'} sweep at {fixed} = {fixed_value}",
+                fontsize=9,
+                color=TEXT,
+            )
+        lines += [
+            f"## {sweep.capitalize()} sweep ({fixed} = {fixed_value})",
+            "",
+            f"| {xkey} | output states | exact L (SLOS) | route | t per estimate (s) | SE | t* at ε (s) "
+            "| **JAX speedup (equal precision)** | t forward+grad (s) | JAX speedup (gradient, equal precision) | z vs exact |",
+            "|---:|---:|---:|---|---:|---:|---:|---:|---:|---:|---:|",
+        ]
+        for r in sorted(recs, key=lambda r: (r[xkey], list(ROUTES).index(r["route"]))):
+            exact = fmt(r["loss_ref"], ".4e") if r["loss_ref_is_exact"] else "—"
+            lines.append(
+                f"| {r[xkey]} | {r['states']:,} | {exact} | {r['route']} | {fmt(r['seconds_forward'])} | "
+                f"{fmt(r['loss_se'], '.2e')} | {fmt(r['seconds_at_eps'])} | **{fmt(r['jax_speedup_equal_precision'])}** | "
+                f"{fmt(r['seconds_grad'])} | {fmt(r['jax_speedup_grad'])} | {fmt(r['z_vs_exact'], '.2f')} |"
+            )
+        lines.append("")
+    handles, labels = [], []
+    for ax in axes.flat:
+        for h, lab in zip(*ax.get_legend_handles_labels()):
+            if lab not in labels:
+                handles.append(h)
+                labels.append(lab)
+    fig.legend(
+        handles,
+        labels,
+        loc="lower center",
+        ncol=3,
+        frameon=False,
+        fontsize=8,
+        bbox_to_anchor=(0.5, -0.05),
+    )
+    fig.suptitle(
+        f"Estimating the paper's MMD² loss: JAX Gurvits vs MerLin photonic_engines routes ({args.label})\n"
+        "left: raw time of one loss estimate · right: JAX speedup over each route at equal precision (SE = 1% of |L|; > 1: JAX faster)",
+        fontsize=10,
+        color=TEXT,
+    )
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    RESULTS_DIR.mkdir(exist_ok=True)
+    stem = f"mmd_backend_benchmark_{args.label}"
+    (RESULTS_DIR / f"{stem}.json").write_text(json.dumps(runs, indent=2))
+    (RESULTS_DIR / f"{stem}.md").write_text("\n".join(lines))
+    paths = save(fig, args.photons[0], stem)
+    print(RESULTS_DIR / f"{stem}.md", paths[-1])
+
+
+if __name__ == "__main__":
+    main()

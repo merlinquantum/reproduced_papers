@@ -1,0 +1,17 @@
+{
+  "description": "E1 / Fig. 2a: FF QNN (simple FM) on Omega_d = {1, 2, 3}; N = 3, L = 4, 2000 iterations, b_s = 1, lr 1e-3 (App. B; N = 3 per LOG.md A1).",
+  "dataset": {
+    "frequencies": [
+      1.0,
+      2.0,
+      3.0
+    ]
+  },
+  "model": {
+    "frequency_mode": "fixed"
+  },
+  "training": {
+    "iterations": 2000,
+    "batch_size": 1
+  }
+}

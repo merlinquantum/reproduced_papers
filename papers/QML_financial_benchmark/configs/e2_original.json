@@ -1,0 +1,11 @@
+{
+  "description": "E2 (Table X): 7-D cross-asset features (same-day APAC/EU returns, lagged DJI/NYA) predicting the S&P 500. QNN on 7 qubits, angle encoding.",
+  "directional": {
+    "dataset": {"feature_set": "7d", "ticker": "^GSPC"},
+    "models": {
+      "qnn": {"families": ["SQ", "MQ", "Hybrid-SQ", "Hybrid-MQ"], "n_qubits": [7], "layers": [1, 2, 3, 4, 5, 6]},
+      "ann": {"hidden_layer_options": [[4], [8], [11], [16], [32], [64], [8, 4], [16, 8], [32, 16], [64, 32]], "minmax_inputs": true}
+    },
+    "training": {"max_epochs": 300}
+  }
+}

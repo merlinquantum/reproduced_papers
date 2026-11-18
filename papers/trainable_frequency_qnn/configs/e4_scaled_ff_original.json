@@ -1,0 +1,17 @@
+{
+  "description": "E4 (Sec. V text): FF QNN on Omega_d = {1.5, 3, 4.5}; the paper says FF fits it given a global scale. Same settings as Fig. 2b.",
+  "dataset": {
+    "frequencies": [
+      1.5,
+      3.0,
+      4.5
+    ]
+  },
+  "training": {
+    "iterations": 6000,
+    "batch_size": 2
+  },
+  "model": {
+    "frequency_mode": "fixed"
+  }
+}

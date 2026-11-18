@@ -1,0 +1,44 @@
+{
+    "sweep_id": "noise_study_merlin",
+    "description": "Phase 04 M3: QCBM and B5 trained on small BS data (m=12 n=3, m=16 n=4), exact noisy MerLin evaluation; local CPU; seeds 0-4.",
+    "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ],
+    "candidates": [
+        {
+            "label": "qcbm_m12",
+            "config": "configs/noise_study_bs_m12_merlin.json",
+            "overrides": {}
+        },
+        {
+            "label": "b5_m12",
+            "config": "configs/noise_study_bs_m12_merlin.json",
+            "overrides": {
+                "model.photon_model": "distinguishable"
+            }
+        },
+        {
+            "label": "qcbm_m16",
+            "config": "configs/noise_study_bs_m16_merlin.json",
+            "overrides": {}
+        },
+        {
+            "label": "b5_m16",
+            "config": "configs/noise_study_bs_m16_merlin.json",
+            "overrides": {
+                "model.photon_model": "distinguishable"
+            }
+        }
+    ],
+    "metric": "primary: sample_metrics.model.walsh_mmd and test_mmd_estimator, compared with the Phase 03 JAX sweep (|\u0394mean| \u2264 2 SE); M3: noise_study[].exact_mmd",
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final parameters",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "within 2 standard errors = preserved / not separated",
+    "selection": "none (comparison sweep)"
+}

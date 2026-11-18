@@ -1,0 +1,11 @@
+{
+  "description": "Phase 4 MerLin adaptation of E3 with the Table V timing (not the paper's method): hybrid photonic QNN (Linear 64 -> m phases; SQ'/MQ' readout) on m in {6, 8} modes, n in {2, 3} photons, L in {1, 2} re-uploads, UNBUNCHED probabilities; paired with the Phase 3 ANN grid. Same data, folds, training and selection as e3_table_v (default AAPL).",
+  "directional": {
+    "dataset": {"feature_set": "64d", "ticker": "AAPL", "feature_timing": "table_v"},
+    "models": {
+      "qnn": {"backend": "merlin", "families": ["Hybrid-SQ", "Hybrid-MQ"], "n_modes": [6, 8], "n_photons": [2, 3], "layers": [1, 2], "angle_scale": 3.141592653589793},
+      "ann": {"hidden_layer_options": [[4], [8], [11], [16], [32], [64], [8, 4], [16, 8], [32, 16], [64, 32]], "minmax_inputs": true}
+    },
+    "training": {"max_epochs": 300}
+  }
+}

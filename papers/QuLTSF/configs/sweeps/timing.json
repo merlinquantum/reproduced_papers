@@ -1,0 +1,75 @@
+{
+  "description": "Timing probe: 2 epochs of QuLTSF, Linear, NLinear and DLinear at L=336, T=96 with 4 parallel workers on the L4.",
+  "sweep_id": "timing",
+  "max_epochs": 2,
+  "entries": [
+    {
+      "name": "qultsf",
+      "config": "configs/table1_qultsf_original.json",
+      "seeds": [
+        2021
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96
+      ],
+      "extra_args": [
+        "--epochs",
+        "2"
+      ]
+    },
+    {
+      "name": "linear",
+      "config": "configs/table1_linear_classical.json",
+      "seeds": [
+        2021
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96
+      ],
+      "extra_args": [
+        "--epochs",
+        "2"
+      ]
+    },
+    {
+      "name": "nlinear",
+      "config": "configs/table1_nlinear_classical.json",
+      "seeds": [
+        2021
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96
+      ],
+      "extra_args": [
+        "--epochs",
+        "2"
+      ]
+    },
+    {
+      "name": "dlinear",
+      "config": "configs/table1_dlinear_classical.json",
+      "seeds": [
+        2021
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96
+      ],
+      "extra_args": [
+        "--epochs",
+        "2"
+      ]
+    }
+  ]
+}

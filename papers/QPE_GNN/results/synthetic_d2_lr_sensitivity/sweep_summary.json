@@ -1,0 +1,54 @@
+{
+  "candidates": [
+    {
+      "best_epochs": [
+        2,
+        64,
+        1,
+        1
+      ],
+      "candidate": "synthetic_rrwp_cosine",
+      "config": "configs/synthetic_rrwp_cosine.json",
+      "epochs": 200,
+      "expected_runs": 4,
+      "mean": 0.4937499985098839,
+      "mean_wall_clock_s": 132.06291246414185,
+      "missing_seeds": [],
+      "num_params": 7074,
+      "observed_runs": 4,
+      "resumed_runs": [],
+      "run_dirs": [
+        "synthetic_rrwp_cosine_seed0/run_20261109-085814",
+        "synthetic_rrwp_cosine_seed1/run_20261109-085814",
+        "synthetic_rrwp_cosine_seed2/run_20261109-085814",
+        "synthetic_rrwp_cosine_seed3/run_20261109-085814"
+      ],
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "status": "COMPLETE",
+      "std": 0.037500008940696716,
+      "values": [
+        0.4749999940395355,
+        0.550000011920929,
+        0.4749999940395355,
+        0.4749999940395355
+      ]
+    }
+  ],
+  "code_commit": "6c8861e93f56fccec9add8c3ac40c5084dbcf7c1",
+  "code_dirty": true,
+  "comparisons": [],
+  "direction": "maximize",
+  "excluded_runs": [],
+  "expected_runs": 4,
+  "metric": "test_acc",
+  "observed_runs": 4,
+  "schema_version": 1,
+  "sweep_id": "synthetic_lr_sensitivity",
+  "tie_rule": "descriptive diagnostic: report per seed whether the run leaves chance (test accuracy above 0.6) and the first epoch with validation accuracy >= 0.95, next to the constant-lr runs of the same seed",
+  "verdict": "COMPLETE SWEEP"
+}

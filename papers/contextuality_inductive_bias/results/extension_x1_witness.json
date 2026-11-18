@@ -1,0 +1,55 @@
+{
+  "truth_eta_on_inputs": 1.0,
+  "models": {
+    "quantum (no bias, Fig. 10 CNOTs) L=1": {
+      "status": "n/a (no bias: Theorem 4.1 premise fails)"
+    },
+    "quantum (no bias, Fig. 10 CNOTs) L=2": {
+      "status": "n/a (no bias: Theorem 4.1 premise fails)"
+    },
+    "photonic MerLin (group readout, PNR) N=2": {
+      "n": 10,
+      "eta_mean": 0.335299894394112,
+      "eta_min": 0.30048239211001837,
+      "eta_max": 0.38897838401215085,
+      "contextual_runs": 0
+    },
+    "B3 bias-encoded MLP h=7": {
+      "n": 10,
+      "eta_mean": 0.1812676176043646,
+      "eta_min": 0.17759427486080243,
+      "eta_max": 0.18276954825506161,
+      "contextual_runs": 0
+    },
+    "B4 unbiased MLP h=9": {
+      "status": "n/a (no bias: Theorem 4.1 premise fails)"
+    },
+    "quantum (biased) L=1": {
+      "n": 10,
+      "eta_mean": 0.38619451730029103,
+      "eta_min": 0.3387563155386065,
+      "eta_max": 0.4800963494775023,
+      "contextual_runs": 0
+    },
+    "quantum (biased) L=2": {
+      "n": 10,
+      "eta_mean": 0.5176436491629987,
+      "eta_min": 0.3721000909145179,
+      "eta_max": 0.6393346274525452,
+      "contextual_runs": 0
+    },
+    "B2 bias-encoded Fourier L=1": {
+      "n": 10,
+      "eta_mean": 0.2518569342021521,
+      "eta_min": 0.2517881272928006,
+      "eta_max": 0.25225732878961626,
+      "contextual_runs": 0
+    },
+    "B5 quadratic (ceiling)": {
+      "status": "n/a (no bias: Theorem 4.1 premise fails)"
+    },
+    "surrogate L=1": {
+      "status": "n/a (no bias: Theorem 4.1 premise fails)"
+    }
+  }
+}

@@ -1,0 +1,333 @@
+{
+  "description": "Contextuality and inductive bias in QML (arXiv:2302.01365): RPS zero-sum-game experiments",
+  "arguments": [
+    {
+      "flags": [
+        "--task"
+      ],
+      "help": "Experiment task",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.task"
+      },
+      "choices": [
+        "train",
+        "theory_lp"
+      ]
+    },
+    {
+      "flags": [
+        "--model"
+      ],
+      "help": "Model class",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.kind"
+      },
+      "choices": [
+        "biased_quantum",
+        "generic_quantum",
+        "surrogate",
+        "photonic_merlin",
+        "bias_fourier",
+        "mlp_biased",
+        "mlp_unbiased",
+        "quadratic"
+      ]
+    },
+    {
+      "flags": [
+        "--layers"
+      ],
+      "help": "Quantum data re-uploading layers L",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.layers"
+      }
+    },
+    {
+      "flags": [
+        "--blocks"
+      ],
+      "help": "Quantum blocks per trainable unitary B",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.blocks"
+      }
+    },
+    {
+      "flags": [
+        "--zz-repetitions"
+      ],
+      "help": "Biased model: ZZ applications per block (1 = Fig. 7, 3 = author code)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.zz_repetitions"
+      }
+    },
+    {
+      "flags": [
+        "--cnot-pattern"
+      ],
+      "help": "Generic model entangler",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.cnot_pattern"
+      },
+      "choices": [
+        "paper",
+        "code"
+      ]
+    },
+    {
+      "flags": [
+        "--spectrum"
+      ],
+      "help": "Surrogate frequency cut-off L",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.spectrum"
+      }
+    },
+    {
+      "flags": [
+        "--protocol"
+      ],
+      "help": "Input-scaling protocol (D12)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "data.protocol"
+      },
+      "choices": [
+        "paper",
+        "code",
+        "fork"
+      ]
+    },
+    {
+      "flags": [
+        "--train-source"
+      ],
+      "help": "Training data source",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "data.train.source"
+      },
+      "choices": [
+        "author",
+        "generated"
+      ]
+    },
+    {
+      "flags": [
+        "--train-seed"
+      ],
+      "help": "Seed of a generated training set",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "data.train.seed"
+      }
+    },
+    {
+      "flags": [
+        "--steps"
+      ],
+      "help": "Full-batch optimisation steps",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.steps"
+      }
+    },
+    {
+      "flags": [
+        "--optimizer"
+      ],
+      "help": "Optimiser",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.optimizer"
+      },
+      "choices": [
+        "adam",
+        "sgd"
+      ]
+    },
+    {
+      "flags": [
+        "--lr"
+      ],
+      "help": "Learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.lr"
+      }
+    },
+    {
+      "flags": [
+        "--l2"
+      ],
+      "help": "L2 penalty strength",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.l2"
+      }
+    },
+    {
+      "flags": [
+        "--eval-every"
+      ],
+      "help": "Evaluate the test KL every N steps",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "evaluation.every"
+      }
+    },
+    {
+      "flags": [
+        "--experiment-id"
+      ],
+      "help": "Experiment identifier recorded in the run status",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.id"
+      }
+    },
+    {
+      "flags": [
+        "--sweep-id"
+      ],
+      "help": "Sweep identifier (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.sweep_id"
+      }
+    },
+    {
+      "flags": [
+        "--run-id"
+      ],
+      "help": "Run identifier (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.run_id"
+      }
+    },
+    {
+      "flags": [
+        "--repetition"
+      ],
+      "help": "Repetition index inside a sweep",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.repetition"
+      }
+    },
+    {
+      "flags": [
+        "--readout"
+      ],
+      "help": "Photonic readout (MerLin adaptation)",
+      "type": "str",
+      "default": null,
+      "choices": [
+        "vertex",
+        "group",
+        "unbiased"
+      ],
+      "apply": {
+        "kind": "config_path",
+        "path": "model.readout"
+      }
+    },
+    {
+      "flags": [
+        "--n-photons"
+      ],
+      "help": "Photon number of the MerLin adaptation",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.n_photons"
+      }
+    },
+    {
+      "flags": [
+        "--computation-space"
+      ],
+      "help": "MerLin detection: unbunched (threshold, collision-free postselection) or fock (PNR, no postselection)",
+      "type": "str",
+      "default": null,
+      "choices": [
+        "unbunched",
+        "fock"
+      ],
+      "apply": {
+        "kind": "config_path",
+        "path": "model.computation_space"
+      }
+    },
+    {
+      "flags": [
+        "--hidden"
+      ],
+      "help": "Hidden width of the MLP baselines (B3, B4)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.hidden"
+      }
+    },
+    {
+      "flags": [
+        "--validation"
+      ],
+      "help": "Enable the labelled validation split (data seed 201) used for tuning",
+      "type": "bool",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "data.validation.enabled"
+      }
+    }
+  ]
+}

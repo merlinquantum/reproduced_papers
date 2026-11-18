@@ -1,0 +1,187 @@
+{
+  "description": "Distributed quantum reservoir computing (arXiv:2605.04991): one architecture grid for one seed",
+  "arguments": [
+    {
+      "flags": [
+        "--observable"
+      ],
+      "help": "Quantum neuron observable: z_all (Z on all 4 qubits) or z0 (Z on qubit 0); see R6",
+      "type": "str",
+      "choices": [
+        "z_all",
+        "z0"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "quantum_reservoir.observable"
+      }
+    },
+    {
+      "flags": [
+        "--update"
+      ],
+      "help": "Reservoir propagation order: synchronous or sequential; see R7",
+      "type": "str",
+      "choices": [
+        "synchronous",
+        "sequential"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "quantum_reservoir.update"
+      }
+    },
+    {
+      "flags": [
+        "--normalization"
+      ],
+      "help": "Min-max fit: train (fitted on train) or per_split (paper-faithful); see R3",
+      "type": "str",
+      "choices": [
+        "train",
+        "per_split"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.normalization"
+      }
+    },
+    {
+      "flags": [
+        "--artifact-handling"
+      ],
+      "help": "Zero/negative loads: keep (paper-faithful) or interpolate",
+      "type": "str",
+      "choices": [
+        "keep",
+        "interpolate"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.artifact_handling"
+      }
+    },
+    {
+      "flags": [
+        "--merge"
+      ],
+      "help": "Merge rule of distributed readout instances: mean or sum; see R12",
+      "type": "str",
+      "choices": [
+        "mean",
+        "sum"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "readout.merge"
+      }
+    },
+    {
+      "flags": [
+        "--noise-mapping"
+      ],
+      "help": "Noise device per component: paper (Table III) or one device name for all",
+      "type": "str",
+      "choices": [
+        "paper",
+        "ibm_brisbane",
+        "ibm_marrakesh",
+        "ionq_aria1"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "noise.mapping"
+      }
+    },
+    {
+      "flags": [
+        "--kernel-fit-subsample"
+      ],
+      "help": "Training points of the final kernel fit (none = full training split)",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "readout.kernel_fit_subsample"
+      }
+    },
+    {
+      "flags": [
+        "--reservoir-shots"
+      ],
+      "help": "Finite shots per expectation of the noisy quantum reservoir (none = exact)",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "quantum_reservoir.shots"
+      }
+    },
+    {
+      "flags": [
+        "--kernel-shots"
+      ],
+      "help": "Finite shots per entry of the noisy fidelity kernel (none = exact)",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "kernel.shots"
+      }
+    },
+    {
+      "flags": [
+        "--noise-scale"
+      ],
+      "help": "Multiply every App. B error rate (gap diagnosis; 1.0 = medians)",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "noise.scale"
+      }
+    },
+    {
+      "flags": [
+        "--linear-intercept"
+      ],
+      "help": "Linear ridge with an intercept (true) or the paper's Eq. 5 without bias (false)",
+      "type": "bool",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "readout.linear_intercept"
+      }
+    },
+    {
+      "flags": [
+        "--neuron-scale"
+      ],
+      "help": "Angle-encoding scale of the photonic neuron chips (MerLin adaptation)",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "photonic.neuron_scale"
+      }
+    },
+    {
+      "flags": [
+        "--kernel-scale"
+      ],
+      "help": "Angle-encoding scale of the photonic fidelity kernel (MerLin adaptation)",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "photonic.kernel_scale"
+      }
+    }
+  ]
+}

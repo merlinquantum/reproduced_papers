@@ -1,0 +1,31 @@
+{
+    "description": "E4 classical baselines (Fair Baseline Plan iv): 2-4-1 MLP (17 parameters); set classical.kind='logistic' for the linear floor. Learning rate selected on a 20% validation split of the training set, then refit on all 200 points; full-batch Adam, 150 iterations.",
+    "experiment": {
+        "task": "classical_classifier",
+        "id": "e4_vqc_classical"
+    },
+    "classical": {
+        "kind": "mlp",
+        "lr_grid": [
+            0.001,
+            0.01,
+            0.1
+        ],
+        "validation_fraction": 0.2
+    },
+    "data": {
+        "source": "generated",
+        "file": null,
+        "n_train": 200,
+        "n_test": 100,
+        "seed_data": 1,
+        "boundary_gap": 0.0,
+        "batch_size": null
+    },
+    "training": {
+        "iterations": 150,
+        "lr": 0.01,
+        "scheduler_factor": null,
+        "scheduler_patience": null
+    }
+}

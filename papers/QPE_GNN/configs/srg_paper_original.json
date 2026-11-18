@@ -1,0 +1,10 @@
+{
+  "description": "Section 4.3 experiment on all 25 paper SRGs with five isomorphic controls per graph. Catalogs are read from <data_root>/QPE_GNN/srg/ (relative srg_data_directory).",
+  "experiment": "srg_paper",
+  "srg_data_directory": "srg",
+  "evolution_time": 1.0,
+  "rrwp_steps": 20,
+  "isomorphic_permutations": 5,
+  "tolerance": 1e-09,
+  "seed": 0
+}

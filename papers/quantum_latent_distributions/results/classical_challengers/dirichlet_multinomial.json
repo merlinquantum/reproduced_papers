@@ -1,0 +1,23 @@
+[
+  {
+    "target": "quantum",
+    "latent": "dirichlet_multinomial",
+    "seed": 0,
+    "l1_nearest_int": 0.055885180830955505,
+    "mean_total": 8.063639640808105
+  },
+  {
+    "target": "quantum",
+    "latent": "dirichlet_multinomial",
+    "seed": 1,
+    "l1_nearest_int": 0.052610449492931366,
+    "mean_total": 7.878661155700684
+  },
+  {
+    "target": "quantum",
+    "latent": "dirichlet_multinomial",
+    "seed": 2,
+    "l1_nearest_int": 0.06688336282968521,
+    "mean_total": 8.187457084655762
+  }
+]

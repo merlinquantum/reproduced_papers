@@ -1,3 +1,6 @@
+# QORC uses `match` (Python 3.10+); without a target, recent Ruff assumes a newer
+# Python and suggests 3.11-only rewrites such as `datetime.UTC`.
+target-version = "py310"
 
 [lint]
 ignore = ["UP032", "E741"]

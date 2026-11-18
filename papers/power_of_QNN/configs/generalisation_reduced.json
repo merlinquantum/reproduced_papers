@@ -1,0 +1,58 @@
+{
+  "description": "E-06 reduced: as generalisation_original with 2e4 epochs and 3 runs per fraction. Partial, not paper-accurate.",
+  "experiment": {
+    "name": "generalisation_reduced",
+    "kind": "generalisation"
+  },
+  "dataset": {
+    "name": "blobs",
+    "batch_size": null
+  },
+  "training": {
+    "iterations": 20000,
+    "lr": 0.01,
+    "seeds": {
+      "start": 0,
+      "count": 3
+    },
+    "finite_difference_step": 1e-10,
+    "log_every": 500,
+    "loss_threshold": 0.01,
+    "fisher_rao": false,
+    "fisher_chunk_size": 100
+  },
+  "models": [
+    {
+      "name": "classical_6_110_2",
+      "type": "classical",
+      "sizes": [
+        6,
+        110,
+        2
+      ],
+      "activation": "leaky_relu",
+      "head": "softmax",
+      "bias": false,
+      "training": {
+        "optimizer": "torch_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": 0.0,
+          "high": 1.0
+        }
+      }
+    }
+  ],
+  "generalisation": {
+    "randomised_fractions": [
+      0.0,
+      0.1,
+      0.2,
+      0.3,
+      0.4
+    ],
+    "label_seed_base": 1000,
+    "n_value": 100000000,
+    "loss_stride": 100
+  }
+}

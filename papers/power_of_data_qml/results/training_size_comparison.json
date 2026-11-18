@@ -1,0 +1,202 @@
+[
+  {
+    "n": 10,
+    "train_size": 100,
+    "quantum_kernel_ours": 0.09538631368089978,
+    "projected_quantum_kernel_ours": 0.04542684488552603,
+    "best_classical_ours": 0.06359383709558435,
+    "quantum_kernel_paper": 0.15945392313967174,
+    "projected_quantum_kernel_paper": 0.0606231467632573,
+    "best_classical_paper": 0.09865290412518114
+  },
+  {
+    "n": 10,
+    "train_size": 200,
+    "quantum_kernel_ours": 0.07764325122680074,
+    "projected_quantum_kernel_ours": 0.03673375078023493,
+    "best_classical_ours": 0.05235783570316277,
+    "quantum_kernel_paper": 0.14398690793478028,
+    "projected_quantum_kernel_paper": 0.051030393453599256,
+    "best_classical_paper": 0.08117189606180236
+  },
+  {
+    "n": 10,
+    "train_size": 400,
+    "quantum_kernel_ours": 0.06343479390298944,
+    "projected_quantum_kernel_ours": 0.029688221563435202,
+    "best_classical_ours": 0.04288537569481039,
+    "quantum_kernel_paper": 0.12884898021826255,
+    "projected_quantum_kernel_paper": 0.04805287501755082,
+    "best_classical_paper": 0.07018654527477286
+  },
+  {
+    "n": 10,
+    "train_size": 800,
+    "quantum_kernel_ours": 0.04966212775673488,
+    "projected_quantum_kernel_ours": 0.02518705138968485,
+    "best_classical_ours": 0.035453223875450475,
+    "quantum_kernel_paper": 0.11391287872339662,
+    "projected_quantum_kernel_paper": 0.044089240353824596,
+    "best_classical_paper": 0.06206677387808753
+  },
+  {
+    "n": 10,
+    "train_size": 1600,
+    "quantum_kernel_ours": 0.03781030722653049,
+    "projected_quantum_kernel_ours": 0.020948511458380444,
+    "best_classical_ours": 0.028802599227996894,
+    "quantum_kernel_paper": 0.10038952868965505,
+    "projected_quantum_kernel_paper": 0.04140376911271667,
+    "best_classical_paper": 0.05325899591251266
+  },
+  {
+    "n": 11,
+    "train_size": 100,
+    "quantum_kernel_ours": 0.1098331752914948,
+    "projected_quantum_kernel_ours": 0.04141082630131804,
+    "best_classical_ours": 0.06714611992338383,
+    "quantum_kernel_paper": 0.1802177857067693,
+    "projected_quantum_kernel_paper": 0.05989364787535118,
+    "best_classical_paper": 0.09857421625164883
+  },
+  {
+    "n": 11,
+    "train_size": 200,
+    "quantum_kernel_ours": 0.09475044292805607,
+    "projected_quantum_kernel_ours": 0.03427414026576714,
+    "best_classical_ours": 0.056216724216922774,
+    "quantum_kernel_paper": 0.16392622415885533,
+    "projected_quantum_kernel_paper": 0.0518046387209183,
+    "best_classical_paper": 0.08025567614797456
+  },
+  {
+    "n": 11,
+    "train_size": 400,
+    "quantum_kernel_ours": 0.08051616847213552,
+    "projected_quantum_kernel_ours": 0.02835404343917758,
+    "best_classical_ours": 0.04599306019775166,
+    "quantum_kernel_paper": 0.14978847149650595,
+    "projected_quantum_kernel_paper": 0.047008920251618604,
+    "best_classical_paper": 0.06922046848802207
+  },
+  {
+    "n": 11,
+    "train_size": 800,
+    "quantum_kernel_ours": 0.06486535042883401,
+    "projected_quantum_kernel_ours": 0.023292272257683884,
+    "best_classical_ours": 0.03719666997873931,
+    "quantum_kernel_paper": 0.1357179453908587,
+    "projected_quantum_kernel_paper": 0.042837109256248604,
+    "best_classical_paper": 0.05915113557089473
+  },
+  {
+    "n": 11,
+    "train_size": 1600,
+    "quantum_kernel_ours": 0.05141791088568317,
+    "projected_quantum_kernel_ours": 0.01935304933890746,
+    "best_classical_ours": 0.030160869220391552,
+    "quantum_kernel_paper": 0.11996187072952937,
+    "projected_quantum_kernel_paper": 0.04079541376642804,
+    "best_classical_paper": 0.053310762423292316
+  },
+  {
+    "n": 12,
+    "train_size": 100,
+    "quantum_kernel_ours": 0.11124655146977554,
+    "projected_quantum_kernel_ours": 0.04582273605556035,
+    "best_classical_ours": 0.06918197331056804,
+    "quantum_kernel_paper": 0.16888865593876798,
+    "projected_quantum_kernel_paper": 0.06068202714614052,
+    "best_classical_paper": 0.10003655470900957
+  },
+  {
+    "n": 12,
+    "train_size": 200,
+    "quantum_kernel_ours": 0.0969829105314797,
+    "projected_quantum_kernel_ours": 0.037586995138228926,
+    "best_classical_ours": 0.057575788520692464,
+    "quantum_kernel_paper": 0.15271449066286502,
+    "projected_quantum_kernel_paper": 0.04991046409978716,
+    "best_classical_paper": 0.08054008737255693
+  },
+  {
+    "n": 12,
+    "train_size": 400,
+    "quantum_kernel_ours": 0.08357979905344695,
+    "projected_quantum_kernel_ours": 0.031147824612216667,
+    "best_classical_ours": 0.04837103200440747,
+    "quantum_kernel_paper": 0.14196349951779835,
+    "projected_quantum_kernel_paper": 0.046863233678887464,
+    "best_classical_paper": 0.06881351170088806
+  },
+  {
+    "n": 12,
+    "train_size": 800,
+    "quantum_kernel_ours": 0.0697932556358212,
+    "projected_quantum_kernel_ours": 0.02510311592009649,
+    "best_classical_ours": 0.03947671695152129,
+    "quantum_kernel_paper": 0.12939414005027824,
+    "projected_quantum_kernel_paper": 0.04322589453717742,
+    "best_classical_paper": 0.05984592577941975
+  },
+  {
+    "n": 12,
+    "train_size": 1600,
+    "quantum_kernel_ours": 0.05756191045714547,
+    "projected_quantum_kernel_ours": 0.02088848737712598,
+    "best_classical_ours": 0.03322787026501498,
+    "quantum_kernel_paper": 0.11670585750102713,
+    "projected_quantum_kernel_paper": 0.040090511518505546,
+    "best_classical_paper": 0.050898881125318984
+  },
+  {
+    "n": 13,
+    "train_size": 100,
+    "quantum_kernel_ours": 0.10896286533763697,
+    "projected_quantum_kernel_ours": 0.04722438224586108,
+    "best_classical_ours": 0.0726861784546055,
+    "quantum_kernel_paper": 0.1703532909045133,
+    "projected_quantum_kernel_paper": 0.056939750089640674,
+    "best_classical_paper": 0.09887591368158452
+  },
+  {
+    "n": 13,
+    "train_size": 200,
+    "quantum_kernel_ours": 0.09711606869529868,
+    "projected_quantum_kernel_ours": 0.041117310059446605,
+    "best_classical_ours": 0.06073802115954883,
+    "quantum_kernel_paper": 0.15623929021938884,
+    "projected_quantum_kernel_paper": 0.04989113344159017,
+    "best_classical_paper": 0.07749793301991666
+  },
+  {
+    "n": 13,
+    "train_size": 400,
+    "quantum_kernel_ours": 0.08547903488574117,
+    "projected_quantum_kernel_ours": 0.03500498921211797,
+    "best_classical_ours": 0.051743801226811326,
+    "quantum_kernel_paper": 0.1445249410418165,
+    "projected_quantum_kernel_paper": 0.04574828154890836,
+    "best_classical_paper": 0.06475417244024828
+  },
+  {
+    "n": 13,
+    "train_size": 800,
+    "quantum_kernel_ours": 0.07229715862649273,
+    "projected_quantum_kernel_ours": 0.029656239677392178,
+    "best_classical_ours": 0.04420208026323991,
+    "quantum_kernel_paper": 0.13484747751434617,
+    "projected_quantum_kernel_paper": 0.042427439876931004,
+    "best_classical_paper": 0.057665884405380737
+  },
+  {
+    "n": 13,
+    "train_size": 1600,
+    "quantum_kernel_ours": 0.060654109642239676,
+    "projected_quantum_kernel_ours": 0.025135084841620275,
+    "best_classical_ours": 0.03747815752915557,
+    "quantum_kernel_paper": 0.12581436112115288,
+    "projected_quantum_kernel_paper": 0.03958106704396191,
+    "best_classical_paper": 0.05100679324222045
+  }
+]

@@ -1,0 +1,252 @@
+{
+  "description": "EXP-AMB stage A2 (label-free refinement): (i) input_scale {0.25,0.3,1/pi,0.35,0.4} x E3 structure {baseline, register n, time (n+1)/3, both}, E2 pair coefficient 2, PQK gamma 1; decided on QK d and g. (ii) PQK gamma scale {0.01,0.03,0.1,0.3} at input_scale {0.3,1/pi}, baseline structure; decided on PQK d and g. n=3-8, seeds 0-2. Predeclared rule: smallest mean relative error over n=3-8 per (quantity, embedding); ties within 0.02.",
+  "experiment": "convention_check",
+  "study": {
+    "embeddings": [
+      "E1",
+      "E2",
+      "E3"
+    ],
+    "system_sizes": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "components": [
+      "dimension_geometry"
+    ],
+    "cv_system_sizes": []
+  },
+  "models": {
+    "grid": "paper",
+    "protocols": [
+      "paper"
+    ],
+    "n_jobs": 8,
+    "include_polynomial_extension": false
+  },
+  "convention_check": {
+    "variants": [
+      {
+        "name": "scale0.25_baseline",
+        "conventions": {
+          "input_scale": 0.25
+        }
+      },
+      {
+        "name": "scale0.25_e3regn",
+        "conventions": {
+          "e3_register": "n",
+          "input_scale": 0.25
+        }
+      },
+      {
+        "name": "scale0.25_e3time",
+        "conventions": {
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.25
+        }
+      },
+      {
+        "name": "scale0.25_e3regn_e3time",
+        "conventions": {
+          "e3_register": "n",
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.25
+        }
+      },
+      {
+        "name": "scale0.3_baseline",
+        "conventions": {
+          "input_scale": 0.3
+        }
+      },
+      {
+        "name": "scale0.3_e3regn",
+        "conventions": {
+          "e3_register": "n",
+          "input_scale": 0.3
+        }
+      },
+      {
+        "name": "scale0.3_e3time",
+        "conventions": {
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.3
+        }
+      },
+      {
+        "name": "scale0.3_e3regn_e3time",
+        "conventions": {
+          "e3_register": "n",
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.3
+        }
+      },
+      {
+        "name": "scaleinvpi_baseline",
+        "conventions": {
+          "input_scale": 0.3183098861837907
+        }
+      },
+      {
+        "name": "scaleinvpi_e3regn",
+        "conventions": {
+          "e3_register": "n",
+          "input_scale": 0.3183098861837907
+        }
+      },
+      {
+        "name": "scaleinvpi_e3time",
+        "conventions": {
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.3183098861837907
+        }
+      },
+      {
+        "name": "scaleinvpi_e3regn_e3time",
+        "conventions": {
+          "e3_register": "n",
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.3183098861837907
+        }
+      },
+      {
+        "name": "scale0.35_baseline",
+        "conventions": {
+          "input_scale": 0.35
+        }
+      },
+      {
+        "name": "scale0.35_e3regn",
+        "conventions": {
+          "e3_register": "n",
+          "input_scale": 0.35
+        }
+      },
+      {
+        "name": "scale0.35_e3time",
+        "conventions": {
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.35
+        }
+      },
+      {
+        "name": "scale0.35_e3regn_e3time",
+        "conventions": {
+          "e3_register": "n",
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.35
+        }
+      },
+      {
+        "name": "scale0.4_baseline",
+        "conventions": {
+          "input_scale": 0.4
+        }
+      },
+      {
+        "name": "scale0.4_e3regn",
+        "conventions": {
+          "e3_register": "n",
+          "input_scale": 0.4
+        }
+      },
+      {
+        "name": "scale0.4_e3time",
+        "conventions": {
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.4
+        }
+      },
+      {
+        "name": "scale0.4_e3regn_e3time",
+        "conventions": {
+          "e3_register": "n",
+          "e3_time": "n_plus_one_over_3",
+          "input_scale": 0.4
+        }
+      },
+      {
+        "name": "scale0.3_baseline_pqkgamma0.01",
+        "conventions": {
+          "input_scale": 0.3
+        },
+        "kernels": {
+          "pqk_gamma_scale_geometry": 0.01
+        }
+      },
+      {
+        "name": "scale0.3_baseline_pqkgamma0.03",
+        "conventions": {
+          "input_scale": 0.3
+        },
+        "kernels": {
+          "pqk_gamma_scale_geometry": 0.03
+        }
+      },
+      {
+        "name": "scale0.3_baseline_pqkgamma0.1",
+        "conventions": {
+          "input_scale": 0.3
+        },
+        "kernels": {
+          "pqk_gamma_scale_geometry": 0.1
+        }
+      },
+      {
+        "name": "scale0.3_baseline_pqkgamma0.3",
+        "conventions": {
+          "input_scale": 0.3
+        },
+        "kernels": {
+          "pqk_gamma_scale_geometry": 0.3
+        }
+      },
+      {
+        "name": "scaleinvpi_baseline_pqkgamma0.01",
+        "conventions": {
+          "input_scale": 0.3183098861837907
+        },
+        "kernels": {
+          "pqk_gamma_scale_geometry": 0.01
+        }
+      },
+      {
+        "name": "scaleinvpi_baseline_pqkgamma0.03",
+        "conventions": {
+          "input_scale": 0.3183098861837907
+        },
+        "kernels": {
+          "pqk_gamma_scale_geometry": 0.03
+        }
+      },
+      {
+        "name": "scaleinvpi_baseline_pqkgamma0.1",
+        "conventions": {
+          "input_scale": 0.3183098861837907
+        },
+        "kernels": {
+          "pqk_gamma_scale_geometry": 0.1
+        }
+      },
+      {
+        "name": "scaleinvpi_baseline_pqkgamma0.3",
+        "conventions": {
+          "input_scale": 0.3183098861837907
+        },
+        "kernels": {
+          "pqk_gamma_scale_geometry": 0.3
+        }
+      }
+    ]
+  }
+}

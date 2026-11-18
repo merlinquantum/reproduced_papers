@@ -1,0 +1,70 @@
+{
+  "description": "MerLin adaptation (Phase 04), not the paper's model; see LOG.md Phase 4 Adaptation Plan. Fig. 3b/Table 1 counterpart: photonic easy/hard, d=8, s_in=4, 6 modes, 3 photons, threshold detection; Iris classes 0/1; 100 seeds; same optimizer, init and lr as the qubit QNN in training_iris_original.",
+  "experiment": {
+    "name": "training_iris_merlin",
+    "kind": "training"
+  },
+  "dataset": {
+    "name": "iris_binary",
+    "batch_size": null
+  },
+  "training": {
+    "iterations": 100,
+    "lr": 0.1,
+    "seeds": {
+      "start": 0,
+      "count": 100
+    },
+    "finite_difference_step": 1e-10,
+    "log_every": 1,
+    "loss_threshold": 0.3,
+    "fisher_rao": true,
+    "fisher_chunk_size": 100
+  },
+  "models": [
+    {
+      "name": "photonic_hard",
+      "type": "photonic",
+      "n_inputs": 4,
+      "encoding": "hard",
+      "d": 8,
+      "detection": "threshold",
+      "extra_modes": 2,
+      "training": {
+        "optimizer": "qiskit_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": 0.0,
+          "high": 6.283185307179586
+        }
+      },
+      "mesh_order": "bs_ps",
+      "layout": "end",
+      "input_kind": "fock",
+      "readout": "click_parity",
+      "data_reps": null
+    },
+    {
+      "name": "photonic_easy",
+      "type": "photonic",
+      "n_inputs": 4,
+      "encoding": "easy",
+      "d": 8,
+      "detection": "threshold",
+      "extra_modes": 2,
+      "training": {
+        "optimizer": "qiskit_adam",
+        "gradient": "autograd",
+        "init": {
+          "low": 0.0,
+          "high": 6.283185307179586
+        }
+      },
+      "mesh_order": "bs_ps",
+      "layout": "end",
+      "input_kind": "fock",
+      "readout": "click_parity",
+      "data_reps": null
+    }
+  ]
+}

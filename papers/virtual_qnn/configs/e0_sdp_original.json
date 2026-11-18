@@ -1,0 +1,36 @@
+{
+    "description": "E0 (Table I row 'Minimum sampling overhead', App. D): SDP minimum overhead for depolarizing and amplitude-damping noise at levels 0.1/0.2/0.3.",
+    "experiment": {
+        "task": "min_overhead_sdp",
+        "id": "e0_sdp_original"
+    },
+    "sdp": {
+        "solver": "CLARABEL",
+        "channels": [
+            {
+                "noise_model": "depolarizing",
+                "noise_level": 0.1
+            },
+            {
+                "noise_model": "depolarizing",
+                "noise_level": 0.2
+            },
+            {
+                "noise_model": "depolarizing",
+                "noise_level": 0.3
+            },
+            {
+                "noise_model": "amplitude_damping",
+                "noise_level": 0.1
+            },
+            {
+                "noise_model": "amplitude_damping",
+                "noise_level": 0.2
+            },
+            {
+                "noise_model": "amplitude_damping",
+                "noise_level": 0.3
+            }
+        ]
+    }
+}

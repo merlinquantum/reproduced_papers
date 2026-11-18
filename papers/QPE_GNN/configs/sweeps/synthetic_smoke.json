@@ -1,0 +1,70 @@
+{
+  "sweep_id": "synthetic_smoke",
+  "description": "Smoke sweep for the remote machine: the four Appendix D.2 synthetic configs, seed 0, 2 epochs, run 4 at a time, to check GPU memory on graphs of up to about 1,600 nodes and measure per-epoch time before synthetic.json.",
+  "machine": "reproduced-papers-1",
+  "max_epochs": 2,
+  "metric": "test_acc",
+  "direction": "maximize",
+  "split": "test (10% of the 800 generated graphs, split seed 1729)",
+  "checkpoint_rule": "model with the highest validation accuracy over the 2 epochs",
+  "aggregation": "single seed; smoke only, not a result",
+  "tie_rule": "not applied (one seed)",
+  "selection_rule": "none",
+  "entries": [
+    {
+      "name": "synthetic_quantum",
+      "config": "configs/synthetic_quantum_original.json",
+      "seeds": [
+        0
+      ],
+      "extra_args": [
+        "--epochs",
+        "2"
+      ]
+    },
+    {
+      "name": "synthetic_quantum_top3",
+      "config": "configs/synthetic_quantum_top3.json",
+      "seeds": [
+        0
+      ],
+      "extra_args": [
+        "--epochs",
+        "2"
+      ]
+    },
+    {
+      "name": "synthetic_laplacian",
+      "config": "configs/synthetic_laplacian_original.json",
+      "seeds": [
+        0
+      ],
+      "extra_args": [
+        "--epochs",
+        "2"
+      ]
+    },
+    {
+      "name": "synthetic_rrwp",
+      "config": "configs/synthetic_rrwp_original.json",
+      "seeds": [
+        0
+      ],
+      "extra_args": [
+        "--epochs",
+        "2"
+      ]
+    },
+    {
+      "name": "synthetic_gcn",
+      "config": "configs/synthetic_gcn_original.json",
+      "seeds": [
+        0
+      ],
+      "extra_args": [
+        "--epochs",
+        "2"
+      ]
+    }
+  ]
+}

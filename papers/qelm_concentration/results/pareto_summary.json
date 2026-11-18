@@ -1,0 +1,209 @@
+{
+  "scope": "original sizes; our search budget and ranges",
+  "sizes": {
+    "6": {
+      "run": "outdir/pareto_n6/run_20261026-094431",
+      "n_layers": 4,
+      "n_trials": 500,
+      "table_I": {
+        "bond_dimension": 8.0,
+        "narma_noiseless": 3.9953206626582207,
+        "narma_noisy": 3.630717473474521,
+        "variability": 0.005215396513937672
+      },
+      "paper_star": {
+        "narma_noisy": 3.35,
+        "bond_dimension": 8,
+        "variability": 0.0068
+      },
+      "projections": {
+        "fig2a_narma_noisy_vs_bond": {
+          "front_size": 7,
+          "reference_front_distance": 0.0,
+          "reference_rank": 0,
+          "reference_rank_percentile": 0.0,
+          "near_front": true
+        },
+        "fig2a_text_definition": {
+          "front_size": 6,
+          "reference_front_distance": 0.025879483135131998,
+          "reference_rank": 1,
+          "reference_rank_percentile": 0.012,
+          "near_front": true
+        },
+        "fig2b_variability_vs_bond": {
+          "front_size": 3,
+          "reference_front_distance": 0.6094447977660739,
+          "reference_rank": 1,
+          "reference_rank_percentile": 0.006,
+          "near_front": true
+        },
+        "all_objectives": {
+          "front_size": 127,
+          "reference_front_distance": 0.0,
+          "reference_rank": 0,
+          "reference_rank_percentile": 0.0,
+          "near_front": true
+        }
+      },
+      "single_objective_narma_noisy": {
+        "best_trial": 354,
+        "best_value": 3.8979822079826967,
+        "reference_value": 3.630717473474521
+      }
+    },
+    "8": {
+      "run": "outdir/pareto_n8/run_20261026-094431",
+      "n_layers": 4,
+      "n_trials": 500,
+      "table_I": {
+        "bond_dimension": 13.8,
+        "narma_noiseless": 5.271985807518884,
+        "narma_noisy": 4.711508961634341,
+        "variability": 0.005508850400513641
+      },
+      "paper_star": {
+        "narma_noisy": 4.45,
+        "bond_dimension": 14,
+        "variability": 0.0067
+      },
+      "projections": {
+        "fig2a_narma_noisy_vs_bond": {
+          "front_size": 6,
+          "reference_front_distance": 0.049893091676807354,
+          "reference_rank": 3,
+          "reference_rank_percentile": 0.06,
+          "near_front": true
+        },
+        "fig2a_text_definition": {
+          "front_size": 6,
+          "reference_front_distance": 0.06184066453751373,
+          "reference_rank": 3,
+          "reference_rank_percentile": 0.06,
+          "near_front": true
+        },
+        "fig2b_variability_vs_bond": {
+          "front_size": 32,
+          "reference_front_distance": 0.11239313579681905,
+          "reference_rank": 12,
+          "reference_rank_percentile": 0.804,
+          "near_front": false
+        },
+        "all_objectives": {
+          "front_size": 189,
+          "reference_front_distance": 0.0,
+          "reference_rank": 0,
+          "reference_rank_percentile": 0.0,
+          "near_front": true
+        }
+      },
+      "single_objective_narma_noisy": {
+        "best_trial": 336,
+        "best_value": 5.059239307530099,
+        "reference_value": 4.711508961634341
+      }
+    },
+    "10": {
+      "run": "outdir/pareto_n10/run_20261026-094431",
+      "n_layers": 8,
+      "n_trials": 500,
+      "table_I": {
+        "bond_dimension": 28.3,
+        "narma_noiseless": 6.429279092224144,
+        "narma_noisy": 5.704375017296365,
+        "variability": 0.0029829928448405507
+      },
+      "paper_star": {
+        "narma_noisy": 5.3,
+        "bond_dimension": 28,
+        "variability": 0.004
+      },
+      "projections": {
+        "fig2a_narma_noisy_vs_bond": {
+          "front_size": 19,
+          "reference_front_distance": 0.0,
+          "reference_rank": 0,
+          "reference_rank_percentile": 0.0,
+          "near_front": true
+        },
+        "fig2a_text_definition": {
+          "front_size": 19,
+          "reference_front_distance": 0.008301540572140931,
+          "reference_rank": 1,
+          "reference_rank_percentile": 0.038,
+          "near_front": true
+        },
+        "fig2b_variability_vs_bond": {
+          "front_size": 50,
+          "reference_front_distance": 0.04513401138984809,
+          "reference_rank": 10,
+          "reference_rank_percentile": 0.888,
+          "near_front": true
+        },
+        "all_objectives": {
+          "front_size": 208,
+          "reference_front_distance": 0.0,
+          "reference_rank": 0,
+          "reference_rank_percentile": 0.0,
+          "near_front": true
+        }
+      },
+      "single_objective_narma_noisy": {
+        "best_trial": 152,
+        "best_value": 6.092926404832687,
+        "reference_value": 5.704375017296365
+      }
+    },
+    "12": {
+      "run": "outdir/pareto_n12/run_20261026-094431",
+      "n_layers": 8,
+      "n_trials": 500,
+      "table_I": {
+        "bond_dimension": 51.1,
+        "narma_noiseless": 7.536699533692159,
+        "narma_noisy": 6.654667171791324,
+        "variability": 0.0036266508233561466
+      },
+      "paper_star": {
+        "narma_noisy": 6.25,
+        "bond_dimension": 50,
+        "variability": 0.004
+      },
+      "projections": {
+        "fig2a_narma_noisy_vs_bond": {
+          "front_size": 16,
+          "reference_front_distance": 0.04106039247156034,
+          "reference_rank": 1,
+          "reference_rank_percentile": 0.032,
+          "near_front": true
+        },
+        "fig2a_text_definition": {
+          "front_size": 20,
+          "reference_front_distance": 0.04256897832131387,
+          "reference_rank": 1,
+          "reference_rank_percentile": 0.04,
+          "near_front": true
+        },
+        "fig2b_variability_vs_bond": {
+          "front_size": 45,
+          "reference_front_distance": 0.09346621241119614,
+          "reference_rank": 8,
+          "reference_rank_percentile": 0.79,
+          "near_front": true
+        },
+        "all_objectives": {
+          "front_size": 234,
+          "reference_front_distance": 0.0,
+          "reference_rank": 0,
+          "reference_rank_percentile": 0.0,
+          "near_front": true
+        }
+      },
+      "single_objective_narma_noisy": {
+        "best_trial": 385,
+        "best_value": 7.080519253871023,
+        "reference_value": 6.654667171791324
+      }
+    }
+  }
+}

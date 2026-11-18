@@ -1,0 +1,42 @@
+{
+  "sweep_id": "e4_scaled",
+  "description": "E4: FF, FF+S and TF on {1.5,3,4.5} (constant multiple of the natural gaps), Fig. 2b settings.",
+  "candidates": [
+    {
+      "name": "ff",
+      "config": "configs/e4_scaled_ff_original.json"
+    },
+    {
+      "name": "ffs",
+      "config": "configs/e4_scaled_ffs_original.json"
+    },
+    {
+      "name": "tf",
+      "config": "configs/e4_scaled_ff_original.json",
+      "overrides": {
+        "model.frequency_mode": "trainable"
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "max_workers": 6,
+  "selection": {
+    "metric": "train_mse",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}

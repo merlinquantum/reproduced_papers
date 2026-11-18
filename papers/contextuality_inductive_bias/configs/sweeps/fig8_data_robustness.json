@@ -1,0 +1,161 @@
+{
+  "sweep_id": "fig8_data_robustness",
+  "description": "E1 data robustness: the Fig. 8 model classes trained on three regenerated 1500-sample training sets (paper generator, data seeds 101-103) under protocol paper, init seed 0, 2000 steps.",
+  "base_config": "configs/fig8_biased_quantum_original.json",
+  "grid": [
+    {
+      "--model": "biased_quantum",
+      "--layers": 1,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 2,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 1,
+      "--cnot-pattern": "paper",
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 2,
+      "--cnot-pattern": "paper",
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--optimizer": "sgd",
+      "--lr": 0.001,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 2,
+      "--optimizer": "sgd",
+      "--lr": 0.0001,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 1,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 2,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 1,
+      "--cnot-pattern": "paper",
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 2,
+      "--cnot-pattern": "paper",
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--optimizer": "sgd",
+      "--lr": 0.001,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 2,
+      "--optimizer": "sgd",
+      "--lr": 0.0001,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 1,
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--model": "biased_quantum",
+      "--layers": 2,
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 1,
+      "--cnot-pattern": "paper",
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--model": "generic_quantum",
+      "--layers": 2,
+      "--cnot-pattern": "paper",
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--optimizer": "sgd",
+      "--lr": 0.001,
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 2,
+      "--optimizer": "sgd",
+      "--lr": 0.0001,
+      "--train-source": "generated",
+      "--train-seed": 103
+    }
+  ],
+  "repetitions": [
+    {
+      "--seed": 0
+    }
+  ],
+  "progress_total": 2000,
+  "plan": {
+    "metrics": [
+      "final.test_kl",
+      "min_test_kl.test_kl",
+      "min_test_kl.step",
+      "final.train_nll",
+      "last_step_objective",
+      "train_seconds"
+    ],
+    "direction": "minimize",
+    "split": "test (fixed seeded set, seed 2302, n = 10000)",
+    "checkpoint": "final step 2000 (no early stopping)",
+    "aggregation": "per model class: mean and sample std over the 3 data seeds (computed in the results table)",
+    "tie_tolerance": "n/a (descriptive sweep)",
+    "selection_rule": "none",
+    "note": "01-plan prioritization item 6 (data robustness). Tests whether the model-class ranking on the author training set survives other training draws."
+  },
+  "fixed_args": {
+    "--protocol": "paper",
+    "--experiment-id": "E1_fig8_data_robustness"
+  },
+  "max_workers": 6
+}

@@ -1,0 +1,22 @@
+# Dependencies for the distributed_qrc reproduction (arXiv:2605.04991).
+# `merlinquantum` is the PyPI name of the `merlin` package imported by runtime_lib.
+merlinquantum==0.4.2
+torch==2.12.1
+numpy==2.5.4
+# Not imported by this paper's code (ReservoirPy needs it). Do not use
+# scipy.linalg factorizations: they corrupted memory on macOS 27.0.x (Accelerate bug).
+scipy==1.18.1
+# Reads the legacy .xls daily files of the IPTO RealTimeSCADASystemLoad dataset.
+xlrd==2.0.1
+# Classical reservoir baseline (the framework named by the paper).
+reservoirpy==0.4.2
+# Cross-checks of the numpy circuit simulator and fidelity kernel (tests only).
+qiskit==2.5.2
+qiskit-aer==0.17.2
+# Figures produced by utils/plot_*.py.
+matplotlib==3.11.2
+pytest==9.1.1
+# Notebook execution (phase 07): run notebook.ipynb in a fresh kernel.
+nbformat==5.11.1
+nbclient==0.11.0
+ipykernel==7.4.0

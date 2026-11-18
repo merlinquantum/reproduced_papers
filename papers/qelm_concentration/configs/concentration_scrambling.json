@@ -1,0 +1,41 @@
+{
+  "description": "E1b scrambling reference under the Fig. 1 block convention (angle_scale 2): each block applies two RZZ gates, so the total ZZ angle is 2J, and J = pi/8 with b = pi/4 gives the dual-unitary (maximally scrambling) kicked-Ising point exp(-i pi/4 ZZ) exp(-i pi/4 X). It replaces the 'scrambling' setting of concentration.json (J = pi/4 gives a total ZZ angle of pi/2, i.e. Z x Z up to a phase, which is non-entangling). Same N, layers, seeds and inputs as concentration.json.",
+  "task": "concentration",
+  "reservoir": {
+    "input_shift": 4,
+    "chunk_size": 256
+  },
+  "dataset": {
+    "name": "uniform_inputs"
+  },
+  "concentration": {
+    "n_qubits": [
+      8,
+      12,
+      16
+    ],
+    "n_layers": [
+      4,
+      8,
+      16
+    ],
+    "reservoir_seeds": [
+      0,
+      1,
+      2
+    ],
+    "n_samples": 256,
+    "parameter_settings": {
+      "scrambling_dual_unitary": {
+        "input_strength": 0.2,
+        "b_mean": 0.7853981633974483,
+        "b_std": 0.0,
+        "h_mean": 0.6,
+        "h_std": 0.0,
+        "J_mean": 0.39269908169872414,
+        "J_std": 0.0,
+        "h_min": 0.1
+      }
+    }
+  }
+}

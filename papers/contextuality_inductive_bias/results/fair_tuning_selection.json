@@ -1,0 +1,1839 @@
+[
+  {
+    "model": {
+      "--cnot-pattern": "paper",
+      "--layers": 1,
+      "--model": "generic_quantum"
+    },
+    "selected": {
+      "lr": 0.003,
+      "l2": 0.0,
+      "mean_validation_nll": 0.6868705450426598
+    },
+    "tied": [
+      {
+        "lr": 0.003,
+        "l2": 0.0,
+        "mean_validation_nll": 0.6868705450426598
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0,
+        "mean_validation_nll": 0.6868280691601663
+      }
+    ],
+    "candidates": [
+      {
+        "lr": 0.001,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6874321927864292,
+        "statuses": {
+          "fair_tuning__c002_r00": "COMPLETED",
+          "fair_tuning__c002_r01": "COMPLETED",
+          "fair_tuning__c002_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6868705450426598,
+        "statuses": {
+          "fair_tuning__c022_r00": "COMPLETED",
+          "fair_tuning__c022_r01": "COMPLETED",
+          "fair_tuning__c022_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6868280691601663,
+        "statuses": {
+          "fair_tuning__c042_r00": "COMPLETED",
+          "fair_tuning__c042_r01": "COMPLETED",
+          "fair_tuning__c042_r02": "COMPLETED"
+        }
+      }
+    ]
+  },
+  {
+    "model": {
+      "--cnot-pattern": "paper",
+      "--layers": 2,
+      "--model": "generic_quantum"
+    },
+    "selected": {
+      "lr": 0.001,
+      "l2": 0.0,
+      "mean_validation_nll": 0.6866326809056175
+    },
+    "tied": [
+      {
+        "lr": 0.001,
+        "l2": 0.0,
+        "mean_validation_nll": 0.6866326809056175
+      }
+    ],
+    "candidates": [
+      {
+        "lr": 0.001,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6866326809056175,
+        "statuses": {
+          "fair_tuning__c003_r00": "COMPLETED",
+          "fair_tuning__c003_r01": "COMPLETED",
+          "fair_tuning__c003_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.688175454710242,
+        "statuses": {
+          "fair_tuning__c023_r00": "COMPLETED",
+          "fair_tuning__c023_r01": "COMPLETED",
+          "fair_tuning__c023_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6883257505895314,
+        "statuses": {
+          "fair_tuning__c043_r00": "COMPLETED",
+          "fair_tuning__c043_r01": "COMPLETED",
+          "fair_tuning__c043_r02": "COMPLETED"
+        }
+      }
+    ]
+  },
+  {
+    "model": {
+      "--computation-space": "fock",
+      "--model": "photonic_merlin",
+      "--n-photons": 2,
+      "--readout": "group"
+    },
+    "selected": {
+      "lr": 0.003,
+      "l2": 0.0,
+      "mean_validation_nll": 0.6864094904036818
+    },
+    "tied": [
+      {
+        "lr": 0.003,
+        "l2": 0.0,
+        "mean_validation_nll": 0.6864094904036818
+      }
+    ],
+    "candidates": [
+      {
+        "lr": 0.001,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6865277071534764,
+        "statuses": {
+          "fair_tuning__c007_r00": "COMPLETED",
+          "fair_tuning__c007_r01": "COMPLETED",
+          "fair_tuning__c007_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6864094904036818,
+        "statuses": {
+          "fair_tuning__c027_r00": "COMPLETED",
+          "fair_tuning__c027_r01": "COMPLETED",
+          "fair_tuning__c027_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6865114410588538,
+        "statuses": {
+          "fair_tuning__c047_r00": "COMPLETED",
+          "fair_tuning__c047_r01": "COMPLETED",
+          "fair_tuning__c047_r02": "COMPLETED"
+        }
+      }
+    ]
+  },
+  {
+    "model": {
+      "--hidden": 7,
+      "--model": "mlp_biased"
+    },
+    "selected": {
+      "lr": 0.001,
+      "l2": 0.001,
+      "mean_validation_nll": 0.688709888832652
+    },
+    "tied": [
+      {
+        "lr": 0.001,
+        "l2": 0.001,
+        "mean_validation_nll": 0.688709888832652
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.001,
+        "mean_validation_nll": 0.6887125183173485
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.001,
+        "mean_validation_nll": 0.6887127928275906
+      }
+    ],
+    "candidates": [
+      {
+        "lr": 0.001,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6983524836101632,
+        "statuses": {
+          "fair_tuning__c004_r00": "COMPLETED",
+          "fair_tuning__c004_r01": "COMPLETED",
+          "fair_tuning__c004_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.0001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6939021401447237,
+        "statuses": {
+          "fair_tuning_ext2__c000_r00": "COMPLETED",
+          "fair_tuning_ext2__c000_r01": "COMPLETED",
+          "fair_tuning_ext2__c000_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.688709888832652,
+        "statuses": {
+          "fair_tuning_ext2__c001_r00": "COMPLETED",
+          "fair_tuning_ext2__c001_r01": "COMPLETED",
+          "fair_tuning_ext2__c001_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.01,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931747693238232,
+        "statuses": {
+          "fair_tuning_ext__c000_r00": "COMPLETED",
+          "fair_tuning_ext__c000_r01": "COMPLETED",
+          "fair_tuning_ext__c000_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.1,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.693148866404934,
+        "statuses": {
+          "fair_tuning_ext__c001_r00": "COMPLETED",
+          "fair_tuning_ext__c001_r01": "COMPLETED",
+          "fair_tuning_ext__c001_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 1.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931470944195888,
+        "statuses": {
+          "fair_tuning_ext__c002_r00": "COMPLETED",
+          "fair_tuning_ext__c002_r01": "COMPLETED",
+          "fair_tuning_ext__c002_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 10.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931471678688107,
+        "statuses": {
+          "fair_tuning_ext__c003_r00": "COMPLETED",
+          "fair_tuning_ext__c003_r01": "COMPLETED",
+          "fair_tuning_ext__c003_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 100.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931471792479075,
+        "statuses": {
+          "fair_tuning_ext__c004_r00": "COMPLETED",
+          "fair_tuning_ext__c004_r01": "COMPLETED",
+          "fair_tuning_ext__c004_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.7086682381321637,
+        "statuses": {
+          "fair_tuning__c024_r00": "COMPLETED",
+          "fair_tuning__c024_r01": "COMPLETED",
+          "fair_tuning__c024_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.0001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6958621022598358,
+        "statuses": {
+          "fair_tuning_ext2__c006_r00": "COMPLETED",
+          "fair_tuning_ext2__c006_r01": "COMPLETED",
+          "fair_tuning_ext2__c006_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6887125183173485,
+        "statuses": {
+          "fair_tuning_ext2__c007_r00": "COMPLETED",
+          "fair_tuning_ext2__c007_r01": "COMPLETED",
+          "fair_tuning_ext2__c007_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.01,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931747692582166,
+        "statuses": {
+          "fair_tuning_ext__c015_r00": "COMPLETED",
+          "fair_tuning_ext__c015_r01": "COMPLETED",
+          "fair_tuning_ext__c015_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.1,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931488664049276,
+        "statuses": {
+          "fair_tuning_ext__c016_r00": "COMPLETED",
+          "fair_tuning_ext__c016_r01": "COMPLETED",
+          "fair_tuning_ext__c016_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 1.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931470944195622,
+        "statuses": {
+          "fair_tuning_ext__c017_r00": "COMPLETED",
+          "fair_tuning_ext__c017_r01": "COMPLETED",
+          "fair_tuning_ext__c017_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 10.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.693147167869093,
+        "statuses": {
+          "fair_tuning_ext__c018_r00": "COMPLETED",
+          "fair_tuning_ext__c018_r01": "COMPLETED",
+          "fair_tuning_ext__c018_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 100.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931471792478715,
+        "statuses": {
+          "fair_tuning_ext__c019_r00": "COMPLETED",
+          "fair_tuning_ext__c019_r01": "COMPLETED",
+          "fair_tuning_ext__c019_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.7240129807579709,
+        "statuses": {
+          "fair_tuning__c044_r00": "COMPLETED",
+          "fair_tuning__c044_r01": "COMPLETED",
+          "fair_tuning__c044_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6980559966863248,
+        "statuses": {
+          "fair_tuning_ext2__c012_r00": "COMPLETED",
+          "fair_tuning_ext2__c012_r01": "COMPLETED",
+          "fair_tuning_ext2__c012_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6887127928275906,
+        "statuses": {
+          "fair_tuning_ext2__c013_r00": "COMPLETED",
+          "fair_tuning_ext2__c013_r01": "COMPLETED",
+          "fair_tuning_ext2__c013_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.01,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931747692580793,
+        "statuses": {
+          "fair_tuning_ext__c030_r00": "COMPLETED",
+          "fair_tuning_ext__c030_r01": "COMPLETED",
+          "fair_tuning_ext__c030_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.1,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931488664049272,
+        "statuses": {
+          "fair_tuning_ext__c031_r00": "COMPLETED",
+          "fair_tuning_ext__c031_r01": "COMPLETED",
+          "fair_tuning_ext__c031_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 1.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.693147168306642,
+        "statuses": {
+          "fair_tuning_ext__c032_r00": "COMPLETED",
+          "fair_tuning_ext__c032_r01": "COMPLETED",
+          "fair_tuning_ext__c032_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 10.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931471679363765,
+        "statuses": {
+          "fair_tuning_ext__c033_r00": "COMPLETED",
+          "fair_tuning_ext__c033_r01": "COMPLETED",
+          "fair_tuning_ext__c033_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 100.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931471793010013,
+        "statuses": {
+          "fair_tuning_ext__c034_r00": "COMPLETED",
+          "fair_tuning_ext__c034_r01": "COMPLETED",
+          "fair_tuning_ext__c034_r02": "COMPLETED"
+        }
+      }
+    ]
+  },
+  {
+    "model": {
+      "--hidden": 9,
+      "--model": "mlp_unbiased"
+    },
+    "selected": {
+      "lr": 0.001,
+      "l2": 0.001,
+      "mean_validation_nll": 0.6888536281714813
+    },
+    "tied": [
+      {
+        "lr": 0.001,
+        "l2": 0.001,
+        "mean_validation_nll": 0.6888536281714813
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.001,
+        "mean_validation_nll": 0.6888401991470864
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.001,
+        "mean_validation_nll": 0.6888442899224501
+      }
+    ],
+    "candidates": [
+      {
+        "lr": 0.001,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6973133857450291,
+        "statuses": {
+          "fair_tuning__c005_r00": "COMPLETED",
+          "fair_tuning__c005_r01": "COMPLETED",
+          "fair_tuning__c005_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.0001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6922368088667995,
+        "statuses": {
+          "fair_tuning_ext2__c002_r00": "COMPLETED",
+          "fair_tuning_ext2__c002_r01": "COMPLETED",
+          "fair_tuning_ext2__c002_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6888536281714813,
+        "statuses": {
+          "fair_tuning_ext2__c003_r00": "COMPLETED",
+          "fair_tuning_ext2__c003_r01": "COMPLETED",
+          "fair_tuning_ext2__c003_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.01,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6932242199391108,
+        "statuses": {
+          "fair_tuning_ext__c005_r00": "COMPLETED",
+          "fair_tuning_ext__c005_r01": "COMPLETED",
+          "fair_tuning_ext__c005_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.1,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931532191791993,
+        "statuses": {
+          "fair_tuning_ext__c006_r00": "COMPLETED",
+          "fair_tuning_ext__c006_r01": "COMPLETED",
+          "fair_tuning_ext__c006_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 1.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931465140117362,
+        "statuses": {
+          "fair_tuning_ext__c007_r00": "COMPLETED",
+          "fair_tuning_ext__c007_r01": "COMPLETED",
+          "fair_tuning_ext__c007_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 10.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931470896422146,
+        "statuses": {
+          "fair_tuning_ext__c008_r00": "COMPLETED",
+          "fair_tuning_ext__c008_r01": "COMPLETED",
+          "fair_tuning_ext__c008_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 100.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931471712065251,
+        "statuses": {
+          "fair_tuning_ext__c009_r00": "COMPLETED",
+          "fair_tuning_ext__c009_r01": "COMPLETED",
+          "fair_tuning_ext__c009_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.7057433675569297,
+        "statuses": {
+          "fair_tuning__c025_r00": "COMPLETED",
+          "fair_tuning__c025_r01": "COMPLETED",
+          "fair_tuning__c025_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.0001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6965612102966542,
+        "statuses": {
+          "fair_tuning_ext2__c008_r00": "COMPLETED",
+          "fair_tuning_ext2__c008_r01": "COMPLETED",
+          "fair_tuning_ext2__c008_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6888401991470864,
+        "statuses": {
+          "fair_tuning_ext2__c009_r00": "COMPLETED",
+          "fair_tuning_ext2__c009_r01": "COMPLETED",
+          "fair_tuning_ext2__c009_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.01,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.693224219939165,
+        "statuses": {
+          "fair_tuning_ext__c020_r00": "COMPLETED",
+          "fair_tuning_ext__c020_r01": "COMPLETED",
+          "fair_tuning_ext__c020_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.1,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931516186666643,
+        "statuses": {
+          "fair_tuning_ext__c021_r00": "COMPLETED",
+          "fair_tuning_ext__c021_r01": "COMPLETED",
+          "fair_tuning_ext__c021_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 1.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931465140117381,
+        "statuses": {
+          "fair_tuning_ext__c022_r00": "COMPLETED",
+          "fair_tuning_ext__c022_r01": "COMPLETED",
+          "fair_tuning_ext__c022_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 10.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931470896422175,
+        "statuses": {
+          "fair_tuning_ext__c023_r00": "COMPLETED",
+          "fair_tuning_ext__c023_r01": "COMPLETED",
+          "fair_tuning_ext__c023_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 100.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931471712065275,
+        "statuses": {
+          "fair_tuning_ext__c024_r00": "COMPLETED",
+          "fair_tuning_ext__c024_r01": "COMPLETED",
+          "fair_tuning_ext__c024_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.7094335324004905,
+        "statuses": {
+          "fair_tuning__c045_r00": "COMPLETED",
+          "fair_tuning__c045_r01": "COMPLETED",
+          "fair_tuning__c045_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6963316132798146,
+        "statuses": {
+          "fair_tuning_ext2__c014_r00": "COMPLETED",
+          "fair_tuning_ext2__c014_r01": "COMPLETED",
+          "fair_tuning_ext2__c014_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6888442899224501,
+        "statuses": {
+          "fair_tuning_ext2__c015_r00": "COMPLETED",
+          "fair_tuning_ext2__c015_r01": "COMPLETED",
+          "fair_tuning_ext2__c015_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.01,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6932242199419901,
+        "statuses": {
+          "fair_tuning_ext__c035_r00": "COMPLETED",
+          "fair_tuning_ext__c035_r01": "COMPLETED",
+          "fair_tuning_ext__c035_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.1,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931532191933183,
+        "statuses": {
+          "fair_tuning_ext__c036_r00": "COMPLETED",
+          "fair_tuning_ext__c036_r01": "COMPLETED",
+          "fair_tuning_ext__c036_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 1.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931465140117076,
+        "statuses": {
+          "fair_tuning_ext__c037_r00": "COMPLETED",
+          "fair_tuning_ext__c037_r01": "COMPLETED",
+          "fair_tuning_ext__c037_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 10.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931470896423169,
+        "statuses": {
+          "fair_tuning_ext__c038_r00": "COMPLETED",
+          "fair_tuning_ext__c038_r01": "COMPLETED",
+          "fair_tuning_ext__c038_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 100.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931471712065277,
+        "statuses": {
+          "fair_tuning_ext__c039_r00": "COMPLETED",
+          "fair_tuning_ext__c039_r01": "COMPLETED",
+          "fair_tuning_ext__c039_r02": "COMPLETED"
+        }
+      }
+    ]
+  },
+  {
+    "model": {
+      "--layers": 1,
+      "--model": "biased_quantum"
+    },
+    "selected": {
+      "lr": 0.001,
+      "l2": 0.0,
+      "mean_validation_nll": 0.6849740717878422
+    },
+    "tied": [
+      {
+        "lr": 0.001,
+        "l2": 0.0,
+        "mean_validation_nll": 0.6849740717878422
+      }
+    ],
+    "candidates": [
+      {
+        "lr": 0.001,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6849740717878422,
+        "statuses": {
+          "fair_tuning__c000_r00": "COMPLETED",
+          "fair_tuning__c000_r01": "COMPLETED",
+          "fair_tuning__c000_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.685119968366243,
+        "statuses": {
+          "fair_tuning__c020_r00": "COMPLETED",
+          "fair_tuning__c020_r01": "COMPLETED",
+          "fair_tuning__c020_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6850744898777862,
+        "statuses": {
+          "fair_tuning__c040_r00": "COMPLETED",
+          "fair_tuning__c040_r01": "COMPLETED",
+          "fair_tuning__c040_r02": "COMPLETED"
+        }
+      }
+    ]
+  },
+  {
+    "model": {
+      "--layers": 2,
+      "--model": "biased_quantum"
+    },
+    "selected": {
+      "lr": 0.001,
+      "l2": 0.0,
+      "mean_validation_nll": 0.6866439052785115
+    },
+    "tied": [
+      {
+        "lr": 0.001,
+        "l2": 0.0,
+        "mean_validation_nll": 0.6866439052785115
+      }
+    ],
+    "candidates": [
+      {
+        "lr": 0.001,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6866439052785115,
+        "statuses": {
+          "fair_tuning__c001_r00": "COMPLETED",
+          "fair_tuning__c001_r01": "COMPLETED",
+          "fair_tuning__c001_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6876693541962206,
+        "statuses": {
+          "fair_tuning__c021_r00": "COMPLETED",
+          "fair_tuning__c021_r01": "COMPLETED",
+          "fair_tuning__c021_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6875756535152187,
+        "statuses": {
+          "fair_tuning__c041_r00": "COMPLETED",
+          "fair_tuning__c041_r01": "COMPLETED",
+          "fair_tuning__c041_r02": "COMPLETED"
+        }
+      }
+    ]
+  },
+  {
+    "model": {
+      "--model": "bias_fourier",
+      "--spectrum": 1
+    },
+    "selected": {
+      "lr": 0.001,
+      "l2": 0.1,
+      "mean_validation_nll": 0.6848743329767754
+    },
+    "tied": [
+      {
+        "lr": 0.001,
+        "l2": 0.1,
+        "mean_validation_nll": 0.6848743329767754
+      }
+    ],
+    "candidates": [
+      {
+        "lr": 0.001,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.7495086172378741,
+        "statuses": {
+          "fair_tuning__c014_r00": "COMPLETED",
+          "fair_tuning__c014_r01": "COMPLETED",
+          "fair_tuning__c014_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.01,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.688673002660523,
+        "statuses": {
+          "fair_tuning__c015_r00": "COMPLETED",
+          "fair_tuning__c015_r01": "COMPLETED",
+          "fair_tuning__c015_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.1,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6848743329767754,
+        "statuses": {
+          "fair_tuning__c016_r00": "COMPLETED",
+          "fair_tuning__c016_r01": "COMPLETED",
+          "fair_tuning__c016_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 1.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6881305360310245,
+        "statuses": {
+          "fair_tuning__c017_r00": "COMPLETED",
+          "fair_tuning__c017_r01": "COMPLETED",
+          "fair_tuning__c017_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 10.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6921350032921846,
+        "statuses": {
+          "fair_tuning__c018_r00": "COMPLETED",
+          "fair_tuning__c018_r01": "COMPLETED",
+          "fair_tuning__c018_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 100.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931627874594549,
+        "statuses": {
+          "fair_tuning__c019_r00": "COMPLETED",
+          "fair_tuning__c019_r01": "COMPLETED",
+          "fair_tuning__c019_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.7265549988682979,
+        "statuses": {
+          "fair_tuning__c034_r00": "COMPLETED",
+          "fair_tuning__c034_r01": "COMPLETED",
+          "fair_tuning__c034_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.01,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6873427306323414,
+        "statuses": {
+          "fair_tuning__c035_r00": "COMPLETED",
+          "fair_tuning__c035_r01": "COMPLETED",
+          "fair_tuning__c035_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.1,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6866166780077586,
+        "statuses": {
+          "fair_tuning__c036_r00": "COMPLETED",
+          "fair_tuning__c036_r01": "COMPLETED",
+          "fair_tuning__c036_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 1.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.688130474116635,
+        "statuses": {
+          "fair_tuning__c037_r00": "COMPLETED",
+          "fair_tuning__c037_r01": "COMPLETED",
+          "fair_tuning__c037_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 10.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6921642419299922,
+        "statuses": {
+          "fair_tuning__c038_r00": "COMPLETED",
+          "fair_tuning__c038_r01": "COMPLETED",
+          "fair_tuning__c038_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 100.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.693036537477815,
+        "statuses": {
+          "fair_tuning__c039_r00": "COMPLETED",
+          "fair_tuning__c039_r01": "COMPLETED",
+          "fair_tuning__c039_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.7403608488788306,
+        "statuses": {
+          "fair_tuning__c054_r00": "COMPLETED",
+          "fair_tuning__c054_r01": "COMPLETED",
+          "fair_tuning__c054_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.01,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.709776837025379,
+        "statuses": {
+          "fair_tuning__c055_r00": "COMPLETED",
+          "fair_tuning__c055_r01": "COMPLETED",
+          "fair_tuning__c055_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.1,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.8246043149658124,
+        "statuses": {
+          "fair_tuning__c056_r00": "COMPLETED",
+          "fair_tuning__c056_r01": "COMPLETED",
+          "fair_tuning__c056_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 1.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6881305645886187,
+        "statuses": {
+          "fair_tuning__c057_r00": "COMPLETED",
+          "fair_tuning__c057_r01": "COMPLETED",
+          "fair_tuning__c057_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 10.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6921590992798934,
+        "statuses": {
+          "fair_tuning__c058_r00": "COMPLETED",
+          "fair_tuning__c058_r01": "COMPLETED",
+          "fair_tuning__c058_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 100.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.694798955357688,
+        "statuses": {
+          "fair_tuning__c059_r00": "COMPLETED",
+          "fair_tuning__c059_r01": "COMPLETED",
+          "fair_tuning__c059_r02": "COMPLETED"
+        }
+      }
+    ]
+  },
+  {
+    "model": {
+      "--model": "quadratic"
+    },
+    "selected": {
+      "lr": 0.001,
+      "l2": 0.01,
+      "mean_validation_nll": 0.6879010878831874
+    },
+    "tied": [
+      {
+        "lr": 0.001,
+        "l2": 0.01,
+        "mean_validation_nll": 0.6879010878831874
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.01,
+        "mean_validation_nll": 0.6879004781473451
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.01,
+        "mean_validation_nll": 0.6879004775560468
+      }
+    ],
+    "candidates": [
+      {
+        "lr": 0.001,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6920929718565004,
+        "statuses": {
+          "fair_tuning__c006_r00": "COMPLETED",
+          "fair_tuning__c006_r01": "COMPLETED",
+          "fair_tuning__c006_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.0001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6915007262703489,
+        "statuses": {
+          "fair_tuning_ext2__c004_r00": "COMPLETED",
+          "fair_tuning_ext2__c004_r01": "COMPLETED",
+          "fair_tuning_ext2__c004_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6894301372275421,
+        "statuses": {
+          "fair_tuning_ext2__c005_r00": "COMPLETED",
+          "fair_tuning_ext2__c005_r01": "COMPLETED",
+          "fair_tuning_ext2__c005_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.01,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6879010878831874,
+        "statuses": {
+          "fair_tuning_ext__c010_r00": "COMPLETED",
+          "fair_tuning_ext__c010_r01": "COMPLETED",
+          "fair_tuning_ext__c010_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.1,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.690266940154685,
+        "statuses": {
+          "fair_tuning_ext__c011_r00": "COMPLETED",
+          "fair_tuning_ext__c011_r01": "COMPLETED",
+          "fair_tuning_ext__c011_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 1.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6926565681921971,
+        "statuses": {
+          "fair_tuning_ext__c012_r00": "COMPLETED",
+          "fair_tuning_ext__c012_r01": "COMPLETED",
+          "fair_tuning_ext__c012_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 10.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6930927595359586,
+        "statuses": {
+          "fair_tuning_ext__c013_r00": "COMPLETED",
+          "fair_tuning_ext__c013_r01": "COMPLETED",
+          "fair_tuning_ext__c013_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 100.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931416657533168,
+        "statuses": {
+          "fair_tuning_ext__c014_r00": "COMPLETED",
+          "fair_tuning_ext__c014_r01": "COMPLETED",
+          "fair_tuning_ext__c014_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6923871692534704,
+        "statuses": {
+          "fair_tuning__c026_r00": "COMPLETED",
+          "fair_tuning__c026_r01": "COMPLETED",
+          "fair_tuning__c026_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.0001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6915602404167797,
+        "statuses": {
+          "fair_tuning_ext2__c010_r00": "COMPLETED",
+          "fair_tuning_ext2__c010_r01": "COMPLETED",
+          "fair_tuning_ext2__c010_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6893214908651917,
+        "statuses": {
+          "fair_tuning_ext2__c011_r00": "COMPLETED",
+          "fair_tuning_ext2__c011_r01": "COMPLETED",
+          "fair_tuning_ext2__c011_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.01,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6879004781473451,
+        "statuses": {
+          "fair_tuning_ext__c025_r00": "COMPLETED",
+          "fair_tuning_ext__c025_r01": "COMPLETED",
+          "fair_tuning_ext__c025_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.1,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6902670794182669,
+        "statuses": {
+          "fair_tuning_ext__c026_r00": "COMPLETED",
+          "fair_tuning_ext__c026_r01": "COMPLETED",
+          "fair_tuning_ext__c026_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 1.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6926565706683755,
+        "statuses": {
+          "fair_tuning_ext__c027_r00": "COMPLETED",
+          "fair_tuning_ext__c027_r01": "COMPLETED",
+          "fair_tuning_ext__c027_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 10.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6930929931048041,
+        "statuses": {
+          "fair_tuning_ext__c028_r00": "COMPLETED",
+          "fair_tuning_ext__c028_r01": "COMPLETED",
+          "fair_tuning_ext__c028_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 100.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931417016191969,
+        "statuses": {
+          "fair_tuning_ext__c029_r00": "COMPLETED",
+          "fair_tuning_ext__c029_r01": "COMPLETED",
+          "fair_tuning_ext__c029_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.692484156240828,
+        "statuses": {
+          "fair_tuning__c046_r00": "COMPLETED",
+          "fair_tuning__c046_r01": "COMPLETED",
+          "fair_tuning__c046_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6915643288055601,
+        "statuses": {
+          "fair_tuning_ext2__c016_r00": "COMPLETED",
+          "fair_tuning_ext2__c016_r01": "COMPLETED",
+          "fair_tuning_ext2__c016_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.001,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6893161615428935,
+        "statuses": {
+          "fair_tuning_ext2__c017_r00": "COMPLETED",
+          "fair_tuning_ext2__c017_r01": "COMPLETED",
+          "fair_tuning_ext2__c017_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.01,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6879004775560468,
+        "statuses": {
+          "fair_tuning_ext__c040_r00": "COMPLETED",
+          "fair_tuning_ext__c040_r01": "COMPLETED",
+          "fair_tuning_ext__c040_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.1,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6902668427548088,
+        "statuses": {
+          "fair_tuning_ext__c041_r00": "COMPLETED",
+          "fair_tuning_ext__c041_r01": "COMPLETED",
+          "fair_tuning_ext__c041_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 1.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6926572883943735,
+        "statuses": {
+          "fair_tuning_ext__c042_r00": "COMPLETED",
+          "fair_tuning_ext__c042_r01": "COMPLETED",
+          "fair_tuning_ext__c042_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 10.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6930936514553285,
+        "statuses": {
+          "fair_tuning_ext__c043_r00": "COMPLETED",
+          "fair_tuning_ext__c043_r01": "COMPLETED",
+          "fair_tuning_ext__c043_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 100.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6931416738212312,
+        "statuses": {
+          "fair_tuning_ext__c044_r00": "COMPLETED",
+          "fair_tuning_ext__c044_r01": "COMPLETED",
+          "fair_tuning_ext__c044_r02": "COMPLETED"
+        }
+      }
+    ]
+  },
+  {
+    "model": {
+      "--model": "surrogate",
+      "--spectrum": 1
+    },
+    "selected": {
+      "lr": 0.001,
+      "l2": 1.0,
+      "mean_validation_nll": 0.6859576564254805
+    },
+    "tied": [
+      {
+        "lr": 0.001,
+        "l2": 1.0,
+        "mean_validation_nll": 0.6859576564254805
+      }
+    ],
+    "candidates": [
+      {
+        "lr": 0.001,
+        "l2": 0.0,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c008_r00": "COMPLETED",
+          "fair_tuning__c008_r01": "COMPLETED",
+          "fair_tuning__c008_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.01,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6918982336191878,
+        "statuses": {
+          "fair_tuning__c009_r00": "COMPLETED",
+          "fair_tuning__c009_r01": "COMPLETED",
+          "fair_tuning__c009_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 0.1,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c010_r00": "FAILED",
+          "fair_tuning__c010_r01": "FAILED",
+          "fair_tuning__c010_r02": "FAILED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 1.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6859576564254805,
+        "statuses": {
+          "fair_tuning__c011_r00": "COMPLETED",
+          "fair_tuning__c011_r01": "COMPLETED",
+          "fair_tuning__c011_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 10.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6893991974894641,
+        "statuses": {
+          "fair_tuning__c012_r00": "COMPLETED",
+          "fair_tuning__c012_r01": "COMPLETED",
+          "fair_tuning__c012_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.001,
+        "l2": 100.0,
+        "eligible": true,
+        "valid_runs": 3,
+        "expected_runs": 3,
+        "mean_validation_nll": 0.6925941770806121,
+        "statuses": {
+          "fair_tuning__c013_r00": "COMPLETED",
+          "fair_tuning__c013_r01": "COMPLETED",
+          "fair_tuning__c013_r02": "COMPLETED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.0,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c028_r00": "FAILED",
+          "fair_tuning__c028_r01": "FAILED",
+          "fair_tuning__c028_r02": "FAILED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.01,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c029_r00": "FAILED",
+          "fair_tuning__c029_r01": "FAILED",
+          "fair_tuning__c029_r02": "FAILED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 0.1,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c030_r00": "FAILED",
+          "fair_tuning__c030_r01": "FAILED",
+          "fair_tuning__c030_r02": "FAILED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 1.0,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c031_r00": "FAILED",
+          "fair_tuning__c031_r01": "FAILED",
+          "fair_tuning__c031_r02": "FAILED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 10.0,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c032_r00": "FAILED",
+          "fair_tuning__c032_r01": "FAILED",
+          "fair_tuning__c032_r02": "FAILED"
+        }
+      },
+      {
+        "lr": 0.003,
+        "l2": 100.0,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c033_r00": "FAILED",
+          "fair_tuning__c033_r01": "FAILED",
+          "fair_tuning__c033_r02": "FAILED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.0,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c048_r00": "FAILED",
+          "fair_tuning__c048_r01": "FAILED",
+          "fair_tuning__c048_r02": "FAILED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.01,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c049_r00": "FAILED",
+          "fair_tuning__c049_r01": "FAILED",
+          "fair_tuning__c049_r02": "FAILED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 0.1,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c050_r00": "FAILED",
+          "fair_tuning__c050_r01": "FAILED",
+          "fair_tuning__c050_r02": "FAILED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 1.0,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c051_r00": "FAILED",
+          "fair_tuning__c051_r01": "FAILED",
+          "fair_tuning__c051_r02": "FAILED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 10.0,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c052_r00": "FAILED",
+          "fair_tuning__c052_r01": "FAILED",
+          "fair_tuning__c052_r02": "FAILED"
+        }
+      },
+      {
+        "lr": 0.01,
+        "l2": 100.0,
+        "eligible": false,
+        "valid_runs": 0,
+        "expected_runs": 3,
+        "mean_validation_nll": NaN,
+        "statuses": {
+          "fair_tuning__c053_r00": "FAILED",
+          "fair_tuning__c053_r01": "FAILED",
+          "fair_tuning__c053_r02": "FAILED"
+        }
+      }
+    ]
+  }
+]

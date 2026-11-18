@@ -1,0 +1,26 @@
+{
+    "description": "E3 (Fig. 5, light blue): same as e3_vqem_budget_noisy_original but with noiseless branches.",
+    "experiment": {
+        "task": "vqem",
+        "id": "e3_vqem_budget_ideal_original"
+    },
+    "vqem": {
+        "algorithm": "budget",
+        "noise_model": "depolarizing",
+        "noise_level": 0.2,
+        "depth": 5,
+        "penalty": 0.0,
+        "initial_t": 2.0,
+        "budget": 1.0,
+        "gate_noise": [
+            0.0,
+            0.0
+        ]
+    },
+    "training": {
+        "iterations": 600,
+        "lr": 0.05,
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 10
+    }
+}

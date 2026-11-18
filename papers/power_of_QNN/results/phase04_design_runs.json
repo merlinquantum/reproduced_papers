@@ -1,0 +1,46 @@
+{
+  "Amendment 2 tier-1 screen (P0-P7)": {
+    "run": "outdir/run_20261024-120238",
+    "role": "EXPLORATORY screen, draws 0-2; selection by hard ED at n=1e5."
+  },
+  "Amendment 2 confirmation (P4)": {
+    "run": "outdir/run_20261024-120439",
+    "role": "Confirmation on fresh draws 5-9."
+  },
+  "Amendment 3 tier-2 screen (T2a-T2c)": {
+    "run": "outdir/run_20261024-121233",
+    "role": "EXPLORATORY screen, draws 0-2."
+  },
+  "Amendment 3 confirmation (T2a)": {
+    "run": "outdir/run_20261024-144127",
+    "role": "Confirmation on fresh draws 5-9."
+  },
+  "Amendment 4 screen, theta ~ U[0,1] (A1-A8, Q2, Q3)": {
+    "run": "outdir/run_20261025-102902",
+    "role": "EXPLORATORY screen, draws 0-2; selection by hard ED at n=1e5 (tie 0.01)."
+  },
+  "Amendment 4 screen, theta ~ U[0,2pi] (A2, A4, Q2)": {
+    "run": "outdir/run_20261025-102829",
+    "role": "EXPLORATORY screen, draws 0-2."
+  },
+  "Amendment 4 confirmation, U[0,1] (A7, A8, Q2, Q3)": {
+    "run": "outdir/run_20261025-103433",
+    "role": "Confirmation on fresh draws 10-14; beats rule 3 x max std at n=1e5 and 1e6."
+  },
+  "Amendment 4 confirmation, U[0,2pi] (A4, Q2)": {
+    "run": "outdir/run_20261025-103537",
+    "role": "Confirmation on fresh draws 10-14."
+  },
+  "Amendment 5 capacity screen (B1-B6, Q3)": {
+    "run": "outdir/run_20261028-165458",
+    "role": "EXPLORATORY screen, draws 0-2; adequacy bar = Q3 - 0.01."
+  },
+  "Amendment 5 loss screen (B1-B6)": {
+    "run": "outdir/run_20261028-165459",
+    "role": "EXPLORATORY screen on the Iris 1/2 split, seeds 0-9; lowest validation CE among adequate designs."
+  },
+  "Amendment 5 capacity confirmation (B2, Q3)": {
+    "run": "outdir/run_20261028-171109",
+    "role": "Confirmation on fresh draws 10-14."
+  }
+}

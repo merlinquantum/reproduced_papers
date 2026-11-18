@@ -1,0 +1,69 @@
+{
+  "description": "Smoke run of the E1 search: 6 qubits, 4 layers, 4 trials, 2 realisations, short NARMA sequences. Checks the optuna loop, bond-dimension and variability objectives, and trials.csv; not a result.",
+  "task": "pareto_search",
+  "dtype": "float32",
+  "reservoir": {
+    "n_qubits": 6,
+    "n_layers": 4,
+    "input_shift": 4,
+    "chunk_size": 512
+  },
+  "dataset": {
+    "name": "narma",
+    "narma": {
+      "orders": [
+        1,
+        2,
+        3
+      ],
+      "t_init": 20,
+      "t_train": 60,
+      "t_test": 40
+    }
+  },
+  "pareto_search": {
+    "sampler": "nsga2",
+    "population_size": 4,
+    "n_trials": 4,
+    "n_realisations": 2,
+    "feature_set": "tuning",
+    "noise": {
+      "kind": "gaussian",
+      "std": 0.03162277660168379
+    },
+    "bond_windows": 2,
+    "fidelity_threshold": 0.9995,
+    "variability_samples": 32,
+    "search_space": {
+      "input_strength": [
+        0.01,
+        2.0
+      ],
+      "b_mean": [
+        0.0,
+        1.5707963267948966
+      ],
+      "b_std": [
+        0.0,
+        0.3
+      ],
+      "h_mean": [
+        0.1,
+        1.5707963267948966
+      ],
+      "h_std": [
+        0.0,
+        0.3
+      ],
+      "J_mean": [
+        0.0,
+        1.5707963267948966
+      ],
+      "J_std": [
+        0.0,
+        0.3
+      ]
+    },
+    "score_max_order": 3
+  }
+}

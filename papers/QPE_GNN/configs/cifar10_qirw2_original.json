@@ -1,0 +1,36 @@
+{
+  "description": "Appendix C CIFAR10 controlled comparison: RRWP plus 2-QiRW, four seeds.",
+  "feasibility": {
+    "status": "resource_intensive"
+  },
+  "dataset": "cifar10",
+  "dataset_kwargs": {},
+  "model": "grit",
+  "encoding": "rrwp+qirw2",
+  "rrwp_dim": 18,
+  "qpe_dim": 18,
+  "qpe_initial_distribution": "adjacency",
+  "seeds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "seed": 0,
+  "node_dim": 52,
+  "depth": 3,
+  "num_heads": 4,
+  "num_classes": 10,
+  "head": "graph_class",
+  "pooling": "mean",
+  "dropout": 0,
+  "attention_dropout": 0.5,
+  "epochs": 200,
+  "batch_size": 16,
+  "lr": 0.001,
+  "weight_decay": 0.00001,
+  "warmup_epochs": 5,
+  "minimum_lr": 0.000001,
+  "parameter_budget": 105000,
+  "device": "cpu"
+}

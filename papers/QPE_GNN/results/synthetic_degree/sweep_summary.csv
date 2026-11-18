@@ -1,0 +1,2 @@
+candidate,status,observed_runs,expected_runs,mean_test_acc,std_test_acc,num_params,epochs,mean_wall_clock_s
+synthetic_degree,COMPLETE,4,4,1.0,0.0,3906,200,142.53482073545456

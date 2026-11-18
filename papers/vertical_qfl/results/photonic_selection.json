@@ -1,0 +1,163 @@
+{
+  "rule": {
+    "metric": "final_validation_accuracy",
+    "direction": "maximize",
+    "aggregation": "mean over permutation seeds",
+    "tie_tolerance": 0.005,
+    "tie_break_ascending": [
+      "lr",
+      "client_encoding_scale"
+    ]
+  },
+  "candidates_ranked_by_mean": [
+    {
+      "overrides": {
+        "client_encoding_scale": 0.39269908169872414,
+        "lr": 0.01
+      },
+      "sweep": "T2",
+      "mean": 0.6705882352941177,
+      "std_ddof1": 0.04991341984846224
+    },
+    {
+      "overrides": {
+        "client_encoding_scale": 0.19634954084936207,
+        "lr": 0.01
+      },
+      "sweep": "T2",
+      "mean": 0.6529411764705882,
+      "std_ddof1": 0.04714045207910316
+    },
+    {
+      "overrides": {
+        "client_encoding_scale": 0.7853981633974483,
+        "lr": 0.01
+      },
+      "sweep": "T1",
+      "mean": 0.6000000000000001,
+      "std_ddof1": 0.016637806616154077
+    },
+    {
+      "overrides": {
+        "client_encoding_scale": 0.7853981633974483,
+        "lr": 0.002
+      },
+      "sweep": "T1",
+      "mean": 0.40784313725490196,
+      "std_ddof1": 0.09428090415820632
+    },
+    {
+      "overrides": {
+        "client_encoding_scale": 1.5707963267948966,
+        "lr": 0.01
+      },
+      "sweep": "T1",
+      "mean": 0.2803921568627451,
+      "std_ddof1": 0.10259980746628337
+    },
+    {
+      "overrides": {
+        "client_encoding_scale": 1.5707963267948966,
+        "lr": 0.002
+      },
+      "sweep": "T1",
+      "mean": 0.15294117647058825,
+      "std_ddof1": 0.03327561323230812
+    },
+    {
+      "overrides": {
+        "client_encoding_scale": 0.39269908169872414,
+        "lr": 0.03
+      },
+      "sweep": "T2",
+      "mean": 0.12352941176470589,
+      "std_ddof1": 0.024956709924231088
+    },
+    {
+      "overrides": {
+        "client_encoding_scale": 0.7853981633974483,
+        "lr": 0.03
+      },
+      "sweep": "T2",
+      "mean": 0.11568627450980393,
+      "std_ddof1": 0.00831890330807703
+    },
+    {
+      "overrides": {
+        "client_encoding_scale": 3.141592653589793,
+        "lr": 0.01
+      },
+      "sweep": "T1",
+      "mean": 0.10784313725490197,
+      "std_ddof1": 0.03604858100166713
+    },
+    {
+      "overrides": {
+        "client_encoding_scale": 0.19634954084936207,
+        "lr": 0.03
+      },
+      "sweep": "T2",
+      "mean": 0.10392156862745097,
+      "std_ddof1": 0.030502645462949108
+    },
+    {
+      "overrides": {
+        "client_encoding_scale": 0.19634954084936207,
+        "lr": 0.1
+      },
+      "sweep": "T2",
+      "mean": 0.10392156862745097,
+      "std_ddof1": 0.00277296776935901
+    },
+    {
+      "overrides": {
+        "client_encoding_scale": 0.39269908169872414,
+        "lr": 0.1
+      },
+      "sweep": "T2",
+      "mean": 0.09803921568627451,
+      "std_ddof1": 0.01109187107743604
+    },
+    {
+      "overrides": {
+        "client_encoding_scale": 3.141592653589793,
+        "lr": 0.002
+      },
+      "sweep": "T1",
+      "mean": 0.09411764705882353,
+      "std_ddof1": 0.0
+    },
+    {
+      "overrides": {
+        "client_encoding_scale": 0.7853981633974483,
+        "lr": 0.1
+      },
+      "sweep": "T2",
+      "mean": 0.08823529411764705,
+      "std_ddof1": 0.01386483884679505
+    }
+  ],
+  "tied_within_tolerance": [
+    {
+      "client_encoding_scale": 0.39269908169872414,
+      "lr": 0.01
+    }
+  ],
+  "selected": {
+    "client_encoding_scale": 0.39269908169872414,
+    "lr": 0.01
+  },
+  "repeated_candidates": [
+    {
+      "overrides": {
+        "client_encoding_scale": 0.7853981633974483,
+        "lr": 0.01
+      },
+      "kept_from": "T1",
+      "repeat_from": "T2",
+      "kept_mean": 0.6000000000000001,
+      "repeat_mean": 0.6000000000000001,
+      "identical": true
+    }
+  ]
+}

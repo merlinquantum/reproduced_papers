@@ -1,0 +1,10 @@
+{
+  "description": "pep_q_gan: training full",
+  "stage": "train",
+  "device": "cuda",
+  "training": {
+    "steps": 100000,
+    "batch_size": 256,
+    "save_every": 1000
+  }
+}

@@ -1,0 +1,10 @@
+# Environment: Python 3.11 virtual environment at <repo>/.venv
+torch
+numpy
+scipy
+scikit-learn
+networkx
+pyscf
+pytest
+# Needed because the shared runtime (runtime_lib) imports merlin and perceval at start-up.
+merlinquantum>=0.4

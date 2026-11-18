@@ -1,0 +1,125 @@
+{
+  "pairs": {
+    "QFL hybrid VQTN vs its non-federated baseline (C1a, C1b)": {
+      "status": "COMMENSURABLE",
+      "above": 0,
+      "below": 1,
+      "within noise": 11,
+      "cells": 12,
+      "mean_difference": -0.18542885159957478,
+      "min_difference": -0.7012195121951237,
+      "max_difference": 0.2032520325203393
+    },
+    "QFL faithful VQTN vs its non-federated baseline": {
+      "status": "COMMENSURABLE",
+      "above": 0,
+      "below": 0,
+      "within noise": 4,
+      "cells": 4,
+      "mean_difference": 0.9979889391654062,
+      "min_difference": 0.010055304172951196,
+      "max_difference": 1.9808949220713856
+    },
+    "QFL photonic vs its non-federated baseline (adaptation)": {
+      "status": "COMMENSURABLE",
+      "above": 0,
+      "below": 0,
+      "within noise": 12,
+      "cells": 12,
+      "mean_difference": -0.048191475385517414,
+      "min_difference": -1.0873983739837598,
+      "max_difference": 0.5242718446601913
+    },
+    "Federated classical MLP vs non-federated classical MLP": {
+      "status": "COMMENSURABLE",
+      "above": 0,
+      "below": 7,
+      "within noise": 5,
+      "cells": 12,
+      "mean_difference": -0.49448933327397054,
+      "min_difference": -1.1262135922330287,
+      "max_difference": 0.10162601626015544
+    },
+    "Hybrid VQTN vs classical MLP": {
+      "status": "COMMENSURABLE",
+      "above": 0,
+      "below": 15,
+      "within noise": 0,
+      "cells": 15,
+      "mean_difference": -3.031556957774035,
+      "min_difference": -4.654471544715449,
+      "max_difference": -1.097087378640765
+    },
+    "Faithful VQTN vs classical MLP": {
+      "status": "PARTIALLY_COMMENSURABLE",
+      "above": 0,
+      "below": 5,
+      "within noise": 0,
+      "cells": 5,
+      "mean_difference": -6.85771744595273,
+      "min_difference": -8.134741075917532,
+      "max_difference": -5.882352941176464
+    },
+    "Photonic MerLin vs classical MLP": {
+      "status": "PARTIALLY_COMMENSURABLE",
+      "above": 0,
+      "below": 15,
+      "within noise": 0,
+      "cells": 15,
+      "mean_difference": -0.9969336104276427,
+      "min_difference": -1.6699029126213674,
+      "max_difference": -0.6601941747572795
+    },
+    "Photonic fixed LexGrouping vs classical MLP": {
+      "status": "PARTIALLY_COMMENSURABLE",
+      "above": 0,
+      "below": 5,
+      "within noise": 0,
+      "cells": 5,
+      "mean_difference": -3.384615384615387,
+      "min_difference": -4.172951231774761,
+      "max_difference": -2.614379084967325
+    },
+    "Photonic MerLin vs hybrid VQTN": {
+      "status": "PARTIALLY_COMMENSURABLE",
+      "above": 13,
+      "below": 0,
+      "within noise": 2,
+      "cells": 15,
+      "mean_difference": 2.034623347346392,
+      "min_difference": 0.25242718446601486,
+      "max_difference": 3.8617886178861767
+    },
+    "Hybrid VQTN vs paper-reported values": {
+      "status": "PARTIALLY_COMMENSURABLE",
+      "above": 3,
+      "below": 10,
+      "within noise": 2,
+      "cells": 15,
+      "mean_difference": -1.3406679761817335,
+      "min_difference": -3.8541463414634194,
+      "max_difference": 0.5703016591251782
+    },
+    "Photonic MerLin vs paper-reported values": {
+      "status": "PARTIALLY_COMMENSURABLE",
+      "above": 8,
+      "below": 2,
+      "within noise": 5,
+      "cells": 15,
+      "mean_difference": 0.6939553711646587,
+      "min_difference": -0.8318446601941787,
+      "max_difference": 2.400422322775256
+    }
+  },
+  "expected_runs": {
+    "e1_vqtn_hybrid": 75,
+    "e2_vqtn_hybrid": 10,
+    "control_classical_e1": 75,
+    "control_classical_e2": 10,
+    "control_iid_vqtn_0v9": 10,
+    "sensitivity_faithful_0v9": 25,
+    "e1_merlin": 75,
+    "e2_merlin": 10,
+    "sensitivity_merlin_lexgroup_0v9": 25
+  }
+}

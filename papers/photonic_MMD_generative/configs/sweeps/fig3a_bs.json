@@ -1,0 +1,65 @@
+{
+    "sweep_id": "fig3a_bs",
+    "description": "Fig. 3a: BS m=256, n=16, Haar, near-identity, Gaussian sigma in {2.0, 3.0, 4.5}; QCBM (with random, B4 marginal, RBM, test-to-test) and B5 distinguishable twin; seeds 0-4. Comparison sweep, no selection.",
+    "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ],
+    "candidates": [
+        {
+            "label": "qcbm_sigma2.0",
+            "config": "configs/fig3a_bs_original.json",
+            "overrides": {
+                "kernel.sigma": 2.0,
+                "evaluation.rbm.score_sigma": 2.0
+            }
+        },
+        {
+            "label": "b5_sigma2.0",
+            "config": "configs/fig3a_bs_classical.json",
+            "overrides": {
+                "kernel.sigma": 2.0
+            }
+        },
+        {
+            "label": "qcbm_sigma3.0",
+            "config": "configs/fig3a_bs_original.json",
+            "overrides": {
+                "kernel.sigma": 3.0,
+                "evaluation.rbm.score_sigma": 3.0
+            }
+        },
+        {
+            "label": "b5_sigma3.0",
+            "config": "configs/fig3a_bs_classical.json",
+            "overrides": {
+                "kernel.sigma": 3.0
+            }
+        },
+        {
+            "label": "qcbm_sigma4.5",
+            "config": "configs/fig3a_bs_original.json",
+            "overrides": {
+                "kernel.sigma": 4.5,
+                "evaluation.rbm.score_sigma": 4.5
+            }
+        },
+        {
+            "label": "b5_sigma4.5",
+            "config": "configs/fig3a_bs_classical.json",
+            "overrides": {
+                "kernel.sigma": 4.5
+            }
+        }
+    ],
+    "metric": "primary: sample_metrics.<model>.walsh_mmd (same kernel operators for every model); also test_mmd_estimator (paper protocol) and gaussian_mmd_raw/binarized for Gaussian kernels",
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final parameters",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "differences within one pooled std are reported as not separated",
+    "selection": "none (comparison sweep)"
+}

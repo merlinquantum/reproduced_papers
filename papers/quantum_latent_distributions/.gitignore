@@ -1,0 +1,14 @@
+outdir/
+outdir_*/
+data/
+*.npy
+!results/*.npy
+__pycache__/
+.venv/
+.pytest_cache/
+models/banks/
+sweep*/
+chal_*/
+run_*/
+gauss_*/
+g5k_*/

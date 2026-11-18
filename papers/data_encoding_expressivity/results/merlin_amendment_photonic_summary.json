@@ -1,0 +1,360 @@
+{
+  "runs": [
+    {
+      "label": "Photonic improved, P0 paper protocol (mini-batch 25, lr 0.3, 200 steps)",
+      "run_dir": "outdir/run_20261028-154813",
+      "steps": 200,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_L3_phase4_model",
+          "final_mse_max": 0.019302299439146957,
+          "final_mse_mean": 0.011262266136923898,
+          "final_mse_min": 0.004387583347902256,
+          "final_mse_std": 0.006338651933191602,
+          "model_kind": "photonic",
+          "n_parameters": 24,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_L3_screens_fixed_readout",
+          "final_mse_max": 0.06434609887543165,
+          "final_mse_mean": 0.03355627093175149,
+          "final_mse_min": 0.004783738052545087,
+          "final_mse_std": 0.024577420925180067,
+          "model_kind": "photonic",
+          "n_parameters": 30,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_L3_screens_trainable_readout",
+          "final_mse_max": 0.03536693779789188,
+          "final_mse_mean": 0.014997391013867633,
+          "final_mse_min": 0.000100391448320953,
+          "final_mse_std": 0.012559162450559967,
+          "model_kind": "photonic",
+          "n_parameters": 37,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4_n5_L1_screens_trainable_readout",
+          "final_mse_max": 0.05054350650359446,
+          "final_mse_mean": 0.04098453762325937,
+          "final_mse_min": 0.03299474534508024,
+          "final_mse_std": 0.00713657845364464,
+          "model_kind": "photonic",
+          "n_parameters": 128,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_multiscale_1_3_screens_trainable_readout",
+          "final_mse_max": 0.02277452845582192,
+          "final_mse_mean": 0.005091229828180058,
+          "final_mse_min": 0.0006206006937835242,
+          "final_mse_std": 0.008681243394451576,
+          "model_kind": "photonic",
+          "n_parameters": 38,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4_single_photon_m6_theorem_setting",
+          "final_mse_max": 0.014306160643901394,
+          "final_mse_mean": 0.005101318761672216,
+          "final_mse_min": 2.218882573528781e-05,
+          "final_mse_std": 0.006982727692694816,
+          "model_kind": "photonic",
+          "n_parameters": 72,
+          "n_seeds": 6,
+          "success_fraction": 0.16666666666666666
+        }
+      ],
+      "repetition_pairs": []
+    },
+    {
+      "label": "Photonic improved, P1 (full batch, lr 0.3, 1000 steps; non-paper protocol)",
+      "run_dir": "outdir/run_20261028-154841",
+      "steps": 1000,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_L3_phase4_model",
+          "final_mse_max": 0.004276185911266342,
+          "final_mse_mean": 0.0027708243115025697,
+          "final_mse_min": 0.0017966994626997294,
+          "final_mse_std": 0.001016400414502198,
+          "model_kind": "photonic",
+          "n_parameters": 24,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_L3_screens_fixed_readout",
+          "final_mse_max": 0.0041537073328526235,
+          "final_mse_mean": 0.0033703110278734544,
+          "final_mse_min": 0.002064241208099366,
+          "final_mse_std": 0.0007333434696815952,
+          "model_kind": "photonic",
+          "n_parameters": 30,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_L3_screens_trainable_readout",
+          "final_mse_max": 0.22841266150772208,
+          "final_mse_mean": 0.0383674885777527,
+          "final_mse_min": 1.0242754346878741e-14,
+          "final_mse_std": 0.09310384719314045,
+          "model_kind": "photonic",
+          "n_parameters": 37,
+          "n_seeds": 6,
+          "success_fraction": 0.5
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4_n5_L1_screens_trainable_readout",
+          "final_mse_max": 0.02677744325949833,
+          "final_mse_mean": 0.012604184813265716,
+          "final_mse_min": 0.00018939919052556156,
+          "final_mse_std": 0.013186434957036985,
+          "model_kind": "photonic",
+          "n_parameters": 128,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_multiscale_1_3_screens_trainable_readout",
+          "final_mse_max": 0.0005183016994668456,
+          "final_mse_mean": 9.689137489300293e-05,
+          "final_mse_min": 7.128959974692913e-12,
+          "final_mse_std": 0.00020696998536531518,
+          "model_kind": "photonic",
+          "n_parameters": 38,
+          "n_seeds": 6,
+          "success_fraction": 0.8333333333333334
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4_single_photon_m6_theorem_setting",
+          "final_mse_max": 6.229555286948844e-05,
+          "final_mse_mean": 1.0659197708906507e-05,
+          "final_mse_min": 5.910592095289399e-10,
+          "final_mse_std": 2.530269276773284e-05,
+          "model_kind": "photonic",
+          "n_parameters": 72,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        }
+      ],
+      "repetition_pairs": []
+    },
+    {
+      "label": "Photonic improved, P2 (full batch, lr 0.05, 1000 steps; non-paper protocol)",
+      "run_dir": "outdir/run_20261028-155113",
+      "steps": 1000,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_L3_phase4_model",
+          "final_mse_max": 0.004146572940024664,
+          "final_mse_mean": 0.0033513467975756096,
+          "final_mse_min": 0.002598071655736066,
+          "final_mse_std": 0.0005999916960575902,
+          "model_kind": "photonic",
+          "n_parameters": 24,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_L3_screens_fixed_readout",
+          "final_mse_max": 0.0038563735578800774,
+          "final_mse_mean": 0.0025081508054286784,
+          "final_mse_min": 0.0015879687960925787,
+          "final_mse_std": 0.001003452431974686,
+          "model_kind": "photonic",
+          "n_parameters": 30,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_L3_screens_trainable_readout",
+          "final_mse_max": 5.052911061771561e-05,
+          "final_mse_mean": 1.4044569552557586e-05,
+          "final_mse_min": 1.4897415224323855e-07,
+          "final_mse_std": 2.0218442747908813e-05,
+          "model_kind": "photonic",
+          "n_parameters": 37,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4_n5_L1_screens_trainable_readout",
+          "final_mse_max": 0.0008368310608695003,
+          "final_mse_mean": 0.00018631198293103763,
+          "final_mse_min": 7.173883000473312e-07,
+          "final_mse_std": 0.00032793303198516905,
+          "model_kind": "photonic",
+          "n_parameters": 128,
+          "n_seeds": 6,
+          "success_fraction": 0.6666666666666666
+        },
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_multiscale_1_3_screens_trainable_readout",
+          "final_mse_max": 2.7830813773186098e-05,
+          "final_mse_mean": 4.791957658531205e-06,
+          "final_mse_min": 9.278910421345421e-10,
+          "final_mse_std": 1.1290007757504839e-05,
+          "model_kind": "photonic",
+          "n_parameters": 38,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4_single_photon_m6_theorem_setting",
+          "final_mse_max": 3.3066552421983176e-05,
+          "final_mse_mean": 1.3094247708461689e-05,
+          "final_mse_min": 1.0661574502985081e-16,
+          "final_mse_std": 1.4830806274979807e-05,
+          "model_kind": "photonic",
+          "n_parameters": 72,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        }
+      ],
+      "repetition_pairs": []
+    },
+    {
+      "label": "Photonic improved, P3 (full batch, lr 0.01, 1000 steps; non-paper protocol)",
+      "run_dir": "outdir/run_20261028-155331",
+      "steps": 1000,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_L3_phase4_model",
+          "final_mse_max": 0.006078983897867249,
+          "final_mse_mean": 0.003779807688494305,
+          "final_mse_min": 0.0022593443583658105,
+          "final_mse_std": 0.0012777175198592481,
+          "model_kind": "photonic",
+          "n_parameters": 24,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_L3_screens_fixed_readout",
+          "final_mse_max": 0.005568893740854482,
+          "final_mse_mean": 0.00291135121905226,
+          "final_mse_min": 0.0016342830351987886,
+          "final_mse_std": 0.0016335927533275157,
+          "model_kind": "photonic",
+          "n_parameters": 30,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_L3_screens_trainable_readout",
+          "final_mse_max": 1.956317499087895e-05,
+          "final_mse_mean": 5.856995484962383e-06,
+          "final_mse_min": 5.92025218334287e-08,
+          "final_mse_std": 8.78010790488992e-06,
+          "model_kind": "photonic",
+          "n_parameters": 37,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4_n5_L1_screens_trainable_readout",
+          "final_mse_max": 3.7389456457735986e-05,
+          "final_mse_mean": 6.586801000753191e-06,
+          "final_mse_min": 4.087194746404269e-10,
+          "final_mse_std": 1.5106013747884457e-05,
+          "model_kind": "photonic",
+          "n_parameters": 128,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 2.0034744183534344e-32,
+          "case": "fig4_n2_multiscale_1_3_screens_trainable_readout",
+          "final_mse_max": 7.340967588521349e-07,
+          "final_mse_mean": 1.2871229923580388e-07,
+          "final_mse_min": 1.7408979445605398e-31,
+          "final_mse_std": 2.969694861810082e-07,
+          "model_kind": "photonic",
+          "n_parameters": 38,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4_single_photon_m6_theorem_setting",
+          "final_mse_max": 2.185385048457228e-05,
+          "final_mse_mean": 3.642521391025289e-06,
+          "final_mse_min": 1.1853772087445014e-31,
+          "final_mse_std": 8.921692778040834e-06,
+          "model_kind": "photonic",
+          "n_parameters": 72,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        }
+      ],
+      "repetition_pairs": []
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "description": "B0 tuned: Fourier surrogate L = 1 (HardTanh, 4374 parameters) trained with Adam and an L2 strength from --l2; Phase 5 fair tuning, validation split enabled.",
+  "experiment": {
+    "id": "fair_surrogate_l1_classical"
+  },
+  "model": {
+    "kind": "surrogate",
+    "spectrum": 1
+  },
+  "data": {
+    "protocol": "paper",
+    "validation": {
+      "enabled": true,
+      "seed": 201,
+      "n": 1500
+    }
+  },
+  "training": {
+    "steps": 2000,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "l2": 0.0
+  }
+}

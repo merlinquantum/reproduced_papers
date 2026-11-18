@@ -1,0 +1,12 @@
+# QML_financial_benchmark (arXiv:2601.03802) reproduction dependencies.
+# Versions are the ones installed in the reproduction venv on 2026-10-21.
+torch>=2.12
+numpy>=2.5
+pandas>=3.0
+scipy>=1.18
+scikit-learn>=1.9
+optuna>=5.0
+arch>=8.0
+merlinquantum>=0.4.2
+certifi
+pytest

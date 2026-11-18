@@ -1,0 +1,49 @@
+{
+  "description": "MerLin photonic adaptation (reduced-scope validation): PA (phase sandwich, m=n modes) and PB (bosonic hopping chain, m=n+1 modes), k=floor(m/2) photons, threshold detection, exact FOCK simulation; n=4-14, 10 seeds, all study components, paper grids, paper + 5-fold CV (CV at n=4,8,12). Photonic FQK up to 14 modes.",
+  "dtype": "float64",
+  "study": {
+    "embeddings": [
+      "PA",
+      "PB"
+    ],
+    "quantum_kernel_max_qubits": 14,
+    "system_sizes": [
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "cv_system_sizes": [
+      4,
+      8,
+      12
+    ]
+  },
+  "models": {
+    "grid": "paper",
+    "protocols": [
+      "paper",
+      "cv"
+    ],
+    "n_jobs": 8
+  }
+}

@@ -1,0 +1,74 @@
+{
+    "description": "Phase 04 M3 (MerLin adaptation, reduced-scope hardware study): boson-sampling data m=16, n=4 (paper recipe, new seeds), Haar QCBM trained on the MerLin backend (PNR, FOCK statistics), then exact MerLin SLOS evaluation of the trained U under indistinguishability V and transmittance T with PNR vs threshold detection, postselected on n detections. Gaussian sigma=1.",
+    "experiment": {
+        "name": "noise_study_bs_m16_merlin",
+        "paper_reference": "none (Phase 04 hardware-aware extension)"
+    },
+    "dataset": {
+        "name": "boson_sampling",
+        "m": 16,
+        "n": 4,
+        "n_train": 5000,
+        "n_test": 5000,
+        "input_state": "middle_compact",
+        "unitary_seed": 2619,
+        "sample_seed": 8809
+    },
+    "model": {
+        "ansatz": "haar",
+        "butterfly_variant": "reference",
+        "input_state": "middle_alternating",
+        "photon_model": "indistinguishable",
+        "backend": "merlin"
+    },
+    "kernel": {
+        "type": "gaussian",
+        "sigma": 1.0
+    },
+    "init": {
+        "strategy": "identity",
+        "perturbation": 0.01
+    },
+    "training": {
+        "steps": 2000,
+        "learning_rate": 0.01,
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "convergence_interval": 200,
+        "log_every": 1
+    },
+    "evaluation": {
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "sample_metrics": true,
+        "num_model_samples": 2000,
+        "baselines": [
+            "random",
+            "marginal",
+            "test_to_test"
+        ],
+        "sampler": "perceval",
+        "noise_study": {
+            "indistinguishability": [
+                1.0,
+                0.95,
+                0.9,
+                0.8,
+                0.6,
+                0.4,
+                0.2,
+                0.0
+            ],
+            "transmittance": [
+                1.0,
+                0.9,
+                0.7
+            ],
+            "detectors": [
+                "pnr",
+                "threshold"
+            ],
+            "sigma": 1.0
+        }
+    }
+}

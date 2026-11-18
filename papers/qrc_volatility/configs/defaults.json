@@ -1,0 +1,186 @@
+{
+  "description": "Paper-accurate defaults for the QRC realized-volatility reproduction (arXiv:2505.13933). Reservoir geometry, encoding, evolution time, ridge delta, rolling-window schedule and baseline hyperparameters follow the paper and the authors' released code; deviations and unresolved ambiguities are recorded in LOG.md.",
+  "experiment": "paper_table2",
+  "seed": 0,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "device": "cpu",
+  "dataset": {
+    "name": "sp500_monthly_realized_volatility",
+    "root": null,
+    "csv_filename": "Data.CSV",
+    "target": "RV",
+    "sample_start": "1950-01",
+    "sample_end": "2017-12",
+    "n_lags": 3
+  },
+  "evaluation": {
+    "protocol": "rolling_window_reestimation",
+    "n_out_of_sample": 245,
+    "n_validation": 120,
+    "horizons": [
+      1,
+      5
+    ],
+    "multi_step_mode": "closed_loop",
+    "selection_metric": "mse",
+    "selection_split": "validation",
+    "tie_tolerance": 1e-06,
+    "mcs": {
+      "size": 0.05,
+      "reps": 10000
+    }
+  },
+  "quantum_reservoir": {
+    "variants": [
+      "QR1",
+      "QR2"
+    ],
+    "virtual_nodes": {
+      "QR1": 1,
+      "QR2": 2
+    },
+    "paper_instance": {
+      "QR1": 0,
+      "QR2": 1
+    },
+    "n_qubits_total": 10,
+    "encoding": "ry_pi_times_feature",
+    "hamiltonian": "fully_connected_transverse_field_ising",
+    "transverse_field_v": 1.0,
+    "evolution_time_tau": 1.0,
+    "readout": "pauli_z_all_qubits",
+    "ridge_delta": 1e-08
+  },
+  "feature_selection": {
+    "method": "wrapper_forward_selection",
+    "variants": [
+      "QR1",
+      "QR2"
+    ],
+    "max_features": 10,
+    "selection_split": "validation",
+    "pool": [
+      "RV",
+      "RV_q",
+      "RV_a",
+      "DP",
+      "EP",
+      "MKT",
+      "SMB",
+      "HML",
+      "STR",
+      "TB",
+      "INF",
+      "DEF",
+      "IP"
+    ],
+    "paper_optimal_qr1": [
+      "RV",
+      "MKT",
+      "DP",
+      "IP",
+      "RV_q",
+      "STR",
+      "DEF"
+    ],
+    "paper_optimal_qr2": [
+      "RV",
+      "MKT",
+      "STR",
+      "RV_q",
+      "EP",
+      "INF",
+      "DEF"
+    ]
+  },
+  "instance_sweep": {
+    "variants": [
+      "QR1",
+      "QR2"
+    ],
+    "n_instances": 100,
+    "coupling_source": "authors"
+  },
+  "baselines": {
+    "enabled": [
+      "har",
+      "harx",
+      "ar1",
+      "ar3",
+      "armax",
+      "rc",
+      "rcx",
+      "lstm",
+      "lstmx"
+    ],
+    "harx_window_start": 277,
+    "rc": {
+      "n_units": 50,
+      "leak_rate": 0.6,
+      "spectral_radius": 0.9,
+      "input_scaling": 0.1,
+      "ridge": 1e-07
+    },
+    "rcx": {
+      "n_units": 20,
+      "leak_rate": 0.6,
+      "spectral_radius": 0.9,
+      "input_scaling": 0.1,
+      "ridge": 1e-07
+    },
+    "lstm": {
+      "layers": 2,
+      "hidden_size": 60,
+      "lr": 0.001,
+      "batch_size": 64,
+      "epochs": 100
+    },
+    "lstmx": {
+      "layers": 2,
+      "hidden_size": 50,
+      "lr": 0.001,
+      "batch_size": 64,
+      "epochs": 100
+    }
+  },
+  "controls": {
+    "enabled": true,
+    "esn_iso": {
+      "readout_dims": [
+        10,
+        20
+      ],
+      "n_instances": 100,
+      "leak_rate": 0.6,
+      "spectral_radius": 0.9,
+      "input_scaling": 0.1
+    }
+  },
+  "logging": {
+    "level": "info"
+  },
+  "photonic": {
+    "n_instances": 25,
+    "encoding_scale_divisors": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "variants": {
+      "PQR1": {
+        "n_modes": 10,
+        "n_photons": 3,
+        "readout": "mode_expectations",
+        "ensemble": false
+      },
+      "PQR2": {
+        "n_modes": 10,
+        "n_photons": 3,
+        "readout": "mode_expectations",
+        "ensemble": true
+      }
+    }
+  }
+}

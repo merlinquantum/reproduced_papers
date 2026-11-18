@@ -1,0 +1,25 @@
+{
+  "description": "MerLin photonic adaptation SMOKE (not a result): PA/PB photonic embeddings, m=4-5 features, seed 0, smoke grids, all study components.",
+  "dtype": "float64",
+  "study": {
+    "embeddings": [
+      "PA",
+      "PB"
+    ],
+    "quantum_kernel_max_qubits": 14,
+    "system_sizes": [
+      4,
+      5
+    ],
+    "seeds": [
+      0
+    ],
+    "cv_system_sizes": [
+      4
+    ]
+  },
+  "models": {
+    "grid": "smoke",
+    "n_jobs": 4
+  }
+}

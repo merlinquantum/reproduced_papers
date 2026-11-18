@@ -1,0 +1,182 @@
+claim,setting,system,role,provenance,scope,runs,metric,mean,std,matching_basis,parameters,status
+C2,KCHOL 3-D lagged,leak_free:qnn,quantum model (paper method),local,paper-accurate,5/5,test AUC (max),0.5156631531661613,0.00895780726051144,"same data, folds, optimizer, selection rule",49–70,COMMENSURABLE
+C2,KCHOL 3-D lagged,leak_free:ann,"paper baseline (ANN grid, reproduced)",local,paper-accurate,5/5,test AUC (max),0.5111694020631788,0.01827799344618171,"same data, folds, optimizer, selection rule",21–673,COMMENSURABLE
+C2,KCHOL 3-D lagged,leak_free:ann_parameter_matched,fair control: parameter-matched ANN,local,paper-accurate,5/5,test AUC (max),0.5101009128683961,0.012558138489097355,trainable parameters (±10%),51–71,COMMENSURABLE
+C2,KCHOL 3-D lagged,logistic_regression,fair control: linear floor,local,paper-accurate,5/5,test AUC (max),0.498323466653832,0.0,"same data, folds, optimizer, selection rule",4–4,COMMENSURABLE
+C2,KCHOL 3-D lagged,majority_class,floor,local,paper-accurate,5/5,test AUC (max),0.5,0.0,"same data, folds, optimizer, selection rule",0–0,COMMENSURABLE
+C2,KCHOL 3-D lagged,paper QNN,paper-reported,paper,single run,1/1,test AUC (max),0.7968,,paper,not reported,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C2,KCHOL 3-D lagged,paper ANN,paper-reported,paper,single run,1/1,test AUC (max),0.7475,,paper,,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C2,KCHOL 3-D same-day (diagnostic),leak_free:qnn,quantum model (paper method),local,diagnostic,5/5,test AUC (max),0.9255266239912723,0.01109125143151397,"same data, folds, optimizer, selection rule",31–58,PARTIALLY_COMMENSURABLE (diagnostic features)
+C2,KCHOL 3-D same-day (diagnostic),leak_free:ann,"paper baseline (ANN grid, reproduced)",local,diagnostic,5/5,test AUC (max),0.944480274662688,0.0026960423742647703,"same data, folds, optimizer, selection rule",2369–2369,PARTIALLY_COMMENSURABLE (diagnostic features)
+C2,KCHOL 3-D same-day (diagnostic),leak_free:ann_parameter_matched,fair control: parameter-matched ANN,local,diagnostic,5/5,test AUC (max),0.9271823009417464,0.006423099494679595,trainable parameters (±10%),31–56,PARTIALLY_COMMENSURABLE (diagnostic features)
+C2,KCHOL 3-D same-day (diagnostic),logistic_regression,fair control: linear floor,local,diagnostic,5/5,test AUC (max),0.9104298021851085,0.0,"same data, folds, optimizer, selection rule",4–4,PARTIALLY_COMMENSURABLE (diagnostic features)
+C2,KCHOL 3-D same-day (diagnostic),majority_class,floor,local,diagnostic,5/5,test AUC (max),0.5,0.0,"same data, folds, optimizer, selection rule",0–0,PARTIALLY_COMMENSURABLE (diagnostic features)
+C2,KCHOL 3-D same-day (diagnostic),paper QNN,paper-reported,paper,single run,1/1,test AUC (max),0.7968,,paper,not reported,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C2,KCHOL 3-D same-day (diagnostic),paper ANN,paper-reported,paper,single run,1/1,test AUC (max),0.7475,,paper,,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,GARAN 3-D lagged,leak_free:qnn,quantum model (paper method),local,paper-accurate,5/5,test AUC (max),0.4966469333076639,0.022538933799100356,"same data, folds, optimizer, selection rule",27–66,COMMENSURABLE
+C3,GARAN 3-D lagged,leak_free:ann,"paper baseline (ANN grid, reproduced)",local,paper-accurate,5/5,test AUC (max),0.5148561710866182,0.014707662073074347,"same data, folds, optimizer, selection rule",73–2369,COMMENSURABLE
+C3,GARAN 3-D lagged,leak_free:ann_parameter_matched,fair control: parameter-matched ANN,local,paper-accurate,5/5,test AUC (max),0.4959394201921997,0.014155789102497412,trainable parameters (±10%),26–66,COMMENSURABLE
+C3,GARAN 3-D lagged,logistic_regression,fair control: linear floor,local,paper-accurate,5/5,test AUC (max),0.5061847234923234,0.0,"same data, folds, optimizer, selection rule",4–4,COMMENSURABLE
+C3,GARAN 3-D lagged,majority_class,floor,local,paper-accurate,5/5,test AUC (max),0.5,0.0,"same data, folds, optimizer, selection rule",0–0,COMMENSURABLE
+C3,GARAN 3-D lagged,paper QNN,paper-reported,paper,single run,1/1,test AUC (max),0.7093,,paper,not reported,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,GARAN 3-D lagged,paper ANN,paper-reported,paper,single run,1/1,test AUC (max),0.8102,,paper,,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,TCELL 3-D lagged,leak_free:qnn,quantum model (paper method),local,paper-accurate,5/5,test AUC (max),0.5074531079956468,0.01003370990079639,"same data, folds, optimizer, selection rule",27–57,COMMENSURABLE
+C3,TCELL 3-D lagged,leak_free:ann,"paper baseline (ANN grid, reproduced)",local,paper-accurate,5/5,test AUC (max),0.4923484412009474,0.009739808667829081,"same data, folds, optimizer, selection rule",41–673,COMMENSURABLE
+C3,TCELL 3-D lagged,leak_free:ann_parameter_matched,fair control: parameter-matched ANN,local,paper-accurate,5/5,test AUC (max),0.4990317521285449,0.01499949790971048,trainable parameters (±10%),26–56,COMMENSURABLE
+C3,TCELL 3-D lagged,logistic_regression,fair control: linear floor,local,paper-accurate,5/5,test AUC (max),0.5022965879265092,0.0,"same data, folds, optimizer, selection rule",4–4,COMMENSURABLE
+C3,TCELL 3-D lagged,majority_class,floor,local,paper-accurate,5/5,test AUC (max),0.5,0.0,"same data, folds, optimizer, selection rule",0–0,COMMENSURABLE
+C3,TCELL 3-D lagged,paper QNN,paper-reported,paper,single run,1/1,test AUC (max),0.743,,paper,not reported,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,TCELL 3-D lagged,paper ANN,paper-reported,paper,single run,1/1,test AUC (max),0.7597,,paper,,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,TUPRS 3-D lagged,leak_free:qnn,quantum model (paper method),local,paper-accurate,5/5,test AUC (max),0.4685490196078431,0.021523324963709296,"same data, folds, optimizer, selection rule",21–43,COMMENSURABLE
+C3,TUPRS 3-D lagged,leak_free:ann,"paper baseline (ANN grid, reproduced)",local,paper-accurate,5/5,test AUC (max),0.49828571428571433,0.023994565385023054,"same data, folds, optimizer, selection rule",21–2369,COMMENSURABLE
+C3,TUPRS 3-D lagged,leak_free:ann_parameter_matched,fair control: parameter-matched ANN,local,paper-accurate,5/5,test AUC (max),0.5154109643857543,0.009679096245710247,trainable parameters (±10%),21–41,COMMENSURABLE
+C3,TUPRS 3-D lagged,logistic_regression,fair control: linear floor,local,paper-accurate,5/5,test AUC (max),0.45352541016406567,0.0,"same data, folds, optimizer, selection rule",4–4,COMMENSURABLE
+C3,TUPRS 3-D lagged,majority_class,floor,local,paper-accurate,5/5,test AUC (max),0.5,0.0,"same data, folds, optimizer, selection rule",0–0,COMMENSURABLE
+C3,TUPRS 3-D lagged,paper QNN,paper-reported,paper,single run,1/1,test AUC (max),0.9039,,paper,not reported,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,TUPRS 3-D lagged,paper ANN,paper-reported,paper,single run,1/1,test AUC (max),0.9042,,paper,,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,ULKER 3-D lagged,leak_free:qnn,quantum model (paper method),local,paper-accurate,5/5,test AUC (max),0.5063913203501305,0.01652771801516845,"same data, folds, optimizer, selection rule",9–36,COMMENSURABLE
+C3,ULKER 3-D lagged,leak_free:ann,"paper baseline (ANN grid, reproduced)",local,paper-accurate,5/5,test AUC (max),0.5051063353122849,0.014274851969019939,"same data, folds, optimizer, selection rule",21–81,COMMENSURABLE
+C3,ULKER 3-D lagged,leak_free:ann_parameter_matched,fair control: parameter-matched ANN,local,paper-accurate,5/5,test AUC (max),0.49718039397673264,0.010486048855477445,trainable parameters (±10%),11–36,COMMENSURABLE
+C3,ULKER 3-D lagged,logistic_regression,fair control: linear floor,local,paper-accurate,5/5,test AUC (max),0.5014802131506938,0.0,"same data, folds, optimizer, selection rule",4–4,COMMENSURABLE
+C3,ULKER 3-D lagged,majority_class,floor,local,paper-accurate,5/5,test AUC (max),0.5,0.0,"same data, folds, optimizer, selection rule",0–0,COMMENSURABLE
+C3,ULKER 3-D lagged,paper QNN,paper-reported,paper,single run,1/1,test AUC (max),0.8518,,paper,not reported,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,ULKER 3-D lagged,paper ANN,paper-reported,paper,single run,1/1,test AUC (max),0.876,,paper,,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,S&P 500 7-D,leak_free:qnn,quantum model (paper method),local,paper-accurate,5/5,test AUC (max),0.7574306878306879,0.007975826415129894,"same data, folds, optimizer, selection rule",98–182,COMMENSURABLE
+C3,S&P 500 7-D,leak_free:ann,"paper baseline (ANN grid, reproduced)",local,paper-accurate,5/5,test AUC (max),0.7569417989417989,0.011771291776933493,"same data, folds, optimizer, selection rule",273–2625,COMMENSURABLE
+C3,S&P 500 7-D,leak_free:ann_parameter_matched,fair control: parameter-matched ANN,local,paper-accurate,5/5,test AUC (max),0.7602116402116403,0.019828434649203173,trainable parameters (±10%),100–181,COMMENSURABLE
+C3,S&P 500 7-D,logistic_regression,fair control: linear floor,local,paper-accurate,5/5,test AUC (max),0.7674285714285713,0.0,"same data, folds, optimizer, selection rule",8–8,COMMENSURABLE
+C3,S&P 500 7-D,majority_class,floor,local,paper-accurate,5/5,test AUC (max),0.5,0.0,"same data, folds, optimizer, selection rule",0–0,COMMENSURABLE
+C3,S&P 500 7-D,paper QNN,paper-reported,paper,single run,1/1,test AUC (max),0.7498,,paper,not reported,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,S&P 500 7-D,paper ANN,paper-reported,paper,single run,1/1,test AUC (max),0.7657,,paper,,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,S&P 500 7-D,photonic QNN (MerLin),MerLin adaptation,local,"paper-accurate protocol, adaptation",5/5,test AUC (max),0.7449333333333333,0.00532332141644955,"same data, folds, optimizer, selection; paired ANN grid",140–182,COMMENSURABLE
+C1,AAPL 64-D Table V timing,leak_free:qnn,quantum model (paper method),local,paper-accurate,5/5,test AUC (max),0.621968182575379,0.007944055221510718,"same data, folds, optimizer, selection rule",1088–4275,COMMENSURABLE
+C1,AAPL 64-D Table V timing,leak_free:ann,"paper baseline (ANN grid, reproduced)",local,paper-accurate,5/5,test AUC (max),0.6406130268199234,0.0013940786793891632,"same data, folds, optimizer, selection rule",727–6273,COMMENSURABLE
+C1,AAPL 64-D Table V timing,leak_free:ann_parameter_matched,fair control: parameter-matched ANN,local,paper-accurate,5/5,test AUC (max),0.6412793603198401,0.0007188282545502384,trainable parameters (±10%),1057–4291,COMMENSURABLE
+C1,AAPL 64-D Table V timing,logistic_regression,fair control: linear floor,local,paper-accurate,5/5,test AUC (max),0.6397426286856571,0.0,"same data, folds, optimizer, selection rule",65–65,COMMENSURABLE
+C1,AAPL 64-D Table V timing,majority_class,floor,local,paper-accurate,5/5,test AUC (max),0.5,0.0,"same data, folds, optimizer, selection rule",0–0,COMMENSURABLE
+C1,AAPL 64-D Table V timing,paper QNN,paper-reported,paper,single run,1/1,test AUC (max),0.635,,paper,not reported,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C1,AAPL 64-D Table V timing,paper ANN,paper-reported,paper,single run,1/1,test AUC (max),0.597,,paper,,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C1,AAPL 64-D Table V timing,photonic QNN (MerLin),MerLin adaptation,local,"paper-accurate protocol, adaptation",5/5,test AUC (max),0.635119940029985,0.004196916596515933,"same data, folds, optimizer, selection; paired ANN grid",450–688,COMMENSURABLE
+C1,AAPL 64-D strict timing,leak_free:qnn,quantum model (paper method),local,paper-accurate (strict timing),5/5,test AUC (max),0.5252644511077793,0.025567781411502816,"same data, folds, optimizer, selection rule",115–4250,COMMENSURABLE
+C1,AAPL 64-D strict timing,leak_free:ann,"paper baseline (ANN grid, reproduced)",local,paper-accurate (strict timing),5/5,test AUC (max),0.4953294186240213,0.021367878852506503,"same data, folds, optimizer, selection rule",1057–2625,COMMENSURABLE
+C1,AAPL 64-D strict timing,leak_free:ann_parameter_matched,fair control: parameter-matched ANN,local,paper-accurate (strict timing),5/5,test AUC (max),0.4966412627019824,0.019457042267329316,trainable parameters (±10%),133–4225,COMMENSURABLE
+C1,AAPL 64-D strict timing,logistic_regression,fair control: linear floor,local,paper-accurate (strict timing),5/5,test AUC (max),0.48879726803265033,6.206335383118183e-17,"same data, folds, optimizer, selection rule",65–65,COMMENSURABLE
+C1,AAPL 64-D strict timing,majority_class,floor,local,paper-accurate (strict timing),5/5,test AUC (max),0.5,0.0,"same data, folds, optimizer, selection rule",0–0,COMMENSURABLE
+C1,AAPL 64-D strict timing,paper QNN,paper-reported,paper,single run,1/1,test AUC (max),0.635,,paper,not reported,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C1,AAPL 64-D strict timing,paper ANN,paper-reported,paper,single run,1/1,test AUC (max),0.597,,paper,,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,BA 64-D strict timing,leak_free:qnn,quantum model (paper method),local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.5191233947515355,0.02389762692341336,"same data, folds, optimizer, selection rule",54–529,COMMENSURABLE
+C3,BA 64-D strict timing,leak_free:ann,"paper baseline (ANN grid, reproduced)",local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.4516680625348967,0.03147224061291868,"same data, folds, optimizer, selection rule",529–1185,COMMENSURABLE
+C3,BA 64-D strict timing,leak_free:ann_parameter_matched,fair control: parameter-matched ANN,local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.4986494974874372,0.02430819533672155,trainable parameters (±10%),67–529,COMMENSURABLE
+C3,BA 64-D strict timing,logistic_regression,fair control: linear floor,local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.5200795644891122,0.0,"same data, folds, optimizer, selection rule",65–65,COMMENSURABLE
+C3,BA 64-D strict timing,majority_class,floor,local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.5,0.0,"same data, folds, optimizer, selection rule",0–0,COMMENSURABLE
+C3,BA 64-D strict timing,paper QNN,paper-reported,paper,single run,1/1,test AUC (max),0.618,,paper,not reported,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,BA 64-D strict timing,paper ANN,paper-reported,paper,single run,1/1,test AUC (max),0.738,,paper,,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,GILD 64-D strict timing,leak_free:qnn,quantum model (paper method),local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.5203204782265765,0.050270044346349796,"same data, folds, optimizer, selection rule",2146–4257,COMMENSURABLE
+C3,GILD 64-D strict timing,leak_free:ann,"paper baseline (ANN grid, reproduced)",local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.47446967495537384,0.005439404512820855,"same data, folds, optimizer, selection rule",265–4225,COMMENSURABLE
+C3,GILD 64-D strict timing,leak_free:ann_parameter_matched,fair control: parameter-matched ANN,local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.4970733529826892,0.03800556023927872,trainable parameters (±10%),2113–4225,COMMENSURABLE
+C3,GILD 64-D strict timing,logistic_regression,fair control: linear floor,local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.5090497737556561,0.0,"same data, folds, optimizer, selection rule",65–65,COMMENSURABLE
+C3,GILD 64-D strict timing,majority_class,floor,local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.5,0.0,"same data, folds, optimizer, selection rule",0–0,COMMENSURABLE
+C3,GILD 64-D strict timing,paper QNN,paper-reported,paper,single run,1/1,test AUC (max),0.59,,paper,not reported,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,GILD 64-D strict timing,paper ANN,paper-reported,paper,single run,1/1,test AUC (max),0.62,,paper,,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,DVN 64-D strict timing,leak_free:qnn,quantum model (paper method),local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.5051449305468999,0.028000562316538264,"same data, folds, optimizer, selection rule",61–266,COMMENSURABLE
+C3,DVN 64-D strict timing,leak_free:ann,"paper baseline (ANN grid, reproduced)",local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.49670045840430976,0.04382180716740993,"same data, folds, optimizer, selection rule",1185–6273,COMMENSURABLE
+C3,DVN 64-D strict timing,leak_free:ann_parameter_matched,fair control: parameter-matched ANN,local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.49824463002202,0.0015467971385363126,trainable parameters (±10%),67–265,COMMENSURABLE
+C3,DVN 64-D strict timing,logistic_regression,fair control: linear floor,local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.4830279612779924,0.0,"same data, folds, optimizer, selection rule",65–65,COMMENSURABLE
+C3,DVN 64-D strict timing,majority_class,floor,local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.5,0.0,"same data, folds, optimizer, selection rule",0–0,COMMENSURABLE
+C3,DVN 64-D strict timing,paper QNN,paper-reported,paper,single run,1/1,test AUC (max),0.608,,paper,not reported,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,DVN 64-D strict timing,paper ANN,paper-reported,paper,single run,1/1,test AUC (max),0.675,,paper,,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,LNC 64-D strict timing,leak_free:qnn,quantum model (paper method),local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.49355375337908086,0.04695253731169187,"same data, folds, optimizer, selection rule",281–560,COMMENSURABLE
+C3,LNC 64-D strict timing,leak_free:ann,"paper baseline (ANN grid, reproduced)",local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.5054585152838428,0.0163986541776245,"same data, folds, optimizer, selection rule",2113–4225,COMMENSURABLE
+C3,LNC 64-D strict timing,leak_free:ann_parameter_matched,fair control: parameter-matched ANN,local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.4800027725791918,0.025690781477819787,trainable parameters (±10%),265–529,COMMENSURABLE
+C3,LNC 64-D strict timing,logistic_regression,fair control: linear floor,local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.4937201081305885,0.0,"same data, folds, optimizer, selection rule",65–65,COMMENSURABLE
+C3,LNC 64-D strict timing,majority_class,floor,local,"paper-accurate (strict timing), 3 seeds",3/3,test AUC (max),0.5,0.0,"same data, folds, optimizer, selection rule",0–0,COMMENSURABLE
+C3,LNC 64-D strict timing,paper QNN,paper-reported,paper,single run,1/1,test AUC (max),0.663,,paper,not reported,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C3,LNC 64-D strict timing,paper ANN,paper-reported,paper,single run,1/1,test AUC (max),0.694,,paper,,PARTIALLY_COMMENSURABLE (different data snapshot; single run)
+C5,S&P 500 regime F1,auc:qlstm,quantum model (paper method),local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),-0.1917599315657562,0.2723613481799506,"same split, loss, early stopping, τ grid, fee",566,COMMENSURABLE
+C5,S&P 500 regime F1,auc:lstm,"paper baseline (LSTM grid, reproduced)",local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.272623602025438,0.2966383899595025,"same split, loss, early stopping, τ grid, fee",208,COMMENSURABLE
+C5,S&P 500 regime F1,auc:lstm_parameter_matched,fair control: parameter-matched LSTM,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.0004817338029288,0.0006596411764422,parameters (±25%),592,COMMENSURABLE
+C5,S&P 500 regime F1,buy_and_hold,fair control: passive strategy,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),-0.3305027341112155,0.0,"same split, loss, early stopping, τ grid, fee",0,COMMENSURABLE
+C5,S&P 500 regime F1,always_flat,floor,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.0,0.0,"same split, loss, early stopping, τ grid, fee",0,COMMENSURABLE
+C5,S&P 500 regime F1,logistic_regression,fair control: linear threshold strategy,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.7953863712003433,0.0,"same split, loss, early stopping, τ grid, fee",41,COMMENSURABLE
+C5,S&P 500 regime F2,auc:qlstm,quantum model (paper method),local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.1793527726840566,0.4759591298842677,"same split, loss, early stopping, τ grid, fee",280,COMMENSURABLE
+C5,S&P 500 regime F2,auc:lstm,"paper baseline (LSTM grid, reproduced)",local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.1160595196381439,0.4796307039971161,"same split, loss, early stopping, τ grid, fee",325,COMMENSURABLE
+C5,S&P 500 regime F2,auc:lstm_parameter_matched,fair control: parameter-matched LSTM,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.2266820170055533,0.406856567123307,parameters (±25%),304,COMMENSURABLE
+C5,S&P 500 regime F2,buy_and_hold,fair control: passive strategy,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.663823934576164,0.0,"same split, loss, early stopping, τ grid, fee",0,COMMENSURABLE
+C5,S&P 500 regime F2,always_flat,floor,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.0,0.0,"same split, loss, early stopping, τ grid, fee",0,COMMENSURABLE
+C5,S&P 500 regime F2,logistic_regression,fair control: linear threshold strategy,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),-0.7265848191144241,0.0,"same split, loss, early stopping, τ grid, fee",41,COMMENSURABLE
+C5,S&P 500 regime F3,auc:qlstm,quantum model (paper method),local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.7417361031601775,0.783861253846139,"same split, loss, early stopping, τ grid, fee",280,COMMENSURABLE
+C5,S&P 500 regime F3,auc:lstm,"paper baseline (LSTM grid, reproduced)",local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.6531764621001275,0.365136742639675,"same split, loss, early stopping, τ grid, fee",496,COMMENSURABLE
+C5,S&P 500 regime F3,auc:lstm_parameter_matched,fair control: parameter-matched LSTM,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.1147637913648232,0.8652127887970198,parameters (±25%),304,COMMENSURABLE
+C5,S&P 500 regime F3,buy_and_hold,fair control: passive strategy,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.8164705776251594,0.0,"same split, loss, early stopping, τ grid, fee",0,COMMENSURABLE
+C5,S&P 500 regime F3,always_flat,floor,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.0,0.0,"same split, loss, early stopping, τ grid, fee",0,COMMENSURABLE
+C5,S&P 500 regime F3,logistic_regression,fair control: linear threshold strategy,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),-0.4296667389203986,6.206335383118183e-17,"same split, loss, early stopping, τ grid, fee",41,COMMENSURABLE
+C5,S&P 500 regime F4,auc:qlstm,quantum model (paper method),local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.1589468786227822,0.2229882850352637,"same split, loss, early stopping, τ grid, fee",476,COMMENSURABLE
+C5,S&P 500 regime F4,auc:lstm,"paper baseline (LSTM grid, reproduced)",local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.2265306499966854,0.206903223398997,"same split, loss, early stopping, τ grid, fee",304,COMMENSURABLE
+C5,S&P 500 regime F4,auc:lstm_parameter_matched,fair control: parameter-matched LSTM,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.1612653151723916,0.2208216271577476,parameters (±25%),485,COMMENSURABLE
+C5,S&P 500 regime F4,buy_and_hold,fair control: passive strategy,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.4031632879309792,0.0,"same split, loss, early stopping, τ grid, fee",0,COMMENSURABLE
+C5,S&P 500 regime F4,always_flat,floor,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.0,0.0,"same split, loss, early stopping, τ grid, fee",0,COMMENSURABLE
+C5,S&P 500 regime F4,logistic_regression,fair control: linear threshold strategy,local,"partial (seed-0 selection, 5 seeds)",5/5,test Sharpe (max),0.0,0.0,"same split, loss, early stopping, τ grid, fee",41,COMMENSURABLE
+C5,S&P 500 regime F1,paper QLSTM,paper-reported,paper,single run,1/1,test Sharpe (max),0.3865,,paper,,"PARTIALLY_COMMENSURABLE (single run inside the random-score null band, G3)"
+C5,S&P 500 regime F1,paper LSTM,paper-reported,paper,single run,1/1,test Sharpe (max),-0.0477,,paper,,"PARTIALLY_COMMENSURABLE (single run inside the random-score null band, G3)"
+C5,S&P 500 regime F2,paper QLSTM,paper-reported,paper,single run,1/1,test Sharpe (max),1.2585,,paper,,"PARTIALLY_COMMENSURABLE (single run inside the random-score null band, G3)"
+C5,S&P 500 regime F2,paper LSTM,paper-reported,paper,single run,1/1,test Sharpe (max),0.4966,,paper,,"PARTIALLY_COMMENSURABLE (single run inside the random-score null band, G3)"
+C5,S&P 500 regime F3,paper QLSTM,paper-reported,paper,single run,1/1,test Sharpe (max),0.7659,,paper,,"PARTIALLY_COMMENSURABLE (single run inside the random-score null band, G3)"
+C5,S&P 500 regime F3,paper LSTM,paper-reported,paper,single run,1/1,test Sharpe (max),0.8947,,paper,,"PARTIALLY_COMMENSURABLE (single run inside the random-score null band, G3)"
+C5,S&P 500 regime F4,paper QLSTM,paper-reported,paper,single run,1/1,test Sharpe (max),-0.6936,,paper,,"PARTIALLY_COMMENSURABLE (single run inside the random-score null band, G3)"
+C5,S&P 500 regime F4,paper LSTM,paper-reported,paper,single run,1/1,test Sharpe (max),1.5228,,paper,,"PARTIALLY_COMMENSURABLE (single run inside the random-score null band, G3)"
+C7/C8/C10,RV AAPL,persistence,floor,local,deterministic,1/1,QLIKE (min),-7.333935409933182,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV AAPL,har,fair control: HAR-RV,local,deterministic,1/1,QLIKE (min),-7.369381357462809,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV AAPL,garch,fair control: GARCH completed with known returns,local,deterministic,1/1,QLIKE (min),-7.3997137743102925,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV AAPL,svr_linear,paper baseline,local,preliminary (single Optuna seed),1/1,QLIKE (min),-7.296401077362984,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV AAPL,svr_poly,paper baseline,local,preliminary (single Optuna seed),1/1,QLIKE (min),-6.976534083682201,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV AAPL,svr_rbf,"paper baseline (RBF, γ scale/auto)",local,preliminary (single Optuna seed),1/1,QLIKE (min),-7.381580333477816,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV AAPL,svr_rbf_wide,"fair control: RBF, wide γ",local,preliminary (single Optuna seed),1/1,QLIKE (min),-7.371042739426235,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV AAPL,qsvr_angle,quantum model (paper method),local,preliminary (single Optuna seed),1/1,QLIKE (min),-7.380416832944847,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV AAPL,garch_sigma2,paper baseline (GARCH σ² only),local,deterministic,1/1,QLIKE (min),-7.225743323229948,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV GARAN,persistence,floor,local,deterministic,1/1,QLIKE (min),-6.62818785562379,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV GARAN,har,fair control: HAR-RV,local,deterministic,1/1,QLIKE (min),-6.68249293148032,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV GARAN,garch,fair control: GARCH completed with known returns,local,deterministic,1/1,QLIKE (min),-6.7133608043774355,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV GARAN,svr_linear,paper baseline,local,preliminary (single Optuna seed),1/1,QLIKE (min),-4.279311230324808,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV GARAN,svr_poly,paper baseline,local,preliminary (single Optuna seed),1/1,QLIKE (min),-6.5849996535384765,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV GARAN,svr_rbf,"paper baseline (RBF, γ scale/auto)",local,preliminary (single Optuna seed),1/1,QLIKE (min),-6.7062822016642745,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV GARAN,svr_rbf_wide,"fair control: RBF, wide γ",local,preliminary (single Optuna seed),1/1,QLIKE (min),-6.705738920627643,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV GARAN,qsvr_angle,quantum model (paper method),local,preliminary (single Optuna seed),1/1,QLIKE (min),-6.70377797755407,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV GARAN,garch_sigma2,paper baseline (GARCH σ² only),local,deterministic,1/1,QLIKE (min),-6.55662222646864,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV GSPC,persistence,floor,local,deterministic,1/1,QLIKE (min),-8.518383657223703,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV GSPC,har,fair control: HAR-RV,local,deterministic,1/1,QLIKE (min),-8.553437016907358,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV GSPC,garch,fair control: GARCH completed with known returns,local,deterministic,1/1,QLIKE (min),-8.589768362911867,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV GSPC,svr_linear,paper baseline,local,preliminary (single Optuna seed),1/1,QLIKE (min),-8.544360863810137,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV GSPC,svr_poly,paper baseline,local,preliminary (single Optuna seed),1/1,QLIKE (min),-5.056820284731967,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV GSPC,svr_rbf,"paper baseline (RBF, γ scale/auto)",local,preliminary (single Optuna seed),1/1,QLIKE (min),-8.55232738472176,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV GSPC,svr_rbf_wide,"fair control: RBF, wide γ",local,preliminary (single Optuna seed),1/1,QLIKE (min),-8.55365976969569,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV GSPC,qsvr_angle,quantum model (paper method),local,preliminary (single Optuna seed),1/1,QLIKE (min),-8.547421015211945,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV GSPC,garch_sigma2,paper baseline (GARCH σ² only),local,deterministic,1/1,QLIKE (min),-8.450903018240266,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV KCHOL,persistence,floor,local,deterministic,1/1,QLIKE (min),-6.938512130472164,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV KCHOL,har,fair control: HAR-RV,local,deterministic,1/1,QLIKE (min),-6.984402450892364,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV KCHOL,garch,fair control: GARCH completed with known returns,local,deterministic,1/1,QLIKE (min),-7.030241065193891,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV KCHOL,svr_linear,paper baseline,local,preliminary (single Optuna seed),1/1,QLIKE (min),-6.965653586627321,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV KCHOL,svr_poly,paper baseline,local,preliminary (single Optuna seed),1/1,QLIKE (min),-7.0045765675146425,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV KCHOL,svr_rbf,"paper baseline (RBF, γ scale/auto)",local,preliminary (single Optuna seed),1/1,QLIKE (min),-7.026354001586391,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV KCHOL,svr_rbf_wide,"fair control: RBF, wide γ",local,preliminary (single Optuna seed),1/1,QLIKE (min),-7.023171226022121,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV KCHOL,qsvr_angle,quantum model (paper method),local,preliminary (single Optuna seed),1/1,QLIKE (min),-7.008380357905048,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV KCHOL,garch_sigma2,paper baseline (GARCH σ² only),local,deterministic,1/1,QLIKE (min),-6.867050227490734,,same data and refits,,COMMENSURABLE
+C7/C8/C10,RV AAPL,photonic_kernel,MerLin adaptation,local,preliminary (single Optuna seed),1/1,QLIKE (min),-7.364669245287931,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV GARAN,photonic_kernel,MerLin adaptation,local,preliminary (single Optuna seed),1/1,QLIKE (min),-6.66757450218555,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV GSPC,photonic_kernel,MerLin adaptation,local,preliminary (single Optuna seed),1/1,QLIKE (min),-8.543644332638308,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV KCHOL,photonic_kernel,MerLin adaptation,local,preliminary (single Optuna seed),1/1,QLIKE (min),-7.002751858421843,,"same features, refits, 50 Optuna trials per refit",,COMMENSURABLE
+C7/C8/C10,RV GSPC,paper qsvr_angle,paper-reported,paper,single run,1/1,QLIKE (min),-8.2937,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV GSPC,paper svr_rbf,paper-reported,paper,single run,1/1,QLIKE (min),-8.3277,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV GSPC,paper svr_linear,paper-reported,paper,single run,1/1,QLIKE (min),-7.8748,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV GSPC,paper garch_sigma2,paper-reported,paper,single run,1/1,QLIKE (min),-8.2488,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV AAPL,paper qsvr_angle,paper-reported,paper,single run,1/1,QLIKE (min),-7.3888,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV AAPL,paper svr_rbf,paper-reported,paper,single run,1/1,QLIKE (min),-7.4101,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV AAPL,paper svr_linear,paper-reported,paper,single run,1/1,QLIKE (min),-7.2522,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV AAPL,paper garch_sigma2,paper-reported,paper,single run,1/1,QLIKE (min),-7.2831,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV GARAN,paper qsvr_angle,paper-reported,paper,single run,1/1,QLIKE (min),-6.2121,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV GARAN,paper svr_rbf,paper-reported,paper,single run,1/1,QLIKE (min),-6.2196,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV GARAN,paper svr_linear,paper-reported,paper,single run,1/1,QLIKE (min),-6.0486,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV GARAN,paper garch_sigma2,paper-reported,paper,single run,1/1,QLIKE (min),-6.1398,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV KCHOL,paper qsvr_angle,paper-reported,paper,single run,1/1,QLIKE (min),-6.4352,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV KCHOL,paper svr_rbf,paper-reported,paper,single run,1/1,QLIKE (min),-6.4247,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV KCHOL,paper svr_linear,paper-reported,paper,single run,1/1,QLIKE (min),-6.293,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"
+C7/C8/C10,RV KCHOL,paper garch_sigma2,paper-reported,paper,single run,1/1,QLIKE (min),-6.3593,,paper,,"INCOMPARABLE in level (unstated test window, R15); ranking comparable"

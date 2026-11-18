@@ -1,0 +1,3215 @@
+{
+ "paper_reference": "abstract; Tables IV-VII (best cells), computed from Tables C1-C12",
+ "paper": {
+  "srsr": {
+   "mae": {
+    "average": 0.28549710854112614,
+    "peak": 0.6921397379912664,
+    "per_config": {
+     "10": {
+      "reduction": 0.6921397379912664,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0141,
+      "baseline": 0.0458
+     },
+     "20": {
+      "reduction": 0.3733333333333333,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0141,
+      "baseline": 0.0225
+     },
+     "40": {
+      "reduction": 0.06622516556291391,
+      "best_cell": "classical|quantum_kernel_ideal",
+      "best": 0.0141,
+      "baseline": 0.0151
+     },
+     "15": {
+      "reduction": 0.6901098901098901,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0141,
+      "baseline": 0.0455
+     },
+     "30": {
+      "reduction": 0.10691823899371067,
+      "best_cell": "classical|quantum_kernel_ideal",
+      "best": 0.0142,
+      "baseline": 0.0159
+     },
+     "60": {
+      "reduction": 0.1470588235294118,
+      "best_cell": "classical|quantum_kernel_ideal",
+      "best": 0.0116,
+      "baseline": 0.0136
+     },
+     "25": {
+      "reduction": 0.20114942528735635,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0139,
+      "baseline": 0.0174
+     },
+     "50": {
+      "reduction": 0.007042253521126862,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0141,
+      "baseline": 0.0142
+     }
+    }
+   },
+   "rmse": {
+    "average": 0.2975621352816682,
+    "peak": 0.6842105263157895,
+    "per_config": {
+     "10": {
+      "reduction": 0.6842105263157895,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0198,
+      "baseline": 0.0627
+     },
+     "20": {
+      "reduction": 0.36190476190476195,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0201,
+      "baseline": 0.0315
+     },
+     "40": {
+      "reduction": 0.08108108108108103,
+      "best_cell": "classical|quantum_kernel_ideal",
+      "best": 0.0204,
+      "baseline": 0.0222
+     },
+     "15": {
+      "reduction": 0.659432387312187,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0204,
+      "baseline": 0.0599
+     },
+     "30": {
+      "reduction": 0.16666666666666674,
+      "best_cell": "classical|quantum_kernel_ideal",
+      "best": 0.0195,
+      "baseline": 0.0234
+     },
+     "60": {
+      "reduction": 0.17910447761194026,
+      "best_cell": "classical|quantum_kernel_ideal",
+      "best": 0.0165,
+      "baseline": 0.0201
+     },
+     "25": {
+      "reduction": 0.2334630350194553,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0197,
+      "baseline": 0.0257
+     },
+     "50": {
+      "reduction": 0.014634146341463539,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0202,
+      "baseline": 0.0205
+     }
+    }
+   }
+  },
+  "mrsr": {
+   "mae": {
+    "average": 0.24674349709511928,
+    "peak": 0.6335078534031413,
+    "per_config": {
+     "2x5": {
+      "reduction": 0.3443396226415095,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0139,
+      "baseline": 0.0212
+     },
+     "2x10": {
+      "reduction": 0.6335078534031413,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.014,
+      "baseline": 0.0382
+     },
+     "2x20": {
+      "reduction": 0.20000000000000007,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.014,
+      "baseline": 0.0175
+     },
+     "3x5": {
+      "reduction": 0.12883435582822078,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0142,
+      "baseline": 0.0163
+     },
+     "3x10": {
+      "reduction": 0.2578947368421053,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0141,
+      "baseline": 0.019
+     },
+     "3x20": {
+      "reduction": 0.11718750000000011,
+      "best_cell": "classical|quantum_kernel_ideal",
+      "best": 0.0113,
+      "baseline": 0.0128
+     },
+     "5x5": {
+      "reduction": 0.1321839080459769,
+      "best_cell": "quantum_ideal|quantum_kernel_noisy",
+      "best": 0.0151,
+      "baseline": 0.0174
+     },
+     "5x10": {
+      "reduction": 0.16000000000000014,
+      "best_cell": "quantum_ideal|quantum_kernel_noisy",
+      "best": 0.0147,
+      "baseline": 0.0175
+     }
+    }
+   },
+   "rmse": {
+    "average": 0.305579960728542,
+    "peak": 0.6264150943396226,
+    "per_config": {
+     "2x5": {
+      "reduction": 0.3931888544891642,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0196,
+      "baseline": 0.0323
+     },
+     "2x10": {
+      "reduction": 0.6264150943396226,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0198,
+      "baseline": 0.053
+     },
+     "2x20": {
+      "reduction": 0.1721311475409837,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0202,
+      "baseline": 0.0244
+     },
+     "3x5": {
+      "reduction": 0.21031746031746024,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0199,
+      "baseline": 0.0252
+     },
+     "3x10": {
+      "reduction": 0.31081081081081074,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0204,
+      "baseline": 0.0296
+     },
+     "3x20": {
+      "reduction": 0.16402116402116396,
+      "best_cell": "classical|quantum_kernel_ideal",
+      "best": 0.0158,
+      "baseline": 0.0189
+     },
+     "5x5": {
+      "reduction": 0.25547445255474455,
+      "best_cell": "quantum_ideal|quantum_kernel_noisy",
+      "best": 0.0204,
+      "baseline": 0.0274
+     },
+     "5x10": {
+      "reduction": 0.31228070175438605,
+      "best_cell": "quantum_ideal|quantum_kernel_noisy",
+      "best": 0.0196,
+      "baseline": 0.0285
+     }
+    }
+   }
+  },
+  "srmr": {
+   "mae": {
+    "average": 0.5420825247937047,
+    "peak": 0.788,
+    "per_config": {
+     "10/2": {
+      "reduction": 0.788,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0159,
+      "baseline": 0.075
+     },
+     "20/2": {
+      "reduction": 0.6948051948051948,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0141,
+      "baseline": 0.0462
+     },
+     "40/2": {
+      "reduction": 0.4085106382978724,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0139,
+      "baseline": 0.0235
+     },
+     "15/3": {
+      "reduction": 0.6942857142857144,
+      "best_cell": "quantum_noisy|quantum_kernel_ideal",
+      "best": 0.0214,
+      "baseline": 0.07
+     },
+     "30/3": {
+      "reduction": 0.5106382978723405,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0138,
+      "baseline": 0.0282
+     },
+     "60/3": {
+      "reduction": 0.33333333333333326,
+      "best_cell": "classical|quantum_kernel_ideal",
+      "best": 0.0122,
+      "baseline": 0.0183
+     },
+     "25/5": {
+      "reduction": 0.5304054054054055,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0139,
+      "baseline": 0.0296
+     },
+     "50/5": {
+      "reduction": 0.3766816143497759,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0139,
+      "baseline": 0.0223
+     }
+    }
+   },
+   "rmse": {
+    "average": 0.5035461049927541,
+    "peak": 0.6688311688311688,
+    "per_config": {
+     "10/2": {
+      "reduction": 0.6340150699677072,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.034,
+      "baseline": 0.0929
+     },
+     "20/2": {
+      "reduction": 0.6688311688311688,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0204,
+      "baseline": 0.0616
+     },
+     "40/2": {
+      "reduction": 0.38557993730407525,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0196,
+      "baseline": 0.0319
+     },
+     "15/3": {
+      "reduction": 0.6011428571428571,
+      "best_cell": "quantum_noisy|quantum_kernel_ideal",
+      "best": 0.0349,
+      "baseline": 0.0875
+     },
+     "30/3": {
+      "reduction": 0.5161290322580645,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0195,
+      "baseline": 0.0403
+     },
+     "60/3": {
+      "reduction": 0.33203125,
+      "best_cell": "classical|quantum_kernel_ideal",
+      "best": 0.0171,
+      "baseline": 0.0256
+     },
+     "25/5": {
+      "reduction": 0.5232273838630807,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0195,
+      "baseline": 0.0409
+     },
+     "50/5": {
+      "reduction": 0.36741214057507987,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0198,
+      "baseline": 0.0313
+     }
+    }
+   }
+  },
+  "mrmr": {
+   "mae": {
+    "average": 0.5205018418721628,
+    "peak": 0.7614991482112436,
+    "per_config": {
+     "2x5": {
+      "reduction": 0.7614991482112436,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.014,
+      "baseline": 0.0587
+     },
+     "2x10": {
+      "reduction": 0.6498740554156172,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0139,
+      "baseline": 0.0397
+     },
+     "2x20": {
+      "reduction": 0.25945945945945936,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0137,
+      "baseline": 0.0185
+     },
+     "3x5": {
+      "reduction": 0.42000000000000004,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0145,
+      "baseline": 0.025
+     },
+     "3x10": {
+      "reduction": 0.5587301587301587,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0139,
+      "baseline": 0.0315
+     },
+     "3x20": {
+      "reduction": 0.2024539877300613,
+      "best_cell": "classical|quantum_kernel_ideal",
+      "best": 0.013,
+      "baseline": 0.0163
+     },
+     "5x5": {
+      "reduction": 0.7239382239382239,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0143,
+      "baseline": 0.0518
+     },
+     "5x10": {
+      "reduction": 0.5880597014925373,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0138,
+      "baseline": 0.0335
+     }
+    }
+   },
+   "rmse": {
+    "average": 0.5141868999741557,
+    "peak": 0.7233748271092669,
+    "per_config": {
+     "2x5": {
+      "reduction": 0.7233748271092669,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.02,
+      "baseline": 0.0723
+     },
+     "2x10": {
+      "reduction": 0.6459854014598541,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0194,
+      "baseline": 0.0548
+     },
+     "2x20": {
+      "reduction": 0.2709923664122138,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0191,
+      "baseline": 0.0262
+     },
+     "3x5": {
+      "reduction": 0.3994169096209912,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0206,
+      "baseline": 0.0343
+     },
+     "3x10": {
+      "reduction": 0.5617977528089888,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0195,
+      "baseline": 0.0445
+     },
+     "3x20": {
+      "reduction": 0.23553719008264462,
+      "best_cell": "classical|quantum_kernel_ideal",
+      "best": 0.0185,
+      "baseline": 0.0242
+     },
+     "5x5": {
+      "reduction": 0.6835637480798771,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0206,
+      "baseline": 0.0651
+     },
+     "5x10": {
+      "reduction": 0.5928270042194093,
+      "best_cell": "quantum_ideal|quantum_kernel_ideal",
+      "best": 0.0193,
+      "baseline": 0.0474
+     }
+    }
+   }
+  }
+ },
+ "ours": {
+  "srsr": {
+   "architecture": "srsr",
+   "seeds": [
+    0,
+    1,
+    2
+   ],
+   "paper_rule": {
+    "mae": {
+     "average_mean": 0.2343684966406642,
+     "average_std": 0.015318956223184785,
+     "peak_mean": 0.6489246179755804,
+     "peak_std": 0.12288281291078448,
+     "per_seed": [
+      {
+       "average": 0.2520512134859929,
+       "peak": 0.7677749249954642,
+       "per_config": {
+        "10": {
+         "reduction": 0.7677749249954642,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013999709888963173,
+         "baseline": 0.060285091472958865
+        },
+        "20": {
+         "reduction": 0.18603750871255775,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.012592135514709947,
+         "baseline": 0.01547016680681809
+        },
+        "40": {
+         "reduction": 0.14351363288859686,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.013181417244054881,
+         "baseline": 0.015390107478897413
+        },
+        "15": {
+         "reduction": 0.1561384633763584,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01393371672724755,
+         "baseline": 0.016511851912337987
+        },
+        "30": {
+         "reduction": 0.19768237410023437,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013876481797849408,
+         "baseline": 0.017295496633627505
+        },
+        "60": {
+         "reduction": 0.21401772972200406,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.013809420228839735,
+         "baseline": 0.0175696332487951
+        },
+        "25": {
+         "reduction": 0.2046264235227837,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013877765805917253,
+         "baseline": 0.017448110191670148
+        },
+        "50": {
+         "reduction": 0.14661865056994372,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.013679291486277152,
+         "baseline": 0.01602951774773737
+        }
+       }
+      },
+      {
+       "average": 0.2259290878339939,
+       "peak": 0.6566272463433855,
+       "per_config": {
+        "10": {
+         "reduction": 0.6566272463433855,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014144378194866657,
+         "baseline": 0.04119248846695496
+        },
+        "20": {
+         "reduction": 0.238332407758853,
+         "best_cell": "quantum_noisy|quantum_kernel_ideal",
+         "best": 0.014021797024877507,
+         "baseline": 0.018409339149666946
+        },
+        "40": {
+         "reduction": 0.14600646541640272,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013259329173414963,
+         "baseline": 0.015526264118475021
+        },
+        "15": {
+         "reduction": 0.17743473569706347,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01389683344879529,
+         "baseline": 0.016894505581355704
+        },
+        "30": {
+         "reduction": 0.20262108000397805,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013763178835771371,
+         "baseline": 0.01726052506610036
+        },
+        "60": {
+         "reduction": 0.14647637158724092,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.011691742063288095,
+         "baseline": 0.013698205502559369
+        },
+        "25": {
+         "reduction": 0.15724738332624688,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013852152685213108,
+         "baseline": 0.016436795817835546
+        },
+        "50": {
+         "reduction": 0.08268701253878041,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013938669046280399,
+         "baseline": 0.01519510705376301
+        }
+       }
+      },
+      {
+       "average": 0.22512518860200575,
+       "peak": 0.5223716825878915,
+       "per_config": {
+        "10": {
+         "reduction": 0.5223716825878915,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014306950725122228,
+         "baseline": 0.029954150965420808
+        },
+        "20": {
+         "reduction": 0.17072655928106473,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013536412505437282,
+         "baseline": 0.01632321962910321
+        },
+        "40": {
+         "reduction": 0.17516994230674432,
+         "best_cell": "quantum_noisy|quantum_kernel_ideal",
+         "best": 0.013731181941473441,
+         "baseline": 0.016647286084450503
+        },
+        "15": {
+         "reduction": 0.31364480266069195,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01394646516234732,
+         "baseline": 0.020319603051614562
+        },
+        "30": {
+         "reduction": 0.16017388665464816,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.013938501660153669,
+         "baseline": 0.016596890045049006
+        },
+        "60": {
+         "reduction": 0.0931635100984598,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013686789098515268,
+         "baseline": 0.01509289629490021
+        },
+        "25": {
+         "reduction": 0.26755755108846146,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013948275177581928,
+         "baseline": 0.019043510105551713
+        },
+        "50": {
+         "reduction": 0.09819357413808405,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013679362664101212,
+         "baseline": 0.015168845854061133
+        }
+       }
+      }
+     ]
+    },
+    "rmse": {
+     "average_mean": 0.2770516514327686,
+     "average_std": 0.011465501851279897,
+     "peak_mean": 0.6409285252584779,
+     "peak_std": 0.1173398926716616,
+     "per_seed": [
+      {
+       "average": 0.28769794085037137,
+       "peak": 0.7435684585258902,
+       "per_config": {
+        "10": {
+         "reduction": 0.7435684585258902,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019741270734475763,
+         "baseline": 0.07698456524104663
+        },
+        "20": {
+         "reduction": 0.2250300509286206,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.018141017459810085,
+         "baseline": 0.023408672144704268
+        },
+        "40": {
+         "reduction": 0.20301888319741057,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.018430240559423074,
+         "baseline": 0.02312506553902231
+        },
+        "15": {
+         "reduction": 0.22877940509424843,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019693251709989833,
+         "baseline": 0.025535173515946474
+        },
+        "30": {
+         "reduction": 0.24781647495439774,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019663177439881177,
+         "baseline": 0.026141462535608007
+        },
+        "60": {
+         "reduction": 0.23468869268025117,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.01953046962228808,
+         "baseline": 0.025519640746831676
+        },
+        "25": {
+         "reduction": 0.2553991664076075,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019689369177070475,
+         "baseline": 0.02644285137592094
+        },
+        "50": {
+         "reduction": 0.16328239501454467,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.01930714263871744,
+         "baseline": 0.023074861247903415
+        }
+       }
+      },
+      {
+       "average": 0.2649130739475999,
+       "peak": 0.6662077328131591,
+       "per_config": {
+        "10": {
+         "reduction": 0.6662077328131591,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02001263946934236,
+         "baseline": 0.05995537175862809
+        },
+        "20": {
+         "reduction": 0.29635618270709974,
+         "best_cell": "quantum_noisy|quantum_kernel_ideal",
+         "best": 0.019745102499356258,
+         "baseline": 0.028061217926025093
+        },
+        "40": {
+         "reduction": 0.1752452194084806,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01955551235903739,
+         "baseline": 0.023710699009240117
+        },
+        "15": {
+         "reduction": 0.25389278883804534,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019595553623725347,
+         "baseline": 0.026263723672108854
+        },
+        "30": {
+         "reduction": 0.26221193973857104,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019406360610605737,
+         "baseline": 0.02630343543880238
+        },
+        "60": {
+         "reduction": 0.11675600200437808,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.01789885800799377,
+         "baseline": 0.020264907600405217
+        },
+        "25": {
+         "reduction": 0.23164987047325625,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01955452306571276,
+         "baseline": 0.025450015968315302
+        },
+        "50": {
+         "reduction": 0.11698485559780891,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019581462906398426,
+         "baseline": 0.022175681844794685
+        }
+       }
+      },
+      {
+       "average": 0.2785439395003346,
+       "peak": 0.5130093844363842,
+       "per_config": {
+        "10": {
+         "reduction": 0.5130093844363842,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.020229266900156653,
+         "baseline": 0.041539336187709545
+        },
+        "20": {
+         "reduction": 0.2164177075709386,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.019328941317258576,
+         "baseline": 0.02466740443730541
+        },
+        "40": {
+         "reduction": 0.25345545410933634,
+         "best_cell": "quantum_noisy|quantum_kernel_ideal",
+         "best": 0.019413674884577847,
+         "baseline": 0.026004710625025594
+        },
+        "15": {
+         "reduction": 0.35322584857937944,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01925783742747223,
+         "baseline": 0.029775211927027312
+        },
+        "30": {
+         "reduction": 0.2167597146555056,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.019791317067621748,
+         "baseline": 0.02526851266200753
+        },
+        "60": {
+         "reduction": 0.24856932901198903,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01937551369122217,
+         "baseline": 0.025784832106661913
+        },
+        "25": {
+         "reduction": 0.3101624313132797,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019629605594391232,
+         "baseline": 0.028455402380825872
+        },
+        "50": {
+         "reduction": 0.1167516463258641,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019293954377209207,
+         "baseline": 0.02184431399951127
+        }
+       }
+      }
+     ]
+    }
+   },
+   "eval_selected": {
+    "mae": {
+     "average_mean": 0.22614747518571632,
+     "average_std": 0.01488395618066392,
+     "peak_mean": 0.6491732208692289,
+     "peak_std": 0.12249892587795122,
+     "per_seed": [
+      {
+       "average": 0.2426752246804444,
+       "peak": 0.7677749249954642,
+       "per_config": {
+        "10": {
+         "reduction": 0.7677749249954642,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013999709888963173,
+         "baseline": 0.060285091472958865
+        },
+        "20": {
+         "reduction": 0.18603750871255775,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.012592135514709947,
+         "baseline": 0.01547016680681809
+        },
+        "40": {
+         "reduction": 0.14351363288859686,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.013181417244054881,
+         "baseline": 0.015390107478897413
+        },
+        "15": {
+         "reduction": 0.1468639243400952,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.014086856542369524,
+         "baseline": 0.016511851912337987
+        },
+        "30": {
+         "reduction": 0.16610501632909302,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.014422627882879036,
+         "baseline": 0.017295496633627505
+        },
+        "60": {
+         "reduction": 0.20226828143606834,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.01401585372609931,
+         "baseline": 0.0175696332487951
+        },
+        "25": {
+         "reduction": 0.1435434917640387,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.014943547530074104,
+         "baseline": 0.017448110191670148
+        },
+        "50": {
+         "reduction": 0.18529501697764106,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013059327984526975,
+         "baseline": 0.01602951774773737
+        }
+       }
+      },
+      {
+       "average": 0.2138022680495899,
+       "peak": 0.6566272463433855,
+       "per_config": {
+        "10": {
+         "reduction": 0.6566272463433855,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014144378194866657,
+         "baseline": 0.04119248846695496
+        },
+        "20": {
+         "reduction": 0.22291901737788045,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.014305547355847045,
+         "baseline": 0.018409339149666946
+        },
+        "40": {
+         "reduction": 0.14600646541640272,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013259329173414963,
+         "baseline": 0.015526264118475021
+        },
+        "15": {
+         "reduction": 0.17743473569706347,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01389683344879529,
+         "baseline": 0.016894505581355704
+        },
+        "30": {
+         "reduction": 0.1928747220479634,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013931406091574347,
+         "baseline": 0.01726052506610036
+        },
+        "60": {
+         "reduction": 0.14647637158724092,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.011691742063288095,
+         "baseline": 0.013698205502559369
+        },
+        "25": {
+         "reduction": 0.09019775972052413,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.0149542336580831,
+         "baseline": 0.016436795817835546
+        },
+        "50": {
+         "reduction": 0.0778818262062585,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.014011684367016348,
+         "baseline": 0.01519510705376301
+        }
+       }
+      },
+      {
+       "average": 0.22196493282711469,
+       "peak": 0.5231174912688369,
+       "per_config": {
+        "10": {
+         "reduction": 0.5231174912688369,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.014284610659301866,
+         "baseline": 0.029954150965420808
+        },
+        "20": {
+         "reduction": 0.17072655928106473,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013536412505437282,
+         "baseline": 0.01632321962910321
+        },
+        "40": {
+         "reduction": 0.13959388227495506,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.014323426790580221,
+         "baseline": 0.016647286084450503
+        },
+        "15": {
+         "reduction": 0.31364480266069195,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01394646516234732,
+         "baseline": 0.020319603051614562
+        },
+        "30": {
+         "reduction": 0.16063361972631174,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013930871520913195,
+         "baseline": 0.016596890045049006
+        },
+        "60": {
+         "reduction": 0.11807701744285415,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013310772115824088,
+         "baseline": 0.01509289629490021
+        },
+        "25": {
+         "reduction": 0.2392863107025558,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.014486658829567406,
+         "baseline": 0.019043510105551713
+        },
+        "50": {
+         "reduction": 0.11063977925964719,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013490568097144195,
+         "baseline": 0.015168845854061133
+        }
+       }
+      }
+     ]
+    },
+    "rmse": {
+     "average_mean": 0.23613096877403564,
+     "average_std": 0.013531964886281134,
+     "peak_mean": 0.6388486813256393,
+     "peak_std": 0.12074677308876706,
+     "per_seed": [
+      {
+       "average": 0.23478672381361215,
+       "peak": 0.7435684585258902,
+       "per_config": {
+        "10": {
+         "reduction": 0.7435684585258902,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019741270734475763,
+         "baseline": 0.07698456524104663
+        },
+        "20": {
+         "reduction": 0.2250300509286206,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.018141017459810085,
+         "baseline": 0.023408672144704268
+        },
+        "40": {
+         "reduction": 0.20301888319741057,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.018430240559423074,
+         "baseline": 0.02312506553902231
+        },
+        "15": {
+         "reduction": 0.21596804241343293,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.020020392079020177,
+         "baseline": 0.025535173515946474
+        },
+        "30": {
+         "reduction": 0.2234171524365316,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.020301011415376193,
+         "baseline": 0.026141462535608007
+        },
+        "60": {
+         "reduction": -0.015137057133985499,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.02590593300685525,
+         "baseline": 0.025519640746831676
+        },
+        "25": {
+         "reduction": 0.13610345203118857,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.022843888022110435,
+         "baseline": 0.02644285137592094
+        },
+        "50": {
+         "reduction": 0.1463248081098084,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.019698436603643493,
+         "baseline": 0.023074861247903415
+        }
+       }
+      },
+      {
+       "average": 0.25028488741790184,
+       "peak": 0.6662077328131591,
+       "per_config": {
+        "10": {
+         "reduction": 0.6662077328131591,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02001263946934236,
+         "baseline": 0.05995537175862809
+        },
+        "20": {
+         "reduction": 0.27700914013438926,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.02028800407721317,
+         "baseline": 0.028061217926025093
+        },
+        "40": {
+         "reduction": 0.1752452194084806,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01955551235903739,
+         "baseline": 0.023710699009240117
+        },
+        "15": {
+         "reduction": 0.25389278883804534,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019595553623725347,
+         "baseline": 0.026263723672108854
+        },
+        "30": {
+         "reduction": 0.2458607277171403,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01983645366035761,
+         "baseline": 0.02630343543880238
+        },
+        "60": {
+         "reduction": 0.11675600200437808,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.01789885800799377,
+         "baseline": 0.020264907600405217
+        },
+        "25": {
+         "reduction": 0.16212333759511133,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.021323974437683146,
+         "baseline": 0.025450015968315302
+        },
+        "50": {
+         "reduction": 0.10518415083251087,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01984315158081803,
+         "baseline": 0.022175681844794685
+        }
+       }
+      },
+      {
+       "average": 0.22332129509059295,
+       "peak": 0.5067698526378687,
+       "per_config": {
+        "10": {
+         "reduction": 0.5067698526378687,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.020488452909189093,
+         "baseline": 0.041539336187709545
+        },
+        "20": {
+         "reduction": 0.2164177075709386,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.019328941317258576,
+         "baseline": 0.02466740443730541
+        },
+        "40": {
+         "reduction": 0.19878577478334603,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.02083534407541317,
+         "baseline": 0.026004710625025594
+        },
+        "15": {
+         "reduction": 0.35322584857937944,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01925783742747223,
+         "baseline": 0.029775211927027312
+        },
+        "30": {
+         "reduction": 0.21637036350336458,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01980115539213959,
+         "baseline": 0.02526851266200753
+        },
+        "60": {
+         "reduction": 0.15540240290172425,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.021777807238869122,
+         "baseline": 0.025784832106661913
+        },
+        "25": {
+         "reduction": 0.1576116625582651,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.023970499102819492,
+         "baseline": 0.028455402380825872
+        },
+        "50": {
+         "reduction": -0.018013251810143016,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.0222378011282043,
+         "baseline": 0.02184431399951127
+        }
+       }
+      }
+     ]
+    }
+   }
+  },
+  "mrsr": {
+   "architecture": "mrsr",
+   "seeds": [
+    0,
+    1,
+    2
+   ],
+   "paper_rule": {
+    "mae": {
+     "average_mean": 0.2618805770114769,
+     "average_std": 0.036140235376670514,
+     "peak_mean": 0.5794505009824658,
+     "peak_std": 0.17376667124617198,
+     "per_seed": [
+      {
+       "average": 0.26642923520763784,
+       "peak": 0.6502868260924828,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.33979154003018863,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014195924802841058,
+         "baseline": 0.021502185542260667
+        },
+        "2x10": {
+         "reduction": 0.2060871874454736,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013854779966108713,
+         "baseline": 0.017451261331239896
+        },
+        "2x20": {
+         "reduction": 0.14483063997652268,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.013814151631152828,
+         "baseline": 0.016153702736465655
+        },
+        "3x5": {
+         "reduction": 0.3871982032182404,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013939600312429403,
+         "baseline": 0.022747322846694895
+        },
+        "3x10": {
+         "reduction": 0.1463977312987037,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.01383536231276068,
+         "baseline": 0.01620820705386636
+        },
+        "3x20": {
+         "reduction": 0.14703422981653025,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013917127851918154,
+         "baseline": 0.01631616219361843
+        },
+        "5x5": {
+         "reduction": 0.6502868260924828,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01388950203131781,
+         "baseline": 0.039716839592067905
+        },
+        "5x10": {
+         "reduction": 0.10980752378296044,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.013867280957111807,
+         "baseline": 0.01557784560934752
+        }
+       }
+      },
+      {
+       "average": 0.2955311542395376,
+       "peak": 0.7066100654372054,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.7066100654372054,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014599877950339913,
+         "baseline": 0.04976270904486357
+        },
+        "2x10": {
+         "reduction": 0.2590940089142617,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.013842282211516536,
+         "baseline": 0.018682913052480224
+        },
+        "2x20": {
+         "reduction": 0.20527070548421456,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.013861664389032096,
+         "baseline": 0.017441995009731915
+        },
+        "3x5": {
+         "reduction": 0.3351262955112102,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.01378101214778528,
+         "baseline": 0.020727263019645614
+        },
+        "3x10": {
+         "reduction": 0.2356086696254419,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.013948853797315872,
+         "baseline": 0.018248315022726405
+        },
+        "3x20": {
+         "reduction": 0.20834197094688756,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.013862864387180315,
+         "baseline": 0.017511177653009382
+        },
+        "5x5": {
+         "reduction": 0.23209939789786505,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013671892047093043,
+         "baseline": 0.017804247072688982
+        },
+        "5x10": {
+         "reduction": 0.18209812009921433,
+         "best_cell": "quantum_noisy|quantum_kernel_ideal",
+         "best": 0.013821396431340689,
+         "baseline": 0.016898599662122395
+        }
+       }
+      },
+      {
+       "average": 0.22368134158725517,
+       "peak": 0.3814546114177091,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.3814546114177091,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014160031411089334,
+         "baseline": 0.022892469449241545
+        },
+        "2x10": {
+         "reduction": 0.16631578111761158,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013903749532141099,
+         "baseline": 0.016677477175686545
+        },
+        "2x20": {
+         "reduction": 0.1337181172137587,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.01383672210612365,
+         "baseline": 0.015972540094709473
+        },
+        "3x5": {
+         "reduction": 0.3443543556752998,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.013775487345751302,
+         "baseline": 0.021010567926428816
+        },
+        "3x10": {
+         "reduction": 0.20763948073829697,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013751289479641843,
+         "baseline": 0.017354839300240336
+        },
+        "3x20": {
+         "reduction": 0.1676441482080131,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.01373033607077762,
+         "baseline": 0.016495752437154673
+        },
+        "5x5": {
+         "reduction": 0.29085820687293273,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013841391268344718,
+         "baseline": 0.01951851012377796
+        },
+        "5x10": {
+         "reduction": 0.09746603145441946,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013965149171197554,
+         "baseline": 0.01547326711004814
+        }
+       }
+      }
+     ]
+    },
+    "rmse": {
+     "average_mean": 0.3310986274223422,
+     "average_std": 0.04682781385670751,
+     "peak_mean": 0.6304276277395621,
+     "peak_std": 0.14196010231136275,
+     "per_seed": [
+      {
+       "average": 0.3291765483442784,
+       "peak": 0.7295836303725955,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.3740412201669019,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01991451598375591,
+         "baseline": 0.031814420734007115
+        },
+        "2x10": {
+         "reduction": 0.33728163036878556,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019548786895874064,
+         "baseline": 0.02949787993164043
+        },
+        "2x20": {
+         "reduction": 0.20058323088781127,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.019416814360843665,
+         "baseline": 0.024288725369631
+        },
+        "3x5": {
+         "reduction": 0.3979667573428268,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019756773668022514,
+         "baseline": 0.03281674875763127
+        },
+        "3x10": {
+         "reduction": 0.19740225315465676,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.019586452687426568,
+         "baseline": 0.024403822169215213
+        },
+        "3x20": {
+         "reduction": 0.213959131254445,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019681544979426945,
+         "baseline": 0.02503883164603996
+        },
+        "5x5": {
+         "reduction": 0.7295836303725955,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019539676816424878,
+         "baseline": 0.07225774402395754
+        },
+        "5x10": {
+         "reduction": 0.18259453320620422,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.01963926703469438,
+         "baseline": 0.02402634657158308
+        }
+       }
+      },
+      {
+       "average": 0.37885788658148034,
+       "peak": 0.6938926978809234,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.6938926978809234,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.020620128824954405,
+         "baseline": 0.06736242057019966
+        },
+        "2x10": {
+         "reduction": 0.5985209116641164,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.01947971873718309,
+         "baseline": 0.0485198838572784
+        },
+        "2x20": {
+         "reduction": 0.26809256076219523,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.019542656236440907,
+         "baseline": 0.026700994126787777
+        },
+        "3x5": {
+         "reduction": 0.37133167375881637,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.019445175609776263,
+         "baseline": 0.030930738512053295
+        },
+        "3x10": {
+         "reduction": 0.30744567162361947,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.01976506411055387,
+         "baseline": 0.028539369838162656
+        },
+        "3x20": {
+         "reduction": 0.2289412478482834,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.01963746664849448,
+         "baseline": 0.02546818461458892
+        },
+        "5x5": {
+         "reduction": 0.2987210880055765,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019325109904359376,
+         "baseline": 0.027556952838349497
+        },
+        "5x10": {
+         "reduction": 0.2639172411083117,
+         "best_cell": "quantum_noisy|quantum_kernel_ideal",
+         "best": 0.01949665329731831,
+         "baseline": 0.02648703975443496
+        }
+       }
+      },
+      {
+       "average": 0.2852614473412678,
+       "peak": 0.467806554965167,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.3970402556817335,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019909062207634675,
+         "baseline": 0.03301889121991844
+        },
+        "2x10": {
+         "reduction": 0.2199115394276273,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01958268331311295,
+         "baseline": 0.025103157273656616
+        },
+        "2x20": {
+         "reduction": 0.15146777593206906,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.019581733004251745,
+         "baseline": 0.02307718251450176
+        },
+        "3x5": {
+         "reduction": 0.3781536824027334,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.019455176870256094,
+         "baseline": 0.031286149519110074
+        },
+        "3x10": {
+         "reduction": 0.28160287298529774,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019444148013627396,
+         "baseline": 0.027066015832256336
+        },
+        "3x20": {
+         "reduction": 0.2080893045501575,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.019429691558848557,
+         "baseline": 0.024535205384253054
+        },
+        "5x5": {
+         "reduction": 0.467806554965167,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01947807388073745,
+         "baseline": 0.03659961253273718
+        },
+        "5x10": {
+         "reduction": 0.17801959278535717,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01967532191536504,
+         "baseline": 0.02393648527710861
+        }
+       }
+      }
+     ]
+    }
+   },
+   "eval_selected": {
+    "mae": {
+     "average_mean": 0.24529758390521894,
+     "average_std": 0.036052523034447545,
+     "peak_mean": 0.5794505009824658,
+     "peak_std": 0.17376667124617198,
+     "per_seed": [
+      {
+       "average": 0.23833039816824353,
+       "peak": 0.6502868260924828,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.33377535151850257,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.014325286004476549,
+         "baseline": 0.021502185542260667
+        },
+        "2x10": {
+         "reduction": 0.2060871874454736,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013854779966108713,
+         "baseline": 0.017451261331239896
+        },
+        "2x20": {
+         "reduction": 0.06267545374057193,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.015141262087867351,
+         "baseline": 0.016153702736465655
+        },
+        "3x5": {
+         "reduction": 0.3871982032182404,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013939600312429403,
+         "baseline": 0.022747322846694895
+        },
+        "3x10": {
+         "reduction": 0.11698046179362709,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01431216350785835,
+         "baseline": 0.01620820705386636
+        },
+        "3x20": {
+         "reduction": 0.04086974219593342,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.015649324851138208,
+         "baseline": 0.01631616219361843
+        },
+        "5x5": {
+         "reduction": 0.6502868260924828,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01388950203131781,
+         "baseline": 0.039716839592067905
+        },
+        "5x10": {
+         "reduction": 0.10876995934111633,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013883443975796604,
+         "baseline": 0.01557784560934752
+        }
+       }
+      },
+      {
+       "average": 0.28432520804942485,
+       "peak": 0.7066100654372054,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.7066100654372054,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014599877950339913,
+         "baseline": 0.04976270904486357
+        },
+        "2x10": {
+         "reduction": 0.2587533394541227,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013848646909419948,
+         "baseline": 0.018682913052480224
+        },
+        "2x20": {
+         "reduction": 0.1437975257435803,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01493387928330059,
+         "baseline": 0.017441995009731915
+        },
+        "3x5": {
+         "reduction": 0.3342827217812093,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01379849712236347,
+         "baseline": 0.020727263019645614
+        },
+        "3x10": {
+         "reduction": 0.23508652428361176,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013958382070001238,
+         "baseline": 0.018248315022726405
+        },
+        "3x20": {
+         "reduction": 0.2147199025236456,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013751179294280966,
+         "baseline": 0.017511177653009382
+        },
+        "5x5": {
+         "reduction": 0.23209939789786505,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013671892047093043,
+         "baseline": 0.017804247072688982
+        },
+        "5x10": {
+         "reduction": 0.14925218727415857,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.014376446700680272,
+         "baseline": 0.016898599662122395
+        }
+       }
+      },
+      {
+       "average": 0.2132371454979884,
+       "peak": 0.3814546114177091,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.3814546114177091,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014160031411089334,
+         "baseline": 0.022892469449241545
+        },
+        "2x10": {
+         "reduction": 0.15620469533016257,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.014072376934582688,
+         "baseline": 0.016677477175686545
+        },
+        "2x20": {
+         "reduction": 0.1371573221181317,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013781789267894633,
+         "baseline": 0.015972540094709473
+        },
+        "3x5": {
+         "reduction": 0.3439583624626812,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01378380738804343,
+         "baseline": 0.021010567926428816
+        },
+        "3x10": {
+         "reduction": 0.16995963125837732,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.014405217212223095,
+         "baseline": 0.017354839300240336
+        },
+        "3x20": {
+         "reduction": 0.15974869707783246,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013860577478000735,
+         "baseline": 0.016495752437154673
+        },
+        "5x5": {
+         "reduction": 0.29085820687293273,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013841391268344718,
+         "baseline": 0.01951851012377796
+        },
+        "5x10": {
+         "reduction": 0.06655563744608017,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.014443433954165419,
+         "baseline": 0.01547326711004814
+        }
+       }
+      }
+     ]
+    },
+    "rmse": {
+     "average_mean": 0.29340791312741804,
+     "average_std": 0.04596957105791244,
+     "peak_mean": 0.6304276277395621,
+     "peak_std": 0.14196010231136275,
+     "per_seed": [
+      {
+       "average": 0.27010729184268945,
+       "peak": 0.7295836303725955,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.36648044350479225,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.020155057713560128,
+         "baseline": 0.031814420734007115
+        },
+        "2x10": {
+         "reduction": 0.33728163036878556,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019548786895874064,
+         "baseline": 0.02949787993164043
+        },
+        "2x20": {
+         "reduction": -0.027563212452827335,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.024958200667202515,
+         "baseline": 0.024288725369631
+        },
+        "3x5": {
+         "reduction": 0.3979667573428268,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019756773668022514,
+         "baseline": 0.03281674875763127
+        },
+        "3x10": {
+         "reduction": 0.17490474284175783,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.020135477928352637,
+         "baseline": 0.024403822169215213
+        },
+        "3x20": {
+         "reduction": 0.0006520333024699898,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.0250225054939518,
+         "baseline": 0.02503883164603996
+        },
+        "5x5": {
+         "reduction": 0.7295836303725955,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019539676816424878,
+         "baseline": 0.07225774402395754
+        },
+        "5x10": {
+         "reduction": 0.18155230946111522,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019664307863599025,
+         "baseline": 0.02402634657158308
+        }
+       }
+      },
+      {
+       "average": 0.3463621249058457,
+       "peak": 0.6938926978809234,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.6938926978809234,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.020620128824954405,
+         "baseline": 0.06736242057019966
+        },
+        "2x10": {
+         "reduction": 0.598468992814235,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019482237833749336,
+         "baseline": 0.0485198838572784
+        },
+        "2x20": {
+         "reduction": 0.16530295345103208,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.022287240937551096,
+         "baseline": 0.026700994126787777
+        },
+        "3x5": {
+         "reduction": 0.37069813992125933,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01946477127924428,
+         "baseline": 0.030930738512053295
+        },
+        "3x10": {
+         "reduction": 0.3069218949994008,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01978001236534503,
+         "baseline": 0.028539369838162656
+        },
+        "3x20": {
+         "reduction": 0.18954519438621986,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.02064081261115253,
+         "baseline": 0.02546818461458892
+        },
+        "5x5": {
+         "reduction": 0.2987210880055765,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019325109904359376,
+         "baseline": 0.027556952838349497
+        },
+        "5x10": {
+         "reduction": 0.1473460377881185,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.02258427939388259,
+         "baseline": 0.02648703975443496
+        }
+       }
+      },
+      {
+       "average": 0.2637543226337189,
+       "peak": 0.467806554965167,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.3970402556817335,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019909062207634675,
+         "baseline": 0.03301889121991844
+        },
+        "2x10": {
+         "reduction": 0.2164976089078693,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.019668383747871773,
+         "baseline": 0.025103157273656616
+        },
+        "2x20": {
+         "reduction": 0.1121068494195624,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.020490072289320753,
+         "baseline": 0.02307718251450176
+        },
+        "3x5": {
+         "reduction": 0.3779754353262905,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01946075353494103,
+         "baseline": 0.031286149519110074
+        },
+        "3x10": {
+         "reduction": 0.2390265171733975,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.020596520334112068,
+         "baseline": 0.027066015832256336
+        },
+        "3x20": {
+         "reduction": 0.2001765010754205,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01962383381726646,
+         "baseline": 0.024535205384253054
+        },
+        "5x5": {
+         "reduction": 0.467806554965167,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01947807388073745,
+         "baseline": 0.03659961253273718
+        },
+        "5x10": {
+         "reduction": 0.09940485852031056,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.021557082344664132,
+         "baseline": 0.02393648527710861
+        }
+       }
+      }
+     ]
+    }
+   }
+  },
+  "srmr": {
+   "architecture": "srmr",
+   "seeds": [
+    0,
+    1,
+    2
+   ],
+   "paper_rule": {
+    "mae": {
+     "average_mean": 0.44119863509460244,
+     "average_std": 0.031329826615960135,
+     "peak_mean": 0.7554653367568411,
+     "peak_std": 0.06475102782486326,
+     "per_seed": [
+      {
+       "average": 0.4575455397358256,
+       "peak": 0.8163184778228924,
+       "per_config": {
+        "10/2": {
+         "reduction": 0.8163184778228924,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.015005632428197408,
+         "baseline": 0.08169375041289575
+        },
+        "20/2": {
+         "reduction": 0.24348108306791783,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01316604997337439,
+         "baseline": 0.01740346431357829
+        },
+        "40/2": {
+         "reduction": 0.20075712738665785,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.012641471031133753,
+         "baseline": 0.015816807962014127
+        },
+        "15/3": {
+         "reduction": 0.5589443397030305,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01524913647094109,
+         "baseline": 0.03457417701129516
+        },
+        "30/3": {
+         "reduction": 0.39930453198895943,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014104925249939521,
+         "baseline": 0.023480991619001655
+        },
+        "60/3": {
+         "reduction": 0.44610669079023135,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013704341956967896,
+         "baseline": 0.024741844194723486
+        },
+        "25/5": {
+         "reduction": 0.5782697228118759,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.0163181773175482,
+         "baseline": 0.03869339765299573
+        },
+        "50/5": {
+         "reduction": 0.41718234431503964,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014191184351698645,
+         "baseline": 0.024349269815823204
+        }
+       }
+      },
+      {
+       "average": 0.4609741016667529,
+       "peak": 0.7626601301168576,
+       "per_config": {
+        "10/2": {
+         "reduction": 0.7626601301168576,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014473188563579696,
+         "baseline": 0.06098085656955055
+        },
+        "20/2": {
+         "reduction": 0.4864149189103629,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014196363804105432,
+         "baseline": 0.02764169818559763
+        },
+        "40/2": {
+         "reduction": 0.1576261302682368,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013818914560433233,
+         "baseline": 0.016404728419263034
+        },
+        "15/3": {
+         "reduction": 0.34089520016236174,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.016702688369755775,
+         "baseline": 0.02534147585311207
+        },
+        "30/3": {
+         "reduction": 0.5294158363918662,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01419456209925034,
+         "baseline": 0.030163705447322435
+        },
+        "60/3": {
+         "reduction": 0.4612824706831221,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01381197715734712,
+         "baseline": 0.02563862582095933
+        },
+        "25/5": {
+         "reduction": 0.5102563131516337,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.015825304566490027,
+         "baseline": 0.03231344270781755
+        },
+        "50/5": {
+         "reduction": 0.43924181364958204,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014293173479984041,
+         "baseline": 0.025489014387838526
+        }
+       }
+      },
+      {
+       "average": 0.4050762638812288,
+       "peak": 0.6874174023307738,
+       "per_config": {
+        "10/2": {
+         "reduction": 0.6122380635326976,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.015401802404303631,
+         "baseline": 0.0397197376942705
+        },
+        "20/2": {
+         "reduction": 0.18698468794630907,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014127627208562529,
+         "baseline": 0.017376827962656563
+        },
+        "40/2": {
+         "reduction": 0.20613483314433267,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013837319162514152,
+         "baseline": 0.017430314038492024
+        },
+        "15/3": {
+         "reduction": 0.5903315629583781,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.016858640552242125,
+         "baseline": 0.04115191464098392
+        },
+        "30/3": {
+         "reduction": 0.2766215701174298,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014216423450983328,
+         "baseline": 0.019652816373431477
+        },
+        "60/3": {
+         "reduction": 0.37211352044600077,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013130980846178461,
+         "baseline": 0.020912985505764783
+        },
+        "25/5": {
+         "reduction": 0.6874174023307738,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014510430681160877,
+         "baseline": 0.046421108498547206
+        },
+        "50/5": {
+         "reduction": 0.30876847057390866,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.013845448684973104,
+         "baseline": 0.020030117399981107
+        }
+       }
+      }
+     ]
+    },
+    "rmse": {
+     "average_mean": 0.44272613403791805,
+     "average_std": 0.027641119562749228,
+     "peak_mean": 0.7256677543120557,
+     "peak_std": 0.06608281051016611,
+     "per_seed": [
+      {
+       "average": 0.45548188148441016,
+       "peak": 0.7843904681888344,
+       "per_config": {
+        "10/2": {
+         "reduction": 0.7843904681888344,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02176162802550212,
+         "baseline": 0.10093073271250973
+        },
+        "20/2": {
+         "reduction": 0.29265470935404725,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.018677873750531527,
+         "baseline": 0.02640559567940964
+        },
+        "40/2": {
+         "reduction": 0.25581916580863917,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.017605650520734362,
+         "baseline": 0.023657758587487615
+        },
+        "15/3": {
+         "reduction": 0.5204485167236585,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.021485969386242375,
+         "baseline": 0.04480430180185907
+        },
+        "30/3": {
+         "reduction": 0.3881545873340293,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01997365270702579,
+         "baseline": 0.032644933333724535
+        },
+        "60/3": {
+         "reduction": 0.4210445217745673,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019395418600230467,
+         "baseline": 0.033500708309522745
+        },
+        "25/5": {
+         "reduction": 0.5644382087511688,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.0236172278576148,
+         "baseline": 0.054222450940657835
+        },
+        "50/5": {
+         "reduction": 0.4169048739403367,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.0200202018847332,
+         "baseline": 0.03433436670963479
+        }
+       }
+      },
+      {
+       "average": 0.46168597274087925,
+       "peak": 0.7385043831209982,
+       "per_config": {
+        "10/2": {
+         "reduction": 0.7385043831209982,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.020662110212555814,
+         "baseline": 0.07901513019285712
+        },
+        "20/2": {
+         "reduction": 0.4807374469320931,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02000961124328401,
+         "baseline": 0.038534670226195264
+        },
+        "40/2": {
+         "reduction": 0.20836748381603798,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019609080068536865,
+         "baseline": 0.024770432830452414
+        },
+        "15/3": {
+         "reduction": 0.3739336110605874,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.02280352842361217,
+         "baseline": 0.036423498891615114
+        },
+        "30/3": {
+         "reduction": 0.5345531338777578,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019960450922957906,
+         "baseline": 0.042884488812339784
+        },
+        "60/3": {
+         "reduction": 0.4565204168720298,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019516454847480696,
+         "baseline": 0.03591018955147256
+        },
+        "25/5": {
+         "reduction": 0.4718408394052489,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.023019326838516572,
+         "baseline": 0.04358407191611502
+        },
+        "50/5": {
+         "reduction": 0.4290304668422805,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02027824231814175,
+         "baseline": 0.035515454223965175
+        }
+       }
+      },
+      {
+       "average": 0.41101054788846464,
+       "peak": 0.6541084116263347,
+       "per_config": {
+        "10/2": {
+         "reduction": 0.5696456565804231,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.022595994723921403,
+         "baseline": 0.05250555750030221
+        },
+        "20/2": {
+         "reduction": 0.24421327740723586,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01985783567767108,
+         "baseline": 0.02627439075609556
+        },
+        "40/2": {
+         "reduction": 0.27371062466737206,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019539093610800612,
+         "baseline": 0.02690262899942884
+        },
+        "15/3": {
+         "reduction": 0.5361621935795247,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.024389188444022845,
+         "baseline": 0.052581286187598324
+        },
+        "30/3": {
+         "reduction": 0.3348364164980867,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019960746811661916,
+         "baseline": 0.03000877875269986
+        },
+        "60/3": {
+         "reduction": 0.37239395596616787,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.019346349005709147,
+         "baseline": 0.030825625708388253
+        },
+        "25/5": {
+         "reduction": 0.6541084116263347,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.0211142819148487,
+         "baseline": 0.061043062695236815
+        },
+        "50/5": {
+         "reduction": 0.30301384678257204,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.019993316927146534,
+         "baseline": 0.02868538612259852
+        }
+       }
+      }
+     ]
+    }
+   },
+   "eval_selected": {
+    "mae": {
+     "average_mean": 0.4377760718067701,
+     "average_std": 0.03092413085378087,
+     "peak_mean": 0.7554653367568411,
+     "peak_std": 0.06475102782486326,
+     "per_seed": [
+      {
+       "average": 0.4575455397358256,
+       "peak": 0.8163184778228924,
+       "per_config": {
+        "10/2": {
+         "reduction": 0.8163184778228924,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.015005632428197408,
+         "baseline": 0.08169375041289575
+        },
+        "20/2": {
+         "reduction": 0.24348108306791783,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01316604997337439,
+         "baseline": 0.01740346431357829
+        },
+        "40/2": {
+         "reduction": 0.20075712738665785,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.012641471031133753,
+         "baseline": 0.015816807962014127
+        },
+        "15/3": {
+         "reduction": 0.5589443397030305,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01524913647094109,
+         "baseline": 0.03457417701129516
+        },
+        "30/3": {
+         "reduction": 0.39930453198895943,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014104925249939521,
+         "baseline": 0.023480991619001655
+        },
+        "60/3": {
+         "reduction": 0.44610669079023135,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013704341956967896,
+         "baseline": 0.024741844194723486
+        },
+        "25/5": {
+         "reduction": 0.5782697228118759,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.0163181773175482,
+         "baseline": 0.03869339765299573
+        },
+        "50/5": {
+         "reduction": 0.41718234431503964,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014191184351698645,
+         "baseline": 0.024349269815823204
+        }
+       }
+      },
+      {
+       "average": 0.4536435799274141,
+       "peak": 0.7626601301168576,
+       "per_config": {
+        "10/2": {
+         "reduction": 0.7626601301168576,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014473188563579696,
+         "baseline": 0.06098085656955055
+        },
+        "20/2": {
+         "reduction": 0.4864149189103629,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014196363804105432,
+         "baseline": 0.02764169818559763
+        },
+        "40/2": {
+         "reduction": 0.0990954613024907,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.014779094289014085,
+         "baseline": 0.016404728419263034
+        },
+        "15/3": {
+         "reduction": 0.34089520016236174,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.016702688369755775,
+         "baseline": 0.02534147585311207
+        },
+        "30/3": {
+         "reduction": 0.5294158363918662,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01419456209925034,
+         "baseline": 0.030163705447322435
+        },
+        "60/3": {
+         "reduction": 0.4611689657341581,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.013814887268262436,
+         "baseline": 0.02563862582095933
+        },
+        "25/5": {
+         "reduction": 0.5102563131516337,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.015825304566490027,
+         "baseline": 0.03231344270781755
+        },
+        "50/5": {
+         "reduction": 0.43924181364958204,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014293173479984041,
+         "baseline": 0.025489014387838526
+        }
+       }
+      },
+      {
+       "average": 0.40213909575707046,
+       "peak": 0.6874174023307738,
+       "per_config": {
+        "10/2": {
+         "reduction": 0.6122380635326976,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.015401802404303631,
+         "baseline": 0.0397197376942705
+        },
+        "20/2": {
+         "reduction": 0.20033622689221153,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013895619813262872,
+         "baseline": 0.017376827962656563
+        },
+        "40/2": {
+         "reduction": 0.1860482371882034,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01418743483799379,
+         "baseline": 0.017430314038492024
+        },
+        "15/3": {
+         "reduction": 0.5903315629583781,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.016858640552242125,
+         "baseline": 0.04115191464098392
+        },
+        "30/3": {
+         "reduction": 0.26011100486640015,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.014540902558083373,
+         "baseline": 0.019652816373431477
+        },
+        "60/3": {
+         "reduction": 0.37211352044600077,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013130980846178461,
+         "baseline": 0.020912985505764783
+        },
+        "25/5": {
+         "reduction": 0.6874174023307738,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014510430681160877,
+         "baseline": 0.046421108498547206
+        },
+        "50/5": {
+         "reduction": 0.30851674784189864,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.01385049072084751,
+         "baseline": 0.020030117399981107
+        }
+       }
+      }
+     ]
+    },
+    "rmse": {
+     "average_mean": 0.43665149580724116,
+     "average_std": 0.029190462676840355,
+     "peak_mean": 0.7256677543120557,
+     "peak_std": 0.06608281051016611,
+     "per_seed": [
+      {
+       "average": 0.45548188148441016,
+       "peak": 0.7843904681888344,
+       "per_config": {
+        "10/2": {
+         "reduction": 0.7843904681888344,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02176162802550212,
+         "baseline": 0.10093073271250973
+        },
+        "20/2": {
+         "reduction": 0.29265470935404725,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.018677873750531527,
+         "baseline": 0.02640559567940964
+        },
+        "40/2": {
+         "reduction": 0.25581916580863917,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.017605650520734362,
+         "baseline": 0.023657758587487615
+        },
+        "15/3": {
+         "reduction": 0.5204485167236585,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.021485969386242375,
+         "baseline": 0.04480430180185907
+        },
+        "30/3": {
+         "reduction": 0.3881545873340293,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01997365270702579,
+         "baseline": 0.032644933333724535
+        },
+        "60/3": {
+         "reduction": 0.4210445217745673,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019395418600230467,
+         "baseline": 0.033500708309522745
+        },
+        "25/5": {
+         "reduction": 0.5644382087511688,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.0236172278576148,
+         "baseline": 0.054222450940657835
+        },
+        "50/5": {
+         "reduction": 0.4169048739403367,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.0200202018847332,
+         "baseline": 0.03433436670963479
+        }
+       }
+      },
+      {
+       "average": 0.4514467458131156,
+       "peak": 0.7385043831209982,
+       "per_config": {
+        "10/2": {
+         "reduction": 0.7385043831209982,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.020662110212555814,
+         "baseline": 0.07901513019285712
+        },
+        "20/2": {
+         "reduction": 0.4807374469320931,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02000961124328401,
+         "baseline": 0.038534670226195264
+        },
+        "40/2": {
+         "reduction": 0.12674083466662256,
+         "best_cell": "classical|quantum_kernel_noisy",
+         "best": 0.021631007498467365,
+         "baseline": 0.024770432830452414
+        },
+        "15/3": {
+         "reduction": 0.3739336110605874,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.02280352842361217,
+         "baseline": 0.036423498891615114
+        },
+        "30/3": {
+         "reduction": 0.5345531338777578,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019960450922957906,
+         "baseline": 0.042884488812339784
+        },
+        "60/3": {
+         "reduction": 0.4562332505993365,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.019526767042765902,
+         "baseline": 0.03591018955147256
+        },
+        "25/5": {
+         "reduction": 0.4718408394052489,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.023019326838516572,
+         "baseline": 0.04358407191611502
+        },
+        "50/5": {
+         "reduction": 0.4290304668422805,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02027824231814175,
+         "baseline": 0.035515454223965175
+        }
+       }
+      },
+      {
+       "average": 0.4030258601241978,
+       "peak": 0.6541084116263347,
+       "per_config": {
+        "10/2": {
+         "reduction": 0.5696456565804231,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.022595994723921403,
+         "baseline": 0.05250555750030221
+        },
+        "20/2": {
+         "reduction": 0.22191179830938734,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.02044379345392685,
+         "baseline": 0.02627439075609556
+        },
+        "40/2": {
+         "reduction": 0.25068546919667156,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.02015853082608304,
+         "baseline": 0.02690262899942884
+        },
+        "15/3": {
+         "reduction": 0.5361621935795247,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.024389188444022845,
+         "baseline": 0.052581286187598324
+        },
+        "30/3": {
+         "reduction": 0.32035940432687293,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.020395184266908013,
+         "baseline": 0.03000877875269986
+        },
+        "60/3": {
+         "reduction": 0.37239395596616787,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.019346349005709147,
+         "baseline": 0.030825625708388253
+        },
+        "25/5": {
+         "reduction": 0.6541084116263347,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.0211142819148487,
+         "baseline": 0.061043062695236815
+        },
+        "50/5": {
+         "reduction": 0.29893999140820005,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.020110177041568016,
+         "baseline": 0.02868538612259852
+        }
+       }
+      }
+     ]
+    }
+   }
+  },
+  "mrmr": {
+   "architecture": "mrmr",
+   "seeds": [
+    0,
+    1,
+    2
+   ],
+   "paper_rule": {
+    "mae": {
+     "average_mean": 0.5183911158403803,
+     "average_std": 0.059261703791753016,
+     "peak_mean": 0.7539259644210653,
+     "peak_std": 0.07043970081082941,
+     "per_seed": [
+      {
+       "average": 0.49669338813238323,
+       "peak": 0.7722100668122757,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.5229539076980834,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014504502376427409,
+         "baseline": 0.030404823790586018
+        },
+        "2x10": {
+         "reduction": 0.3539582832288204,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014371575781206361,
+         "baseline": 0.022245584779003683
+        },
+        "2x20": {
+         "reduction": 0.15687689575071762,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013914661831004087,
+         "baseline": 0.01650371311244485
+        },
+        "3x5": {
+         "reduction": 0.6374833678341874,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01550676831210081,
+         "baseline": 0.04277532928477642
+        },
+        "3x10": {
+         "reduction": 0.39866468543290356,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014016858587298772,
+         "baseline": 0.02330955499826176
+        },
+        "3x20": {
+         "reduction": 0.3876428098528515,
+         "best_cell": "quantum_noisy|quantum_kernel_ideal",
+         "best": 0.013912406950087466,
+         "baseline": 0.02271943103459655
+        },
+        "5x5": {
+         "reduction": 0.7437570884492266,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.016114532470677293,
+         "baseline": 0.06288771998863381
+        },
+        "5x10": {
+         "reduction": 0.7722100668122757,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014274136556672737,
+         "baseline": 0.06266359692422956
+        }
+       }
+      },
+      {
+       "average": 0.5854436806004019,
+       "peak": 0.8134207848771455,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.8134207848771455,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.015335022796832905,
+         "baseline": 0.08219041326085245
+        },
+        "2x10": {
+         "reduction": 0.5445931525140115,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014047133942127903,
+         "baseline": 0.030845240952509158
+        },
+        "2x20": {
+         "reduction": 0.45287580575511976,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01378150192021998,
+         "baseline": 0.025188982803512606
+        },
+        "3x5": {
+         "reduction": 0.7026417863697656,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014857071139090778,
+         "baseline": 0.04996354719014279
+        },
+        "3x10": {
+         "reduction": 0.47802207369102023,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01396356419018408,
+         "baseline": 0.02675125419368497
+        },
+        "3x20": {
+         "reduction": 0.4032770502012205,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.013806618229038305,
+         "baseline": 0.023137401089892762
+        },
+        "5x5": {
+         "reduction": 0.673183718958121,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01448660909200969,
+         "baseline": 0.044326460866107656
+        },
+        "5x10": {
+         "reduction": 0.6155350724368109,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014076695131868417,
+         "baseline": 0.03661373020704166
+        }
+       }
+      },
+      {
+       "average": 0.47303627878835597,
+       "peak": 0.6761470415737744,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.6761470415737744,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014532464092591757,
+         "baseline": 0.04487364933521916
+        },
+        "2x10": {
+         "reduction": 0.2088175515440901,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013497716286543037,
+         "baseline": 0.01706018164695829
+        },
+        "2x20": {
+         "reduction": 0.13187467843353706,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.013867494081423373,
+         "baseline": 0.015974069338745452
+        },
+        "3x5": {
+         "reduction": 0.5635699576020416,
+         "best_cell": "quantum_noisy|quantum_kernel_ideal",
+         "best": 0.015430006697086988,
+         "baseline": 0.035355051664883216
+        },
+        "3x10": {
+         "reduction": 0.5293191526872658,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014163740774441082,
+         "baseline": 0.030092027018533595
+        },
+        "3x20": {
+         "reduction": 0.5261514041411104,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.013759418504363295,
+         "baseline": 0.029037584208566062
+        },
+        "5x5": {
+         "reduction": 0.5485051695639224,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014615932439605201,
+         "baseline": 0.032372314042861484
+        },
+        "5x10": {
+         "reduction": 0.599905274761106,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014192611001608771,
+         "baseline": 0.035473127002947746
+        }
+       }
+      }
+     ]
+    },
+    "rmse": {
+     "average_mean": 0.5104109387274274,
+     "average_std": 0.04952037805544875,
+     "peak_mean": 0.7245013094490641,
+     "peak_std": 0.0667349352089297,
+     "per_seed": [
+      {
+       "average": 0.4898250365366243,
+       "peak": 0.7414405614197304,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.502072978032512,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.020562094423936413,
+         "baseline": 0.04129539775264298
+        },
+        "2x10": {
+         "reduction": 0.3696827095649655,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.020204538304258696,
+         "baseline": 0.03205455190720512
+        },
+        "2x20": {
+         "reduction": 0.22976883237761458,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019602215068681796,
+         "baseline": 0.02544978169241264
+        },
+        "3x5": {
+         "reduction": 0.595659795854097,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02229868824611072,
+         "baseline": 0.05514833305585514
+        },
+        "3x10": {
+         "reduction": 0.38381261849578585,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019785932747999044,
+         "baseline": 0.03211025305272942
+        },
+        "3x20": {
+         "reduction": 0.39036249659532285,
+         "best_cell": "quantum_noisy|quantum_kernel_ideal",
+         "best": 0.019570767460817755,
+         "baseline": 0.03210230235430035
+        },
+        "5x5": {
+         "reduction": 0.7058002999529662,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02308578128734921,
+         "baseline": 0.07846976486943555
+        },
+        "5x10": {
+         "reduction": 0.7414405614197304,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.020201094094340587,
+         "baseline": 0.07812940113601448
+        }
+       }
+      },
+      {
+       "average": 0.5669038174850838,
+       "peak": 0.7811342785298707,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.7811342785298707,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.022237275620073025,
+         "baseline": 0.10160236820414092
+        },
+        "2x10": {
+         "reduction": 0.5223880869692514,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019772296987336787,
+         "baseline": 0.04139824918073987
+        },
+        "2x20": {
+         "reduction": 0.4571495439235901,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019468193872673976,
+         "baseline": 0.03586290414746137
+        },
+        "3x5": {
+         "reduction": 0.6700237608723485,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.021282770762268855,
+         "baseline": 0.06449788875263712
+        },
+        "3x10": {
+         "reduction": 0.47305098290971515,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019674424790837187,
+         "baseline": 0.0373364863634735
+        },
+        "3x20": {
+         "reduction": 0.39822078377600567,
+         "best_cell": "quantum_noisy|quantum_kernel_noisy",
+         "best": 0.019508001935201188,
+         "baseline": 0.032417207855081384
+        },
+        "5x5": {
+         "reduction": 0.6347615338692667,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.021029154508603622,
+         "baseline": 0.057576505375741174
+        },
+        "5x10": {
+         "reduction": 0.5985015690306223,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019845510791856324,
+         "baseline": 0.04942861356628799
+        }
+       }
+      },
+      {
+       "average": 0.47450396216057394,
+       "peak": 0.6509290883975913,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.6509290883975913,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.020804612286468186,
+         "baseline": 0.059599959764520885
+        },
+        "2x10": {
+         "reduction": 0.2884520898009628,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.019117799059888765,
+         "baseline": 0.026867901354022745
+        },
+        "2x20": {
+         "reduction": 0.20173552828758834,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.019592519619586236,
+         "baseline": 0.024543895305220064
+        },
+        "3x5": {
+         "reduction": 0.528182273675738,
+         "best_cell": "quantum_noisy|quantum_kernel_ideal",
+         "best": 0.022152616775846325,
+         "baseline": 0.04695164157656444
+        },
+        "3x10": {
+         "reduction": 0.510783229102104,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01994262977794339,
+         "baseline": 0.040764403357107314
+        },
+        "3x20": {
+         "reduction": 0.5274360553964894,
+         "best_cell": "quantum_ideal|quantum_kernel_noisy",
+         "best": 0.019420187037135266,
+         "baseline": 0.04109536340828782
+        },
+        "5x5": {
+         "reduction": 0.5081463738127725,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02105482021622787,
+         "baseline": 0.04280708547264671
+        },
+        "5x10": {
+         "reduction": 0.5803670588113454,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02002397050375748,
+         "baseline": 0.047717823217208515
+        }
+       }
+      }
+     ]
+    }
+   },
+   "eval_selected": {
+    "mae": {
+     "average_mean": 0.5162384820926776,
+     "average_std": 0.06081097045439316,
+     "peak_mean": 0.7539259644210653,
+     "peak_std": 0.07043970081082941,
+     "per_seed": [
+      {
+       "average": 0.4931497292121164,
+       "peak": 0.7722100668122757,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.5229539076980834,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014504502376427409,
+         "baseline": 0.030404823790586018
+        },
+        "2x10": {
+         "reduction": 0.3539582832288204,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014371575781206361,
+         "baseline": 0.022245584779003683
+        },
+        "2x20": {
+         "reduction": 0.1265484990050999,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.014415192990054167,
+         "baseline": 0.01650371311244485
+        },
+        "3x5": {
+         "reduction": 0.6374833678341874,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01550676831210081,
+         "baseline": 0.04277532928477642
+        },
+        "3x10": {
+         "reduction": 0.39866468543290356,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014016858587298772,
+         "baseline": 0.02330955499826176
+        },
+        "3x20": {
+         "reduction": 0.3896219352363346,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013867442347428602,
+         "baseline": 0.02271943103459655
+        },
+        "5x5": {
+         "reduction": 0.7437570884492266,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.016114532470677293,
+         "baseline": 0.06288771998863381
+        },
+        "5x10": {
+         "reduction": 0.7722100668122757,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014274136556672737,
+         "baseline": 0.06266359692422956
+        }
+       }
+      },
+      {
+       "average": 0.585212434932409,
+       "peak": 0.8134207848771455,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.8134207848771455,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.015335022796832905,
+         "baseline": 0.08219041326085245
+        },
+        "2x10": {
+         "reduction": 0.5445931525140115,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014047133942127903,
+         "baseline": 0.030845240952509158
+        },
+        "2x20": {
+         "reduction": 0.45287580575511976,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01378150192021998,
+         "baseline": 0.025188982803512606
+        },
+        "3x5": {
+         "reduction": 0.7026417863697656,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014857071139090778,
+         "baseline": 0.04996354719014279
+        },
+        "3x10": {
+         "reduction": 0.47802207369102023,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01396356419018408,
+         "baseline": 0.02675125419368497
+        },
+        "3x20": {
+         "reduction": 0.4014270848572783,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.013849421619203496,
+         "baseline": 0.023137401089892762
+        },
+        "5x5": {
+         "reduction": 0.673183718958121,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01448660909200969,
+         "baseline": 0.044326460866107656
+        },
+        "5x10": {
+         "reduction": 0.6155350724368109,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014076695131868417,
+         "baseline": 0.03661373020704166
+        }
+       }
+      },
+      {
+       "average": 0.47035328213350736,
+       "peak": 0.6761470415737744,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.6761470415737744,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014532464092591757,
+         "baseline": 0.04487364933521916
+        },
+        "2x10": {
+         "reduction": 0.2088175515440901,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.013497716286543037,
+         "baseline": 0.01706018164695829
+        },
+        "2x20": {
+         "reduction": 0.11057612289637286,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.014207718684389154,
+         "baseline": 0.015974069338745452
+        },
+        "3x5": {
+         "reduction": 0.5635699576020416,
+         "best_cell": "quantum_noisy|quantum_kernel_ideal",
+         "best": 0.015430006697086988,
+         "baseline": 0.035355051664883216
+        },
+        "3x10": {
+         "reduction": 0.5293191526872658,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014163740774441082,
+         "baseline": 0.030092027018533595
+        },
+        "3x20": {
+         "reduction": 0.5259859864394854,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01376422183480382,
+         "baseline": 0.029037584208566062
+        },
+        "5x5": {
+         "reduction": 0.5485051695639224,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014615932439605201,
+         "baseline": 0.032372314042861484
+        },
+        "5x10": {
+         "reduction": 0.599905274761106,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.014192611001608771,
+         "baseline": 0.035473127002947746
+        }
+       }
+      }
+     ]
+    },
+    "rmse": {
+     "average_mean": 0.5054627428888934,
+     "average_std": 0.05349467661834229,
+     "peak_mean": 0.7245013094490641,
+     "peak_std": 0.0667349352089297,
+     "per_seed": [
+      {
+       "average": 0.48161990082587225,
+       "peak": 0.7414405614197304,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.502072978032512,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.020562094423936413,
+         "baseline": 0.04129539775264298
+        },
+        "2x10": {
+         "reduction": 0.3696827095649655,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.020204538304258696,
+         "baseline": 0.03205455190720512
+        },
+        "2x20": {
+         "reduction": 0.16439835348930154,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.021265879485517832,
+         "baseline": 0.02544978169241264
+        },
+        "3x5": {
+         "reduction": 0.595659795854097,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02229868824611072,
+         "baseline": 0.05514833305585514
+        },
+        "3x10": {
+         "reduction": 0.38381261849578585,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019785932747999044,
+         "baseline": 0.03211025305272942
+        },
+        "3x20": {
+         "reduction": 0.39009188979761933,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019579454562056765,
+         "baseline": 0.03210230235430035
+        },
+        "5x5": {
+         "reduction": 0.7058002999529662,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02308578128734921,
+         "baseline": 0.07846976486943555
+        },
+        "5x10": {
+         "reduction": 0.7414405614197304,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.020201094094340587,
+         "baseline": 0.07812940113601448
+        }
+       }
+      },
+      {
+       "average": 0.5667331212373462,
+       "peak": 0.7811342785298707,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.7811342785298707,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.022237275620073025,
+         "baseline": 0.10160236820414092
+        },
+        "2x10": {
+         "reduction": 0.5223880869692514,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019772296987336787,
+         "baseline": 0.04139824918073987
+        },
+        "2x20": {
+         "reduction": 0.4571495439235901,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019468193872673976,
+         "baseline": 0.03586290414746137
+        },
+        "3x5": {
+         "reduction": 0.6700237608723485,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.021282770762268855,
+         "baseline": 0.06449788875263712
+        },
+        "3x10": {
+         "reduction": 0.47305098290971515,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019674424790837187,
+         "baseline": 0.0373364863634735
+        },
+        "3x20": {
+         "reduction": 0.3968552137941045,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01955226990114514,
+         "baseline": 0.032417207855081384
+        },
+        "5x5": {
+         "reduction": 0.6347615338692667,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.021029154508603622,
+         "baseline": 0.057576505375741174
+        },
+        "5x10": {
+         "reduction": 0.5985015690306223,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019845510791856324,
+         "baseline": 0.04942861356628799
+        }
+       }
+      },
+      {
+       "average": 0.46803520660346165,
+       "peak": 0.6509290883975913,
+       "per_config": {
+        "2x5": {
+         "reduction": 0.6509290883975913,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.020804612286468186,
+         "baseline": 0.059599959764520885
+        },
+        "2x10": {
+         "reduction": 0.2884520898009628,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.019117799059888765,
+         "baseline": 0.026867901354022745
+        },
+        "2x20": {
+         "reduction": 0.15005374492152423,
+         "best_cell": "classical|quantum_kernel_ideal",
+         "best": 0.020860991899709976,
+         "baseline": 0.024543895305220064
+        },
+        "3x5": {
+         "reduction": 0.528182273675738,
+         "best_cell": "quantum_noisy|quantum_kernel_ideal",
+         "best": 0.022152616775846325,
+         "baseline": 0.04695164157656444
+        },
+        "3x10": {
+         "reduction": 0.510783229102104,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.01994262977794339,
+         "baseline": 0.040764403357107314
+        },
+        "3x20": {
+         "reduction": 0.527367794305655,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.019422992251469755,
+         "baseline": 0.04109536340828782
+        },
+        "5x5": {
+         "reduction": 0.5081463738127725,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02105482021622787,
+         "baseline": 0.04280708547264671
+        },
+        "5x10": {
+         "reduction": 0.5803670588113454,
+         "best_cell": "quantum_ideal|quantum_kernel_ideal",
+         "best": 0.02002397050375748,
+         "baseline": 0.047717823217208515
+        }
+       }
+      }
+     ]
+    }
+   }
+  }
+ }
+}

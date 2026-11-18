@@ -1,0 +1,287 @@
+{
+  "sweep_id": "fair_robustness",
+  "description": "Phase 5 data robustness: every model at its selected (lr, L2) on generated training sets (data seeds 101-103), init seed 10, protocol paper.",
+  "base_config": "configs/fair_quantum_tuning.json",
+  "grid": [
+    {
+      "--cnot-pattern": "paper",
+      "--layers": 1,
+      "--model": "generic_quantum",
+      "--lr": 0.003,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--cnot-pattern": "paper",
+      "--layers": 2,
+      "--model": "generic_quantum",
+      "--lr": 0.001,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--computation-space": "fock",
+      "--model": "photonic_merlin",
+      "--n-photons": 2,
+      "--readout": "group",
+      "--lr": 0.003,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--hidden": 7,
+      "--model": "mlp_biased",
+      "--lr": 0.001,
+      "--l2": 0.001,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--hidden": 9,
+      "--model": "mlp_unbiased",
+      "--lr": 0.001,
+      "--l2": 0.001,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--layers": 1,
+      "--model": "biased_quantum",
+      "--lr": 0.001,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--layers": 2,
+      "--model": "biased_quantum",
+      "--lr": 0.001,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 0.1,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--model": "quadratic",
+      "--lr": 0.001,
+      "--l2": 0.01,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 1.0,
+      "--train-source": "generated",
+      "--train-seed": 101
+    },
+    {
+      "--cnot-pattern": "paper",
+      "--layers": 1,
+      "--model": "generic_quantum",
+      "--lr": 0.003,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--cnot-pattern": "paper",
+      "--layers": 2,
+      "--model": "generic_quantum",
+      "--lr": 0.001,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--computation-space": "fock",
+      "--model": "photonic_merlin",
+      "--n-photons": 2,
+      "--readout": "group",
+      "--lr": 0.003,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--hidden": 7,
+      "--model": "mlp_biased",
+      "--lr": 0.001,
+      "--l2": 0.001,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--hidden": 9,
+      "--model": "mlp_unbiased",
+      "--lr": 0.001,
+      "--l2": 0.001,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--layers": 1,
+      "--model": "biased_quantum",
+      "--lr": 0.001,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--layers": 2,
+      "--model": "biased_quantum",
+      "--lr": 0.001,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 0.1,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--model": "quadratic",
+      "--lr": 0.001,
+      "--l2": 0.01,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 1.0,
+      "--train-source": "generated",
+      "--train-seed": 102
+    },
+    {
+      "--cnot-pattern": "paper",
+      "--layers": 1,
+      "--model": "generic_quantum",
+      "--lr": 0.003,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--cnot-pattern": "paper",
+      "--layers": 2,
+      "--model": "generic_quantum",
+      "--lr": 0.001,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--computation-space": "fock",
+      "--model": "photonic_merlin",
+      "--n-photons": 2,
+      "--readout": "group",
+      "--lr": 0.003,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--hidden": 7,
+      "--model": "mlp_biased",
+      "--lr": 0.001,
+      "--l2": 0.001,
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--hidden": 9,
+      "--model": "mlp_unbiased",
+      "--lr": 0.001,
+      "--l2": 0.001,
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--layers": 1,
+      "--model": "biased_quantum",
+      "--lr": 0.001,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--layers": 2,
+      "--model": "biased_quantum",
+      "--lr": 0.001,
+      "--l2": 0.0,
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--model": "bias_fourier",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 0.1,
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--model": "quadratic",
+      "--lr": 0.001,
+      "--l2": 0.01,
+      "--train-source": "generated",
+      "--train-seed": 103
+    },
+    {
+      "--model": "surrogate",
+      "--spectrum": 1,
+      "--lr": 0.001,
+      "--l2": 1.0,
+      "--train-source": "generated",
+      "--train-seed": 103
+    }
+  ],
+  "repetitions": [
+    {
+      "--seed": 10
+    }
+  ],
+  "progress_total": 2000,
+  "plan": {
+    "metrics": [
+      "final.test_kl",
+      "min_validation_nll.test_kl",
+      "min_validation_nll.step",
+      "final.validation_nll",
+      "final.train_nll",
+      "final.test_zero_sum_violation",
+      "train_seconds"
+    ],
+    "direction": "minimize",
+    "split": "test (fixed seeded set, seed 2302, n = 10000); validation used only for the early-stopping view",
+    "checkpoint": "final step 2000 (primary); step of minimum validation NLL (secondary)",
+    "aggregation": "mean and sample std (ddof = 1) over repetitions; Welch and Mann-Whitney tests",
+    "tie_tolerance": "difference resolved only if Welch and Mann-Whitney p < 0.05",
+    "selection_rule": "none (hyperparameters fixed by fair_tuning_selection.json)",
+    "note": "Generated by utils/select_hyperparameters.py; paired over data seeds."
+  },
+  "fixed_args": {
+    "--protocol": "paper",
+    "--validation": "true",
+    "--optimizer": "adam",
+    "--experiment-id": "P5_fair_robustness"
+  },
+  "max_workers": 6
+}

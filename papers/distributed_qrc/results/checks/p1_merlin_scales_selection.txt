@@ -1,0 +1,8 @@
+{"kernel_scale": 2.0, "neuron_scale": 1.0} [(0, np.float64(0.02131086420361124)), (1, np.float64(0.021058293096388084)), (2, np.float64(0.021584856527701687))]
+{"kernel_scale": 2.0, "neuron_scale": 3.14159} [(0, np.float64(0.022302472814756537)), (1, np.float64(0.027800674441534688)), (2, np.float64(0.02148345942093017))]
+{"kernel_scale": 3.14159, "neuron_scale": 1.0} [(0, np.float64(0.02098982613499068)), (1, np.float64(0.021107166932106156)), (2, np.float64(0.021397401544480672))]
+{"kernel_scale": 3.14159, "neuron_scale": 3.14159} [(0, np.float64(0.022133336265323326)), (1, np.float64(0.027086742337048123)), (2, np.float64(0.0214427622066079))]
+{"kernel_scale": 2.0, "neuron_scale": 1.0}: mean eval RMSE 0.021318 rel +0.7239% n=3
+{"kernel_scale": 2.0, "neuron_scale": 3.14159}: mean eval RMSE 0.023862 rel +12.7448% n=3
+{"kernel_scale": 3.14159, "neuron_scale": 1.0}: mean eval RMSE 0.021165 rel +0.0000% n=3
+{"kernel_scale": 3.14159, "neuron_scale": 3.14159}: mean eval RMSE 0.023554 rel +11.2899% n=3

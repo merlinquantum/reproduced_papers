@@ -1,0 +1,181 @@
+{
+  "description": "Phase 4 amendment (fairness control, qubit models): serial and parallel r = 5 on the published Fig. 4 target with the paper's <Z_0> and with a trainable observable (linear readout over all computational-basis probabilities), the same readout class as the photonic models. Default protocol = paper P0; P1-P3 via CLI.",
+  "experiment": "fit",
+  "fit": {
+    "grid": {
+      "start": -6.0,
+      "stop": 6.0,
+      "num": 70
+    },
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      42
+    ],
+    "models": [
+      "quantum"
+    ],
+    "success_tolerance": 0.0001,
+    "training": {
+      "optimizer": "adam",
+      "lr": 0.3,
+      "batch_size": 25,
+      "steps": 200,
+      "init_high": 6.283185307179586,
+      "full_batch": false
+    },
+    "cases": [
+      {
+        "name": "fig4s1_serial_r5_z0",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 5,
+          "encoding_scaling": 1.0,
+          "readout": "z0"
+        }
+      },
+      {
+        "name": "fig4s1_serial_r5_trainable_linear",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 5,
+          "encoding_scaling": 1.0,
+          "readout": "trainable_linear"
+        }
+      },
+      {
+        "name": "fig4s1_parallel_r5_z0",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "parallel",
+          "repetitions": 5,
+          "encoding_scaling": 1.0,
+          "ansatz": "strongly",
+          "ansatz_layers": 3,
+          "readout": "z0"
+        }
+      },
+      {
+        "name": "fig4s1_parallel_r5_trainable_linear",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "parallel",
+          "repetitions": 5,
+          "encoding_scaling": 1.0,
+          "ansatz": "strongly",
+          "ansatz_layers": 3,
+          "readout": "trainable_linear"
+        }
+      }
+    ]
+  }
+}

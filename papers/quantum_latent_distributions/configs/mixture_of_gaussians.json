@@ -1,0 +1,43 @@
+{
+  "description": "Paper Fig. 2 / Fig. 1 -- blobs on a circle. Appendix C gives 2x256 LeakyReLU nets, size-16 latents, 5000 training steps, 5 seeds, latents centred to mean 0, and '1-3-9' loop latents. The paper states no dataset, optimizer, learning rate or batch size, so those follow the authors' released code (github.com/orcacomputing/quantum-latent-distributions): 7 blobs on a radius-5 circle with polar noise, Adam betas (0.0, 0.9) at 5e-4, batch 32, gradient penalty 10.",
+
+  "experiment": "mixture_of_gaussians",
+  "seed": 0,
+  "torch_threads": 1,
+
+  "latent": {
+    "dim": 16,
+    "architecture": "1-3-9",
+    "normalize": "center",
+    "bank_size": 100000,
+    "kinds": ["gaussian", "bernoulli", "distinguishable", "boson"]
+  },
+
+  "dataset": {"name": "mixture_of_gaussians", "size": 10500, "batch_size": 32},
+
+  "model": {
+    "generator_hidden": [256, 256],
+    "critic_hidden": [256, 256],
+    "activation": "leaky_relu",
+    "latent_reinjection": false
+  },
+
+  "training": {
+    "iterations": 5000,
+    "optimizer": "adam",
+    "lr": 5e-4,
+    "betas": [0.0, 0.9],
+    "n_critic": 5,
+    "gp_weight": 10.0
+  },
+
+  "evaluation": {"repeats": 5, "n_samples": 10000},
+
+  "mixture": {
+    "n_components": 7,
+    "radius": 5.0,
+    "radial_std": 0.2,
+    "tangential_std": 0.05,
+    "capture_sigmas": 3.0
+  }
+}

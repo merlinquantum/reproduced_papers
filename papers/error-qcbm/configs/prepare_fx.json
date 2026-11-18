@@ -1,0 +1,15 @@
+{
+  "description": "Verify and preprocess the frozen local ECB CSV; offline, no training",
+  "task": "prepare_data",
+  "model": {"input_state": [0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0, 0]},
+  "dataset": {
+    "name": "fx",
+    "source_file": "ecb_usd_per_eur_2004_2023.csv",
+    "sha256": "2d45d8e704309af8ec25f53bdaab38f17b7d731022662b5708cbeedebca89794",
+    "start_date": "2004-01-01",
+    "end_date": "2023-12-31",
+    "binning": "equal_width_observed_range",
+    "source_url": "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?startPeriod=2004-01-01&endPeriod=2023-12-31&format=csvdata"
+  },
+  "data_preparation": {"download": false, "timeout_seconds": 25}
+}

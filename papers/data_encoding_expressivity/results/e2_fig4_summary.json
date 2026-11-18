@@ -1,0 +1,784 @@
+{
+  "runs": [
+    {
+      "label": "E2 quantum, s = 1 (published figure), 200 steps",
+      "run_dir": "outdir/run_20261028-100128",
+      "steps": 200,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 0.03573779328726536,
+          "case": "fig4s1_serial_r1",
+          "final_mse_max": 0.04367052140394678,
+          "final_mse_mean": 0.04070277206366168,
+          "final_mse_min": 0.03707016474955468,
+          "final_mse_std": 0.002869011213929055,
+          "model_kind": "quantum",
+          "n_parameters": 6,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.01908082535841243,
+          "case": "fig4s1_serial_r3",
+          "final_mse_max": 0.05711379716880245,
+          "final_mse_mean": 0.03743260724482638,
+          "final_mse_min": 0.03039452395974764,
+          "final_mse_std": 0.010552953448223394,
+          "model_kind": "quantum",
+          "n_parameters": 12,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_serial_r5",
+          "final_mse_max": 0.043748992552472346,
+          "final_mse_mean": 0.024744211665053247,
+          "final_mse_min": 0.0025565471139918504,
+          "final_mse_std": 0.014588796440032584,
+          "model_kind": "quantum",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.03573779328726536,
+          "case": "fig4s1_parallel_r1",
+          "final_mse_max": 0.06064572983933096,
+          "final_mse_mean": 0.0458575697011916,
+          "final_mse_min": 0.03721126532546093,
+          "final_mse_std": 0.009947554332923745,
+          "model_kind": "quantum",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.01908082535841243,
+          "case": "fig4s1_parallel_r3",
+          "final_mse_max": 0.05399852927256422,
+          "final_mse_mean": 0.034326959690989645,
+          "final_mse_min": 0.02111125602131835,
+          "final_mse_std": 0.012134240326107977,
+          "model_kind": "quantum",
+          "n_parameters": 54,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_parallel_r5",
+          "final_mse_max": 0.0073801379744578045,
+          "final_mse_mean": 0.0033141528066228405,
+          "final_mse_min": 7.104186778481566e-05,
+          "final_mse_std": 0.0031831733032700957,
+          "model_kind": "quantum",
+          "n_parameters": 90,
+          "n_seeds": 6,
+          "success_fraction": 0.3333333333333333
+        }
+      ],
+      "repetition_pairs": [
+        {
+          "layout": "serial",
+          "model_kind": "quantum",
+          "from_case": "fig4s1_serial_r1",
+          "to_case": "fig4s1_serial_r3",
+          "from_r": 1,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 4
+        },
+        {
+          "layout": "serial",
+          "model_kind": "quantum",
+          "from_case": "fig4s1_serial_r3",
+          "to_case": "fig4s1_serial_r5",
+          "from_r": 3,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 4
+        },
+        {
+          "layout": "parallel",
+          "model_kind": "quantum",
+          "from_case": "fig4s1_parallel_r1",
+          "to_case": "fig4s1_parallel_r3",
+          "from_r": 1,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 5
+        },
+        {
+          "layout": "parallel",
+          "model_kind": "quantum",
+          "from_case": "fig4s1_parallel_r3",
+          "to_case": "fig4s1_parallel_r5",
+          "from_r": 3,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        }
+      ]
+    },
+    {
+      "label": "E2 quantum, s = 2 (caption), 200 steps",
+      "run_dir": "outdir/run_20261028-100100",
+      "steps": 200,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 0.036100742189747945,
+          "case": "fig4_serial_r1",
+          "final_mse_max": 0.04470544734988777,
+          "final_mse_mean": 0.038821115644131786,
+          "final_mse_min": 0.03664935745027018,
+          "final_mse_std": 0.0029534570114060697,
+          "model_kind": "quantum",
+          "n_parameters": 6,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.01923008633677283,
+          "case": "fig4_serial_r3",
+          "final_mse_max": 0.05677376859903643,
+          "final_mse_mean": 0.03705981464967586,
+          "final_mse_min": 0.02567032254793995,
+          "final_mse_std": 0.010453472220348346,
+          "model_kind": "quantum",
+          "n_parameters": 12,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.2471922146114383e-32,
+          "case": "fig4_serial_r5",
+          "final_mse_max": 0.06885919582791444,
+          "final_mse_mean": 0.028803199529119944,
+          "final_mse_min": 0.004182373061326166,
+          "final_mse_std": 0.029273056380913615,
+          "model_kind": "quantum",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.036100742189747945,
+          "case": "fig4_parallel_r1",
+          "final_mse_max": 0.04692167647181032,
+          "final_mse_mean": 0.0418844264112907,
+          "final_mse_min": 0.03703360649748788,
+          "final_mse_std": 0.0038805347411983706,
+          "model_kind": "quantum",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.01923008633677283,
+          "case": "fig4_parallel_r3",
+          "final_mse_max": 0.052306285670174216,
+          "final_mse_mean": 0.03400842342108158,
+          "final_mse_min": 0.02461937613999806,
+          "final_mse_std": 0.01073580038121833,
+          "model_kind": "quantum",
+          "n_parameters": 54,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.2471922146114383e-32,
+          "case": "fig4_parallel_r5",
+          "final_mse_max": 0.0035032279012720546,
+          "final_mse_mean": 0.0017290735283807875,
+          "final_mse_min": 0.0007445365056065097,
+          "final_mse_std": 0.0012227799991399073,
+          "model_kind": "quantum",
+          "n_parameters": 90,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        }
+      ],
+      "repetition_pairs": [
+        {
+          "layout": "serial",
+          "model_kind": "quantum",
+          "from_case": "fig4_serial_r1",
+          "to_case": "fig4_serial_r3",
+          "from_r": 1,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 5
+        },
+        {
+          "layout": "serial",
+          "model_kind": "quantum",
+          "from_case": "fig4_serial_r3",
+          "to_case": "fig4_serial_r5",
+          "from_r": 3,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 4
+        },
+        {
+          "layout": "parallel",
+          "model_kind": "quantum",
+          "from_case": "fig4_parallel_r1",
+          "to_case": "fig4_parallel_r3",
+          "from_r": 1,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 5
+        },
+        {
+          "layout": "parallel",
+          "model_kind": "quantum",
+          "from_case": "fig4_parallel_r3",
+          "to_case": "fig4_parallel_r5",
+          "from_r": 3,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        }
+      ]
+    },
+    {
+      "label": "E2 B2 classical, s = 2, 200 steps",
+      "run_dir": "outdir/run_20261028-100159",
+      "steps": 200,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 0.036100742189747945,
+          "case": "fig4_serial_r1",
+          "final_mse_max": 0.038790723526174534,
+          "final_mse_mean": 0.03752544493848429,
+          "final_mse_min": 0.03628153208486563,
+          "final_mse_std": 0.0012984273793255824,
+          "model_kind": "fourier_classical",
+          "n_parameters": 3,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.01923008633677283,
+          "case": "fig4_serial_r3",
+          "final_mse_max": 0.021631221821536595,
+          "final_mse_mean": 0.020865042964644014,
+          "final_mse_min": 0.019573077294217988,
+          "final_mse_std": 0.0007655068408386139,
+          "model_kind": "fourier_classical",
+          "n_parameters": 7,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.2471922146114383e-32,
+          "case": "fig4_serial_r5",
+          "final_mse_max": 4.3284508705904336e-07,
+          "final_mse_mean": 2.1261485302848656e-07,
+          "final_mse_min": 8.106173274597117e-08,
+          "final_mse_std": 1.3868648509419175e-07,
+          "model_kind": "fourier_classical",
+          "n_parameters": 11,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 0.036100742189747945,
+          "case": "fig4_parallel_r1",
+          "final_mse_max": 0.038790723526174534,
+          "final_mse_mean": 0.03752544493848429,
+          "final_mse_min": 0.03628153208486563,
+          "final_mse_std": 0.0012984273793255824,
+          "model_kind": "fourier_classical",
+          "n_parameters": 3,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.01923008633677283,
+          "case": "fig4_parallel_r3",
+          "final_mse_max": 0.021631221821536595,
+          "final_mse_mean": 0.020865042964644014,
+          "final_mse_min": 0.019573077294217988,
+          "final_mse_std": 0.0007655068408386139,
+          "model_kind": "fourier_classical",
+          "n_parameters": 7,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.2471922146114383e-32,
+          "case": "fig4_parallel_r5",
+          "final_mse_max": 4.3284508705904336e-07,
+          "final_mse_mean": 2.1261485302848656e-07,
+          "final_mse_min": 8.106173274597117e-08,
+          "final_mse_std": 1.3868648509419175e-07,
+          "model_kind": "fourier_classical",
+          "n_parameters": 11,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        }
+      ],
+      "repetition_pairs": [
+        {
+          "layout": "serial",
+          "model_kind": "fourier_classical",
+          "from_case": "fig4_serial_r1",
+          "to_case": "fig4_serial_r3",
+          "from_r": 1,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        },
+        {
+          "layout": "serial",
+          "model_kind": "fourier_classical",
+          "from_case": "fig4_serial_r3",
+          "to_case": "fig4_serial_r5",
+          "from_r": 3,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        },
+        {
+          "layout": "parallel",
+          "model_kind": "fourier_classical",
+          "from_case": "fig4_parallel_r1",
+          "to_case": "fig4_parallel_r3",
+          "from_r": 1,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        },
+        {
+          "layout": "parallel",
+          "model_kind": "fourier_classical",
+          "from_case": "fig4_parallel_r3",
+          "to_case": "fig4_parallel_r5",
+          "from_r": 3,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        }
+      ]
+    },
+    {
+      "label": "E2 quantum, s = 1, 1000 steps (sensitivity, non-paper step budget)",
+      "run_dir": "outdir/run_20261028-100525",
+      "steps": 1000,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 0.03573779328726536,
+          "case": "fig4s1_serial_r1",
+          "final_mse_max": 0.051518670594822555,
+          "final_mse_mean": 0.041219638244856284,
+          "final_mse_min": 0.036096584435953045,
+          "final_mse_std": 0.0054473147418644605,
+          "model_kind": "quantum",
+          "n_parameters": 6,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.01908082535841243,
+          "case": "fig4s1_serial_r3",
+          "final_mse_max": 0.03793903644698912,
+          "final_mse_mean": 0.02908601881780089,
+          "final_mse_min": 0.02353113102047389,
+          "final_mse_std": 0.005727859778201022,
+          "model_kind": "quantum",
+          "n_parameters": 12,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_serial_r5",
+          "final_mse_max": 0.13584037024936074,
+          "final_mse_mean": 0.033889952547009015,
+          "final_mse_min": 1.004779732487927e-06,
+          "final_mse_std": 0.05480302502295805,
+          "model_kind": "quantum",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 0.5
+        },
+        {
+          "b1_mse": 0.03573779328726536,
+          "case": "fig4s1_parallel_r1",
+          "final_mse_max": 0.04855172550839971,
+          "final_mse_mean": 0.04175366599677299,
+          "final_mse_min": 0.03717227043153769,
+          "final_mse_std": 0.0039003211151048306,
+          "model_kind": "quantum",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.01908082535841243,
+          "case": "fig4s1_parallel_r3",
+          "final_mse_max": 0.06367496568617179,
+          "final_mse_mean": 0.03226704647927083,
+          "final_mse_min": 0.022637538994620295,
+          "final_mse_std": 0.015594015310611034,
+          "model_kind": "quantum",
+          "n_parameters": 54,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 1.9122584748894324e-32,
+          "case": "fig4s1_parallel_r5",
+          "final_mse_max": 0.0024833008905992397,
+          "final_mse_mean": 0.0005666418534262808,
+          "final_mse_min": 1.0026131043603819e-06,
+          "final_mse_std": 0.0009634989699246297,
+          "model_kind": "quantum",
+          "n_parameters": 90,
+          "n_seeds": 6,
+          "success_fraction": 0.3333333333333333
+        }
+      ],
+      "repetition_pairs": [
+        {
+          "layout": "serial",
+          "model_kind": "quantum",
+          "from_case": "fig4s1_serial_r1",
+          "to_case": "fig4s1_serial_r3",
+          "from_r": 1,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        },
+        {
+          "layout": "serial",
+          "model_kind": "quantum",
+          "from_case": "fig4s1_serial_r3",
+          "to_case": "fig4s1_serial_r5",
+          "from_r": 3,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 4
+        },
+        {
+          "layout": "parallel",
+          "model_kind": "quantum",
+          "from_case": "fig4s1_parallel_r1",
+          "to_case": "fig4s1_parallel_r3",
+          "from_r": 1,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 5
+        },
+        {
+          "layout": "parallel",
+          "model_kind": "quantum",
+          "from_case": "fig4s1_parallel_r3",
+          "to_case": "fig4s1_parallel_r5",
+          "from_r": 3,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        }
+      ]
+    },
+    {
+      "label": "E2 quantum, s = 2, 1000 steps (sensitivity, non-paper step budget)",
+      "run_dir": "outdir/run_20261028-100643",
+      "steps": 1000,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 0.036100742189747945,
+          "case": "fig4_serial_r1",
+          "final_mse_max": 0.050562032756297545,
+          "final_mse_mean": 0.040969987729297525,
+          "final_mse_min": 0.037006434508286404,
+          "final_mse_std": 0.005466426835254156,
+          "model_kind": "quantum",
+          "n_parameters": 6,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.01923008633677283,
+          "case": "fig4_serial_r3",
+          "final_mse_max": 0.060887318659270696,
+          "final_mse_mean": 0.042895739731850964,
+          "final_mse_min": 0.031115701666768785,
+          "final_mse_std": 0.01097853432355844,
+          "model_kind": "quantum",
+          "n_parameters": 12,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.2471922146114383e-32,
+          "case": "fig4_serial_r5",
+          "final_mse_max": 0.05632207654386252,
+          "final_mse_mean": 0.013985284290091597,
+          "final_mse_min": 8.1053156926774e-08,
+          "final_mse_std": 0.02116918578901994,
+          "model_kind": "quantum",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 0.16666666666666666
+        },
+        {
+          "b1_mse": 0.036100742189747945,
+          "case": "fig4_parallel_r1",
+          "final_mse_max": 0.06278571694210637,
+          "final_mse_mean": 0.04731645439132296,
+          "final_mse_min": 0.03895865777774612,
+          "final_mse_std": 0.009353465295293637,
+          "model_kind": "quantum",
+          "n_parameters": 18,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.01923008633677283,
+          "case": "fig4_parallel_r3",
+          "final_mse_max": 0.03559516433214615,
+          "final_mse_mean": 0.0268433684830688,
+          "final_mse_min": 0.020594151955936443,
+          "final_mse_std": 0.005401491252118538,
+          "model_kind": "quantum",
+          "n_parameters": 54,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.2471922146114383e-32,
+          "case": "fig4_parallel_r5",
+          "final_mse_max": 0.0036040232304083548,
+          "final_mse_mean": 0.0007606914758611998,
+          "final_mse_min": 2.383293638586343e-07,
+          "final_mse_std": 0.001411841331070179,
+          "model_kind": "quantum",
+          "n_parameters": 90,
+          "n_seeds": 6,
+          "success_fraction": 0.5
+        }
+      ],
+      "repetition_pairs": [
+        {
+          "layout": "serial",
+          "model_kind": "quantum",
+          "from_case": "fig4_serial_r1",
+          "to_case": "fig4_serial_r3",
+          "from_r": 1,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 3
+        },
+        {
+          "layout": "serial",
+          "model_kind": "quantum",
+          "from_case": "fig4_serial_r3",
+          "to_case": "fig4_serial_r5",
+          "from_r": 3,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        },
+        {
+          "layout": "parallel",
+          "model_kind": "quantum",
+          "from_case": "fig4_parallel_r1",
+          "to_case": "fig4_parallel_r3",
+          "from_r": 1,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        },
+        {
+          "layout": "parallel",
+          "model_kind": "quantum",
+          "from_case": "fig4_parallel_r3",
+          "to_case": "fig4_parallel_r5",
+          "from_r": 3,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        }
+      ]
+    },
+    {
+      "label": "E2 B2 classical, s = 2, 1000 steps (sensitivity, non-paper step budget)",
+      "run_dir": "outdir/run_20261028-100802",
+      "steps": 1000,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        42
+      ],
+      "success_tolerance": 0.0001,
+      "summary": [
+        {
+          "b1_mse": 0.036100742189747945,
+          "case": "fig4_serial_r1",
+          "final_mse_max": 0.05089567841310234,
+          "final_mse_mean": 0.04068779061201095,
+          "final_mse_min": 0.03689930116766212,
+          "final_mse_std": 0.0051752515688817296,
+          "model_kind": "fourier_classical",
+          "n_parameters": 3,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.01923008633677283,
+          "case": "fig4_serial_r3",
+          "final_mse_max": 0.02838151976098757,
+          "final_mse_mean": 0.02427603679590933,
+          "final_mse_min": 0.0206512189384338,
+          "final_mse_std": 0.0025817631609472173,
+          "model_kind": "fourier_classical",
+          "n_parameters": 7,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.2471922146114383e-32,
+          "case": "fig4_serial_r5",
+          "final_mse_max": 2.242452436668382e-32,
+          "final_mse_mean": 6.977325485407886e-33,
+          "final_mse_min": 1.7469592501968984e-33,
+          "final_mse_std": 7.962501815138686e-33,
+          "model_kind": "fourier_classical",
+          "n_parameters": 11,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        },
+        {
+          "b1_mse": 0.036100742189747945,
+          "case": "fig4_parallel_r1",
+          "final_mse_max": 0.05089567841310234,
+          "final_mse_mean": 0.04068779061201095,
+          "final_mse_min": 0.03689930116766212,
+          "final_mse_std": 0.0051752515688817296,
+          "model_kind": "fourier_classical",
+          "n_parameters": 3,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 0.01923008633677283,
+          "case": "fig4_parallel_r3",
+          "final_mse_max": 0.02838151976098757,
+          "final_mse_mean": 0.02427603679590933,
+          "final_mse_min": 0.0206512189384338,
+          "final_mse_std": 0.0025817631609472173,
+          "model_kind": "fourier_classical",
+          "n_parameters": 7,
+          "n_seeds": 6,
+          "success_fraction": 0.0
+        },
+        {
+          "b1_mse": 2.2471922146114383e-32,
+          "case": "fig4_parallel_r5",
+          "final_mse_max": 2.242452436668382e-32,
+          "final_mse_mean": 6.977325485407886e-33,
+          "final_mse_min": 1.7469592501968984e-33,
+          "final_mse_std": 7.962501815138686e-33,
+          "model_kind": "fourier_classical",
+          "n_parameters": 11,
+          "n_seeds": 6,
+          "success_fraction": 1.0
+        }
+      ],
+      "repetition_pairs": [
+        {
+          "layout": "serial",
+          "model_kind": "fourier_classical",
+          "from_case": "fig4_serial_r1",
+          "to_case": "fig4_serial_r3",
+          "from_r": 1,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        },
+        {
+          "layout": "serial",
+          "model_kind": "fourier_classical",
+          "from_case": "fig4_serial_r3",
+          "to_case": "fig4_serial_r5",
+          "from_r": 3,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        },
+        {
+          "layout": "parallel",
+          "model_kind": "fourier_classical",
+          "from_case": "fig4_parallel_r1",
+          "to_case": "fig4_parallel_r3",
+          "from_r": 1,
+          "to_r": 3,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        },
+        {
+          "layout": "parallel",
+          "model_kind": "fourier_classical",
+          "from_case": "fig4_parallel_r3",
+          "to_case": "fig4_parallel_r5",
+          "from_r": 3,
+          "to_r": 5,
+          "n_seeds": 6,
+          "seeds_where_larger_r_is_lower": 6
+        }
+      ]
+    }
+  ]
+}

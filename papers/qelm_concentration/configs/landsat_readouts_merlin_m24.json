@@ -1,0 +1,93 @@
+{
+  "description": "Phase 4 MerLin adaptation of E5/E3/E4/E7/E8 at 24 modes / 6 photons (36 layers, encoding every 4th, Table I b/h/a_in mapped through BS<->RX, PS<->RZ; no ZZ). Same protocol as landsat_readouts_reduced_n24_standard.json: z-score inputs, 5 splits x 3 reservoirs x 3 shot seeds, 1e5 shots, same sweeps. FOCK space with threshold detectors, no postselection. Click readouts w{1,2}_{click,et,etcut}_{unit,scaled}.",
+  "task": "landsat_readouts_merlin",
+  "merlin_reservoir": {
+    "n_modes": 24,
+    "n_photons": 6,
+    "n_layers": 36,
+    "encoding_period": 4,
+    "input_shift": 8,
+    "angle_scale": 2.0,
+    "chunk_size": 16
+  },
+  "dataset": {
+    "landsat": {
+      "input_scaling": "standard"
+    }
+  },
+  "landsat_readouts": {
+    "split_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "reservoir_seeds": [
+      0,
+      1,
+      2
+    ],
+    "shot_seeds": [
+      0,
+      1,
+      2
+    ],
+    "headline_shots": 100000,
+    "nsr_cutoff": 1.0,
+    "readouts": [
+      "w1_click_scaled",
+      "w1_click_unit",
+      "w1_et_scaled",
+      "w1_et_unit",
+      "w1_etcut_scaled",
+      "w1_etcut_unit",
+      "w2_click_scaled",
+      "w2_click_unit",
+      "w2_et_scaled",
+      "w2_et_unit",
+      "w2_etcut_scaled",
+      "w2_etcut_unit"
+    ],
+    "cutoff_sweep": {
+      "cutoffs": [
+        0.01,
+        0.03,
+        0.1,
+        0.3,
+        1.0,
+        3.0,
+        10.0,
+        30.0,
+        100.0
+      ],
+      "readouts": [
+        "w2_etcut_scaled",
+        "w2_etcut_unit"
+      ]
+    },
+    "train_size_sweep": {
+      "sizes": [
+        10,
+        25,
+        50,
+        100,
+        200,
+        400,
+        688
+      ],
+      "resamples": 20,
+      "readout": "w1_click_scaled"
+    },
+    "shots_sweep": {
+      "shots": [
+        100,
+        1000,
+        10000,
+        100000
+      ],
+      "readout": "w1_click_scaled"
+    },
+    "save_probabilities": true
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "sweep_id": "e6_table1",
+  "description": "E6 / Table I: TF vs FF DQC Navier-Stokes, paper settings, 10 paired seeds, raw coordinates.",
+  "candidates": [
+    {
+      "name": "ff",
+      "config": "configs/ns_table1_ff_original.json"
+    },
+    {
+      "name": "tf",
+      "config": "configs/ns_table1_tf_original.json"
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "max_workers": 4,
+  "selection": {
+    "metric": "final_loss",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}

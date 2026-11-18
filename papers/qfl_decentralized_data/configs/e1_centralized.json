@@ -1,0 +1,9 @@
+{
+    "description": "E1 non-federated VQTN control (paper's own baseline): one model on pooled data, one epoch per round",
+    "experiment": "e1_vqtn_0v9_centralized",
+    "label": "non-federated control",
+    "federation": {
+        "mode": "centralized",
+        "n_clients": 1
+    }
+}

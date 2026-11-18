@@ -1,0 +1,24 @@
+{
+    "sweep_id": "fig2_bs",
+    "description": "Fig. 2a/2b: BS training curves with |K|=|Z|=2000 vs 5000, 2000 steps, seed 0.",
+    "seeds": [
+        0
+    ],
+    "candidates": [
+        {
+            "label": "fig2a_K2000",
+            "config": "configs/fig2a_bs_original.json"
+        },
+        {
+            "label": "fig2b_K5000",
+            "config": "configs/fig2b_bs_original.json"
+        }
+    ],
+    "metric": "primary: sample_metrics.<model>.walsh_mmd (same kernel operators for every model); also test_mmd_estimator (paper protocol) and gaussian_mmd_raw/binarized for Gaussian kernels",
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final parameters",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "differences within one pooled std are reported as not separated",
+    "selection": "none (comparison sweep)"
+}

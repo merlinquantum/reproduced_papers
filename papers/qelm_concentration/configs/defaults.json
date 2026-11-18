@@ -1,0 +1,137 @@
+{
+  "description": "Defaults for the QELM concentration reproduction (arXiv:2603.13005): paper Table I hyperparameters, shared reservoir/readout/dataset settings, and a lightweight runnable Landsat readout run at 8 qubits with one seed of each kind. Named configs in configs/ overlay this file and select their task via 'task' and the matching task section.",
+  "task": "landsat_readouts",
+  "seed": 42,
+  "dtype": "float64",
+  "device": "cpu",
+  "outdir": "outdir",
+  "data_root": "../../data",
+  "_comment_data_root": "Relative to this paper folder, i.e. <repo>/data. Needed because the shared runtime's repo-root detection stops at this folder (it holds implementation.py). Override with --data-root, or with --data-root \"$DATA_DIR\" to use the DATA_DIR environment variable.",
+  "logging": {
+    "level": "info"
+  },
+  "hyperparameters": {
+    "_comment": "Paper Table I ('used in all experiments'). h_min enforces h > 0.1 (paper Sec. II).",
+    "input_strength": 0.2,
+    "b_mean": 0.707,
+    "b_std": 0.031,
+    "h_mean": 0.683,
+    "h_std": 0.034,
+    "J_mean": 0.237,
+    "J_std": 0.038,
+    "h_min": 0.1
+  },
+  "reservoir": {
+    "_comment": "encoding_period 4 = 1 encoding : 3 dynamics layers. input_shift is the cyclic shift of the input vector between encoding layers. Paper Fig. 1 layout: block_order 'figure1' = RZ(h)_2 RZZ(J) RX(b)xRX(b) RZZ(J) RZ(h)_2; bell_pairs 'odd' = Bell cups on (1,2),...,(N-1,0); brickwall_offset 0 = layer 0 on (0,1),(2,3),... angle_scale 2.0 turns the Qiskit half-angle gates into exp(-i theta P) with theta the labelled coefficient (RZZ(2J), RX(2b), RZ(2h)); it reproduces the Fig. 2 stars (LOG.md). chunk_size = samples simulated at once.",
+    "n_qubits": 8,
+    "n_layers": 8,
+    "encoding_period": 4,
+    "input_shift": 4,
+    "angle_scale": 2.0,
+    "brickwall_offset": 0,
+    "block_order": "figure1",
+    "bell_pairs": "odd",
+    "chunk_size": 128
+  },
+  "readout": {
+    "alphas": {
+      "log_min": -8,
+      "log_max": 2,
+      "num": 21
+    }
+  },
+  "dataset": {
+    "name": "landsat",
+    "batch_size": 64,
+    "landsat": {
+      "_comment": "Paper: 860 of 6435 rows, inputs = two stacked copies of the 36 features. Subset and split are unpublished; ours are stratified and seeded. input_scaling: 'minmax' maps each feature to [-1, 1] with training min/max (default); 'standard' uses training z-scores. The paper does not state its QELM input scaling.",
+      "subdir": "statlog_landsat",
+      "n_subsample": 860,
+      "test_fraction": 0.2,
+      "n_copies": 2,
+      "input_scaling": "minmax"
+    },
+    "narma": {
+      "_comment": "Paper App. Methods: T_init 100 (discarded), T_train 250, T_test 250. input_encoding 'unit_interval' maps u ~ Unif(0, 0.5) to Unif(-1, 1) as the paper states; its literal formula 2u - 1 would give [-1, 0] ('two_u_minus_one', ablation).",
+      "orders": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "t_init": 100,
+      "t_train": 250,
+      "t_test": 250,
+      "input_encoding": "unit_interval"
+    }
+  },
+  "landsat_readouts": {
+    "split_seeds": [
+      0
+    ],
+    "reservoir_seeds": [
+      0
+    ],
+    "shot_seeds": [
+      0
+    ],
+    "realisations": null,
+    "_comment_realisations": "null: every (split, reservoir) pair of split_seeds x reservoir_seeds; otherwise an explicit list of [split_seed, reservoir_seed] pairs.",
+    "headline_shots": 100000,
+    "nsr_cutoff": 1.0,
+    "readouts": [
+      "w1_x_unit",
+      "w1_x_scaled",
+      "w1_pauli_unit",
+      "w1_pauli_scaled",
+      "w1_et_unit",
+      "w1_et_scaled",
+      "w1_etcut_unit",
+      "w1_etcut_scaled",
+      "w2_x_unit",
+      "w2_x_scaled",
+      "w2_pauli_unit",
+      "w2_pauli_scaled",
+      "w2_et_unit",
+      "w2_et_scaled",
+      "w2_etcut_unit",
+      "w2_etcut_scaled"
+    ],
+    "cutoff_sweep": {
+      "cutoffs": [
+        0.1,
+        1.0,
+        10.0
+      ],
+      "readouts": [
+        "w2_etcut_scaled",
+        "w2_etcut_unit"
+      ]
+    },
+    "train_size_sweep": {
+      "sizes": [
+        50,
+        200,
+        688
+      ],
+      "resamples": 3,
+      "readout": "w1_pauli_scaled"
+    },
+    "shots_sweep": {
+      "shots": [
+        100,
+        1000,
+        10000,
+        100000
+      ],
+      "readout": "w1_pauli_scaled"
+    },
+    "save_probabilities": true,
+    "probability_sources": null,
+    "_comment_probability_sources": "null: simulate. Otherwise run directories (relative to this paper folder) whose saved probabilities_split*_res*.npz are reused; their config must match on circuit, hyperparameters, dataset and dtype."
+  }
+}

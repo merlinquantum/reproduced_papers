@@ -1,0 +1,51 @@
+{
+  "description": "Phase 5 classical vertical-FL baseline, e3_8x1 layout, parameters matched to the photonic_f model; lr selected on validation.",
+  "experiment": "e3_8x1_classical_photonic_f",
+  "label": "classical fair baseline (Phase 5), validation-selected lr",
+  "seed": 42,
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "data_root": "../../data",
+  "dataset": {
+    "name": "semeion",
+    "subdir": "vertical_qfl/semeion",
+    "file": "semeion.data",
+    "permutation_seed": 42,
+    "partition_seed": 42,
+    "test_size": 0.2,
+    "batch_size": 32,
+    "max_train_samples": null,
+    "max_test_samples": null
+  },
+  "model": {
+    "name": "vqfl_classical",
+    "backend": "classical",
+    "architecture": "vertical",
+    "size": "photonic_f",
+    "client_slices": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "server_encoding": "server_wide",
+    "client_hidden": 7,
+    "server_hidden": 7,
+    "central_hidden": 10
+  },
+  "training": {
+    "epochs": 100,
+    "optimizer": "adam",
+    "lr": 0.002,
+    "weight_decay": 0.0
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

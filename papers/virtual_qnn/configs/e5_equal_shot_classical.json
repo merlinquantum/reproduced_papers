@@ -1,0 +1,22 @@
+{
+    "description": "Phase 5 fair control for C5: trained Phase 3 VVQE/VQE models evaluated at EQUAL total shot budgets with the paper's quasi-probability estimator (Eq. 6); RMSE vs FCI. Not a paper experiment.",
+    "experiment": {
+        "task": "equal_shot_eval",
+        "id": "e5_equal_shot"
+    },
+    "equal_shot": {
+        "experiment": "e5",
+        "sweeps": {
+            "vvqe": "outdir/sweeps/e5_vvqe"
+        },
+        "shot_grid": [
+            100,
+            1000,
+            10000,
+            100000,
+            1000000,
+            10000000
+        ],
+        "tie_tolerance_ha": 0.0001
+    }
+}

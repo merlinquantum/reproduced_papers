@@ -1,0 +1,49 @@
+{
+    "description": "E11 runtime probe: sushi m=100, n=10, Haar, |K|=2000, |Z|=5000, 5 steps, no sampling. Reports seconds per step in metrics.json.",
+    "experiment": {
+        "name": "runtime_probe",
+        "paper_reference": "\u00a76 text (3-4 s/step)"
+    },
+    "dataset": {
+        "name": "sushi_top10",
+        "m": 100,
+        "n": 10,
+        "n_train": 3000,
+        "n_test": 2000,
+        "seed": 42
+    },
+    "model": {
+        "ansatz": "haar",
+        "butterfly_variant": "reference",
+        "input_state": "middle_alternating",
+        "photon_model": "indistinguishable"
+    },
+    "kernel": {
+        "type": "gaussian",
+        "sigma": 3.0
+    },
+    "init": {
+        "strategy": "identity",
+        "perturbation": 0.01
+    },
+    "training": {
+        "steps": 5,
+        "learning_rate": 0.01,
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "convergence_interval": null,
+        "log_every": 1
+    },
+    "evaluation": {
+        "n_operators": 200,
+        "n_gurvits": 200,
+        "sample_metrics": false,
+        "num_model_samples": 2000,
+        "baselines": [
+            "random",
+            "marginal",
+            "rbm",
+            "test_to_test"
+        ]
+    }
+}

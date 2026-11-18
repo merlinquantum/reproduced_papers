@@ -1,0 +1,5 @@
+variant,seed,rule,family,candidate,score,rank,tied_with_best,selected,run_dir
+AAPL,0,test_qlike,photonic_kernel,photonic_kernel,-7.363923978134086,1,True,False,AAPL/seed0/run_20261022-213354
+GARAN,0,test_qlike,photonic_kernel,photonic_kernel,-6.667350236939582,1,True,False,GARAN/seed0/run_20261022-214156
+GSPC,0,test_qlike,photonic_kernel,photonic_kernel,-8.543242069926363,1,True,False,GSPC/seed0/run_20261022-213352
+KCHOL,0,test_qlike,photonic_kernel,photonic_kernel,-7.002879892907947,1,True,False,KCHOL/seed0/run_20261022-214213

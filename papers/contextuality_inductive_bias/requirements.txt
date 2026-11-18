@@ -1,0 +1,14 @@
+# Dependencies of the contextuality_inductive_bias reproduction (arXiv:2302.01365).
+# Versions are those used for the recorded runs (Python 3.13.15).
+numpy==2.5.3
+scipy==1.18.1          # E5 linear programs (HiGHS)
+torch==2.12.1          # models, simulator, training
+pennylane==0.45.1      # test-only cross-check of the 3-qubit simulator
+jax==0.11.2            # test-only cross-check of Adam/SGD against optax (the authors' stack)
+jaxlib==0.11.2
+optax==0.2.8
+matplotlib==3.11.1     # figures (Phase 3)
+# Imported by the shared runtime (runtime_lib/runtime.py logs MerLin/Perceval versions).
+merlinquantum==0.4.1
+perceval-quandela==1.2.4
+pytest==9.1.1

@@ -1,0 +1,47 @@
+{
+  "sweep_id": "m2_fig2b",
+  "description": "Phase 4 MerLin adaptation of E2 / Fig. 2b-c plus the UNBUNCHED readout ablation.",
+  "candidates": [
+    {
+      "name": "ff",
+      "config": "configs/fig2b_ff_merlin.json"
+    },
+    {
+      "name": "tf",
+      "config": "configs/fig2b_tf_merlin.json"
+    },
+    {
+      "name": "ffs",
+      "config": "configs/fig2b_ffs_merlin.json"
+    },
+    {
+      "name": "ff_unbunched",
+      "config": "configs/fig2b_ff_unbunched_merlin.json"
+    },
+    {
+      "name": "tf_unbunched",
+      "config": "configs/fig2b_tf_unbunched_merlin.json"
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "max_workers": 6,
+  "selection": {
+    "metric": "train_mse",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}

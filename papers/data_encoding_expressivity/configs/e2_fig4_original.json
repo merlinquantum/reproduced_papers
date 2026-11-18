@@ -1,0 +1,255 @@
+{
+  "description": "E2 / paper Fig. 4: degree-5 target g(x) = sum_n c_n exp(2inx), c_n = 0.05 - 0.05i (n = 1..5), c_0 = 0, fitted with r = 1, 3, 5 RX repetitions in series (one qubit, Rot blocks) and in parallel (r qubits, 3 StronglyEntangling layers per block, <Z_0>). Input scaling 2 in target and encoding, per the paper caption (LOG.md D1). Paper protocol, seeds 0-4 plus 42.",
+  "experiment": "fit",
+  "fit": {
+    "grid": {
+      "start": -6.0,
+      "stop": 6.0,
+      "num": 70
+    },
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      42
+    ],
+    "models": [
+      "quantum"
+    ],
+    "success_tolerance": 0.0001,
+    "training": {
+      "optimizer": "adam",
+      "lr": 0.3,
+      "batch_size": 25,
+      "steps": 200,
+      "init_high": 6.283185307179586,
+      "full_batch": false
+    },
+    "cases": [
+      {
+        "name": "fig4_serial_r1",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 2.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 1,
+          "encoding_scaling": 2.0,
+          "readout": "z0"
+        }
+      },
+      {
+        "name": "fig4_serial_r3",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 2.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 3,
+          "encoding_scaling": 2.0,
+          "readout": "z0"
+        }
+      },
+      {
+        "name": "fig4_serial_r5",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 2.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 5,
+          "encoding_scaling": 2.0,
+          "readout": "z0"
+        }
+      },
+      {
+        "name": "fig4_parallel_r1",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 2.0
+        },
+        "model": {
+          "layout": "parallel",
+          "repetitions": 1,
+          "encoding_scaling": 2.0,
+          "ansatz": "strongly",
+          "ansatz_layers": 3,
+          "readout": "z0"
+        }
+      },
+      {
+        "name": "fig4_parallel_r3",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 2.0
+        },
+        "model": {
+          "layout": "parallel",
+          "repetitions": 3,
+          "encoding_scaling": 2.0,
+          "ansatz": "strongly",
+          "ansatz_layers": 3,
+          "readout": "z0"
+        }
+      },
+      {
+        "name": "fig4_parallel_r5",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 2.0
+        },
+        "model": {
+          "layout": "parallel",
+          "repetitions": 5,
+          "encoding_scaling": 2.0,
+          "ansatz": "strongly",
+          "ansatz_layers": 3,
+          "readout": "z0"
+        }
+      }
+    ]
+  }
+}

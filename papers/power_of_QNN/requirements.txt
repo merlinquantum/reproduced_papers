@@ -1,0 +1,16 @@
+# power_of_QNN reproduction dependencies.
+# merlinquantum (PyPI; it pulls in perceval-quandela) runs the Phase 04 MerLin adaptation, and
+# the shared runtime imports merlin and perceval at startup to log versions. merlinquantum 0.4.x
+# requires torch<2.13; without the floor, uv picks torch 2.14 and falls back to merlinquantum
+# 0.3.1, which cannot import with perceval 1.3. Configs with an emitter (cluster/GHZ) input need
+# ML.EmitterState, which is only in the local photonic_engines MerLin fork (see README).
+# pandas: sklearn.datasets.fetch_openml uses it to parse the dense MNIST ARFF
+# (utils/prepare_datasets.py).
+numpy
+torch
+scipy
+scikit-learn
+pandas
+matplotlib
+pytest
+merlinquantum>=0.4.2

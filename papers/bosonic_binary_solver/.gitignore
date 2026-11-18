@@ -1,0 +1,28 @@
+# Raw run output. AGENTS.md keeps generated raw runs out of the repository and
+# curated, README-worthy artifacts in results/.
+outdir/
+logs/
+results/*.jsonl
+
+# results/summary.json and results/README.md ARE committed: 16 KB of curated
+# aggregates and paired statistics standing in for 3.7 MB of raw rows, and the
+# evidence behind every number in README.md. Regenerate with utils/summarise.py.
+
+# Working documents for this reproduction effort, not part of the deliverable.
+# LOG.md is the running decision log, VISITED_URLS.md the resource trail,
+# FEEDBACK.md is feedback on the reproduction workflow itself, and CONFLUENCE.md
+# a summary staged for publication elsewhere. README.md is the committed record.
+LOG.md
+VISITED_URLS.md
+FEEDBACK.md
+CONFLUENCE.md
+
+# Environment
+.venv/
+requirements_frozen.txt
+
+# Transfer artifacts from moving this package onto the machine
+_*.tgz
+_transfer/
+_template_leftovers/
+_package_note.txt

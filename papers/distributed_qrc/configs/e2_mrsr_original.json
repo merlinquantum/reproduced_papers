@@ -1,0 +1,15 @@
+{
+  "description": "E2 (Table V, C4-C6, Fig. 5): MRSR, 8 configurations x 9 cells, full-n kernels.",
+  "experiment": {
+    "id": "E2",
+    "variant": "original",
+    "architecture": "mrsr",
+    "sizes": ["2x5", "2x10", "2x20", "3x5", "3x10", "3x20", "5x5", "5x10"],
+    "reservoir_types": ["classical", "quantum_ideal", "quantum_noisy"],
+    "readout_types": ["linear", "quantum_kernel_ideal", "quantum_kernel_noisy"]
+  },
+  "readout": {
+    "kernel_selection_subsample": 8000,
+    "kernel_fit_subsample": null
+  }
+}

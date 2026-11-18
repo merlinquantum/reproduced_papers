@@ -1,0 +1,142 @@
+[
+  {
+    "target": "quantum",
+    "latent": "gaussian",
+    "seed": 0,
+    "l1_nearest_int": 0.13967740535736084,
+    "mean_total": 8.166651725769043
+  },
+  {
+    "target": "quantum",
+    "latent": "bernoulli",
+    "seed": 0,
+    "l1_nearest_int": 0.132910817861557,
+    "mean_total": 7.988918781280518
+  },
+  {
+    "target": "quantum",
+    "latent": "distinguishable",
+    "seed": 0,
+    "l1_nearest_int": 0.09640113264322281,
+    "mean_total": 7.961478233337402
+  },
+  {
+    "target": "quantum",
+    "latent": "boson",
+    "seed": 0,
+    "l1_nearest_int": 0.1006031334400177,
+    "mean_total": 7.893864154815674
+  },
+  {
+    "target": "quantum",
+    "latent": "gaussian",
+    "seed": 1,
+    "l1_nearest_int": 0.1383175104856491,
+    "mean_total": 7.968440532684326
+  },
+  {
+    "target": "quantum",
+    "latent": "bernoulli",
+    "seed": 1,
+    "l1_nearest_int": 0.12580695748329163,
+    "mean_total": 8.05463695526123
+  },
+  {
+    "target": "quantum",
+    "latent": "distinguishable",
+    "seed": 1,
+    "l1_nearest_int": 0.09734270721673965,
+    "mean_total": 8.123128890991211
+  },
+  {
+    "target": "quantum",
+    "latent": "boson",
+    "seed": 1,
+    "l1_nearest_int": 0.08870147168636322,
+    "mean_total": 7.9216108322143555
+  },
+  {
+    "target": "quantum",
+    "latent": "gaussian",
+    "seed": 2,
+    "l1_nearest_int": 0.14130492508411407,
+    "mean_total": 8.005354881286621
+  },
+  {
+    "target": "quantum",
+    "latent": "bernoulli",
+    "seed": 2,
+    "l1_nearest_int": 0.13315057754516602,
+    "mean_total": 8.088916778564453
+  },
+  {
+    "target": "quantum",
+    "latent": "distinguishable",
+    "seed": 2,
+    "l1_nearest_int": 0.0915118008852005,
+    "mean_total": 7.948423385620117
+  },
+  {
+    "target": "quantum",
+    "latent": "boson",
+    "seed": 2,
+    "l1_nearest_int": 0.08824852108955383,
+    "mean_total": 7.992580413818359
+  },
+  {
+    "target": "bernoulli",
+    "latent": "gaussian",
+    "seed": 0,
+    "l1_nearest_int": 0.10425066202878952,
+    "mean_total": 8.021592140197754
+  },
+  {
+    "target": "bernoulli",
+    "latent": "bernoulli",
+    "seed": 0,
+    "l1_nearest_int": 0.06250650435686111,
+    "mean_total": 7.899017333984375
+  },
+  {
+    "target": "bernoulli",
+    "latent": "distinguishable",
+    "seed": 0,
+    "l1_nearest_int": 0.055097807198762894,
+    "mean_total": 7.85762882232666
+  },
+  {
+    "target": "bernoulli",
+    "latent": "boson",
+    "seed": 0,
+    "l1_nearest_int": 0.07008529454469681,
+    "mean_total": 7.846257209777832
+  },
+  {
+    "target": "bernoulli",
+    "latent": "gaussian",
+    "seed": 1,
+    "l1_nearest_int": 0.10905880481004715,
+    "mean_total": 8.04504108428955
+  },
+  {
+    "target": "bernoulli",
+    "latent": "bernoulli",
+    "seed": 1,
+    "l1_nearest_int": 0.05334705114364624,
+    "mean_total": 8.069506645202637
+  },
+  {
+    "target": "bernoulli",
+    "latent": "distinguishable",
+    "seed": 1,
+    "l1_nearest_int": 0.05298706144094467,
+    "mean_total": 8.00100326538086
+  },
+  {
+    "target": "bernoulli",
+    "latent": "boson",
+    "seed": 1,
+    "l1_nearest_int": 0.07790705561637878,
+    "mean_total": 8.032805442810059
+  }
+]

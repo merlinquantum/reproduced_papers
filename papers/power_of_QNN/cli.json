@@ -1,0 +1,40 @@
+{
+  "description": "power_of_QNN (Abbas et al., The power of quantum neural networks) reproduction runner",
+  "arguments": [
+    {
+      "flags": ["--num-thetas"],
+      "help": "Override the number of sampled parameter sets per Fisher draw (fisher.num_thetas)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "fisher.num_thetas"}
+    },
+    {
+      "flags": ["--num-inputs"],
+      "help": "Override the number of Gaussian inputs per Fisher estimate (fisher.num_inputs)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "fisher.num_inputs"}
+    },
+    {
+      "flags": ["--iterations"],
+      "help": "Override the number of training iterations (training.iterations)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.iterations"}
+    },
+    {
+      "flags": ["--lr"],
+      "help": "Override the shared learning rate (training.lr)",
+      "type": "float",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.lr"}
+    },
+    {
+      "flags": ["--seeds-count"],
+      "help": "Override the number of training seeds, starting at training.seeds.start (training.seeds.count)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "training.seeds.count"}
+    }
+  ]
+}
