@@ -1,0 +1,31 @@
+== paper-table
+  e2e3_cartpole_optimal_full_original        mean_censored=616.7000 fastest=233  matches statistics file: True
+  e4_cartpole_pqc_l10_original               mean_censored=576.0000 fastest=207  matches statistics file: True
+  e4_cartpole_pqc_l15_original               mean_censored=473.7000 fastest=272  matches statistics file: True
+  e4_cartpole_pqc_l20_original               mean_censored=789.5000 fastest=330  matches statistics file: True
+  e4_cartpole_pqc_l25_original               mean_censored=428.0000 fastest=237  matches statistics file: True
+  e4_cartpole_pqc_l30_original               mean_censored=692.1000 fastest=370  matches statistics file: True
+  pqc: lowest mean e4_cartpole_pqc_l25_original (428.0000); fastest agent 207 in e4_cartpole_pqc_l10_original
+  e4_cartpole_mlp_10_10_classical            mean_censored=990.3000 fastest=219  matches statistics file: True
+  e4_cartpole_mlp_15_15_classical            mean_censored=918.9000 fastest=230  matches statistics file: True
+  e4_cartpole_mlp_20_20_classical            mean_censored=1048.5000 fastest=190  matches statistics file: True
+  e4_cartpole_mlp_24_24_classical            mean_censored=862.2000 fastest=187  matches statistics file: True
+  e4_cartpole_mlp_30_30_classical            mean_censored=385.3000 fastest=191  matches statistics file: True
+  e4_cartpole_mlp_64_64_classical            mean_censored=1032.5000 fastest=195  matches statistics file: True
+  nn: lowest mean e4_cartpole_mlp_30_30_classical (385.3000); fastest agent 187 in e4_cartpole_mlp_24_24_classical
+== code-faithful
+  e2e3_cartpole_optimal_full_codefaithful    mean_censored=302.6000 fastest=208  matches statistics file: True
+  e4_cartpole_pqc_l10_codefaithful           mean_censored=411.7000 fastest=215  matches statistics file: True
+  e4_cartpole_pqc_l15_codefaithful           mean_censored=467.6000 fastest=236  matches statistics file: True
+  e4_cartpole_pqc_l20_codefaithful           mean_censored=511.6000 fastest=301  matches statistics file: True
+  e4_cartpole_pqc_l25_codefaithful           mean_censored=435.2000 fastest=247  matches statistics file: True
+  e4_cartpole_pqc_l30_codefaithful           mean_censored=751.2000 fastest=304  matches statistics file: True
+  pqc: lowest mean e2e3_cartpole_optimal_full_codefaithful (302.6000); fastest agent 208 in e2e3_cartpole_optimal_full_codefaithful
+  e4_cartpole_mlp_10_10_codefaithful         mean_censored=788.2000 fastest=202  matches statistics file: True
+  e4_cartpole_mlp_15_15_codefaithful         mean_censored=857.1000 fastest=214  matches statistics file: True
+  e4_cartpole_mlp_20_20_codefaithful         mean_censored=556.4000 fastest=197  matches statistics file: True
+  e4_cartpole_mlp_24_24_codefaithful         mean_censored=247.7000 fastest=193  matches statistics file: True
+  e4_cartpole_mlp_30_30_codefaithful         mean_censored=234.2000 fastest=191  matches statistics file: True
+  e4_cartpole_mlp_64_64_codefaithful         mean_censored=837.3000 fastest=197  matches statistics file: True
+  nn: lowest mean e4_cartpole_mlp_30_30_codefaithful (234.2000); fastest agent 191 in e4_cartpole_mlp_30_30_codefaithful
+ALL MATCH

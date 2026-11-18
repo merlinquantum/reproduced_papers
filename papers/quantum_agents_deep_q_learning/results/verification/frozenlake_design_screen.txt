@@ -1,0 +1,7 @@
+phase once, 6 modes / 3 photons, 5 layers (planned)            MAE44 [0.149, 0.149, 0.148] argmax [0.45, 0.45, 0.45] params 60 outcomes 41 3.6 ms/step
+phase once, 8 modes / 4 photons, 5 layers                      MAE44 [0.147, 0.154, 0.154] argmax [0.45, 0.55, 0.45] params 84 outcomes 162 5.9 ms/step
+phase once, 8 modes / 4 photons, 10 layers                     MAE44 [0.147, 0.154, 0.154] argmax [0.45, 0.45, 0.45] params 154 outcomes 162 10.7 ms/step
+phase once, 10 modes / 5 photons, 5 layers                     MAE44 [0.148, 0.154, 0.154] argmax [0.55, 0.45, 0.45] params 108 outcomes 637 16.5 ms/step
+dual-rail input, 8 modes / 4 photons, 5 layers                 MAE44 [0.135, 0.134, 0.135] argmax [0.64, 0.82, 0.64] params 84 outcomes 162 7.1 ms/step
+dual-rail input, 8 modes / 4 photons, 10 layers                MAE44 [0.136, 0.135, 0.135] argmax [0.55, 0.64, 0.64] params 154 outcomes 162 12.0 ms/step
+phase re-uploaded, 6 modes / 3 photons, 5 layers (reference)   MAE44 [0.062, 0.058, 0.064] argmax [0.91, 0.91, 0.73] params 60 outcomes 41 4.7 ms/step

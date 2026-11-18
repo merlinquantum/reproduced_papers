@@ -1,0 +1,1258 @@
+{
+  "merlin_batches": [
+    "outdir/batches/merlin_core",
+    "outdir/batches/merlin_fl_reupload",
+    "outdir/batches/merlin_fl_designs"
+  ],
+  "qubit_batches": [
+    "outdir/batches/cf_frozenlake",
+    "outdir/batches/cf_cartpole_optimal",
+    "outdir/batches/cf_cartpole_suboptimal"
+  ],
+  "bootstrap": {
+    "resamples": 10000,
+    "seed": 20261117
+  },
+  "pairs": {
+    "e1_frozenlake_l10_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e1_frozenlake_l10_merlin/run_20261116-214644",
+        "solved": 0,
+        "agents": 10,
+        "mean_censored": 5000.0,
+        "mean_censored_ci95": [
+          5000.0,
+          5000.0
+        ],
+        "median_censored": 5000.0,
+        "trainable_parameters": 110,
+        "mae44_at_10000": 0.2521265868226724,
+        "seconds_per_lockstep_iteration": 0.09522864481103098,
+        "wall_clock_seconds": 9527.530684698839,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_frozenlake/runs/e1_frozenlake_l10_codefaithful/run_20261113-083137",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 821.3,
+        "mean_censored_ci95": [
+          623.295,
+          1069.5174999999997
+        ],
+        "median_censored": 653.5,
+        "trainable_parameters": 88,
+        "mae44_at_10000": 0.1524267624787764,
+        "seconds_per_lockstep_iteration": 0.0390956253390292,
+        "wall_clock_seconds": 1003.7410849542357,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 6.386444750436982e-05,
+      "agreement": "MerLin slower"
+    },
+    "e1_frozenlake_l10_merlin_dualrail": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_fl_designs/runs/e1_frozenlake_l10_merlin_dualrail/run_20261117-120212",
+        "solved": 0,
+        "agents": 10,
+        "mean_censored": 5000.0,
+        "mean_censored_ci95": [
+          5000.0,
+          5000.0
+        ],
+        "median_censored": 5000.0,
+        "trainable_parameters": 154,
+        "mae44_at_10000": 0.19660393310525637,
+        "seconds_per_lockstep_iteration": 0.029890033704604028,
+        "wall_clock_seconds": 1264.0196353339998,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_frozenlake/runs/e1_frozenlake_l10_codefaithful/run_20261113-083137",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 821.3,
+        "mean_censored_ci95": [
+          622.395,
+          1068.8049999999998
+        ],
+        "median_censored": 653.5,
+        "trainable_parameters": 88,
+        "mae44_at_10000": 0.1524267624787764,
+        "seconds_per_lockstep_iteration": 0.0390956253390292,
+        "wall_clock_seconds": 1003.7410849542357,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 6.386444750436982e-05,
+      "agreement": "MerLin slower"
+    },
+    "e1_frozenlake_l10_merlin_reupload": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_fl_reupload/runs/e1_frozenlake_l10_merlin_reupload/run_20261117-082018",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 500.8,
+        "mean_censored_ci95": [
+          456.9,
+          547.3024999999999
+        ],
+        "median_censored": 485.0,
+        "trainable_parameters": 110,
+        "mae44_at_10000": 0.1282036058976635,
+        "seconds_per_lockstep_iteration": 0.07420291915814996,
+        "wall_clock_seconds": 483.87723583029583,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_frozenlake/runs/e1_frozenlake_l10_codefaithful/run_20261113-083137",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 821.3,
+        "mean_censored_ci95": [
+          622.1,
+          1070.5025
+        ],
+        "median_censored": 653.5,
+        "trainable_parameters": 88,
+        "mae44_at_10000": 0.1524267624787764,
+        "seconds_per_lockstep_iteration": 0.0390956253390292,
+        "wall_clock_seconds": 1003.7410849542357,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 0.0017062493689195964,
+      "agreement": "MerLin faster"
+    },
+    "e1_frozenlake_l15_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e1_frozenlake_l15_merlin/run_20261116-214815",
+        "solved": 0,
+        "agents": 10,
+        "mean_censored": 5000.0,
+        "mean_censored_ci95": [
+          5000.0,
+          5000.0
+        ],
+        "median_censored": 5000.0,
+        "trainable_parameters": 160,
+        "mae44_at_10000": 0.2536720993295801,
+        "seconds_per_lockstep_iteration": 0.14188150721341544,
+        "wall_clock_seconds": 13163.198713231832,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_frozenlake/runs/e1_frozenlake_l15_codefaithful/run_20261113-083138",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 748.7,
+        "mean_censored_ci95": [
+          638.1,
+          883.1025
+        ],
+        "median_censored": 687.5,
+        "trainable_parameters": 128,
+        "mae44_at_10000": 0.13674653148612542,
+        "seconds_per_lockstep_iteration": 0.0593659339017171,
+        "wall_clock_seconds": 624.5296246460639,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 6.386444750436982e-05,
+      "agreement": "MerLin slower"
+    },
+    "e1_frozenlake_l15_merlin_reupload": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_fl_reupload/runs/e1_frozenlake_l15_merlin_reupload/run_20261117-082019",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 545.0,
+        "mean_censored_ci95": [
+          497.5975,
+          594.5
+        ],
+        "median_censored": 533.5,
+        "trainable_parameters": 160,
+        "mae44_at_10000": 0.08282358284824172,
+        "seconds_per_lockstep_iteration": 0.10733701169294443,
+        "wall_clock_seconds": 625.1307560997084,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_frozenlake/runs/e1_frozenlake_l15_codefaithful/run_20261113-083138",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 748.7,
+        "mean_censored_ci95": [
+          639.3,
+          876.9024999999999
+        ],
+        "median_censored": 687.5,
+        "trainable_parameters": 128,
+        "mae44_at_10000": 0.13674653148612542,
+        "seconds_per_lockstep_iteration": 0.0593659339017171,
+        "wall_clock_seconds": 624.5296246460639,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 0.0072845570094796615,
+      "agreement": "MerLin faster"
+    },
+    "e1_frozenlake_l5_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e1_frozenlake_l5_merlin/run_20261116-211212",
+        "solved": 0,
+        "agents": 10,
+        "mean_censored": 5000.0,
+        "mean_censored_ci95": [
+          5000.0,
+          5000.0
+        ],
+        "median_censored": 5000.0,
+        "trainable_parameters": 60,
+        "mae44_at_10000": 0.2506427494430218,
+        "seconds_per_lockstep_iteration": 0.0687826705093304,
+        "wall_clock_seconds": 7638.590690743178,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_frozenlake/runs/e1_frozenlake_l5_codefaithful/run_20261113-083136",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 1323.0,
+        "mean_censored_ci95": [
+          853.695,
+          1998.8174999999997
+        ],
+        "median_censored": 1071.0,
+        "trainable_parameters": 48,
+        "mae44_at_10000": 0.16941847024980455,
+        "seconds_per_lockstep_iteration": 0.022278276292540308,
+        "wall_clock_seconds": 1490.929084325675,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 6.386444750436982e-05,
+      "agreement": "MerLin slower"
+    },
+    "e1_frozenlake_l5_merlin_8modes": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_fl_designs/runs/e1_frozenlake_l5_merlin_8modes/run_20261117-120209",
+        "solved": 0,
+        "agents": 10,
+        "mean_censored": 5000.0,
+        "mean_censored_ci95": [
+          5000.0,
+          5000.0
+        ],
+        "median_censored": 5000.0,
+        "trainable_parameters": 84,
+        "mae44_at_10000": 0.3719996879122877,
+        "seconds_per_lockstep_iteration": 0.017335052520246485,
+        "wall_clock_seconds": 3226.1572843329923,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_frozenlake/runs/e1_frozenlake_l5_codefaithful/run_20261113-083136",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 1323.0,
+        "mean_censored_ci95": [
+          856.6975,
+          1993.5199999999998
+        ],
+        "median_censored": 1071.0,
+        "trainable_parameters": 48,
+        "mae44_at_10000": 0.16941847024980455,
+        "seconds_per_lockstep_iteration": 0.022278276292540308,
+        "wall_clock_seconds": 1490.929084325675,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 6.386444750436982e-05,
+      "agreement": "MerLin slower"
+    },
+    "e1_frozenlake_l5_merlin_dualrail": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_fl_designs/runs/e1_frozenlake_l5_merlin_dualrail/run_20261117-120210",
+        "solved": 0,
+        "agents": 10,
+        "mean_censored": 5000.0,
+        "mean_censored_ci95": [
+          5000.0,
+          5000.0
+        ],
+        "median_censored": 5000.0,
+        "trainable_parameters": 84,
+        "mae44_at_10000": 0.19506702775739976,
+        "seconds_per_lockstep_iteration": 0.01831411546171795,
+        "wall_clock_seconds": 802.5062254170189,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_frozenlake/runs/e1_frozenlake_l5_codefaithful/run_20261113-083136",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 1323.0,
+        "mean_censored_ci95": [
+          858.8,
+          1997.5
+        ],
+        "median_censored": 1071.0,
+        "trainable_parameters": 48,
+        "mae44_at_10000": 0.16941847024980455,
+        "seconds_per_lockstep_iteration": 0.022278276292540308,
+        "wall_clock_seconds": 1490.929084325675,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 6.386444750436982e-05,
+      "agreement": "MerLin slower"
+    },
+    "e1_frozenlake_l5_merlin_reupload": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_fl_reupload/runs/e1_frozenlake_l5_merlin_reupload/run_20261117-082017",
+        "solved": 7,
+        "agents": 10,
+        "mean_censored": 2093.0,
+        "mean_censored_ci95": [
+          1001.8575000000001,
+          3392.3
+        ],
+        "median_censored": 737.5,
+        "trainable_parameters": 60,
+        "mae44_at_10000": 0.2049524967104929,
+        "seconds_per_lockstep_iteration": 0.04247488123825409,
+        "wall_clock_seconds": 3636.2321079256944,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_frozenlake/runs/e1_frozenlake_l5_codefaithful/run_20261113-083136",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 1323.0,
+        "mean_censored_ci95": [
+          857.985,
+          1995.705
+        ],
+        "median_censored": 1071.0,
+        "trainable_parameters": 48,
+        "mae44_at_10000": 0.16941847024980455,
+        "seconds_per_lockstep_iteration": 0.022278276292540308,
+        "wall_clock_seconds": 1490.929084325675,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 0.8498835087000991,
+      "agreement": "no clear separation"
+    },
+    "e2e3_cartpole_optimal_fixed_range_180_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e2e3_cartpole_optimal_fixed_range_180_merlin/run_20261116-152553",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 374.7,
+        "mean_censored_ci95": [
+          293.8,
+          480.00249999999994
+        ],
+        "median_censored": 337.5,
+        "trainable_parameters": 80,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.08324681266603721,
+        "wall_clock_seconds": 10298.130207664799,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_cartpole_optimal/runs/e2e3_cartpole_optimal_fixed_range_180_codefaithful/run_20261113-085716",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 350.4,
+        "mean_censored_ci95": [
+          277.1,
+          444.80249999999995
+        ],
+        "median_censored": 291.0,
+        "trainable_parameters": 60,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.03164284384576508,
+        "wall_clock_seconds": 3302.5319693386555,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 0.762282125586337,
+      "agreement": "no clear separation"
+    },
+    "e2e3_cartpole_optimal_fixed_range_1_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e2e3_cartpole_optimal_fixed_range_1_merlin/run_20261116-200138",
+        "solved": 0,
+        "agents": 10,
+        "mean_censored": 5000.0,
+        "mean_censored_ci95": [
+          5000.0,
+          5000.0
+        ],
+        "median_censored": 5000.0,
+        "trainable_parameters": 80,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.08238538180440966,
+        "wall_clock_seconds": 4219.284943731036,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_cartpole_optimal/runs/e2e3_cartpole_optimal_fixed_range_1_codefaithful/run_20261113-085713",
+        "solved": 0,
+        "agents": 10,
+        "mean_censored": 5000.0,
+        "mean_censored_ci95": [
+          5000.0,
+          5000.0
+        ],
+        "median_censored": 5000.0,
+        "trainable_parameters": 60,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.036445999807090394,
+        "wall_clock_seconds": 2115.2893828037195,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 1.0,
+      "agreement": "no clear separation"
+    },
+    "e2e3_cartpole_optimal_fixed_range_90_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e2e3_cartpole_optimal_fixed_range_90_merlin/run_20261116-195936",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 824.8,
+        "mean_censored_ci95": [
+          283.7,
+          1775.1
+        ],
+        "median_censored": 292.0,
+        "trainable_parameters": 80,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.04423727374645246,
+        "wall_clock_seconds": 39478.80292136781,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_cartpole_optimal/runs/e2e3_cartpole_optimal_fixed_range_90_codefaithful/run_20261113-085715",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 279.0,
+        "mean_censored_ci95": [
+          239.4,
+          335.20249999999993
+        ],
+        "median_censored": 257.5,
+        "trainable_parameters": 60,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.03541416137305996,
+        "wall_clock_seconds": 2469.3232300593518,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 0.4055023001299908,
+      "agreement": "no clear separation"
+    },
+    "e2e3_cartpole_optimal_full_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e2e3_cartpole_optimal_full_merlin/run_20261116-181831",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 303.9,
+        "mean_censored_ci95": [
+          244.0,
+          370.0
+        ],
+        "median_censored": 279.5,
+        "trainable_parameters": 82,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.08248089852664693,
+        "wall_clock_seconds": 6027.786545225885,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_cartpole_optimal/runs/e2e3_cartpole_optimal_full_codefaithful/run_20261113-085709",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 302.6,
+        "mean_censored_ci95": [
+          253.4975,
+          363.30249999999995
+        ],
+        "median_censored": 303.0,
+        "trainable_parameters": 62,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.03511594963155867,
+        "wall_clock_seconds": 2758.849466853775,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 0.7913367801006604,
+      "agreement": "no clear separation"
+    },
+    "e2e3_cartpole_optimal_no_input_weights_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e2e3_cartpole_optimal_no_input_weights_merlin/run_20261116-143010",
+        "solved": 5,
+        "agents": 10,
+        "mean_censored": 3121.5,
+        "mean_censored_ci95": [
+          1907.8,
+          4298.1
+        ],
+        "median_censored": 3508.5,
+        "trainable_parameters": 62,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.06004704553109814,
+        "wall_clock_seconds": 44289.13956055418,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_cartpole_optimal/runs/e2e3_cartpole_optimal_no_input_weights_codefaithful/run_20261113-085712",
+        "solved": 8,
+        "agents": 10,
+        "mean_censored": 1419.9,
+        "mean_censored_ci95": [
+          449.69,
+          2720.677499999999
+        ],
+        "median_censored": 530.0,
+        "trainable_parameters": 42,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.01909782229943786,
+        "wall_clock_seconds": 16761.547501903027,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 0.022698345317375895,
+      "agreement": "MerLin slower"
+    },
+    "e2e3_cartpole_optimal_no_reuploading_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e2e3_cartpole_optimal_no_reuploading_merlin/run_20261116-143018",
+        "solved": 3,
+        "agents": 10,
+        "mean_censored": 3613.1,
+        "mean_censored_ci95": [
+          2225.8,
+          5000.0
+        ],
+        "median_censored": 5000.0,
+        "trainable_parameters": 66,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.059089512348688075,
+        "wall_clock_seconds": 41501.696266638115,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_cartpole_optimal/runs/e2e3_cartpole_optimal_no_reuploading_codefaithful/run_20261113-085711",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 394.5,
+        "mean_censored_ci95": [
+          307.9,
+          521.0049999999999
+        ],
+        "median_censored": 344.5,
+        "trainable_parameters": 46,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.02516614559815894,
+        "wall_clock_seconds": 3764.704384610988,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 0.0029432675256050845,
+      "agreement": "MerLin slower"
+    },
+    "e2e3_cartpole_suboptimal_fixed_range_180_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e2e3_cartpole_suboptimal_fixed_range_180_merlin/run_20261116-143016",
+        "solved": 7,
+        "agents": 10,
+        "mean_censored": 3099.6,
+        "mean_censored_ci95": [
+          2200.0675,
+          4019.7
+        ],
+        "median_censored": 2511.0,
+        "trainable_parameters": 80,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.03698756079253207,
+        "wall_clock_seconds": 28073.003828119952,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_cartpole_suboptimal/runs/e2e3_cartpole_suboptimal_fixed_range_180_codefaithful/run_20261113-133724",
+        "solved": 9,
+        "agents": 10,
+        "mean_censored": 2685.9,
+        "mean_censored_ci95": [
+          1816.8,
+          3625.2025
+        ],
+        "median_censored": 2352.0,
+        "trainable_parameters": 60,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.014184696838156007,
+        "wall_clock_seconds": 8528.407126972917,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 0.4946648397254585,
+      "agreement": "no clear separation"
+    },
+    "e2e3_cartpole_suboptimal_fixed_range_1_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e2e3_cartpole_suboptimal_fixed_range_1_merlin/run_20261116-143019",
+        "solved": 0,
+        "agents": 10,
+        "mean_censored": 5000.0,
+        "mean_censored_ci95": [
+          5000.0,
+          5000.0
+        ],
+        "median_censored": 5000.0,
+        "trainable_parameters": 80,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.0532958028567568,
+        "wall_clock_seconds": 3295.7591528589837,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_cartpole_suboptimal/runs/e2e3_cartpole_suboptimal_fixed_range_1_codefaithful/run_20261113-133721",
+        "solved": 0,
+        "agents": 10,
+        "mean_censored": 5000.0,
+        "mean_censored_ci95": [
+          5000.0,
+          5000.0
+        ],
+        "median_censored": 5000.0,
+        "trainable_parameters": 60,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.016894180246482662,
+        "wall_clock_seconds": 2230.18384015793,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 1.0,
+      "agreement": "no clear separation"
+    },
+    "e2e3_cartpole_suboptimal_fixed_range_90_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e2e3_cartpole_suboptimal_fixed_range_90_merlin/run_20261116-143017",
+        "solved": 5,
+        "agents": 10,
+        "mean_censored": 3193.3,
+        "mean_censored_ci95": [
+          2075.2,
+          4301.5
+        ],
+        "median_censored": 3435.0,
+        "trainable_parameters": 80,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.03976511895700027,
+        "wall_clock_seconds": 31176.052087883,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_cartpole_suboptimal/runs/e2e3_cartpole_suboptimal_fixed_range_90_codefaithful/run_20261113-133723",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 1648.8,
+        "mean_censored_ci95": [
+          1240.8,
+          2057.5025
+        ],
+        "median_censored": 1696.0,
+        "trainable_parameters": 60,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.015455735291231273,
+        "wall_clock_seconds": 5977.845650060102,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 0.15880458231023753,
+      "agreement": "no clear separation"
+    },
+    "e2e3_cartpole_suboptimal_full_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e2e3_cartpole_suboptimal_full_merlin/run_20261116-143011",
+        "solved": 8,
+        "agents": 10,
+        "mean_censored": 1989.2,
+        "mean_censored_ci95": [
+          1107.0974999999999,
+          3071.3199999999997
+        ],
+        "median_censored": 1313.5,
+        "trainable_parameters": 82,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.032432721886900225,
+        "wall_clock_seconds": 26146.481999893673,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_cartpole_suboptimal/runs/e2e3_cartpole_suboptimal_full_codefaithful/run_20261113-133717",
+        "solved": 10,
+        "agents": 10,
+        "mean_censored": 1900.6,
+        "mean_censored_ci95": [
+          1172.495,
+          2757.0025
+        ],
+        "median_censored": 1503.5,
+        "trainable_parameters": 62,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.012078487002352933,
+        "wall_clock_seconds": 8623.882699348964,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 0.969838641404833,
+      "agreement": "no clear separation"
+    },
+    "e2e3_cartpole_suboptimal_no_input_weights_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e2e3_cartpole_suboptimal_no_input_weights_merlin/run_20261116-143012",
+        "solved": 2,
+        "agents": 10,
+        "mean_censored": 4615.1,
+        "mean_censored_ci95": [
+          4065.6,
+          5000.0
+        ],
+        "median_censored": 5000.0,
+        "trainable_parameters": 62,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.04502129398123129,
+        "wall_clock_seconds": 26232.37727886811,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_cartpole_suboptimal/runs/e2e3_cartpole_suboptimal_no_input_weights_codefaithful/run_20261113-133720",
+        "solved": 5,
+        "agents": 10,
+        "mean_censored": 3472.5,
+        "mean_censored_ci95": [
+          2390.9,
+          4513.7
+        ],
+        "median_censored": 4539.0,
+        "trainable_parameters": 42,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.014186488982589717,
+        "wall_clock_seconds": 10063.725046381354,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 0.12060702175318022,
+      "agreement": "no clear separation"
+    },
+    "e2e3_cartpole_suboptimal_no_reuploading_merlin": {
+      "merlin": {
+        "run_dir": "outdir/batches/merlin_core/runs/e2e3_cartpole_suboptimal_no_reuploading_merlin/run_20261116-143014",
+        "solved": 0,
+        "agents": 10,
+        "mean_censored": 5000.0,
+        "mean_censored_ci95": [
+          5000.0,
+          5000.0
+        ],
+        "median_censored": 5000.0,
+        "trainable_parameters": 66,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.039037092994325055,
+        "wall_clock_seconds": 19830.648055652156,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "qubit": {
+        "run_dir": "outdir/batches/cf_cartpole_suboptimal/runs/e2e3_cartpole_suboptimal_no_reuploading_codefaithful/run_20261113-133718",
+        "solved": 8,
+        "agents": 10,
+        "mean_censored": 2961.0,
+        "mean_censored_ci95": [
+          2117.37,
+          3858.1
+        ],
+        "median_censored": 2317.0,
+        "trainable_parameters": 46,
+        "mae44_at_10000": null,
+        "seconds_per_lockstep_iteration": 0.011575198328263847,
+        "wall_clock_seconds": 7588.769475199748,
+        "seeds": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9
+        ]
+      },
+      "mann_whitney_p": 0.0007511794334780429,
+      "agreement": "MerLin slower"
+    }
+  },
+  "criteria": {
+    "C1 planned (basis phases once): all depths solve >= 8/10 and depth does not hurt": {
+      "observed": "solved [0, 0, 0], mean episodes [5000, 5000, 5000]",
+      "met": false
+    },
+    "C2: fixed [0,1] 0/10 (both sets); trainable w_o and fixed [0,90] >= 8/10 (best set)": {
+      "observed": "[0,1] 0/10 and 0/10; w_o 10/10; [0,90] 10/10",
+      "met": true
+    },
+    "C3: sub-optimal set, both ablations not faster than full (median)": {
+      "observed": "median full 1314, w/o re-uploading 5000, w/o w_d 5000",
+      "met": true
+    },
+    "C4: full arm, best set, >= 8/10": {
+      "observed": "10/10",
+      "met": true
+    },
+    "C1 diagnostic (basis phases re-uploaded), same criterion; not the planned model": {
+      "observed": "solved [7, 10, 10], mean episodes [2093, 501, 545]",
+      "met": false
+    }
+  }
+}

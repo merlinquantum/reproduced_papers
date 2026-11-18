@@ -1,0 +1,1529 @@
+{
+  "batches": [
+    "outdir/batches/cf_frozenlake",
+    "outdir/batches/cf_cartpole_optimal",
+    "outdir/batches/cf_cartpole_suboptimal",
+    "outdir/batches/cf_e4_pqc_depth",
+    "outdir/batches/cf_e4_nn_width"
+  ],
+  "bootstrap": {
+    "resamples": 10000,
+    "seed": 20261113
+  },
+  "configs": {
+    "e1_frozenlake_l10_original": {
+      "config": "e1_frozenlake_l10_original",
+      "batch": "cf_frozenlake",
+      "run_dir": "outdir/batches/cf_frozenlake/runs/e1_frozenlake_l10_codefaithful/run_20261113-083137",
+      "label": "code-faithful",
+      "trainable_parameters": 88,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        656,
+        1373,
+        1680,
+        540,
+        630,
+        760,
+        577,
+        824,
+        522,
+        651
+      ],
+      "mean_solved_only": 821.3,
+      "best_agent": 522,
+      "mean_censored": 821.3,
+      "mean_censored_ci95": [
+        622.9975,
+        1066.9474999999993
+      ],
+      "median_censored": 653.5,
+      "median_censored_ci95": [
+        577.0,
+        1066.5
+      ],
+      "mae44_at_step_10000": [
+        0.15003636830230188,
+        0.14547836879582837,
+        0.1611150939922766,
+        0.14660763342215796,
+        0.1507264743107882,
+        0.14689273962051216,
+        0.15783990843001275,
+        0.14504997601647807,
+        0.1649665414108363,
+        0.15555452048657156
+      ],
+      "mae44_at_step_10000_mean": 0.1524267624787764,
+      "mae44_at_step_10000_sem": 0.0022301170094568864,
+      "mae44_at_step_0_mean": 0.5408806105921269
+    },
+    "e1_frozenlake_l15_original": {
+      "config": "e1_frozenlake_l15_original",
+      "batch": "cf_frozenlake",
+      "run_dir": "outdir/batches/cf_frozenlake/runs/e1_frozenlake_l15_codefaithful/run_20261113-083138",
+      "label": "code-faithful",
+      "trainable_parameters": 128,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        765,
+        599,
+        686,
+        689,
+        753,
+        1065,
+        605,
+        1177,
+        602,
+        546
+      ],
+      "mean_solved_only": 748.7,
+      "best_agent": 546,
+      "mean_censored": 748.7,
+      "mean_censored_ci95": [
+        637.9975,
+        885.1049999999999
+      ],
+      "median_censored": 687.5,
+      "median_censored_ci95": [
+        602.0,
+        909.0
+      ],
+      "mae44_at_step_10000": [
+        0.12080420898381146,
+        0.13717939596770024,
+        0.12788320010172233,
+        0.13765881239444558,
+        0.13016420405916732,
+        0.13616089283986524,
+        0.15814994595505974,
+        0.13737707861388812,
+        0.12967075376194168,
+        0.15241682218365235
+      ],
+      "mae44_at_step_10000_mean": 0.13674653148612542,
+      "mae44_at_step_10000_sem": 0.003545786712029856,
+      "mae44_at_step_0_mean": 0.5398408931779645
+    },
+    "e1_frozenlake_l5_original": {
+      "config": "e1_frozenlake_l5_original",
+      "batch": "cf_frozenlake",
+      "run_dir": "outdir/batches/cf_frozenlake/runs/e1_frozenlake_l5_codefaithful/run_20261113-083136",
+      "label": "code-faithful",
+      "trainable_parameters": 48,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        716,
+        1293,
+        539,
+        1389,
+        861,
+        4028,
+        1647,
+        1281,
+        741,
+        735
+      ],
+      "mean_solved_only": 1323.0,
+      "best_agent": 539,
+      "mean_censored": 1323.0,
+      "mean_censored_ci95": [
+        857.2925,
+        1982.2025
+      ],
+      "median_censored": 1071.0,
+      "median_censored_ci95": [
+        728.5,
+        1464.0
+      ],
+      "mae44_at_step_10000": [
+        0.17873707868346297,
+        0.15476623034615947,
+        0.1753611976271109,
+        0.15852363084780083,
+        0.17823104739306184,
+        0.15909042777200175,
+        0.17222786305956406,
+        0.18524291965428263,
+        0.15454476602541312,
+        0.17745954108918793
+      ],
+      "mae44_at_step_10000_mean": 0.16941847024980455,
+      "mae44_at_step_10000_sem": 0.0036271505397985687,
+      "mae44_at_step_0_mean": 0.5420364430697181
+    },
+    "e1_frozenlake_mlp_classical": {
+      "config": "e1_frozenlake_mlp_classical",
+      "batch": "cf_frozenlake",
+      "run_dir": "outdir/batches/cf_frozenlake/runs/e1_frozenlake_mlp_codefaithful/run_20261113-083139",
+      "label": "code-faithful",
+      "trainable_parameters": 49,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 5,
+      "solved_fraction_ci95": [
+        0.236593090512564,
+        0.7634069094874361
+      ],
+      "solved_episode_indices": [
+        null,
+        null,
+        null,
+        2340,
+        null,
+        null,
+        567,
+        1414,
+        1007,
+        872
+      ],
+      "mean_solved_only": 1240.0,
+      "best_agent": 567,
+      "mean_censored": 3120.0,
+      "mean_censored_ci95": [
+        1881.57,
+        4290.7
+      ],
+      "median_censored": 3670.0,
+      "median_censored_ci95": [
+        1007.0,
+        5000.0
+      ],
+      "mae44_at_step_10000": [
+        0.3816849209115752,
+        0.37799780854331555,
+        0.37844523264286334,
+        0.37647346834335277,
+        0.37881194947629065,
+        0.37247302584922254,
+        0.14760605874974086,
+        0.368807313621093,
+        0.21904995604440033,
+        0.2265985412821662
+      ],
+      "mae44_at_step_10000_mean": 0.32279482754640204,
+      "mae44_at_step_10000_sem": 0.02807224707981104,
+      "mae44_at_step_0_mean": 0.4437506572302983
+    },
+    "e2e3_cartpole_optimal_fixed_range_180_original": {
+      "config": "e2e3_cartpole_optimal_fixed_range_180_original",
+      "batch": "cf_cartpole_optimal",
+      "run_dir": "outdir/batches/cf_cartpole_optimal/runs/e2e3_cartpole_optimal_fixed_range_180_codefaithful/run_20261113-085716",
+      "label": "code-faithful",
+      "trainable_parameters": 60,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        226,
+        247,
+        688,
+        280,
+        255,
+        346,
+        277,
+        488,
+        395,
+        302
+      ],
+      "mean_solved_only": 350.4,
+      "best_agent": 226,
+      "mean_censored": 350.4,
+      "mean_censored_ci95": [
+        278.8,
+        445.4
+      ],
+      "median_censored": 291.0,
+      "median_censored_ci95": [
+        255.0,
+        417.0
+      ]
+    },
+    "e2e3_cartpole_optimal_fixed_range_1_original": {
+      "config": "e2e3_cartpole_optimal_fixed_range_1_original",
+      "batch": "cf_cartpole_optimal",
+      "run_dir": "outdir/batches/cf_cartpole_optimal/runs/e2e3_cartpole_optimal_fixed_range_1_codefaithful/run_20261113-085713",
+      "label": "code-faithful",
+      "trainable_parameters": 60,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 0,
+      "solved_fraction_ci95": [
+        0.0,
+        0.2775327998628892
+      ],
+      "solved_episode_indices": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "mean_solved_only": null,
+      "best_agent": null,
+      "mean_censored": 5000.0,
+      "mean_censored_ci95": [
+        5000.0,
+        5000.0
+      ],
+      "median_censored": 5000.0,
+      "median_censored_ci95": [
+        5000.0,
+        5000.0
+      ]
+    },
+    "e2e3_cartpole_optimal_fixed_range_90_original": {
+      "config": "e2e3_cartpole_optimal_fixed_range_90_original",
+      "batch": "cf_cartpole_optimal",
+      "run_dir": "outdir/batches/cf_cartpole_optimal/runs/e2e3_cartpole_optimal_fixed_range_90_codefaithful/run_20261113-085715",
+      "label": "code-faithful",
+      "trainable_parameters": 60,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        228,
+        237,
+        210,
+        305,
+        234,
+        491,
+        278,
+        219,
+        304,
+        284
+      ],
+      "mean_solved_only": 279.0,
+      "best_agent": 210,
+      "mean_censored": 279.0,
+      "mean_censored_ci95": [
+        238.9,
+        334.5
+      ],
+      "median_censored": 257.5,
+      "median_censored_ci95": [
+        226.5,
+        304.0
+      ]
+    },
+    "e2e3_cartpole_optimal_full_original": {
+      "config": "e2e3_cartpole_optimal_full_original",
+      "batch": "cf_cartpole_optimal",
+      "run_dir": "outdir/batches/cf_cartpole_optimal/runs/e2e3_cartpole_optimal_full_codefaithful/run_20261113-085709",
+      "label": "code-faithful",
+      "trainable_parameters": 62,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        222,
+        208,
+        299,
+        231,
+        337,
+        332,
+        224,
+        307,
+        524,
+        342
+      ],
+      "mean_solved_only": 302.6,
+      "best_agent": 208,
+      "mean_censored": 302.6,
+      "mean_censored_ci95": [
+        253.6,
+        363.8
+      ],
+      "median_censored": 303.0,
+      "median_censored_ci95": [
+        224.0,
+        337.0
+      ],
+      "paper": {
+        "statement": "solves in <= 600 episodes on average (text); Fig. 6a dashed line ~320",
+        "mean_episodes": 320,
+        "source": "figure"
+      },
+      "paper_mean_inside_our_ci95": true
+    },
+    "e2e3_cartpole_optimal_no_input_weights_original": {
+      "config": "e2e3_cartpole_optimal_no_input_weights_original",
+      "batch": "cf_cartpole_optimal",
+      "run_dir": "outdir/batches/cf_cartpole_optimal/runs/e2e3_cartpole_optimal_no_input_weights_codefaithful/run_20261113-085712",
+      "label": "code-faithful",
+      "trainable_parameters": 42,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 8,
+      "solved_fraction_ci95": [
+        0.49016247153664183,
+        0.9433178485456247
+      ],
+      "solved_episode_indices": [
+        290,
+        null,
+        1240,
+        296,
+        597,
+        239,
+        742,
+        463,
+        332,
+        null
+      ],
+      "mean_solved_only": 524.875,
+      "best_agent": 239,
+      "mean_censored": 1419.9,
+      "mean_censored_ci95": [
+        449.6,
+        2713.5349999999994
+      ],
+      "median_censored": 530.0,
+      "median_censored_ci95": [
+        296.0,
+        2798.5
+      ]
+    },
+    "e2e3_cartpole_optimal_no_reuploading_original": {
+      "config": "e2e3_cartpole_optimal_no_reuploading_original",
+      "batch": "cf_cartpole_optimal",
+      "run_dir": "outdir/batches/cf_cartpole_optimal/runs/e2e3_cartpole_optimal_no_reuploading_codefaithful/run_20261113-085711",
+      "label": "code-faithful",
+      "trainable_parameters": 46,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        378,
+        919,
+        293,
+        447,
+        269,
+        396,
+        250,
+        304,
+        354,
+        335
+      ],
+      "mean_solved_only": 394.5,
+      "best_agent": 250,
+      "mean_censored": 394.5,
+      "mean_censored_ci95": [
+        308.1,
+        522.5074999999999
+      ],
+      "median_censored": 344.5,
+      "median_censored_ci95": [
+        286.5,
+        412.5
+      ]
+    },
+    "e2e3_cartpole_suboptimal_fixed_range_180_original": {
+      "config": "e2e3_cartpole_suboptimal_fixed_range_180_original",
+      "batch": "cf_cartpole_suboptimal",
+      "run_dir": "outdir/batches/cf_cartpole_suboptimal/runs/e2e3_cartpole_suboptimal_fixed_range_180_codefaithful/run_20261113-133724",
+      "label": "code-faithful",
+      "trainable_parameters": 60,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 9,
+      "solved_fraction_ci95": [
+        0.5958499732047615,
+        0.9821237869049271
+      ],
+      "solved_episode_indices": [
+        1505,
+        4410,
+        878,
+        4955,
+        1539,
+        2275,
+        2530,
+        2429,
+        null,
+        1338
+      ],
+      "mean_solved_only": 2428.777777777778,
+      "best_agent": 878,
+      "mean_censored": 2685.9,
+      "mean_censored_ci95": [
+        1803.2925,
+        3644.647499999999
+      ],
+      "median_censored": 2352.0,
+      "median_censored_ci95": [
+        1438.5,
+        4410.0
+      ]
+    },
+    "e2e3_cartpole_suboptimal_fixed_range_1_original": {
+      "config": "e2e3_cartpole_suboptimal_fixed_range_1_original",
+      "batch": "cf_cartpole_suboptimal",
+      "run_dir": "outdir/batches/cf_cartpole_suboptimal/runs/e2e3_cartpole_suboptimal_fixed_range_1_codefaithful/run_20261113-133721",
+      "label": "code-faithful",
+      "trainable_parameters": 60,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 0,
+      "solved_fraction_ci95": [
+        0.0,
+        0.2775327998628892
+      ],
+      "solved_episode_indices": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "mean_solved_only": null,
+      "best_agent": null,
+      "mean_censored": 5000.0,
+      "mean_censored_ci95": [
+        5000.0,
+        5000.0
+      ],
+      "median_censored": 5000.0,
+      "median_censored_ci95": [
+        5000.0,
+        5000.0
+      ]
+    },
+    "e2e3_cartpole_suboptimal_fixed_range_90_original": {
+      "config": "e2e3_cartpole_suboptimal_fixed_range_90_original",
+      "batch": "cf_cartpole_suboptimal",
+      "run_dir": "outdir/batches/cf_cartpole_suboptimal/runs/e2e3_cartpole_suboptimal_fixed_range_90_codefaithful/run_20261113-133723",
+      "label": "code-faithful",
+      "trainable_parameters": 60,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        753,
+        1418,
+        1084,
+        2677,
+        1873,
+        1836,
+        2569,
+        1556,
+        638,
+        2084
+      ],
+      "mean_solved_only": 1648.8,
+      "best_agent": 638,
+      "mean_censored": 1648.8,
+      "mean_censored_ci95": [
+        1248.5925,
+        2054.0099999999998
+      ],
+      "median_censored": 1696.0,
+      "median_censored_ci95": [
+        1084.0,
+        2221.0
+      ]
+    },
+    "e2e3_cartpole_suboptimal_full_original": {
+      "config": "e2e3_cartpole_suboptimal_full_original",
+      "batch": "cf_cartpole_suboptimal",
+      "run_dir": "outdir/batches/cf_cartpole_suboptimal/runs/e2e3_cartpole_suboptimal_full_codefaithful/run_20261113-133717",
+      "label": "code-faithful",
+      "trainable_parameters": 62,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        742,
+        916,
+        2019,
+        1218,
+        1789,
+        990,
+        4886,
+        2803,
+        521,
+        3122
+      ],
+      "mean_solved_only": 1900.6,
+      "best_agent": 521,
+      "mean_censored": 1900.6,
+      "mean_censored_ci95": [
+        1186.995,
+        2791.267499999999
+      ],
+      "median_censored": 1503.5,
+      "median_censored_ci95": [
+        866.0,
+        2803.0
+      ]
+    },
+    "e2e3_cartpole_suboptimal_no_input_weights_original": {
+      "config": "e2e3_cartpole_suboptimal_no_input_weights_original",
+      "batch": "cf_cartpole_suboptimal",
+      "run_dir": "outdir/batches/cf_cartpole_suboptimal/runs/e2e3_cartpole_suboptimal_no_input_weights_codefaithful/run_20261113-133720",
+      "label": "code-faithful",
+      "trainable_parameters": 42,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 5,
+      "solved_fraction_ci95": [
+        0.236593090512564,
+        0.7634069094874361
+      ],
+      "solved_episode_indices": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        1059,
+        1651,
+        1463,
+        1474,
+        4078
+      ],
+      "mean_solved_only": 1945.0,
+      "best_agent": 1059,
+      "mean_censored": 3472.5,
+      "mean_censored_ci95": [
+        2405.1,
+        4554.1
+      ],
+      "median_censored": 4539.0,
+      "median_censored_ci95": [
+        1474.0,
+        5000.0
+      ]
+    },
+    "e2e3_cartpole_suboptimal_no_reuploading_original": {
+      "config": "e2e3_cartpole_suboptimal_no_reuploading_original",
+      "batch": "cf_cartpole_suboptimal",
+      "run_dir": "outdir/batches/cf_cartpole_suboptimal/runs/e2e3_cartpole_suboptimal_no_reuploading_codefaithful/run_20261113-133718",
+      "label": "code-faithful",
+      "trainable_parameters": 46,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 8,
+      "solved_fraction_ci95": [
+        0.49016247153664183,
+        0.9433178485456247
+      ],
+      "solved_episode_indices": [
+        1565,
+        null,
+        1429,
+        4120,
+        4239,
+        2678,
+        1953,
+        1670,
+        null,
+        1956
+      ],
+      "mean_solved_only": 2451.25,
+      "best_agent": 1429,
+      "mean_censored": 2961.0,
+      "mean_censored_ci95": [
+        2152.36,
+        3857.905
+      ],
+      "median_censored": 2317.0,
+      "median_censored_ci95": [
+        1670.0,
+        4239.0
+      ]
+    },
+    "e4_cartpole_mlp_10_10_classical": {
+      "config": "e4_cartpole_mlp_10_10_classical",
+      "batch": "cf_e4_nn_width",
+      "run_dir": "outdir/batches/cf_e4_nn_width/runs/e4_cartpole_mlp_10_10_codefaithful/run_20261113-092457",
+      "label": "code-faithful",
+      "trainable_parameters": 182,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 9,
+      "solved_fraction_ci95": [
+        0.5958499732047615,
+        0.9821237869049271
+      ],
+      "solved_episode_indices": [
+        null,
+        255,
+        202,
+        478,
+        229,
+        350,
+        414,
+        208,
+        332,
+        414
+      ],
+      "mean_solved_only": 320.22222222222223,
+      "best_agent": 202,
+      "mean_censored": 788.2,
+      "mean_censored_ci95": [
+        275.5,
+        1747.0025
+      ],
+      "median_censored": 341.0,
+      "median_censored_ci95": [
+        229.0,
+        446.0
+      ],
+      "paper": {
+        "mean_episodes": 1110,
+        "source": "figure"
+      },
+      "paper_mean_inside_our_ci95": true
+    },
+    "e4_cartpole_mlp_14_14_classical": {
+      "config": "e4_cartpole_mlp_14_14_classical",
+      "batch": "cf_e4_nn_width",
+      "run_dir": "outdir/batches/cf_e4_nn_width/runs/e4_cartpole_mlp_14_14_codefaithful/run_20261113-093806",
+      "label": "code-faithful",
+      "trainable_parameters": 310,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        4444,
+        197,
+        255,
+        2164,
+        256,
+        223,
+        956,
+        290,
+        2406,
+        484
+      ],
+      "mean_solved_only": 1167.5,
+      "best_agent": 197,
+      "mean_censored": 1167.5,
+      "mean_censored_ci95": [
+        440.08250000000004,
+        2069.0074999999997
+      ],
+      "median_censored": 387.0,
+      "median_censored_ci95": [
+        239.5,
+        2164.0
+      ]
+    },
+    "e4_cartpole_mlp_15_15_classical": {
+      "config": "e4_cartpole_mlp_15_15_classical",
+      "batch": "cf_e4_nn_width",
+      "run_dir": "outdir/batches/cf_e4_nn_width/runs/e4_cartpole_mlp_15_15_codefaithful/run_20261113-092559",
+      "label": "code-faithful",
+      "trainable_parameters": 347,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        230,
+        374,
+        295,
+        319,
+        273,
+        318,
+        1473,
+        214,
+        4791,
+        284
+      ],
+      "mean_solved_only": 857.1,
+      "best_agent": 214,
+      "mean_censored": 857.1,
+      "mean_censored_ci95": [
+        278.0,
+        1770.8025
+      ],
+      "median_censored": 306.5,
+      "median_censored_ci95": [
+        257.0,
+        896.0
+      ],
+      "paper": {
+        "mean_episodes": 540,
+        "source": "figure"
+      },
+      "paper_mean_inside_our_ci95": true
+    },
+    "e4_cartpole_mlp_20_20_classical": {
+      "config": "e4_cartpole_mlp_20_20_classical",
+      "batch": "cf_e4_nn_width",
+      "run_dir": "outdir/batches/cf_e4_nn_width/runs/e4_cartpole_mlp_20_20_codefaithful/run_20261113-092830",
+      "label": "code-faithful",
+      "trainable_parameters": 562,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        197,
+        262,
+        197,
+        1594,
+        228,
+        237,
+        349,
+        1451,
+        199,
+        850
+      ],
+      "mean_solved_only": 556.4,
+      "best_agent": 197,
+      "mean_censored": 556.4,
+      "mean_censored_ci95": [
+        262.56750000000005,
+        893.1099999999999
+      ],
+      "median_censored": 249.5,
+      "median_censored_ci95": [
+        199.0,
+        856.5
+      ],
+      "paper": {
+        "statement": "best NN on average, 250 episodes (text); Fig. 6b dashed line ~430",
+        "mean_episodes": 430,
+        "source": "figure"
+      },
+      "paper_mean_inside_our_ci95": true
+    },
+    "e4_cartpole_mlp_24_24_classical": {
+      "config": "e4_cartpole_mlp_24_24_classical",
+      "batch": "cf_e4_nn_width",
+      "run_dir": "outdir/batches/cf_e4_nn_width/runs/e4_cartpole_mlp_24_24_codefaithful/run_20261113-093031",
+      "label": "code-faithful",
+      "trainable_parameters": 770,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        207,
+        209,
+        240,
+        338,
+        193,
+        211,
+        287,
+        248,
+        323,
+        221
+      ],
+      "mean_solved_only": 247.7,
+      "best_agent": 193,
+      "mean_censored": 247.7,
+      "mean_censored_ci95": [
+        219.2,
+        279.6
+      ],
+      "median_censored": 230.5,
+      "median_censored_ci95": [
+        209.0,
+        287.0
+      ],
+      "paper": {
+        "mean_episodes": 415,
+        "source": "figure"
+      },
+      "paper_mean_inside_our_ci95": false
+    },
+    "e4_cartpole_mlp_30_30_classical": {
+      "config": "e4_cartpole_mlp_30_30_classical",
+      "batch": "cf_e4_nn_width",
+      "run_dir": "outdir/batches/cf_e4_nn_width/runs/e4_cartpole_mlp_30_30_codefaithful/run_20261113-093102",
+      "label": "code-faithful",
+      "trainable_parameters": 1142,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        323,
+        212,
+        223,
+        328,
+        206,
+        221,
+        247,
+        199,
+        191,
+        192
+      ],
+      "mean_solved_only": 234.2,
+      "best_agent": 191,
+      "mean_censored": 234.2,
+      "mean_censored_ci95": [
+        207.4,
+        266.50249999999994
+      ],
+      "median_censored": 216.5,
+      "median_censored_ci95": [
+        199.0,
+        273.0
+      ],
+      "paper": {
+        "statement": "best individual NN 186 episodes (Fig. 7); Fig. 6b dashed line ~250",
+        "mean_episodes": 250,
+        "best_agent": 186,
+        "source": "figure"
+      },
+      "paper_mean_inside_our_ci95": true
+    },
+    "e4_cartpole_mlp_5_5_classical": {
+      "config": "e4_cartpole_mlp_5_5_classical",
+      "batch": "cf_e4_nn_width",
+      "run_dir": "outdir/batches/cf_e4_nn_width/runs/e4_cartpole_mlp_5_5_codefaithful/run_20261113-093335",
+      "label": "code-faithful",
+      "trainable_parameters": 67,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 5,
+      "solved_fraction_ci95": [
+        0.236593090512564,
+        0.7634069094874361
+      ],
+      "solved_episode_indices": [
+        4819,
+        547,
+        null,
+        460,
+        null,
+        622,
+        null,
+        null,
+        null,
+        915
+      ],
+      "mean_solved_only": 1472.6,
+      "best_agent": 460,
+      "mean_censored": 3236.3,
+      "mean_censored_ci95": [
+        1908.6,
+        4537.2
+      ],
+      "median_censored": 4909.5,
+      "median_censored_ci95": [
+        622.0,
+        5000.0
+      ]
+    },
+    "e4_cartpole_mlp_64_64_classical": {
+      "config": "e4_cartpole_mlp_64_64_classical",
+      "batch": "cf_e4_nn_width",
+      "run_dir": "outdir/batches/cf_e4_nn_width/runs/e4_cartpole_mlp_64_64_codefaithful/run_20261113-093133",
+      "label": "code-faithful",
+      "trainable_parameters": 4610,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 9,
+      "solved_fraction_ci95": [
+        0.5958499732047615,
+        0.9821237869049271
+      ],
+      "solved_episode_indices": [
+        197,
+        253,
+        199,
+        207,
+        797,
+        1061,
+        198,
+        244,
+        null,
+        217
+      ],
+      "mean_solved_only": 374.77777777777777,
+      "best_agent": 197,
+      "mean_censored": 837.3,
+      "mean_censored_ci95": [
+        224.595,
+        1818.6
+      ],
+      "median_censored": 230.5,
+      "median_censored_ci95": [
+        199.0,
+        797.0
+      ],
+      "paper": {
+        "mean_episodes": 345,
+        "source": "figure"
+      },
+      "paper_mean_inside_our_ci95": true
+    },
+    "e4_cartpole_pqc_l10_original": {
+      "config": "e4_cartpole_pqc_l10_original",
+      "batch": "cf_e4_pqc_depth",
+      "run_dir": "outdir/batches/cf_e4_pqc_depth/runs/e4_cartpole_pqc_l10_codefaithful/run_20261113-162539",
+      "label": "code-faithful",
+      "trainable_parameters": 122,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        264,
+        238,
+        346,
+        272,
+        215,
+        414,
+        248,
+        989,
+        831,
+        300
+      ],
+      "mean_solved_only": 411.7,
+      "best_agent": 215,
+      "mean_censored": 411.7,
+      "mean_censored_ci95": [
+        272.295,
+        592.0
+      ],
+      "median_censored": 286.0,
+      "median_censored_ci95": [
+        248.0,
+        588.5
+      ],
+      "paper": {
+        "mean_episodes": 635,
+        "source": "figure"
+      },
+      "paper_mean_inside_our_ci95": false
+    },
+    "e4_cartpole_pqc_l15_original": {
+      "config": "e4_cartpole_pqc_l15_original",
+      "batch": "cf_e4_pqc_depth",
+      "run_dir": "outdir/batches/cf_e4_pqc_depth/runs/e4_cartpole_pqc_l15_codefaithful/run_20261113-162540",
+      "label": "code-faithful",
+      "trainable_parameters": 182,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        366,
+        255,
+        250,
+        754,
+        303,
+        236,
+        490,
+        490,
+        820,
+        712
+      ],
+      "mean_solved_only": 467.6,
+      "best_agent": 236,
+      "mean_censored": 467.6,
+      "mean_censored_ci95": [
+        342.4975,
+        603.8
+      ],
+      "median_censored": 428.0,
+      "median_censored_ci95": [
+        255.0,
+        712.0
+      ],
+      "paper": {
+        "mean_episodes": 690,
+        "source": "figure"
+      },
+      "paper_mean_inside_our_ci95": false
+    },
+    "e4_cartpole_pqc_l20_original": {
+      "config": "e4_cartpole_pqc_l20_original",
+      "batch": "cf_e4_pqc_depth",
+      "run_dir": "outdir/batches/cf_e4_pqc_depth/runs/e4_cartpole_pqc_l20_codefaithful/run_20261113-162541",
+      "label": "code-faithful",
+      "trainable_parameters": 242,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        391,
+        322,
+        568,
+        328,
+        480,
+        1325,
+        359,
+        301,
+        423,
+        619
+      ],
+      "mean_solved_only": 511.6,
+      "best_agent": 301,
+      "mean_censored": 511.6,
+      "mean_censored_ci95": [
+        373.3,
+        714.9049999999999
+      ],
+      "median_censored": 407.0,
+      "median_censored_ci95": [
+        328.0,
+        568.0
+      ],
+      "paper": {
+        "mean_episodes": 770,
+        "source": "figure"
+      },
+      "paper_mean_inside_our_ci95": false
+    },
+    "e4_cartpole_pqc_l25_original": {
+      "config": "e4_cartpole_pqc_l25_original",
+      "batch": "cf_e4_pqc_depth",
+      "run_dir": "outdir/batches/cf_e4_pqc_depth/runs/e4_cartpole_pqc_l25_codefaithful/run_20261113-162543",
+      "label": "code-faithful",
+      "trainable_parameters": 302,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        248,
+        247,
+        269,
+        254,
+        266,
+        616,
+        828,
+        735,
+        494,
+        395
+      ],
+      "mean_solved_only": 435.2,
+      "best_agent": 247,
+      "mean_censored": 435.2,
+      "mean_censored_ci95": [
+        314.3,
+        574.7025
+      ],
+      "median_censored": 332.0,
+      "median_censored_ci95": [
+        254.0,
+        616.0
+      ],
+      "paper": {
+        "statement": "best PQC on average, 500 episodes (text); Fig. 6a dashed line ~350",
+        "mean_episodes": 350,
+        "source": "figure"
+      },
+      "paper_mean_inside_our_ci95": true
+    },
+    "e4_cartpole_pqc_l30_original": {
+      "config": "e4_cartpole_pqc_l30_original",
+      "batch": "cf_e4_pqc_depth",
+      "run_dir": "outdir/batches/cf_e4_pqc_depth/runs/e4_cartpole_pqc_l30_codefaithful/run_20261113-162544",
+      "label": "code-faithful",
+      "trainable_parameters": 362,
+      "episode_cap": 5000,
+      "agents": 10,
+      "solved": 10,
+      "solved_fraction_ci95": [
+        0.7224672001371107,
+        0.9999999999999999
+      ],
+      "solved_episode_indices": [
+        498,
+        334,
+        401,
+        304,
+        821,
+        1214,
+        1633,
+        994,
+        738,
+        575
+      ],
+      "mean_solved_only": 751.2,
+      "best_agent": 304,
+      "mean_censored": 751.2,
+      "mean_censored_ci95": [
+        517.9925000000001,
+        1022.3249999999996
+      ],
+      "median_censored": 656.5,
+      "median_censored_ci95": [
+        401.0,
+        1017.5
+      ],
+      "paper": {
+        "mean_episodes": 940,
+        "source": "figure"
+      },
+      "paper_mean_inside_our_ci95": true
+    }
+  },
+  "run_set": "code-faithful",
+  "comparisons": [
+    {
+      "claim": "C3",
+      "comparison": "optimal: full vs w/o re-uploading",
+      "a": "e2e3_cartpole_optimal_full_original",
+      "b": "e2e3_cartpole_optimal_no_reuploading_original",
+      "median_a": 303.0,
+      "median_b": 344.5,
+      "median_difference_a_minus_b_ci95": [
+        -152.0125,
+        33.0
+      ],
+      "mann_whitney_u": 30.0,
+      "p_value": 0.14046504815835498,
+      "verdict": "no clear separation"
+    },
+    {
+      "claim": "C3",
+      "comparison": "optimal: full vs w/o input weights",
+      "a": "e2e3_cartpole_optimal_full_original",
+      "b": "e2e3_cartpole_optimal_no_input_weights_original",
+      "median_a": 303.0,
+      "median_b": 530.0,
+      "median_difference_a_minus_b_ci95": [
+        -2567.5,
+        17.0
+      ],
+      "mann_whitney_u": 22.5,
+      "p_value": 0.04109755198325099,
+      "verdict": "no clear separation"
+    },
+    {
+      "claim": "C3",
+      "comparison": "sub-optimal: full vs w/o re-uploading",
+      "a": "e2e3_cartpole_suboptimal_full_original",
+      "b": "e2e3_cartpole_suboptimal_no_reuploading_original",
+      "median_a": 1503.5,
+      "median_b": 2317.0,
+      "median_difference_a_minus_b_ci95": [
+        -3204.0,
+        647.0
+      ],
+      "mann_whitney_u": 28.0,
+      "p_value": 0.10397974445898674,
+      "verdict": "no clear separation"
+    },
+    {
+      "claim": "C3",
+      "comparison": "sub-optimal: full vs w/o input weights",
+      "a": "e2e3_cartpole_suboptimal_full_original",
+      "b": "e2e3_cartpole_suboptimal_no_input_weights_original",
+      "median_a": 1503.5,
+      "median_b": 4539.0,
+      "median_difference_a_minus_b_ci95": [
+        -4047.0,
+        545.0
+      ],
+      "mann_whitney_u": 22.0,
+      "p_value": 0.036205388244780555,
+      "verdict": "no clear separation"
+    },
+    {
+      "claim": "C2",
+      "comparison": "optimal: trainable w_o vs fixed [0,1]",
+      "a": "e2e3_cartpole_optimal_full_original",
+      "b": "e2e3_cartpole_optimal_fixed_range_1_original",
+      "median_a": 303.0,
+      "median_b": 5000.0,
+      "median_difference_a_minus_b_ci95": [
+        -4776.0,
+        -4663.0
+      ],
+      "mann_whitney_u": 0.0,
+      "p_value": 6.386444750436982e-05,
+      "verdict": "separated"
+    },
+    {
+      "claim": "C2",
+      "comparison": "optimal: trainable w_o vs fixed [0,90]",
+      "a": "e2e3_cartpole_optimal_full_original",
+      "b": "e2e3_cartpole_optimal_fixed_range_90_original",
+      "median_a": 303.0,
+      "median_b": 257.5,
+      "median_difference_a_minus_b_ci95": [
+        -60.0,
+        101.51249999999982
+      ],
+      "mann_whitney_u": 60.0,
+      "p_value": 0.47267559351158717,
+      "verdict": "no clear separation"
+    },
+    {
+      "claim": "C2",
+      "comparison": "optimal: trainable w_o vs fixed [0,180]",
+      "a": "e2e3_cartpole_optimal_full_original",
+      "b": "e2e3_cartpole_optimal_fixed_range_180_original",
+      "median_a": 303.0,
+      "median_b": 291.0,
+      "median_difference_a_minus_b_ci95": [
+        -143.0,
+        66.0
+      ],
+      "mann_whitney_u": 39.0,
+      "p_value": 0.4273553138978077,
+      "verdict": "no clear separation"
+    },
+    {
+      "claim": "C2",
+      "comparison": "sub-optimal: trainable w_o vs fixed [0,1]",
+      "a": "e2e3_cartpole_suboptimal_full_original",
+      "b": "e2e3_cartpole_suboptimal_fixed_range_1_original",
+      "median_a": 1503.5,
+      "median_b": 5000.0,
+      "median_difference_a_minus_b_ci95": [
+        -4134.0,
+        -2197.0
+      ],
+      "mann_whitney_u": 0.0,
+      "p_value": 6.386444750436982e-05,
+      "verdict": "separated"
+    },
+    {
+      "claim": "C2",
+      "comparison": "sub-optimal: trainable w_o vs fixed [0,90]",
+      "a": "e2e3_cartpole_suboptimal_full_original",
+      "b": "e2e3_cartpole_suboptimal_fixed_range_90_original",
+      "median_a": 1503.5,
+      "median_b": 1696.0,
+      "median_difference_a_minus_b_ci95": [
+        -1025.5,
+        1266.5
+      ],
+      "mann_whitney_u": 50.0,
+      "p_value": 1.0,
+      "verdict": "no clear separation"
+    },
+    {
+      "claim": "C2",
+      "comparison": "sub-optimal: trainable w_o vs fixed [0,180]",
+      "a": "e2e3_cartpole_suboptimal_full_original",
+      "b": "e2e3_cartpole_suboptimal_fixed_range_180_original",
+      "median_a": 1503.5,
+      "median_b": 2352.0,
+      "median_difference_a_minus_b_ci95": [
+        -2906.5,
+        872.0
+      ],
+      "mann_whitney_u": 33.0,
+      "p_value": 0.21229383619233166,
+      "verdict": "no clear separation"
+    },
+    {
+      "claim": "C5",
+      "comparison": "best paper PQC (25 layers) vs best paper NN (20,20)",
+      "a": "e4_cartpole_pqc_l25_original",
+      "b": "e4_cartpole_mlp_20_20_classical",
+      "median_a": 332.0,
+      "median_b": 249.5,
+      "median_difference_a_minus_b_ci95": [
+        -590.0,
+        382.0
+      ],
+      "mann_whitney_u": 62.0,
+      "p_value": 0.3844942826161789,
+      "verdict": "no clear separation"
+    },
+    {
+      "claim": "C5",
+      "comparison": "iso-parameter: PQC 5 layers (62) vs NN (5,5) (67)",
+      "a": "e2e3_cartpole_optimal_full_original",
+      "b": "e4_cartpole_mlp_5_5_classical",
+      "median_a": 303.0,
+      "median_b": 4909.5,
+      "median_difference_a_minus_b_ci95": [
+        -4772.5,
+        -319.0
+      ],
+      "mann_whitney_u": 1.0,
+      "p_value": 0.00022063564765109403,
+      "verdict": "separated"
+    },
+    {
+      "claim": "C5",
+      "comparison": "iso-parameter: PQC 25 layers (302) vs NN (14,14) (310)",
+      "a": "e4_cartpole_pqc_l25_original",
+      "b": "e4_cartpole_mlp_14_14_classical",
+      "median_a": 332.0,
+      "median_b": 387.0,
+      "median_difference_a_minus_b_ci95": [
+        -1895.0,
+        310.0
+      ],
+      "mann_whitney_u": 43.0,
+      "p_value": 0.6231762238821174,
+      "verdict": "no clear separation"
+    },
+    {
+      "claim": "C1",
+      "comparison": "Frozen Lake: 5 vs 15 layers (episodes)",
+      "a": "e1_frozenlake_l5_original",
+      "b": "e1_frozenlake_l15_original",
+      "median_a": 1071.0,
+      "median_b": 687.5,
+      "median_difference_a_minus_b_ci95": [
+        -18.0,
+        784.0
+      ],
+      "mann_whitney_u": 76.0,
+      "p_value": 0.05390255716938719,
+      "verdict": "no clear separation"
+    }
+  ],
+  "frozen_lake_mae": {
+    "metric": "MAE to Q* over 44 non-terminal pairs at time step 10000",
+    "mean_by_depth": {
+      "5": 0.16941847024980455,
+      "10": 0.1524267624787764,
+      "15": 0.13674653148612542
+    },
+    "paper_by_depth_read_from_fig3b": {
+      "5": 0.19,
+      "10": 0.17,
+      "15": 0.155
+    },
+    "mean_difference_5_minus_15": 0.03267193876367913,
+    "mean_difference_5_minus_15_ci95": [
+      0.022903229057720645,
+      0.04186082718374556
+    ],
+    "paper_difference_5_minus_15": 0.05,
+    "mann_whitney_p_value": 0.0003298385207779935
+  },
+  "pqc_depth_scan": {
+    "configs": [
+      "e2e3_cartpole_optimal_full_original",
+      "e4_cartpole_pqc_l10_original",
+      "e4_cartpole_pqc_l15_original",
+      "e4_cartpole_pqc_l20_original",
+      "e4_cartpole_pqc_l25_original",
+      "e4_cartpole_pqc_l30_original"
+    ],
+    "kruskal_h": 14.162918194953866,
+    "p_value": 0.014606994026399514,
+    "lowest_mean_censored": "e2e3_cartpole_optimal_full_original",
+    "mean_censored": {
+      "e2e3_cartpole_optimal_full_original": 302.6,
+      "e4_cartpole_pqc_l10_original": 411.7,
+      "e4_cartpole_pqc_l15_original": 467.6,
+      "e4_cartpole_pqc_l20_original": 511.6,
+      "e4_cartpole_pqc_l25_original": 435.2,
+      "e4_cartpole_pqc_l30_original": 751.2
+    }
+  },
+  "nn_width_scan": {
+    "configs": [
+      "e4_cartpole_mlp_10_10_classical",
+      "e4_cartpole_mlp_15_15_classical",
+      "e4_cartpole_mlp_20_20_classical",
+      "e4_cartpole_mlp_24_24_classical",
+      "e4_cartpole_mlp_30_30_classical",
+      "e4_cartpole_mlp_64_64_classical"
+    ],
+    "kruskal_h": 9.368793951691352,
+    "p_value": 0.09522794492485788,
+    "lowest_mean_censored": "e4_cartpole_mlp_30_30_classical",
+    "mean_censored": {
+      "e4_cartpole_mlp_10_10_classical": 788.2,
+      "e4_cartpole_mlp_15_15_classical": 857.1,
+      "e4_cartpole_mlp_20_20_classical": 556.4,
+      "e4_cartpole_mlp_24_24_classical": 247.7,
+      "e4_cartpole_mlp_30_30_classical": 234.2,
+      "e4_cartpole_mlp_64_64_classical": 837.3
+    }
+  },
+  "best_individual": {
+    "pqc": {
+      "config": "e2e3_cartpole_optimal_full_original",
+      "episodes": 208,
+      "paper": 206
+    },
+    "nn": {
+      "config": "e4_cartpole_mlp_30_30_classical",
+      "episodes": 191,
+      "paper": 186
+    }
+  }
+}

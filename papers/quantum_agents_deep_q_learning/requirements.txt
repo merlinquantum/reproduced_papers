@@ -1,0 +1,15 @@
+# Quantum agents in the Gym (Skolik, Jerbi, Dunjko 2022) - reproduction
+# merlinquantum (and perceval) are imported by the shared runtime_lib.
+merlinquantum==0.4.2
+torch>=2.4
+numpy>=1.26
+# Environment package; dynamics verified equal to the authors' gym 0.17.2 (see LOG.md).
+gymnasium==1.4.0
+matplotlib>=3.8
+pytest
+scipy>=1.11
+# Notebook (notebook.ipynb) only:
+pandas>=2.0
+ipykernel
+nbformat
+nbconvert

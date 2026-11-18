@@ -1,0 +1,342 @@
+{
+  "rows": {
+    "PQC 5 layers, tuned": {
+      "config": "e5_eval_pqc_l5",
+      "run_dir": "outdir/batches/e5_eval_pqc/runs/e5_eval_pqc_l5/run_20261118-075913",
+      "role": "paper method",
+      "provenance": "local",
+      "scope": "paper-method-tuned",
+      "matching_basis": "62 params vs NN (5,5) 67; same 6-setting grid",
+      "hardware": "remote L4",
+      "successful_runs": 1,
+      "expected_runs": 1,
+      "agents": 10,
+      "solved": 10,
+      "mean_censored": 261.8,
+      "mean_ci95": [
+        204.9,
+        356.7
+      ],
+      "median_censored": 214.0,
+      "median_ci95": [
+        195.0,
+        266.0
+      ],
+      "best_agent": 185,
+      "trainable_parameters": 62,
+      "wall_clock_seconds": 1947.1095548169687,
+      "seconds_per_lockstep_iteration": 0.019285186351738925,
+      "paper_value": "--"
+    },
+    "NN (5,5), tuned": {
+      "config": "e5_eval_mlp_5_5_classical",
+      "run_dir": "outdir/batches/e5_eval_nn/runs/e5_eval_mlp_5_5_classical/run_20261117-152935",
+      "role": "added fair baseline",
+      "provenance": "local",
+      "scope": "added-baseline-tuned",
+      "matching_basis": "67 params vs PQC 5 layers 62; same grid",
+      "hardware": "laptop CPU",
+      "successful_runs": 1,
+      "expected_runs": 1,
+      "agents": 10,
+      "solved": 10,
+      "mean_censored": 964.5,
+      "mean_ci95": [
+        375.1975,
+        1781.4025000000001
+      ],
+      "median_censored": 297.5,
+      "median_ci95": [
+        252.0,
+        1520.0
+      ],
+      "best_agent": 245,
+      "trainable_parameters": 67,
+      "wall_clock_seconds": 199.44419670800562,
+      "seconds_per_lockstep_iteration": 0.0003449058060827722,
+      "paper_value": "--"
+    },
+    "PQC 25 layers, tuned (= paper setting)": {
+      "config": "e4_cartpole_pqc_l25_codefaithful",
+      "run_dir": "outdir/batches/cf_e4_pqc_depth/runs/e4_cartpole_pqc_l25_codefaithful/run_20261113-162543",
+      "role": "paper method",
+      "provenance": "local",
+      "scope": "code-faithful",
+      "matching_basis": "302 params vs NN (14,14) 310; same grid",
+      "hardware": "remote L4",
+      "successful_runs": 1,
+      "expected_runs": 1,
+      "agents": 10,
+      "solved": 10,
+      "mean_censored": 435.2,
+      "mean_ci95": [
+        314.5975,
+        570.3024999999999
+      ],
+      "median_censored": 332.0,
+      "median_ci95": [
+        254.0,
+        616.0
+      ],
+      "best_agent": 247,
+      "trainable_parameters": 302,
+      "wall_clock_seconds": 6770.479855535086,
+      "seconds_per_lockstep_iteration": 0.049737591134076914,
+      "paper_value": "~350 (Fig. 6a); 500 (text)"
+    },
+    "NN (14,14), tuned": {
+      "config": "e5_eval_mlp_14_14_classical",
+      "run_dir": "outdir/batches/e5_eval_nn/runs/e5_eval_mlp_14_14_classical/run_20261117-152936",
+      "role": "added fair baseline",
+      "provenance": "local",
+      "scope": "added-baseline-tuned",
+      "matching_basis": "310 params vs PQC 25 layers 302; same grid",
+      "hardware": "laptop CPU",
+      "successful_runs": 1,
+      "expected_runs": 1,
+      "agents": 10,
+      "solved": 10,
+      "mean_censored": 304.0,
+      "mean_ci95": [
+        219.3,
+        443.50249999999994
+      ],
+      "median_censored": 232.5,
+      "median_ci95": [
+        214.0,
+        297.0
+      ],
+      "best_agent": 190,
+      "trainable_parameters": 310,
+      "wall_clock_seconds": 52.62805387499975,
+      "seconds_per_lockstep_iteration": 0.0004138043723119,
+      "paper_value": "--"
+    },
+    "PQC 5 layers, paper setting": {
+      "config": "e2e3_cartpole_optimal_full_codefaithful",
+      "run_dir": "outdir/batches/cf_cartpole_optimal/runs/e2e3_cartpole_optimal_full_codefaithful/run_20261113-085709",
+      "role": "paper method (context)",
+      "provenance": "local",
+      "scope": "code-faithful",
+      "matching_basis": "paper's Table 2/3 setting",
+      "hardware": "remote L4",
+      "successful_runs": 1,
+      "expected_runs": 1,
+      "agents": 10,
+      "solved": 10,
+      "mean_censored": 302.6,
+      "mean_ci95": [
+        253.0,
+        363.3
+      ],
+      "median_censored": 303.0,
+      "median_ci95": [
+        224.0,
+        337.0
+      ],
+      "best_agent": 208,
+      "trainable_parameters": 62,
+      "wall_clock_seconds": 2758.849466853775,
+      "seconds_per_lockstep_iteration": 0.03511594963155867,
+      "paper_value": "~320 (Fig. 6a)"
+    },
+    "NN (5,5), untuned": {
+      "config": "e4_cartpole_mlp_5_5_codefaithful",
+      "run_dir": "outdir/batches/cf_e4_nn_width/runs/e4_cartpole_mlp_5_5_codefaithful/run_20261113-093335",
+      "role": "baseline before tuning (context)",
+      "provenance": "local",
+      "scope": "added-baseline",
+      "matching_basis": "batch 16 / target 1, not tuned",
+      "hardware": "laptop CPU",
+      "successful_runs": 1,
+      "expected_runs": 1,
+      "agents": 10,
+      "solved": 5,
+      "mean_censored": 3236.3,
+      "mean_ci95": [
+        1907.9,
+        4537.2
+      ],
+      "median_censored": 4909.5,
+      "median_ci95": [
+        622.0,
+        5000.0
+      ],
+      "best_agent": 460,
+      "trainable_parameters": 67,
+      "wall_clock_seconds": 262.7787831250025,
+      "seconds_per_lockstep_iteration": 0.00032889858032131845,
+      "paper_value": "--"
+    },
+    "NN (14,14), untuned": {
+      "config": "e4_cartpole_mlp_14_14_codefaithful",
+      "run_dir": "outdir/batches/cf_e4_nn_width/runs/e4_cartpole_mlp_14_14_codefaithful/run_20261113-093806",
+      "role": "baseline before tuning (context)",
+      "provenance": "local",
+      "scope": "added-baseline",
+      "matching_basis": "batch 16 / target 1, not tuned",
+      "hardware": "laptop CPU",
+      "successful_runs": 1,
+      "expected_runs": 1,
+      "agents": 10,
+      "solved": 10,
+      "mean_censored": 1167.5,
+      "mean_ci95": [
+        446.68,
+        2102.9025
+      ],
+      "median_censored": 387.0,
+      "median_ci95": [
+        239.5,
+        2164.0
+      ],
+      "best_agent": 197,
+      "trainable_parameters": 310,
+      "wall_clock_seconds": 198.43696304199693,
+      "seconds_per_lockstep_iteration": 0.0003773484099590717,
+      "paper_value": "--"
+    },
+    "NN (20,20), paper setting": {
+      "config": "e4_cartpole_mlp_20_20_codefaithful",
+      "run_dir": "outdir/batches/cf_e4_nn_width/runs/e4_cartpole_mlp_20_20_codefaithful/run_20261113-092830",
+      "role": "paper baseline (context)",
+      "provenance": "local",
+      "scope": "code-faithful",
+      "matching_basis": "562 params, not matched",
+      "hardware": "laptop CPU",
+      "successful_runs": 1,
+      "expected_runs": 1,
+      "agents": 10,
+      "solved": 10,
+      "mean_censored": 556.4,
+      "mean_ci95": [
+        260.3925,
+        901.8224999999996
+      ],
+      "median_censored": 249.5,
+      "median_ci95": [
+        199.0,
+        900.0
+      ],
+      "best_agent": 197,
+      "trainable_parameters": 562,
+      "wall_clock_seconds": 109.6350005419954,
+      "seconds_per_lockstep_iteration": 0.0005136885236731782,
+      "paper_value": "~430 (Fig. 6b); 250 (text)"
+    },
+    "NN (30,30), paper setting": {
+      "config": "e4_cartpole_mlp_30_30_codefaithful",
+      "run_dir": "outdir/batches/cf_e4_nn_width/runs/e4_cartpole_mlp_30_30_codefaithful/run_20261113-093102",
+      "role": "paper baseline (context)",
+      "provenance": "local",
+      "scope": "code-faithful",
+      "matching_basis": "1142 params, not matched",
+      "hardware": "laptop CPU",
+      "successful_runs": 1,
+      "expected_runs": 1,
+      "agents": 10,
+      "solved": 10,
+      "mean_censored": 234.2,
+      "mean_ci95": [
+        206.8,
+        265.7
+      ],
+      "median_censored": 216.5,
+      "median_ci95": [
+        199.0,
+        272.0
+      ],
+      "best_agent": 191,
+      "trainable_parameters": 1142,
+      "wall_clock_seconds": 28.562922165998316,
+      "seconds_per_lockstep_iteration": 0.0005692433219602271,
+      "paper_value": "~250 (Fig. 6b)"
+    },
+    "MerLin 5 layers (adaptation)": {
+      "config": "e2e3_cartpole_optimal_full_merlin",
+      "run_dir": "outdir/batches/merlin_core/runs/e2e3_cartpole_optimal_full_merlin/run_20261116-181831",
+      "role": "photonic adaptation",
+      "provenance": "local",
+      "scope": "merlin-adaptation (simulated)",
+      "matching_basis": "82 params, untuned: PARTIALLY_COMMENSURABLE",
+      "hardware": "remote CPU",
+      "successful_runs": 1,
+      "expected_runs": 1,
+      "agents": 10,
+      "solved": 10,
+      "mean_censored": 303.9,
+      "mean_ci95": [
+        243.7,
+        370.1
+      ],
+      "median_censored": 279.5,
+      "median_ci95": [
+        203.0,
+        399.5
+      ],
+      "best_agent": 194,
+      "trainable_parameters": 82,
+      "wall_clock_seconds": 6027.786545225885,
+      "seconds_per_lockstep_iteration": 0.08248089852664693,
+      "paper_value": "--"
+    }
+  },
+  "pairs": [
+    {
+      "a": "PQC 5 layers, tuned",
+      "b": "NN (5,5), tuned",
+      "median_a": 214.0,
+      "median_b": 297.5,
+      "median_difference_ci95": [
+        -1306.0,
+        -15.5
+      ],
+      "mann_whitney_p": 0.004586392080253494,
+      "verdict": "PQC 5 layers, tuned faster",
+      "commensurability": "COMMENSURABLE"
+    },
+    {
+      "a": "PQC 25 layers, tuned (= paper setting)",
+      "b": "NN (14,14), tuned",
+      "median_a": 332.0,
+      "median_b": 232.5,
+      "median_difference_ci95": [
+        17.5,
+        392.5
+      ],
+      "mann_whitney_p": 0.009108496398030965,
+      "verdict": "NN (14,14), tuned faster",
+      "commensurability": "COMMENSURABLE"
+    },
+    {
+      "a": "MerLin 5 layers (adaptation)",
+      "b": "NN (5,5), tuned",
+      "median_a": 279.5,
+      "median_b": 297.5,
+      "median_difference_ci95": [
+        -1167.5625,
+        95.0
+      ],
+      "mann_whitney_p": 0.24132159301718004,
+      "verdict": "no clear separation",
+      "commensurability": "PARTIALLY_COMMENSURABLE"
+    },
+    {
+      "a": "MerLin 5 layers (adaptation)",
+      "b": "PQC 5 layers, tuned",
+      "median_a": 279.5,
+      "median_b": 214.0,
+      "median_difference_ci95": [
+        -22.0,
+        174.5
+      ],
+      "mann_whitney_p": 0.13042537721263486,
+      "verdict": "no clear separation",
+      "commensurability": "PARTIALLY_COMMENSURABLE"
+    }
+  ],
+  "bootstrap": {
+    "resamples": 10000,
+    "seed": 20261118
+  }
+}

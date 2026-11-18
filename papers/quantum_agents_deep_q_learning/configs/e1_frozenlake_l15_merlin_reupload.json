@@ -1,0 +1,95 @@
+{
+  "description": "Phase 4 MerLin DIAGNOSTIC (basis phases re-uploaded before every layer; not the paper's Frozen Lake model) (linear optics, 6 modes, 3 photons, threshold detectors) of e1_frozenlake_l15_codefaithful: identical environment, training and evaluation settings; only the Q-function changes (LOG.md, Phase 4 Adaptation Plan).",
+  "experiment": {
+    "id": "E1",
+    "arm": "pqc_l15_merlin_reupload",
+    "label": "merlin-diagnostic"
+  },
+  "agents": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ]
+  },
+  "environment": {
+    "name": "FrozenLake-v1",
+    "is_slippery": false,
+    "max_episode_steps": 100,
+    "solve": {
+      "window": 100,
+      "mean_threshold": 1.0,
+      "min_episodes": 100
+    }
+  },
+  "model": {
+    "kind": "merlin",
+    "n_modes": 6,
+    "n_photons": 3,
+    "input_state": [
+      1,
+      0,
+      1,
+      0,
+      1,
+      0
+    ],
+    "n_layers": 15,
+    "state_encoding": "basis_phase",
+    "data_reuploading": true,
+    "train_input_weights": false,
+    "train_output_weights": false,
+    "output_factor": 1.0,
+    "readout": "threshold_click",
+    "readout_modes": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "theta_init": {
+      "low": 0.0,
+      "high": 6.283185307179586
+    }
+  },
+  "training": {
+    "max_episodes": 5000,
+    "gamma": 0.8,
+    "batch_size": 11,
+    "update_model_every": 1,
+    "update_target_every": 10,
+    "replay_capacity": 10000,
+    "replay_eviction": "random",
+    "replay_sampling": "without_replacement",
+    "loss_form": "vector_form",
+    "bootstrap_network": "target",
+    "terminal_mask": "terminated_or_truncated",
+    "learning_rates": {
+      "main": 0.001,
+      "input_weights": null,
+      "output_weights": null
+    },
+    "amsgrad_main": true,
+    "adam": {
+      "beta1": 0.9,
+      "beta2": 0.999,
+      "epsilon": 1e-07
+    },
+    "epsilon_greedy": {
+      "start": 1.0,
+      "decay": 0.99,
+      "min": 0.01
+    }
+  },
+  "evaluation": {
+    "greedy_episodes": 10,
+    "track_q_star_mae": true
+  }
+}
