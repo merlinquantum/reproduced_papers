@@ -10,8 +10,8 @@ Usage (from the repository root)::
 Writes ``results/photonic_comparison.json`` (full precision) and
 ``results/photonic_comparison.md``.
 
-Rules (frozen in the Phase 4 adaptation plan)
----------------------------------------------
+Rules (fixed before the photonic runs)
+--------------------------------------
 * Metric: test MSE at the ridge selected on validation data; normalized test MSE
   divides it by the variance of the test labels.
 * Paired comparison per task over the 5 shared seeds, with the 2 SE rule and the sign

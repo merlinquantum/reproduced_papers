@@ -12,7 +12,7 @@
 
 - Paper: A. Aaraba, S. Cherkaoui, O. Ahmad, S. Wang, "QuaRK: A Quantum Reservoir Kernel for Time Series Learning", [arXiv:2602.13531](https://arxiv.org/abs/2602.13531) (v1, 2026)
 - Original repository: https://github.com/abdo-aary/quark (MIT licence). We reproduce the paper-era code, commit `8f02ff1`, which drew the paper's figures.
-- **Later work by the authors:** after arXiv v1 they added genuine classical shadows, an echo-state-network comparison on 10 real datasets and a validation-based protocol (commit `c8cf7b6`). We follow the paper and say where the later code addresses a point.
+- **Later work by the authors:** their later code (commit `c8cf7b6`) extends the paper with genuine classical shadows, an echo-state-network comparison on 10 real datasets and a validation-based protocol. We follow the paper and say where the later code addresses a point.
 
 ## Original Paper
 
@@ -37,7 +37,7 @@ flowchart TB
     end
 ```
 
-**Data:** windows of a synthetic 3-dimensional VARMA process (App. B), with three labels (App. B.2): current-point readout (F1: a one-step forecast in the text, the last point in the code), exponential fading (F2, a weighted sum of the window) and Volterra (F3, that sum plus a quadratic term).
+**Data:** windows of a synthetic 3-dimensional VARMA process (App. B), with three labels (App. B.2): current-point readout (F1: a single-step forecast in the text, the last point in the code), exponential fading (F2, a weighted sum of the window) and Volterra (F3, that sum plus a quadratic term).
 
 ## Reproduction Scope (including Updates and Deviations)
 
@@ -97,7 +97,14 @@ Metric: test MSE on 2,000 held-out windows divided by the test-label variance, m
 
 ### 1. The paper's experiments reproduce exactly, and its learning claims hold qualitatively
 
-At the authors' seed, our values match their released figures within a relative 1.5·10⁻⁹ ([Fig. 3](results/fig3_regularization_sweep.png), [4](results/fig4_fit_examples.png), [5](results/fig5_training_size_sweep.png)). Over 5 seeds:
+At the authors' seed, our values match their released values within a relative 1.5·10⁻⁹:
+
+![Training MSE against the ridge strength, ours and the authors' release (paper Fig. 3)](results/fig3_regularization_sweep.png)
+![Test MSE against the number of training windows, ours and the authors' release (paper Fig. 5)](results/fig5_training_size_sweep.png)
+
+**Look at:** the crosses (the authors' released values) sit on our curves. Fit examples (paper Fig. 4): [figure](results/fig4_fit_examples.png).
+
+**Look at:** each claim of the paper against what we find over 5 seeds.
 
 | Paper's claim | What we find |
 |---|---|
@@ -111,7 +118,7 @@ At the authors' seed, our values match their released figures within a relative 
 
 ![Normalized test MSE of each model on the three tasks, one dot per seed](results/model_comparison.png)
 
-**Look at:** blue rows (QuaRK) sit to the right of orange rows (classical) on F2 and F3; log axis, lower is better.
+**Look at:** the top blue row (QuaRK, paper settings) sits to the right of every orange row (classical) on all three tasks, and every blue row does on F2 and F3; log axis, lower is better.
 
 **Result:** every classical baseline beats QuaRK on every task, in 5 of 5 seeds. Even a random classical reservoir with QuaRK's 315 features and readout does (0.063 against 0.48 on F2), and shot noise is not the reason: without it, QuaRK still trails on F2 and F3 (a check added after the runs). On real data, the authors' later comparison is mixed (QuaRK better on 5 of 10 datasets).
 
@@ -121,11 +128,13 @@ At the authors' seed, our values match their released figures within a relative 
 
 **Look at:** at the same number of measurements (x-axis), orange (shadows, as in the paper's text) lies below blue (the code's model). The y-axis is the error with shot noise divided by the error without.
 
-**Result:** at about 10⁴ measurements, shadows beat the code's model on every task, in 5 of 5 seeds. The paper's figures used the code's model, which spends 105 times more measurements than the text's 1000 shadows; the authors' later code adopts shadows.
+**Result:** at about 10⁴ measurements, shadows beat the code's model on every task, in 5 of 5 seeds (verdicts: [`results/result_tables.md`](results/result_tables.md), shot budget; seed counts: notebook). The paper's figures used the code's model, which spends 105 times more measurements than the text's 1000 shadows; the authors' later code adopts shadows.
 
 ### 4. A photonic version of the reservoir matches QuaRK, with or without photon interference
 
 Per sub-reservoir, 3 photons in 14 modes in MerLin, with QuaRK's reset, readout and data, and ideal components; a control makes the photons distinguishable, so they cannot interfere.
+
+**Look at:** the three columns, mean normalized test MSE, all without shot noise.
 
 | Task | QuaRK, exact | Photonic, exact | Photonic, no interference |
 |---|---:|---:|---:|
@@ -133,12 +142,12 @@ Per sub-reservoir, 3 photons in 14 modes in MerLin, with QuaRK's reset, readout 
 | F2 | 0.328 | 0.307 | 0.307 |
 | F3 | 0.391 | 0.388 | 0.387 |
 
-**Result:** the photonic reservoir matches QuaRK, and switching interference off changes nothing (within 0.0011). Our reading: the accuracy comes from the nonlinear encoding and the fading memory, not from interference. Details: [`results/photonic_comparison.md`](results/photonic_comparison.md).
+**Result:** the photonic reservoir matches QuaRK, and switching interference off changes nothing (means differ by at most 0.00102). Our reading: the accuracy comes from the nonlinear encoding and the fading memory, not from interference. Details: [`results/photonic_comparison.md`](results/photonic_comparison.md).
 
 ## Limitations
 
 - **Synthetic data only, as in the paper;** with 3 input dimensions and 5 qubits, the projection never reduces the dimension, so the scalability argument is not tested.
-- **Theorem 2 checked numerically,** not its proof; all reservoirs here are classically simulable.
+- **Theorem 2 is checked numerically,** not its proof; all reservoirs here are classically simulable.
 
 ## Tests
 
@@ -146,7 +155,7 @@ Per sub-reservoir, 3 photons in 14 modes in MerLin, with QuaRK's reset, readout 
 cd papers/QuaRK && pytest -q
 ```
 
-41 tests, among them the circuit against the closed-form reset, the match with the authors' release, MerLin against permanents, every config and the results script.
+41 tests, among them the checks with known answers: the circuit against the closed-form reset, our features against the authors' release, MerLin against permanents; also every config and the results script.
 
 ## Citation and License
 

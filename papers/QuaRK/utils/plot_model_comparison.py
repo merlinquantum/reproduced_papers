@@ -23,15 +23,8 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.lines import Line2D
-from plot_style import (
-    PAPER_TASKS,
-    TASK_LABELS,
-    TEXT_SECONDARY,
-    apply_style,
-    load_sweep,
-    save,
-    selected,
-)
+from plot_style import TEXT_SECONDARY, apply_style, load_sweep, save, selected
+from report_statistics import PAPER_TASKS, TASK_LABELS
 
 QUARK_MODELS = (
     ("quark", "QuaRK (paper settings)", "quantum"),

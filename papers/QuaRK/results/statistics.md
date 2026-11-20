@@ -11,31 +11,31 @@ Paper-accurate settings, 5 seeds (12345 is the authors' data; 1-4 are regenerate
 | QuaRK (paper settings) | Current-point readout (F1 as run) | 0.00834 ± 0.0062 | 0.019 ± 0.013 | 0.00834 ± 0.0062 | 0.00431, 1 |
 | QuaRK (paper settings) | Exponential fading (F2) | 0.464 ± 0.14 | 0.48 ± 0.035 | 0.463 ± 0.14 | 0.449, 3 |
 | QuaRK (paper settings) | Volterra (F3) | 0.751 ± 0.18 | 0.508 ± 0.1 | 0.751 ± 0.18 | 0.651, 2 |
-| QuaRK (paper settings) | One-step forecast (F1 as written) | 0.379 ± 0.026 | 0.882 ± 0.065 | 0.379 ± 0.026 | 0.421, 5 |
+| QuaRK (paper settings) | Single-step forecast (F1 as written) | 0.379 ± 0.026 | 0.882 ± 0.065 | 0.379 ± 0.026 | 0.421, 5 |
 | QuaRK, exact expectations | Current-point readout (F1 as run) | 5.33e-05 ± 8.5e-05 | 1.16e-04 ± 1.8e-04 | 5.33e-05 ± 8.5e-05 | 2.77e-05, 4 |
 | QuaRK, exact expectations | Exponential fading (F2) | 0.319 ± 0.12 | 0.328 ± 0.044 | 0.319 ± 0.12 | 0.34, 4 |
 | QuaRK, exact expectations | Volterra (F3) | 0.576 ± 0.18 | 0.391 ± 0.11 | 0.576 ± 0.18 | 0.531, 3 |
-| QuaRK, exact expectations | One-step forecast (F1 as written) | 0.383 ± 0.03 | 0.891 ± 0.076 | 0.382 ± 0.031 | 0.432, 5 |
+| QuaRK, exact expectations | Single-step forecast (F1 as written) | 0.383 ± 0.03 | 0.891 ± 0.076 | 0.382 ± 0.031 | 0.432, 5 |
 | QuaRK, random-Pauli shadows | Current-point readout (F1 as run) | 0.0386 ± 0.019 | 0.0881 ± 0.042 | 0.0386 ± 0.019 | 0.027, 2 |
 | QuaRK, random-Pauli shadows | Exponential fading (F2) | 0.613 ± 0.24 | 0.62 ± 0.026 | 0.612 ± 0.24 | 0.55, 3 |
 | QuaRK, random-Pauli shadows | Volterra (F3) | 0.944 ± 0.23 | 0.634 ± 0.098 | 0.943 ± 0.23 | 0.79, 1 |
-| QuaRK, random-Pauli shadows | One-step forecast (F1 as written) | 0.393 ± 0.031 | 0.914 ± 0.046 | 0.393 ± 0.031 | 0.439, 5 |
+| QuaRK, random-Pauli shadows | Single-step forecast (F1 as written) | 0.393 ± 0.031 | 0.914 ± 0.046 | 0.393 ± 0.031 | 0.439, 5 |
 | Matérn kernel on the raw window | Current-point readout (F1 as run) | 3.19e-10 ± 7.6e-11 | 7.40e-10 ± 2.4e-10 | 3.00e-10 ± 3.5e-11 | 3.08e-10, 4 |
 | Matérn kernel on the raw window | Exponential fading (F2) | 1.11e-09 ± 1.6e-10 | 1.30e-09 ± 5.8e-10 | 9.78e-10 ± 9.1e-11 | 1.20e-09, 3 |
 | Matérn kernel on the raw window | Volterra (F3) | 1.07e-04 ± 5.5e-05 | 7.37e-05 ± 3.8e-05 | 1.07e-04 ± 5.5e-05 | 8.48e-05, 3 |
-| Matérn kernel on the raw window | One-step forecast (F1 as written) | 0.361 ± 0.012 | 0.843 ± 0.09 | 0.36 ± 0.012 | 0.356, 3 |
+| Matérn kernel on the raw window | Single-step forecast (F1 as written) | 0.361 ± 0.012 | 0.843 ± 0.09 | 0.36 ± 0.012 | 0.356, 3 |
 | Linear ridge on the raw window | Current-point readout (F1 as run) | 1.93e-13 ± 4.3e-13 | 5.03e-13 ± 1.1e-12 | 2.64e-30 ± 1.4e-30 | 2.13e-30, 2 |
 | Linear ridge on the raw window | Exponential fading (F2) | 6.29e-13 ± 1.4e-12 | 5.50e-13 ± 1.2e-12 | 1.28e-29 ± 7.3e-30 | 5.83e-30, 1 |
 | Linear ridge on the raw window | Volterra (F3) | 0.419 ± 0.24 | 0.281 ± 0.13 | 0.419 ± 0.24 | 0.33, 3 |
-| Linear ridge on the raw window | One-step forecast (F1 as written) | 0.353 ± 0.012 | 0.826 ± 0.093 | 0.353 ± 0.012 | 0.346, 2 |
+| Linear ridge on the raw window | Single-step forecast (F1 as written) | 0.353 ± 0.012 | 0.826 ± 0.093 | 0.353 ± 0.012 | 0.346, 2 |
 | Echo state network, default | Current-point readout (F1 as run) | 6.89e-05 ± 3.0e-06 | 1.58e-04 ± 1.6e-05 | 6.89e-05 ± 3.0e-06 | 7.00e-05, 4 |
 | Echo state network, default | Exponential fading (F2) | 0.0601 ± 0.016 | 0.0634 ± 0.011 | 0.0601 ± 0.016 | 0.0495, 3 |
 | Echo state network, default | Volterra (F3) | 0.133 ± 0.029 | 0.0895 ± 0.015 | 0.133 ± 0.029 | 0.114, 1 |
-| Echo state network, default | One-step forecast (F1 as written) | 0.363 ± 0.012 | 0.848 ± 0.092 | 0.362 ± 0.013 | 0.36, 3 |
+| Echo state network, default | Single-step forecast (F1 as written) | 0.363 ± 0.012 | 0.848 ± 0.092 | 0.362 ± 0.013 | 0.36, 3 |
 | Echo state network, tuned | Current-point readout (F1 as run) | 9.01e-08 ± 1.2e-08 | 2.07e-07 ± 4.3e-08 | 9.01e-08 ± 1.2e-08 | 8.58e-08, 3 |
 | Echo state network, tuned | Exponential fading (F2) | 3.43e-06 ± 1.5e-06 | 4.20e-06 ± 3.0e-06 | 3.43e-06 ± 1.5e-06 | 2.40e-06, 2 |
 | Echo state network, tuned | Volterra (F3) | 2.65e-05 ± 2.3e-05 | 1.80e-05 ± 1.6e-05 | 2.64e-05 ± 2.3e-05 | 7.82e-06, 1 |
-| Echo state network, tuned | One-step forecast (F1 as written) | 0.366 ± 0.011 | 0.854 ± 0.082 | 0.366 ± 0.011 | 0.366, 3 |
+| Echo state network, tuned | Single-step forecast (F1 as written) | 0.366 ± 0.011 | 0.854 ± 0.082 | 0.366 ± 0.011 | 0.366, 3 |
 
 ## Paired comparisons with QuaRK (frozen rule)
 
@@ -46,27 +46,27 @@ Paper-accurate settings, 5 seeds (12345 is the authors' data; 1-4 are regenerate
 | QuaRK (paper settings) | QuaRK, exact expectations | Current-point readout (F1 as run) | 0.00829 | [7.22e-04, 0.0159] | 0/5 | QuaRK, exact expectations lower |
 | QuaRK (paper settings) | QuaRK, exact expectations | Exponential fading (F2) | 0.144 | [0.0657, 0.223] | 0/5 | QuaRK, exact expectations lower |
 | QuaRK (paper settings) | QuaRK, exact expectations | Volterra (F3) | 0.175 | [0.125, 0.225] | 0/5 | QuaRK, exact expectations lower |
-| QuaRK (paper settings) | QuaRK, exact expectations | One-step forecast (F1 as written) | -0.00392 | [-0.0123, 0.00444] | 4/5 | no clear separation |
+| QuaRK (paper settings) | QuaRK, exact expectations | Single-step forecast (F1 as written) | -0.00392 | [-0.0123, 0.00444] | 4/5 | no clear separation |
 | QuaRK (paper settings) | QuaRK, random-Pauli shadows | Current-point readout (F1 as run) | -0.0303 | [-0.0467, -0.0139] | 5/5 | QuaRK lower |
 | QuaRK (paper settings) | QuaRK, random-Pauli shadows | Exponential fading (F2) | -0.149 | [-0.278, -0.0196] | 5/5 | QuaRK lower |
 | QuaRK (paper settings) | QuaRK, random-Pauli shadows | Volterra (F3) | -0.193 | [-0.275, -0.111] | 5/5 | QuaRK lower |
-| QuaRK (paper settings) | QuaRK, random-Pauli shadows | One-step forecast (F1 as written) | -0.0145 | [-0.0281, -8.33e-04] | 4/5 | QuaRK lower |
+| QuaRK (paper settings) | QuaRK, random-Pauli shadows | Single-step forecast (F1 as written) | -0.0145 | [-0.0281, -8.33e-04] | 4/5 | QuaRK lower |
 | QuaRK (paper settings) | Matérn kernel on the raw window | Current-point readout (F1 as run) | 0.00834 | [6.77e-04, 0.016] | 0/5 | Matérn kernel on the raw window lower |
 | QuaRK (paper settings) | Matérn kernel on the raw window | Exponential fading (F2) | 0.464 | [0.286, 0.641] | 0/5 | Matérn kernel on the raw window lower |
 | QuaRK (paper settings) | Matérn kernel on the raw window | Volterra (F3) | 0.751 | [0.527, 0.974] | 0/5 | Matérn kernel on the raw window lower |
-| QuaRK (paper settings) | Matérn kernel on the raw window | One-step forecast (F1 as written) | 0.0181 | [-0.0154, 0.0515] | 0/5 | no clear separation |
+| QuaRK (paper settings) | Matérn kernel on the raw window | Single-step forecast (F1 as written) | 0.0181 | [-0.0154, 0.0515] | 0/5 | no clear separation |
 | QuaRK (paper settings) | Linear ridge on the raw window | Current-point readout (F1 as run) | 0.00834 | [6.77e-04, 0.016] | 0/5 | Linear ridge on the raw window lower |
 | QuaRK (paper settings) | Linear ridge on the raw window | Exponential fading (F2) | 0.464 | [0.286, 0.641] | 0/5 | Linear ridge on the raw window lower |
 | QuaRK (paper settings) | Linear ridge on the raw window | Volterra (F3) | 0.332 | [0.227, 0.437] | 0/5 | Linear ridge on the raw window lower |
-| QuaRK (paper settings) | Linear ridge on the raw window | One-step forecast (F1 as written) | 0.0254 | [-0.00957, 0.0603] | 0/5 | Linear ridge on the raw window lower (interval contains 0) |
+| QuaRK (paper settings) | Linear ridge on the raw window | Single-step forecast (F1 as written) | 0.0254 | [-0.00957, 0.0603] | 0/5 | Linear ridge on the raw window lower (interval contains 0) |
 | QuaRK (paper settings) | Echo state network, default | Current-point readout (F1 as run) | 0.00827 | [6.04e-04, 0.0159] | 0/5 | Echo state network, default lower |
 | QuaRK (paper settings) | Echo state network, default | Exponential fading (F2) | 0.404 | [0.244, 0.563] | 0/5 | Echo state network, default lower |
 | QuaRK (paper settings) | Echo state network, default | Volterra (F3) | 0.618 | [0.43, 0.806] | 0/5 | Echo state network, default lower |
-| QuaRK (paper settings) | Echo state network, default | One-step forecast (F1 as written) | 0.016 | [-0.0161, 0.0481] | 1/5 | no clear separation |
+| QuaRK (paper settings) | Echo state network, default | Single-step forecast (F1 as written) | 0.016 | [-0.0161, 0.0481] | 1/5 | no clear separation |
 | QuaRK (paper settings) | Echo state network, tuned | Current-point readout (F1 as run) | 0.00834 | [6.77e-04, 0.016] | 0/5 | Echo state network, tuned lower |
 | QuaRK (paper settings) | Echo state network, tuned | Exponential fading (F2) | 0.464 | [0.286, 0.641] | 0/5 | Echo state network, tuned lower |
 | QuaRK (paper settings) | Echo state network, tuned | Volterra (F3) | 0.751 | [0.527, 0.974] | 0/5 | Echo state network, tuned lower |
-| QuaRK (paper settings) | Echo state network, tuned | One-step forecast (F1 as written) | 0.0128 | [-0.017, 0.0426] | 1/5 | no clear separation |
+| QuaRK (paper settings) | Echo state network, tuned | Single-step forecast (F1 as written) | 0.0128 | [-0.017, 0.0426] | 1/5 | no clear separation |
 
 ## Paired comparisons of noise-free QuaRK with the classical baselines (after the sweep)
 
@@ -77,19 +77,19 @@ Paper-accurate settings, 5 seeds (12345 is the authors' data; 1-4 are regenerate
 | QuaRK, exact expectations | Matérn kernel on the raw window | Current-point readout (F1 as run) | 5.33e-05 | [-5.22e-05, 1.59e-04] | 0/5 | no clear separation |
 | QuaRK, exact expectations | Matérn kernel on the raw window | Exponential fading (F2) | 0.319 | [0.172, 0.467] | 0/5 | Matérn kernel on the raw window lower |
 | QuaRK, exact expectations | Matérn kernel on the raw window | Volterra (F3) | 0.576 | [0.353, 0.8] | 0/5 | Matérn kernel on the raw window lower |
-| QuaRK, exact expectations | Matérn kernel on the raw window | One-step forecast (F1 as written) | 0.022 | [-0.0161, 0.06] | 0/5 | no clear separation |
+| QuaRK, exact expectations | Matérn kernel on the raw window | Single-step forecast (F1 as written) | 0.022 | [-0.0161, 0.06] | 0/5 | no clear separation |
 | QuaRK, exact expectations | Linear ridge on the raw window | Current-point readout (F1 as run) | 5.33e-05 | [-5.22e-05, 1.59e-04] | 0/5 | no clear separation |
 | QuaRK, exact expectations | Linear ridge on the raw window | Exponential fading (F2) | 0.319 | [0.172, 0.467] | 0/5 | Linear ridge on the raw window lower |
 | QuaRK, exact expectations | Linear ridge on the raw window | Volterra (F3) | 0.157 | [0.062, 0.252] | 0/5 | Linear ridge on the raw window lower |
-| QuaRK, exact expectations | Linear ridge on the raw window | One-step forecast (F1 as written) | 0.0293 | [-0.0101, 0.0687] | 0/5 | Linear ridge on the raw window lower (interval contains 0) |
+| QuaRK, exact expectations | Linear ridge on the raw window | Single-step forecast (F1 as written) | 0.0293 | [-0.0101, 0.0687] | 0/5 | Linear ridge on the raw window lower (interval contains 0) |
 | QuaRK, exact expectations | Echo state network, default | Current-point readout (F1 as run) | -1.56e-05 | [-1.24e-04, 9.30e-05] | 4/5 | no clear separation |
 | QuaRK, exact expectations | Echo state network, default | Exponential fading (F2) | 0.259 | [0.124, 0.395] | 0/5 | Echo state network, default lower |
 | QuaRK, exact expectations | Echo state network, default | Volterra (F3) | 0.444 | [0.254, 0.634] | 0/5 | Echo state network, default lower |
-| QuaRK, exact expectations | Echo state network, default | One-step forecast (F1 as written) | 0.0199 | [-0.0163, 0.0561] | 0/5 | no clear separation |
+| QuaRK, exact expectations | Echo state network, default | Single-step forecast (F1 as written) | 0.0199 | [-0.0163, 0.0561] | 0/5 | no clear separation |
 | QuaRK, exact expectations | Echo state network, tuned | Current-point readout (F1 as run) | 5.33e-05 | [-5.23e-05, 1.59e-04] | 0/5 | no clear separation |
 | QuaRK, exact expectations | Echo state network, tuned | Exponential fading (F2) | 0.319 | [0.172, 0.467] | 0/5 | Echo state network, tuned lower |
 | QuaRK, exact expectations | Echo state network, tuned | Volterra (F3) | 0.576 | [0.353, 0.8] | 0/5 | Echo state network, tuned lower |
-| QuaRK, exact expectations | Echo state network, tuned | One-step forecast (F1 as written) | 0.0167 | [-0.0182, 0.0517] | 1/5 | no clear separation |
+| QuaRK, exact expectations | Echo state network, tuned | Single-step forecast (F1 as written) | 0.0167 | [-0.0182, 0.0517] | 1/5 | no clear separation |
 
 ## Interpolation: training MSE at the smallest ridge
 
@@ -100,31 +100,31 @@ Paper-accurate settings, 5 seeds (12345 is the authors' data; 1-4 are regenerate
 | QuaRK (paper settings) | Current-point readout (F1 as run) | 4.49e-25 | 0.1 to 1 |
 | QuaRK (paper settings) | Exponential fading (F2) | 2.58e-24 | 0.05 to 0.1 |
 | QuaRK (paper settings) | Volterra (F3) | 5.63e-21 | 0.001 to 0.1 |
-| QuaRK (paper settings) | One-step forecast (F1 as written) | 4.74e-25 | 0.1 |
+| QuaRK (paper settings) | Single-step forecast (F1 as written) | 4.74e-25 | 0.1 |
 | QuaRK, exact expectations | Current-point readout (F1 as run) | 2.60e-19 | 0.01 to 1 |
 | QuaRK, exact expectations | Exponential fading (F2) | 1.09e-11 | 1.00e-08 to 0.001 |
 | QuaRK, exact expectations | Volterra (F3) | 1.02e-12 | 1.00e-07 to 0.01 |
-| QuaRK, exact expectations | One-step forecast (F1 as written) | 4.81e-25 | 0.1 |
+| QuaRK, exact expectations | Single-step forecast (F1 as written) | 4.81e-25 | 0.1 |
 | QuaRK, random-Pauli shadows | Current-point readout (F1 as run) | 2.02e-24 | 0.05 to 0.1 |
 | QuaRK, random-Pauli shadows | Exponential fading (F2) | 5.04e-24 | 0.05 to 0.1 |
 | QuaRK, random-Pauli shadows | Volterra (F3) | 5.59e-21 | 0.001 to 0.1 |
-| QuaRK, random-Pauli shadows | One-step forecast (F1 as written) | 4.62e-25 | 0.1 |
+| QuaRK, random-Pauli shadows | Single-step forecast (F1 as written) | 4.62e-25 | 0.1 |
 | Matérn kernel on the raw window | Current-point readout (F1 as run) | 1.49e-13 | 0.001 |
 | Matérn kernel on the raw window | Exponential fading (F2) | 4.33e-13 | 0.001 to 0.005 |
 | Matérn kernel on the raw window | Volterra (F3) | 2.16e-17 | 1.00e-05 to 1.00e-04 |
-| Matérn kernel on the raw window | One-step forecast (F1 as written) | 4.57e-25 | 0.1 |
+| Matérn kernel on the raw window | Single-step forecast (F1 as written) | 4.57e-25 | 0.1 |
 | Linear ridge on the raw window | Current-point readout (F1 as run) | 4.26e-30 | 500 |
 | Linear ridge on the raw window | Exponential fading (F2) | 2.06e-29 | 100 to 500 |
 | Linear ridge on the raw window | Volterra (F3) | 0.796 | — (5 seeds never below 1 %) |
-| Linear ridge on the raw window | One-step forecast (F1 as written) | 0.367 | — (5 seeds never below 1 %) |
+| Linear ridge on the raw window | Single-step forecast (F1 as written) | 0.367 | — (5 seeds never below 1 %) |
 | Echo state network, default | Current-point readout (F1 as run) | 1.40e-19 | 0.5 to 5 |
 | Echo state network, default | Exponential fading (F2) | 3.44e-21 | 0.001 |
 | Echo state network, default | Volterra (F3) | 4.01e-13 | 1.00e-07 to 0.001 |
-| Echo state network, default | One-step forecast (F1 as written) | 4.55e-25 | 0.1 |
+| Echo state network, default | Single-step forecast (F1 as written) | 4.55e-25 | 0.1 |
 | Echo state network, tuned | Current-point readout (F1 as run) | 1.12e-19 | 10 |
 | Echo state network, tuned | Exponential fading (F2) | 8.89e-13 | 0.5 to 5 |
 | Echo state network, tuned | Volterra (F3) | 1.79e-13 | 0.05 to 0.5 |
-| Echo state network, tuned | One-step forecast (F1 as written) | 5.61e-25 | 0.1 |
+| Echo state network, tuned | Single-step forecast (F1 as written) | 5.61e-25 | 0.1 |
 
 ## Test MSE against the number of training windows
 
@@ -135,31 +135,31 @@ Paper-accurate settings, 5 seeds (12345 is the authors' data; 1-4 are regenerate
 | QuaRK (paper settings) | Current-point readout (F1 as run) | -0.458 ± 0.075 | [-0.551, -0.366] | yes | 45/45 |
 | QuaRK (paper settings) | Exponential fading (F2) | -0.0918 ± 0.021 | [-0.118, -0.0659] | no | 45/45 |
 | QuaRK (paper settings) | Volterra (F3) | -0.0855 ± 0.023 | [-0.115, -0.0563] | no | 45/45 |
-| QuaRK (paper settings) | One-step forecast (F1 as written) | -0.02 ± 0.011 | [-0.0338, -0.00629] | no | 43/45 |
+| QuaRK (paper settings) | Single-step forecast (F1 as written) | -0.02 ± 0.011 | [-0.0338, -0.00629] | no | 43/45 |
 | QuaRK, exact expectations | Current-point readout (F1 as run) | -1.36 ± 0.29 | [-1.72, -1] | no | 45/45 |
 | QuaRK, exact expectations | Exponential fading (F2) | -0.162 ± 0.07 | [-0.249, -0.0747] | no | 45/45 |
 | QuaRK, exact expectations | Volterra (F3) | -0.16 ± 0.068 | [-0.245, -0.075] | no | 45/45 |
-| QuaRK, exact expectations | One-step forecast (F1 as written) | -0.0248 ± 0.016 | [-0.0444, -0.00508] | no | 41/45 |
+| QuaRK, exact expectations | Single-step forecast (F1 as written) | -0.0248 ± 0.016 | [-0.0444, -0.00508] | no | 41/45 |
 | QuaRK, random-Pauli shadows | Current-point readout (F1 as run) | -0.287 ± 0.042 | [-0.339, -0.236] | no | 45/45 |
 | QuaRK, random-Pauli shadows | Exponential fading (F2) | -0.0681 ± 0.0095 | [-0.0799, -0.0563] | no | 45/45 |
 | QuaRK, random-Pauli shadows | Volterra (F3) | -0.0652 ± 0.03 | [-0.102, -0.0284] | no | 44/45 |
-| QuaRK, random-Pauli shadows | One-step forecast (F1 as written) | -0.0167 ± 0.0093 | [-0.0282, -0.00514] | no | 39/45 |
+| QuaRK, random-Pauli shadows | Single-step forecast (F1 as written) | -0.0167 ± 0.0093 | [-0.0282, -0.00514] | no | 39/45 |
 | Matérn kernel on the raw window | Current-point readout (F1 as run) | -0.526 ± 0.21 | [-0.791, -0.262] | yes | 29/45 |
 | Matérn kernel on the raw window | Exponential fading (F2) | -0.76 ± 0.35 | [-1.19, -0.328] | yes | 37/45 |
 | Matérn kernel on the raw window | Volterra (F3) | -3.26 ± 0.37 | [-3.72, -2.8] | no | 45/45 |
-| Matérn kernel on the raw window | One-step forecast (F1 as written) | -0.0361 ± 0.022 | [-0.0636, -0.00864] | no | 42/45 |
+| Matérn kernel on the raw window | Single-step forecast (F1 as written) | -0.0361 ± 0.022 | [-0.0636, -0.00864] | no | 42/45 |
 | Linear ridge on the raw window | Current-point readout (F1 as run) | -11.7 ± 3.4 (exact solution: slope not a learning rate) | [-15.8, -7.48] | no | 33/45 |
 | Linear ridge on the raw window | Exponential fading (F2) | -10 ± 3.9 (exact solution: slope not a learning rate) | [-14.9, -5.15] | no | 25/45 |
 | Linear ridge on the raw window | Volterra (F3) | -0.0491 ± 0.011 | [-0.0629, -0.0353] | no | 42/45 |
-| Linear ridge on the raw window | One-step forecast (F1 as written) | -0.0284 ± 0.014 | [-0.0457, -0.0112] | no | 39/45 |
+| Linear ridge on the raw window | Single-step forecast (F1 as written) | -0.0284 ± 0.014 | [-0.0457, -0.0112] | no | 39/45 |
 | Echo state network, default | Current-point readout (F1 as run) | -0.887 ± 0.06 | [-0.961, -0.813] | no | 45/45 |
 | Echo state network, default | Exponential fading (F2) | -0.236 ± 0.011 | [-0.25, -0.223] | no | 45/45 |
 | Echo state network, default | Volterra (F3) | -0.386 ± 0.089 | [-0.497, -0.276] | no | 45/45 |
-| Echo state network, default | One-step forecast (F1 as written) | -0.0327 ± 0.021 | [-0.0592, -0.00628] | no | 42/45 |
+| Echo state network, default | Single-step forecast (F1 as written) | -0.0327 ± 0.021 | [-0.0592, -0.00628] | no | 42/45 |
 | Echo state network, tuned | Current-point readout (F1 as run) | -1.85 ± 0.026 | [-1.88, -1.82] | no | 45/45 |
 | Echo state network, tuned | Exponential fading (F2) | -0.961 ± 0.21 | [-1.22, -0.698] | no | 45/45 |
 | Echo state network, tuned | Volterra (F3) | -1.34 ± 0.11 | [-1.47, -1.2] | no | 45/45 |
-| Echo state network, tuned | One-step forecast (F1 as written) | -0.0344 ± 0.023 | [-0.0631, -0.00568] | no | 41/45 |
+| Echo state network, tuned | Single-step forecast (F1 as written) | -0.0344 ± 0.023 | [-0.0631, -0.00568] | no | 41/45 |
 
 ## Task ranking (paper: current-point readout < exponential fading < Volterra)
 
@@ -184,7 +184,7 @@ Paper-accurate settings, 5 seeds (12345 is the authors' data; 1-4 are regenerate
 | Current-point readout (F1 as run) | 5, 5, 5, 5, 5 | 19.2 ± 6.6 | 27.3 ± 20 | 32.6 ± 23 | 154 | 0.00834 ± 0.0062 | 6.6e+03 | 73.1 |
 | Exponential fading (F2) | 0.5, 1.5, 1.5, 2.5, 0.5 | 78.1 ± 16 | 417 ± 1.8e+02 | 485 ± 2.1e+02 | 2.89e+03 | 0.463 ± 0.14 | 1.73e+03 | 813 |
 | Volterra (F3) | 0.5, 1.5, 0.5, 2.5, 1.5 | 216 ± 2.7e+02 | 6.72e+03 ± 1.4e+04 | 7.56e+03 ± 1.5e+04 | 4.34e+03 | 0.75 ± 0.18 | 1.43e+03 | 898 |
-| One-step forecast (F1 as written) | 2.5, 0.5, 0.5, 1.5, 5 | 55.8 ± 3.3 | 203 ± 23 | 231 ± 26 | 2.13e+03 | 0.379 ± 0.026 | 1.04e+03 | 925 |
+| Single-step forecast (F1 as written) | 2.5, 0.5, 0.5, 1.5, 5 | 55.8 ± 3.3 | 203 ± 23 | 231 ± 26 | 2.13e+03 | 0.379 ± 0.026 | 1.04e+03 | 925 |
 
 Kernel fits with ν ≤ 1 (Theorem 2 does not apply), over every QuaRK run of the three sweeps:
 
@@ -193,13 +193,13 @@ Kernel fits with ν ≤ 1 (Theorem 2 does not apply), over every QuaRK run of th
 | Current-point readout (F1 as run) | 3/55 | 0.00382, 0.00567 |
 | Exponential fading (F2) | 25/55 | 0.0145, 0.117 |
 | Volterra (F3) | 31/55 | 0.0175, 0.16 |
-| One-step forecast (F1 as written) | 34/55 | 0.00342, 0.023 |
+| Single-step forecast (F1 as written) | 34/55 | 0.00342, 0.023 |
 
 ## Shot budget and estimator
 
 Extension: paper settings with the estimator or shot budget changed, 5 seeds. The 1000-shot and exact rows come from the main comparison (same seeds, data and code).
 
-| Setting | Current-point readout (F1 as run) | Exponential fading (F2) | Volterra (F3) | One-step forecast (F1 as written) |
+| Setting | Current-point readout (F1 as run) | Exponential fading (F2) | Volterra (F3) | Single-step forecast (F1 as written) |
 |---|---:|---:|---:|---:|
 | per-observable 100, n = 5, R = 3 | 0.0556 ± 0.026 | 0.65 ± 0.27 | 0.989 ± 0.24 | 0.393 ± 0.027 |
 | per-observable 1000, n = 5, R = 3 | 0.00834 ± 0.0062 | 0.464 ± 0.14 | 0.751 ± 0.18 | 0.379 ± 0.026 |
@@ -211,7 +211,7 @@ Extension: paper settings with the estimator or shot budget changed, 5 seeds. Th
 
 Measurement penalty: test MSE divided by the test MSE of the same seed with exact expectations (1 = no penalty); mean ± std over seeds:
 
-| Setting | Current-point readout (F1 as run) | Exponential fading (F2) | Volterra (F3) | One-step forecast (F1 as written) |
+| Setting | Current-point readout (F1 as run) | Exponential fading (F2) | Volterra (F3) | Single-step forecast (F1 as written) |
 |---|---:|---:|---:|---:|
 | per-observable 100, n = 5, R = 3 | 3.14e+03 ± 2.6e+03 | 2.03 ± 0.29 | 1.76 ± 0.29 | 1.03 ± 0.041 |
 | per-observable 1000, n = 5, R = 3 | 399 ± 3.1e+02 | 1.48 ± 0.24 | 1.33 ± 0.14 | 0.99 ± 0.018 |
@@ -222,7 +222,7 @@ Measurement penalty: test MSE divided by the test MSE of the same seed with exac
 
 Seeds where the test MSE falls at each step 100 → 1000 → 10000 shots:
 
-| Estimator | Current-point readout (F1 as run) | Exponential fading (F2) | Volterra (F3) | One-step forecast (F1 as written) |
+| Estimator | Current-point readout (F1 as run) | Exponential fading (F2) | Volterra (F3) | Single-step forecast (F1 as written) |
 |---|---:|---:|---:|---:|
 | Per-observable noise (authors' code) | 5/5 | 5/5 | 5/5 | 2/5 |
 | Random-Pauli shadows | 5/5 | 5/5 | 5/5 | 4/5 |
@@ -258,21 +258,21 @@ Paired comparisons after the sweep (difference = A − B):
 | per-observable 10000, n = 5, R = 3 | shadows 10000, n = 5, R = 3 | Volterra (F3) | -0.0822 | [-0.0983, -0.0661] | 5/5 | per-observable 10000, n = 5, R = 3 lower |
 | exact, n = 5, R = 3 | per-observable 10000, n = 5, R = 3 | Volterra (F3) | -0.0644 | [-0.103, -0.0254] | 5/5 | exact, n = 5, R = 3 lower |
 | exact, n = 5, R = 3 | shadows 10000, n = 5, R = 3 | Volterra (F3) | -0.147 | [-0.191, -0.102] | 5/5 | exact, n = 5, R = 3 lower |
-| per-observable 100, n = 5, R = 3 | per-observable 1000, n = 5, R = 3 | One-step forecast (F1 as written) | 0.014 | [0.00339, 0.0246] | 0/5 | per-observable 1000, n = 5, R = 3 lower |
-| per-observable 1000, n = 5, R = 3 | per-observable 10000, n = 5, R = 3 | One-step forecast (F1 as written) | 5.32e-04 | [-0.00397, 0.00503] | 3/5 | no clear separation |
-| shadows 100, n = 5, R = 3 | shadows 1000, n = 5, R = 3 | One-step forecast (F1 as written) | 0.0168 | [0.00272, 0.0309] | 0/5 | shadows 1000, n = 5, R = 3 lower |
-| shadows 1000, n = 5, R = 3 | shadows 10000, n = 5, R = 3 | One-step forecast (F1 as written) | 0.0133 | [9.00e-04, 0.0257] | 1/5 | shadows 10000, n = 5, R = 3 lower |
-| per-observable 100, n = 5, R = 3 | shadows 100, n = 5, R = 3 | One-step forecast (F1 as written) | -0.0173 | [-0.0336, -9.44e-04] | 5/5 | per-observable 100, n = 5, R = 3 lower |
-| per-observable 1000, n = 5, R = 3 | shadows 1000, n = 5, R = 3 | One-step forecast (F1 as written) | -0.0145 | [-0.0281, -8.33e-04] | 4/5 | per-observable 1000, n = 5, R = 3 lower |
-| per-observable 10000, n = 5, R = 3 | shadows 10000, n = 5, R = 3 | One-step forecast (F1 as written) | -0.00168 | [-0.00681, 0.00346] | 3/5 | no clear separation |
-| exact, n = 5, R = 3 | per-observable 10000, n = 5, R = 3 | One-step forecast (F1 as written) | 0.00445 | [-1.51e-04, 0.00906] | 1/5 | per-observable 10000, n = 5, R = 3 lower (interval contains 0) |
-| exact, n = 5, R = 3 | shadows 10000, n = 5, R = 3 | One-step forecast (F1 as written) | 0.00278 | [-0.00616, 0.0117] | 1/5 | no clear separation |
+| per-observable 100, n = 5, R = 3 | per-observable 1000, n = 5, R = 3 | Single-step forecast (F1 as written) | 0.014 | [0.00339, 0.0246] | 0/5 | per-observable 1000, n = 5, R = 3 lower |
+| per-observable 1000, n = 5, R = 3 | per-observable 10000, n = 5, R = 3 | Single-step forecast (F1 as written) | 5.32e-04 | [-0.00397, 0.00503] | 3/5 | no clear separation |
+| shadows 100, n = 5, R = 3 | shadows 1000, n = 5, R = 3 | Single-step forecast (F1 as written) | 0.0168 | [0.00272, 0.0309] | 0/5 | shadows 1000, n = 5, R = 3 lower |
+| shadows 1000, n = 5, R = 3 | shadows 10000, n = 5, R = 3 | Single-step forecast (F1 as written) | 0.0133 | [9.00e-04, 0.0257] | 1/5 | shadows 10000, n = 5, R = 3 lower |
+| per-observable 100, n = 5, R = 3 | shadows 100, n = 5, R = 3 | Single-step forecast (F1 as written) | -0.0173 | [-0.0336, -9.44e-04] | 5/5 | per-observable 100, n = 5, R = 3 lower |
+| per-observable 1000, n = 5, R = 3 | shadows 1000, n = 5, R = 3 | Single-step forecast (F1 as written) | -0.0145 | [-0.0281, -8.33e-04] | 4/5 | per-observable 1000, n = 5, R = 3 lower |
+| per-observable 10000, n = 5, R = 3 | shadows 10000, n = 5, R = 3 | Single-step forecast (F1 as written) | -0.00168 | [-0.00681, 0.00346] | 3/5 | no clear separation |
+| exact, n = 5, R = 3 | per-observable 10000, n = 5, R = 3 | Single-step forecast (F1 as written) | 0.00445 | [-1.51e-04, 0.00906] | 1/5 | per-observable 10000, n = 5, R = 3 lower (interval contains 0) |
+| exact, n = 5, R = 3 | shadows 10000, n = 5, R = 3 | Single-step forecast (F1 as written) | 0.00278 | [-0.00616, 0.0117] | 1/5 | no clear separation |
 
 ## Number of qubits n and of sub-reservoirs R
 
 Extension: paper settings with n or R changed, 5 seeds. Per-observable noise, 1000 shots; the n = 5, R = 3 row comes from the main comparison.
 
-| Setting | Current-point readout (F1 as run) | Exponential fading (F2) | Volterra (F3) | One-step forecast (F1 as written) |
+| Setting | Current-point readout (F1 as run) | Exponential fading (F2) | Volterra (F3) | Single-step forecast (F1 as written) |
 |---|---:|---:|---:|---:|
 | per-observable 1000, n = 3, R = 3 | 0.0431 ± 0.038 | 0.498 ± 0.13 | 1.09 ± 0.28 | 0.396 ± 0.026 |
 | per-observable 1000, n = 5, R = 3 | 0.00834 ± 0.0062 | 0.464 ± 0.14 | 0.751 ± 0.18 | 0.379 ± 0.026 |
@@ -282,7 +282,7 @@ Extension: paper settings with n or R changed, 5 seeds. Per-observable noise, 10
 
 Seeds where the test MSE falls at each step (n: 3 → 5 → 7; R: 1 → 3 → 6):
 
-| Axis | Current-point readout (F1 as run) | Exponential fading (F2) | Volterra (F3) | One-step forecast (F1 as written) |
+| Axis | Current-point readout (F1 as run) | Exponential fading (F2) | Volterra (F3) | Single-step forecast (F1 as written) |
 |---|---:|---:|---:|---:|
 | Qubits n | 4/5 | 3/5 | 4/5 | 3/5 |
 | Sub-reservoirs R | 4/5 | 5/5 | 4/5 | 1/5 |
@@ -303,10 +303,10 @@ Paired comparisons after the sweep (difference = A − B):
 | per-observable 1000, n = 5, R = 3 | per-observable 1000, n = 7, R = 3 | Volterra (F3) | -0.0282 | [-0.377, 0.321] | 1/5 | no clear separation |
 | per-observable 1000, n = 5, R = 1 | per-observable 1000, n = 5, R = 3 | Volterra (F3) | 0.337 | [0.107, 0.566] | 0/5 | per-observable 1000, n = 5, R = 3 lower |
 | per-observable 1000, n = 5, R = 3 | per-observable 1000, n = 5, R = 6 | Volterra (F3) | 0.0784 | [-0.0395, 0.196] | 1/5 | no clear separation |
-| per-observable 1000, n = 3, R = 3 | per-observable 1000, n = 5, R = 3 | One-step forecast (F1 as written) | 0.0168 | [5.20e-04, 0.0332] | 0/5 | per-observable 1000, n = 5, R = 3 lower |
-| per-observable 1000, n = 5, R = 3 | per-observable 1000, n = 7, R = 3 | One-step forecast (F1 as written) | -2.43e-04 | [-0.00617, 0.00568] | 2/5 | no clear separation |
-| per-observable 1000, n = 5, R = 1 | per-observable 1000, n = 5, R = 3 | One-step forecast (F1 as written) | 0.0128 | [0.00608, 0.0195] | 0/5 | per-observable 1000, n = 5, R = 3 lower |
-| per-observable 1000, n = 5, R = 3 | per-observable 1000, n = 5, R = 6 | One-step forecast (F1 as written) | -6.36e-04 | [-0.0034, 0.00213] | 4/5 | no clear separation |
+| per-observable 1000, n = 3, R = 3 | per-observable 1000, n = 5, R = 3 | Single-step forecast (F1 as written) | 0.0168 | [5.20e-04, 0.0332] | 0/5 | per-observable 1000, n = 5, R = 3 lower |
+| per-observable 1000, n = 5, R = 3 | per-observable 1000, n = 7, R = 3 | Single-step forecast (F1 as written) | -2.43e-04 | [-0.00617, 0.00568] | 2/5 | no clear separation |
+| per-observable 1000, n = 5, R = 1 | per-observable 1000, n = 5, R = 3 | Single-step forecast (F1 as written) | 0.0128 | [0.00608, 0.0195] | 0/5 | per-observable 1000, n = 5, R = 3 lower |
+| per-observable 1000, n = 5, R = 3 | per-observable 1000, n = 5, R = 6 | Single-step forecast (F1 as written) | -6.36e-04 | [-0.0034, 0.00213] | 4/5 | no clear separation |
 
 ## Ridge chosen on validation data versus on the test set
 
@@ -317,7 +317,7 @@ Every run of the three sweeps. Relative increase = test MSE with the validation-
 | QuaRK | 220 | 99 | 0.00122 | 0.0169 |
 | all models | 300 | 146 | 0.00792 | 0.326 |
 
-## One-step forecast (F1 as written) and its noise floor
+## Single-step forecast (F1 as written) and its noise floor
 
 Paper-accurate settings, 5 seeds (12345 is the authors' data; 1-4 are regenerated with their procedure). Every model except QuaRK is our addition. The oracle predicts the conditional mean of the next label from the true past of the process (`utils/forecast_noise_floor.py`); no model that sees only the past can beat it in expectation. Oracle test MSE 0.343 ± 0.013 (normalized 0.804 ± 0.1); expected floor 0.348 ± 0.01.
 

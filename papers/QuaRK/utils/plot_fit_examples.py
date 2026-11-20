@@ -18,7 +18,6 @@ import numpy as np
 from matplotlib.lines import Line2D
 from plot_style import (
     TASK_COLORS,
-    TASK_LABELS,
     TEXT,
     TEXT_SECONDARY,
     apply_style,
@@ -26,6 +25,7 @@ from plot_style import (
     ordered_tasks,
     save,
 )
+from report_statistics import TASK_LABELS
 
 
 def main() -> int:

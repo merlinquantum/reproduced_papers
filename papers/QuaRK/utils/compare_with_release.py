@@ -26,7 +26,8 @@ import json
 from pathlib import Path
 
 import numpy as np
-from plot_style import PAPER_TASKS, RESULTS_DIR, load_release, load_run
+from plot_style import RESULTS_DIR, load_release, load_run
+from report_statistics import PAPER_TASKS
 
 ROUNDING_LEVEL = 1e-10
 

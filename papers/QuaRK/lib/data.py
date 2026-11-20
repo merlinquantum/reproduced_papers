@@ -23,7 +23,7 @@ import numpy as np
 from runtime_lib.data_paths import resolve_data_root
 
 # Labels in the authors' order, followed by our variant of F1 as the paper text
-# describes it (u . X_{t+1}, a genuine one-step forecast).
+# describes it (u . X_{t+1}, a genuine single-step forecast).
 TASK_NAMES = (
     "current_point_readout",
     "exp_fading",
@@ -149,7 +149,7 @@ def generate_dataset(data_cfg: dict, seed: int) -> WindowsDataset:
     for t in range(length):
         latent[t] = varma_step(ar, ma, latent, innovations, t)
 
-    # One extra step for the one-step-forecast label of the last window. Its
+    # One extra step for the single-step-forecast label of the last window. Its
     # innovation comes from a separate stream so the authors' draws stay unchanged.
     extra_innovation = np.random.default_rng([seed, 1]).normal(
         0.0, float(varma["innovation_scale"]), size=(1, input_dim)

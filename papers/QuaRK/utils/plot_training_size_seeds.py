@@ -21,9 +21,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 from plot_style import (
-    PAPER_TASKS,
     TASK_COLORS,
-    TASK_LABELS,
     TEXT_SECONDARY,
     apply_style,
     load_sweep,
@@ -31,6 +29,7 @@ from plot_style import (
     selected,
     spread_log_labels,
 )
+from report_statistics import PAPER_TASKS, TASK_LABELS
 
 
 def main() -> int:

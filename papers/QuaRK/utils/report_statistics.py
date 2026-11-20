@@ -12,8 +12,8 @@ Writes ``results/statistics.json`` (full precision) and ``results/statistics.md`
 
 Rules
 -----
-* Metric: test MSE at the ridge selected on validation data (frozen in the fair-baseline
-  plan). The normalized test MSE divides it by the variance of the test labels.
+* Metric: test MSE at the ridge selected on validation data (fixed before the runs).
+  The normalized test MSE divides it by the variance of the test labels.
 * Aggregation: mean and sample standard deviation over the seeds, with a 95 % Student-t
   interval of the mean (descriptive, not part of the frozen rule).
 * Paired comparison of A with B, per task, over the shared seeds:
@@ -22,7 +22,7 @@ Rules
   separation". Reported next to it: the number of seeds where A has the lower error and
   the 95 % Student-t interval of the mean delta. A row is flagged when that interval
   contains 0 although the 2 SE rule separates the models.
-* Comparisons outside the frozen plan (neighbouring shot budgets, n and R) use the same
+* Comparisons not fixed before the runs (neighbouring shot budgets, n and R) use the same
   rule and are marked "after the sweep".
 * QuaRK runs are identified by their recorded settings (estimator, shots, n, R), not by
   candidate names.
@@ -47,7 +47,7 @@ TASK_LABELS = {
     "current_point_readout": "Current-point readout (F1 as run)",
     "exp_fading": "Exponential fading (F2)",
     "volterra": "Volterra (F3)",
-    "one_step_forecast": "One-step forecast (F1 as written)",
+    "one_step_forecast": "Single-step forecast (F1 as written)",
 }
 MAIN_MODELS = {
     "quark": "QuaRK (paper settings)",
@@ -904,7 +904,7 @@ def to_markdown(report: dict) -> str:
     f = report["forecast"]
     out += [
         "",
-        "## One-step forecast (F1 as written) and its noise floor",
+        "## Single-step forecast (F1 as written) and its noise floor",
         "",
         MAIN_SCOPE
         + " The oracle predicts the conditional mean of the next label from the "

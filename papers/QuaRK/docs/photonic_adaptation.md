@@ -1,6 +1,6 @@
 # Photonic Adaptation of QuaRK
 
-Status: full MerLin implementation, simulated. It is our adaptation; the paper has none. Results: message 5 of the README; every table, including the setup of each run: [`results/photonic_comparison.md`](../results/photonic_comparison.md).
+Status: full MerLin implementation, simulated. It is our adaptation; the paper has none. Result: message 4 of the README, "A photonic version of the reservoir matches QuaRK, with or without photon interference"; every table, including the setup of each run: [`results/photonic_comparison.md`](../results/photonic_comparison.md).
 
 ## What it keeps
 

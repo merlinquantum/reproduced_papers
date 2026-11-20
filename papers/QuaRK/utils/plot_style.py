@@ -11,6 +11,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
+from report_statistics import TASKS  # noqa: E402
 
 PROJECT_DIR = Path(__file__).resolve().parents[1]
 RESULTS_DIR = PROJECT_DIR / "results"
@@ -27,19 +28,19 @@ TASK_COLORS = {
     "volterra": "#1baf7a",
     "one_step_forecast": "#eda100",
 }
-TASK_LABELS = {
-    "current_point_readout": "Current-point readout (F1 as run)",
-    "exp_fading": "Exponential fading (F2)",
-    "volterra": "Volterra (F3)",
-    "one_step_forecast": "One-step forecast (F1 as written)",
+
+
+# Short panel titles for the paper's figures, with the paper's task labels.
+PAPER_FIGURE_TITLES = {
+    "current_point_readout": "F1: current-point readout",
+    "exp_fading": "F2: exponential fading",
+    "volterra": "F3: Volterra",
 }
-PAPER_TASKS = ("current_point_readout", "exp_fading", "volterra")
-TASK_ORDER = (*PAPER_TASKS, "one_step_forecast")
 
 
 def ordered_tasks(metrics: dict) -> list[str]:
     """Tasks of a run in the fixed display order (paper tasks first)."""
-    return [task for task in TASK_ORDER if task in metrics["tasks"]]
+    return [task for task in TASKS if task in metrics["tasks"]]
 
 
 def apply_style() -> None:

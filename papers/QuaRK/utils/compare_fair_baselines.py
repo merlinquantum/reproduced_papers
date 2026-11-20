@@ -12,8 +12,8 @@ Usage (from the repository root)::
 Writes ``results/fair_comparison.json`` (full precision) and
 ``results/fair_comparison.md``. Read-only on the run artifacts.
 
-Rules (frozen in the "Phase 5 Comparison Plan" of the reproduction log)
----------------------------------------------------------------------
+Rules (fixed before the runs)
+-----------------------------
 * Metric: test MSE at the ridge selected on validation data, minimized; normalized
   test MSE divides it by the variance of the test labels.
 * Aggregation: mean and sample standard deviation over the 5 seeds.
@@ -115,24 +115,16 @@ LABELS = {s[0]: s[1] for s in SYSTEMS}
 BASELINES = ("raw_window_kernel", "raw_window_linear", "esn_default", "esn_tuned")
 # Paired comparisons of the plan: (A, B, origin).
 PAIRS = (
+    *[(q, b, "fixed before the runs") for q in ("quark",) for b in BASELINES],
+    *[(q, b, "added after the runs") for q in ("quark_exact",) for b in BASELINES],
     *[
-        (q, b, "frozen in the Fair Baseline Plan")
-        for q in ("quark",)
-        for b in BASELINES
-    ],
-    *[
-        (q, b, "added after the main sweep (phase 03)")
-        for q in ("quark_exact",)
-        for b in BASELINES
-    ],
-    *[
-        (p, b, "Phase 4 plan")
+        (p, b, "fixed before the photonic runs")
         for p in ("quark_merlin", "quark_exact_merlin", "quark_distinguishable_merlin")
         for b in BASELINES
     ],
-    ("quark_exact_merlin", "quark_exact", "Phase 4 plan"),
-    ("quark_merlin", "quark_shadows", "Phase 4 plan"),
-    ("quark_merlin", "quark", "Phase 4 plan"),
+    ("quark_exact_merlin", "quark_exact", "fixed before the photonic runs"),
+    ("quark_merlin", "quark_shadows", "fixed before the photonic runs"),
+    ("quark_merlin", "quark", "fixed before the photonic runs"),
 )
 EXTENSIONS = (
     (
@@ -532,7 +524,7 @@ def to_markdown(report: dict) -> str:
         "",
         "## Wall-clock",
         "",
-        "One machine (Apple M5, 10 cores, local CPU, recorded in the reproduction log), "
+        "One machine (Apple M5, 10 cores, local CPU), "
         "one run at a time. Workload per run: 10,000 windows, features once, then for "
         "each of the 4 tasks the Matérn tuning (4 ν × up to 80 ξ evaluations), the "
         "26-ridge sweep and the 10-size training sweep. Quantum features are simulated; "

@@ -1,4 +1,4 @@
-"""Lowest test MSE any model can reach on the one-step forecast (F1 as written).
+"""Lowest test MSE any model can reach on the single-step forecast (F1 as written).
 
 The label is ``u . tanh(Z_{t+1})`` with ``Z_{t+1} = mu_{t+1} + eps_{t+1}``: ``mu_{t+1}`` is
 fixed by the past of the VARMA and the innovation ``eps_{t+1} ~ N(0, sigma^2 I)`` is

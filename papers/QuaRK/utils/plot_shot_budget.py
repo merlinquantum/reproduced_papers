@@ -28,8 +28,6 @@ import numpy as np
 from matplotlib.lines import Line2D
 from matplotlib.ticker import NullFormatter
 from plot_style import (
-    PAPER_TASKS,
-    TASK_LABELS,
     TEXT_SECONDARY,
     apply_style,
     load_sweep,
@@ -37,6 +35,7 @@ from plot_style import (
     save,
     selected,
 )
+from report_statistics import PAPER_TASKS, TASK_LABELS
 
 BUDGETS = (100, 1000, 10000)
 PAPER_BUDGET = 1000

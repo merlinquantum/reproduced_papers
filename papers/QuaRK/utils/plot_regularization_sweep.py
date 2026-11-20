@@ -1,4 +1,6 @@
-"""Fig. 3: training MSE against the ridge regularization, one line per task.
+"""Fig. 3: training MSE against the ridge strength, one line per paper task.
+
+The release overlay marks the authors' values.
 
 Usage (from the repository root)::
 
@@ -14,16 +16,15 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 from plot_style import (
-    PAPER_TASKS,
+    PAPER_FIGURE_TITLES,
     TASK_COLORS,
-    TASK_LABELS,
     TEXT_SECONDARY,
     apply_style,
     load_release,
     load_run,
-    ordered_tasks,
     save,
 )
+from report_statistics import PAPER_TASKS
 
 
 def main() -> int:
@@ -43,12 +44,10 @@ def main() -> int:
 
     fig, ax = plt.subplots(figsize=(7.5, 4.6))
     ends = {}
-    for task in ordered_tasks(metrics):
+    for task in PAPER_TASKS:
         values = sweep[f"{task}__mse_train"]
         color = TASK_COLORS[task]
-        ax.plot(
-            grid, values, color=color, marker="o", markersize=4, label=TASK_LABELS[task]
-        )
+        ax.plot(grid, values, color=color, marker="o", markersize=4)
         ends[task] = float(values[-1])
         if release is not None and task in PAPER_TASKS:
             ax.plot(
@@ -59,6 +58,7 @@ def main() -> int:
                 markersize=8,
                 color=TEXT_SECONDARY,
             )
+    ax.plot([], [], color=TEXT_SECONDARY, marker="o", markersize=4, label="Ours")
     if release is not None:
         ax.plot(
             [],
@@ -76,7 +76,7 @@ def main() -> int:
         label_y[task], previous = y, y
     for task, y in label_y.items():
         ax.annotate(
-            TASK_LABELS[task].split(" (")[0],
+            PAPER_FIGURE_TITLES[task],
             (grid[-1], ends[task]),
             xytext=(grid[-1] * 2.5, y),
             textcoords="data",
@@ -85,10 +85,10 @@ def main() -> int:
             color=TEXT_SECONDARY,
         )
     ax.set_xscale("log")
-    ax.set_xlabel("Ridge regularization λ_reg (Gram diagonal + λ_reg)")
+    ax.set_xlabel("Ridge strength (log scale)")
     ax.set_ylabel("Training MSE")
     ax.set_title(
-        f"Training MSE vs regularization (paper Fig. 3) · {args.label}",
+        f"Training MSE vs ridge strength (paper Fig. 3) · {args.label}",
         fontsize=10,
         loc="left",
     )
@@ -98,8 +98,8 @@ def main() -> int:
     saved = save(fig, args.run_dir, "fig3_regularization_sweep")
     print("\n".join(str(p) for p in saved))
     print(
-        "max training MSE at the smallest λ_reg:",
-        max(float(np.asarray(sweep[f"{t}__mse_train"])[0]) for t in metrics["tasks"]),
+        "max training MSE at the smallest ridge strength:",
+        max(float(np.asarray(sweep[f"{t}__mse_train"])[0]) for t in PAPER_TASKS),
     )
     return 0
 
