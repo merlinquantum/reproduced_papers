@@ -1,0 +1,13 @@
+sweep_id,learning_rate,seed,final_exact_loss,run_id,metrics_path,selected,source
+lrsel2_fig7_m8,0.01,100,-0.030495977413294614,run_20261019-155533,lr_0.01/run_20261019-155533/metrics.json,False,outdir/sweeps/lrsel2_fig7_m8/summary.csv
+lrsel2_fig7_m8,0.03,100,-0.03599112819229247,run_20261019-155541,lr_0.03/run_20261019-155541/metrics.json,False,outdir/sweeps/lrsel2_fig7_m8/summary.csv
+lrsel2_fig7_m8,0.1,100,-1.6624517027212187,run_20261019-155550,lr_0.1/run_20261019-155550/metrics.json,True,outdir/sweeps/lrsel2_fig7_m8/summary.csv
+lrsel2_fig7_m8,0.3,100,-1.5684268870925755,run_20261019-155558,lr_0.3/run_20261019-155558/metrics.json,False,outdir/sweeps/lrsel2_fig7_m8/summary.csv
+lrsel2_fig7_m12,0.01,100,0.06281967611960262,run_20261019-155525,lr_0.01/run_20261019-155525/metrics.json,False,outdir/sweeps/lrsel2_fig7_m12/summary.csv
+lrsel2_fig7_m12,0.03,100,0.04698674107174364,run_20261019-155642,lr_0.03/run_20261019-155642/metrics.json,False,outdir/sweeps/lrsel2_fig7_m12/summary.csv
+lrsel2_fig7_m12,0.1,100,0.033869056709732316,run_20261019-155829,lr_0.1/run_20261019-155829/metrics.json,False,outdir/sweeps/lrsel2_fig7_m12/summary.csv
+lrsel2_fig7_m12,0.3,100,-0.11883238727797273,run_20261019-155922,lr_0.3/run_20261019-155922/metrics.json,True,outdir/sweeps/lrsel2_fig7_m12/summary.csv
+lrsel2_fig9_m16,0.01,100,-38.922229171502096,run_20261019-155612,lr_0.01/run_20261019-155612/metrics.json,False,outdir/sweeps/lrsel2_fig9_m16/summary.csv
+lrsel2_fig9_m16,0.03,100,-40.12746306431907,run_20261019-155645,lr_0.03/run_20261019-155645/metrics.json,True,outdir/sweeps/lrsel2_fig9_m16/summary.csv
+lrsel2_fig9_m16,0.1,100,-12.062961080607629,run_20261019-155728,lr_0.1/run_20261019-155728/metrics.json,False,outdir/sweeps/lrsel2_fig9_m16/summary.csv
+lrsel2_fig9_m16,0.3,100,4.769879668789443,run_20261019-155757,lr_0.3/run_20261019-155757/metrics.json,False,outdir/sweeps/lrsel2_fig9_m16/summary.csv

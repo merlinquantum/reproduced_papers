@@ -1,0 +1,42 @@
+{
+  "experiment": "training",
+  "seed": 0,
+  "methods": [
+    "gpsr_shots",
+    "gpsr_exact",
+    "spsa_equal_shots"
+  ],
+  "seeds": [
+    0,
+    1
+  ],
+  "learning_rate_grid": [
+    0.01,
+    0.1
+  ],
+  "selection_seed": 100,
+  "spsa_perturbation": 0.1,
+  "shot_interpretation": "per_shift",
+  "max_fock_dimension": 60000,
+  "selection": {
+    "name": "learning_rate by final exact loss of gpsr_exact on selection_seed",
+    "direction": "minimize",
+    "split": "selection_seed=100",
+    "checkpoint": "last_iteration"
+  },
+  "description": "Smoke run of the training path (E8 code, not a result): M=4 Clements mesh, 3 iterations, 2 seeds, 200 shots per shifted loss, two-point learning-rate grid. Seconds.",
+  "modes": 4,
+  "input": "alternating",
+  "circuit": {
+    "type": "clements"
+  },
+  "observable": {
+    "type": "network",
+    "hidden_layers": 3,
+    "bias": true,
+    "normalise": "uniform_std"
+  },
+  "gpsr_order": 8,
+  "shots": 200,
+  "iterations": 3
+}

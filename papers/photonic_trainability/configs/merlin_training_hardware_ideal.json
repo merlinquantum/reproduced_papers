@@ -1,0 +1,43 @@
+{
+  "experiment": "training_hardware",
+  "seed": 0,
+  "methods": [
+    "gpsr_shots",
+    "gpsr_exact"
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "shot_interpretation": "per_shift",
+  "max_fock_dimension": 60000,
+  "selection": {
+    "name": "none (learning rate fixed at 0.1, the Phase 03 M=8 selection)",
+    "direction": "minimize",
+    "split": "n/a",
+    "checkpoint": "n/a"
+  },
+  "description": "Phase 04 MerLin adaptation (reduced-scope validation): E8-style GPSR training at M=6, n=3 on a random quadratic NN observable (3 squaring layers, normalised), R=3, 10,000 shots per shifted loss, 60 iterations, seeds 0-2, lr 0.1 fixed; hardware condition ideal.",
+  "modes": 6,
+  "input": "alternating",
+  "circuit": {
+    "type": "clements"
+  },
+  "observable": {
+    "type": "network",
+    "hidden_layers": 3,
+    "bias": true,
+    "normalise": "uniform_std"
+  },
+  "gpsr_order": 3,
+  "shots": 10000,
+  "iterations": 60,
+  "learning_rate": 0.1,
+  "hardware": {
+    "name": "ideal",
+    "noise": {},
+    "detector": "pnr",
+    "postselect": false
+  }
+}

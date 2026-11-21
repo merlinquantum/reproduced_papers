@@ -1,0 +1,39 @@
+{
+  "experiment": "training",
+  "seed": 0,
+  "methods": [
+    "gpsr_shots",
+    "gpsr_exact",
+    "spsa_equal_shots"
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "spsa_perturbation": 0.1,
+  "shot_interpretation": "per_gradient_component",
+  "max_fock_dimension": 60000,
+  "selection": {
+    "name": "none (learning rate fixed from the earlier selection)",
+    "direction": "minimize",
+    "split": "n/a",
+    "checkpoint": "n/a"
+  },
+  "description": "E8 ambiguity variant: as fig7_nn_training_reduced.json but reading '10,000 samples per gradient estimate' as the total per gradient component (625 shots per shifted loss with R=8). Learning rate fixed at 0.1, the rate selected for M=8 (results/lr_selection_summary.csv); no new selection.",
+  "modes": 8,
+  "input": "alternating",
+  "circuit": {
+    "type": "clements"
+  },
+  "observable": {
+    "type": "network",
+    "hidden_layers": 3,
+    "bias": true,
+    "normalise": "uniform_std"
+  },
+  "gpsr_order": 8,
+  "shots": 10000,
+  "iterations": 100,
+  "learning_rate": 0.1
+}

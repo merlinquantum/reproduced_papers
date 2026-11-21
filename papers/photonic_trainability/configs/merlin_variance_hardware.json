@@ -1,0 +1,106 @@
+{
+  "description": "Phase 04 MerLin adaptation (reduced-scope validation): Var_samp, Var_circ and ratio of photon-number observables under ideal PNR, partial distinguishability, loss (post-selected or not) and threshold detection, for Haar-random Clements meshes in MerLin (FOCK space), M=4,6,8, input |1,0,1,0,...>. Plan: LOG.md Phase 4 Adaptation Plan.",
+  "experiment": "merlin_variance",
+  "seed": 41,
+  "observable_seed": 3,
+  "input": "alternating",
+  "modes": [
+    4,
+    6,
+    8
+  ],
+  "observables": [
+    {
+      "label": "n0^2",
+      "observable": {
+        "type": "monomial",
+        "exponents_by_mode": {
+          "0": 2
+        }
+      }
+    },
+    {
+      "label": "n0 n1",
+      "observable": {
+        "type": "monomial",
+        "exponents_by_mode": {
+          "0": 1,
+          "1": 1
+        }
+      }
+    },
+    {
+      "label": "random PNP |alpha|<=2",
+      "observable": {
+        "type": "random_polynomial",
+        "min_order": 1,
+        "max_order": 2,
+        "term_count": null,
+        "coefficient_range": [
+          -1,
+          1
+        ]
+      }
+    }
+  ],
+  "conditions": [
+    {
+      "name": "ideal",
+      "noise": {},
+      "detector": "pnr",
+      "postselect": false
+    },
+    {
+      "name": "indistinguishability_0.9",
+      "noise": {
+        "indistinguishability": 0.9
+      },
+      "detector": "pnr",
+      "postselect": false
+    },
+    {
+      "name": "indistinguishability_0.7",
+      "noise": {
+        "indistinguishability": 0.7
+      },
+      "detector": "pnr",
+      "postselect": false
+    },
+    {
+      "name": "loss_0.9_postselected",
+      "noise": {
+        "transmittance": 0.9
+      },
+      "detector": "pnr",
+      "postselect": true
+    },
+    {
+      "name": "loss_0.7_postselected",
+      "noise": {
+        "transmittance": 0.7
+      },
+      "detector": "pnr",
+      "postselect": true
+    },
+    {
+      "name": "loss_0.7_unpostselected",
+      "noise": {
+        "transmittance": 0.7
+      },
+      "detector": "pnr",
+      "postselect": false
+    },
+    {
+      "name": "threshold_detection",
+      "noise": {},
+      "detector": "threshold",
+      "postselect": false
+    }
+  ],
+  "monte_carlo": {
+    "unitaries": 2000,
+    "batch_size": 500,
+    "batches": 20
+  },
+  "z_threshold": 4.0
+}

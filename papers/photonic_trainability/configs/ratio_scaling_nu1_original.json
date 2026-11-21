@@ -1,0 +1,48 @@
+{
+  "description": "E7 / paper Eqs. 14-16 (no figure): variance ratio of a fixed-order PNM versus the order-growing monomial (1,...,1) with K=M/2 and K=M/4, input all_ones. Small M because the growing-support second moment is exponential in K.",
+  "experiment": "variance_scaling",
+  "seed": 0,
+  "input": "all_ones",
+  "modes": [
+    4,
+    6,
+    8,
+    10,
+    12,
+    14,
+    16
+  ],
+  "observables": [
+    {
+      "label": "fixed [1,1]",
+      "exponents": [
+        1,
+        1
+      ]
+    },
+    {
+      "label": "fixed [2,2]",
+      "exponents": [
+        2,
+        2
+      ]
+    },
+    {
+      "label": "(1,...,1), K=M/2",
+      "growing_support": {
+        "fraction": 0.5,
+        "exponent": 1
+      }
+    },
+    {
+      "label": "(1,...,1), K=M/4",
+      "growing_support": {
+        "fraction": 0.25,
+        "exponent": 1
+      }
+    }
+  ],
+  "fit": {
+    "min_points": 5
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "description": "Lightweight default: E2 smoke validation of the exact Haar-moment code against Monte Carlo on two tiny cases (seconds). Full E2: configs/validate_moments.json.",
+  "experiment": "validate_moments",
+  "seed": 42,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "device": "cpu",
+  "logging": {"level": "info"},
+  "z_threshold": 4.0,
+  "monte_carlo": {"unitaries": 400, "batch_size": 100, "batches": 10},
+  "cases": [
+    {
+      "name": "n0^2, M=4, |1,0,1,0>",
+      "modes": 4,
+      "input": "alternating",
+      "observable": {"type": "monomial", "exponents_by_mode": {"0": 2}}
+    },
+    {
+      "name": "projector |0,1,0,1>, M=4, |1,0,1,0>",
+      "modes": 4,
+      "input": "alternating",
+      "observable": {"type": "projector", "pattern": [0, 1, 0, 1]}
+    }
+  ]
+}

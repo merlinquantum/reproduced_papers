@@ -1,0 +1,35 @@
+{
+  "description": "E1 / paper Fig. 10: mu1 of balanced PNMs with K=5 versus weight 5..25 at M=50 (Eq. 9) and the M->inf limit (Eq. 10), nu in {0.5, 1, 2}. Paper-accurate settings.",
+  "experiment": "first_moment",
+  "seed": 0,
+  "modes": 50,
+  "support": 5,
+  "weights": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+  ],
+  "densities": [
+    0.5,
+    1.0,
+    2.0
+  ]
+}

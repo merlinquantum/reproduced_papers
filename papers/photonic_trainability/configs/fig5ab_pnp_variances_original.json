@@ -1,0 +1,27 @@
+{
+  "experiment": "pnp_variances",
+  "seed": 5,
+  "instances": 20,
+  "coefficient_range": [
+    -1,
+    1
+  ],
+  "description": "E5 / paper Fig. 5a,b: 20 random PNPs per M containing every PNM with 1<=|alpha|<=2, c~U[-1,1], M=10..90, input |1,0,1,0,...> (nu=0.5; density not stated in the paper, assumed). Exact Haar variances.",
+  "input": "alternating",
+  "modes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90
+  ],
+  "terms": {
+    "mode": "all",
+    "min_order": 1,
+    "max_order": 2
+  }
+}

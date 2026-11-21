@@ -1,0 +1,53 @@
+{
+  "description": "Extension beyond the paper's range (C3): exact Var_circ and Var_samp of fixed-order PNMs for M=250..2000, input nu=1 (|1,...,1>), to test whether the decay is asymptotically a power law (local log-log slope tends to a constant) or exponential. Not a paper figure.",
+  "experiment": "variance_scaling",
+  "seed": 0,
+  "input": "all_ones",
+  "modes": [
+    250,
+    350,
+    500,
+    700,
+    1000,
+    1400,
+    2000
+  ],
+  "observables": [
+    {
+      "label": "alpha=2",
+      "exponents": [
+        2
+      ]
+    },
+    {
+      "label": "[0,0,6]",
+      "exponents": [
+        6
+      ]
+    },
+    {
+      "label": "alpha=10",
+      "exponents": [
+        10
+      ]
+    },
+    {
+      "label": "[0,1,5]",
+      "exponents": [
+        1,
+        5
+      ]
+    },
+    {
+      "label": "[2,2,2]",
+      "exponents": [
+        2,
+        2,
+        2
+      ]
+    }
+  ],
+  "fit": {
+    "min_points": 5
+  }
+}

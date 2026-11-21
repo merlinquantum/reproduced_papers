@@ -1,0 +1,11 @@
+# Dependencies for the photonic_trainability reproduction.
+# Versions observed in the development environment: merlinquantum 0.4.1,
+# perceval-quandela 1.2.4, torch 2.14.1, numpy 2.5.3, sympy 1.14.0,
+# matplotlib 3.11.1, pytest 9.1.1, Python 3.13.
+merlinquantum
+perceval-quandela
+torch
+numpy
+sympy
+matplotlib
+pytest

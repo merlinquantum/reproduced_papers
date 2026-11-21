@@ -1,0 +1,61 @@
+{
+  "experiment": "training",
+  "seed": 0,
+  "methods": [
+    "gpsr_shots",
+    "gpsr_exact",
+    "spsa_equal_shots"
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "spsa_perturbation": 0.1,
+  "shot_interpretation": "per_gradient_component",
+  "max_fock_dimension": 60000,
+  "selection": {
+    "name": "none (learning rate fixed from the earlier selection)",
+    "direction": "minimize",
+    "split": "n/a",
+    "checkpoint": "n/a"
+  },
+  "description": "E9 ambiguity variant: as fig9_loop_training_substitute.json but reading '1000 samples per gradient estimate' as the total per gradient component (250 shots per shifted loss with R=2). Learning rate fixed at 0.03, the rate selected for the substitute (results/lr_selection_summary.csv); no new selection.",
+  "modes": 16,
+  "input": [
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "circuit": {
+    "type": "loop",
+    "loops": 2
+  },
+  "observable": {
+    "type": "random_pnp",
+    "terms": 100,
+    "min_order": 1,
+    "max_order": 2,
+    "coefficient_range": [
+      -5,
+      5
+    ]
+  },
+  "gpsr_order": 2,
+  "shots": 1000,
+  "iterations": 90,
+  "learning_rate": 0.03
+}

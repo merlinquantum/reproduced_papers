@@ -1,0 +1,84 @@
+{
+  "description": "E3 / paper Fig. 3c,d: as Fig. 3a,b with input |1,...,1> (nu=1, inferred input), M=10..200.",
+  "experiment": "variance_scaling",
+  "seed": 0,
+  "input": "all_ones",
+  "modes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100,
+    110,
+    120,
+    130,
+    140,
+    150,
+    160,
+    170,
+    180,
+    190,
+    200
+  ],
+  "observables": [
+    {
+      "label": "[0,0,6]",
+      "exponents": [
+        6
+      ]
+    },
+    {
+      "label": "[0,1,5]",
+      "exponents": [
+        1,
+        5
+      ]
+    },
+    {
+      "label": "[0,2,4]",
+      "exponents": [
+        2,
+        4
+      ]
+    },
+    {
+      "label": "[0,3,3]",
+      "exponents": [
+        3,
+        3
+      ]
+    },
+    {
+      "label": "[1,1,4]",
+      "exponents": [
+        1,
+        1,
+        4
+      ]
+    },
+    {
+      "label": "[1,2,3]",
+      "exponents": [
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "label": "[2,2,2]",
+      "exponents": [
+        2,
+        2,
+        2
+      ]
+    }
+  ],
+  "fit": {
+    "min_points": 5
+  }
+}

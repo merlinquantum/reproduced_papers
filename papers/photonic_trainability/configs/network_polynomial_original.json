@@ -1,0 +1,44 @@
+{
+  "description": "E12 / paper Eq. 20, Fig. 6: exact symbolic expansion of random quadratic networks (degree 2^L, every monomial up to that order with biases) and forward-pass cost versus expanded term count.",
+  "experiment": "network_polynomial",
+  "seed": 13,
+  "test_patterns": 50,
+  "expansion_cases": [
+    {
+      "modes": 3,
+      "hidden_layers": 1,
+      "bias": true
+    },
+    {
+      "modes": 3,
+      "hidden_layers": 2,
+      "bias": true
+    },
+    {
+      "modes": 3,
+      "hidden_layers": 3,
+      "bias": true
+    },
+    {
+      "modes": 4,
+      "hidden_layers": 2,
+      "bias": true
+    },
+    {
+      "modes": 4,
+      "hidden_layers": 2,
+      "bias": false
+    }
+  ],
+  "cost_modes": [
+    10,
+    20,
+    50,
+    100
+  ],
+  "cost_layers": [
+    1,
+    2,
+    3
+  ]
+}
