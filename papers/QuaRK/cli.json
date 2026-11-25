@@ -1,0 +1,82 @@
+{
+  "description": "QuaRK reproduction runner (one model, one seed, all tasks)",
+  "arguments": [
+    {
+      "flags": [
+        "--num-windows"
+      ],
+      "help": "Override the number of windows (paper: 10000)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "data.num_windows"
+      }
+    },
+    {
+      "flags": [
+        "--estimator"
+      ],
+      "help": "QuaRK feature estimator",
+      "type": "str",
+      "choices": [
+        "per_observable_shots",
+        "random_pauli_shadows",
+        "exact"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.quark.estimator"
+      }
+    },
+    {
+      "flags": [
+        "--shots"
+      ],
+      "help": "Shots per circuit for the QuaRK estimators",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.quark.shots"
+      }
+    },
+    {
+      "flags": [
+        "--num-qubits"
+      ],
+      "help": "Qubits per QuaRK sub-reservoir (paper: 5)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.quark.num_qubits"
+      }
+    },
+    {
+      "flags": [
+        "--num-reservoirs"
+      ],
+      "help": "Number of QuaRK sub-reservoirs (paper: 3)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.quark.num_reservoirs"
+      }
+    },
+    {
+      "flags": [
+        "--merlin-shots"
+      ],
+      "help": "Shots per window and sub-reservoir for the photonic MerLin adaptation",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.merlin.shots"
+      }
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "sweep_id": "main_comparison",
+  "candidate": "quark",
+  "quadrature_nodes": 80,
+  "runs": [
+    {
+      "seed": 12345,
+      "num_test": 2000,
+      "label_variance_test": 0.4780700898832758,
+      "expected_floor_mse__80_nodes": 0.34390201078357463,
+      "oracle_test_mse__80_nodes": 0.32827795544742194,
+      "expected_floor_mse__160_nodes": 0.3439020107834964,
+      "oracle_test_mse__160_nodes": 0.3282779554475207,
+      "expected_floor_mse": 0.34390201078357463,
+      "oracle_test_mse": 0.32827795544742194,
+      "expected_floor_normalized": 0.7193547934938593,
+      "oracle_test_mse_normalized": 0.6866732774007538
+    },
+    {
+      "seed": 1,
+      "num_test": 2000,
+      "label_variance_test": 0.362650646428354,
+      "expected_floor_mse__80_nodes": 0.3453148257107654,
+      "oracle_test_mse__80_nodes": 0.34575394441279245,
+      "expected_floor_mse__160_nodes": 0.34531482571150673,
+      "oracle_test_mse__160_nodes": 0.3457539444129644,
+      "expected_floor_mse": 0.3453148257107654,
+      "oracle_test_mse": 0.34575394441279245,
+      "expected_floor_normalized": 0.9521969121292784,
+      "oracle_test_mse_normalized": 0.9534077708616475
+    },
+    {
+      "seed": 2,
+      "num_test": 2000,
+      "label_variance_test": 0.4229311211797242,
+      "expected_floor_mse__80_nodes": 0.36370457395034167,
+      "oracle_test_mse__80_nodes": 0.3582246603231546,
+      "expected_floor_mse__160_nodes": 0.36370457394840605,
+      "oracle_test_mse__160_nodes": 0.35822466032328854,
+      "expected_floor_mse": 0.36370457395034167,
+      "oracle_test_mse": 0.3582246603231546,
+      "expected_floor_normalized": 0.8599617189102188,
+      "oracle_test_mse_normalized": 0.8470047305195291
+    },
+    {
+      "seed": 3,
+      "num_test": 2000,
+      "label_variance_test": 0.4454343547150003,
+      "expected_floor_mse__80_nodes": 0.33606311814074147,
+      "oracle_test_mse__80_nodes": 0.3313787036569861,
+      "expected_floor_mse__160_nodes": 0.33606311814311934,
+      "oracle_test_mse__160_nodes": 0.3313787036569786,
+      "expected_floor_mse": 0.33606311814074147,
+      "oracle_test_mse": 0.3313787036569861,
+      "expected_floor_normalized": 0.7544616049109252,
+      "oracle_test_mse_normalized": 0.7439450957234993
+    },
+    {
+      "seed": 4,
+      "num_test": 2000,
+      "label_variance_test": 0.44847027986665056,
+      "expected_floor_mse__80_nodes": 0.35000697828729693,
+      "oracle_test_mse__80_nodes": 0.35332482132489507,
+      "expected_floor_mse__160_nodes": 0.3500069782849834,
+      "oracle_test_mse__160_nodes": 0.3533248213250046,
+      "expected_floor_mse": 0.35000697828729693,
+      "oracle_test_mse": 0.35332482132489507,
+      "expected_floor_normalized": 0.7804463171815288,
+      "oracle_test_mse_normalized": 0.7878444507626094
+    }
+  ]
+}

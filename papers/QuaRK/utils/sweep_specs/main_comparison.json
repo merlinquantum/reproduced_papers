@@ -1,0 +1,42 @@
+{
+  "sweep_id": "main_comparison",
+  "reference": "quark",
+  "description": "QuaRK (paper settings) against its measurement variants and the fair classical baselines; 5 seeds.",
+  "seeds": [
+    12345,
+    1,
+    2,
+    3,
+    4
+  ],
+  "candidates": [
+    {
+      "name": "quark",
+      "config": "configs/quark_original.json"
+    },
+    {
+      "name": "quark_exact",
+      "config": "configs/quark_exact_original.json"
+    },
+    {
+      "name": "quark_shadows",
+      "config": "configs/quark_shadows_original.json"
+    },
+    {
+      "name": "raw_window_kernel",
+      "config": "configs/raw_window_kernel_classical.json"
+    },
+    {
+      "name": "raw_window_linear",
+      "config": "configs/raw_window_linear_classical.json"
+    },
+    {
+      "name": "esn_default",
+      "config": "configs/esn_default_classical.json"
+    },
+    {
+      "name": "esn_tuned",
+      "config": "configs/esn_tuned_classical.json"
+    }
+  ]
+}

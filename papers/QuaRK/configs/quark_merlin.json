@@ -1,0 +1,19 @@
+{
+  "description": "Photonic adaptation of QuaRK with MerLin (not the paper): 3 sub-reservoirs of 14 modes and 3 photons, reset mixture with QuaRK's contractions, threshold detection, 1- and 2-mode click marginals estimated from 1000 shared shots, 10,000 windows.",
+  "data": {
+    "num_windows": 10000,
+    "check_release": true
+  },
+  "model": {
+    "kind": "quark_merlin",
+    "merlin": {
+      "num_modes": 14,
+      "num_photons": 3,
+      "num_reservoirs": 3,
+      "locality": 2,
+      "estimator": "click_sampling",
+      "shots": 1000,
+      "distinguishable": false
+    }
+  }
+}

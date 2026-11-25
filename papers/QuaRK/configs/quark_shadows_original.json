@@ -1,0 +1,12 @@
+{
+  "data": {
+    "num_windows": 10000,
+    "check_release": true
+  },
+  "description": "QuaRK with classical shadows as the paper text describes them: 1000 random-Pauli snapshots shared by all observables.",
+  "model": {
+    "quark": {
+      "estimator": "random_pauli_shadows"
+    }
+  }
+}

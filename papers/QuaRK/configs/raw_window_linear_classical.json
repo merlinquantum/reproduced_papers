@@ -1,0 +1,10 @@
+{
+  "data": {
+    "num_windows": 10000,
+    "check_release": true
+  },
+  "description": "Baseline: linear ridge regression on the raw flattened window (75 features).",
+  "model": {
+    "kind": "raw_window_linear"
+  }
+}

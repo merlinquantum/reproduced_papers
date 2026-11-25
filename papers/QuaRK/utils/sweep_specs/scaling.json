@@ -1,0 +1,46 @@
+{
+  "sweep_id": "scaling",
+  "reference": "quark_n3",
+  "description": "One factor at a time around the paper point (n=5, R=3 is in main_comparison); per-observable noise, 1000 shots; 5 seeds.",
+  "seeds": [
+    12345,
+    1,
+    2,
+    3,
+    4
+  ],
+  "candidates": [
+    {
+      "name": "quark_n3",
+      "config": "configs/quark_original.json",
+      "args": [
+        "--num-qubits",
+        "3"
+      ]
+    },
+    {
+      "name": "quark_n7",
+      "config": "configs/quark_original.json",
+      "args": [
+        "--num-qubits",
+        "7"
+      ]
+    },
+    {
+      "name": "quark_r1",
+      "config": "configs/quark_original.json",
+      "args": [
+        "--num-reservoirs",
+        "1"
+      ]
+    },
+    {
+      "name": "quark_r6",
+      "config": "configs/quark_original.json",
+      "args": [
+        "--num-reservoirs",
+        "6"
+      ]
+    }
+  ]
+}

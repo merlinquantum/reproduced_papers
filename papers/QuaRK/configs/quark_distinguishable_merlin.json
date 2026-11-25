@@ -1,0 +1,18 @@
+{
+  "description": "Control for the photonic adaptation: as quark_exact_merlin.json with distinguishable photons, so without multi-photon interference.",
+  "data": {
+    "num_windows": 10000,
+    "check_release": true
+  },
+  "model": {
+    "kind": "quark_merlin",
+    "merlin": {
+      "num_modes": 14,
+      "num_photons": 3,
+      "num_reservoirs": 3,
+      "locality": 2,
+      "estimator": "exact",
+      "distinguishable": true
+    }
+  }
+}

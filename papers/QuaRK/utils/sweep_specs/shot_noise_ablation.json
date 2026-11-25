@@ -1,0 +1,46 @@
+{
+  "sweep_id": "shot_noise_ablation",
+  "reference": "quark_shots_100",
+  "description": "Shot budget 100 and 10000 for the two noisy estimators (1000 shots is in main_comparison); 5 seeds.",
+  "seeds": [
+    12345,
+    1,
+    2,
+    3,
+    4
+  ],
+  "candidates": [
+    {
+      "name": "quark_shots_100",
+      "config": "configs/quark_original.json",
+      "args": [
+        "--shots",
+        "100"
+      ]
+    },
+    {
+      "name": "quark_shots_10000",
+      "config": "configs/quark_original.json",
+      "args": [
+        "--shots",
+        "10000"
+      ]
+    },
+    {
+      "name": "quark_shadows_shots_100",
+      "config": "configs/quark_shadows_original.json",
+      "args": [
+        "--shots",
+        "100"
+      ]
+    },
+    {
+      "name": "quark_shadows_shots_10000",
+      "config": "configs/quark_shadows_original.json",
+      "args": [
+        "--shots",
+        "10000"
+      ]
+    }
+  ]
+}
