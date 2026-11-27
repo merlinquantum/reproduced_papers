@@ -1,0 +1,12 @@
+{
+    "description": "E2 (Sec. III, VI.A, Fig. 11-12): HEA context loader on AAPL, 5-day moving average, L=4, MSE + SPSA, 3000 epochs, 10,000 shots.",
+    "experiment": {
+        "kind": "loader"
+    },
+    "dataset": {
+        "tickers": [
+            "AAPL"
+        ],
+        "moving_average_window": 5
+    }
+}

@@ -1,0 +1,6 @@
+{
+    "description": "Smoke test: QSTL on AAPL with 20 SPSA epochs (reduced; not a paper result).",
+    "training": {
+        "epochs": 20
+    }
+}

@@ -1,0 +1,140 @@
+{
+  "description": "QNN_STOCK reproduction runner (Contextual QNNs for stock price prediction)",
+  "arguments": [
+    {
+      "flags": [
+        "--kind"
+      ],
+      "help": "Experiment kind",
+      "type": "str",
+      "choices": [
+        "qstl",
+        "qmtl",
+        "baselines",
+        "loader",
+        "photonic"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.kind"
+      }
+    },
+    {
+      "flags": [
+        "--tickers"
+      ],
+      "help": "Comma-separated tickers, e.g. AAPL,GOOGL",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "custom_callable",
+        "callable": "lib.cli_overrides.set_tickers"
+      }
+    },
+    {
+      "flags": [
+        "--epochs"
+      ],
+      "help": "Override the number of SPSA epochs (QSTL)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.epochs"
+      }
+    },
+    {
+      "flags": [
+        "--epochs-per-task"
+      ],
+      "help": "Override SPSA epochs per asset and cycle (QMTL)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.epochs_per_task"
+      }
+    },
+    {
+      "flags": [
+        "--lr"
+      ],
+      "help": "Override the SPSA learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.lr"
+      }
+    },
+    {
+      "flags": [
+        "--shots"
+      ],
+      "help": "Override the number of measurement shots",
+      "type": "int_or_none",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.shots"
+      }
+    },
+    {
+      "flags": [
+        "--ma-window"
+      ],
+      "help": "Moving-average window on prices (1 = raw daily moves)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.moving_average_window"
+      }
+    },
+    {
+      "flags": [
+        "--loader-mode"
+      ],
+      "help": "Context register preparation: exact amplitudes or trained HEA loader",
+      "type": "str",
+      "choices": [
+        "exact",
+        "hea"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.context_loader.mode"
+      }
+    },
+    {
+      "flags": [
+        "--ansatz"
+      ],
+      "help": "QSTL circuit: paper HEA on all qubits, or context-preserving rotations on the prediction qubit",
+      "type": "str",
+      "choices": [
+        "hea",
+        "context_controlled"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.ansatz"
+      }
+    },
+    {
+      "flags": [
+        "--interaction-order"
+      ],
+      "help": "Largest number of context qubits controlling one rotation (context_controlled ansatz)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.interaction_order"
+      }
+    }
+  ]
+}

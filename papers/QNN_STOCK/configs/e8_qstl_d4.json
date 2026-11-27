@@ -1,0 +1,9 @@
+{
+    "description": "E8 (Sec. VI.C.3, Fig. 19): AAPL, d=4 quantile levels fitted on the training moves, T=2 (6 qubits), 5-day moving average, 3000 epochs. The paper uses a QMTL-like circuit; a single-task circuit is used here (LOG.md).",
+    "dataset": {
+        "levels": 4,
+        "quantization": "quantile",
+        "context_length": 2,
+        "moving_average_window": 5
+    }
+}

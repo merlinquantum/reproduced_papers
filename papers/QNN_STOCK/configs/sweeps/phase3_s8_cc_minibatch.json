@@ -1,0 +1,61 @@
+{
+    "sweep_id": "phase3_s8_cc_minibatch",
+    "description": "Phase 3 sweep S8 (E12b): the context-preserving order-1 circuit (E11, 3 context + 1 prediction qubit) trained with the QBGU superposed loss versus mini-batch per-sample SGD at equal shots (3000 SPSA iterations x 10,000 shots per loss evaluation): batch 1 (10,000 shots on one window), 100 (100 shots each), 10,000 (1 shot each). Raw and MA5 data; classical baselines rerun as reference. Evaluation matrix: no winner selected.",
+    "candidates": [
+        "e11_qstl_cc1",
+        "e11_qstl_cc1_ma5",
+        "e3_baselines_classical",
+        "e3_baselines_ma5"
+    ],
+    "grid": {
+        "configs": [
+            "e11_qstl_cc1",
+            "e11_qstl_cc1_ma5"
+        ],
+        "overrides": {
+            "ps_b1": {
+                "training": {
+                    "mode": "per_sample",
+                    "batch_size": 1
+                }
+            },
+            "ps_b100": {
+                "training": {
+                    "mode": "per_sample",
+                    "batch_size": 100
+                }
+            },
+            "ps_b10000": {
+                "training": {
+                    "mode": "per_sample",
+                    "batch_size": 10000
+                }
+            }
+        }
+    },
+    "seeds": [
+        42,
+        43,
+        44,
+        45,
+        46
+    ],
+    "repetition": 0,
+    "evaluation": {
+        "primary_metrics": [
+            "inference/test/log_loss",
+            "inference/test/accuracy"
+        ],
+        "secondary_metrics": [
+            "final_fidelity",
+            "expected per-sample fidelity (losses.csv, last row)",
+            "inference confidence max_o q(o | c)"
+        ],
+        "direction": "minimize (log_loss); maximize (accuracy, fidelity)",
+        "split": "test = chronological last 20 % of T+1 windows",
+        "checkpoint": "final iteration for quantum models; validation-selected refit for baselines",
+        "aggregation": "mean and sample standard deviation over seeds; paired-by-seed differences with a 95 % t interval",
+        "tie_rule": "a paired difference whose 95 % interval contains 0 is reported as not distinguishable",
+        "selection_rule": "none: evaluation matrix"
+    }
+}

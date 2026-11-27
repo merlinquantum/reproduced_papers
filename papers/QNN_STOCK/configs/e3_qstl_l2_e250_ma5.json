@@ -1,0 +1,16 @@
+{
+    "description": "Comparison Protocol step B (MA5): as e3_qstl_l2_e250 on 5-day moving-average moves; pairs with e4_qmtl_ma5.",
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ],
+        "moving_average_window": 5
+    },
+    "model": {
+        "layers": 2
+    },
+    "training": {
+        "epochs": 250
+    }
+}

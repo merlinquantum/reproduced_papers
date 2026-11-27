@@ -1,0 +1,9 @@
+{
+    "description": "E3 (Sec. VI.B, Fig. 13, Table 1 STL): QSTL on AAPL and GOOGL separately, raw daily moves (Sec. VI.B says raw data), exact context loading, paper hyperparameters.",
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ]
+    }
+}

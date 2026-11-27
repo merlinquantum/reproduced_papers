@@ -1,0 +1,14 @@
+{
+    "description": "Phase 5 control for C7: classical baselines B0-B4 on the K=4 assets of e7_qmtl_k4_original (AAPL, GOOGL, MSFT, AMZN), raw daily moves, same split and targets.",
+    "experiment": {
+        "kind": "baselines"
+    },
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL",
+            "MSFT",
+            "AMZN"
+        ]
+    }
+}

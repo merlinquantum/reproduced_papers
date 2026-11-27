@@ -1,0 +1,5 @@
+asset,loss,selected_lr
+AAPL,MSE,0.1
+AAPL,fidelity,0.1
+GOOGL,MSE,0.1
+GOOGL,fidelity,0.1

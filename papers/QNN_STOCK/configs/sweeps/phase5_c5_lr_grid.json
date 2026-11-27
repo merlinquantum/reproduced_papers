@@ -1,0 +1,42 @@
+{
+    "sweep_id": "phase5_c5_lr_grid",
+    "description": "C5 control (Phase 1 plan, run after Phase 7): QSTL with the MSE loss (E6) and with the SWAP-test fidelity loss (E3) on the same shared SPSA learning-rate grid, the same 10,000 epochs (the paper's MSE budget), shots, perturbation, data (raw AAPL, GOOGL) and seeds. Purpose: separate the effect of the loss from the 1e4 learning-rate difference in the paper (MSE lr 1e-5, fidelity lr 0.1). Grid = Phase 1 grid {1e-5, 1e-3, 1e-2, 1e-1} plus 1.0 (amendment declared before the runs). Evaluation matrix; the best learning rate per loss is chosen on the training metric only.",
+    "candidates": [],
+    "grid": {
+        "configs": [
+            "e6_qstl_mse_original",
+            "e3_qstl_original"
+        ],
+        "overrides": {
+            "lr1e-5": {"training": {"lr": 1e-05, "epochs": 10000}},
+            "lr1e-3": {"training": {"lr": 0.001, "epochs": 10000}},
+            "lr1e-2": {"training": {"lr": 0.01, "epochs": 10000}},
+            "lr1e-1": {"training": {"lr": 0.1, "epochs": 10000}},
+            "lr1e0": {"training": {"lr": 1.0, "epochs": 10000}}
+        }
+    },
+    "seeds": [
+        42,
+        43,
+        44,
+        45,
+        46
+    ],
+    "repetition": 0,
+    "evaluation": {
+        "primary_metrics": [
+            "output/train/kl_joint"
+        ],
+        "secondary_metrics": [
+            "final_fidelity",
+            "output/train/kl_conditional_sum",
+            "inference/test/log_loss"
+        ],
+        "direction": "minimize (kl, log_loss); maximize (fidelity)",
+        "split": "train target (the paper's protocol for Fig. 17); test = chronological last 20 % for the secondary log-loss",
+        "checkpoint": "final epoch",
+        "aggregation": "mean and sample standard deviation over seeds; paired-by-seed differences with a 95 % t interval",
+        "tie_rule": "a paired difference whose 95 % interval contains 0 is reported as not distinguishable",
+        "selection_rule": "per loss, the learning rate with the lowest seed-mean output/train/kl_joint per asset (training metric only; no test data)"
+    }
+}

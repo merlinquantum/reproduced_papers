@@ -1,0 +1,12 @@
+claim,kind,outcome,reason
+C1,parity,UNSUPPORTED,4 of 8 primary cells against the claim
+C2,advantage,UNSUPPORTED,no advantage in any of 4 primary cells (all not distinguishable)
+C3,advantage,UNSUPPORTED,"opposite direction in 1 of 4 primary cells, advantage in 0"
+C4,parity,SUPPORTED,no primary cell against the claim (4 cells)
+C5,advantage,UNSUPPORTED,"opposite direction in 2 of 2 primary cells, advantage in 0"
+C6,parity,UNSUPPORTED,1 of 4 primary cells against the claim
+C7,parity,UNSUPPORTED,16 of 24 primary cells against the claim
+C8,parity,UNSUPPORTED,2 of 2 primary cells against the claim
+P4,advantage,UNRESOLVED,"primary pair confounded both ways: the photonic model has 9-18x the parameters, the baselines are validation-tuned and the photonic model is not"
+C9,robustness,UNRESOLVED,EVIDENCE_MISSING: E10 noise study not implemented in Phase 3
+C10,resources,OUT OF SCOPE,"theoretical, no experiment (Phase 1)"

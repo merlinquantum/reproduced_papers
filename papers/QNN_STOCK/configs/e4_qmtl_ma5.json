@@ -1,0 +1,16 @@
+{
+    "description": "Comparison Protocol step B (MA5): e4_qmtl_original on 5-day moving-average moves.",
+    "experiment": {
+        "kind": "qmtl"
+    },
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ],
+        "moving_average_window": 5
+    },
+    "model": {
+        "layers": 1
+    }
+}

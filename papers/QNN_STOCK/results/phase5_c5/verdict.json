@@ -1,0 +1,8 @@
+{
+  "claim": "C5",
+  "outcome": "UNSUPPORTED",
+  "rule": "fidelity lower than MSE (95 % interval excludes 0) on train kl_joint at each loss's selected lr, on all assets",
+  "assets_fidelity_lower": 0,
+  "assets": 2,
+  "runs": 50
+}

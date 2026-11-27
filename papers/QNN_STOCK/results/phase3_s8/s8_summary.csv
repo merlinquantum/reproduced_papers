@@ -1,0 +1,97 @@
+data,asset,arm,metric,n,mean,std
+MA5,AAPL,"Per-sample, batch 1",final_fidelity,5,0.3333488686305893,0.45330302513487536
+MA5,AAPL,"Per-sample, batch 1",inference_confidence,5,0.9524567207786927,0.05207660312386333
+MA5,AAPL,"Per-sample, batch 1",inference_test_accuracy,5,0.7964089775561097,0.04148714651520806
+MA5,AAPL,"Per-sample, batch 1",inference_test_log_loss,5,1.2169560882962618,0.28484210807545024
+MA5,AAPL,"Per-sample, batch 1",output_test_log_loss,5,1.2169560882962618,0.2848421080754502
+MA5,AAPL,"Per-sample, batch 1",per_sample_fidelity,5,0.7737306117154645,0.031240866150770395
+MA5,AAPL,"Per-sample, batch 100",final_fidelity,5,0.3161484650414998,0.42921534940944844
+MA5,AAPL,"Per-sample, batch 100",inference_confidence,5,0.9555654021565063,0.053830809440771024
+MA5,AAPL,"Per-sample, batch 100",inference_test_accuracy,5,0.7964089775561097,0.04148714651520806
+MA5,AAPL,"Per-sample, batch 100",inference_test_log_loss,5,0.9651368097088598,0.0706382044696649
+MA5,AAPL,"Per-sample, batch 100",output_test_log_loss,5,0.9651368097088598,0.07063820446966501
+MA5,AAPL,"Per-sample, batch 100",per_sample_fidelity,5,0.7771068191235364,0.02826477787001255
+MA5,AAPL,"Per-sample, batch 10⁴",final_fidelity,5,0.3638810950441581,0.4279210742046267
+MA5,AAPL,"Per-sample, batch 10⁴",inference_confidence,5,0.9384180696744145,0.0646848944835496
+MA5,AAPL,"Per-sample, batch 10⁴",inference_test_accuracy,5,0.7964089775561097,0.04148714651520806
+MA5,AAPL,"Per-sample, batch 10⁴",inference_test_log_loss,5,1.1006936932293745,0.14937563973533538
+MA5,AAPL,"Per-sample, batch 10⁴",output_test_log_loss,5,1.1006936932293745,0.1493756397353354
+MA5,AAPL,"Per-sample, batch 10⁴",per_sample_fidelity,5,0.7676878225778923,0.03663223014391709
+MA5,AAPL,QBGU,final_fidelity,5,0.9977908035690053,0.0042307399424746294
+MA5,AAPL,QBGU,inference_confidence,5,0.7628234526453767,0.018527656406359064
+MA5,AAPL,QBGU,inference_test_accuracy,5,0.8119700748129676,0.006691475244388378
+MA5,AAPL,QBGU,inference_test_log_loss,5,0.4790165370992142,0.007638044625874433
+MA5,AAPL,QBGU,output_test_log_loss,5,0.4790165370992142,0.007638044625874474
+MA5,AAPL,QBGU,per_sample_fidelity,5,0.6793155542643194,0.0020065019863473627
+MA5,GOOGL,"Per-sample, batch 1",final_fidelity,5,0.015187260582788487,0.0023082458251206905
+MA5,GOOGL,"Per-sample, batch 1",inference_confidence,5,0.947492069819743,0.059283467895641546
+MA5,GOOGL,"Per-sample, batch 1",inference_test_accuracy,5,0.7938271604938272,0.0
+MA5,GOOGL,"Per-sample, batch 1",inference_test_log_loss,5,1.0787813569961635,0.20241633963643468
+MA5,GOOGL,"Per-sample, batch 1",output_test_log_loss,5,1.0787813569961635,0.20241633963643468
+MA5,GOOGL,"Per-sample, batch 1",per_sample_fidelity,5,0.7993459344576002,0.011269439081314472
+MA5,GOOGL,"Per-sample, batch 100",final_fidelity,5,0.16789789290360857,0.3456931497795722
+MA5,GOOGL,"Per-sample, batch 100",inference_confidence,5,0.966278734549711,0.016569099647120528
+MA5,GOOGL,"Per-sample, batch 100",inference_test_accuracy,5,0.7938271604938272,0.0
+MA5,GOOGL,"Per-sample, batch 100",inference_test_log_loss,5,1.0901865785700577,0.23806630810298468
+MA5,GOOGL,"Per-sample, batch 100",output_test_log_loss,5,1.0901865785700577,0.23806630810298457
+MA5,GOOGL,"Per-sample, batch 100",per_sample_fidelity,5,0.8029220040317433,0.005938941293979826
+MA5,GOOGL,"Per-sample, batch 10⁴",final_fidelity,5,0.17910823335926726,0.3615151479763973
+MA5,GOOGL,"Per-sample, batch 10⁴",inference_confidence,5,0.971901846544496,0.028156403776346532
+MA5,GOOGL,"Per-sample, batch 10⁴",inference_test_accuracy,5,0.7738271604938272,0.04472135954999579
+MA5,GOOGL,"Per-sample, batch 10⁴",inference_test_log_loss,5,1.3703732301019496,0.42815439530075666
+MA5,GOOGL,"Per-sample, batch 10⁴",output_test_log_loss,5,1.3703732301019496,0.4281543953007567
+MA5,GOOGL,"Per-sample, batch 10⁴",per_sample_fidelity,5,0.7834362249664473,0.040198963847234925
+MA5,GOOGL,QBGU,final_fidelity,5,0.8748727120705897,0.27651061044166453
+MA5,GOOGL,QBGU,inference_confidence,5,0.7793343253485815,0.02693125284777076
+MA5,GOOGL,QBGU,inference_test_accuracy,5,0.7839506172839507,0.02208462199999792
+MA5,GOOGL,QBGU,inference_test_log_loss,5,0.5210338855737814,0.02402264990361476
+MA5,GOOGL,QBGU,output_test_log_loss,5,0.5210338855737814,0.02402264990361476
+MA5,GOOGL,QBGU,per_sample_fidelity,5,0.6942640686716278,0.013168145448134308
+raw,AAPL,"Per-sample, batch 1",final_fidelity,5,0.01008590677034513,0.014677802669230171
+raw,AAPL,"Per-sample, batch 1",inference_confidence,5,0.809882331077071,0.08053527102012337
+raw,AAPL,"Per-sample, batch 1",inference_test_accuracy,5,0.4937188434695912,0.007373823364746004
+raw,AAPL,"Per-sample, batch 1",inference_test_log_loss,5,1.3837959956422012,0.36474383629213997
+raw,AAPL,"Per-sample, batch 1",output_test_log_loss,5,1.3837959956422012,0.36474383629213986
+raw,AAPL,"Per-sample, batch 1",per_sample_fidelity,5,0.49954282061004623,0.005507164325296505
+raw,AAPL,"Per-sample, batch 100",final_fidelity,5,0.0007895935064487682,0.0010188308764155743
+raw,AAPL,"Per-sample, batch 100",inference_confidence,5,0.8310590717782242,0.033602442373222456
+raw,AAPL,"Per-sample, batch 100",inference_test_accuracy,5,0.49890329012961115,0.013843712827684764
+raw,AAPL,"Per-sample, batch 100",inference_test_log_loss,5,1.5193211350190376,0.5130104697657839
+raw,AAPL,"Per-sample, batch 100",output_test_log_loss,5,1.5193211350190374,0.513010469765784
+raw,AAPL,"Per-sample, batch 100",per_sample_fidelity,5,0.5050781193058913,0.007079255835910393
+raw,AAPL,"Per-sample, batch 10⁴",final_fidelity,5,0.04344465551600933,0.08544161680292785
+raw,AAPL,"Per-sample, batch 10⁴",inference_confidence,5,0.8391874801398845,0.07646095756735873
+raw,AAPL,"Per-sample, batch 10⁴",inference_test_accuracy,5,0.4892323030907278,0.012530225363302136
+raw,AAPL,"Per-sample, batch 10⁴",inference_test_log_loss,5,1.4001295260060698,0.4558512672834885
+raw,AAPL,"Per-sample, batch 10⁴",output_test_log_loss,5,1.4001295260060698,0.4558512672834885
+raw,AAPL,"Per-sample, batch 10⁴",per_sample_fidelity,5,0.5075331869735185,0.004092050247034062
+raw,AAPL,QBGU,final_fidelity,5,0.5907705014001687,0.5395771763338537
+raw,AAPL,QBGU,inference_confidence,5,0.668416924394664,0.14255320631784393
+raw,AAPL,QBGU,inference_test_accuracy,5,0.4860418743768694,0.02038999136213116
+raw,AAPL,QBGU,inference_test_log_loss,5,0.9673832977720085,0.32234709971909004
+raw,AAPL,QBGU,output_test_log_loss,5,0.9673832977720085,0.32234709971908987
+raw,AAPL,QBGU,per_sample_fidelity,5,0.5047698133368348,0.0038462227676056083
+raw,GOOGL,"Per-sample, batch 1",final_fidelity,5,0.0447981149239465,0.08154810259685545
+raw,GOOGL,"Per-sample, batch 1",inference_confidence,5,0.8825173113011727,0.06463464379970699
+raw,GOOGL,"Per-sample, batch 1",inference_test_accuracy,5,0.49568434032059183,0.010924812050967549
+raw,GOOGL,"Per-sample, batch 1",inference_test_log_loss,5,1.6899469932592506,0.5586676010578244
+raw,GOOGL,"Per-sample, batch 1",output_test_log_loss,5,1.6899469932592506,0.5586676010578244
+raw,GOOGL,"Per-sample, batch 1",per_sample_fidelity,5,0.5072126961541197,0.011448253047747168
+raw,GOOGL,"Per-sample, batch 100",final_fidelity,5,0.01842596872544654,0.02530527978308629
+raw,GOOGL,"Per-sample, batch 100",inference_confidence,5,0.8558921099852371,0.07776998937765585
+raw,GOOGL,"Per-sample, batch 100",inference_test_accuracy,5,0.5087546239210851,0.017209712771756244
+raw,GOOGL,"Per-sample, batch 100",inference_test_log_loss,5,1.6171422270874527,0.5221604721767877
+raw,GOOGL,"Per-sample, batch 100",output_test_log_loss,5,1.6171422270874527,0.5221604721767877
+raw,GOOGL,"Per-sample, batch 100",per_sample_fidelity,5,0.5039753921397211,0.010463406397001709
+raw,GOOGL,"Per-sample, batch 10⁴",final_fidelity,5,0.05714800637832666,0.11581659006531046
+raw,GOOGL,"Per-sample, batch 10⁴",inference_confidence,5,0.8386954840444021,0.05433440446557438
+raw,GOOGL,"Per-sample, batch 10⁴",inference_test_accuracy,5,0.49691738594327994,0.02014813148997312
+raw,GOOGL,"Per-sample, batch 10⁴",inference_test_log_loss,5,1.3180525077401266,0.2123047205527206
+raw,GOOGL,"Per-sample, batch 10⁴",output_test_log_loss,5,1.3180525077401268,0.2123047205527205
+raw,GOOGL,"Per-sample, batch 10⁴",per_sample_fidelity,5,0.5082103294692548,0.00633289286527201
+raw,GOOGL,QBGU,final_fidelity,5,0.9991463629732069,2.405229460363906e-05
+raw,GOOGL,QBGU,inference_confidence,5,0.5235724069437757,0.0033477320491832933
+raw,GOOGL,QBGU,inference_test_accuracy,5,0.5272503082614056,0.004052201411875451
+raw,GOOGL,QBGU,inference_test_log_loss,5,0.6921342026945394,0.000286032972156525
+raw,GOOGL,QBGU,output_test_log_loss,5,0.6921342026945394,0.000286032972156525
+raw,GOOGL,QBGU,per_sample_fidelity,5,0.5014676214194562,0.00021251385346421039

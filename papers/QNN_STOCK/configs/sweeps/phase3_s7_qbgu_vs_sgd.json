@@ -1,0 +1,64 @@
+{
+    "sweep_id": "phase3_s7_qbgu_vs_sgd",
+    "description": "Phase 3 sweep S7 (E12): QSTL (paper HEA, 3 context + 1 prediction qubit) trained with the QBGU superposed loss (Eq. 20) versus per-sample SGD on one window per SPSA iteration (Eq. 18-19), at equal total shots (6e7 per asset): 3000 iterations x 10,000 shots and 300,000 iterations x 100 shots for each objective. Raw and MA5 data; classical baselines rerun as reference. Evaluation matrix: no winner selected.",
+    "candidates": [
+        "e3_qstl_original",
+        "e3_qstl_ma5",
+        "e3_baselines_classical",
+        "e3_baselines_ma5"
+    ],
+    "grid": {
+        "configs": [
+            "e3_qstl_original",
+            "e3_qstl_ma5"
+        ],
+        "overrides": {
+            "ps_e3000": {
+                "training": {
+                    "mode": "per_sample"
+                }
+            },
+            "ps_e300k_s100": {
+                "training": {
+                    "mode": "per_sample",
+                    "epochs": 300000,
+                    "shots": 100,
+                    "monitor_every": 100
+                }
+            },
+            "qbgu_e300k_s100": {
+                "training": {
+                    "mode": "qbgu",
+                    "epochs": 300000,
+                    "shots": 100,
+                    "monitor_every": 100
+                }
+            }
+        }
+    },
+    "seeds": [
+        42,
+        43,
+        44,
+        45,
+        46
+    ],
+    "repetition": 0,
+    "evaluation": {
+        "primary_metrics": [
+            "inference/test/log_loss",
+            "final_fidelity"
+        ],
+        "secondary_metrics": [
+            "inference/test/accuracy",
+            "output/test/log_loss",
+            "expected per-sample fidelity (losses.csv, last row)"
+        ],
+        "direction": "minimize (log_loss); maximize (fidelity, accuracy)",
+        "split": "test = chronological last 20 % of T+1 windows",
+        "checkpoint": "final iteration for quantum models; validation-selected refit for baselines",
+        "aggregation": "mean and sample standard deviation over seeds; paired-by-seed differences with a 95 % t interval",
+        "tie_rule": "a paired difference whose 95 % interval contains 0 is reported as not distinguishable",
+        "selection_rule": "none: evaluation matrix; QBGU and per-sample are compared at equal (iterations, shots)"
+    }
+}
