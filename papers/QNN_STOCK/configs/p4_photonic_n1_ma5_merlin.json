@@ -1,0 +1,16 @@
+{
+    "description": "Phase 4 MerLin ADAPTATION (not the paper's method): photonic context-conditional predictor, 1 photon (ablation: wave interference only; not a photonic result on its own); 5-day moving-average moves, AAPL and GOOGL. T + 1 modes, context bits as phases pi*c with 2 re-uploads, readout = detection on mode 0, weighted NLL, Adam.",
+    "experiment": {
+        "kind": "photonic"
+    },
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ],
+        "moving_average_window": 5
+    },
+    "photonic": {
+        "n_photons": 1
+    }
+}

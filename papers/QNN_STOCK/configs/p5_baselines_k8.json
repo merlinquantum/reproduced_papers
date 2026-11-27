@@ -1,0 +1,19 @@
+{
+    "description": "Phase 5 control for C7: classical baselines B0-B4 on the K=8 assets of e7_qmtl_k8_original, 3-day price averaging, same split and targets.",
+    "experiment": {
+        "kind": "baselines"
+    },
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL",
+            "MSFT",
+            "AMZN",
+            "PEP",
+            "WDC",
+            "TXN",
+            "IBM"
+        ],
+        "moving_average_window": 3
+    }
+}

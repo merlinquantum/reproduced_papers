@@ -1,0 +1,15 @@
+{
+    "description": "Comparison Protocol step B (raw): independent 2-layer QSTL per asset with 250 SPSA epochs, the per-asset budget of e4_qmtl_original. Single factor against QMTL: parameter sharing.",
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ]
+    },
+    "model": {
+        "layers": 2
+    },
+    "training": {
+        "epochs": 250
+    }
+}

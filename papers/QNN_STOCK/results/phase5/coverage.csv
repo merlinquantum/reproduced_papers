@@ -1,0 +1,16 @@
+sweep,directory,machine,workers,expected_runs,observed_runs,completed_runs,duplicate_run_ids,complete
+S1,phase3_s1_core_20261117-174613,remote Linux machine,16,80,80,80,0,True
+S2,phase3_s2_context_preserving_20261117-180639,remote Linux machine,16,50,50,50,0,True
+S3,phase3_s3_train_size_20261119-094720,remote Linux machine,32,560,560,560,0,True
+S4,phase3_s4_qmtl_fig7_20261119-142511,remote Linux machine,16,50,50,50,0,True
+S5,phase3_s5_qmtl_3000_20261119-143111,remote Linux machine,16,45,45,45,0,True
+S6,phase3_s6_qmtl_interleaved_20261119-143917,remote Linux machine,16,60,60,60,0,True
+S7,phase3_s7_qbgu_vs_sgd_20261119-164242,remote Linux machine,16,50,50,50,0,True
+S8,phase3_s8_cc_minibatch_20261119-171509,remote Linux machine,16,50,50,50,0,True
+S9,phase3_s9_loader_20261120-125414,remote Linux machine,16,70,70,70,0,True
+S10,phase3_s10_multi_step_20261120-152631,remote Linux machine,16,120,120,120,0,True
+S11,phase3_s11_scale_up_20261120-154435,remote Linux machine,16,480,480,480,0,True
+S12,phase3_s12_lbfgs_20261120-171950,remote Linux machine,16,120,120,120,0,True
+P1,phase4_p1_photonic_20261124-115455,local laptop (8 threads),6,150,150,150,0,True
+P5,phase5_c7_c8_baselines_20261126-142211,remote Linux machine,5,15,15,15,0,True
+C5,phase5_c5_lr_grid_20261126-131726,local laptop (8 threads),6,50,50,50,0,True

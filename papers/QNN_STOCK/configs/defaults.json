@@ -1,0 +1,75 @@
+{
+    "description": "QSTL on AAPL with the paper's hyperparameters (Sec. VI.A-B, Table 1 STL row): raw daily moves, T=3, exact context loading, SWAP-test loss, SPSA lr 0.1, c 0.01, 10,000 shots, 3000 epochs. Data: CC0 Zenodo substitute (substitute-data).",
+
+    "seed": 42,
+    "dtype": "float64",
+    "outdir": "outdir",
+    "device": "cpu",
+    "experiment": {"kind": "qstl"},
+    "dataset": {
+        "source_dir": "sp500_daily_prices_zenodo",
+        "tickers": ["AAPL"],
+        "price_field": "Close",
+        "end_date": "2020-09-25",
+        "moving_average_window": 1,
+        "quantization": "sign",
+        "levels": 2,
+        "context_length": 3,
+        "horizon": 1,
+        "train_fraction": 0.8,
+        "train_size": null,
+        "train_subset_seed": "seed"
+    },
+    "model": {
+        "name": "contextual_qnn",
+        "ansatz": "hea",
+        "interaction_order": 1,
+        "prediction_layers": 2,
+        "qmtl_asset_block": "rotations",
+        "layers": 4,
+        "loss": "swap_test_fidelity",
+        "cycles": 1,
+        "context_loader": {
+            "mode": "exact",
+            "initial_hadamard": false,
+            "layers": 4,
+            "epochs": 3000,
+            "lr": 0.1,
+            "spsa_perturbation": 0.01,
+            "shots": 10000
+        }
+    },
+    "training": {
+        "optimizer": "spsa",
+        "mode": "qbgu",
+        "batch_size": 1,
+        "monitor_every": 1,
+        "init_max_angle": 6.283185307179586,
+        "epochs": 3000,
+        "epochs_per_task": 250,
+        "lr": 0.1,
+        "spsa_perturbation": 0.01,
+        "shots": 10000
+    },
+    "photonic": {
+        "n_photons": 2,
+        "reuploads": 2,
+        "computation_space": "fock",
+        "distinguishable": false,
+        "steps": 1500,
+        "lr": 0.02,
+        "monitor_every": 50
+    },
+    "baselines": {
+        "validation_fraction": 0.125,
+        "laplace_alpha": [0.0, 0.5, 1.0],
+        "pooled_strength": [0.0, 1.0, 10.0, 100.0, 1000.0],
+        "torch": {
+            "steps": 2000,
+            "lr": [0.001, 0.01],
+            "weight_decay": [0.0, 0.0001, 0.01],
+            "mlp_hidden": [3, 6]
+        }
+    },
+    "logging": {"level": "info"}
+}

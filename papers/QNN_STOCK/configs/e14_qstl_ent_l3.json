@@ -1,0 +1,13 @@
+{
+    "description": "E14 (extension, not in the paper): QSTL with the entangling context-preserving ansatz (circuit B, 3 context-controlled RY layers with CZ chains between them), raw daily moves; set dataset.horizon for multi-step prediction. QBGU, SWAP-test loss and SPSA settings as e3_qstl_original.",
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ]
+    },
+    "model": {
+        "ansatz": "context_entangling",
+        "prediction_layers": 3
+    }
+}

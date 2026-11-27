@@ -1,0 +1,10 @@
+{
+    "description": "E3 preprocessing variant: as e3_qstl_original with the 5-day moving average of Sec. II.A / VI.A.",
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ],
+        "moving_average_window": 5
+    }
+}

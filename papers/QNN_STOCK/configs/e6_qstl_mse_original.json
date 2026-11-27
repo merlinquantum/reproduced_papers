@@ -1,0 +1,16 @@
+{
+    "description": "E6 (Sec. VI.C.2, Fig. 17): QSTL with the MSE loss on the measured joint distribution, lr 1e-5, 10,000 epochs, as stated in the paper.",
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ]
+    },
+    "model": {
+        "loss": "mse"
+    },
+    "training": {
+        "lr": 1e-05,
+        "epochs": 10000
+    }
+}

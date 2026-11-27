@@ -1,0 +1,13 @@
+{
+    "description": "E11 (extension, not in the paper): QSTL with the context-preserving ansatz, interaction order 3 (8 parameters), raw daily moves; QBGU, SWAP-test loss and SPSA settings as e3_qstl_original.",
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ]
+    },
+    "model": {
+        "ansatz": "context_controlled",
+        "interaction_order": 3
+    }
+}

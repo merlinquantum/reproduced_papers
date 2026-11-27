@@ -1,0 +1,163 @@
+{
+    "sweep_id": "phase3_s11_scale_up",
+    "description": "Phase 3 sweep S11 (E14b): multi-step prediction with the context grown together with the horizon: (T, tau) = (5, 2), (5, 3), (6, 4). Context-preserving circuits A (sequential) and B (2 and 3 context-controlled RY layers with CZ chains) and the classical baselines on path outcomes. Training variants: 3000 SPSA iterations x 10,000 shots or shot-free exact fidelity (shots null), each with the paper initialization U(0, 2 pi) or small positive angles U(0, 0.3). Exact loading, raw and MA5 data. The baselines are rerun under every override label so each quantum candidate has a baseline with the same label; the training keys do not affect them. Evaluation matrix: no winner selected.",
+    "candidates": [],
+    "grid": {
+        "configs": [
+            "e14_qstl_seq",
+            "e14_qstl_ent",
+            "e14_qstl_ent_l3",
+            "e14_qstl_seq_ma5",
+            "e14_qstl_ent_ma5",
+            "e14_qstl_ent_l3_ma5",
+            "e3_baselines_classical",
+            "e3_baselines_ma5"
+        ],
+        "overrides": {
+            "t5h2": {
+                "dataset": {
+                    "context_length": 5,
+                    "horizon": 2
+                },
+                "training": {
+                    "monitor_every": 10
+                }
+            },
+            "t5h2_exact": {
+                "dataset": {
+                    "context_length": 5,
+                    "horizon": 2
+                },
+                "training": {
+                    "monitor_every": 10,
+                    "shots": null
+                }
+            },
+            "t5h2_safe": {
+                "dataset": {
+                    "context_length": 5,
+                    "horizon": 2
+                },
+                "training": {
+                    "monitor_every": 10,
+                    "init_max_angle": 0.3
+                }
+            },
+            "t5h2_exact_safe": {
+                "dataset": {
+                    "context_length": 5,
+                    "horizon": 2
+                },
+                "training": {
+                    "monitor_every": 10,
+                    "shots": null,
+                    "init_max_angle": 0.3
+                }
+            },
+            "t5h3": {
+                "dataset": {
+                    "context_length": 5,
+                    "horizon": 3
+                },
+                "training": {
+                    "monitor_every": 10
+                }
+            },
+            "t5h3_exact": {
+                "dataset": {
+                    "context_length": 5,
+                    "horizon": 3
+                },
+                "training": {
+                    "monitor_every": 10,
+                    "shots": null
+                }
+            },
+            "t5h3_safe": {
+                "dataset": {
+                    "context_length": 5,
+                    "horizon": 3
+                },
+                "training": {
+                    "monitor_every": 10,
+                    "init_max_angle": 0.3
+                }
+            },
+            "t5h3_exact_safe": {
+                "dataset": {
+                    "context_length": 5,
+                    "horizon": 3
+                },
+                "training": {
+                    "monitor_every": 10,
+                    "shots": null,
+                    "init_max_angle": 0.3
+                }
+            },
+            "t6h4": {
+                "dataset": {
+                    "context_length": 6,
+                    "horizon": 4
+                },
+                "training": {
+                    "monitor_every": 10
+                }
+            },
+            "t6h4_exact": {
+                "dataset": {
+                    "context_length": 6,
+                    "horizon": 4
+                },
+                "training": {
+                    "monitor_every": 10,
+                    "shots": null
+                }
+            },
+            "t6h4_safe": {
+                "dataset": {
+                    "context_length": 6,
+                    "horizon": 4
+                },
+                "training": {
+                    "monitor_every": 10,
+                    "init_max_angle": 0.3
+                }
+            },
+            "t6h4_exact_safe": {
+                "dataset": {
+                    "context_length": 6,
+                    "horizon": 4
+                },
+                "training": {
+                    "monitor_every": 10,
+                    "shots": null,
+                    "init_max_angle": 0.3
+                }
+            }
+        }
+    },
+    "seeds": [
+        42,
+        43,
+        44,
+        45,
+        46
+    ],
+    "repetition": 0,
+    "evaluation": {
+        "primary_metrics": [
+            "inference/test/log_loss",
+            "inference/test/accuracy"
+        ],
+        "secondary_metrics": [
+            "final_fidelity",
+            "inference/test/step*_log_loss"
+        ],
+        "direction": "minimize (log_loss); maximize (accuracy, fidelity)",
+        "split": "test = chronological last 20 % of T + horizon windows",
+        "checkpoint": "final iteration for quantum models; validation-selected refit for baselines",
+        "aggregation": "mean and sample standard deviation over seeds; paired-by-seed differences with a 95 % t interval",
+        "tie_rule": "a paired difference whose 95 % interval contains 0 is reported as not distinguishable",
+        "selection_rule": "none: evaluation matrix"
+    }
+}

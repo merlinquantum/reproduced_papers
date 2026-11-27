@@ -1,0 +1,17 @@
+{
+    "description": "E7 (Sec. VI.C.3, Fig. 15, 18): QMTL with K=4 (AAPL, GOOGL, MSFT, AMZN), 250 epochs per asset, raw daily moves.",
+    "experiment": {
+        "kind": "qmtl"
+    },
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL",
+            "MSFT",
+            "AMZN"
+        ]
+    },
+    "model": {
+        "layers": 1
+    }
+}

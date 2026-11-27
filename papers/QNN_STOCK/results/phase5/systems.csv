@@ -1,0 +1,290 @@
+claim,sweep,system,asset,metric,n_seeds,mean,std,n_params,wall_clock_s_median,wall_clock_s_max,machine,concurrent_workers,provenance
+C5,C5,e3_qstl_original__lr1e-1:QSTL,AAPL,output/train/kl_joint,5,0.0011242819493777316,0.0004815745347736961,32.0,197.0,392.0,local laptop (8 threads),6,locally executed
+C5,C5,e3_qstl_original__lr1e-1:QSTL,GOOGL,output/train/kl_joint,5,0.0016022764700382853,0.0005184209759256828,32.0,197.0,392.0,local laptop (8 threads),6,locally executed
+C5,C5,e6_qstl_mse_original__lr1e-1:QSTL,AAPL,output/train/kl_joint,5,4.9123923506734935e-05,1.488299338670991e-05,32.0,207.0,271.0,local laptop (8 threads),6,locally executed
+C5,C5,e6_qstl_mse_original__lr1e-1:QSTL,GOOGL,output/train/kl_joint,5,6.140266322379823e-05,2.1698577267443148e-05,32.0,207.0,271.0,local laptop (8 threads),6,locally executed
+C5,C5,e6_qstl_mse_original__lr1e-5:QSTL,AAPL,output/train/kl_joint,5,0.6884471985864085,0.2581347773202633,32.0,206.0,207.0,local laptop (8 threads),6,locally executed
+C5,C5,e6_qstl_mse_original__lr1e-5:QSTL,GOOGL,output/train/kl_joint,5,0.4724391779269784,0.14204873696672776,32.0,206.0,207.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_classical__t3:B0_frequency,AAPL,inference/test/log_loss,5,0.6956471229088451,0.0,8.0,91.0,128.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_classical__t3:B0_frequency,GOOGL,inference/test/log_loss,5,0.694632398944532,0.0,8.0,91.0,128.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_classical__t3:B2_logistic,AAPL,inference/test/log_loss,5,0.695693034292623,5.614046490786758e-06,4.0,91.0,128.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_classical__t3:B2_logistic,GOOGL,inference/test/log_loss,5,0.6917836181240324,2.2632854088883367e-05,4.0,91.0,128.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_classical__t5:B0_frequency,AAPL,inference/test/log_loss,5,0.6974355927498961,0.0,32.0,84.0,87.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_classical__t5:B0_frequency,GOOGL,inference/test/log_loss,5,0.6951934704204344,0.0,32.0,84.0,87.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_classical__t5:B2_logistic,AAPL,inference/test/log_loss,5,0.6952962913582932,0.00014181011568178387,6.0,84.0,87.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_classical__t5:B2_logistic,GOOGL,inference/test/log_loss,5,0.6923729324343254,7.745550876413809e-05,6.0,84.0,87.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_classical__t6:B0_frequency,AAPL,inference/test/log_loss,5,0.7003174561740475,0.0,64.0,85.0,87.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_classical__t6:B0_frequency,GOOGL,inference/test/log_loss,5,0.7023429962325609,0.0,64.0,85.0,87.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_classical__t6:B2_logistic,AAPL,inference/test/log_loss,5,0.6952540097380978,5.68198551121861e-08,7.0,85.0,87.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_classical__t6:B2_logistic,GOOGL,inference/test/log_loss,5,0.6923607966251263,1.0444361882208685e-05,7.0,85.0,87.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_ma5__t3:B0_frequency,AAPL,inference/test/log_loss,5,0.4750241839358648,0.0,8.0,90.0,92.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_ma5__t3:B0_frequency,GOOGL,inference/test/log_loss,5,0.5141955334012008,0.0,8.0,90.0,92.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_ma5__t3:B2_logistic,AAPL,inference/test/log_loss,5,0.47529733278642505,7.904108963303364e-10,4.0,90.0,92.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_ma5__t3:B2_logistic,GOOGL,inference/test/log_loss,5,0.5120491285780805,4.87519577176783e-08,4.0,90.0,92.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_ma5__t5:B0_frequency,AAPL,inference/test/log_loss,5,0.47126981760009035,0.0,32.0,73.0,92.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_ma5__t5:B0_frequency,GOOGL,inference/test/log_loss,5,0.5101583902039399,0.0,32.0,73.0,92.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_ma5__t5:B2_logistic,AAPL,inference/test/log_loss,5,0.47232028677878757,2.1680554735458594e-09,6.0,73.0,92.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_ma5__t5:B2_logistic,GOOGL,inference/test/log_loss,5,0.5006020003884517,1.0015311653469446e-09,6.0,73.0,92.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_ma5__t6:B0_frequency,AAPL,inference/test/log_loss,5,0.47370510246630093,0.0,64.0,90.0,94.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_ma5__t6:B0_frequency,GOOGL,inference/test/log_loss,5,0.510815095058834,0.0,64.0,90.0,94.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_ma5__t6:B2_logistic,AAPL,inference/test/log_loss,5,0.4717564719395405,2.261928649928074e-09,7.0,90.0,94.0,local laptop (8 threads),6,locally executed
+P4,P1,e3_baselines_ma5__t6:B2_logistic,GOOGL,inference/test/log_loss,5,0.4994001178915982,3.2597492830623853e-09,7.0,90.0,94.0,local laptop (8 threads),6,locally executed
+P4,P1,p4_photonic_n2_fock_ma5_merlin__t3:PHOTONIC,AAPL,inference/test/log_loss,5,0.4750399351785816,2.211248396556303e-05,36.0,42.0,43.0,local laptop (8 threads),6,locally executed
+P4,P1,p4_photonic_n2_fock_ma5_merlin__t3:PHOTONIC,GOOGL,inference/test/log_loss,5,0.5140433109951772,0.0006023939566584656,36.0,42.0,43.0,local laptop (8 threads),6,locally executed
+P4,P1,p4_photonic_n2_fock_ma5_merlin__t5:PHOTONIC,AAPL,inference/test/log_loss,5,0.47136247992771996,0.00026910682903962115,90.0,95.0,98.0,local laptop (8 threads),6,locally executed
+P4,P1,p4_photonic_n2_fock_ma5_merlin__t5:PHOTONIC,GOOGL,inference/test/log_loss,5,0.5022653361095881,0.0011168971159076751,90.0,95.0,98.0,local laptop (8 threads),6,locally executed
+P4,P1,p4_photonic_n2_fock_ma5_merlin__t6:PHOTONIC,AAPL,inference/test/log_loss,5,0.47074701448512063,0.0005042905446109326,126.0,138.0,144.0,local laptop (8 threads),6,locally executed
+P4,P1,p4_photonic_n2_fock_ma5_merlin__t6:PHOTONIC,GOOGL,inference/test/log_loss,5,0.501754982438013,0.0017865192874221753,126.0,138.0,144.0,local laptop (8 threads),6,locally executed
+P4,P1,p4_photonic_n2_fock_merlin__t3:PHOTONIC,AAPL,inference/test/log_loss,5,0.6956147015202067,6.524227782362384e-05,36.0,45.0,48.0,local laptop (8 threads),6,locally executed
+P4,P1,p4_photonic_n2_fock_merlin__t3:PHOTONIC,GOOGL,inference/test/log_loss,5,0.694585202455111,0.0001052860726013438,36.0,45.0,48.0,local laptop (8 threads),6,locally executed
+P4,P1,p4_photonic_n2_fock_merlin__t5:PHOTONIC,AAPL,inference/test/log_loss,5,0.696051394141489,0.0002217624831294989,90.0,95.0,95.0,local laptop (8 threads),6,locally executed
+P4,P1,p4_photonic_n2_fock_merlin__t5:PHOTONIC,GOOGL,inference/test/log_loss,5,0.6943581988923426,0.0007113174605003931,90.0,95.0,95.0,local laptop (8 threads),6,locally executed
+P4,P1,p4_photonic_n2_fock_merlin__t6:PHOTONIC,AAPL,inference/test/log_loss,5,0.6977887281382114,0.0006795378256293271,126.0,137.0,139.0,local laptop (8 threads),6,locally executed
+P4,P1,p4_photonic_n2_fock_merlin__t6:PHOTONIC,GOOGL,inference/test/log_loss,5,0.6976432176447533,0.001712518688521094,126.0,137.0,139.0,local laptop (8 threads),6,locally executed
+C8,P5,p5_baselines_d4:B0_frequency,AAPL,inference/test/log_loss,5,0.7019854756700608,0.0,48.0,19.0,20.0,remote Linux machine,5,locally executed
+C8,P5,p5_baselines_d4:B2_logistic,AAPL,inference/test/log_loss,5,1.047670290911362,0.00325631637831012,20.0,19.0,20.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k4:B0_frequency,AAPL,inference/test/log_loss,5,0.6956471229088451,0.0,8.0,79.0,80.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k4:B0_frequency,AMZN,inference/test/log_loss,5,0.6954649425383752,0.0,8.0,79.0,80.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k4:B0_frequency,GOOGL,inference/test/log_loss,5,0.694632398944532,0.0,8.0,79.0,80.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k4:B0_frequency,MSFT,inference/test/log_loss,5,0.694700378751453,0.0,8.0,79.0,80.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k4:B4_pooled_shrinkage,AAPL,inference/test/log_loss,5,0.6938799413536804,0.0,8.0,79.0,80.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k4:B4_pooled_shrinkage,AMZN,inference/test/log_loss,5,0.6954649425383752,0.0,8.0,79.0,80.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k4:B4_pooled_shrinkage,GOOGL,inference/test/log_loss,5,0.694632398944532,0.0,8.0,79.0,80.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k4:B4_pooled_shrinkage,MSFT,inference/test/log_loss,5,0.6945999991936207,0.0,8.0,79.0,80.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B0_frequency,AAPL,inference/test/log_loss,5,0.5700230450804354,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B0_frequency,AMZN,inference/test/log_loss,5,0.5622190765585334,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B0_frequency,GOOGL,inference/test/log_loss,5,0.5613168909864,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B0_frequency,IBM,inference/test/log_loss,5,0.5704624349361481,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B0_frequency,MSFT,inference/test/log_loss,5,0.5680427826608994,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B0_frequency,PEP,inference/test/log_loss,5,0.571366890837318,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B0_frequency,TXN,inference/test/log_loss,5,0.5827864034774956,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B0_frequency,WDC,inference/test/log_loss,5,0.564242915310311,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B4_pooled_shrinkage,AAPL,inference/test/log_loss,5,0.5697372061678682,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B4_pooled_shrinkage,AMZN,inference/test/log_loss,5,0.5622665246090366,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B4_pooled_shrinkage,GOOGL,inference/test/log_loss,5,0.5589732925818589,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B4_pooled_shrinkage,IBM,inference/test/log_loss,5,0.5704461752282329,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B4_pooled_shrinkage,MSFT,inference/test/log_loss,5,0.5680427826608994,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B4_pooled_shrinkage,PEP,inference/test/log_loss,5,0.5713575028602164,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B4_pooled_shrinkage,TXN,inference/test/log_loss,5,0.5823523948323754,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C7,P5,p5_baselines_k8:B4_pooled_shrinkage,WDC,inference/test/log_loss,5,0.5625455338577551,0.0,8.0,149.0,152.0,remote Linux machine,5,locally executed
+C5,S1,e3_qstl_original:QSTL,AAPL,output/train/kl_joint,5,0.001433566794234922,0.0005935676613821823,32.0,12.0,12.0,remote Linux machine,16,locally executed
+C5,S1,e3_qstl_original:QSTL,GOOGL,output/train/kl_joint,5,0.002699347978829992,0.001097318832866684,32.0,12.0,12.0,remote Linux machine,16,locally executed
+C5,S1,e6_qstl_mse_original:QSTL,AAPL,output/train/kl_joint,5,0.6886505294788877,0.2581476011794928,32.0,37.0,38.0,remote Linux machine,16,locally executed
+C5,S1,e6_qstl_mse_original:QSTL,GOOGL,output/train/kl_joint,5,0.5338645276689735,0.20354250998204182,32.0,37.0,38.0,remote Linux machine,16,locally executed
+C8,S1,e8_qstl_d4:QSTL,AAPL,inference/test/log_loss,5,1.4220130048347641,0.06842779924927792,48.0,5.0,6.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_ent_l3__t5h2_lbfgs:QSTL,AAPL,inference/test/log_loss,5,1.394153447856319,0.0009806262215309453,36.0,53.0,59.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_ent_l3__t5h2_lbfgs:QSTL,GOOGL,inference/test/log_loss,5,1.392523449740246,0.001027139292530466,36.0,53.0,59.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_ent_l3__t5h3_lbfgs:QSTL,AAPL,inference/test/log_loss,5,2.0920100945594484,0.00020046446029202408,54.0,105.0,134.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_ent_l3__t5h3_lbfgs:QSTL,GOOGL,inference/test/log_loss,5,2.092403444992778,0.0020028959551080506,54.0,105.0,134.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_ent_l3__t6h4_lbfgs:QSTL,AAPL,inference/test/log_loss,5,2.7890285266623485,0.001469647832059753,84.0,366.0,374.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_ent_l3__t6h4_lbfgs:QSTL,GOOGL,inference/test/log_loss,5,2.8175533542319444,0.007781573533242778,84.0,366.0,374.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_ent_l3_ma5__t5h2_lbfgs:QSTL,AAPL,inference/test/log_loss,5,0.9435298462005408,0.0009081672976827214,36.0,45.0,51.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_ent_l3_ma5__t5h2_lbfgs:QSTL,GOOGL,inference/test/log_loss,5,1.0342576482924126,0.0066265696794039,36.0,45.0,51.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_ent_l3_ma5__t5h3_lbfgs:QSTL,AAPL,inference/test/log_loss,5,1.4209623434645902,0.0006419800607879315,54.0,84.0,107.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_ent_l3_ma5__t5h3_lbfgs:QSTL,GOOGL,inference/test/log_loss,5,1.5453206591187374,0.005755016643281921,54.0,84.0,107.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_ent_l3_ma5__t6h4_lbfgs:QSTL,AAPL,inference/test/log_loss,5,1.8965776450687677,0.0024055075196394824,84.0,190.0,213.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_ent_l3_ma5__t6h4_lbfgs:QSTL,GOOGL,inference/test/log_loss,5,2.098086980681347,0.010612401829590258,84.0,190.0,213.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_seq__t5h2_lbfgs:QSTL,AAPL,inference/test/log_loss,5,1.390926019426694,3.831985843240274e-09,13.0,0.0,1.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_seq__t5h2_lbfgs:QSTL,GOOGL,inference/test/log_loss,5,1.3846739151866712,1.1583178229094554e-08,13.0,0.0,1.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_seq__t5h3_lbfgs:QSTL,AAPL,inference/test/log_loss,5,2.086275344696059,4.537881782524187e-09,21.0,0.0,1.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_seq__t5h3_lbfgs:QSTL,GOOGL,inference/test/log_loss,5,2.0791421767827147,2.477781233031844e-09,21.0,0.0,1.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_seq__t6h4_lbfgs:QSTL,AAPL,inference/test/log_loss,5,2.78222051811422,8.605491622696065e-09,34.0,2.0,2.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_seq__t6h4_lbfgs:QSTL,GOOGL,inference/test/log_loss,5,2.776227127459823,8.878065641515139e-09,34.0,2.0,2.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_seq_ma5__t5h2_lbfgs:QSTL,AAPL,inference/test/log_loss,5,0.9428446248519974,6.337672417521216e-09,13.0,0.0,0.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_seq_ma5__t5h2_lbfgs:QSTL,GOOGL,inference/test/log_loss,5,1.002242601578193,1.5737314089246165e-08,13.0,0.0,0.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_seq_ma5__t5h3_lbfgs:QSTL,AAPL,inference/test/log_loss,5,1.4135816134135115,1.289422849835647e-08,21.0,0.0,1.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_seq_ma5__t5h3_lbfgs:QSTL,GOOGL,inference/test/log_loss,5,1.5067816281529423,2.7694950323981657e-08,21.0,0.0,1.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_seq_ma5__t6h4_lbfgs:QSTL,AAPL,inference/test/log_loss,5,1.885178374706228,1.0445087289451576e-08,34.0,3.0,3.0,remote Linux machine,16,locally executed
+E14,S12,e14_qstl_seq_ma5__t6h4_lbfgs:QSTL,GOOGL,inference/test/log_loss,5,2.0217950054202434,5.7469151353853786e-08,34.0,3.0,3.0,remote Linux machine,16,locally executed
+E14,S12,e3_baselines_classical__t5h2_lbfgs:B2_logistic,AAPL,inference/test/log_loss,5,1.3910170010066494,1.2776545603112548e-05,24.0,40.0,42.0,remote Linux machine,16,locally executed
+E14,S12,e3_baselines_classical__t5h2_lbfgs:B2_logistic,GOOGL,inference/test/log_loss,5,1.389086313714635,1.302401817743137e-06,24.0,40.0,42.0,remote Linux machine,16,locally executed
+E14,S12,e3_baselines_classical__t5h3_lbfgs:B2_logistic,AAPL,inference/test/log_loss,5,2.087901502680504,2.7234863594588793e-06,48.0,38.0,44.0,remote Linux machine,16,locally executed
+E14,S12,e3_baselines_classical__t5h3_lbfgs:B2_logistic,GOOGL,inference/test/log_loss,5,2.0878601273595807,0.0001537764610834911,48.0,38.0,44.0,remote Linux machine,16,locally executed
+E14,S12,e3_baselines_classical__t6h4_lbfgs:B2_logistic,AAPL,inference/test/log_loss,5,2.781946376434739,7.376200636662616e-06,112.0,40.0,43.0,remote Linux machine,16,locally executed
+E14,S12,e3_baselines_classical__t6h4_lbfgs:B2_logistic,GOOGL,inference/test/log_loss,5,2.779111553973109,7.878822515113073e-06,112.0,40.0,43.0,remote Linux machine,16,locally executed
+E14,S12,e3_baselines_ma5__t5h2_lbfgs:B2_logistic,AAPL,inference/test/log_loss,5,0.9433847504008384,2.159375766442922e-12,24.0,39.0,41.0,remote Linux machine,16,locally executed
+E14,S12,e3_baselines_ma5__t5h2_lbfgs:B2_logistic,GOOGL,inference/test/log_loss,5,0.9996715701715189,0.0030792141088602856,24.0,39.0,41.0,remote Linux machine,16,locally executed
+E14,S12,e3_baselines_ma5__t5h3_lbfgs:B2_logistic,AAPL,inference/test/log_loss,5,1.4144800534997979,1.092126384103615e-05,48.0,40.0,42.0,remote Linux machine,16,locally executed
+E14,S12,e3_baselines_ma5__t5h3_lbfgs:B2_logistic,GOOGL,inference/test/log_loss,5,1.5047738548718004,0.0005605736725628199,48.0,40.0,42.0,remote Linux machine,16,locally executed
+E14,S12,e3_baselines_ma5__t6h4_lbfgs:B2_logistic,AAPL,inference/test/log_loss,5,1.886009640816076,2.015750205794985e-05,112.0,35.0,40.0,remote Linux machine,16,locally executed
+E14,S12,e3_baselines_ma5__t6h4_lbfgs:B2_logistic,GOOGL,inference/test/log_loss,5,2.019869808788,0.001508566203118278,112.0,35.0,40.0,remote Linux machine,16,locally executed
+E11,S2,e11_qstl_cc1:QSTL,AAPL,inference/test/log_loss,5,0.9673832977720085,0.32234709971909004,4.0,2.0,2.0,remote Linux machine,16,locally executed
+E11,S2,e11_qstl_cc1:QSTL,GOOGL,inference/test/log_loss,5,0.6921342026945394,0.000286032972156525,4.0,2.0,2.0,remote Linux machine,16,locally executed
+E11,S2,e11_qstl_cc1_ma5:QSTL,AAPL,inference/test/log_loss,5,0.4790165370992142,0.007638044625874433,4.0,2.0,2.0,remote Linux machine,16,locally executed
+E11,S2,e11_qstl_cc1_ma5:QSTL,GOOGL,inference/test/log_loss,5,0.5210338855737814,0.02402264990361476,4.0,2.0,2.0,remote Linux machine,16,locally executed
+E11,S2,e11_qstl_cc3:QSTL,AAPL,inference/test/log_loss,5,0.9262954373183959,0.36097421921374523,8.0,2.0,2.0,remote Linux machine,16,locally executed
+E11,S2,e11_qstl_cc3:QSTL,GOOGL,inference/test/log_loss,5,1.4801596900467675,0.6546385325970765,8.0,2.0,2.0,remote Linux machine,16,locally executed
+E11,S2,e11_qstl_cc3_ma5:QSTL,AAPL,inference/test/log_loss,5,0.5736537771751884,0.080227166443317,8.0,2.0,2.0,remote Linux machine,16,locally executed
+E11,S2,e11_qstl_cc3_ma5:QSTL,GOOGL,inference/test/log_loss,5,0.6838970269243255,0.10548474578642868,8.0,2.0,2.0,remote Linux machine,16,locally executed
+E11,S2,e3_baselines_classical:B0_frequency,AAPL,inference/test/log_loss,5,0.6956471229088451,0.0,8.0,30.0,37.0,remote Linux machine,16,locally executed
+E11,S2,e3_baselines_classical:B0_frequency,GOOGL,inference/test/log_loss,5,0.694632398944532,0.0,8.0,30.0,37.0,remote Linux machine,16,locally executed
+E11,S2,e3_baselines_classical:B2_logistic,AAPL,inference/test/log_loss,5,0.6956930342923886,5.614045967071353e-06,4.0,30.0,37.0,remote Linux machine,16,locally executed
+E11,S2,e3_baselines_classical:B2_logistic,GOOGL,inference/test/log_loss,5,0.6917836181236743,2.2632853287322744e-05,4.0,30.0,37.0,remote Linux machine,16,locally executed
+E11,S2,e3_baselines_ma5:B0_frequency,AAPL,inference/test/log_loss,5,0.4750241839358648,0.0,8.0,30.0,36.0,remote Linux machine,16,locally executed
+E11,S2,e3_baselines_ma5:B0_frequency,GOOGL,inference/test/log_loss,5,0.5141955334012008,0.0,8.0,30.0,36.0,remote Linux machine,16,locally executed
+E11,S2,e3_baselines_ma5:B2_logistic,AAPL,inference/test/log_loss,5,0.47529733278642505,7.904107846160495e-10,4.0,30.0,36.0,remote Linux machine,16,locally executed
+E11,S2,e3_baselines_ma5:B2_logistic,GOOGL,inference/test/log_loss,5,0.5120491285780785,4.875195348498107e-08,4.0,30.0,36.0,remote Linux machine,16,locally executed
+F,S3,e11_qstl_cc1__n100:QSTL,AAPL,inference/test/log_loss,10,0.8920309184172783,0.25704638106588923,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1__n100:QSTL,GOOGL,inference/test/log_loss,10,0.7865497372478728,0.2240177018251723,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1__n2000:QSTL,AAPL,inference/test/log_loss,10,0.9537931915143085,0.3282069064791177,4.0,1.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1__n2000:QSTL,GOOGL,inference/test/log_loss,10,0.8910531737302814,0.3200347597845031,4.0,1.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1__n250:QSTL,AAPL,inference/test/log_loss,10,0.9612346614963683,0.3139786295182094,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1__n250:QSTL,GOOGL,inference/test/log_loss,10,0.8750050391961833,0.2849375604086889,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1__n25:QSTL,AAPL,inference/test/log_loss,10,1.0648419835357745,0.19324147956522658,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1__n25:QSTL,GOOGL,inference/test/log_loss,10,1.1274741115541014,0.42569367054841045,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1__n500:QSTL,AAPL,inference/test/log_loss,10,0.9284020576637863,0.30899852685831236,4.0,1.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1__n500:QSTL,GOOGL,inference/test/log_loss,10,0.974462270841428,0.4941019513711402,4.0,1.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1__n50:QSTL,AAPL,inference/test/log_loss,10,0.8772193952250751,0.15516998937757057,4.0,1.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1__n50:QSTL,GOOGL,inference/test/log_loss,10,1.0101267050789655,0.41435490451139034,4.0,1.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1__nfull:QSTL,AAPL,inference/test/log_loss,10,0.8502793646419426,0.2539154996887522,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1__nfull:QSTL,GOOGL,inference/test/log_loss,10,0.7455362015131144,0.1690637170814453,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__n100:QSTL,AAPL,inference/test/log_loss,10,0.5251472646828051,0.04539865321929621,4.0,1.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__n100:QSTL,GOOGL,inference/test/log_loss,10,0.6165256699927874,0.1457913850162776,4.0,1.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__n2000:QSTL,AAPL,inference/test/log_loss,10,0.5344837771653137,0.14853021019349502,4.0,1.5,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__n2000:QSTL,GOOGL,inference/test/log_loss,10,0.620903137093186,0.2919040358039539,4.0,1.5,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__n250:QSTL,AAPL,inference/test/log_loss,10,0.4990365387550349,0.03997941442454755,4.0,1.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__n250:QSTL,GOOGL,inference/test/log_loss,10,0.5277569722753932,0.034350046363401075,4.0,1.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__n25:QSTL,AAPL,inference/test/log_loss,10,0.6744759054464744,0.22064715477591845,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__n25:QSTL,GOOGL,inference/test/log_loss,10,0.7512489815098397,0.20307767979185815,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__n500:QSTL,AAPL,inference/test/log_loss,10,0.5636402698366764,0.18041316368724478,4.0,1.5,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__n500:QSTL,GOOGL,inference/test/log_loss,10,0.6687398371738096,0.2981821148386609,4.0,1.5,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__n50:QSTL,AAPL,inference/test/log_loss,10,0.6071363741560739,0.10959667681503976,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__n50:QSTL,GOOGL,inference/test/log_loss,10,0.6203882559924533,0.07943342863072968,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__nfull:QSTL,AAPL,inference/test/log_loss,10,0.4979172264309481,0.06326298364430238,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e11_qstl_cc1_ma5__nfull:QSTL,GOOGL,inference/test/log_loss,10,0.5211693304907076,0.018245988142613013,4.0,2.0,2.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__n100:B2_logistic,AAPL,inference/test/log_loss,10,0.7232192097045562,0.01843730266089345,4.0,40.0,41.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__n100:B2_logistic,GOOGL,inference/test/log_loss,10,0.7103179944591306,0.021469750838095342,4.0,40.0,41.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__n2000:B2_logistic,AAPL,inference/test/log_loss,10,0.7003809111520136,0.006003341035179196,4.0,40.0,41.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__n2000:B2_logistic,GOOGL,inference/test/log_loss,10,0.6918722141354928,0.0007280281539180703,4.0,40.0,41.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__n250:B2_logistic,AAPL,inference/test/log_loss,10,0.7149920388817254,0.015363220680624014,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__n250:B2_logistic,GOOGL,inference/test/log_loss,10,0.6970559383311695,0.004127323133340928,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__n25:B2_logistic,AAPL,inference/test/log_loss,10,0.8069002839277729,0.08970770313624045,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__n25:B2_logistic,GOOGL,inference/test/log_loss,10,0.7841147027602493,0.09147569184517172,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__n500:B2_logistic,AAPL,inference/test/log_loss,10,0.7131500254893721,0.016572615355632613,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__n500:B2_logistic,GOOGL,inference/test/log_loss,10,0.6947215541721616,0.0020363387463907534,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__n50:B2_logistic,AAPL,inference/test/log_loss,10,0.7708858384464976,0.08524460058222467,4.0,40.0,41.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__n50:B2_logistic,GOOGL,inference/test/log_loss,10,0.7196095421571325,0.015298010847213678,4.0,40.0,41.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__nfull:B2_logistic,AAPL,inference/test/log_loss,10,0.6957166220180557,7.22091463654558e-05,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_classical__nfull:B2_logistic,GOOGL,inference/test/log_loss,10,0.6917918343510404,4.323929425633636e-05,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__n100:B2_logistic,AAPL,inference/test/log_loss,10,0.5284392881630083,0.036760994376115276,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__n100:B2_logistic,GOOGL,inference/test/log_loss,10,0.5245474937116997,0.013889344465086401,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__n2000:B2_logistic,AAPL,inference/test/log_loss,10,0.47916765236696934,0.004186949106524003,4.0,39.0,41.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__n2000:B2_logistic,GOOGL,inference/test/log_loss,10,0.5124762465605294,0.003098857211484751,4.0,39.0,41.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__n250:B2_logistic,AAPL,inference/test/log_loss,10,0.4900916918957484,0.013058314539265379,4.0,40.0,41.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__n250:B2_logistic,GOOGL,inference/test/log_loss,10,0.5172516434843376,0.01390885279125463,4.0,40.0,41.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__n25:B2_logistic,AAPL,inference/test/log_loss,10,0.5872210595252022,0.08227001916713707,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__n25:B2_logistic,GOOGL,inference/test/log_loss,10,0.6357589959710986,0.12328856158957628,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__n500:B2_logistic,AAPL,inference/test/log_loss,10,0.4890064365568943,0.016597642567923784,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__n500:B2_logistic,GOOGL,inference/test/log_loss,10,0.5143314459646906,0.005231415274806869,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__n50:B2_logistic,AAPL,inference/test/log_loss,10,0.5804934228587163,0.08061648083341395,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__n50:B2_logistic,GOOGL,inference/test/log_loss,10,0.5341818974010482,0.02094239476807488,4.0,40.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__nfull:B2_logistic,AAPL,inference/test/log_loss,10,0.4752973383417956,1.1467118268490623e-08,4.0,24.0,40.0,remote Linux machine,32,locally executed
+F,S3,e3_baselines_ma5__nfull:B2_logistic,GOOGL,inference/test/log_loss,10,0.5120492699239731,2.9217109164309276e-07,4.0,24.0,40.0,remote Linux machine,32,locally executed
+C1,S4,e3_baselines_classical:B0_frequency,AAPL,inference/test/log_loss,5,0.6956471229088451,0.0,8.0,30.0,37.0,remote Linux machine,16,locally executed
+C1,S4,e3_baselines_classical:B0_frequency,GOOGL,inference/test/log_loss,5,0.694632398944532,0.0,8.0,30.0,37.0,remote Linux machine,16,locally executed
+C1,S4,e3_baselines_classical:B2_logistic,AAPL,inference/test/log_loss,5,0.6956930342923886,5.614045967071353e-06,4.0,30.0,37.0,remote Linux machine,16,locally executed
+C1,S4,e3_baselines_classical:B2_logistic,GOOGL,inference/test/log_loss,5,0.6917836181236743,2.2632853287322744e-05,4.0,30.0,37.0,remote Linux machine,16,locally executed
+C2,S4,e3_baselines_classical:B3_mlp_h3,AAPL,inference/test/log_loss,5,0.6955028690690417,0.00012998932456425986,16.0,30.0,37.0,remote Linux machine,16,locally executed
+C2,S4,e3_baselines_classical:B3_mlp_h3,GOOGL,inference/test/log_loss,5,0.6946039524419616,2.7281147486054347e-05,16.0,30.0,37.0,remote Linux machine,16,locally executed
+C1,S4,e3_baselines_classical:B3_mlp_h6,AAPL,inference/test/log_loss,5,0.6955848974153043,3.1032986263362765e-05,31.0,30.0,37.0,remote Linux machine,16,locally executed
+C1,S4,e3_baselines_classical:B3_mlp_h6,GOOGL,inference/test/log_loss,5,0.6945768157695396,0.0001159487239602376,31.0,30.0,37.0,remote Linux machine,16,locally executed
+C2,S4,e3_baselines_classical:B4_pooled_shrinkage,AAPL,inference/test/log_loss,5,0.6942831411614023,0.0,8.0,30.0,37.0,remote Linux machine,16,locally executed
+C2,S4,e3_baselines_classical:B4_pooled_shrinkage,GOOGL,inference/test/log_loss,5,0.694632398944532,0.0,8.0,30.0,37.0,remote Linux machine,16,locally executed
+C1,S4,e3_baselines_ma5:B0_frequency,AAPL,inference/test/log_loss,5,0.4750241839358648,0.0,8.0,29.0,35.0,remote Linux machine,16,locally executed
+C1,S4,e3_baselines_ma5:B0_frequency,GOOGL,inference/test/log_loss,5,0.5141955334012008,0.0,8.0,29.0,35.0,remote Linux machine,16,locally executed
+C1,S4,e3_baselines_ma5:B2_logistic,AAPL,inference/test/log_loss,5,0.47529733278642505,7.904107846160495e-10,4.0,29.0,35.0,remote Linux machine,16,locally executed
+C1,S4,e3_baselines_ma5:B2_logistic,GOOGL,inference/test/log_loss,5,0.5120491285780785,4.875195348498107e-08,4.0,29.0,35.0,remote Linux machine,16,locally executed
+C2,S4,e3_baselines_ma5:B3_mlp_h3,AAPL,inference/test/log_loss,5,0.4750249752331401,1.1111448885043627e-05,16.0,29.0,35.0,remote Linux machine,16,locally executed
+C2,S4,e3_baselines_ma5:B3_mlp_h3,GOOGL,inference/test/log_loss,5,0.5141615000015229,6.0634105044173334e-05,16.0,29.0,35.0,remote Linux machine,16,locally executed
+C1,S4,e3_baselines_ma5:B3_mlp_h6,AAPL,inference/test/log_loss,5,0.4750241689136545,3.346452120635718e-08,31.0,29.0,35.0,remote Linux machine,16,locally executed
+C1,S4,e3_baselines_ma5:B3_mlp_h6,GOOGL,inference/test/log_loss,5,0.5142327276240608,4.089110271794757e-05,31.0,29.0,35.0,remote Linux machine,16,locally executed
+C2,S4,e3_baselines_ma5:B4_pooled_shrinkage,AAPL,inference/test/log_loss,5,0.4741059700827255,0.0,8.0,29.0,35.0,remote Linux machine,16,locally executed
+C2,S4,e3_baselines_ma5:B4_pooled_shrinkage,GOOGL,inference/test/log_loss,5,0.5147168421641164,0.0,8.0,29.0,35.0,remote Linux machine,16,locally executed
+C3,S4,e3_qstl_l2_e250:QSTL,AAPL,final_fidelity,5,0.30424279760104905,0.09920413980953124,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C3,S4,e3_qstl_l2_e250:QSTL,GOOGL,final_fidelity,5,0.5262206306087899,0.28114936042739547,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C2,S4,e3_qstl_l2_e250:QSTL,AAPL,inference/test/log_loss,5,0.7142227803714751,0.025541687859195937,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C2,S4,e3_qstl_l2_e250:QSTL,GOOGL,inference/test/log_loss,5,0.7392731391051629,0.052399379541161896,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C3,S4,e3_qstl_l2_e250_ma5:QSTL,AAPL,final_fidelity,5,0.5203800511358282,0.3089100960731978,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C3,S4,e3_qstl_l2_e250_ma5:QSTL,GOOGL,final_fidelity,5,0.6595928893641443,0.17683078393534707,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C2,S4,e3_qstl_l2_e250_ma5:QSTL,AAPL,inference/test/log_loss,5,0.6989195932862293,0.08987918086915708,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C2,S4,e3_qstl_l2_e250_ma5:QSTL,GOOGL,inference/test/log_loss,5,0.7190817476532516,0.058707328240620235,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C1,S4,e3_qstl_ma5:QSTL,AAPL,inference/test/log_loss,5,0.7219114872076424,0.11899992562304103,32.0,12.0,13.0,remote Linux machine,16,locally executed
+C1,S4,e3_qstl_ma5:QSTL,GOOGL,inference/test/log_loss,5,0.6848597849544716,0.047404135045576515,32.0,12.0,13.0,remote Linux machine,16,locally executed
+C2,S4,e3_qstl_ma5:QSTL,AAPL,output/train/kl_joint,5,0.00615011443359156,0.004654647920164149,32.0,12.0,13.0,remote Linux machine,16,locally executed
+C2,S4,e3_qstl_ma5:QSTL,GOOGL,output/train/kl_joint,5,0.0048329842239581275,0.004054053944645841,32.0,12.0,13.0,remote Linux machine,16,locally executed
+C1,S4,e3_qstl_original:QSTL,AAPL,inference/test/log_loss,5,0.7175345474304904,0.026208110018272383,32.0,11.0,13.0,remote Linux machine,16,locally executed
+C1,S4,e3_qstl_original:QSTL,GOOGL,inference/test/log_loss,5,0.7058001006065019,0.014422837865235679,32.0,11.0,13.0,remote Linux machine,16,locally executed
+C2,S4,e3_qstl_original:QSTL,AAPL,output/train/kl_joint,5,0.001433566794234922,0.0005935676613821823,32.0,11.0,13.0,remote Linux machine,16,locally executed
+C2,S4,e3_qstl_original:QSTL,GOOGL,output/train/kl_joint,5,0.002699347978829992,0.001097318832866684,32.0,11.0,13.0,remote Linux machine,16,locally executed
+C3,S4,e4_qmtl_ma5:QMTL,AAPL,final_fidelity,5,0.2046253889822184,0.13748421299055796,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C3,S4,e4_qmtl_ma5:QMTL,GOOGL,final_fidelity,5,0.5528535048077369,0.10160666589549892,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C2,S4,e4_qmtl_ma5:QMTL,AAPL,inference/test/log_loss,5,0.7041339020314822,0.0512133802123822,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C2,S4,e4_qmtl_ma5:QMTL,GOOGL,inference/test/log_loss,5,0.6847955194743923,0.04377746340997674,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C2,S4,e4_qmtl_ma5:QMTL,AAPL,output/train/kl_joint,5,1.072051116490544,0.7107621133797603,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C2,S4,e4_qmtl_ma5:QMTL,GOOGL,output/train/kl_joint,5,0.4603271434072119,0.2135851477101696,16.0,1.0,1.0,remote Linux machine,16,locally executed
+C3,S4,e4_qmtl_original:QMTL,AAPL,final_fidelity,5,0.17734703798494078,0.12700467324953008,16.0,0.0,1.0,remote Linux machine,16,locally executed
+C3,S4,e4_qmtl_original:QMTL,GOOGL,final_fidelity,5,0.5029984607843705,0.2685640421342658,16.0,0.0,1.0,remote Linux machine,16,locally executed
+C2,S4,e4_qmtl_original:QMTL,AAPL,inference/test/log_loss,5,0.7278164982762727,0.062467669563173504,16.0,0.0,1.0,remote Linux machine,16,locally executed
+C2,S4,e4_qmtl_original:QMTL,GOOGL,inference/test/log_loss,5,0.8744174689307066,0.38143099935777075,16.0,0.0,1.0,remote Linux machine,16,locally executed
+C2,S4,e4_qmtl_original:QMTL,AAPL,output/train/kl_joint,5,1.496211889474063,1.3402599029808588,16.0,0.0,1.0,remote Linux machine,16,locally executed
+C2,S4,e4_qmtl_original:QMTL,GOOGL,output/train/kl_joint,5,0.34107255462043173,0.24235457689142428,16.0,0.0,1.0,remote Linux machine,16,locally executed
+C7,S4,e7_qmtl_k4_original:QMTL,AAPL,inference/test/log_loss,5,0.6965476783991272,0.006096701482981111,16.0,2.0,2.0,remote Linux machine,16,locally executed
+C7,S4,e7_qmtl_k4_original:QMTL,AMZN,inference/test/log_loss,5,0.7136102965345861,0.04624678722956446,16.0,2.0,2.0,remote Linux machine,16,locally executed
+C7,S4,e7_qmtl_k4_original:QMTL,GOOGL,inference/test/log_loss,5,0.7163271463532348,0.04964413444873212,16.0,2.0,2.0,remote Linux machine,16,locally executed
+C7,S4,e7_qmtl_k4_original:QMTL,MSFT,inference/test/log_loss,5,0.7198472497180702,0.051797463764658165,16.0,2.0,2.0,remote Linux machine,16,locally executed
+C7,S4,e7_qmtl_k8_original:QMTL,AAPL,inference/test/log_loss,5,0.6872949135515085,0.008975944647853574,16.0,2.0,3.0,remote Linux machine,16,locally executed
+C7,S4,e7_qmtl_k8_original:QMTL,AMZN,inference/test/log_loss,5,0.7035892543498681,0.04054078532498898,16.0,2.0,3.0,remote Linux machine,16,locally executed
+C7,S4,e7_qmtl_k8_original:QMTL,GOOGL,inference/test/log_loss,5,0.7109505817776499,0.03169700606988388,16.0,2.0,3.0,remote Linux machine,16,locally executed
+C7,S4,e7_qmtl_k8_original:QMTL,IBM,inference/test/log_loss,5,0.6903868838848082,0.004942540242353133,16.0,2.0,3.0,remote Linux machine,16,locally executed
+C7,S4,e7_qmtl_k8_original:QMTL,MSFT,inference/test/log_loss,5,0.7023914561268949,0.01715447437424438,16.0,2.0,3.0,remote Linux machine,16,locally executed
+C7,S4,e7_qmtl_k8_original:QMTL,PEP,inference/test/log_loss,5,0.7074044018390672,0.021945956215855874,16.0,2.0,3.0,remote Linux machine,16,locally executed
+C7,S4,e7_qmtl_k8_original:QMTL,TXN,inference/test/log_loss,5,0.693725241114391,0.010881306024489093,16.0,2.0,3.0,remote Linux machine,16,locally executed
+C7,S4,e7_qmtl_k8_original:QMTL,WDC,inference/test/log_loss,5,0.7061817072406923,0.015541649316094863,16.0,2.0,3.0,remote Linux machine,16,locally executed
+C3,S5,e3_qstl_l2:QSTL,AAPL,final_fidelity,5,0.9985667560540484,0.00042263597669725306,16.0,6.0,6.0,remote Linux machine,16,locally executed
+C3,S5,e3_qstl_l2:QSTL,GOOGL,final_fidelity,5,0.996839071482577,0.0009479126848613358,16.0,6.0,6.0,remote Linux machine,16,locally executed
+C2,S5,e3_qstl_l2:QSTL,AAPL,inference/test/log_loss,5,1.6842102082963133,1.0939761476085395,16.0,6.0,6.0,remote Linux machine,16,locally executed
+C2,S5,e3_qstl_l2:QSTL,GOOGL,inference/test/log_loss,5,2.0499601347122516,1.651561997033974,16.0,6.0,6.0,remote Linux machine,16,locally executed
+C3,S5,e3_qstl_l2_ma5:QSTL,AAPL,final_fidelity,5,0.9599219784700381,0.017018953149538368,16.0,6.0,7.0,remote Linux machine,16,locally executed
+C3,S5,e3_qstl_l2_ma5:QSTL,GOOGL,final_fidelity,5,0.9449569898029866,0.01638890555608531,16.0,6.0,7.0,remote Linux machine,16,locally executed
+C2,S5,e3_qstl_l2_ma5:QSTL,AAPL,inference/test/log_loss,5,0.6835330939696409,0.1077500642760344,16.0,6.0,7.0,remote Linux machine,16,locally executed
+C2,S5,e3_qstl_l2_ma5:QSTL,GOOGL,inference/test/log_loss,5,0.7579804941874585,0.16034760794009267,16.0,6.0,7.0,remote Linux machine,16,locally executed
+C3,S5,e4_qmtl_ma5__e3000:QMTL,AAPL,final_fidelity,5,0.2528672560185635,0.20728800336704462,16.0,10.0,11.0,remote Linux machine,16,locally executed
+C3,S5,e4_qmtl_ma5__e3000:QMTL,GOOGL,final_fidelity,5,0.7524867943805672,0.03520058213178611,16.0,10.0,11.0,remote Linux machine,16,locally executed
+C2,S5,e4_qmtl_ma5__e3000:QMTL,AAPL,inference/test/log_loss,5,0.7114468254151926,0.08298650882591023,16.0,10.0,11.0,remote Linux machine,16,locally executed
+C2,S5,e4_qmtl_ma5__e3000:QMTL,GOOGL,inference/test/log_loss,5,0.7820271952932751,0.16702372004260746,16.0,10.0,11.0,remote Linux machine,16,locally executed
+C3,S5,e4_qmtl_original__e3000:QMTL,AAPL,final_fidelity,5,0.7959741085169058,0.4445220684322032,16.0,9.0,9.0,remote Linux machine,16,locally executed
+C3,S5,e4_qmtl_original__e3000:QMTL,GOOGL,final_fidelity,5,0.9978774008675192,0.000927070036821687,16.0,9.0,9.0,remote Linux machine,16,locally executed
+C2,S5,e4_qmtl_original__e3000:QMTL,AAPL,inference/test/log_loss,5,0.6932663590946783,0.0006876565619444527,16.0,9.0,9.0,remote Linux machine,16,locally executed
+C2,S5,e4_qmtl_original__e3000:QMTL,GOOGL,inference/test/log_loss,5,0.693119854490929,0.00011272199701589097,16.0,9.0,9.0,remote Linux machine,16,locally executed
+C4,S7,e3_qstl_ma5:QSTL,AAPL,inference/test/log_loss,5,0.7219114872076424,0.11899992562304103,32.0,42.0,46.0,remote Linux machine,16,locally executed
+C4,S7,e3_qstl_ma5:QSTL,GOOGL,inference/test/log_loss,5,0.6848597849544716,0.047404135045576515,32.0,42.0,46.0,remote Linux machine,16,locally executed
+C4,S7,e3_qstl_ma5__ps_e3000:QSTL,AAPL,inference/test/log_loss,5,0.6079502448359022,0.0692020627694983,32.0,51.0,51.0,remote Linux machine,16,locally executed
+C4,S7,e3_qstl_ma5__ps_e3000:QSTL,GOOGL,inference/test/log_loss,5,0.6145052440714905,0.13673413967350598,32.0,51.0,51.0,remote Linux machine,16,locally executed
+C4,S7,e3_qstl_original:QSTL,AAPL,inference/test/log_loss,5,0.7175345474304904,0.026208110018272383,32.0,43.0,50.0,remote Linux machine,16,locally executed
+C4,S7,e3_qstl_original:QSTL,GOOGL,inference/test/log_loss,5,0.7058001006065019,0.014422837865235679,32.0,43.0,50.0,remote Linux machine,16,locally executed
+C4,S7,e3_qstl_original__ps_e3000:QSTL,AAPL,inference/test/log_loss,5,0.7340612543382573,0.031082967288484177,32.0,46.0,48.0,remote Linux machine,16,locally executed
+C4,S7,e3_qstl_original__ps_e3000:QSTL,GOOGL,inference/test/log_loss,5,0.7198587229460556,0.01661642603864878,32.0,46.0,48.0,remote Linux machine,16,locally executed
+C4,S8,e11_qstl_cc1:QSTL,AAPL,inference/test/log_loss,5,0.9673832977720085,0.32234709971909004,4.0,5.0,5.0,remote Linux machine,16,locally executed
+C4,S8,e11_qstl_cc1:QSTL,GOOGL,inference/test/log_loss,5,0.6921342026945394,0.000286032972156525,4.0,5.0,5.0,remote Linux machine,16,locally executed
+C4,S8,e11_qstl_cc1__ps_b10000:QSTL,AAPL,inference/test/log_loss,5,1.4001295260060698,0.4558512672834885,4.0,10.0,10.0,remote Linux machine,16,locally executed
+C4,S8,e11_qstl_cc1__ps_b10000:QSTL,GOOGL,inference/test/log_loss,5,1.3180525077401266,0.2123047205527206,4.0,10.0,10.0,remote Linux machine,16,locally executed
+C4,S8,e11_qstl_cc1_ma5:QSTL,AAPL,inference/test/log_loss,5,0.4790165370992142,0.007638044625874433,4.0,5.0,5.0,remote Linux machine,16,locally executed
+C4,S8,e11_qstl_cc1_ma5:QSTL,GOOGL,inference/test/log_loss,5,0.5210338855737814,0.02402264990361476,4.0,5.0,5.0,remote Linux machine,16,locally executed
+C4,S8,e11_qstl_cc1_ma5__ps_b10000:QSTL,AAPL,inference/test/log_loss,5,1.1006936932293745,0.14937563973533538,4.0,9.0,9.0,remote Linux machine,16,locally executed
+C4,S8,e11_qstl_cc1_ma5__ps_b10000:QSTL,GOOGL,inference/test/log_loss,5,1.3703732301019496,0.42815439530075666,4.0,9.0,9.0,remote Linux machine,16,locally executed
+C6,S9,e11_qstl_cc1:QSTL,AAPL,inference/test/log_loss,5,0.9673832977720085,0.32234709971909004,4.0,5.0,5.0,remote Linux machine,16,locally executed
+C6,S9,e11_qstl_cc1:QSTL,GOOGL,inference/test/log_loss,5,0.6921342026945394,0.000286032972156525,4.0,5.0,5.0,remote Linux machine,16,locally executed
+C6,S9,e11_qstl_cc1__hea_loader_fig4:QSTL,AAPL,inference/test/log_loss,5,1.3775281705473987,0.1412228161574265,4.0,15.0,15.0,remote Linux machine,16,locally executed
+C6,S9,e11_qstl_cc1__hea_loader_fig4:QSTL,GOOGL,inference/test/log_loss,5,1.7704239440564205,0.4948187682359889,4.0,15.0,15.0,remote Linux machine,16,locally executed
+C6,S9,e11_qstl_cc1_ma5:QSTL,AAPL,inference/test/log_loss,5,0.4790165370992142,0.007638044625874433,4.0,5.0,5.0,remote Linux machine,16,locally executed
+C6,S9,e11_qstl_cc1_ma5:QSTL,GOOGL,inference/test/log_loss,5,0.5210338855737814,0.02402264990361476,4.0,5.0,5.0,remote Linux machine,16,locally executed
+C6,S9,e11_qstl_cc1_ma5__hea_loader_fig4:QSTL,AAPL,inference/test/log_loss,5,1.0154658915964276,0.39377945217276755,4.0,10.0,13.0,remote Linux machine,16,locally executed
+C6,S9,e11_qstl_cc1_ma5__hea_loader_fig4:QSTL,GOOGL,inference/test/log_loss,5,0.6454908370028062,0.058902084108435414,4.0,10.0,13.0,remote Linux machine,16,locally executed
+C6,S9,e3_qstl_ma5:QSTL,AAPL,inference/test/log_loss,5,0.7219114872076424,0.11899992562304103,32.0,40.0,43.0,remote Linux machine,16,locally executed
+C6,S9,e3_qstl_ma5:QSTL,GOOGL,inference/test/log_loss,5,0.6848597849544716,0.047404135045576515,32.0,40.0,43.0,remote Linux machine,16,locally executed
+C6,S9,e3_qstl_ma5__hea_loader_fig4:QSTL,AAPL,inference/test/log_loss,5,0.7286231780079255,0.08466026807373574,32.0,48.0,49.0,remote Linux machine,16,locally executed
+C6,S9,e3_qstl_ma5__hea_loader_fig4:QSTL,GOOGL,inference/test/log_loss,5,0.7314141795527686,0.12619705436491088,32.0,48.0,49.0,remote Linux machine,16,locally executed
+C6,S9,e3_qstl_original:QSTL,AAPL,inference/test/log_loss,5,0.7175345474304904,0.026208110018272383,32.0,39.0,40.0,remote Linux machine,16,locally executed
+C6,S9,e3_qstl_original:QSTL,GOOGL,inference/test/log_loss,5,0.7058001006065019,0.014422837865235679,32.0,39.0,40.0,remote Linux machine,16,locally executed
+C6,S9,e3_qstl_original__hea_loader_fig4:QSTL,AAPL,inference/test/log_loss,5,0.71198014979576,0.020314702415435277,32.0,49.0,52.0,remote Linux machine,16,locally executed
+C6,S9,e3_qstl_original__hea_loader_fig4:QSTL,GOOGL,inference/test/log_loss,5,0.7339737259444967,0.023895702732247975,32.0,49.0,52.0,remote Linux machine,16,locally executed

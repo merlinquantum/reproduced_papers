@@ -1,0 +1,16 @@
+{
+    "description": "Phase 4 MerLin ADAPTATION (not the paper's method): photonic context-conditional predictor, 2 indistinguishable photons, photon-number-resolving detection, no postselection; raw daily moves, AAPL and GOOGL. T + 1 modes, context bits as phases pi*c with 2 re-uploads, readout = detection on mode 0, weighted NLL, Adam.",
+    "experiment": {
+        "kind": "photonic"
+    },
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ],
+        "moving_average_window": 1
+    },
+    "photonic": {
+        "n_photons": 2
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "description": "E14 (extension, not in the paper): QSTL with the sequential context-preserving ansatz (circuit A, chain rule, no interference), 5-day moving-average moves; set dataset.horizon for multi-step prediction. QBGU, SWAP-test loss and SPSA settings as e3_qstl_original.",
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ],
+        "moving_average_window": 5
+    },
+    "model": {
+        "ansatz": "context_sequential"
+    }
+}

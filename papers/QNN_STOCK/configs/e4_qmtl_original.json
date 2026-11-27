@@ -1,0 +1,15 @@
+{
+    "description": "E4 (Sec. VI.C, Fig. 14, 16, Table 1 MTL): share-and-specify QMTL, AAPL then GOOGL, 250 SPSA epochs each, one shared + one specific layer (16 parameters per asset), raw daily moves.",
+    "experiment": {
+        "kind": "qmtl"
+    },
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ]
+    },
+    "model": {
+        "layers": 1
+    }
+}

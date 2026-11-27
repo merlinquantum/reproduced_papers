@@ -1,0 +1,12 @@
+{
+    "description": "Phase 5 control for C8: classical baselines B0-B4 on the quantization of e8_qstl_d4 (AAPL, d=4 quantile levels fitted on the training moves, T=2, 5-day moving average).",
+    "experiment": {
+        "kind": "baselines"
+    },
+    "dataset": {
+        "levels": 4,
+        "quantization": "quantile",
+        "context_length": 2,
+        "moving_average_window": 5
+    }
+}

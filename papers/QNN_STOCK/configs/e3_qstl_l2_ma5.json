@@ -1,0 +1,13 @@
+{
+    "description": "Comparison Protocol step A (MA5): as e3_qstl_ma5 but 2 layers (16 parameters). Single factor: circuit depth and size.",
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ],
+        "moving_average_window": 5
+    },
+    "model": {
+        "layers": 2
+    }
+}

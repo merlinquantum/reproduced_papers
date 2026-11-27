@@ -1,0 +1,41 @@
+{
+    "sweep_id": "phase3_s4_qmtl_fig7",
+    "description": "Phase 3 sweep S4: QMTL rerun with the asset block of Fig. 7 (label-controlled RY and RZ, no CNOT; model.qmtl_asset_block = rotations), replacing the earlier asset block that also carried a ring CNOT. QMTL K = 2 (raw, MA5), K = 4, K = 8, with the paired QSTL and baseline references rerun in the same sweep. Evaluation matrix: no winner selected.",
+    "candidates": [
+        "e4_qmtl_original",
+        "e4_qmtl_ma5",
+        "e7_qmtl_k4_original",
+        "e7_qmtl_k8_original",
+        "e3_qstl_l2_e250",
+        "e3_qstl_l2_e250_ma5",
+        "e3_qstl_original",
+        "e3_qstl_ma5",
+        "e3_baselines_classical",
+        "e3_baselines_ma5"
+    ],
+    "seeds": [
+        42,
+        43,
+        44,
+        45,
+        46
+    ],
+    "repetition": 0,
+    "evaluation": {
+        "primary_metrics": [
+            "inference/test/log_loss",
+            "inference/test/kl_conditional_weighted"
+        ],
+        "secondary_metrics": [
+            "output/train/kl_joint",
+            "output/train/kl_conditional_sum",
+            "inference/test/accuracy"
+        ],
+        "direction": "minimize (log_loss, KL); maximize (accuracy)",
+        "split": "test = chronological last 20 % of T+1 windows; train-target metrics are secondary",
+        "checkpoint": "final epoch for quantum models; validation-selected refit for baselines",
+        "aggregation": "mean and sample standard deviation over seeds; paired-by-seed differences with a 95 % t interval",
+        "tie_rule": "a paired difference whose 95 % interval contains 0 is reported as not distinguishable",
+        "selection_rule": "none: evaluation matrix; comparisons follow LOG.md Comparison Protocol"
+    }
+}

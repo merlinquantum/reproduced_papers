@@ -1,0 +1,13 @@
+{
+    "description": "Classical baselines B0-B4 on AAPL and GOOGL, 5-day moving-average moves; same split and targets as e3_qstl_ma5.",
+    "experiment": {
+        "kind": "baselines"
+    },
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ],
+        "moving_average_window": 5
+    }
+}

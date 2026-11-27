@@ -1,0 +1,12 @@
+{
+    "description": "Classical baselines B0-B4 on AAPL and GOOGL, raw daily moves, same split and targets as e3_qstl_original.",
+    "experiment": {
+        "kind": "baselines"
+    },
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ]
+    }
+}

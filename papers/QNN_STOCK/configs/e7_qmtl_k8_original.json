@@ -1,0 +1,25 @@
+{
+    "description": "E7 (Sec. VI.C.3, Fig. 21): QMTL with K=8, 3-day price averaging, 100 epochs per asset (text; the caption says 800 total).",
+    "experiment": {
+        "kind": "qmtl"
+    },
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL",
+            "MSFT",
+            "AMZN",
+            "PEP",
+            "WDC",
+            "TXN",
+            "IBM"
+        ],
+        "moving_average_window": 3
+    },
+    "model": {
+        "layers": 1
+    },
+    "training": {
+        "epochs_per_task": 100
+    }
+}

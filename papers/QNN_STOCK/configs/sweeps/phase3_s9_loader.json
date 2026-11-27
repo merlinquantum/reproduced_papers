@@ -1,0 +1,63 @@
+{
+    "sweep_id": "phase3_s9_loader",
+    "description": "Phase 3 sweep S9 (E13): exact context loading versus the trained HEA context loader (Sec. III, MSE + SPSA, L = 4, 3000 epochs), with and without the leading Hadamard layer drawn in Fig. 4, for the paper HEA QSTL and the context-preserving order-1 circuit (E11). QBGU, SWAP-test loss, 3000 SPSA iterations x 10,000 shots. Raw and MA5 data; classical baselines rerun as reference. Evaluation matrix: no winner selected.",
+    "candidates": [
+        "e3_qstl_original",
+        "e3_qstl_ma5",
+        "e11_qstl_cc1",
+        "e11_qstl_cc1_ma5",
+        "e3_baselines_classical",
+        "e3_baselines_ma5"
+    ],
+    "grid": {
+        "configs": [
+            "e3_qstl_original",
+            "e3_qstl_ma5",
+            "e11_qstl_cc1",
+            "e11_qstl_cc1_ma5"
+        ],
+        "overrides": {
+            "hea_loader": {
+                "model": {
+                    "context_loader": {
+                        "mode": "hea",
+                        "initial_hadamard": false
+                    }
+                }
+            },
+            "hea_loader_fig4": {
+                "model": {
+                    "context_loader": {
+                        "mode": "hea",
+                        "initial_hadamard": true
+                    }
+                }
+            }
+        }
+    },
+    "seeds": [
+        42,
+        43,
+        44,
+        45,
+        46
+    ],
+    "repetition": 0,
+    "evaluation": {
+        "primary_metrics": [
+            "inference/test/log_loss",
+            "inference/test/accuracy"
+        ],
+        "secondary_metrics": [
+            "final_fidelity",
+            "context loader tvd, fidelity_to_exact_state, fidelity_magnitudes_only",
+            "context-preserving fidelity bound from the loaded state (utils/plot_phase3_s9.py)"
+        ],
+        "direction": "minimize (log_loss); maximize (accuracy, fidelity)",
+        "split": "test = chronological last 20 % of T+1 windows",
+        "checkpoint": "final iteration for quantum models; validation-selected refit for baselines",
+        "aggregation": "mean and sample standard deviation over seeds; paired-by-seed differences with a 95 % t interval",
+        "tie_rule": "a paired difference whose 95 % interval contains 0 is reported as not distinguishable",
+        "selection_rule": "none: evaluation matrix"
+    }
+}

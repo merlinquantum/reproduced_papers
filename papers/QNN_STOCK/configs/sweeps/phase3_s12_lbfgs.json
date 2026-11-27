@@ -1,0 +1,82 @@
+{
+    "sweep_id": "phase3_s12_lbfgs",
+    "description": "Phase 3 sweep S12 (E14c): the S11 circuits and sizes, (T, tau) = (5, 2), (5, 3), (6, 4), trained with L-BFGS on the shot-free SWAP-test loss (central-difference gradient, at most 2000 iterations, small positive initial angles U(0, 0.3)) instead of SPSA with a fixed learning rate. Purpose: remove the optimizer and the learning rate from the comparison of circuit B (interfering) with circuit A and the logistic baseline. Baselines are rerun under the same labels; the training keys do not affect them. Evaluation matrix: no winner selected.",
+    "candidates": [],
+    "grid": {
+        "configs": [
+            "e14_qstl_seq",
+            "e14_qstl_ent",
+            "e14_qstl_ent_l3",
+            "e14_qstl_seq_ma5",
+            "e14_qstl_ent_ma5",
+            "e14_qstl_ent_l3_ma5",
+            "e3_baselines_classical",
+            "e3_baselines_ma5"
+        ],
+        "overrides": {
+            "t5h2_lbfgs": {
+                "dataset": {
+                    "context_length": 5,
+                    "horizon": 2
+                },
+                "training": {
+                    "optimizer": "lbfgs",
+                    "shots": null,
+                    "init_max_angle": 0.3,
+                    "epochs": 2000,
+                    "monitor_every": 10
+                }
+            },
+            "t5h3_lbfgs": {
+                "dataset": {
+                    "context_length": 5,
+                    "horizon": 3
+                },
+                "training": {
+                    "optimizer": "lbfgs",
+                    "shots": null,
+                    "init_max_angle": 0.3,
+                    "epochs": 2000,
+                    "monitor_every": 10
+                }
+            },
+            "t6h4_lbfgs": {
+                "dataset": {
+                    "context_length": 6,
+                    "horizon": 4
+                },
+                "training": {
+                    "optimizer": "lbfgs",
+                    "shots": null,
+                    "init_max_angle": 0.3,
+                    "epochs": 2000,
+                    "monitor_every": 10
+                }
+            }
+        }
+    },
+    "seeds": [
+        42,
+        43,
+        44,
+        45,
+        46
+    ],
+    "repetition": 0,
+    "evaluation": {
+        "primary_metrics": [
+            "inference/test/log_loss",
+            "inference/test/accuracy"
+        ],
+        "secondary_metrics": [
+            "final_fidelity",
+            "inference/train/log_loss"
+        ],
+        "direction": "minimize (log_loss); maximize (accuracy, fidelity)",
+        "split": "test = chronological last 20 % of T + horizon windows",
+        "checkpoint": "final iteration for quantum models; validation-selected refit for baselines",
+        "aggregation": "mean and sample standard deviation over seeds; paired-by-seed differences with a 95 % t interval",
+        "tie_rule": "a paired difference whose 95 % interval contains 0 is reported as not distinguishable",
+        "selection_rule": "none: evaluation matrix"
+    }
+}

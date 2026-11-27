@@ -1,0 +1,12 @@
+{
+    "description": "Comparison Protocol step A (raw): as e3_qstl_original but 2 layers (16 parameters) instead of 4 (32). Single factor: circuit depth and size.",
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ]
+    },
+    "model": {
+        "layers": 2
+    }
+}

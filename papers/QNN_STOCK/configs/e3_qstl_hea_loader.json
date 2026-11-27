@@ -1,0 +1,14 @@
+{
+    "description": "E3 loader variant: as e3_qstl_original but the context register comes from the trained HEA loader (Sec. III) instead of exact amplitudes.",
+    "dataset": {
+        "tickers": [
+            "AAPL",
+            "GOOGL"
+        ]
+    },
+    "model": {
+        "context_loader": {
+            "mode": "hea"
+        }
+    }
+}
