@@ -1,0 +1,43 @@
+{
+  "sweep_id": "e7_scaling_controls",
+  "description": "Gap G1 / claim C5 confounder test: in the over-parameterised App. C regime, does the TF advantage survive input scaling? FF and TF with min-max inputs, and FF+S (per-coordinate trainable scale) with raw inputs; 5 seeds paired with e7_appc.",
+  "candidates": [
+    {
+      "name": "ff_minmax",
+      "config": "configs/ns_appc_ff_original.json",
+      "overrides": {
+        "dataset.coordinate_transform": "minmax"
+      }
+    },
+    {
+      "name": "tf_minmax",
+      "config": "configs/ns_appc_tf_original.json",
+      "overrides": {
+        "dataset.coordinate_transform": "minmax"
+      }
+    },
+    {
+      "name": "ffs",
+      "config": "configs/ns_appc_ff_original.json",
+      "overrides": {
+        "model.frequency_mode": "global_scale"
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "max_workers": 4,
+  "selection": {
+    "metric": "final_loss",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "description": "Default run: E2 trainable-frequency QNN on Omega_d = {1, 1.2, 3} with the paper's App. B settings (N = 3, see LOG.md A1). Experiment configs overlay this file.",
+  "task": "toy_regression",
+  "seed": 42,
+  "dtype": "float64",
+  "device": "cpu",
+  "outdir": "outdir",
+  "dataset": {
+    "name": "cosine_series",
+    "frequencies": [
+      1.0,
+      1.2,
+      3.0
+    ],
+    "domain_pi": [
+      -4,
+      4
+    ],
+    "dense_factor": 4
+  },
+  "model": {
+    "family": "qnn",
+    "n_qubits": 3,
+    "layout": "toy",
+    "n_layers": 4,
+    "entangler": "cnot",
+    "feature_map": "simple",
+    "frequency_mode": "trainable",
+    "frequency_init": 1.0
+  },
+  "training": {
+    "iterations": 6000,
+    "batch_size": 2,
+    "optimizer": "adam",
+    "lr": 0.001
+  },
+  "evaluation": {
+    "batch_size": 4096,
+    "every": 100,
+    "spectrum": {
+      "half_width_pi": 256,
+      "n_points": 65536,
+      "n_peaks": 6
+    }
+  },
+  "logging": {
+    "level": "info"
+  }
+}

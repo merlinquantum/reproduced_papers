@@ -1,0 +1,109 @@
+{
+  "description": "EXP-AMB: compare inferred conventions (AMB-1, 2, 3, 7, 13, 15, 17) with the journal Source Data at n=3-6, 3 seeds, paper grids, paper protocol only. Selection rule: smallest mean relative error to the paper per (component, quantity, embedding).",
+  "experiment": "convention_check",
+  "study": {
+    "embeddings": [
+      "E1",
+      "E2",
+      "E3"
+    ],
+    "system_sizes": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "components": [
+      "dimension_geometry",
+      "quantum_dataset",
+      "engineered_pqk"
+    ],
+    "cv_system_sizes": []
+  },
+  "models": {
+    "grid": "paper",
+    "protocols": [
+      "paper"
+    ],
+    "n_jobs": 8,
+    "include_polynomial_extension": false
+  },
+  "convention_check": {
+    "variants": [
+      {
+        "name": "baseline"
+      },
+      {
+        "name": "e2_pair_coefficient_1",
+        "conventions": {
+          "e2_pair_coefficient": 1.0
+        }
+      },
+      {
+        "name": "e3_register_n",
+        "conventions": {
+          "e3_register": "n"
+        }
+      },
+      {
+        "name": "e3_time_n_plus_one_over_3",
+        "conventions": {
+          "e3_time": "n_plus_one_over_3"
+        }
+      },
+      {
+        "name": "qnn_boundary_periodic",
+        "conventions": {
+          "qnn_boundary": "periodic"
+        }
+      },
+      {
+        "name": "pqk_gamma_0.25",
+        "kernels": {
+          "pqk_gamma_scale_geometry": 0.25
+        }
+      },
+      {
+        "name": "pqk_gamma_0.5",
+        "kernels": {
+          "pqk_gamma_scale_geometry": 0.5
+        }
+      },
+      {
+        "name": "pqk_gamma_2",
+        "kernels": {
+          "pqk_gamma_scale_geometry": 2.0
+        }
+      },
+      {
+        "name": "engineered_median_threshold",
+        "engineered": {
+          "label_threshold": "median"
+        }
+      },
+      {
+        "name": "input_scale_0.3",
+        "conventions": {
+          "input_scale": 0.3
+        }
+      },
+      {
+        "name": "input_scale_0.2",
+        "conventions": {
+          "input_scale": 0.2
+        }
+      },
+      {
+        "name": "input_scale_0.1",
+        "conventions": {
+          "input_scale": 0.1
+        }
+      }
+    ]
+  }
+}

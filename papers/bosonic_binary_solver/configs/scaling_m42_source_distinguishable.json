@@ -1,0 +1,37 @@
+{
+  "description": "Beyond the paper. The paper's largest simulated size is m=30, where the Appendix B budget already covers only 0.2% of the space. At m=42 it covers 7e-07, so % optimal goes to zero and mean relative error becomes the metric -- the same shift the paper's own TSP m=29 row shows. Tests whether the click-density result survives when the search is a vanishing fraction of the space, or whether it was an artifact of the regime where the budget is still appreciable. Distinguishable photons, no multi-photon interference.",
+  "seed": 42,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "device": "cpu",
+  "problem": {
+    "family": "knapsack",
+    "m": 42,
+    "instances": 30,
+    "instance_seed_base": 0
+  },
+  "circuit": {
+    "delays": [
+      1,
+      3,
+      9
+    ]
+  },
+  "training": {
+    "updates": 200,
+    "samples": 50,
+    "lr_theta": 0.01,
+    "lr_alpha": 0.05,
+    "shift": 1.5707963267948966,
+    "shift_scale": 1.0
+  },
+  "method": {
+    "name": "bbs",
+    "source": "distinguishable",
+    "rate_scale": 1.0
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

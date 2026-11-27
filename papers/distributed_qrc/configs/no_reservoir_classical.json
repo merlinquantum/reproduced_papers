@@ -1,0 +1,25 @@
+{
+  "description": "No-reservoir control: persistence, linear ridge (AR(4)), the paper's kernel and an RBF kernel applied directly to the 4-lag window. The srsr size 10 entry only fixes the 10-qubit kernel width; no reservoir is built. Sweep ID B1B3-RAW.",
+  "experiment": {
+    "id": "B1B3-RAW",
+    "variant": "classical",
+    "architecture": "srsr",
+    "sizes": [
+      10
+    ],
+    "reservoir_types": [
+      "raw_lags"
+    ],
+    "_comment_reservoir_types": "raw_lags = no reservoir: the readouts see the 4-lag window directly.",
+    "readout_types": [
+      "persistence",
+      "linear",
+      "quantum_kernel_ideal",
+      "rbf_kernel"
+    ]
+  },
+  "readout": {
+    "kernel_selection_subsample": 8000,
+    "kernel_fit_subsample": null
+  }
+}

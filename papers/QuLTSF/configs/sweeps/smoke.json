@@ -1,0 +1,38 @@
+{
+  "description": "Coordinator smoke on the synthetic defaults (CPU, seconds).",
+  "sweep_id": "smoke",
+  "max_epochs": 2,
+  "entries": [
+    {
+      "name": "qultsf",
+      "config": "configs/defaults.json",
+      "seeds": [
+        1,
+        2
+      ],
+      "sequence_lengths": [
+        48
+      ],
+      "prediction_horizons": [
+        24
+      ]
+    },
+    {
+      "name": "persistence",
+      "config": "configs/defaults.json",
+      "seeds": [
+        1
+      ],
+      "sequence_lengths": [
+        48
+      ],
+      "prediction_horizons": [
+        24
+      ],
+      "extra_args": [
+        "--model-name",
+        "persistence"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "AAPL:all_lagged_1to7": {
+    "ann_test_auc": 0.5184386973180077,
+    "logistic_test_auc": 0.48960936198567384,
+    "test_rows": 439
+  },
+  "AAPL:apac_eu_same_day": {
+    "ann_test_auc": 0.6406380143261702,
+    "logistic_test_auc": 0.6395760453106779,
+    "test_rows": 439
+  },
+  "BA:all_lagged_1to7": {
+    "ann_test_auc": 0.45910804020100504,
+    "logistic_test_auc": 0.5192211055276382,
+    "test_rows": 439
+  },
+  "BA:apac_eu_same_day": {
+    "ann_test_auc": 0.6157244556113902,
+    "logistic_test_auc": 0.6875,
+    "test_rows": 439
+  },
+  "DVN:all_lagged_1to7": {
+    "ann_test_auc": 0.5162449623997674,
+    "logistic_test_auc": 0.4830279612779924,
+    "test_rows": 439
+  },
+  "DVN:apac_eu_same_day": {
+    "ann_test_auc": 0.7102081515642529,
+    "logistic_test_auc": 0.696310607004861,
+    "test_rows": 439
+  },
+  "GILD:all_lagged_1to7": {
+    "ann_test_auc": 0.45807214911370336,
+    "logistic_test_auc": 0.5125575989040642,
+    "test_rows": 439
+  },
+  "GILD:apac_eu_same_day": {
+    "ann_test_auc": 0.5530740171862676,
+    "logistic_test_auc": 0.5791440076383412,
+    "test_rows": 439
+  },
+  "LNC:all_lagged_1to7": {
+    "ann_test_auc": 0.49929299230609275,
+    "logistic_test_auc": 0.4923892701185278,
+    "test_rows": 439
+  },
+  "LNC:apac_eu_same_day": {
+    "ann_test_auc": 0.6960490746516947,
+    "logistic_test_auc": 0.7072988147223955,
+    "test_rows": 439
+  }
+}

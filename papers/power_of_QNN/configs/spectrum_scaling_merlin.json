@@ -1,0 +1,123 @@
+{
+  "description": "MerLin adaptation (Phase 04), not the paper's model; see LOG.md Phase 4 Adaptation Plan. Fig. 9 counterpart: photonic easy/hard at s_in=6, 8, 10 (8/10/12 modes, 4/5/6 photons, d=60/80/100), threshold detection, theta ~ U[0,1]; draws 0-2.",
+  "experiment": {
+    "name": "spectrum_scaling_merlin",
+    "kind": "fisher_effective_dimension"
+  },
+  "fisher": {
+    "num_thetas": 100,
+    "num_inputs": 100,
+    "theta_low": 0.0,
+    "theta_high": 1.0,
+    "draw_seeds": [
+      0,
+      1,
+      2
+    ],
+    "chunk_size": 50,
+    "gamma": 1.0,
+    "n_values": [
+      1000,
+      2000,
+      8000,
+      10000,
+      40000,
+      60000,
+      100000,
+      150000,
+      200000,
+      500000,
+      1000000
+    ],
+    "zero_tolerance": 1e-10,
+    "save_fhat_draws": [
+      0
+    ]
+  },
+  "models": [
+    {
+      "name": "photonic_hard_s6",
+      "type": "photonic",
+      "n_inputs": 6,
+      "encoding": "hard",
+      "d": 60,
+      "detection": "threshold",
+      "extra_modes": 2,
+      "mesh_order": "bs_ps",
+      "layout": "end",
+      "input_kind": "fock",
+      "readout": "click_parity",
+      "data_reps": null
+    },
+    {
+      "name": "photonic_easy_s6",
+      "type": "photonic",
+      "n_inputs": 6,
+      "encoding": "easy",
+      "d": 60,
+      "detection": "threshold",
+      "extra_modes": 2,
+      "mesh_order": "bs_ps",
+      "layout": "end",
+      "input_kind": "fock",
+      "readout": "click_parity",
+      "data_reps": null
+    },
+    {
+      "name": "photonic_hard_s8",
+      "type": "photonic",
+      "n_inputs": 8,
+      "encoding": "hard",
+      "d": 80,
+      "detection": "threshold",
+      "extra_modes": 2,
+      "mesh_order": "bs_ps",
+      "layout": "end",
+      "input_kind": "fock",
+      "readout": "click_parity",
+      "data_reps": null
+    },
+    {
+      "name": "photonic_easy_s8",
+      "type": "photonic",
+      "n_inputs": 8,
+      "encoding": "easy",
+      "d": 80,
+      "detection": "threshold",
+      "extra_modes": 2,
+      "mesh_order": "bs_ps",
+      "layout": "end",
+      "input_kind": "fock",
+      "readout": "click_parity",
+      "data_reps": null
+    },
+    {
+      "name": "photonic_hard_s10",
+      "type": "photonic",
+      "n_inputs": 10,
+      "encoding": "hard",
+      "d": 100,
+      "detection": "threshold",
+      "extra_modes": 2,
+      "mesh_order": "bs_ps",
+      "layout": "end",
+      "input_kind": "fock",
+      "readout": "click_parity",
+      "data_reps": null
+    },
+    {
+      "name": "photonic_easy_s10",
+      "type": "photonic",
+      "n_inputs": 10,
+      "encoding": "easy",
+      "d": 100,
+      "detection": "threshold",
+      "extra_modes": 2,
+      "mesh_order": "bs_ps",
+      "layout": "end",
+      "input_kind": "fock",
+      "readout": "click_parity",
+      "data_reps": null
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "description": "Appendix C ZINC controlled comparison: RRWP baseline, four seeds.",
+  "feasibility": {
+    "status": "resource_intensive"
+  },
+  "dataset": "zinc",
+  "dataset_kwargs": {
+    "subset": true
+  },
+  "model": "grit",
+  "encoding": "rrwp",
+  "rrwp_dim": 21,
+  "seeds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "seed": 0,
+  "node_dim": 64,
+  "depth": 10,
+  "num_heads": 8,
+  "head": "graph_reg",
+  "pooling": "sum",
+  "dropout": 0,
+  "attention_dropout": 0.2,
+  "epochs": 2000,
+  "batch_size": 32,
+  "lr": 0.001,
+  "weight_decay": 0.00001,
+  "warmup_epochs": 50,
+  "minimum_lr": 0.000001,
+  "parameter_budget": 500000,
+  "device": "cpu"
+}

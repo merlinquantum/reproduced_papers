@@ -1,0 +1,19 @@
+{
+    "description": "E2 reduced smoke run (NOT paper-accurate)",
+    "experiment": "e2_vqtn_4class_reduced",
+    "label": "reduced smoke run",
+    "dataset": {
+        "classes": [
+            2,
+            3,
+            6,
+            7
+        ],
+        "max_train_samples": 2000,
+        "max_test_samples": 500
+    },
+    "federation": {
+        "n_clients": 4,
+        "rounds": 2
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "description": "Phase 4 MerLin adaptation smoke run: 2 rounds on a 2000-image subset (NOT an evidence run)",
+    "experiment": "e1_merlin_0v9_reduced",
+    "label": "MerLin adaptation, reduced smoke run",
+    "dataset": {"max_train_samples": 2000, "max_test_samples": 500},
+    "model": {
+        "name": "merlin",
+        "n_photons": 4,
+        "encoding_scale": 1.0,
+        "superposition": "front",
+        "photonic_readout": "linear_head",
+        "computation_space": "unbunched"
+    },
+    "federation": {"rounds": 2}
+}

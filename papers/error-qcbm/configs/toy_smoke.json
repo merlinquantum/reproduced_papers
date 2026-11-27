@@ -1,0 +1,66 @@
+{
+  "description": "Toy scope/CLI smoke: four modes, two photons, three estimators, two updates, 2000 initial shots",
+  "task": "train",
+  "device": "cpu",
+  "dtype": "float64",
+  "model": {
+    "input_state": [
+      1,
+      0,
+      1,
+      0
+    ]
+  },
+  "dataset": {
+    "name": "gaussian",
+    "means": [
+      1,
+      4
+    ],
+    "standard_deviations": [
+      1,
+      1
+    ]
+  },
+  "training": {
+    "seeds": [
+      0
+    ],
+    "steps": 2,
+    "record_every": 1,
+    "shots": 2000,
+    "torch_threads": 1,
+    "sampling_seed_offset": 10000,
+    "perturbation_seed_offset": 100000,
+    "conditions": [
+      {
+        "name": "lossless",
+        "transmittance": 1.0,
+        "indistinguishability": 1.0,
+        "estimator": "postselection"
+      },
+      {
+        "name": "postselection",
+        "transmittance": 0.7,
+        "indistinguishability": 1.0,
+        "estimator": "postselection"
+      },
+      {
+        "name": "recycling",
+        "transmittance": 0.7,
+        "indistinguishability": 1.0,
+        "estimator": "recycling"
+      }
+    ],
+    "spsa": {
+      "alpha": 0.602,
+      "gamma": 0.101,
+      "c": 0.1,
+      "stability_fraction": 0.1,
+      "initial_step": 0.001,
+      "gain_calibration": "author_absolute_mean"
+    },
+    "loss": "kl",
+    "native_count_accumulation": "python"
+  }
+}

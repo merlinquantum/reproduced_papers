@@ -1,0 +1,48 @@
+{
+  "description": "LIGHTWEIGHT defaults for pipeline checks (2 layers per block, 2 epochs, 64 train / 32 test samples). NOT paper-accurate. Use configs/e*_original.json for the paper settings.",
+  "experiment": "e1_8clients",
+  "label": "reduced smoke run (not paper-accurate)",
+  "seed": 42,
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "data_root": "../../data",
+  "dataset": {
+    "name": "semeion",
+    "subdir": "vertical_qfl/semeion",
+    "file": "semeion.data",
+    "permutation_seed": 42,
+    "partition_seed": 42,
+    "test_size": 0.2,
+    "batch_size": 32,
+    "max_train_samples": 64,
+    "max_test_samples": 32
+  },
+  "model": {
+    "name": "vqfl",
+    "client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "server_encoding": "server_wide",
+    "softmax_output": true,
+    "n_blocks": 5,
+    "depth_per_block": 2
+  },
+  "training": {
+    "epochs": 2,
+    "optimizer": "adam",
+    "lr": 0.002,
+    "weight_decay": 0.0
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

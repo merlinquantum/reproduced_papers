@@ -1,0 +1,17 @@
+{
+  "description": "E2 / Fig. 2b-c: TF QNN on Omega_d = {1, 1.2, 3}; N = 3, L = 4, 6000 iterations, b_s = 2, lr 1e-3.",
+  "dataset": {
+    "frequencies": [
+      1.0,
+      1.2,
+      3.0
+    ]
+  },
+  "training": {
+    "iterations": 6000,
+    "batch_size": 2
+  },
+  "model": {
+    "frequency_mode": "trainable"
+  }
+}

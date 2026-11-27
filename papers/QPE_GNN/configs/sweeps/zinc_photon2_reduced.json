@@ -1,0 +1,16 @@
+{
+  "sweep_id": "zinc_photon2_reduced",
+  "description": "Phase 4 MerLin adaptation on reduced ZINC (claim C1): GRIT with RRWP plus the two-photon threshold-detection walk encoding, four seeds, 200 of 2000 epochs, same protocol as zinc_reduced.json. Compared with the Phase 3 candidates through zinc_photonic_comparison.json. Results are partial.",
+  "machine": "merlin-ai",
+  "max_epochs": 200,
+  "metric": "test_mae",
+  "direction": "minimize",
+  "split": "test (official ZINC 12k subset, 1,000 graphs)",
+  "checkpoint_rule": "model with the lowest validation MAE over the 200 epochs, evaluated once on the test split",
+  "aggregation": "mean and sample standard deviation over the four seeds",
+  "tie_rule": "no winner unless the margin exceeds twice the larger seed standard deviation and a Wilcoxon signed-rank test on seed-averaged per-graph absolute errors gives p < 0.05",
+  "selection_rule": "none: one fixed configuration, no candidate is selected",
+  "entries": [
+    {"name": "zinc_photon2", "config": "configs/zinc_photon2_reduced.json", "seeds": [0, 1, 2, 3]}
+  ]
+}

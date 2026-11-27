@@ -1,0 +1,122 @@
+{
+  "description": "Phase 4 smoke run (reduced): photonic n = 3, L = 1 and n = 2, L = 2; seed 0; 5 steps. Pipeline check only.",
+  "experiment": "fit",
+  "fit": {
+    "grid": {
+      "start": -6.0,
+      "stop": 6.0,
+      "num": 70
+    },
+    "seeds": [
+      0
+    ],
+    "models": [
+      "photonic"
+    ],
+    "success_tolerance": 0.0001,
+    "training": {
+      "optimizer": "adam",
+      "lr": 0.3,
+      "batch_size": 25,
+      "steps": 5,
+      "init_high": 6.283185307179586,
+      "full_batch": false
+    },
+    "cases": [
+      {
+        "name": "fig4_photonic_n3_L1",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "photonic",
+          "route": "photon_number",
+          "n_photons": 3,
+          "n_modes": 4,
+          "encoded_modes": [
+            0
+          ],
+          "encoding_layers": 1,
+          "encoding_scaling": 1.0,
+          "computation_space": "fock",
+          "mode_scales": [
+            1.0
+          ],
+          "phase_screens": false,
+          "readout": "threshold_mode0"
+        }
+      },
+      {
+        "name": "fig4_photonic_n2_L2",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 1.0
+        },
+        "model": {
+          "layout": "photonic",
+          "route": "reuploading",
+          "n_photons": 2,
+          "n_modes": 3,
+          "encoded_modes": [
+            0
+          ],
+          "encoding_layers": 2,
+          "encoding_scaling": 1.0,
+          "computation_space": "fock",
+          "mode_scales": [
+            1.0
+          ],
+          "phase_screens": false,
+          "readout": "threshold_mode0"
+        }
+      }
+    ]
+  }
+}

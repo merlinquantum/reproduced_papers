@@ -1,0 +1,40 @@
+{
+  "description": "Paper Table I -- L1 distance to the nearest integer on two discrete targets. Appendix D verbatim: 'fully connected networks with 2 hidden layers of 512 neurons for both', 'a ReLU activation function in all their hidden layers', 'batches of 500 samples over 40k iterations', 'we update the critic 5 times for each generator update', 'a RMSProp optimizer with a learning rate of 5e-4'. This is the paper-accurate config and costs about 2.8 h per (latent, seed) on one CPU core; see synthetic_datasets_fast.json for a cheaper variant.",
+
+  "experiment": "synthetic_datasets",
+  "seed": 0,
+  "torch_threads": 1,
+
+  "latent": {
+    "dim": 16,
+    "architecture": "haar",
+    "normalize": "center",
+    "bank_size": 200000,
+    "kinds": ["gaussian", "bernoulli", "distinguishable", "boson"]
+  },
+
+  "dataset": {
+    "name": "synthetic",
+    "targets": ["quantum", "bernoulli"],
+    "size": 100000,
+    "batch_size": 500
+  },
+
+  "model": {
+    "generator_hidden": [512, 512],
+    "critic_hidden": [512, 512],
+    "activation": "relu",
+    "latent_reinjection": false
+  },
+
+  "training": {
+    "iterations": 40000,
+    "optimizer": "rmsprop",
+    "lr": 5e-4,
+    "betas": [0.0, 0.9],
+    "n_critic": 5,
+    "gp_weight": 10.0
+  },
+
+  "evaluation": {"repeats": 12, "n_samples": 10000}
+}

@@ -1,0 +1,39 @@
+{
+    "description": "Phase 4 MerLin ADAPTATION of E4 (not the original): two-branch photonic virtual classifier, 2 photons in 4 modes, (x1, x2) phase-encoded on modes 0-1, PNR (FOCK) detection, partial distinguishability noise (indistinguishability 0.9). Same data, split, loss, accuracy rule and optimizer as e4_vqc_original. Sweep --vqc-merlin-budget and --seed/--seed-data.",
+    "experiment": {
+        "task": "vqc_merlin",
+        "id": "e4_vqc_merlin"
+    },
+    "vqc_merlin": {
+        "n_modes": 4,
+        "input_state": [
+            1,
+            0,
+            1,
+            0
+        ],
+        "encoding_modes": [
+            0,
+            1
+        ],
+        "encoding_scale": 3.141592653589793,
+        "computation_space": "fock",
+        "budget": 1.0,
+        "indistinguishability": 0.9
+    },
+    "data": {
+        "source": "generated",
+        "file": null,
+        "n_train": 200,
+        "n_test": 100,
+        "seed_data": 1,
+        "boundary_gap": 0.0,
+        "batch_size": null
+    },
+    "training": {
+        "iterations": 150,
+        "lr": 0.2,
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 10
+    }
+}

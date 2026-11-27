@@ -1,0 +1,25 @@
+{
+    "description": "E5 baseline (Fair Baseline Plan iv): noiseless VQE (budget 1) with the same ansatz, the ceiling of the circuit family.",
+    "experiment": {
+        "task": "vvqe",
+        "id": "e5_vqe_noiseless"
+    },
+    "vvqe": {
+        "half_distance_bohr": 0.8,
+        "n_qubits": 6,
+        "depth": 5,
+        "budget": 1.0,
+        "gate_noise": [
+            0.0,
+            0.0
+        ],
+        "penalty": 10.0,
+        "chebyshev_order": 100
+    },
+    "training": {
+        "iterations": 300,
+        "lr": 0.2,
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 10
+    }
+}

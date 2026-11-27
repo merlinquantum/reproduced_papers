@@ -1,0 +1,46 @@
+{
+  "sweep_id": "diagnose_vqtn_known_answer_zhead",
+  "purpose": "Separate an implementation bug from a read-out capacity limit: repeat the easy 0 vs 1 known-answer task with the diagnostic read-out head (amendment written after the components sweep showed the known-answer failure)",
+  "paper": "qfl_decentralized_data",
+  "base_config": "configs/e1_centralized.json",
+  "fixed_overrides": {
+    "dataset": {
+      "validation_fraction": 0.1
+    },
+    "model": {
+      "layers": 2,
+      "init_std": 0.1
+    },
+    "training": {
+      "lr": 0.03
+    }
+  },
+  "candidates": [
+    {
+      "name": "known_answer_0v1_z_head",
+      "overrides": {
+        "dataset.classes": [
+          0,
+          1
+        ],
+        "model.readout": "z_head"
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "workers": 3,
+  "threads_per_worker": 3,
+  "selection": {
+    "metric": "validation_accuracy",
+    "split": "validation",
+    "checkpoint": "last",
+    "direction": "maximize",
+    "aggregation": "mean",
+    "tie_tolerance": 0.005,
+    "tie_handling": "diagnosis only: no candidate is selected; all means are reported against the baseline"
+  }
+}

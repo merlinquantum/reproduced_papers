@@ -1,0 +1,56 @@
+{
+  "description": "E3P v2 - MerLin photonic ADAPTATION: fully photonic: 4 photons, client message = per-mode click probabilities (threshold detection), server = fixed grouping of its photon-number-resolved distribution (D3 best fully photonic); 100 epochs; encoding scale pi/8 and lr 0.01 from T1/T2.",
+  "experiment": "e3p_8x1client_merlin_photonic",
+  "label": "photonic adaptation v2 (D3 fully photonic design), tuned, 5 distributions, 1 seed each",
+  "seed": 42,
+  "dtype": "float32",
+  "outdir": "outdir",
+  "device": "cpu",
+  "data_root": "../../data",
+  "dataset": {
+    "name": "semeion",
+    "subdir": "vertical_qfl/semeion",
+    "file": "semeion.data",
+    "permutation_seed": 42,
+    "partition_seed": 42,
+    "test_size": 0.2,
+    "batch_size": 32,
+    "max_train_samples": null,
+    "max_test_samples": null
+  },
+  "model": {
+    "name": "vqfl_merlin",
+    "client_slices": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "server_encoding": "server_wide",
+    "backend": "merlin",
+    "n_modes": 8,
+    "n_photons": 4,
+    "client_encoding_scale": 0.39269908169872414,
+    "server_encoding_scale": 3.141592653589793,
+    "n_client_stages": 4,
+    "server_modes": 8,
+    "server_head": 0,
+    "computation_space": "fock",
+    "reuploads": 1,
+    "client_readout": "click_probabilities"
+  },
+  "training": {
+    "epochs": 100,
+    "optimizer": "adam",
+    "lr": 0.01,
+    "weight_decay": 0.0
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

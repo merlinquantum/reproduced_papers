@@ -1,0 +1,2885 @@
+{
+ "source": "data/distributed_qrc/sources/arxiv_source_v1/tqe_tran.tex",
+ "cells": [
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "10",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0458,
+   "rmse": 0.0627,
+   "r2": 0.8494
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.023,
+   "rmse": 0.034,
+   "r2": 0.9557
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0257,
+   "rmse": 0.0363,
+   "r2": 0.9495
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "20",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0225,
+   "rmse": 0.0315,
+   "r2": 0.9619
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.018,
+   "rmse": 0.0262,
+   "r2": 0.9738
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0245,
+   "rmse": 0.0327,
+   "r2": 0.9591
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "40",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0151,
+   "rmse": 0.0222,
+   "r2": 0.9812
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "40",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0182,
+   "rmse": 0.0287,
+   "r2": 0.9714
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "40",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0199,
+   "rmse": 0.0281,
+   "r2": 0.9698
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "15",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0455,
+   "rmse": 0.0599,
+   "r2": 0.8629
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "15",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0189,
+   "rmse": 0.0269,
+   "r2": 0.9722
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "15",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0321,
+   "rmse": 0.0469,
+   "r2": 0.9158
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "30",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0159,
+   "rmse": 0.0234,
+   "r2": 0.9789
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "30",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0177,
+   "rmse": 0.0284,
+   "r2": 0.9692
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "30",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0223,
+   "rmse": 0.0308,
+   "r2": 0.9637
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "60",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0136,
+   "rmse": 0.0201,
+   "r2": 0.9845
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "60",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0162,
+   "rmse": 0.024,
+   "r2": 0.9779
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "60",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0175,
+   "rmse": 0.0264,
+   "r2": 0.9726
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "25",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0174,
+   "rmse": 0.0257,
+   "r2": 0.9747
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "25",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.018,
+   "rmse": 0.038,
+   "r2": 0.9647
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "25",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0236,
+   "rmse": 0.0315,
+   "r2": 0.9605
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "50",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0142,
+   "rmse": 0.0205,
+   "r2": 0.9839
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "50",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0172,
+   "rmse": 0.0265,
+   "r2": 0.973
+  },
+  {
+   "table": "C1",
+   "architecture": "srsr",
+   "configuration": "50",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0185,
+   "rmse": 0.0277,
+   "r2": 0.9713
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0389,
+   "rmse": 0.0552,
+   "r2": 0.8834
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0141,
+   "rmse": 0.0198,
+   "r2": 0.985
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0207,
+   "rmse": 0.0277,
+   "r2": 0.9707
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "20",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0164,
+   "rmse": 0.0233,
+   "r2": 0.9792
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0141,
+   "rmse": 0.0201,
+   "r2": 0.9845
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0191,
+   "rmse": 0.0258,
+   "r2": 0.9745
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "40",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0141,
+   "rmse": 0.0204,
+   "r2": 0.9841
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "40",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0142,
+   "rmse": 0.0205,
+   "r2": 0.9839
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "40",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0206,
+   "rmse": 0.0278,
+   "r2": 0.9705
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "15",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0269,
+   "rmse": 0.0365,
+   "r2": 0.949
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "15",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0141,
+   "rmse": 0.0204,
+   "r2": 0.9841
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "15",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0209,
+   "rmse": 0.0289,
+   "r2": 0.968
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "30",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0142,
+   "rmse": 0.0195,
+   "r2": 0.9854
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "30",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.014,
+   "rmse": 0.0199,
+   "r2": 0.9848
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "30",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.02,
+   "rmse": 0.0276,
+   "r2": 0.9708
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "60",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0116,
+   "rmse": 0.0165,
+   "r2": 0.9896
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "60",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0146,
+   "rmse": 0.022,
+   "r2": 0.9815
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "60",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0174,
+   "rmse": 0.0238,
+   "r2": 0.9766
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "25",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0158,
+   "rmse": 0.022,
+   "r2": 0.9815
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "25",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0139,
+   "rmse": 0.0197,
+   "r2": 0.9851
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "25",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0193,
+   "rmse": 0.0264,
+   "r2": 0.9731
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "50",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0149,
+   "rmse": 0.0292,
+   "r2": 0.9674
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "50",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0141,
+   "rmse": 0.0202,
+   "r2": 0.984
+  },
+  {
+   "table": "C2",
+   "architecture": "srsr",
+   "configuration": "50",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0188,
+   "rmse": 0.0251,
+   "r2": 0.9753
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0411,
+   "rmse": 0.0583,
+   "r2": 0.8712
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0178,
+   "rmse": 0.0275,
+   "r2": 0.9695
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0214,
+   "rmse": 0.0285,
+   "r2": 0.9698
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "20",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0214,
+   "rmse": 0.0297,
+   "r2": 0.9632
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0166,
+   "rmse": 0.0261,
+   "r2": 0.9734
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0196,
+   "rmse": 0.0267,
+   "r2": 0.9731
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "40",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0146,
+   "rmse": 0.0214,
+   "r2": 0.9827
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "40",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0153,
+   "rmse": 0.0242,
+   "r2": 0.9763
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "40",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0189,
+   "rmse": 0.0258,
+   "r2": 0.9747
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "15",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0386,
+   "rmse": 0.0528,
+   "r2": 0.8865
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "15",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0172,
+   "rmse": 0.0264,
+   "r2": 0.9728
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "15",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0208,
+   "rmse": 0.0282,
+   "r2": 0.9702
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "30",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.015,
+   "rmse": 0.0216,
+   "r2": 0.9814
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "30",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0157,
+   "rmse": 0.0248,
+   "r2": 0.9757
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "30",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0193,
+   "rmse": 0.0261,
+   "r2": 0.9736
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "60",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0129,
+   "rmse": 0.0188,
+   "r2": 0.9875
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "60",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0148,
+   "rmse": 0.0219,
+   "r2": 0.9823
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "60",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0176,
+   "rmse": 0.0241,
+   "r2": 0.9762
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "25",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0171,
+   "rmse": 0.0245,
+   "r2": 0.9763
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "25",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0164,
+   "rmse": 0.0253,
+   "r2": 0.9754
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "25",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0195,
+   "rmse": 0.0262,
+   "r2": 0.9738
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "50",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0144,
+   "rmse": 0.0262,
+   "r2": 0.9691
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "50",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0152,
+   "rmse": 0.0228,
+   "r2": 0.9807
+  },
+  {
+   "table": "C3",
+   "architecture": "srsr",
+   "configuration": "50",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0185,
+   "rmse": 0.0249,
+   "r2": 0.9755
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "2x5",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0212,
+   "rmse": 0.0323,
+   "r2": 0.96
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "2x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0229,
+   "rmse": 0.0446,
+   "r2": 0.9239
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "2x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0281,
+   "rmse": 0.0369,
+   "r2": 0.9479
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "2x10",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0382,
+   "rmse": 0.053,
+   "r2": 0.8924
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "2x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0171,
+   "rmse": 0.0248,
+   "r2": 0.9764
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "2x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0258,
+   "rmse": 0.035,
+   "r2": 0.9532
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "2x20",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0175,
+   "rmse": 0.0244,
+   "r2": 0.9772
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "2x20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0168,
+   "rmse": 0.0257,
+   "r2": 0.9747
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "2x20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0198,
+   "rmse": 0.0278,
+   "r2": 0.9704
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "3x5",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0163,
+   "rmse": 0.0252,
+   "r2": 0.9756
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "3x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0193,
+   "rmse": 0.0279,
+   "r2": 0.9702
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "3x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0239,
+   "rmse": 0.033,
+   "r2": 0.9585
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "3x10",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.019,
+   "rmse": 0.0296,
+   "r2": 0.9664
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "3x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0174,
+   "rmse": 0.0344,
+   "r2": 0.9547
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "3x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0205,
+   "rmse": 0.0285,
+   "r2": 0.969
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "3x20",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0128,
+   "rmse": 0.0189,
+   "r2": 0.9863
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "3x20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0159,
+   "rmse": 0.0245,
+   "r2": 0.977
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "3x20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0179,
+   "rmse": 0.0261,
+   "r2": 0.9755
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "5x5",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0174,
+   "rmse": 0.0274,
+   "r2": 0.9713
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "5x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0178,
+   "rmse": 0.0292,
+   "r2": 0.9673
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "5x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0246,
+   "rmse": 0.0335,
+   "r2": 0.9578
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "5x10",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0175,
+   "rmse": 0.0285,
+   "r2": 0.969
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "5x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0171,
+   "rmse": 0.0252,
+   "r2": 0.9758
+  },
+  {
+   "table": "C4",
+   "architecture": "mrsr",
+   "configuration": "5x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0183,
+   "rmse": 0.0268,
+   "r2": 0.9739
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "2x5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0165,
+   "rmse": 0.0236,
+   "r2": 0.9787
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "2x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0139,
+   "rmse": 0.0196,
+   "r2": 0.9853
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "2x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0204,
+   "rmse": 0.0289,
+   "r2": 0.9681
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "2x10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0343,
+   "rmse": 0.0479,
+   "r2": 0.9122
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "2x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.014,
+   "rmse": 0.0198,
+   "r2": 0.985
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "2x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0173,
+   "rmse": 0.0244,
+   "r2": 0.9773
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "2x20",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0142,
+   "rmse": 0.0317,
+   "r2": 0.9615
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "2x20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.014,
+   "rmse": 0.0202,
+   "r2": 0.9845
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "2x20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0158,
+   "rmse": 0.0225,
+   "r2": 0.9807
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "3x5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0157,
+   "rmse": 0.0223,
+   "r2": 0.981
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "3x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0142,
+   "rmse": 0.0199,
+   "r2": 0.9848
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "3x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0169,
+   "rmse": 0.0246,
+   "r2": 0.9769
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "3x10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0147,
+   "rmse": 0.0206,
+   "r2": 0.9837
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "3x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0141,
+   "rmse": 0.0204,
+   "r2": 0.9841
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "3x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0176,
+   "rmse": 0.0243,
+   "r2": 0.9774
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "3x20",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0113,
+   "rmse": 0.0158,
+   "r2": 0.9904
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "3x20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0145,
+   "rmse": 0.0213,
+   "r2": 0.9826
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "3x20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0147,
+   "rmse": 0.0209,
+   "r2": 0.9833
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "5x5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0146,
+   "rmse": 0.0207,
+   "r2": 0.9837
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "5x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0142,
+   "rmse": 0.0202,
+   "r2": 0.9844
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "5x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0165,
+   "rmse": 0.0241,
+   "r2": 0.9791
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "5x10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0148,
+   "rmse": 0.0224,
+   "r2": 0.9807
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "5x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0143,
+   "rmse": 0.0211,
+   "r2": 0.983
+  },
+  {
+   "table": "C5",
+   "architecture": "mrsr",
+   "configuration": "5x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0152,
+   "rmse": 0.0217,
+   "r2": 0.9816
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "2x5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0183,
+   "rmse": 0.0274,
+   "r2": 0.9735
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "2x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0176,
+   "rmse": 0.0256,
+   "r2": 0.9748
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "2x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0211,
+   "rmse": 0.0296,
+   "r2": 0.9674
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "2x10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0335,
+   "rmse": 0.0458,
+   "r2": 0.9216
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "2x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0158,
+   "rmse": 0.0217,
+   "r2": 0.9813
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "2x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0188,
+   "rmse": 0.0263,
+   "r2": 0.9726
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "2x20",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.015,
+   "rmse": 0.0279,
+   "r2": 0.9603
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "2x20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0153,
+   "rmse": 0.0205,
+   "r2": 0.9828
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "2x20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0159,
+   "rmse": 0.0233,
+   "r2": 0.9801
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "3x5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0176,
+   "rmse": 0.0245,
+   "r2": 0.9787
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "3x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0169,
+   "rmse": 0.0231,
+   "r2": 0.9791
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "3x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0192,
+   "rmse": 0.0269,
+   "r2": 0.9718
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "3x10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0168,
+   "rmse": 0.0239,
+   "r2": 0.9792
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "3x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0155,
+   "rmse": 0.0207,
+   "r2": 0.983
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "3x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0172,
+   "rmse": 0.0238,
+   "r2": 0.9789
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "3x20",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0123,
+   "rmse": 0.0163,
+   "r2": 0.9883
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "3x20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0145,
+   "rmse": 0.0203,
+   "r2": 0.9842
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "3x20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0148,
+   "rmse": 0.0207,
+   "r2": 0.9825
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "5x5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0152,
+   "rmse": 0.0224,
+   "r2": 0.9815
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "5x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0151,
+   "rmse": 0.0204,
+   "r2": 0.9846
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "5x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0153,
+   "rmse": 0.0219,
+   "r2": 0.9808
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "5x10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0149,
+   "rmse": 0.0203,
+   "r2": 0.9809
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "5x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0147,
+   "rmse": 0.0196,
+   "r2": 0.9854
+  },
+  {
+   "table": "C6",
+   "architecture": "mrsr",
+   "configuration": "5x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.015,
+   "rmse": 0.0212,
+   "r2": 0.9811
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "10/2",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.075,
+   "rmse": 0.0929,
+   "r2": 0.6701
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "10/2",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0419,
+   "rmse": 0.0608,
+   "r2": 0.8586
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "10/2",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0507,
+   "rmse": 0.0671,
+   "r2": 0.8278
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "20/2",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0462,
+   "rmse": 0.0616,
+   "r2": 0.8548
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "20/2",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0246,
+   "rmse": 0.0368,
+   "r2": 0.9483
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "20/2",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0329,
+   "rmse": 0.0443,
+   "r2": 0.9249
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "40/2",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0235,
+   "rmse": 0.0319,
+   "r2": 0.9612
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "40/2",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0163,
+   "rmse": 0.0244,
+   "r2": 0.9766
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "40/2",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0216,
+   "rmse": 0.0306,
+   "r2": 0.9641
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "15/3",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.07,
+   "rmse": 0.0875,
+   "r2": 0.707
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "15/3",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0465,
+   "rmse": 0.0604,
+   "r2": 0.8604
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "15/3",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0475,
+   "rmse": 0.0546,
+   "r2": 0.8659
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "30/3",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0282,
+   "rmse": 0.0403,
+   "r2": 0.938
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "30/3",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0304,
+   "rmse": 0.0416,
+   "r2": 0.9319
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "30/3",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0271,
+   "rmse": 0.036,
+   "r2": 0.9505
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "60/3",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0183,
+   "rmse": 0.0256,
+   "r2": 0.9749
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "60/3",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0174,
+   "rmse": 0.0256,
+   "r2": 0.9744
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "60/3",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0221,
+   "rmse": 0.0308,
+   "r2": 0.9638
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "25/5",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0296,
+   "rmse": 0.0409,
+   "r2": 0.9361
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "25/5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0243,
+   "rmse": 0.0351,
+   "r2": 0.9529
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "25/5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0293,
+   "rmse": 0.0402,
+   "r2": 0.9345
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "50/5",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0223,
+   "rmse": 0.0313,
+   "r2": 0.9626
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "50/5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0167,
+   "rmse": 0.0254,
+   "r2": 0.9753
+  },
+  {
+   "table": "C7",
+   "architecture": "srmr",
+   "configuration": "50/5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0227,
+   "rmse": 0.0322,
+   "r2": 0.9619
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "10/2",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0553,
+   "rmse": 0.074,
+   "r2": 0.7904
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "10/2",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0159,
+   "rmse": 0.034,
+   "r2": 0.9557
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "10/2",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0223,
+   "rmse": 0.0367,
+   "r2": 0.9517
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "20/2",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.025,
+   "rmse": 0.0345,
+   "r2": 0.9544
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "20/2",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0141,
+   "rmse": 0.0204,
+   "r2": 0.9841
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "20/2",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0197,
+   "rmse": 0.0306,
+   "r2": 0.9713
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "40/2",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0175,
+   "rmse": 0.0238,
+   "r2": 0.9783
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "40/2",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0139,
+   "rmse": 0.0196,
+   "r2": 0.9853
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "40/2",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0186,
+   "rmse": 0.0261,
+   "r2": 0.9765
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "15/3",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0618,
+   "rmse": 0.0791,
+   "r2": 0.7606
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "15/3",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0156,
+   "rmse": 0.0373,
+   "r2": 0.9467
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "15/3",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0214,
+   "rmse": 0.0349,
+   "r2": 0.953
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "30/3",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.02,
+   "rmse": 0.027,
+   "r2": 0.9721
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "30/3",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0138,
+   "rmse": 0.0195,
+   "r2": 0.9855
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "30/3",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.019,
+   "rmse": 0.0264,
+   "r2": 0.9758
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "60/3",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0122,
+   "rmse": 0.0171,
+   "r2": 0.9888
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "60/3",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0142,
+   "rmse": 0.0207,
+   "r2": 0.9837
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "60/3",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0176,
+   "rmse": 0.0238,
+   "r2": 0.9772
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "25/5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0228,
+   "rmse": 0.033,
+   "r2": 0.9584
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "25/5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0139,
+   "rmse": 0.0195,
+   "r2": 0.9854
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "25/5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0203,
+   "rmse": 0.0266,
+   "r2": 0.9723
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "50/5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0134,
+   "rmse": 0.02,
+   "r2": 0.9847
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "50/5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0139,
+   "rmse": 0.0198,
+   "r2": 0.9851
+  },
+  {
+   "table": "C8",
+   "architecture": "srmr",
+   "configuration": "50/5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0185,
+   "rmse": 0.0247,
+   "r2": 0.9761
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "10/2",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0578,
+   "rmse": 0.0806,
+   "r2": 0.7686
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "10/2",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0175,
+   "rmse": 0.0383,
+   "r2": 0.9522
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "10/2",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0244,
+   "rmse": 0.0376,
+   "r2": 0.9492
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "20/2",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0291,
+   "rmse": 0.0432,
+   "r2": 0.9235
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "20/2",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0167,
+   "rmse": 0.0237,
+   "r2": 0.9788
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "20/2",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0203,
+   "rmse": 0.0312,
+   "r2": 0.9685
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "40/2",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0193,
+   "rmse": 0.0261,
+   "r2": 0.9716
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "40/2",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0146,
+   "rmse": 0.0219,
+   "r2": 0.9813
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "40/2",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0202,
+   "rmse": 0.0308,
+   "r2": 0.9698
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "15/3",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0642,
+   "rmse": 0.0824,
+   "r2": 0.7467
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "15/3",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0171,
+   "rmse": 0.0336,
+   "r2": 0.952
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "15/3",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0229,
+   "rmse": 0.0355,
+   "r2": 0.9509
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "30/3",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0228,
+   "rmse": 0.0302,
+   "r2": 0.9609
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "30/3",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0155,
+   "rmse": 0.0232,
+   "r2": 0.9796
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "30/3",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0198,
+   "rmse": 0.0276,
+   "r2": 0.9716
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "60/3",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0146,
+   "rmse": 0.0208,
+   "r2": 0.9835
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "60/3",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0149,
+   "rmse": 0.0216,
+   "r2": 0.9818
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "60/3",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0187,
+   "rmse": 0.0249,
+   "r2": 0.9757
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "25/5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0249,
+   "rmse": 0.0386,
+   "r2": 0.9491
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "25/5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0146,
+   "rmse": 0.0217,
+   "r2": 0.9816
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "25/5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0215,
+   "rmse": 0.0281,
+   "r2": 0.9711
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "50/5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0187,
+   "rmse": 0.0249,
+   "r2": 0.9752
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "50/5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0144,
+   "rmse": 0.0205,
+   "r2": 0.9827
+  },
+  {
+   "table": "C9",
+   "architecture": "srmr",
+   "configuration": "50/5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0189,
+   "rmse": 0.0255,
+   "r2": 0.9745
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "2x5",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0587,
+   "rmse": 0.0723,
+   "r2": 0.8002
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "2x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0337,
+   "rmse": 0.045,
+   "r2": 0.9225
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "2x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0388,
+   "rmse": 0.0522,
+   "r2": 0.8957
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "2x10",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0397,
+   "rmse": 0.0548,
+   "r2": 0.8851
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "2x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0264,
+   "rmse": 0.0456,
+   "r2": 0.9203
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "2x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0275,
+   "rmse": 0.0371,
+   "r2": 0.9474
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "2x20",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0185,
+   "rmse": 0.0262,
+   "r2": 0.9737
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "2x20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0175,
+   "rmse": 0.0267,
+   "r2": 0.9727
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "2x20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0214,
+   "rmse": 0.0296,
+   "r2": 0.9665
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "3x5",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.025,
+   "rmse": 0.0343,
+   "r2": 0.9551
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "3x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0293,
+   "rmse": 0.0407,
+   "r2": 0.9304
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "3x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0355,
+   "rmse": 0.046,
+   "r2": 0.9189
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "3x10",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0315,
+   "rmse": 0.0445,
+   "r2": 0.9243
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "3x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0202,
+   "rmse": 0.0295,
+   "r2": 0.9668
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "3x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0263,
+   "rmse": 0.0353,
+   "r2": 0.9523
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "3x20",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0163,
+   "rmse": 0.0242,
+   "r2": 0.9776
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "3x20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0155,
+   "rmse": 0.0231,
+   "r2": 0.9785
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "3x20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0192,
+   "rmse": 0.0279,
+   "r2": 0.9711
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "5x5",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0518,
+   "rmse": 0.0651,
+   "r2": 0.8377
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "5x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0306,
+   "rmse": 0.0425,
+   "r2": 0.931
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "5x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0343,
+   "rmse": 0.0453,
+   "r2": 0.9203
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "5x10",
+   "reservoir_type": "classical",
+   "readout_type": "linear",
+   "mae": 0.0335,
+   "rmse": 0.0474,
+   "r2": 0.9139
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "5x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "linear",
+   "mae": 0.0281,
+   "rmse": 0.0384,
+   "r2": 0.9436
+  },
+  {
+   "table": "C10",
+   "architecture": "mrmr",
+   "configuration": "5x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "linear",
+   "mae": 0.0304,
+   "rmse": 0.0429,
+   "r2": 0.9268
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "2x5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0572,
+   "rmse": 0.0721,
+   "r2": 0.801
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "2x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.014,
+   "rmse": 0.02,
+   "r2": 0.9847
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "2x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.02,
+   "rmse": 0.0332,
+   "r2": 0.9579
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "2x10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0343,
+   "rmse": 0.0481,
+   "r2": 0.9116
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "2x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0139,
+   "rmse": 0.0194,
+   "r2": 0.9856
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "2x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.016,
+   "rmse": 0.0227,
+   "r2": 0.9804
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "2x20",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0137,
+   "rmse": 0.0225,
+   "r2": 0.9807
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "2x20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0137,
+   "rmse": 0.0191,
+   "r2": 0.9858
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "2x20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0158,
+   "rmse": 0.0216,
+   "r2": 0.9821
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "3x5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0251,
+   "rmse": 0.0335,
+   "r2": 0.9572
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "3x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0145,
+   "rmse": 0.0206,
+   "r2": 0.9837
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "3x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0224,
+   "rmse": 0.0299,
+   "r2": 0.9657
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "3x10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0226,
+   "rmse": 0.0313,
+   "r2": 0.9624
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "3x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0139,
+   "rmse": 0.0195,
+   "r2": 0.9855
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "3x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0165,
+   "rmse": 0.0222,
+   "r2": 0.9812
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "3x20",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.013,
+   "rmse": 0.0185,
+   "r2": 0.9869
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "3x20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0135,
+   "rmse": 0.0189,
+   "r2": 0.9864
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "3x20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0163,
+   "rmse": 0.0223,
+   "r2": 0.981
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "5x5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0475,
+   "rmse": 0.0588,
+   "r2": 0.8675
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "5x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0143,
+   "rmse": 0.0206,
+   "r2": 0.9838
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "5x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0175,
+   "rmse": 0.0237,
+   "r2": 0.9798
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "5x10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0323,
+   "rmse": 0.0456,
+   "r2": 0.9205
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "5x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0138,
+   "rmse": 0.0193,
+   "r2": 0.9857
+  },
+  {
+   "table": "C11",
+   "architecture": "mrmr",
+   "configuration": "5x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_ideal",
+   "mae": 0.0169,
+   "rmse": 0.0231,
+   "r2": 0.9804
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "2x5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0578,
+   "rmse": 0.0724,
+   "r2": 0.8006
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "2x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0206,
+   "rmse": 0.0298,
+   "r2": 0.9695
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "2x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0215,
+   "rmse": 0.0307,
+   "r2": 0.9623
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "2x10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0369,
+   "rmse": 0.0497,
+   "r2": 0.9058
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "2x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0195,
+   "rmse": 0.0271,
+   "r2": 0.9712
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "2x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0203,
+   "rmse": 0.0294,
+   "r2": 0.9648
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "2x20",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0146,
+   "rmse": 0.024,
+   "r2": 0.9762
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "2x20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0168,
+   "rmse": 0.0237,
+   "r2": 0.9805
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "2x20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0171,
+   "rmse": 0.0236,
+   "r2": 0.9811
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "3x5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.025,
+   "rmse": 0.0338,
+   "r2": 0.9573
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "3x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0198,
+   "rmse": 0.0275,
+   "r2": 0.9701
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "3x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0202,
+   "rmse": 0.0291,
+   "r2": 0.9653
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "3x10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0245,
+   "rmse": 0.0349,
+   "r2": 0.9551
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "3x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0176,
+   "rmse": 0.0249,
+   "r2": 0.9791
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "3x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0185,
+   "rmse": 0.0262,
+   "r2": 0.9724
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "3x20",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0144,
+   "rmse": 0.0205,
+   "r2": 0.9846
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "3x20",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0141,
+   "rmse": 0.0197,
+   "r2": 0.9852
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "3x20",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0167,
+   "rmse": 0.0215,
+   "r2": 0.9817
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "5x5",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0488,
+   "rmse": 0.0593,
+   "r2": 0.8598
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "5x5",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0185,
+   "rmse": 0.0263,
+   "r2": 0.9782
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "5x5",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0179,
+   "rmse": 0.0246,
+   "r2": 0.9793
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "5x10",
+   "reservoir_type": "classical",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0327,
+   "rmse": 0.0461,
+   "r2": 0.9193
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "5x10",
+   "reservoir_type": "quantum_ideal",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0163,
+   "rmse": 0.024,
+   "r2": 0.981
+  },
+  {
+   "table": "C12",
+   "architecture": "mrmr",
+   "configuration": "5x10",
+   "reservoir_type": "quantum_noisy",
+   "readout_type": "quantum_kernel_noisy",
+   "mae": 0.0168,
+   "rmse": 0.0228,
+   "r2": 0.9822
+  }
+ ]
+}

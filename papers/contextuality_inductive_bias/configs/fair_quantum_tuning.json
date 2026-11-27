@@ -1,0 +1,25 @@
+{
+  "description": "Phase 5 fair tuning of the paper's quantum models (and the photonic adaptation): validation split enabled, protocol paper; model and lr from --model/--layers/--cnot-pattern/--lr.",
+  "experiment": {
+    "id": "fair_quantum_tuning"
+  },
+  "model": {
+    "kind": "biased_quantum",
+    "layers": 2,
+    "blocks": 2
+  },
+  "data": {
+    "protocol": "paper",
+    "validation": {
+      "enabled": true,
+      "seed": 201,
+      "n": 1500
+    }
+  },
+  "training": {
+    "steps": 2000,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "l2": 0.0
+  }
+}

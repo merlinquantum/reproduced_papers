@@ -1,0 +1,18 @@
+{
+  "description": "Smoke run: biased quantum model, L = 1, 5 steps, 500 test strategies (wiring and logging check only, not evidence).",
+  "experiment": {
+    "id": "smoke"
+  },
+  "data": {
+    "test": {
+      "seed": 2302,
+      "n": 500
+    }
+  },
+  "model": {
+    "layers": 1
+  },
+  "training": {
+    "steps": 5
+  }
+}

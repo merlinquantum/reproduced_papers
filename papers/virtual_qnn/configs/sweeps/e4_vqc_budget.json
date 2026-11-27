@@ -1,0 +1,74 @@
+{
+  "sweep_id": "e4_vqc_budget",
+  "description": "Fig. 6d. Repetition r uses seed=r and seed_data=r, so budgets are compared on identical data sets (paired).",
+  "base_config": "configs/e4_vqc_original.json",
+  "axes": {
+    "--vqc-budget": [
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0
+    ]
+  },
+  "repetitions": [
+    {
+      "--seed": 1,
+      "--seed-data": 1
+    },
+    {
+      "--seed": 2,
+      "--seed-data": 2
+    },
+    {
+      "--seed": 3,
+      "--seed-data": 3
+    },
+    {
+      "--seed": 4,
+      "--seed-data": 4
+    },
+    {
+      "--seed": 5,
+      "--seed-data": 5
+    },
+    {
+      "--seed": 6,
+      "--seed-data": 6
+    },
+    {
+      "--seed": 7,
+      "--seed-data": 7
+    },
+    {
+      "--seed": 8,
+      "--seed-data": 8
+    },
+    {
+      "--seed": 9,
+      "--seed-data": 9
+    },
+    {
+      "--seed": 10,
+      "--seed-data": 10
+    }
+  ],
+  "progress_total": 150,
+  "plan": {
+    "metrics": [
+      "train_accuracy",
+      "test_accuracy",
+      "n_parameters",
+      "train_mse"
+    ],
+    "direction": "maximize",
+    "split": "train and test (reported, not selected on)",
+    "checkpoint": "final iteration (no early stopping)",
+    "aggregation": "per candidate: mean and population std (ddof=0) over repetitions; min and max also reported (best-of-repetitions is a secondary view because the reference code hints at best-of-N restarts)",
+    "tie_tolerance": "n/a (descriptive sweep)",
+    "selection_rule": "none: descriptive curve over the swept axis; no candidate is selected",
+    "note": "Fig. 6d. Repetition r uses seed=r and seed_data=r, so budgets are compared on identical data sets (paired)."
+  },
+  "fixed_args": {},
+  "max_workers": 6
+}

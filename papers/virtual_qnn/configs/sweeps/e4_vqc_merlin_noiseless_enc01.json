@@ -1,0 +1,71 @@
+{
+  "sweep_id": "e4_vqc_merlin_noiseless_enc01",
+  "description": "Phase 4 MerLin ADAPTATION of E4, noise-free control (budgets 1 and 3). Amendment 2: (x1, x2) encoded on modes 0-1 only.",
+  "base_config": "configs/e4_vqc_merlin_noiseless.json",
+  "axes": {
+    "--vqc-merlin-budget": [
+      1.0,
+      3.0
+    ]
+  },
+  "repetitions": [
+    {
+      "--seed": 1,
+      "--seed-data": 1
+    },
+    {
+      "--seed": 2,
+      "--seed-data": 2
+    },
+    {
+      "--seed": 3,
+      "--seed-data": 3
+    },
+    {
+      "--seed": 4,
+      "--seed-data": 4
+    },
+    {
+      "--seed": 5,
+      "--seed-data": 5
+    },
+    {
+      "--seed": 6,
+      "--seed-data": 6
+    },
+    {
+      "--seed": 7,
+      "--seed-data": 7
+    },
+    {
+      "--seed": 8,
+      "--seed-data": 8
+    },
+    {
+      "--seed": 9,
+      "--seed-data": 9
+    },
+    {
+      "--seed": 10,
+      "--seed-data": 10
+    }
+  ],
+  "progress_total": 150,
+  "fixed_args": {},
+  "max_workers": 6,
+  "plan": {
+    "metrics": [
+      "train_accuracy",
+      "test_accuracy",
+      "n_parameters",
+      "train_mse"
+    ],
+    "direction": "maximize",
+    "split": "train and test (reported, not selected on)",
+    "checkpoint": "final iteration (no early stopping)",
+    "aggregation": "per candidate: mean and population std (ddof=0) over 10 paired repetitions; min/max",
+    "tie_tolerance": "n/a (descriptive sweep)",
+    "selection_rule": "none: descriptive curve over budget; no candidate is selected",
+    "note": "Phase 4 MerLin ADAPTATION of E4, noise-free control (budgets 1 and 3). Amendment 2: (x1, x2) encoded on modes 0-1 only."
+  }
+}

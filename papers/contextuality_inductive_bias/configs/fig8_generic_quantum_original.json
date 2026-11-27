@@ -1,0 +1,18 @@
+{
+  "description": "E1 / Fig. 8: generic (unbiased) quantum model of App. E / Fig. 10, L = 2, B = 2, Fig. 10 CNOT pattern, Adam lr 1e-3, 2000 steps. Use --cnot-pattern code for the author-code control (D3).",
+  "experiment": {
+    "id": "fig8_generic_quantum"
+  },
+  "model": {
+    "kind": "generic_quantum",
+    "layers": 2,
+    "blocks": 2,
+    "cnot_pattern": "paper"
+  },
+  "training": {
+    "steps": 2000,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "l2": 0.0
+  }
+}

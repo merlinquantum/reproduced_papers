@@ -1,0 +1,6 @@
+{
+  "description": "Photonic smoke overlay: 2 reservoir instances, 2 encoding scales, horizon 1 only. NOT paper-accurate.",
+  "experiment": "photonic",
+  "evaluation": {"horizons": [1], "n_out_of_sample": 60, "n_validation": 60},
+  "photonic": {"n_instances": 2, "encoding_scale_divisors": [1, 8]}
+}

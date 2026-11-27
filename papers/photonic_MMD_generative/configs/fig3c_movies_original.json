@@ -1,0 +1,55 @@
+{
+    "description": "Fig. 3c: movies m=100, n=10 (rebuilt, unverified), Haar; sweep --init data_dependent/identity/random/weak_unbiased and --sigma 1.5/2.5/3.5, seeds 0-4.",
+    "experiment": {
+        "name": "fig3c_movies_haar",
+        "paper_reference": "Fig. 3c"
+    },
+    "dataset": {
+        "name": "movies",
+        "m": 100,
+        "n": 10,
+        "n_train": 10000,
+        "n_test": 10000,
+        "seed": 42,
+        "min_date": "2005-01-01"
+    },
+    "model": {
+        "ansatz": "haar",
+        "butterfly_variant": "reference",
+        "input_state": "middle_alternating",
+        "photon_model": "indistinguishable"
+    },
+    "kernel": {
+        "type": "gaussian",
+        "sigma": 2.5
+    },
+    "init": {
+        "strategy": "identity",
+        "perturbation": 0.01,
+        "steps": 5000,
+        "learning_rate": 0.5
+    },
+    "training": {
+        "steps": 2000,
+        "learning_rate": 0.01,
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "convergence_interval": 200,
+        "log_every": 1
+    },
+    "evaluation": {
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "sample_metrics": true,
+        "num_model_samples": 2000,
+        "baselines": [
+            "random",
+            "marginal",
+            "rbm",
+            "test_to_test"
+        ],
+        "rbm": {
+            "score_sigma": 2.5
+        }
+    }
+}

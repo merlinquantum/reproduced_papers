@@ -1,0 +1,54 @@
+{
+  "candidates": [
+    {
+      "best_epochs": [
+        96,
+        131,
+        51,
+        124
+      ],
+      "candidate": "synthetic_degree",
+      "config": "configs/synthetic_degree_classical.json",
+      "epochs": 200,
+      "expected_runs": 4,
+      "mean": 1.0,
+      "mean_wall_clock_s": 142.53482073545456,
+      "missing_seeds": [],
+      "num_params": 3906,
+      "observed_runs": 4,
+      "resumed_runs": [],
+      "run_dirs": [
+        "synthetic_degree_seed0/run_20261109-100533",
+        "synthetic_degree_seed1/run_20261109-100533",
+        "synthetic_degree_seed2/run_20261109-100533",
+        "synthetic_degree_seed3/run_20261109-100533"
+      ],
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "status": "COMPLETE",
+      "std": 0.0,
+      "values": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    }
+  ],
+  "code_commit": "6c8861e93f56fccec9add8c3ac40c5084dbcf7c1",
+  "code_dirty": true,
+  "comparisons": [],
+  "direction": "maximize",
+  "excluded_runs": [],
+  "expected_runs": 4,
+  "metric": "test_acc",
+  "observed_runs": 4,
+  "schema_version": 1,
+  "sweep_id": "synthetic_degree",
+  "tie_rule": "no winner unless the margin exceeds twice the larger seed standard deviation and an exact McNemar test on the pooled test predictions gives p < 0.05",
+  "verdict": "COMPLETE SWEEP"
+}

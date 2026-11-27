@@ -1,0 +1,62 @@
+{
+  "sweep_id": "e3_ff_depth",
+  "description": "E3: FF depth ablation on {1,1.2,3}, L in {4,...,128}, other settings as Fig. 2b.",
+  "candidates": [
+    {
+      "name": "ff_L4",
+      "config": "configs/fig2b_ff_original.json",
+      "overrides": {
+        "model.n_layers": 4
+      }
+    },
+    {
+      "name": "ff_L8",
+      "config": "configs/fig2b_ff_original.json",
+      "overrides": {
+        "model.n_layers": 8
+      }
+    },
+    {
+      "name": "ff_L16",
+      "config": "configs/fig2b_ff_original.json",
+      "overrides": {
+        "model.n_layers": 16
+      }
+    },
+    {
+      "name": "ff_L32",
+      "config": "configs/fig2b_ff_original.json",
+      "overrides": {
+        "model.n_layers": 32
+      }
+    },
+    {
+      "name": "ff_L64",
+      "config": "configs/fig2b_ff_original.json",
+      "overrides": {
+        "model.n_layers": 64
+      }
+    },
+    {
+      "name": "ff_L128",
+      "config": "configs/fig2b_ff_original.json",
+      "overrides": {
+        "model.n_layers": 128
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "max_workers": 6,
+  "selection": {
+    "metric": "train_mse",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}

@@ -1,0 +1,158 @@
+{
+  "run_dir": "outdir/run_20261028-110341",
+  "experiment": "coefficients",
+  "settings": [
+    {
+      "label": "photonic_n4_L1",
+      "n_parameters": 40,
+      "per_frequency": [
+        {
+          "fraction_zero": 0.0,
+          "frequency": 0,
+          "max_abs": 0.7743809562889281,
+          "mean_abs": 0.12501450484298024,
+          "var_imag": 0.0,
+          "var_real": 0.02343073872520609,
+          "var_total": 0.02343073872520609
+        },
+        {
+          "fraction_zero": 0.0,
+          "frequency": 1,
+          "max_abs": 0.19330930044177283,
+          "mean_abs": 0.039937632556067165,
+          "var_imag": 0.0012087380280660079,
+          "var_real": 0.001799588686820405,
+          "var_total": 0.0030083267148864126
+        },
+        {
+          "fraction_zero": 0.0,
+          "frequency": 2,
+          "max_abs": 0.08016078665560501,
+          "mean_abs": 0.018061800139398797,
+          "var_imag": 0.0004125523164137754,
+          "var_real": 0.00028129085463098427,
+          "var_total": 0.0006938431710447597
+        },
+        {
+          "fraction_zero": 0.0,
+          "frequency": 3,
+          "max_abs": 0.02239498972278273,
+          "mean_abs": 0.004377677811363549,
+          "var_imag": 2.1966910484922407e-05,
+          "var_real": 2.6240316142622432e-05,
+          "var_total": 4.8207226627544836e-05
+        },
+        {
+          "fraction_zero": 0.01,
+          "frequency": 4,
+          "max_abs": 0.0049715897448796755,
+          "mean_abs": 0.0005302086376929814,
+          "var_imag": 5.956073805660377e-07,
+          "var_real": 4.0740852651048634e-07,
+          "var_total": 1.003015907076524e-06
+        },
+        {
+          "fraction_zero": 1.0,
+          "frequency": 5,
+          "max_abs": 3.6769952927165787e-16,
+          "mean_abs": 1.1047943444420009e-16,
+          "var_imag": 8.473430310090988e-33,
+          "var_real": 7.511537811761381e-33,
+          "var_total": 1.598496812185237e-32
+        }
+      ],
+      "predicted_degree": 4,
+      "setting": {
+        "label": "photonic_n4_L1",
+        "photonic": {
+          "computation_space": "fock",
+          "encoded_modes": [
+            0
+          ],
+          "encoding_layers": 1,
+          "encoding_scaling": 1.0,
+          "layout": "photonic",
+          "n_modes": 5,
+          "n_photons": 4,
+          "route": "photon_number"
+        }
+      }
+    },
+    {
+      "label": "photonic_n2_L2",
+      "n_parameters": 18,
+      "per_frequency": [
+        {
+          "fraction_zero": 0.0,
+          "frequency": 0,
+          "max_abs": 0.5903506078220903,
+          "mean_abs": 0.16374647148141663,
+          "var_imag": 0.0,
+          "var_real": 0.04167863392814176,
+          "var_total": 0.04167863392814176
+        },
+        {
+          "fraction_zero": 0.0,
+          "frequency": 1,
+          "max_abs": 0.35197002889406437,
+          "mean_abs": 0.12342209665693586,
+          "var_imag": 0.011059903645988562,
+          "var_real": 0.010482338412387937,
+          "var_total": 0.0215422420583765
+        },
+        {
+          "fraction_zero": 0.0,
+          "frequency": 2,
+          "max_abs": 0.22207793947220486,
+          "mean_abs": 0.07100887632983964,
+          "var_imag": 0.004145020143754638,
+          "var_real": 0.003179907686443144,
+          "var_total": 0.007324927830197782
+        },
+        {
+          "fraction_zero": 0.0,
+          "frequency": 3,
+          "max_abs": 0.08665324675196504,
+          "mean_abs": 0.025419636171085492,
+          "var_imag": 0.00046642047635441007,
+          "var_real": 0.0006689619914751874,
+          "var_total": 0.0011353824678295974
+        },
+        {
+          "fraction_zero": 0.0,
+          "frequency": 4,
+          "max_abs": 0.14433353189546494,
+          "mean_abs": 0.012363143450408301,
+          "var_imag": 0.0003675376062531632,
+          "var_real": 0.00028220991339680183,
+          "var_total": 0.000649747519649965
+        },
+        {
+          "fraction_zero": 1.0,
+          "frequency": 5,
+          "max_abs": 3.251160536143384e-16,
+          "mean_abs": 1.199929009892262e-16,
+          "var_imag": 1.0193831366477452e-32,
+          "var_real": 7.888475523562574e-33,
+          "var_total": 1.8082306890040028e-32
+        }
+      ],
+      "predicted_degree": 4,
+      "setting": {
+        "label": "photonic_n2_L2",
+        "photonic": {
+          "computation_space": "fock",
+          "encoded_modes": [
+            0
+          ],
+          "encoding_layers": 2,
+          "encoding_scaling": 1.0,
+          "layout": "photonic",
+          "n_modes": 3,
+          "n_photons": 2,
+          "route": "reuploading"
+        }
+      }
+    }
+  ]
+}

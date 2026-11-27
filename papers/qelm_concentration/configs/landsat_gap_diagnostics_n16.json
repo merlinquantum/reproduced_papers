@@ -1,0 +1,40 @@
+{
+  "description": "Gap diagnostics D1/D2 for E5 at 16 qubits (no simulation): reloads the exact pair-POVM probabilities of the 15 realisations of outdir/run_20261023-173640 and compares readouts on exact probabilities (infinite shots) with 1e5-shot readouts, reporting train and test F1.",
+  "task": "landsat_gap_diagnostics",
+  "reservoir": {
+    "n_qubits": 16,
+    "n_layers": 36,
+    "input_shift": 8,
+    "chunk_size": 64
+  },
+  "landsat_gap_diagnostics": {
+    "split_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "realisations": null,
+    "reservoir_seeds": [
+      0,
+      1,
+      2
+    ],
+    "probability_sources": [
+      "outdir/run_20261023-173640"
+    ],
+    "shots": 100000,
+    "readouts": [
+      "w1_x_unit",
+      "w1_pauli_unit",
+      "w1_pauli_scaled",
+      "w1_et_scaled",
+      "w2_x_unit",
+      "w2_pauli_unit",
+      "w2_pauli_scaled",
+      "w2_et_unit",
+      "w2_etcut_scaled"
+    ]
+  }
+}

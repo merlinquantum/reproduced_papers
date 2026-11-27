@@ -1,0 +1,55 @@
+{
+    "sweep_id": "fig4b_mushroom",
+    "description": "Fig. 4b: mushroom blocks, Haar, Gaussian sigma=2, up to 500 steps or convergence; inits weak_unbiased, data_dependent, identity, block_uniform, random; seeds 0-4.",
+    "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+    ],
+    "candidates": [
+        {
+            "label": "weak_unbiased",
+            "config": "configs/fig4b_mushroom_original.json",
+            "overrides": {
+                "init.strategy": "weak_unbiased"
+            }
+        },
+        {
+            "label": "data_dependent",
+            "config": "configs/fig4b_mushroom_original.json",
+            "overrides": {
+                "init.strategy": "data_dependent"
+            }
+        },
+        {
+            "label": "identity",
+            "config": "configs/fig4b_mushroom_original.json",
+            "overrides": {
+                "init.strategy": "identity"
+            }
+        },
+        {
+            "label": "block_uniform",
+            "config": "configs/fig4b_mushroom_original.json",
+            "overrides": {
+                "init.strategy": "block_uniform"
+            }
+        },
+        {
+            "label": "random",
+            "config": "configs/fig4b_mushroom_original.json",
+            "overrides": {
+                "init.strategy": "random"
+            }
+        }
+    ],
+    "metric": "primary: sample_metrics.<model>.walsh_mmd (same kernel operators for every model); also test_mmd_estimator (paper protocol) and gaussian_mmd_raw/binarized for Gaussian kernels",
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final parameters",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "differences within one pooled std are reported as not separated",
+    "selection": "none (comparison sweep)"
+}

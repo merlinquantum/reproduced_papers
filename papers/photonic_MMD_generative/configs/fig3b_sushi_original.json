@@ -1,0 +1,52 @@
+{
+    "description": "Fig. 3b: sushi top-10 of 100, Gaussian sigma=3, near-identity; sweep --ansatz clements/mzi3/butterfly/haar (and --butterfly-variant corrected for D3), seeds 0-4.",
+    "experiment": {
+        "name": "fig3b_sushi",
+        "paper_reference": "Fig. 3b"
+    },
+    "dataset": {
+        "name": "sushi_top10",
+        "m": 100,
+        "n": 10,
+        "n_train": 3000,
+        "n_test": 2000,
+        "seed": 42
+    },
+    "model": {
+        "ansatz": "haar",
+        "butterfly_variant": "reference",
+        "input_state": "middle_alternating",
+        "photon_model": "indistinguishable"
+    },
+    "kernel": {
+        "type": "gaussian",
+        "sigma": 3.0
+    },
+    "init": {
+        "strategy": "identity",
+        "perturbation": 0.01
+    },
+    "training": {
+        "steps": 2000,
+        "learning_rate": 0.01,
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "convergence_interval": 200,
+        "log_every": 1
+    },
+    "evaluation": {
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "sample_metrics": true,
+        "num_model_samples": 2000,
+        "baselines": [
+            "random",
+            "marginal",
+            "rbm",
+            "test_to_test"
+        ],
+        "rbm": {
+            "score_sigma": 3.0
+        }
+    }
+}

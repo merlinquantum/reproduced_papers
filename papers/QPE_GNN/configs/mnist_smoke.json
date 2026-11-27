@@ -1,0 +1,19 @@
+{
+  "description": "Reduced MNIST-as-graphs smoke: 200 samples, 2 epochs. Downloads the GNNBenchmark MNIST split (~1.7 GB on disk after processing) on first run.",
+  "dataset": "mnist",
+  "dataset_kwargs": {"limit": 200},
+  "model": "grit_lite",
+  "encoding": "qirw2",
+  "pe_dim": 6,
+  "node_dim": 16,
+  "depth": 1,
+  "num_heads": 2,
+  "num_classes": 10,
+  "head": "graph_class",
+  "epochs": 2,
+  "batch_size": 8,
+  "lr": 1e-3,
+  "train_frac": 0.7,
+  "val_frac": 0.15,
+  "device": "cpu"
+}

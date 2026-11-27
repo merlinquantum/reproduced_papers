@@ -1,0 +1,51 @@
+{
+  "sweep_id": "e3_vqem_budget_noisy",
+  "description": "Fig. 5 orange (noisy branches, depolarizing p=0.2).",
+  "base_config": "configs/e3_vqem_budget_noisy_original.json",
+  "axes": {
+    "--vqem-budget": [
+      1.0,
+      1.1,
+      1.2,
+      1.3,
+      1.4,
+      1.5,
+      1.6,
+      1.7,
+      1.8,
+      1.9,
+      2.0,
+      2.1,
+      2.2,
+      2.3,
+      2.4,
+      2.5
+    ]
+  },
+  "repetitions": [
+    {
+      "--seed": 1
+    },
+    {
+      "--seed": 2
+    },
+    {
+      "--seed": 3
+    }
+  ],
+  "progress_total": 600,
+  "plan": {
+    "metrics": [
+      "hs_squared"
+    ],
+    "direction": "minimize",
+    "split": "n/a",
+    "checkpoint": "final iteration (no early stopping)",
+    "aggregation": "per candidate: mean and population std (ddof=0) over repetitions; min and max also reported (best-of-repetitions is a secondary view because the reference code hints at best-of-N restarts)",
+    "tie_tolerance": "n/a (descriptive sweep)",
+    "selection_rule": "none: descriptive curve over the swept axis; no candidate is selected",
+    "note": "Fig. 5 orange (noisy branches, depolarizing p=0.2)."
+  },
+  "fixed_args": {},
+  "max_workers": 6
+}

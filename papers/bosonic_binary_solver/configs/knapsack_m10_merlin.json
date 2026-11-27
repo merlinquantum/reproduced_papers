@@ -1,0 +1,36 @@
+{
+  "description": "MerLin photonic variant at m=10: identical circuit, input state and bit-flip layer, but the click distribution is computed exactly and the angles are trained by autograd instead of the photonic parameter-shift rule. Limited to small m by the Fock-space size.",
+  "seed": 42,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "device": "cpu",
+  "problem": {
+    "family": "knapsack",
+    "m": 10,
+    "instances": 20,
+    "instance_seed_base": 0
+  },
+  "circuit": {
+    "delays": [
+      1,
+      3,
+      9
+    ]
+  },
+  "training": {
+    "updates": 200,
+    "samples": 50,
+    "lr_theta": 0.01,
+    "lr_alpha": 0.05,
+    "shift": 1.5707963267948966,
+    "shift_scale": 1.0
+  },
+  "method": {
+    "name": "bbs_merlin",
+    "topology": "chain"
+  },
+  "logging": {
+    "level": "info",
+    "save_config_snapshot": true
+  }
+}

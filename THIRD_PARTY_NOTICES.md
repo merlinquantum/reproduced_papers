@@ -42,6 +42,11 @@ material it covers.
   licenses.
 - Example: some files under `papers/shared/` retain Apache 2.0 headers from
   upstream material.
+- Example: `papers/photonic_MMD_generative/lib/` adapts code from
+  <https://github.com/merlinquantum/generative_classical_training>
+  (commit `17a12c4`, MIT, Copyright (c) 2026 merlinquantum); the adapted files
+  carry a header naming their source. Its training loop follows that
+  repository's `Trainer`, itself adapted from XanaduAI/iqpopt (Apache 2.0).
 
 ## Practical rule
 

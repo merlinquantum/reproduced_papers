@@ -1,0 +1,138 @@
+{
+  "description": "Smoke-scale defaults: SRSR with 10 neurons, all 9 cells, kernels fitted on 4,000 evenly spaced training points. Not a paper-accurate run.",
+  "seed": 0,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "device": "cpu",
+  "data_root": "../../data",
+  "logging": {
+    "level": "info"
+  },
+  "dataset": {
+    "name": "ipto_greek_hourly_load",
+    "start": "2020-10-22",
+    "end": "2024-10-21",
+    "split_sizes": [
+      24539,
+      5258,
+      5267
+    ],
+    "lags": 4,
+    "normalization": "train",
+    "artifact_handling": "keep",
+    "batch_size": null
+  },
+  "experiment": {
+    "id": "smoke",
+    "variant": "smoke",
+    "architecture": "srsr",
+    "sizes": [
+      10
+    ],
+    "reservoir_types": [
+      "classical",
+      "quantum_ideal",
+      "quantum_noisy"
+    ],
+    "readout_types": [
+      "linear",
+      "quantum_kernel_ideal",
+      "quantum_kernel_noisy"
+    ]
+  },
+  "quantum_reservoir": {
+    "observable": "z_all",
+    "passes": 3,
+    "update": "synchronous",
+    "shots": null,
+    "_comment": "shots applies to the quantum_noisy reservoir only; null = exact expectations."
+  },
+  "kernel": {
+    "_comment": "Finite-shot estimation of the noisy kernel (gap diagnosis); null = exact.",
+    "shots": null
+  },
+  "photonic": {
+    "_comment": "MerLin adaptation: photonic neuron chips and photonic fidelity kernel; see lib/photonic_merlin.py.",
+    "neuron_scale": 1.0,
+    "kernel_scale": 2.0,
+    "kernel_photons": 2,
+    "kernel_blocks": 2
+  },
+  "classical_reservoir": {
+    "_comment": "ReservoirPy 0.4.2 defaults; the paper reports no hyperparameters (R14).",
+    "lr": 1.0,
+    "sr": 1.0,
+    "input_scaling": 1.0,
+    "input_connectivity": 0.1,
+    "rc_connectivity": 0.1
+  },
+  "classical_baselines": {
+    "_comment": "Fair classical baselines (grids declared before the runs): tuned-ESN grid (nested order sr, lr, input_scaling) and RBF gamma = factor / n_features.",
+    "esn_grid": {
+      "sr": [
+        0.5,
+        0.9,
+        1.2
+      ],
+      "lr": [
+        0.3,
+        1.0
+      ],
+      "input_scaling": [
+        0.5,
+        1.0
+      ]
+    },
+    "rbf_gamma_factors": [
+      0.1,
+      0.3,
+      1.0,
+      3.0,
+      10.0
+    ]
+  },
+  "readout": {
+    "lambda_grid": [
+      1e-08,
+      1e-07,
+      1e-06,
+      1e-05,
+      0.0001,
+      0.001,
+      0.01,
+      0.1,
+      1.0,
+      10.0
+    ],
+    "merge": "mean",
+    "kernel_selection_subsample": 2000,
+    "kernel_fit_subsample": 4000,
+    "linear_intercept": true,
+    "_comment_linear_intercept": "true: unpenalized intercept (primary); false: paper Eq. 5 without bias (gap diagnosis C)."
+  },
+  "noise": {
+    "mapping": "paper",
+    "devices": {
+      "ibm_brisbane": {
+        "_source": "App. B Table B1: median SX error, median ECR error, median readout error",
+        "error_1q": 0.0002236,
+        "error_2q": 0.007519,
+        "readout_error": 0.0166
+      },
+      "ibm_marrakesh": {
+        "_source": "App. B Table B1: median SX error, median CZ error, median readout error",
+        "error_1q": 0.0002304,
+        "error_2q": 0.003351,
+        "readout_error": 0.01038
+      },
+      "ionq_aria1": {
+        "_source": "App. B Table B2: 1 - median 1Q / 2Q / measurement fidelity",
+        "error_1q": 0.0002,
+        "error_2q": 0.0142,
+        "readout_error": 0.0049
+      }
+    },
+    "scale": 1.0,
+    "_comment_scale": "Multiplies every App. B error rate (gap diagnosis A); 1.0 = App. B medians."
+  }
+}

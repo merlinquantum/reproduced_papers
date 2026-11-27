@@ -1,0 +1,20 @@
+{
+  "description": "QPE_GNN default configuration for graph neural network with quantum phase encoding",
+  "feasibility": {"status": "supported"},
+  "dataset": "ladder_concat",
+  "dataset_kwargs": {"per_class": 16, "length_range": [3, 5], "seed": 0},
+  "model": "grit_lite",
+  "encoding": "qirw2",
+  "pe_dim": 8,
+  "node_dim": 16,
+  "depth": 1,
+  "num_heads": 2,
+  "num_classes": 2,
+  "head": "graph_class",
+  "epochs": 4,
+  "batch_size": 8,
+  "lr": 1e-3,
+  "train_frac": 0.8,
+  "val_frac": 0.1,
+  "device": "cpu"
+}

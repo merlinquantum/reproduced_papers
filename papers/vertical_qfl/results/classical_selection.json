@@ -1,0 +1,964 @@
+{
+  "rule": {
+    "metric": "final_validation_accuracy",
+    "direction": "maximize",
+    "aggregation": "mean over permutation seeds",
+    "tie_tolerance": 0.005,
+    "tie_break_ascending": [
+      "lr"
+    ],
+    "group_by": [
+      "architecture",
+      "size"
+    ]
+  },
+  "candidates_ranked_by_mean": [
+    {
+      "overrides": {
+        "architecture": "central",
+        "central_hidden": 270,
+        "client_hidden": 195,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 30,
+        "lr": 0.01,
+        "server_encoding": "server_wide",
+        "server_hidden": 107,
+        "size": "gate"
+      },
+      "sweep": "CT",
+      "mean": 0.9313725490196079,
+      "std_ddof1": 0.002772967769359
+    },
+    {
+      "overrides": {
+        "architecture": "central",
+        "central_hidden": 270,
+        "client_hidden": 195,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 30,
+        "lr": 0.005,
+        "server_encoding": "server_wide",
+        "server_hidden": 107,
+        "size": "gate"
+      },
+      "sweep": "CT",
+      "mean": 0.9215686274509804,
+      "std_ddof1": 0.02218374215487208
+    },
+    {
+      "overrides": {
+        "architecture": "vertical",
+        "central_hidden": 270,
+        "client_hidden": 195,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 30,
+        "lr": 0.005,
+        "server_encoding": "server_wide",
+        "server_hidden": 107,
+        "size": "gate"
+      },
+      "sweep": "CT",
+      "mean": 0.9098039215686275,
+      "std_ddof1": 0.02218374215487208
+    },
+    {
+      "overrides": {
+        "architecture": "vertical",
+        "central_hidden": 270,
+        "client_hidden": 195,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 30,
+        "lr": 0.002,
+        "server_encoding": "server_wide",
+        "server_hidden": 107,
+        "size": "gate"
+      },
+      "sweep": "CT",
+      "mean": 0.907843137254902,
+      "std_ddof1": 0.013864838846795
+    },
+    {
+      "overrides": {
+        "architecture": "central",
+        "central_hidden": 270,
+        "client_hidden": 195,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 30,
+        "lr": 0.002,
+        "server_encoding": "server_wide",
+        "server_hidden": 107,
+        "size": "gate"
+      },
+      "sweep": "CT",
+      "mean": 0.9058823529411765,
+      "std_ddof1": 0.0
+    },
+    {
+      "overrides": {
+        "architecture": "central",
+        "central_hidden": 10,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.01,
+        "server_encoding": "server_wide",
+        "server_hidden": 7,
+        "size": "photonic_f"
+      },
+      "sweep": "CT",
+      "mean": 0.9058823529411765,
+      "std_ddof1": 0.0
+    },
+    {
+      "overrides": {
+        "architecture": "central",
+        "central_hidden": 270,
+        "client_hidden": 195,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 30,
+        "lr": 0.001,
+        "server_encoding": "server_wide",
+        "server_hidden": 107,
+        "size": "gate"
+      },
+      "sweep": "CT",
+      "mean": 0.903921568627451,
+      "std_ddof1": 0.002772967769359
+    },
+    {
+      "overrides": {
+        "architecture": "central",
+        "central_hidden": 12,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.001,
+        "server_encoding": "server_wide",
+        "server_hidden": 12,
+        "size": "photonic_h"
+      },
+      "sweep": "CT",
+      "mean": 0.9019607843137255,
+      "std_ddof1": 0.0
+    },
+    {
+      "overrides": {
+        "architecture": "central",
+        "central_hidden": 10,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.001,
+        "server_encoding": "server_wide",
+        "server_hidden": 7,
+        "size": "photonic_f"
+      },
+      "sweep": "CT",
+      "mean": 0.9,
+      "std_ddof1": 0.002772967769359
+    },
+    {
+      "overrides": {
+        "architecture": "central",
+        "central_hidden": 10,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.002,
+        "server_encoding": "server_wide",
+        "server_hidden": 7,
+        "size": "photonic_f"
+      },
+      "sweep": "CT",
+      "mean": 0.9,
+      "std_ddof1": 0.002772967769359
+    },
+    {
+      "overrides": {
+        "architecture": "central",
+        "central_hidden": 12,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.01,
+        "server_encoding": "server_wide",
+        "server_hidden": 12,
+        "size": "photonic_h"
+      },
+      "sweep": "CT",
+      "mean": 0.8999999999999999,
+      "std_ddof1": 0.01386483884679508
+    },
+    {
+      "overrides": {
+        "architecture": "central",
+        "central_hidden": 10,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.005,
+        "server_encoding": "server_wide",
+        "server_hidden": 7,
+        "size": "photonic_f"
+      },
+      "sweep": "CT",
+      "mean": 0.8980392156862745,
+      "std_ddof1": 0.005545935538718
+    },
+    {
+      "overrides": {
+        "architecture": "vertical",
+        "central_hidden": 270,
+        "client_hidden": 195,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 30,
+        "lr": 0.001,
+        "server_encoding": "server_wide",
+        "server_hidden": 107,
+        "size": "gate"
+      },
+      "sweep": "CT",
+      "mean": 0.8941176470588235,
+      "std_ddof1": 0.016637806616154077
+    },
+    {
+      "overrides": {
+        "architecture": "central",
+        "central_hidden": 12,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.002,
+        "server_encoding": "server_wide",
+        "server_hidden": 12,
+        "size": "photonic_h"
+      },
+      "sweep": "CT",
+      "mean": 0.8901960784313725,
+      "std_ddof1": 0.005545935538718079
+    },
+    {
+      "overrides": {
+        "architecture": "central",
+        "central_hidden": 12,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.005,
+        "server_encoding": "server_wide",
+        "server_hidden": 12,
+        "size": "photonic_h"
+      },
+      "sweep": "CT",
+      "mean": 0.8901960784313725,
+      "std_ddof1": 0.011091871077436078
+    },
+    {
+      "overrides": {
+        "architecture": "vertical",
+        "central_hidden": 270,
+        "client_hidden": 195,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 30,
+        "lr": 0.01,
+        "server_encoding": "server_wide",
+        "server_hidden": 107,
+        "size": "gate"
+      },
+      "sweep": "CT",
+      "mean": 0.8745098039215686,
+      "std_ddof1": 0.016637806616154
+    },
+    {
+      "overrides": {
+        "architecture": "vertical",
+        "central_hidden": 12,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.005,
+        "server_encoding": "server_wide",
+        "server_hidden": 12,
+        "size": "photonic_h"
+      },
+      "sweep": "CT",
+      "mean": 0.8666666666666667,
+      "std_ddof1": 0.016637806616154077
+    },
+    {
+      "overrides": {
+        "architecture": "vertical",
+        "central_hidden": 12,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.002,
+        "server_encoding": "server_wide",
+        "server_hidden": 12,
+        "size": "photonic_h"
+      },
+      "sweep": "CT",
+      "mean": 0.8627450980392157,
+      "std_ddof1": 0.016637806616154077
+    },
+    {
+      "overrides": {
+        "architecture": "vertical",
+        "central_hidden": 12,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.001,
+        "server_encoding": "server_wide",
+        "server_hidden": 12,
+        "size": "photonic_h"
+      },
+      "sweep": "CT",
+      "mean": 0.8490196078431373,
+      "std_ddof1": 0.024956709924231078
+    },
+    {
+      "overrides": {
+        "architecture": "vertical",
+        "central_hidden": 10,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.01,
+        "server_encoding": "server_wide",
+        "server_hidden": 7,
+        "size": "photonic_f"
+      },
+      "sweep": "CT",
+      "mean": 0.8470588235294119,
+      "std_ddof1": 0.02218374215487208
+    },
+    {
+      "overrides": {
+        "architecture": "vertical",
+        "central_hidden": 12,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.01,
+        "server_encoding": "server_wide",
+        "server_hidden": 12,
+        "size": "photonic_h"
+      },
+      "sweep": "CT",
+      "mean": 0.8450980392156863,
+      "std_ddof1": 0.008318903308077
+    },
+    {
+      "overrides": {
+        "architecture": "vertical",
+        "central_hidden": 10,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.002,
+        "server_encoding": "server_wide",
+        "server_hidden": 7,
+        "size": "photonic_f"
+      },
+      "sweep": "CT",
+      "mean": 0.8431372549019608,
+      "std_ddof1": 0.049913419848462155
+    },
+    {
+      "overrides": {
+        "architecture": "vertical",
+        "central_hidden": 10,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.001,
+        "server_encoding": "server_wide",
+        "server_hidden": 7,
+        "size": "photonic_f"
+      },
+      "sweep": "CT",
+      "mean": 0.8392156862745098,
+      "std_ddof1": 0.005545935538718
+    },
+    {
+      "overrides": {
+        "architecture": "vertical",
+        "central_hidden": 10,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.005,
+        "server_encoding": "server_wide",
+        "server_hidden": 7,
+        "size": "photonic_f"
+      },
+      "sweep": "CT",
+      "mean": 0.8156862745098039,
+      "std_ddof1": 0.033275613232308154
+    }
+  ],
+  "selections_by_group": {
+    "{\"architecture\": \"central\", \"size\": \"gate\"}": {
+      "selected": {
+        "architecture": "central",
+        "central_hidden": 270,
+        "client_hidden": 195,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 30,
+        "lr": 0.01,
+        "server_encoding": "server_wide",
+        "server_hidden": 107,
+        "size": "gate"
+      },
+      "tied_within_tolerance": [
+        {
+          "architecture": "central",
+          "central_hidden": 270,
+          "client_hidden": 195,
+          "client_slices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "epochs": 30,
+          "lr": 0.01,
+          "server_encoding": "server_wide",
+          "server_hidden": 107,
+          "size": "gate"
+        }
+      ]
+    },
+    "{\"architecture\": \"vertical\", \"size\": \"gate\"}": {
+      "selected": {
+        "architecture": "vertical",
+        "central_hidden": 270,
+        "client_hidden": 195,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 30,
+        "lr": 0.002,
+        "server_encoding": "server_wide",
+        "server_hidden": 107,
+        "size": "gate"
+      },
+      "tied_within_tolerance": [
+        {
+          "architecture": "vertical",
+          "central_hidden": 270,
+          "client_hidden": 195,
+          "client_slices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "epochs": 30,
+          "lr": 0.002,
+          "server_encoding": "server_wide",
+          "server_hidden": 107,
+          "size": "gate"
+        },
+        {
+          "architecture": "vertical",
+          "central_hidden": 270,
+          "client_hidden": 195,
+          "client_slices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "epochs": 30,
+          "lr": 0.005,
+          "server_encoding": "server_wide",
+          "server_hidden": 107,
+          "size": "gate"
+        }
+      ]
+    },
+    "{\"architecture\": \"central\", \"size\": \"photonic_f\"}": {
+      "selected": {
+        "architecture": "central",
+        "central_hidden": 10,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.01,
+        "server_encoding": "server_wide",
+        "server_hidden": 7,
+        "size": "photonic_f"
+      },
+      "tied_within_tolerance": [
+        {
+          "architecture": "central",
+          "central_hidden": 10,
+          "client_hidden": 7,
+          "client_slices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "epochs": 100,
+          "lr": 0.01,
+          "server_encoding": "server_wide",
+          "server_hidden": 7,
+          "size": "photonic_f"
+        }
+      ]
+    },
+    "{\"architecture\": \"central\", \"size\": \"photonic_h\"}": {
+      "selected": {
+        "architecture": "central",
+        "central_hidden": 12,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.001,
+        "server_encoding": "server_wide",
+        "server_hidden": 12,
+        "size": "photonic_h"
+      },
+      "tied_within_tolerance": [
+        {
+          "architecture": "central",
+          "central_hidden": 12,
+          "client_hidden": 7,
+          "client_slices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "epochs": 100,
+          "lr": 0.001,
+          "server_encoding": "server_wide",
+          "server_hidden": 12,
+          "size": "photonic_h"
+        },
+        {
+          "architecture": "central",
+          "central_hidden": 12,
+          "client_hidden": 7,
+          "client_slices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "epochs": 100,
+          "lr": 0.01,
+          "server_encoding": "server_wide",
+          "server_hidden": 12,
+          "size": "photonic_h"
+        }
+      ]
+    },
+    "{\"architecture\": \"vertical\", \"size\": \"photonic_h\"}": {
+      "selected": {
+        "architecture": "vertical",
+        "central_hidden": 12,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.002,
+        "server_encoding": "server_wide",
+        "server_hidden": 12,
+        "size": "photonic_h"
+      },
+      "tied_within_tolerance": [
+        {
+          "architecture": "vertical",
+          "central_hidden": 12,
+          "client_hidden": 7,
+          "client_slices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "epochs": 100,
+          "lr": 0.002,
+          "server_encoding": "server_wide",
+          "server_hidden": 12,
+          "size": "photonic_h"
+        },
+        {
+          "architecture": "vertical",
+          "central_hidden": 12,
+          "client_hidden": 7,
+          "client_slices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "epochs": 100,
+          "lr": 0.005,
+          "server_encoding": "server_wide",
+          "server_hidden": 12,
+          "size": "photonic_h"
+        }
+      ]
+    },
+    "{\"architecture\": \"vertical\", \"size\": \"photonic_f\"}": {
+      "selected": {
+        "architecture": "vertical",
+        "central_hidden": 10,
+        "client_hidden": 7,
+        "client_slices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "epochs": 100,
+        "lr": 0.002,
+        "server_encoding": "server_wide",
+        "server_hidden": 7,
+        "size": "photonic_f"
+      },
+      "tied_within_tolerance": [
+        {
+          "architecture": "vertical",
+          "central_hidden": 10,
+          "client_hidden": 7,
+          "client_slices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "epochs": 100,
+          "lr": 0.002,
+          "server_encoding": "server_wide",
+          "server_hidden": 7,
+          "size": "photonic_f"
+        },
+        {
+          "architecture": "vertical",
+          "central_hidden": 10,
+          "client_hidden": 7,
+          "client_slices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "epochs": 100,
+          "lr": 0.01,
+          "server_encoding": "server_wide",
+          "server_hidden": 7,
+          "size": "photonic_f"
+        }
+      ]
+    }
+  },
+  "repeated_candidates": []
+}

@@ -1,0 +1,11 @@
+{
+  "description": "E3 (Table XI) with the Table V feature timing for the 64-D set: APAC/EU index returns at lags 0-6 (closes before the U.S. close), U.S. indices at lags 1-7, own returns at lags 1-8. Gap diagnosis G2 identified this as the paper's likely design. Otherwise identical to e3_original.json (default AAPL; override with --ticker).",
+  "directional": {
+    "dataset": {"feature_set": "64d", "ticker": "AAPL", "feature_timing": "table_v"},
+    "models": {
+      "qnn": {"families": ["SQ", "MQ", "Hybrid-SQ", "Hybrid-MQ"], "n_qubits": [2, 3, 4, 5, 6], "layers": [1, 2, 3, 4, 5, 6], "encoding": "amplitude"},
+      "ann": {"hidden_layer_options": [[4], [8], [11], [16], [32], [64], [8, 4], [16, 8], [32, 16], [64, 32]], "minmax_inputs": true}
+    },
+    "training": {"max_epochs": 300}
+  }
+}

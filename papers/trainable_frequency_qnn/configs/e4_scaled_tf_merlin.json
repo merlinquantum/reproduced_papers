@@ -1,0 +1,25 @@
+{
+  "description": "E4 photonic: TF on {1.5, 3, 4.5}, 3 photons in 6 modes; frequency_init overridden to 1.5 in the e4b candidates of sweep m4_scaled. MerLin photonic ADAPTATION (Phase 4), not the paper's model; qubit-only keys inherited from defaults.json (n_qubits, n_layers, entangler) are unused by family merlin_qnn.",
+  "dataset": {
+    "frequencies": [
+      1.5,
+      3.0,
+      4.5
+    ]
+  },
+  "training": {
+    "iterations": 6000,
+    "batch_size": 2
+  },
+  "model": {
+    "family": "merlin_qnn",
+    "n_modes": 6,
+    "n_photons": 3,
+    "layout": "toy",
+    "encoding_modes_per_input": 3,
+    "feature_map": "simple",
+    "frequency_mode": "trainable",
+    "frequency_init": 1.0,
+    "readout": "threshold_clicks"
+  }
+}

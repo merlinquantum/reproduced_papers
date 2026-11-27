@@ -1,0 +1,32 @@
+{
+  "description": "Additional classical baselines for the MRSR grid: the paper baseline and ideal-quantum reservoirs (in-run anchors) and the tuned ESN, each with a linear ridge and an RBF kernel ridge; 8 configurations, full-size kernels. Independent controls, not the paper's method.",
+  "experiment": {
+    "id": "E2-CLASSICAL",
+    "variant": "classical",
+    "architecture": "mrsr",
+    "sizes": [
+      "2x5",
+      "2x10",
+      "2x20",
+      "3x5",
+      "3x10",
+      "3x20",
+      "5x5",
+      "5x10"
+    ],
+    "reservoir_types": [
+      "classical",
+      "quantum_ideal",
+      "esn_tuned"
+    ],
+    "_comment_reservoir_types": "classical = ReservoirPy defaults (paper baseline); quantum_ideal = ideal quantum reservoir; esn_tuned = the same ReservoirPy reservoir with spectral radius, leak rate and input scaling tuned on the eval split (12 settings).",
+    "readout_types": [
+      "linear",
+      "rbf_kernel"
+    ]
+  },
+  "readout": {
+    "kernel_selection_subsample": 8000,
+    "kernel_fit_subsample": null
+  }
+}

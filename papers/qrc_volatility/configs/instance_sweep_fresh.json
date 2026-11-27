@@ -1,0 +1,6 @@
+{
+  "description": "Reservoir-instance sweep on 100 freshly drawn coupling matrices (seeded, coeff_matrix rule) instead of the authors' saved instances. Tests whether the reported performance depends on the specific published draws.",
+  "experiment": "reservoir_instance_sweep",
+  "evaluation": {"horizons": [1]},
+  "instance_sweep": {"variants": ["QR1", "QR2"], "n_instances": 100, "coupling_source": "fresh"}
+}

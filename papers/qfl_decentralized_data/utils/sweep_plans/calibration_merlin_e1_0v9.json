@@ -1,0 +1,50 @@
+{
+  "sweep_id": "calibration_merlin_e1_0v9",
+  "purpose": "Phase 4 MerLin adaptation calibration: superposition placement, encoding scale and photon number on task 0 vs 9, non-federated, validation split (plan in LOG.md, Phase 4 Adaptation Plan)",
+  "paper": "qfl_decentralized_data",
+  "base_config": "configs/e1_centralized.json",
+  "fixed_overrides": {
+    "dataset": {
+      "validation_fraction": 0.1
+    },
+    "model": {
+      "name": "merlin",
+      "photonic_readout": "linear_head",
+      "computation_space": "unbunched"
+    },
+    "training": {
+      "lr": 0.03
+    }
+  },
+  "axes": {
+    "model.superposition": [
+      "front",
+      "replace"
+    ],
+    "model.encoding_scale": [
+      0.25,
+      0.5,
+      1.0
+    ],
+    "model.n_photons": [
+      2,
+      4
+    ]
+  },
+  "seeds": [
+    1,
+    2,
+    3
+  ],
+  "workers": 3,
+  "threads_per_worker": 3,
+  "selection": {
+    "metric": "validation_accuracy",
+    "split": "validation",
+    "checkpoint": "last",
+    "direction": "maximize",
+    "aggregation": "mean",
+    "tie_tolerance": 0.005,
+    "tie_handling": "fewer trainable parameters first (replace before front), then 4 photons before 2, then the encoding scale closest to 1.0"
+  }
+}

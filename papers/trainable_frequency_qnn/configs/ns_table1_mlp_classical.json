@@ -1,0 +1,57 @@
+{
+  "description": "E6 classical context reference B4: tanh MLP PINN 3-11-11-1 per network (188 parameters each vs 186 for a TF QNN), same loss, data and iterations.",
+  "task": "navier_stokes",
+  "dataset": {
+    "name": "cylinder_wake",
+    "file": "cylinder_nektar_wake/cylinder_nektar_wake.mat",
+    "time_window": [
+      0.0,
+      5.5
+    ],
+    "reynolds": 100.0,
+    "coordinate_transform": "raw",
+    "data_stride": 10,
+    "evaluation_times": [
+      0.0,
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0,
+      4.5,
+      5.0,
+      5.5
+    ]
+  },
+  "evaluation": {
+    "batch_size": 5000,
+    "table_times": [
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0,
+      4.5,
+      5.0,
+      5.5
+    ]
+  },
+  "training": {
+    "iterations": 5000,
+    "batch_size": 600,
+    "lr": 0.01
+  },
+  "model": {
+    "family": "mlp",
+    "hidden_sizes": [
+      11,
+      11
+    ]
+  }
+}

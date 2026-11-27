@@ -1,0 +1,54 @@
+[
+  {
+    "model.circuit": {
+      "first_layer": "superposition"
+    }
+  },
+  {
+    "model.n_modes": 12,
+    "model.n_client_stages": 8,
+    "model.circuit": {
+      "client_feature_maps": [
+        "identity",
+        "square",
+        "cos"
+      ],
+      "message_width": 8,
+      "server_photons": 4
+    }
+  },
+  {
+    "model.n_modes": 12,
+    "model.n_client_stages": 8,
+    "model.circuit": {
+      "first_layer": "superposition",
+      "client_feature_maps": [
+        "identity",
+        "square",
+        "cos"
+      ],
+      "message_width": 8,
+      "server_photons": 4
+    }
+  },
+  {
+    "model.n_modes": 12,
+    "model.n_client_stages": 8,
+    "model.server_modes": 12,
+    "model.circuit": {
+      "first_layer": "superposition",
+      "client_feature_maps": [
+        "identity",
+        "square",
+        "cos"
+      ],
+      "server_feature_maps": [
+        "identity",
+        "square",
+        "cos"
+      ],
+      "message_width": 8,
+      "server_photons": 4
+    }
+  }
+]

@@ -1,0 +1,5 @@
+{
+  "description": "Evaluate existing fixed-Fock/Gaussian generation attempts with user-installed MHCflurry; no new generation",
+  "stage": "evaluate",
+  "device": "cuda"
+}

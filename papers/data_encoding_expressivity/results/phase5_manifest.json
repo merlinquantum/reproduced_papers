@@ -1,0 +1,269 @@
+{
+  "description": "Runs compared in Phase 5 (frozen plan in LOG.md, 'Phase 5 Comparison Plan'). Each entry is one completed run; 'cases' optionally restricts which cases are included (null = all).",
+  "runs": [
+    {
+      "group": "G1",
+      "protocol": "P0",
+      "run": "outdir/run_20261029-115724",
+      "role": "fair classical baseline B2 (uniform init, original plan)",
+      "provenance": "local, Phase 5",
+      "scope": "paper protocol, 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P1",
+      "run": "outdir/run_20261029-115727",
+      "role": "fair classical baseline B2 (uniform init, original plan)",
+      "provenance": "local, Phase 5",
+      "scope": "non-paper protocol, 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P2",
+      "run": "outdir/run_20261029-115737",
+      "role": "fair classical baseline B2 (uniform init, original plan)",
+      "provenance": "local, Phase 5",
+      "scope": "non-paper protocol, 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P3",
+      "run": "outdir/run_20261029-115746",
+      "role": "fair classical baseline B2 (uniform init, original plan)",
+      "provenance": "local, Phase 5",
+      "scope": "non-paper protocol, 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P0",
+      "run": "outdir/run_20261028-155555",
+      "role": "reproduced paper model (r = 5), with paper or trainable observable",
+      "provenance": "local, Phase 4 amendment control",
+      "scope": "paper protocol, 6 seeds",
+      "modality": "qubit",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P1",
+      "run": "outdir/run_20261028-155615",
+      "role": "reproduced paper model (r = 5), with paper or trainable observable",
+      "provenance": "local, Phase 4 amendment control",
+      "scope": "non-paper protocol, 6 seeds",
+      "modality": "qubit",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P2",
+      "run": "outdir/run_20261028-155808",
+      "role": "reproduced paper model (r = 5), with paper or trainable observable",
+      "provenance": "local, Phase 4 amendment control",
+      "scope": "non-paper protocol, 6 seeds",
+      "modality": "qubit",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P3",
+      "run": "outdir/run_20261028-155958",
+      "role": "reproduced paper model (r = 5), with paper or trainable observable",
+      "provenance": "local, Phase 4 amendment control",
+      "scope": "non-paper protocol, 6 seeds",
+      "modality": "qubit",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P0",
+      "run": "outdir/run_20261028-154813",
+      "role": "MerLin adaptation",
+      "provenance": "local, Phase 4 amendment",
+      "scope": "adaptation, paper protocol, 6 seeds, simulation",
+      "modality": "photonic",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P1",
+      "run": "outdir/run_20261028-154841",
+      "role": "MerLin adaptation",
+      "provenance": "local, Phase 4 amendment",
+      "scope": "adaptation, non-paper protocol, 6 seeds, simulation",
+      "modality": "photonic",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P2",
+      "run": "outdir/run_20261028-155113",
+      "role": "MerLin adaptation",
+      "provenance": "local, Phase 4 amendment",
+      "scope": "adaptation, non-paper protocol, 6 seeds, simulation",
+      "modality": "photonic",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P3",
+      "run": "outdir/run_20261028-155331",
+      "role": "MerLin adaptation",
+      "provenance": "local, Phase 4 amendment",
+      "scope": "adaptation, non-paper protocol, 6 seeds, simulation",
+      "modality": "photonic",
+      "cases": null
+    },
+    {
+      "group": "G2",
+      "protocol": "P0",
+      "run": "outdir/run_20261028-100128",
+      "role": "reproduced paper models r = 1, 3, 5 (serial, parallel)",
+      "provenance": "local, Phase 3",
+      "scope": "paper-accurate, 6 seeds",
+      "modality": "qubit",
+      "cases": null
+    },
+    {
+      "group": "G2",
+      "protocol": "P0",
+      "run": "outdir/run_20261028-110320",
+      "role": "MerLin adaptation (original Phase 4 models)",
+      "provenance": "local, Phase 4",
+      "scope": "adaptation, paper protocol, 6 seeds, simulation",
+      "modality": "photonic",
+      "cases": [
+        "fig4_photonic_n1_L1_ablation",
+        "fig4_photonic_n3_L1",
+        "fig4_photonic_n5_L1",
+        "fig4_photonic_n2_L1",
+        "fig4_photonic_n2_L2",
+        "fig4_photonic_n2_L3"
+      ]
+    },
+    {
+      "group": "G2",
+      "protocol": "P0",
+      "run": "outdir/run_20261029-115724",
+      "role": "fair classical baseline B2 (uniform init, original plan)",
+      "provenance": "local, Phase 5",
+      "scope": "paper protocol, 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "G3",
+      "protocol": "P0",
+      "run": "outdir/run_20261028-100040",
+      "role": "reproduced paper model (single encoding)",
+      "provenance": "local, Phase 3",
+      "scope": "paper-accurate, 6 seeds",
+      "modality": "qubit",
+      "cases": null
+    },
+    {
+      "group": "G3",
+      "protocol": "P0",
+      "run": "outdir/run_20261028-100052",
+      "role": "fair classical baseline B2 (uniform init, original plan)",
+      "provenance": "local, Phase 3",
+      "scope": "paper protocol, 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "G4",
+      "protocol": "P0",
+      "run": "outdir/run_20261028-100100",
+      "role": "reproduced paper models r = 1, 3, 5 (caption scaling 2)",
+      "provenance": "local, Phase 3",
+      "scope": "paper-accurate (caption target), 6 seeds",
+      "modality": "qubit",
+      "cases": null
+    },
+    {
+      "group": "G4",
+      "protocol": "P0",
+      "run": "outdir/run_20261028-100159",
+      "role": "fair classical baseline B2 (uniform init, original plan; caption scaling 2)",
+      "provenance": "local, Phase 3",
+      "scope": "paper protocol, 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P0",
+      "run": "outdir/run_20261029-120051",
+      "role": "fair classical baseline B2 (zero init, Phase 5 amendment)",
+      "provenance": "local, Phase 5 amendment",
+      "scope": "paper protocol, 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "G2",
+      "protocol": "P0",
+      "run": "outdir/run_20261029-120051",
+      "role": "fair classical baseline B2 (zero init, Phase 5 amendment)",
+      "provenance": "local, Phase 5 amendment",
+      "scope": "paper protocol, 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P1",
+      "run": "outdir/run_20261029-120054",
+      "role": "fair classical baseline B2 (zero init, Phase 5 amendment)",
+      "provenance": "local, Phase 5 amendment",
+      "scope": "non-paper protocol, 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P2",
+      "run": "outdir/run_20261029-120103",
+      "role": "fair classical baseline B2 (zero init, Phase 5 amendment)",
+      "provenance": "local, Phase 5 amendment",
+      "scope": "non-paper protocol, 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "G1",
+      "protocol": "P3",
+      "run": "outdir/run_20261029-120112",
+      "role": "fair classical baseline B2 (zero init, Phase 5 amendment)",
+      "provenance": "local, Phase 5 amendment",
+      "scope": "non-paper protocol, 6 seeds",
+      "modality": "classical",
+      "cases": null
+    }
+  ],
+  "paper_reported": [
+    {
+      "group": "G3",
+      "claim": "Fig. 3: degree-1 fits; RX(2x) mismatch and degree-2 target do not fit",
+      "value": "qualitative only (single typical run, no numbers)"
+    },
+    {
+      "group": "G2",
+      "claim": "Fig. 4: fit improves with r; r = 5 fits 'almost perfectly' (serial and parallel)",
+      "value": "qualitative only (single run per panel, no numbers)"
+    },
+    {
+      "group": "G4",
+      "claim": "Fig. 4 caption target e^{2inx}",
+      "value": "the published panel matches scaling 1 instead (LOG.md D1)"
+    }
+  ]
+}

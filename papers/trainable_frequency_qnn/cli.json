@@ -1,0 +1,115 @@
+{
+  "description": "Trainable-frequency QNN reproduction (Jaderberg et al., PRA 109, 042421)",
+  "arguments": [
+    {
+      "flags": [
+        "--iterations"
+      ],
+      "help": "Override the number of optimiser iterations",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.iterations"
+      }
+    },
+    {
+      "flags": [
+        "--batch-size"
+      ],
+      "help": "Override the training batch size",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.batch_size"
+      }
+    },
+    {
+      "flags": [
+        "--lr"
+      ],
+      "help": "Override the Adam learning rate",
+      "type": "float",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "training.lr"
+      }
+    },
+    {
+      "flags": [
+        "--n-qubits"
+      ],
+      "help": "Override the number of qubits per QNN",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.n_qubits"
+      }
+    },
+    {
+      "flags": [
+        "--n-layers"
+      ],
+      "help": "Override the total number of ansatz layers per QNN",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.n_layers"
+      }
+    },
+    {
+      "flags": [
+        "--frequency-mode"
+      ],
+      "help": "Feature-map frequency mode",
+      "type": "str",
+      "choices": [
+        "fixed",
+        "trainable",
+        "global_scale"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.frequency_mode"
+      }
+    },
+    {
+      "flags": [
+        "--feature-map"
+      ],
+      "help": "Fixed generator coefficients of the feature map",
+      "type": "str",
+      "choices": [
+        "simple",
+        "tower",
+        "exponential"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "model.feature_map"
+      }
+    },
+    {
+      "flags": [
+        "--coordinate-transform"
+      ],
+      "help": "Navier-Stokes input coordinates: raw physical values or min-max to [-1, 1]",
+      "type": "str",
+      "choices": [
+        "raw",
+        "minmax"
+      ],
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "dataset.coordinate_transform"
+      }
+    }
+  ]
+}

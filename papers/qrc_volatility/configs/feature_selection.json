@@ -1,0 +1,6 @@
+{
+  "description": "Wrapper forward feature selection (paper Fig. 5/6) for QR1 and QR2 over the 13-column pool, up to 10 features. Selection metric: MSE on the leakage-free validation window; the out-of-sample MSE of every candidate is recorded so the paper's test-set-scored curve can also be plotted.",
+  "experiment": "feature_selection_sweep",
+  "evaluation": {"horizons": [1]},
+  "feature_selection": {"selection_split": "validation", "max_features": 10}
+}

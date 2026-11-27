@@ -1,0 +1,261 @@
+{
+  "description": "E2 baseline B2: trainable classical Fourier model with the same frequency set and input scaling as each case's quantum model, trained with the identical protocol and seeds. B1 (least-squares oracle) is computed in every fit run.",
+  "experiment": "fit",
+  "fit": {
+    "grid": {
+      "start": -6.0,
+      "stop": 6.0,
+      "num": 70
+    },
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      42
+    ],
+    "models": [
+      "fourier_classical"
+    ],
+    "success_tolerance": 0.0001,
+    "training": {
+      "optimizer": "adam",
+      "lr": 0.3,
+      "batch_size": 25,
+      "steps": 200,
+      "init_high": 6.283185307179586,
+      "full_batch": false
+    },
+    "cases": [
+      {
+        "name": "fig4_serial_r1",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 2.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 1,
+          "encoding_scaling": 2.0,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      },
+      {
+        "name": "fig4_serial_r3",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 2.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 3,
+          "encoding_scaling": 2.0,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      },
+      {
+        "name": "fig4_serial_r5",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 2.0
+        },
+        "model": {
+          "layout": "serial",
+          "repetitions": 5,
+          "encoding_scaling": 2.0,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      },
+      {
+        "name": "fig4_parallel_r1",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 2.0
+        },
+        "model": {
+          "layout": "parallel",
+          "repetitions": 1,
+          "encoding_scaling": 2.0,
+          "ansatz": "strongly",
+          "ansatz_layers": 3,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      },
+      {
+        "name": "fig4_parallel_r3",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 2.0
+        },
+        "model": {
+          "layout": "parallel",
+          "repetitions": 3,
+          "encoding_scaling": 2.0,
+          "ansatz": "strongly",
+          "ansatz_layers": 3,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      },
+      {
+        "name": "fig4_parallel_r5",
+        "target": {
+          "c0": 0.0,
+          "coefficients": [
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            },
+            {
+              "re": 0.05,
+              "im": -0.05
+            }
+          ],
+          "sign": 1,
+          "scaling": 2.0
+        },
+        "model": {
+          "layout": "parallel",
+          "repetitions": 5,
+          "encoding_scaling": 2.0,
+          "ansatz": "strongly",
+          "ansatz_layers": 3,
+          "readout": "z0",
+          "coefficient_init": "uniform"
+        }
+      }
+    ]
+  }
+}

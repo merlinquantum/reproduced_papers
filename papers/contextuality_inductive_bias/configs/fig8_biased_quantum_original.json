@@ -1,0 +1,18 @@
+{
+  "description": "E1 / Fig. 8: biased quantum model (Fig. 7), L = 2, B = 2, Adam lr 1e-3, 2000 steps, author training data. Protocol from --protocol (default paper).",
+  "experiment": {
+    "id": "fig8_biased_quantum"
+  },
+  "model": {
+    "kind": "biased_quantum",
+    "layers": 2,
+    "blocks": 2,
+    "zz_repetitions": 1
+  },
+  "training": {
+    "steps": 2000,
+    "optimizer": "adam",
+    "lr": 0.001,
+    "l2": 0.0
+  }
+}

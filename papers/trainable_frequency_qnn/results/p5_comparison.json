@@ -1,0 +1,4849 @@
+{
+ "protocol": "LOG.md#Phase 5 Comparison Plan \u2014 2026-10-28T10:15:12Z",
+ "tie_tolerance_rel": 0.05,
+ "systems": {
+  "E2.tf": {
+   "id": "E2.tf",
+   "experiment": "E2",
+   "role": "method",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "e2_fig2b"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 10,
+     "mean": 0.0011610610601340157,
+     "std": 0.0013616082088498008,
+     "sem": 0.00043057832207476056,
+     "median": 0.0008075763112981563,
+     "min": 2.158063087456026e-05,
+     "max": 0.004748122428588123
+    }
+   },
+   "parameters": "39 (freq 3)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.0038500648534666657,
+    "std": 0.0005127376131645158,
+    "sem": 0.00016214186996382044,
+    "median": 0.0034964680937500815,
+    "min": 0.003393665298666747,
+    "max": 0.004611562729166508
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 23.100389120799992,
+    "std": 3.0764256789870936,
+    "sem": 0.9728512197829223,
+    "median": 20.97880856250049,
+    "min": 20.36199179200048,
+    "max": 27.669376374999047
+   }
+  },
+  "E2.ff": {
+   "id": "E2.ff",
+   "experiment": "E2",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "same circuit, \u03b8_F = 1",
+   "sweeps": [
+    "e2_fig2b"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 10,
+     "mean": 0.050827966423873716,
+     "std": 0.0005613699890402147,
+     "sem": 0.00017752077754308387,
+     "median": 0.05069235693578699,
+     "min": 0.05044011731653459,
+     "max": 0.05237239624374092
+    }
+   },
+   "parameters": "36 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.003917509313866655,
+    "std": 0.0004383700997055638,
+    "sem": 0.00013862479731846893,
+    "median": 0.0036612120208331664,
+    "min": 0.0034470523195001684,
+    "max": 0.004455782715166606
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 23.50505588319993,
+    "std": 2.630220598233383,
+    "sem": 0.8317487839108136,
+    "median": 21.967272124999,
+    "min": 20.68231391700101,
+    "max": 26.734696290999636
+   }
+  },
+  "E2.ffs": {
+   "id": "E2.ffs",
+   "experiment": "E2",
+   "role": "fairness control (B2)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "same circuit + 1 global scale",
+   "sweeps": [
+    "e2_fig2b"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 10,
+     "mean": 0.05368822073172495,
+     "std": 0.007846826183942555,
+     "sem": 0.0024813843144705834,
+     "median": 0.048883069060398805,
+     "min": 0.048515915807031365,
+     "max": 0.06541471382106864
+    }
+   },
+   "parameters": "37 (freq 1)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.00425556660901669,
+    "std": 0.00010889017864018347,
+    "sem": 3.443409793255962e-05,
+    "median": 0.00426234131250006,
+    "min": 0.004010900500000086,
+    "max": 0.004415264055666739
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 25.53339965410014,
+    "std": 0.6533410718411015,
+    "sem": 0.20660458759535794,
+    "median": 25.57404787500036,
+    "min": 24.065403000000515,
+    "max": 26.491584334000436
+   }
+  },
+  "E2.tf_n4": {
+   "id": "E2.tf_n4",
+   "experiment": "E2",
+   "role": "method (N = 4)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "e2_fig2b"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 10,
+     "mean": 0.0013149127953711562,
+     "std": 0.0014671650070039153,
+     "sem": 0.0004639583125429265,
+     "median": 0.0006907996511250315,
+     "min": 9.90549908366417e-05,
+     "max": 0.004441511370005388
+    }
+   },
+   "parameters": "52 (freq 4)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.002683822415300013,
+    "std": 0.00022682269427140442,
+    "sem": 7.172763389136644e-05,
+    "median": 0.0027517267639166976,
+    "min": 0.002236384229166712,
+    "max": 0.0029107593403335462
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 16.102934491800077,
+    "std": 1.360936165628427,
+    "sem": 0.43036580334819874,
+    "median": 16.510360583500187,
+    "min": 13.418305375000273,
+    "max": 17.464556042001277
+   }
+  },
+  "E2.ff_n4": {
+   "id": "E2.ff_n4",
+   "experiment": "E2",
+   "role": "paper baseline (N = 4)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "same circuit, \u03b8_F = 1",
+   "sweeps": [
+    "e2_fig2b"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 10,
+     "mean": 0.050600187568348255,
+     "std": 9.279628232407735e-05,
+     "sem": 2.9344761054010765e-05,
+     "median": 0.05058725153424022,
+     "min": 0.05046076085863709,
+     "max": 0.05079901569598616
+    }
+   },
+   "parameters": "48 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.0027948896992833396,
+    "std": 0.0002575003190173138,
+    "sem": 8.142875063146822e-05,
+    "median": 0.0029483024895001412,
+    "min": 0.002431427763833199,
+    "max": 0.003054315895833194
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 16.769338195700037,
+    "std": 1.5450019141038829,
+    "sem": 0.4885725037888094,
+    "median": 17.689814937000847,
+    "min": 14.588566582999192,
+    "max": 18.325895374999163
+   }
+  },
+  "E2.mlp": {
+   "id": "E2.mlp",
+   "experiment": "E2",
+   "role": "classical context (B4a)",
+   "modality": "classical",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "params \u00b110 % of TF",
+   "sweeps": [
+    "e2_fig2b"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 10,
+     "mean": 0.14981698150469094,
+     "std": 0.007490350672636764,
+     "sem": 0.002368656859890643,
+     "median": 0.14763967670421932,
+     "min": 0.1421304718616943,
+     "max": 0.16360697383566689
+    }
+   },
+   "parameters": "40 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.00033215541249995416,
+    "std": 9.055351371161959e-05,
+    "sem": 2.863553534600056e-05,
+    "median": 0.00030893694441647314,
+    "min": 0.00027029875700009144,
+    "max": 0.0005778259236667509
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 1.992932474999725,
+    "std": 0.5433210822697176,
+    "sem": 0.17181321207600342,
+    "median": 1.8536216664988387,
+    "min": 1.6217925420005486,
+    "max": 3.4669555420005054
+   }
+  },
+  "E2.fourier": {
+   "id": "E2.fourier",
+   "experiment": "E2",
+   "role": "classical context (B4b)",
+   "modality": "classical",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "K = #FF gaps",
+   "sweeps": [
+    "e2_fig2b"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 10,
+     "mean": 0.009531255605264617,
+     "std": 5.0717279172031516e-05,
+     "sem": 1.603821189102383e-05,
+     "median": 0.00952260690457634,
+     "min": 0.009488779195850346,
+     "max": 0.009661145804348474
+    }
+   },
+   "parameters": "10 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.0003349138215333672,
+    "std": 4.980475391282282e-05,
+    "sem": 1.574964606687033e-05,
+    "median": 0.0003367225867500565,
+    "min": 0.0002469564166667624,
+    "max": 0.00038730703466656756
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 2.009482929200203,
+    "std": 0.2988285234769369,
+    "sem": 0.09449787640122195,
+    "median": 2.020335520500339,
+    "min": 1.4817385000005743,
+    "max": 2.323842207999405
+   }
+  },
+  "E3.ff_L4": {
+   "id": "E3.ff_L4",
+   "experiment": "E3",
+   "role": "capacity control (B3)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "L = 4",
+   "sweeps": [
+    "e3_ff_depth"
+   ],
+   "provenance": "local",
+   "successful_runs": 3,
+   "expected_runs": 3,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 3,
+     "mean": 0.05058571869508773,
+     "std": 0.0001483927008470612,
+     "sem": 8.56745657798264e-05,
+     "median": 0.05052911333343294,
+     "min": 0.050473959716498165,
+     "max": 0.05075408303533209
+    }
+   },
+   "parameters": "36 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 3,
+    "mean": 0.002965463189777842,
+    "std": 0.00010516114443175265,
+    "sem": 6.071481504596152e-05,
+    "median": 0.002914809069500128,
+    "min": 0.002895215743000032,
+    "max": 0.0030863647568333667
+   },
+   "training_seconds": {
+    "n": 3,
+    "mean": 17.792779138667054,
+    "std": 0.6309668665905158,
+    "sem": 0.364288890275769,
+    "median": 17.488854417000766,
+    "min": 17.371294458000193,
+    "max": 18.5181885410002
+   }
+  },
+  "E3.ff_L8": {
+   "id": "E3.ff_L8",
+   "experiment": "E3",
+   "role": "capacity control (B3)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "L = 8",
+   "sweeps": [
+    "e3_ff_depth"
+   ],
+   "provenance": "local",
+   "successful_runs": 3,
+   "expected_runs": 3,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 3,
+     "mean": 0.05182372207063705,
+     "std": 0.0011274268871567185,
+     "sem": 0.0006509202167915533,
+     "median": 0.0517404955277493,
+     "min": 0.05074021472952284,
+     "max": 0.052990455954639026
+    }
+   },
+   "parameters": "72 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 3,
+    "mean": 0.005200010560222331,
+    "std": 7.141954657971598e-05,
+    "sem": 4.123409444320004e-05,
+    "median": 0.0052102635833334715,
+    "min": 0.005124018625000038,
+    "max": 0.005265749472333482
+   },
+   "training_seconds": {
+    "n": 3,
+    "mean": 31.200063361333985,
+    "std": 0.4285172794782946,
+    "sem": 0.2474045666591995,
+    "median": 31.26158150000083,
+    "min": 30.74411175000023,
+    "max": 31.594496834000893
+   }
+  },
+  "E3.ff_L16": {
+   "id": "E3.ff_L16",
+   "experiment": "E3",
+   "role": "capacity control (B3)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "L = 16",
+   "sweeps": [
+    "e3_ff_depth"
+   ],
+   "provenance": "local",
+   "successful_runs": 3,
+   "expected_runs": 3,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 3,
+     "mean": 0.05295218476724121,
+     "std": 0.0025392603631981727,
+     "sem": 0.001466042654235012,
+     "median": 0.052369467310401124,
+     "min": 0.050754934754571226,
+     "max": 0.05573215223675128
+    }
+   },
+   "parameters": "144 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 3,
+    "mean": 0.010064148629611129,
+    "std": 9.456645899463687e-05,
+    "sem": 5.4597970556863305e-05,
+    "median": 0.010041154138833311,
+    "min": 0.00998319991666661,
+    "max": 0.010168091833333467
+   },
+   "training_seconds": {
+    "n": 3,
+    "mean": 60.38489177766678,
+    "std": 0.567398753967822,
+    "sem": 0.3275878233411803,
+    "median": 60.246924832999866,
+    "min": 59.89919949999967,
+    "max": 61.00855100000081
+   }
+  },
+  "E3.ff_L32": {
+   "id": "E3.ff_L32",
+   "experiment": "E3",
+   "role": "capacity control (B3)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "L = 32",
+   "sweeps": [
+    "e3_ff_depth"
+   ],
+   "provenance": "local",
+   "successful_runs": 3,
+   "expected_runs": 3,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 3,
+     "mean": 0.05457181647180224,
+     "std": 0.005079136382123506,
+     "sem": 0.0029324407574698283,
+     "median": 0.05169139473907583,
+     "min": 0.05158766248324686,
+     "max": 0.06043639219308402
+    }
+   },
+   "parameters": "288 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 3,
+    "mean": 0.01883731917822226,
+    "std": 0.0003709642449868141,
+    "sem": 0.00021417630670286341,
+    "median": 0.019032290319333393,
+    "min": 0.018409524416666802,
+    "max": 0.01907014279866659
+   },
+   "training_seconds": {
+    "n": 3,
+    "mean": 113.02391506933357,
+    "std": 2.2257854699208823,
+    "sem": 1.285057840217179,
+    "median": 114.19374191600036,
+    "min": 110.45714650000082,
+    "max": 114.42085679199954
+   }
+  },
+  "E3.ff_L64": {
+   "id": "E3.ff_L64",
+   "experiment": "E3",
+   "role": "capacity control (B3)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "L = 64",
+   "sweeps": [
+    "e3_ff_depth"
+   ],
+   "provenance": "local",
+   "successful_runs": 3,
+   "expected_runs": 3,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 3,
+     "mean": 0.05557684180911147,
+     "std": 0.0036276925817005467,
+     "sem": 0.0020944492885820194,
+     "median": 0.05570266926437643,
+     "min": 0.05188787250331263,
+     "max": 0.05913998365964534
+    }
+   },
+   "parameters": "576 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 3,
+    "mean": 0.03986945665744426,
+    "std": 0.0009824504621457994,
+    "sem": 0.0005672180387853496,
+    "median": 0.04030446286816641,
+    "min": 0.03874460240283315,
+    "max": 0.040559304701333225
+   },
+   "training_seconds": {
+    "n": 3,
+    "mean": 239.2167399446656,
+    "std": 5.894702772874798,
+    "sem": 3.403308232712098,
+    "median": 241.82677720899846,
+    "min": 232.4676144169989,
+    "max": 243.35582820799937
+   }
+  },
+  "E3.ff_L128": {
+   "id": "E3.ff_L128",
+   "experiment": "E3",
+   "role": "capacity control (B3)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "L = 128",
+   "sweeps": [
+    "e3_ff_depth"
+   ],
+   "provenance": "local",
+   "successful_runs": 3,
+   "expected_runs": 3,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 3,
+     "mean": 0.06702254219111803,
+     "std": 0.010282878830336569,
+     "sem": 0.005936822860739123,
+     "median": 0.07072678602343445,
+     "min": 0.05540074626492022,
+     "max": 0.07494009428499943
+    }
+   },
+   "parameters": "1152 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 3,
+    "mean": 0.06784127942822225,
+    "std": 0.0014436263860222796,
+    "sem": 0.0008334780825792098,
+    "median": 0.06866590122216681,
+    "min": 0.06617435452083342,
+    "max": 0.06868358254166651
+   },
+   "training_seconds": {
+    "n": 3,
+    "mean": 407.04767656933353,
+    "std": 8.661758316133668,
+    "sem": 5.0008684954752525,
+    "median": 411.9954073330009,
+    "min": 397.04612712500057,
+    "max": 412.10149524999906
+   }
+  },
+  "E2.tf.lr1e-3": {
+   "id": "E2.tf.lr1e-3",
+   "experiment": "E2-lr",
+   "role": "method",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "e2_fig2b"
+   ],
+   "provenance": "local",
+   "successful_runs": 3,
+   "expected_runs": 3,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 3,
+     "mean": 0.0005537656666803223,
+     "std": 0.00038514311341287404,
+     "sem": 0.0002223624802054534,
+     "median": 0.0003358612735898799,
+     "min": 0.00032697469588884785,
+     "max": 0.0009984610305622391
+    }
+   },
+   "parameters": "39 (freq 3)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 3,
+    "mean": 0.004234530488388878,
+    "std": 0.000631677548626289,
+    "sem": 0.0003646992027404309,
+    "median": 0.004586756027666828,
+    "min": 0.0035052727083332985,
+    "max": 0.004611562729166508
+   },
+   "training_seconds": {
+    "n": 3,
+    "mean": 25.407182930333267,
+    "std": 3.7900652917577324,
+    "sem": 2.1881952164425846,
+    "median": 27.520536166000966,
+    "min": 21.031636249999792,
+    "max": 27.669376374999047
+   }
+  },
+  "E2.ff.lr1e-3": {
+   "id": "E2.ff.lr1e-3",
+   "experiment": "E2-lr",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "e2_fig2b"
+   ],
+   "provenance": "local",
+   "successful_runs": 3,
+   "expected_runs": 3,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 3,
+     "mean": 0.05058571869508773,
+     "std": 0.0001483927008470612,
+     "sem": 8.56745657798264e-05,
+     "median": 0.05052911333343294,
+     "min": 0.050473959716498165,
+     "max": 0.05075408303533209
+    }
+   },
+   "parameters": "36 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 3,
+    "mean": 0.0035750715578889056,
+    "std": 0.00011218414929762244,
+    "sem": 6.476954879579149e-05,
+    "median": 0.003621946729166666,
+    "min": 0.0034470523195001684,
+    "max": 0.003656215624999883
+   },
+   "training_seconds": {
+    "n": 3,
+    "mean": 21.450429347333436,
+    "std": 0.673104895785735,
+    "sem": 0.3886172927747491,
+    "median": 21.731680374999996,
+    "min": 20.68231391700101,
+    "max": 21.9372937499993
+   }
+  },
+  "E2.tf.lr3e-3": {
+   "id": "E2.tf.lr3e-3",
+   "experiment": "E2-lr",
+   "role": "method",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "lr_robustness"
+   ],
+   "provenance": "local",
+   "successful_runs": 3,
+   "expected_runs": 3,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 3,
+     "mean": 0.0006432743089895542,
+     "std": 0.0005652134504753078,
+     "sem": 0.0003263261377815162,
+     "median": 0.0007410996959354734,
+     "min": 3.5533475700904876e-05,
+     "max": 0.0011531897553322846
+    }
+   },
+   "parameters": "39 (freq 3)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 3,
+    "mean": 0.002230606402833372,
+    "std": 2.634307643928565e-05,
+    "sem": 1.5209182273504458e-05,
+    "median": 0.002230453375000252,
+    "min": 0.0022043401736667268,
+    "max": 0.0022570256598331375
+   },
+   "training_seconds": {
+    "n": 3,
+    "mean": 13.383638417000233,
+    "std": 0.1580584586357133,
+    "sem": 0.09125509364102641,
+    "median": 13.382720250001512,
+    "min": 13.226041042000361,
+    "max": 13.542153958998824
+   }
+  },
+  "E2.ff.lr3e-3": {
+   "id": "E2.ff.lr3e-3",
+   "experiment": "E2-lr",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "lr_robustness"
+   ],
+   "provenance": "local",
+   "successful_runs": 3,
+   "expected_runs": 3,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 3,
+     "mean": 0.05315087409012401,
+     "std": 0.0026435736085616375,
+     "sem": 0.001526267934525652,
+     "median": 0.05262309794090749,
+     "min": 0.05081100129320005,
+     "max": 0.05601852303626449
+    }
+   },
+   "parameters": "36 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 3,
+    "mean": 0.0022472560370554976,
+    "std": 8.696162377643534e-05,
+    "sem": 5.0207316896491906e-05,
+    "median": 0.002258702513833365,
+    "min": 0.002155138020833268,
+    "max": 0.00232792757649986
+   },
+   "training_seconds": {
+    "n": 3,
+    "mean": 13.483536222332987,
+    "std": 0.5217697426586124,
+    "sem": 0.3012439013789517,
+    "median": 13.552215083000192,
+    "min": 12.930828124999607,
+    "max": 13.967565458999161
+   }
+  },
+  "E2.tf.lr1e-2": {
+   "id": "E2.tf.lr1e-2",
+   "experiment": "E2-lr",
+   "role": "method",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "lr_robustness"
+   ],
+   "provenance": "local",
+   "successful_runs": 3,
+   "expected_runs": 3,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 3,
+     "mean": 0.001981742290763166,
+     "std": 0.001933956963753377,
+     "sem": 0.0011165705736241635,
+     "median": 0.0015072219508794078,
+     "min": 0.00032921083914259593,
+     "max": 0.004108794082267495
+    }
+   },
+   "parameters": "39 (freq 3)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 3,
+    "mean": 0.0021386410115000116,
+    "std": 0.0001404846473203381,
+    "sem": 8.110884894740685e-05,
+    "median": 0.0021319604651668365,
+    "min": 0.002001615819333286,
+    "max": 0.002282346749999912
+   },
+   "training_seconds": {
+    "n": 3,
+    "mean": 12.83184606900007,
+    "std": 0.8429078839220283,
+    "sem": 0.4866530936844409,
+    "median": 12.79176279100102,
+    "min": 12.009694915999717,
+    "max": 13.694080499999473
+   }
+  },
+  "E2.ff.lr1e-2": {
+   "id": "E2.ff.lr1e-2",
+   "experiment": "E2-lr",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "lr_robustness"
+   ],
+   "provenance": "local",
+   "successful_runs": 3,
+   "expected_runs": 3,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 3,
+     "mean": 0.05419614094644993,
+     "std": 0.003347526931685243,
+     "sem": 0.001932695575127997,
+     "median": 0.05372597952732573,
+     "min": 0.05110854987891256,
+     "max": 0.0577538934331115
+    }
+   },
+   "parameters": "36 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 3,
+    "mean": 0.002124757122610996,
+    "std": 5.505277708947708e-05,
+    "sem": 3.1784735672246055e-05,
+    "median": 0.0021009968263333576,
+    "min": 0.002085574617999858,
+    "max": 0.0021876999234997736
+   },
+   "training_seconds": {
+    "n": 3,
+    "mean": 12.748542735665978,
+    "std": 0.3303166625368622,
+    "sem": 0.1907084140334762,
+    "median": 12.605980958000146,
+    "min": 12.513447707999148,
+    "max": 13.126199540998641
+   }
+  },
+  "E5.tf": {
+   "id": "E5.tf",
+   "experiment": "E5",
+   "role": "method",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "e5_fig3"
+   ],
+   "provenance": "local",
+   "successful_runs": 35,
+   "expected_runs": 35,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.018720036809123757,
+    "box_worst": 0.0491771228678516,
+    "box_best": 9.36924775818152e-11,
+    "box_median": 0.020294610539767007,
+    "per_dataset_mean": {
+     "1": 1.3156528013079047e-10,
+     "2": 1.6179191379634456e-08,
+     "3": 9.36924775818152e-11,
+     "4": 0.0491771228678516,
+     "5": 0.0370119322107693,
+     "6": 0.024556575641029244,
+     "7": 0.020294610539767007
+    }
+   },
+   "parameters": "100 (freq 4)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 35,
+    "mean": 0.004744345594950002,
+    "std": 0.0001226945213750896,
+    "sem": 2.0739159354407178e-05,
+    "median": 0.004717166541499864,
+    "min": 0.004550307583249833,
+    "max": 0.00504150592725
+   },
+   "training_seconds": {
+    "n": 35,
+    "mean": 18.977382379800005,
+    "std": 0.49077808550035845,
+    "sem": 0.08295663741762872,
+    "median": 18.868666165999457,
+    "min": 18.20123033299933,
+    "max": 20.166023709
+   }
+  },
+  "E5.simple": {
+   "id": "E5.simple",
+   "experiment": "E5",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "same circuit, simple FM",
+   "sweeps": [
+    "e5_fig3"
+   ],
+   "provenance": "local",
+   "successful_runs": 35,
+   "expected_runs": 35,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.024255830357947688,
+    "box_worst": 0.06412291280903724,
+    "box_best": 6.558045472867264e-11,
+    "box_median": 0.030677903277904615,
+    "per_dataset_mean": {
+     "1": 1.4237036783833101e-10,
+     "2": 1.2837973601682611e-08,
+     "3": 6.558045472867264e-11,
+     "4": 0.06412291280903724,
+     "5": 0.04138173567135323,
+     "6": 0.030677903277904615,
+     "7": 0.03360824770141431
+    }
+   },
+   "parameters": "96 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 35,
+    "mean": 0.004653780510707137,
+    "std": 0.00018756044432432776,
+    "sem": 3.170350150789533e-05,
+    "median": 0.004618942114499987,
+    "min": 0.004294400843750282,
+    "max": 0.005034265135500391
+   },
+   "training_seconds": {
+    "n": 35,
+    "mean": 18.615122042828546,
+    "std": 0.7502417772973112,
+    "sem": 0.12681400603158136,
+    "median": 18.475768457999948,
+    "min": 17.177603375001127,
+    "max": 20.137060542001564
+   }
+  },
+  "E5.tower": {
+   "id": "E5.tower",
+   "experiment": "E5",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "same circuit, tower FM",
+   "sweeps": [
+    "e5_fig3"
+   ],
+   "provenance": "local",
+   "successful_runs": 35,
+   "expected_runs": 35,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.02424200308883657,
+    "box_worst": 0.06413470103793766,
+    "box_best": 1.5701245745115004e-07,
+    "box_median": 0.03058338241621733,
+    "per_dataset_mean": {
+     "1": 1.2779676734937622e-06,
+     "2": 2.415042383949628e-07,
+     "3": 1.5701245745115004e-07,
+     "4": 0.06413470103793766,
+     "5": 0.04148139652463939,
+     "6": 0.03058338241621733,
+     "7": 0.03349286515869229
+    }
+   },
+   "parameters": "96 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 35,
+    "mean": 0.004230648727671424,
+    "std": 0.00020174760705489797,
+    "sem": 3.4101569696748785e-05,
+    "median": 0.004183549572750053,
+    "min": 0.0038593790937497944,
+    "max": 0.004664530333250241
+   },
+   "training_seconds": {
+    "n": 35,
+    "mean": 16.9225949106857,
+    "std": 0.8069904282195921,
+    "sem": 0.13640627878699516,
+    "median": 16.73419829100021,
+    "min": 15.437516374999177,
+    "max": 18.658121333000963
+   }
+  },
+  "E5.exponential": {
+   "id": "E5.exponential",
+   "experiment": "E5",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "same circuit, exponential FM",
+   "sweeps": [
+    "e5_fig3"
+   ],
+   "provenance": "local",
+   "successful_runs": 35,
+   "expected_runs": 35,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.024248415683468118,
+    "box_worst": 0.06402837322315183,
+    "box_best": 3.3065432398242146e-08,
+    "box_median": 0.030684500546681,
+    "per_dataset_mean": {
+     "1": 3.3065432398242146e-08,
+     "2": 3.5388935400556534e-06,
+     "3": 1.5198909891593674e-06,
+     "4": 0.06402837322315183,
+     "5": 0.04143945284747262,
+     "6": 0.030684500546681,
+     "7": 0.03358149131700978
+    }
+   },
+   "parameters": "96 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 35,
+    "mean": 0.004202062365785709,
+    "std": 0.00035602181679033473,
+    "sem": 6.0178670647305565e-05,
+    "median": 0.0041472558020000175,
+    "min": 0.003594557572999747,
+    "max": 0.004754172552
+   },
+   "training_seconds": {
+    "n": 35,
+    "mean": 16.808249463142836,
+    "std": 1.424087267161339,
+    "sem": 0.24071468258922224,
+    "median": 16.58902320800007,
+    "min": 14.378230291998989,
+    "max": 19.016690208
+   }
+  },
+  "E5.ffs": {
+   "id": "E5.ffs",
+   "experiment": "E5",
+   "role": "fairness control (B2)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "simple FM + 1 global scale",
+   "sweeps": [
+    "e5_fig3"
+   ],
+   "provenance": "local",
+   "successful_runs": 35,
+   "expected_runs": 35,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.023810461729124464,
+    "box_worst": 0.0639094044250143,
+    "box_best": 1.181413910434548e-10,
+    "box_median": 0.030347428842031426,
+    "per_dataset_mean": {
+     "1": 1.181413910434548e-10,
+     "2": 1.8847073397844325e-08,
+     "3": 1.4004922776806413e-10,
+     "4": 0.0639094044250143,
+     "5": 0.04001155766681487,
+     "6": 0.030347428842031426,
+     "7": 0.03240482206474663
+    }
+   },
+   "parameters": "97 (freq 1)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 35,
+    "mean": 0.004528143959842809,
+    "std": 0.00036508456866292383,
+    "sem": 6.171055530823907e-05,
+    "median": 0.004561867843749951,
+    "min": 0.0034895376039999065,
+    "max": 0.00502628245825008
+   },
+   "training_seconds": {
+    "n": 35,
+    "mean": 18.11257583937123,
+    "std": 1.460338274651695,
+    "sem": 0.2468422212329562,
+    "median": 18.247471374999805,
+    "min": 13.958150415999626,
+    "max": 20.10512983300032
+   }
+  },
+  "E5b.simple_oracle": {
+   "id": "E5b.simple_oracle",
+   "experiment": "E5b",
+   "role": "prior-knowledge control",
+   "modality": "qubit",
+   "scope": "diagnosis control",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "input scaled by data base frequency",
+   "sweeps": [
+    "e5b_oracle_scale"
+   ],
+   "provenance": "local",
+   "successful_runs": 21,
+   "expected_runs": 21,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.033612621362902446,
+    "box_worst": 0.10307361949426448,
+    "box_best": 8.738175424598014e-11,
+    "box_median": 0.039825830650085894,
+    "per_dataset_mean": {
+     "1": 8.738175424598014e-11,
+     "2": 1.9272871874311328e-08,
+     "3": 1.0929999426161691e-10,
+     "4": 0.10307361949426448,
+     "5": 0.04169493526419338,
+     "6": 0.05069394466221976,
+     "7": 0.039825830650085894
+    }
+   },
+   "parameters": "96 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 21,
+    "mean": 0.0043003504280951736,
+    "std": 0.00026665010765006676,
+    "sem": 5.818782392259782e-05,
+    "median": 0.0042707351144999845,
+    "min": 0.003816615906249808,
+    "max": 0.004708678760499879
+   },
+   "training_seconds": {
+    "n": 21,
+    "mean": 17.201401712380694,
+    "std": 1.066600430600267,
+    "sem": 0.23275129569039127,
+    "median": 17.08294045799994,
+    "min": 15.266463624999233,
+    "max": 18.834715041999516
+   }
+  },
+  "E5b.tower_oracle": {
+   "id": "E5b.tower_oracle",
+   "experiment": "E5b",
+   "role": "prior-knowledge control",
+   "modality": "qubit",
+   "scope": "diagnosis control",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "input scaled by data base frequency",
+   "sweeps": [
+    "e5b_oracle_scale"
+   ],
+   "provenance": "local",
+   "successful_runs": 21,
+   "expected_runs": 21,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.0035910633824534363,
+    "box_worst": 0.025090077301913195,
+    "box_best": 8.743254823649438e-08,
+    "box_median": 2.0573207339405754e-06,
+    "per_dataset_mean": {
+     "1": 2.0573207339405754e-06,
+     "2": 3.9943784316464186e-07,
+     "3": 8.743254823649438e-08,
+     "4": 4.135800737388628e-05,
+     "5": 1.5932551450191193e-07,
+     "6": 0.025090077301913195,
+     "7": 3.3048512471304157e-06
+    }
+   },
+   "parameters": "96 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 21,
+    "mean": 0.003983861287714306,
+    "std": 0.00015796590982759262,
+    "sem": 3.447098757178628e-05,
+    "median": 0.003935578697999972,
+    "min": 0.00377750678124994,
+    "max": 0.004454437073000008
+   },
+   "training_seconds": {
+    "n": 21,
+    "mean": 15.935445150857223,
+    "std": 0.6318636393103704,
+    "sem": 0.1378839502871451,
+    "median": 15.742314791999888,
+    "min": 15.11002712499976,
+    "max": 17.817748292000033
+   }
+  },
+  "E5b.exponential_oracle": {
+   "id": "E5b.exponential_oracle",
+   "experiment": "E5b",
+   "role": "prior-knowledge control",
+   "modality": "qubit",
+   "scope": "diagnosis control",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "input scaled by data base frequency",
+   "sweeps": [
+    "e5b_oracle_scale"
+   ],
+   "provenance": "local",
+   "successful_runs": 21,
+   "expected_runs": 21,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 2.9962779989192245e-05,
+    "box_worst": 0.00019884818893413443,
+    "box_best": 5.508162008303274e-08,
+    "box_median": 2.682195539943467e-06,
+    "per_dataset_mean": {
+     "1": 5.508162008303274e-08,
+     "2": 2.682195539943467e-06,
+     "3": 3.126977139496037e-07,
+     "4": 3.1152530119205825e-06,
+     "5": 1.7294843818315137e-06,
+     "6": 0.00019884818893413443,
+     "7": 2.9965587224830966e-06
+    }
+   },
+   "parameters": "96 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 21,
+    "mean": 0.004175083021833242,
+    "std": 0.00038984451527165453,
+    "sem": 8.507104764265356e-05,
+    "median": 0.004295012416750069,
+    "min": 0.0031760830937496392,
+    "max": 0.004613030656249975
+   },
+   "training_seconds": {
+    "n": 21,
+    "mean": 16.70033208733297,
+    "std": 1.5593780610866181,
+    "sem": 0.34028419057061426,
+    "median": 17.180049667000276,
+    "min": 12.704332374998557,
+    "max": 18.4521226249999
+   }
+  },
+  "E5.tf.lr3e-3": {
+   "id": "E5.tf.lr3e-3",
+   "experiment": "E5-lr",
+   "role": "method",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "lr_robustness"
+   ],
+   "provenance": "local",
+   "successful_runs": 21,
+   "expected_runs": 21,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.008530362898945806,
+    "box_worst": 0.03807263979089726,
+    "box_best": 3.484125882809941e-06,
+    "box_median": 0.0007134199726087641,
+    "per_dataset_mean": {
+     "1": 3.484125882809941e-06,
+     "2": 0.0005541615836171476,
+     "3": 0.0004272314989664622,
+     "4": 0.0007134199726087641,
+     "5": 0.03807263979089726,
+     "6": 0.011620080752477951,
+     "7": 0.00832152256817025
+    }
+   },
+   "parameters": "100 (freq 4)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 21,
+    "mean": 0.004252670527273819,
+    "std": 0.00013023685937875546,
+    "sem": 2.8420012684593636e-05,
+    "median": 0.004250941926999986,
+    "min": 0.0039932544062498895,
+    "max": 0.004462736739500087
+   },
+   "training_seconds": {
+    "n": 21,
+    "mean": 17.010682109095278,
+    "std": 0.520947437515022,
+    "sem": 0.11368005073837459,
+    "median": 17.00376770799994,
+    "min": 15.973017624999557,
+    "max": 17.85094695800035
+   }
+  },
+  "E5.simple.lr3e-3": {
+   "id": "E5.simple.lr3e-3",
+   "experiment": "E5-lr",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "lr_robustness"
+   ],
+   "provenance": "local",
+   "successful_runs": 21,
+   "expected_runs": 21,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.025133498323190253,
+    "box_worst": 0.06638191276397976,
+    "box_best": 7.276945065932635e-12,
+    "box_median": 0.03101806915736231,
+    "per_dataset_mean": {
+     "1": 8.560369792816887e-07,
+     "2": 7.276945065932635e-12,
+     "3": 0.002308193754959688,
+     "4": 0.06638191276397976,
+     "5": 0.04221130334940929,
+     "6": 0.03101806915736231,
+     "7": 0.0340141531923645
+    }
+   },
+   "parameters": "96 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 21,
+    "mean": 0.004369380225226169,
+    "std": 0.0002328359873573289,
+    "sem": 5.080897793213051e-05,
+    "median": 0.004360616104250312,
+    "min": 0.0039579180625000845,
+    "max": 0.004791029208250166
+   },
+   "training_seconds": {
+    "n": 21,
+    "mean": 17.477520900904675,
+    "std": 0.9313439494293156,
+    "sem": 0.20323591172852204,
+    "median": 17.442464417001247,
+    "min": 15.831672250000338,
+    "max": 19.164116833000662
+   }
+  },
+  "E5.tower.lr3e-3": {
+   "id": "E5.tower.lr3e-3",
+   "experiment": "E5-lr",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "lr_robustness"
+   ],
+   "provenance": "local",
+   "successful_runs": 21,
+   "expected_runs": 21,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.025676185703585867,
+    "box_worst": 0.06718292063209118,
+    "box_best": 2.2624883489350732e-10,
+    "box_median": 0.03304602276353811,
+    "per_dataset_mean": {
+     "1": 3.28134627383604e-08,
+     "2": 2.2624883489350732e-10,
+     "3": 6.267043283151291e-06,
+     "4": 0.06718292063209118,
+     "5": 0.043328152304249225,
+     "6": 0.03304602276353811,
+     "7": 0.036169904142227816
+    }
+   },
+   "parameters": "96 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 21,
+    "mean": 0.004180720167142833,
+    "std": 0.0002296904782711787,
+    "sem": 5.012257157563267e-05,
+    "median": 0.004220240228999955,
+    "min": 0.0037585131769997133,
+    "max": 0.0046327605937503905
+   },
+   "training_seconds": {
+    "n": 21,
+    "mean": 16.72288066857133,
+    "std": 0.9187619130847149,
+    "sem": 0.20049028630253068,
+    "median": 16.88096091599982,
+    "min": 15.034052707998853,
+    "max": 18.53104237500156
+   }
+  },
+  "E5.exponential.lr3e-3": {
+   "id": "E5.exponential.lr3e-3",
+   "experiment": "E5-lr",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "lr_robustness"
+   ],
+   "provenance": "local",
+   "successful_runs": 21,
+   "expected_runs": 21,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.025888922993829482,
+    "box_worst": 0.0673200403356616,
+    "box_best": 2.803611989370433e-08,
+    "box_median": 0.03309527079192926,
+    "per_dataset_mean": {
+     "1": 2.803611989370433e-08,
+     "2": 1.1542012018410146e-05,
+     "3": 0.0005446567874513766,
+     "4": 0.0673200403356616,
+     "5": 0.04402101209234332,
+     "6": 0.03309527079192926,
+     "7": 0.03622991090128253
+    }
+   },
+   "parameters": "96 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 21,
+    "mean": 0.004250346817464279,
+    "std": 0.00018301942179887459,
+    "sem": 3.993811209716161e-05,
+    "median": 0.004242516697750034,
+    "min": 0.003961920833500244,
+    "max": 0.004658758593750008
+   },
+   "training_seconds": {
+    "n": 21,
+    "mean": 17.001387269857116,
+    "std": 0.7320776871954982,
+    "sem": 0.15975244838864638,
+    "median": 16.970066791000136,
+    "min": 15.847683334000976,
+    "max": 18.635034375000032
+   }
+  },
+  "E5.tf.lr1e-2": {
+   "id": "E5.tf.lr1e-2",
+   "experiment": "E5-lr",
+   "role": "method",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "lr_robustness"
+   ],
+   "provenance": "local",
+   "successful_runs": 21,
+   "expected_runs": 21,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.024381048267121997,
+    "box_worst": 0.10874967333116715,
+    "box_best": 0.00024512333201976523,
+    "box_median": 0.00676647100846822,
+    "per_dataset_mean": {
+     "1": 0.00024512333201976523,
+     "2": 0.10874967333116715,
+     "3": 0.00676647100846822,
+     "4": 0.0039793602777316505,
+     "5": 0.04076717675732837,
+     "6": 0.002701294128577943,
+     "7": 0.007458239034560866
+    }
+   },
+   "parameters": "100 (freq 4)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 21,
+    "mean": 0.003734506562988112,
+    "std": 0.00011892067577392734,
+    "sem": 2.5950618972824917e-05,
+    "median": 0.003747502416750194,
+    "min": 0.003444015270750242,
+    "max": 0.003943763510249937
+   },
+   "training_seconds": {
+    "n": 21,
+    "mean": 14.938026251952449,
+    "std": 0.47568270309570954,
+    "sem": 0.1038024758912997,
+    "median": 14.990009667000777,
+    "min": 13.776061083000968,
+    "max": 15.775054040999748
+   }
+  },
+  "E5.simple.lr1e-2": {
+   "id": "E5.simple.lr1e-2",
+   "experiment": "E5-lr",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "lr_robustness"
+   ],
+   "provenance": "local",
+   "successful_runs": 21,
+   "expected_runs": 21,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.028245085664251292,
+    "box_worst": 0.07385284032016409,
+    "box_best": 1.6982426396429187e-08,
+    "box_median": 0.03264985414561952,
+    "per_dataset_mean": {
+     "1": 0.009642231868769878,
+     "2": 0.0006671218347771227,
+     "3": 1.6982426396429187e-08,
+     "4": 0.07385284032016409,
+     "5": 0.04457670772098646,
+     "6": 0.03264985414561952,
+     "7": 0.03632682677701557
+    }
+   },
+   "parameters": "96 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 21,
+    "mean": 0.003872800129023766,
+    "std": 0.0003003389579790489,
+    "sem": 6.553933376586442e-05,
+    "median": 0.0037796758959998443,
+    "min": 0.0034456944374996966,
+    "max": 0.004482883000000129
+   },
+   "training_seconds": {
+    "n": 21,
+    "mean": 15.491200516095065,
+    "std": 1.2013558319161954,
+    "sem": 0.2621573350634577,
+    "median": 15.118703583999377,
+    "min": 13.782777749998786,
+    "max": 17.931532000000516
+   }
+  },
+  "E5.tower.lr1e-2": {
+   "id": "E5.tower.lr1e-2",
+   "experiment": "E5-lr",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "lr_robustness"
+   ],
+   "provenance": "local",
+   "successful_runs": 21,
+   "expected_runs": 21,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.029622575849789674,
+    "box_worst": 0.07494814783334303,
+    "box_best": 0.0002543739081951887,
+    "box_median": 0.035662866973421505,
+    "per_dataset_mean": {
+     "1": 0.0005343957745906994,
+     "2": 0.008134925444328336,
+     "3": 0.0002543739081951887,
+     "4": 0.07494814783334303,
+     "5": 0.04735044624969451,
+     "6": 0.035662866973421505,
+     "7": 0.040472874764954474
+    }
+   },
+   "parameters": "96 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 21,
+    "mean": 0.003887265259428551,
+    "std": 0.00014941270367003305,
+    "sem": 3.260452496933013e-05,
+    "median": 0.003848812302249826,
+    "min": 0.003632367593750132,
+    "max": 0.004141585468749781
+   },
+   "training_seconds": {
+    "n": 21,
+    "mean": 15.549061037714203,
+    "std": 0.5976508146801324,
+    "sem": 0.13041809987732056,
+    "median": 15.395249208999303,
+    "min": 14.529470375000528,
+    "max": 16.566341874999125
+   }
+  },
+  "E5.exponential.lr1e-2": {
+   "id": "E5.exponential.lr1e-2",
+   "experiment": "E5-lr",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "preliminary (3 seeds)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "lr_robustness"
+   ],
+   "provenance": "local",
+   "successful_runs": 21,
+   "expected_runs": 21,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.03739695289488484,
+    "box_worst": 0.08423281588484617,
+    "box_best": 0.0032973546758636144,
+    "box_median": 0.044404413949439094,
+    "per_dataset_mean": {
+     "1": 0.0032973546758636144,
+     "2": 0.020403261563646177,
+     "3": 0.006212980076091612,
+     "4": 0.08423281588484617,
+     "5": 0.05517679636831895,
+     "6": 0.044404413949439094,
+     "7": 0.048051047745988285
+    }
+   },
+   "parameters": "96 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 21,
+    "mean": 0.0037852946215356973,
+    "std": 0.00024225922444718868,
+    "sem": 5.2865296849073266e-05,
+    "median": 0.0037462727395,
+    "min": 0.003433007896000163,
+    "max": 0.004156822458499846
+   },
+   "training_seconds": {
+    "n": 21,
+    "mean": 15.141178486142788,
+    "std": 0.9690368977887548,
+    "sem": 0.21146118739629308,
+    "median": 14.985090958,
+    "min": 13.732031584000651,
+    "max": 16.627289833999384
+   }
+  },
+  "E6.tf": {
+   "id": "E6.tf",
+   "experiment": "E6",
+   "role": "method",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "",
+   "sweeps": [
+    "e6_table1"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 10,
+     "mean": 9.015719106095915,
+     "std": 1.4193616758572323,
+     "sem": 0.4488415719262478,
+     "median": 9.03613094917469,
+     "min": 6.64701296085203,
+     "max": 11.60614654587809
+    },
+    "v_mean_maerm": {
+     "n": 10,
+     "mean": 30.403841578014237,
+     "std": 3.460031343314223,
+     "sem": 1.0941579820444955,
+     "median": 29.666001631884157,
+     "min": 26.63666892339418,
+     "max": 36.393660635540535
+    },
+    "p_mean_maerm": {
+     "n": 10,
+     "mean": 45.61524743370792,
+     "std": 3.61415642034167,
+     "sem": 1.142896610840058,
+     "median": 44.832889362460506,
+     "min": 41.57578868784842,
+     "max": 52.265844173076964
+    }
+   },
+   "parameters": "186 / network \u00d7 2 (freq 6)",
+   "cost_factor": 1.0333333333333334,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.24252502480409105,
+    "std": 0.003071782891266519,
+    "sem": 0.0009713830413939546,
+    "median": 0.24337955674489495,
+    "min": 0.23642688383320346,
+    "max": 0.24629987280243076
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 1212.6251240204554,
+    "std": 15.35891445633259,
+    "sem": 4.856915206969772,
+    "median": 1216.8977837244747,
+    "min": 1182.1344191660173,
+    "max": 1231.4993640121538
+   }
+  },
+  "E6.ff": {
+   "id": "E6.ff",
+   "experiment": "E6",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "same circuit, \u03b8_F = 1",
+   "sweeps": [
+    "e6_table1"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 10,
+     "mean": 20.10770959823405,
+     "std": 0.932198851576791,
+     "sem": 0.2947871603175905,
+     "median": 19.846579435229746,
+     "min": 19.394660117232224,
+     "max": 22.595519337669995
+    },
+    "v_mean_maerm": {
+     "n": 10,
+     "mean": 61.018724698368146,
+     "std": 1.8302958950262562,
+     "sem": 0.5787903820339418,
+     "median": 60.53746317713768,
+     "min": 59.2664783223188,
+     "max": 65.12804907816421
+    },
+    "p_mean_maerm": {
+     "n": 10,
+     "mean": 76.24223500458021,
+     "std": 3.455141218956648,
+     "sem": 1.092611588943355,
+     "median": 75.58438025234659,
+     "min": 71.11959456782145,
+     "max": 84.2145894356329
+    }
+   },
+   "parameters": "180 / network \u00d7 2 (freq 0)",
+   "cost_factor": 1.0,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.2325429970394075,
+    "std": 0.001590691276980277,
+    "sem": 0.0005030207489419441,
+    "median": 0.2324666412636172,
+    "min": 0.23014509538537822,
+    "max": 0.2351538870742079
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 1162.7149851970375,
+    "std": 7.953456384901389,
+    "sem": 2.515103744709722,
+    "median": 1162.333206318086,
+    "min": 1150.7254769268911,
+    "max": 1175.7694353710394
+   }
+  },
+  "E6.ffs": {
+   "id": "E6.ffs",
+   "experiment": "E6",
+   "role": "fairness control (B2)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "same circuit + 3 scales / QNN",
+   "sweeps": [
+    "e6_controls"
+   ],
+   "provenance": "local",
+   "successful_runs": 5,
+   "expected_runs": 5,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 5,
+     "mean": 11.204359816993065,
+     "std": 1.4882573764365727,
+     "sem": 0.665568932345534,
+     "median": 10.793286550596646,
+     "min": 9.247939227105826,
+     "max": 12.997501895138658
+    },
+    "v_mean_maerm": {
+     "n": 5,
+     "mean": 35.58932083599935,
+     "std": 2.9008199897285745,
+     "sem": 1.2972861375046667,
+     "median": 33.89215660460735,
+     "min": 33.03336571583453,
+     "max": 39.41443323552516
+    },
+    "p_mean_maerm": {
+     "n": 5,
+     "mean": 49.929147004337686,
+     "std": 5.553316939901229,
+     "sem": 2.4835188356440527,
+     "median": 48.034771964809345,
+     "min": 43.554831728812275,
+     "max": 56.905406482640295
+    }
+   },
+   "parameters": "183 / network \u00d7 2 (freq 3)",
+   "cost_factor": 1.0166666666666666,
+   "seconds_per_iteration": {
+    "n": 5,
+    "mean": 0.24025217035867272,
+    "std": 0.010567428907731304,
+    "sem": 0.004725897877016709,
+    "median": 0.24425039182957262,
+    "min": 0.22145453466176987,
+    "max": 0.24672389209521933
+   },
+   "training_seconds": {
+    "n": 5,
+    "mean": 1201.2608517933636,
+    "std": 52.837144538656524,
+    "sem": 23.62948938508355,
+    "median": 1221.251959147863,
+    "min": 1107.2726733088493,
+    "max": 1233.6194604760967
+   }
+  },
+  "E6.tf_minmax": {
+   "id": "E6.tf_minmax",
+   "experiment": "E6",
+   "role": "method, min\u2013max inputs",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "",
+   "sweeps": [
+    "e6_minmax"
+   ],
+   "provenance": "local",
+   "successful_runs": 5,
+   "expected_runs": 5,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 5,
+     "mean": 7.554791309367391,
+     "std": 1.4492291219042501,
+     "sem": 0.6481149663100465,
+     "median": 7.665133769643771,
+     "min": 5.295651145946334,
+     "max": 9.018996374588077
+    },
+    "v_mean_maerm": {
+     "n": 5,
+     "mean": 28.464605798065833,
+     "std": 1.6292048311547498,
+     "sem": 0.7286025503466175,
+     "median": 29.241376052554866,
+     "min": 26.1201487858271,
+     "max": 29.937875549137164
+    },
+    "p_mean_maerm": {
+     "n": 5,
+     "mean": 41.80680791857726,
+     "std": 1.8381251952051092,
+     "sem": 0.8220345775267389,
+     "median": 41.888980916224575,
+     "min": 39.89609871281063,
+     "max": 44.527042072035734
+    }
+   },
+   "parameters": "186 / network \u00d7 2 (freq 6)",
+   "cost_factor": 1.0333333333333334,
+   "seconds_per_iteration": {
+    "n": 5,
+    "mean": 0.2139581517381221,
+    "std": 0.04037591263321127,
+    "sem": 0.018056657060290585,
+    "median": 0.24146269518099725,
+    "min": 0.16788467101939022,
+    "max": 0.2450278701942414
+   },
+   "training_seconds": {
+    "n": 5,
+    "mean": 1069.7907586906106,
+    "std": 201.87956316605633,
+    "sem": 90.28328530145292,
+    "median": 1207.3134759049863,
+    "min": 839.4233550969511,
+    "max": 1225.139350971207
+   }
+  },
+  "E6.ff_minmax": {
+   "id": "E6.ff_minmax",
+   "experiment": "E6",
+   "role": "paper baseline, min\u2013max inputs",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "same circuit, \u03b8_F = 1",
+   "sweeps": [
+    "e6_minmax"
+   ],
+   "provenance": "local",
+   "successful_runs": 5,
+   "expected_runs": 5,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 5,
+     "mean": 14.567457777598946,
+     "std": 0.310725190559352,
+     "sem": 0.1389605296824574,
+     "median": 14.681860101451734,
+     "min": 14.119390049546489,
+     "max": 14.852101683238214
+    },
+    "v_mean_maerm": {
+     "n": 5,
+     "mean": 87.6815353059753,
+     "std": 2.6997588410823394,
+     "sem": 1.2073688583032325,
+     "median": 86.91026081323069,
+     "min": 85.61153966757891,
+     "max": 92.33353396826534
+    },
+    "p_mean_maerm": {
+     "n": 5,
+     "mean": 86.39544284193985,
+     "std": 2.91054679099664,
+     "sem": 1.301636095272472,
+     "median": 87.15227521595041,
+     "min": 81.88944910858515,
+     "max": 89.38644468277609
+    }
+   },
+   "parameters": "180 / network \u00d7 2 (freq 0)",
+   "cost_factor": 1.0,
+   "seconds_per_iteration": {
+    "n": 5,
+    "mean": 0.2323125249740854,
+    "std": 0.000988685491258426,
+    "sem": 0.00044215359336432293,
+    "median": 0.2324660854974296,
+    "min": 0.2311985596898012,
+    "max": 0.23373579108482226
+   },
+   "training_seconds": {
+    "n": 5,
+    "mean": 1161.562624870427,
+    "std": 4.94342745629216,
+    "sem": 2.2107679668216282,
+    "median": 1162.330427487148,
+    "min": 1155.992798449006,
+    "max": 1168.6789554241113
+   }
+  },
+  "E6.mlp": {
+   "id": "E6.mlp",
+   "experiment": "E6",
+   "role": "classical context (B4, selected lr)",
+   "modality": "classical",
+   "scope": "paper-accurate",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "\u2248 same params, not circuit-matched",
+   "sweeps": [
+    "e6_controls"
+   ],
+   "provenance": "local",
+   "successful_runs": 5,
+   "expected_runs": 5,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 5,
+     "mean": 3.959953405187271,
+     "std": 0.257314753873664,
+     "sem": 0.115074656255028,
+     "median": 3.930846498214416,
+     "min": 3.6563783633380167,
+     "max": 4.291339599849783
+    },
+    "v_mean_maerm": {
+     "n": 5,
+     "mean": 17.145700875521346,
+     "std": 1.5161094168581017,
+     "sem": 0.6780247434844562,
+     "median": 17.855662567723456,
+     "min": 14.600189414967952,
+     "max": 18.31988062895717
+    },
+    "p_mean_maerm": {
+     "n": 5,
+     "mean": 30.703719897072,
+     "std": 4.022955227142716,
+     "sem": 1.7991202716658439,
+     "median": 31.231668656037872,
+     "min": 26.248804499507436,
+     "max": 35.60477829150064
+    }
+   },
+   "parameters": "188 / network \u00d7 2 (freq 0)",
+   "cost_factor": NaN,
+   "seconds_per_iteration": {
+    "n": 5,
+    "mean": 0.04754960558896885,
+    "std": 9.870643853048577e-05,
+    "sem": 4.4142861274214124e-05,
+    "median": 0.04754426909000613,
+    "min": 0.04741652163802646,
+    "max": 0.04768555108318105
+   },
+   "training_seconds": {
+    "n": 5,
+    "mean": 237.7480279448442,
+    "std": 0.49353219265243226,
+    "sem": 0.22071430637107214,
+    "median": 237.72134545003064,
+    "min": 237.0826081901323,
+    "max": 238.42775541590527
+   }
+  },
+  "E7.tf": {
+   "id": "E7.tf",
+   "experiment": "E7",
+   "role": "method",
+   "modality": "qubit",
+   "scope": "paper-accurate (union of 2 sweeps)",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "",
+   "sweeps": [
+    "e7_appc",
+    "e7_appc_retry"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 10,
+     "mean": 6.618446905578848,
+     "std": 0.9090759032889406,
+     "sem": 0.2874750420368007,
+     "median": 6.761979161474821,
+     "min": 5.155108650446855,
+     "max": 7.688248211120108
+    },
+    "v_mean_maerm": {
+     "n": 10,
+     "mean": 20.086480621036653,
+     "std": 1.283193376535185,
+     "sem": 0.4057813748293247,
+     "median": 20.407946747343477,
+     "min": 18.079680075394776,
+     "max": 22.059915152756705
+    },
+    "p_mean_maerm": {
+     "n": 10,
+     "mean": 34.752690592666966,
+     "std": 2.5979956915076112,
+     "sem": 0.8215583736468219,
+     "median": 34.69677391244315,
+     "min": 30.200043256370314,
+     "max": 39.31878507995344
+    }
+   },
+   "parameters": "816 / network \u00d7 2 (freq 12)",
+   "cost_factor": 1.0149253731343284,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.8713723459869623,
+    "std": 0.06398881788022377,
+    "sem": 0.020235040928321457,
+    "median": 0.9067710261688102,
+    "min": 0.7740431395641993,
+    "max": 0.9223627865927759
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 4356.861729934812,
+    "std": 319.9440894011189,
+    "sem": 101.1752046416073,
+    "median": 4533.855130844051,
+    "min": 3870.215697820997,
+    "max": 4611.81393296388
+   }
+  },
+  "E7.ff": {
+   "id": "E7.ff",
+   "experiment": "E7",
+   "role": "paper baseline (B1)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "same circuit, \u03b8_F = 1",
+   "sweeps": [
+    "e7_appc"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 10,
+     "mean": 31.486747685658752,
+     "std": 5.37856276467238,
+     "sem": 1.7008508874536943,
+     "median": 32.59100406221289,
+     "min": 20.05944836820405,
+     "max": 38.89346863662201
+    },
+    "v_mean_maerm": {
+     "n": 10,
+     "mean": 73.15045482243018,
+     "std": 8.67893641179287,
+     "sem": 2.744520672903451,
+     "median": 75.1957714001797,
+     "min": 54.04392458978689,
+     "max": 83.07474648067874
+    },
+    "p_mean_maerm": {
+     "n": 10,
+     "mean": 123.3446968638799,
+     "std": 13.033855632299995,
+     "sem": 4.121667049188208,
+     "median": 124.14311793672107,
+     "min": 91.12496660785945,
+     "max": 139.49719648340786
+    }
+   },
+   "parameters": "804 / network \u00d7 2 (freq 0)",
+   "cost_factor": 1.0,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.8926577015740611,
+    "std": 0.008355477624014613,
+    "sem": 0.0026422340230458177,
+    "median": 0.8917068970568245,
+    "min": 0.8821483430441934,
+    "max": 0.9075553070473951
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 4463.288507870306,
+    "std": 41.777388120073,
+    "sem": 13.211170115229068,
+    "median": 4458.534485284123,
+    "min": 4410.741715220967,
+    "max": 4537.776535236975
+   }
+  },
+  "E7.ffs": {
+   "id": "E7.ffs",
+   "experiment": "E7",
+   "role": "fairness control (B2)",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "same circuit + 3 scales / QNN",
+   "sweeps": [
+    "e7_scaling_controls"
+   ],
+   "provenance": "local",
+   "successful_runs": 5,
+   "expected_runs": 5,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 5,
+     "mean": 6.085480227648214,
+     "std": 0.6148780992265674,
+     "sem": 0.2749818455492931,
+     "median": 6.09022611030102,
+     "min": 5.307544252194935,
+     "max": 6.904475927350979
+    },
+    "v_mean_maerm": {
+     "n": 5,
+     "mean": 20.592873409985618,
+     "std": 1.3388809384637221,
+     "sem": 0.5987657584367191,
+     "median": 20.40753423594838,
+     "min": 19.153177792487757,
+     "max": 22.07985224710523
+    },
+    "p_mean_maerm": {
+     "n": 5,
+     "mean": 32.40189598948073,
+     "std": 2.557301291968313,
+     "sem": 1.143659905557837,
+     "median": 32.49616272160613,
+     "min": 28.991712858491606,
+     "max": 36.09262032490315
+    }
+   },
+   "parameters": "807 / network \u00d7 2 (freq 3)",
+   "cost_factor": 1.0037313432835822,
+   "seconds_per_iteration": {
+    "n": 5,
+    "mean": 0.8349890261055901,
+    "std": 0.07263884008266147,
+    "sem": 0.0324850768463135,
+    "median": 0.7913125476693734,
+    "min": 0.7766945212041959,
+    "max": 0.9147763734135776
+   },
+   "training_seconds": {
+    "n": 5,
+    "mean": 4174.945130527951,
+    "std": 363.1942004133073,
+    "sem": 162.42538423156748,
+    "median": 3956.5627383468673,
+    "min": 3883.4726060209796,
+    "max": 4573.881867067888
+   }
+  },
+  "E7.tf_minmax": {
+   "id": "E7.tf_minmax",
+   "experiment": "E7",
+   "role": "method, min\u2013max inputs",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "",
+   "sweeps": [
+    "e7_scaling_controls"
+   ],
+   "provenance": "local",
+   "successful_runs": 5,
+   "expected_runs": 5,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 5,
+     "mean": 4.435753576581498,
+     "std": 0.4862145601658712,
+     "sem": 0.21744176163620987,
+     "median": 4.2683007718933075,
+     "min": 3.9153047945694373,
+     "max": 5.18754351699436
+    },
+    "v_mean_maerm": {
+     "n": 5,
+     "mean": 18.19178232241643,
+     "std": 1.053150453684923,
+     "sem": 0.4709832009948463,
+     "median": 17.73198917617998,
+     "min": 17.428854094834502,
+     "max": 19.933022547056336
+    },
+    "p_mean_maerm": {
+     "n": 5,
+     "mean": 24.998257149292147,
+     "std": 1.9727833145404163,
+     "sem": 0.882255519237944,
+     "median": 24.8354769612635,
+     "min": 22.522720319887128,
+     "max": 27.667836143041324
+    }
+   },
+   "parameters": "816 / network \u00d7 2 (freq 12)",
+   "cost_factor": 1.0149253731343284,
+   "seconds_per_iteration": {
+    "n": 5,
+    "mean": 0.9027240959903505,
+    "std": 0.0036895513139273564,
+    "sem": 0.001650017508883047,
+    "median": 0.903673516662186,
+    "min": 0.8964075295629911,
+    "max": 0.9056570450783707
+   },
+   "training_seconds": {
+    "n": 5,
+    "mean": 4513.620479951753,
+    "std": 18.44775656963672,
+    "sem": 8.250087544415207,
+    "median": 4518.36758331093,
+    "min": 4482.037647814956,
+    "max": 4528.285225391854
+   }
+  },
+  "E7.ff_minmax": {
+   "id": "E7.ff_minmax",
+   "experiment": "E7",
+   "role": "paper baseline, min\u2013max inputs",
+   "modality": "qubit",
+   "scope": "paper-accurate",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "same circuit, \u03b8_F = 1",
+   "sweeps": [
+    "e7_scaling_controls"
+   ],
+   "provenance": "local",
+   "successful_runs": 5,
+   "expected_runs": 5,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 5,
+     "mean": 4.927539261974946,
+     "std": 0.2733479835316267,
+     "sem": 0.12224493453784206,
+     "median": 4.835774733757609,
+     "min": 4.576759983774465,
+     "max": 5.247941571389456
+    },
+    "v_mean_maerm": {
+     "n": 5,
+     "mean": 21.211478707087558,
+     "std": 0.842604896729716,
+     "sem": 0.376824365452367,
+     "median": 21.355755472625493,
+     "min": 20.339511153426077,
+     "max": 22.38639109601548
+    },
+    "p_mean_maerm": {
+     "n": 5,
+     "mean": 31.70023693217153,
+     "std": 1.8887857269827086,
+     "sem": 0.844690656092939,
+     "median": 31.575495850244366,
+     "min": 29.30274859396363,
+     "max": 34.56556789465269
+    }
+   },
+   "parameters": "804 / network \u00d7 2 (freq 0)",
+   "cost_factor": 1.0,
+   "seconds_per_iteration": {
+    "n": 5,
+    "mean": 0.8853560398748425,
+    "std": 0.007327687641804592,
+    "sem": 0.0032770415369920394,
+    "median": 0.8862594352341723,
+    "min": 0.8748348548581824,
+    "max": 0.8926961480346043
+   },
+   "training_seconds": {
+    "n": 5,
+    "mean": 4426.780199374212,
+    "std": 36.638438209022965,
+    "sem": 16.3852076849602,
+    "median": 4431.297176170861,
+    "min": 4374.174274290912,
+    "max": 4463.480740173021
+   }
+  },
+  "M2.tf": {
+   "id": "M2.tf",
+   "experiment": "M2",
+   "role": "photonic method",
+   "modality": "merlin",
+   "scope": "MerLin adaptation (simulation)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "m2_fig2b"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 10,
+     "mean": 0.05662285367442482,
+     "std": 0.00197544228595921,
+     "sem": 0.0006246897009840764,
+     "median": 0.05579659044745814,
+     "min": 0.054955831321687736,
+     "max": 0.06045197528354228
+    }
+   },
+   "parameters": "63 (freq 3)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.010440263177766671,
+    "std": 0.0004898292380117016,
+    "sem": 0.00015489760566617038,
+    "median": 0.010588200010333365,
+    "min": 0.009341162222166683,
+    "max": 0.010867041701500057
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 62.64157906660002,
+    "std": 2.93897542807021,
+    "sem": 0.9293856339970225,
+    "median": 63.5292000620002,
+    "min": 56.046973333000096,
+    "max": 65.20225020900034
+   }
+  },
+  "M2.ff": {
+   "id": "M2.ff",
+   "experiment": "M2",
+   "role": "photonic paper-baseline analogue",
+   "modality": "merlin",
+   "scope": "MerLin adaptation (simulation)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "same circuit, w = 1",
+   "sweeps": [
+    "m2_fig2b"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 10,
+     "mean": 0.10052685440891873,
+     "std": 0.003424919447038465,
+     "sem": 0.0010830546255245976,
+     "median": 0.10275587017809816,
+     "min": 0.09591392279649046,
+     "max": 0.10346016770737007
+    }
+   },
+   "parameters": "60 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.009417299415949992,
+    "std": 0.00037109535719796017,
+    "sem": 0.00011735065578593144,
+    "median": 0.00955355784025005,
+    "min": 0.008905719451333274,
+    "max": 0.009838282201333337
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 56.50379649569995,
+    "std": 2.226572143187761,
+    "sem": 0.7041039347155886,
+    "median": 57.3213470415003,
+    "min": 53.43431670799964,
+    "max": 59.029693208000026
+   }
+  },
+  "M2.ffs": {
+   "id": "M2.ffs",
+   "experiment": "M2",
+   "role": "photonic fairness control",
+   "modality": "merlin",
+   "scope": "MerLin adaptation (simulation)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "same circuit + 1 global scale",
+   "sweeps": [
+    "m2_fig2b"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "train_mse": {
+     "n": 10,
+     "mean": 0.06734986634623362,
+     "std": 0.00014386839278887476,
+     "sem": 4.549518045205882e-05,
+     "median": 0.0673622523794285,
+     "min": 0.06712199363782166,
+     "max": 0.06754295215899726
+    }
+   },
+   "parameters": "61 (freq 1)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 0.009941298220850011,
+    "std": 0.00033412463229106227,
+    "sem": 0.00010565948604060005,
+    "median": 0.009930099552083372,
+    "min": 0.009347627632000088,
+    "max": 0.01043687275000002
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 59.64778932510008,
+    "std": 2.0047477937463745,
+    "sem": 0.6339569162436005,
+    "median": 59.58059731250023,
+    "min": 56.08576579200053,
+    "max": 62.62123650000012
+   }
+  },
+  "M5.tf": {
+   "id": "M5.tf",
+   "experiment": "M5",
+   "role": "photonic method",
+   "modality": "merlin",
+   "scope": "MerLin adaptation (simulation)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "m5_fig3"
+   ],
+   "provenance": "local",
+   "successful_runs": 35,
+   "expected_runs": 35,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.058479420366078026,
+    "box_worst": 0.11721338794459324,
+    "box_best": 1.3029447516470436e-05,
+    "box_median": 0.06392868347849565,
+    "per_dataset_mean": {
+     "1": 1.3029447516470436e-05,
+     "2": 0.11721338794459324,
+     "3": 0.06539547507595905,
+     "4": 0.09599860589895579,
+     "5": 0.06392868347849565,
+     "6": 0.036643010451122976,
+     "7": 0.03016375026590302
+    }
+   },
+   "parameters": "116 (freq 4)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 35,
+    "mean": 0.013415209405364281,
+    "std": 0.0010186536193239409,
+    "sem": 0.00017218388809324626,
+    "median": 0.012984311406250072,
+    "min": 0.012469495551999898,
+    "max": 0.016297409146000065
+   },
+   "training_seconds": {
+    "n": 35,
+    "mean": 53.66083762145713,
+    "std": 4.074614477295763,
+    "sem": 0.688735552372985,
+    "median": 51.93724562500029,
+    "min": 49.877982207999594,
+    "max": 65.18963658400025
+   }
+  },
+  "M5.simple": {
+   "id": "M5.simple",
+   "experiment": "M5",
+   "role": "photonic FF analogue",
+   "modality": "merlin",
+   "scope": "MerLin adaptation (simulation)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "m5_fig3"
+   ],
+   "provenance": "local",
+   "successful_runs": 35,
+   "expected_runs": 35,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.06050456110814527,
+    "box_worst": 0.11727384026513274,
+    "box_best": 1.2588170169060584e-05,
+    "box_median": 0.0646354723203607,
+    "per_dataset_mean": {
+     "1": 1.2588170169060584e-05,
+     "2": 0.11727384026513274,
+     "3": 0.06571631468867041,
+     "4": 0.09596248320155108,
+     "5": 0.0646354723203607,
+     "6": 0.03927768792744964,
+     "7": 0.04065354118368322
+    }
+   },
+   "parameters": "112 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 35,
+    "mean": 0.016463680324414327,
+    "std": 0.0010667010699852678,
+    "sem": 0.00018030538956430203,
+    "median": 0.01654123645850018,
+    "min": 0.01449196976050007,
+    "max": 0.018517427239750077
+   },
+   "training_seconds": {
+    "n": 35,
+    "mean": 65.8547212976573,
+    "std": 4.266804279941071,
+    "sem": 0.7212215582572081,
+    "median": 66.16494583400072,
+    "min": 57.96787904200028,
+    "max": 74.06970895900031
+   }
+  },
+  "M5.tower": {
+   "id": "M5.tower",
+   "experiment": "M5",
+   "role": "photonic FF analogue",
+   "modality": "merlin",
+   "scope": "MerLin adaptation (simulation)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "m5_fig3"
+   ],
+   "provenance": "local",
+   "successful_runs": 35,
+   "expected_runs": 35,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.02421112358740374,
+    "box_worst": 0.06368281690854846,
+    "box_best": 0.00019908095671642844,
+    "box_median": 0.030468938385257365,
+    "per_dataset_mean": {
+     "1": 0.0002777421651385339,
+     "2": 0.00023383134881917118,
+     "3": 0.00019908095671642844,
+     "4": 0.06368281690854846,
+     "5": 0.041227620196505804,
+     "6": 0.030468938385257365,
+     "7": 0.033387835150840435
+    }
+   },
+   "parameters": "112 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 35,
+    "mean": 0.013815126072600001,
+    "std": 0.001160762153297373,
+    "sem": 0.00019620461451742187,
+    "median": 0.013646353551999937,
+    "min": 0.012260381968750152,
+    "max": 0.015634506895750064
+   },
+   "training_seconds": {
+    "n": 35,
+    "mean": 55.26050429040001,
+    "std": 4.6430486131894915,
+    "sem": 0.7848184580696874,
+    "median": 54.58541420799975,
+    "min": 49.04152787500061,
+    "max": 62.53802758300026
+   }
+  },
+  "M5.exponential": {
+   "id": "M5.exponential",
+   "experiment": "M5",
+   "role": "photonic FF analogue",
+   "modality": "merlin",
+   "scope": "MerLin adaptation (simulation)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "m5_fig3"
+   ],
+   "provenance": "local",
+   "successful_runs": 35,
+   "expected_runs": 35,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.026404339628542085,
+    "box_worst": 0.06489262962695513,
+    "box_best": 0.0009981949622438612,
+    "box_median": 0.031248379427721774,
+    "per_dataset_mean": {
+     "1": 0.004122088893297603,
+     "2": 0.006866352538907454,
+     "3": 0.0009981949622438612,
+     "4": 0.06489262962695513,
+     "5": 0.04226111283935927,
+     "6": 0.031248379427721774,
+     "7": 0.03444161911130951
+    }
+   },
+   "parameters": "112 (freq 0)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 35,
+    "mean": 0.014669289581250015,
+    "std": 0.001468989850638732,
+    "sem": 0.00024830460448406645,
+    "median": 0.015154858375000003,
+    "min": 0.01251752371875,
+    "max": 0.01673942095849998
+   },
+   "training_seconds": {
+    "n": 35,
+    "mean": 58.67715832500006,
+    "std": 5.875959402554927,
+    "sem": 0.9932184179362658,
+    "median": 60.619433500000014,
+    "min": 50.070094874999995,
+    "max": 66.95768383399991
+   }
+  },
+  "M5.ffs": {
+   "id": "M5.ffs",
+   "experiment": "M5",
+   "role": "photonic FF analogue",
+   "modality": "merlin",
+   "scope": "MerLin adaptation (simulation)",
+   "hardware": "local Apple M3 CPU, 6 workers",
+   "matching": "",
+   "sweeps": [
+    "m5_fig3"
+   ],
+   "provenance": "local",
+   "successful_runs": 35,
+   "expected_runs": 35,
+   "coverage": "COMPLETE",
+   "stats": {
+    "box_mean": 0.06050287170798905,
+    "box_worst": 0.11727608559424245,
+    "box_best": 1.333701664109493e-05,
+    "box_median": 0.06491750036378321,
+    "per_dataset_mean": {
+     "1": 1.333701664109493e-05,
+     "2": 0.11727608559424245,
+     "3": 0.06555959388134754,
+     "4": 0.09593263882087857,
+     "5": 0.06491750036378321,
+     "6": 0.03910676654084126,
+     "7": 0.04071417973818919
+    }
+   },
+   "parameters": "113 (freq 1)",
+   "cost_factor": null,
+   "seconds_per_iteration": {
+    "n": 35,
+    "mean": 0.012988636973792862,
+    "std": 0.0008321437827138234,
+    "sem": 0.000140657971701294,
+    "median": 0.012913212489499983,
+    "min": 0.009307298854000237,
+    "max": 0.014272513281249758
+   },
+   "training_seconds": {
+    "n": 35,
+    "mean": 51.95454789517145,
+    "std": 3.3285751308552936,
+    "sem": 0.5626318868051761,
+    "median": 51.65284995799993,
+    "min": 37.22919541600095,
+    "max": 57.09005312499903
+   }
+  },
+  "M6.tf": {
+   "id": "M6.tf",
+   "experiment": "M6",
+   "role": "photonic method",
+   "modality": "merlin",
+   "scope": "MerLin adaptation (simulation)",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "",
+   "sweeps": [
+    "m6_table1_tf"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 10,
+     "mean": 21.686119501516345,
+     "std": 7.437733742215543,
+     "sem": 2.352017925528877,
+     "median": 21.4529563192514,
+     "min": 13.127343666981359,
+     "max": 40.95821141683263
+    },
+    "v_mean_maerm": {
+     "n": 10,
+     "mean": 94.92856835645509,
+     "std": 28.61298297418689,
+     "sem": 9.04821968500494,
+     "median": 112.098830641335,
+     "min": 43.07558469236241,
+     "max": 113.23393506700664
+    },
+    "p_mean_maerm": {
+     "n": 10,
+     "mean": 81.20413606064155,
+     "std": 14.304511882983565,
+     "sem": 4.5234838367172046,
+     "median": 86.70405225082149,
+     "min": 52.41231595420747,
+     "max": 93.9410323278103
+    }
+   },
+   "parameters": "96 / network \u00d7 2 (freq 6)",
+   "cost_factor": 1.0666666666666667,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 1.7706360159716756,
+    "std": 0.1076274963721398,
+    "sem": 0.03403480273974709,
+    "median": 1.8162583372646943,
+    "min": 1.563430619866401,
+    "max": 1.8341969021636062
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 8853.180079858377,
+    "std": 538.137481860699,
+    "sem": 170.1740136987355,
+    "median": 9081.291686323471,
+    "min": 7817.153099332005,
+    "max": 9170.98451081803
+   }
+  },
+  "M6.ff": {
+   "id": "M6.ff",
+   "experiment": "M6",
+   "role": "photonic paper-baseline analogue",
+   "modality": "merlin",
+   "scope": "MerLin adaptation (simulation)",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "same circuit, w = 1",
+   "sweeps": [
+    "m6_table1_ff"
+   ],
+   "provenance": "local",
+   "successful_runs": 10,
+   "expected_runs": 10,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 10,
+     "mean": 96.75036123688892,
+     "std": 0.05041598559536081,
+     "sem": 0.01594293449635803,
+     "median": 96.75213557559556,
+     "min": 96.6507612418265,
+     "max": 96.83737726918108
+    },
+    "v_mean_maerm": {
+     "n": 10,
+     "mean": 90.76247630775278,
+     "std": 0.5946994111480565,
+     "sem": 0.1880604662388789,
+     "median": 90.75394831062799,
+     "min": 90.10260858746888,
+     "max": 92.16157661035753
+    },
+    "p_mean_maerm": {
+     "n": 10,
+     "mean": 124.84162111634018,
+     "std": 1.5685820235116632,
+     "sem": 0.49602918910926436,
+     "median": 124.59951076647461,
+     "min": 123.49940776025277,
+     "max": 128.77281807613062
+    }
+   },
+   "parameters": "90 / network \u00d7 2 (freq 0)",
+   "cost_factor": 1.0,
+   "seconds_per_iteration": {
+    "n": 10,
+    "mean": 1.7433719230364495,
+    "std": 0.11263483973797465,
+    "sem": 0.03561826374600428,
+    "median": 1.7928249238956022,
+    "min": 1.5188363862425553,
+    "max": 1.806205585147394
+   },
+   "training_seconds": {
+    "n": 10,
+    "mean": 8716.859615182248,
+    "std": 563.1741986898732,
+    "sem": 178.09131873002138,
+    "median": 8964.12461947801,
+    "min": 7594.181931212777,
+    "max": 9031.02792573697
+   }
+  },
+  "M6.ffs": {
+   "id": "M6.ffs",
+   "experiment": "M6",
+   "role": "photonic fairness control",
+   "modality": "merlin",
+   "scope": "MerLin adaptation (simulation)",
+   "hardware": "remote gpu-reproduced-papers-1 (L4 host, 8 vCPU), 4 workers",
+   "matching": "same circuit + 3 scales / network",
+   "sweeps": [
+    "m6_table1_ffs"
+   ],
+   "provenance": "local",
+   "successful_runs": 5,
+   "expected_runs": 5,
+   "coverage": "COMPLETE",
+   "stats": {
+    "u_mean_maerm": {
+     "n": 5,
+     "mean": 22.63082863372162,
+     "std": 1.8521036073023882,
+     "sem": 0.8282859134601431,
+     "median": 22.0987575111422,
+     "min": 21.072049039577852,
+     "max": 25.830504534029345
+    },
+    "v_mean_maerm": {
+     "n": 5,
+     "mean": 113.20665982951445,
+     "std": 0.36413112609079495,
+     "sem": 0.16284439013251295,
+     "median": 113.22077153371865,
+     "min": 112.77325021795117,
+     "max": 113.63756407020873
+    },
+    "p_mean_maerm": {
+     "n": 5,
+     "mean": 105.14424713004908,
+     "std": 6.49064349449749,
+     "sem": 2.9027040142826337,
+     "median": 108.02152530071731,
+     "min": 95.22553515680792,
+     "max": 110.57723862853928
+    }
+   },
+   "parameters": "93 / network \u00d7 2 (freq 3)",
+   "cost_factor": 1.0333333333333334,
+   "seconds_per_iteration": {
+    "n": 5,
+    "mean": 1.7539959143793862,
+    "std": 0.12283111662220164,
+    "sem": 0.054931745303889445,
+    "median": 1.8072641983557958,
+    "min": 1.534330644431198,
+    "max": 1.8139332050997763
+   },
+   "training_seconds": {
+    "n": 5,
+    "mean": 8769.97957189693,
+    "std": 614.1555831110081,
+    "sem": 274.65872651944716,
+    "median": 9036.320991778979,
+    "min": 7671.65322215599,
+    "max": 9069.666025498882
+   }
+  }
+ },
+ "paper_rows": {
+  "E6.paper.ff": {
+   "experiment": "E6",
+   "table": "Table I",
+   "u": [
+    17.5,
+    0.3
+   ],
+   "v": [
+    103.2,
+    1.4
+   ],
+   "p": [
+    73.2,
+    1.9
+   ]
+  },
+  "E6.paper.tf": {
+   "experiment": "E6",
+   "table": "Table I",
+   "u": [
+    13.2,
+    2.0
+   ],
+   "v": [
+    30.4,
+    2.7
+   ],
+   "p": [
+    57.0,
+    3.7
+   ]
+  },
+  "E7.paper.ff": {
+   "experiment": "E7",
+   "table": "Table II",
+   "u": [
+    7.7,
+    0.3
+   ],
+   "v": [
+    26.0,
+    0.5
+   ],
+   "p": [
+    45.2,
+    3.3
+   ]
+  },
+  "E7.paper.tf": {
+   "experiment": "E7",
+   "table": "Table II",
+   "u": [
+    6.2,
+    0.4
+   ],
+   "v": [
+    18.9,
+    0.7
+   ],
+   "p": [
+    36.8,
+    2.2
+   ]
+  }
+ },
+ "comparisons": [
+  {
+   "claim": "C1",
+   "a": "E2.tf",
+   "b": "E2.ff",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "train_mse",
+   "n_paired": 10,
+   "mean_a": 0.0011610610601340157,
+   "mean_b": 0.050827966423873716,
+   "relative_difference": -0.9771570428285191,
+   "paired_difference_std_rel": 0.01792109569802357,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C1",
+   "a": "E2.tf",
+   "b": "E2.ffs",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "train_mse",
+   "n_paired": 10,
+   "mean_a": 0.0011610610601340157,
+   "mean_b": 0.05368822073172495,
+   "relative_difference": -0.9783740074766916,
+   "paired_difference_std_rel": 0.13892864417755799,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C1",
+   "a": "E2.tf_n4",
+   "b": "E2.ff_n4",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "train_mse",
+   "n_paired": 10,
+   "mean_a": 0.0013149127953711562,
+   "mean_b": 0.050600187568348255,
+   "relative_difference": -0.9740136774474395,
+   "paired_difference_std_rel": 0.03019194736983937,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C1",
+   "a": "E2.tf",
+   "b": "E3.ff_L4",
+   "mode": "unpaired",
+   "commensurability": "COMMENSURABLE",
+   "note": "capacity control; FF has up to 32\u00d7 the parameters",
+   "metric": "train_mse",
+   "n_a": 10,
+   "n_b": 3,
+   "mean_a": 0.0011610610601340157,
+   "mean_b": 0.05058571869508773,
+   "relative_difference": -0.9770476511931665,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C1",
+   "a": "E2.tf",
+   "b": "E3.ff_L8",
+   "mode": "unpaired",
+   "commensurability": "COMMENSURABLE",
+   "note": "capacity control; FF has up to 32\u00d7 the parameters",
+   "metric": "train_mse",
+   "n_a": 10,
+   "n_b": 3,
+   "mean_a": 0.0011610610601340157,
+   "mean_b": 0.05182372207063705,
+   "relative_difference": -0.9775959538654623,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C1",
+   "a": "E2.tf",
+   "b": "E3.ff_L16",
+   "mode": "unpaired",
+   "commensurability": "COMMENSURABLE",
+   "note": "capacity control; FF has up to 32\u00d7 the parameters",
+   "metric": "train_mse",
+   "n_a": 10,
+   "n_b": 3,
+   "mean_a": 0.0011610610601340157,
+   "mean_b": 0.05295218476724121,
+   "relative_difference": -0.9780734059371181,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C1",
+   "a": "E2.tf",
+   "b": "E3.ff_L32",
+   "mode": "unpaired",
+   "commensurability": "COMMENSURABLE",
+   "note": "capacity control; FF has up to 32\u00d7 the parameters",
+   "metric": "train_mse",
+   "n_a": 10,
+   "n_b": 3,
+   "mean_a": 0.0011610610601340157,
+   "mean_b": 0.05457181647180224,
+   "relative_difference": -0.9787241632183172,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C1",
+   "a": "E2.tf",
+   "b": "E3.ff_L64",
+   "mode": "unpaired",
+   "commensurability": "COMMENSURABLE",
+   "note": "capacity control; FF has up to 32\u00d7 the parameters",
+   "metric": "train_mse",
+   "n_a": 10,
+   "n_b": 3,
+   "mean_a": 0.0011610610601340157,
+   "mean_b": 0.05557684180911147,
+   "relative_difference": -0.9791089053940509,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C1",
+   "a": "E2.tf",
+   "b": "E3.ff_L128",
+   "mode": "unpaired",
+   "commensurability": "COMMENSURABLE",
+   "note": "capacity control; FF has up to 32\u00d7 the parameters",
+   "metric": "train_mse",
+   "n_a": 10,
+   "n_b": 3,
+   "mean_a": 0.0011610610601340157,
+   "mean_b": 0.06702254219111803,
+   "relative_difference": -0.9826765589281411,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C1",
+   "a": "E2.tf",
+   "b": "E2.mlp",
+   "mode": "paired",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "classical context; not circuit-matched",
+   "metric": "train_mse",
+   "n_paired": 10,
+   "mean_a": 0.0011610610601340157,
+   "mean_b": 0.14981698150469094,
+   "relative_difference": -0.9922501371441816,
+   "paired_difference_std_rel": 0.05106697980313533,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C1",
+   "a": "E2.tf",
+   "b": "E2.fourier",
+   "mode": "paired",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "classical context; trainable-frequency Fourier regressor",
+   "metric": "train_mse",
+   "n_paired": 10,
+   "mean_a": 0.0011610610601340157,
+   "mean_b": 0.009531255605264617,
+   "relative_difference": -0.878183829264562,
+   "paired_difference_std_rel": 0.14355423479597534,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C7",
+   "a": "E2.tf.lr1e-3",
+   "b": "E2.ff.lr1e-3",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "train_mse",
+   "n_paired": 3,
+   "mean_a": 0.0005537656666803223,
+   "mean_b": 0.05058571869508773,
+   "relative_difference": -0.9890529247984353,
+   "paired_difference_std_rel": 0.009762961715323412,
+   "a_lower_seeds": 3,
+   "wilcoxon_p": null,
+   "decision": "NO_SEPARATION"
+  },
+  {
+   "claim": "C7",
+   "a": "E2.tf.lr3e-3",
+   "b": "E2.ff.lr3e-3",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "train_mse",
+   "n_paired": 3,
+   "mean_a": 0.0006432743089895542,
+   "mean_b": 0.05315087409012401,
+   "relative_difference": -0.9878972016923221,
+   "paired_difference_std_rel": 0.060368913151368664,
+   "a_lower_seeds": 3,
+   "wilcoxon_p": null,
+   "decision": "NO_SEPARATION"
+  },
+  {
+   "claim": "C7",
+   "a": "E2.tf.lr1e-2",
+   "b": "E2.ff.lr1e-2",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "train_mse",
+   "n_paired": 3,
+   "mean_a": 0.001981742290763166,
+   "mean_b": 0.05419614094644993,
+   "relative_difference": -0.9634338855838226,
+   "paired_difference_std_rel": 0.04181828041267925,
+   "a_lower_seeds": 3,
+   "wilcoxon_p": null,
+   "decision": "NO_SEPARATION"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5.simple",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "box_mean",
+   "mean_a": 0.018720036809123757,
+   "mean_b": 0.024255830357947688,
+   "relative_difference": -0.2282252747950172,
+   "a_lower_seeds_per_dataset": {
+    "1": "3/5",
+    "2": "1/5",
+    "3": "0/5",
+    "4": "5/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5.simple",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "box_worst",
+   "mean_a": 0.0491771228678516,
+   "mean_b": 0.06412291280903724,
+   "relative_difference": -0.23308033410296422,
+   "a_lower_seeds_per_dataset": {
+    "1": "3/5",
+    "2": "1/5",
+    "3": "0/5",
+    "4": "5/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5.simple",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "box_best",
+   "mean_a": 9.36924775818152e-11,
+   "mean_b": 6.558045472867264e-11,
+   "relative_difference": 0.4286646527452577,
+   "a_lower_seeds_per_dataset": {
+    "1": "3/5",
+    "2": "1/5",
+    "3": "0/5",
+    "4": "5/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "B_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5.tower",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "box_mean",
+   "mean_a": 0.018720036809123757,
+   "mean_b": 0.02424200308883657,
+   "relative_difference": -0.22778506625369077,
+   "a_lower_seeds_per_dataset": {
+    "1": "5/5",
+    "2": "5/5",
+    "3": "5/5",
+    "4": "5/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5.tower",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "box_worst",
+   "mean_a": 0.0491771228678516,
+   "mean_b": 0.06413470103793766,
+   "relative_difference": -0.23322129717636303,
+   "a_lower_seeds_per_dataset": {
+    "1": "5/5",
+    "2": "5/5",
+    "3": "5/5",
+    "4": "5/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5.tower",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "box_best",
+   "mean_a": 9.36924775818152e-11,
+   "mean_b": 1.5701245745115004e-07,
+   "relative_difference": -0.9994032799747055,
+   "a_lower_seeds_per_dataset": {
+    "1": "5/5",
+    "2": "5/5",
+    "3": "5/5",
+    "4": "5/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5.exponential",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "box_mean",
+   "mean_a": 0.018720036809123757,
+   "mean_b": 0.024248415683468118,
+   "relative_difference": -0.2279892817126792,
+   "a_lower_seeds_per_dataset": {
+    "1": "3/5",
+    "2": "5/5",
+    "3": "5/5",
+    "4": "5/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5.exponential",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "box_worst",
+   "mean_a": 0.0491771228678516,
+   "mean_b": 0.06402837322315183,
+   "relative_difference": -0.2319479569399744,
+   "a_lower_seeds_per_dataset": {
+    "1": "3/5",
+    "2": "5/5",
+    "3": "5/5",
+    "4": "5/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5.exponential",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "box_best",
+   "mean_a": 9.36924775818152e-11,
+   "mean_b": 3.3065432398242146e-08,
+   "relative_difference": -0.9971664523707606,
+   "a_lower_seeds_per_dataset": {
+    "1": "3/5",
+    "2": "5/5",
+    "3": "5/5",
+    "4": "5/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5.ffs",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "box_mean",
+   "mean_a": 0.018720036809123757,
+   "mean_b": 0.023810461729124464,
+   "relative_difference": -0.21378942491376404,
+   "a_lower_seeds_per_dataset": {
+    "1": "3/5",
+    "2": "4/5",
+    "3": "4/5",
+    "4": "5/5",
+    "5": "5/5",
+    "6": "3/5",
+    "7": "5/5"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5.ffs",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "box_worst",
+   "mean_a": 0.0491771228678516,
+   "mean_b": 0.0639094044250143,
+   "relative_difference": -0.23051821073451362,
+   "a_lower_seeds_per_dataset": {
+    "1": "3/5",
+    "2": "4/5",
+    "3": "4/5",
+    "4": "5/5",
+    "5": "5/5",
+    "6": "3/5",
+    "7": "5/5"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5.ffs",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "box_best",
+   "mean_a": 9.36924775818152e-11,
+   "mean_b": 1.181413910434548e-10,
+   "relative_difference": -0.20694621288695336,
+   "a_lower_seeds_per_dataset": {
+    "1": "3/5",
+    "2": "4/5",
+    "3": "4/5",
+    "4": "5/5",
+    "5": "5/5",
+    "6": "3/5",
+    "7": "5/5"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5b.simple_oracle",
+   "mode": "box",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "FF given the data base frequency (prior knowledge TF does not get)",
+   "metric": "box_mean",
+   "mean_a": 0.018720036809123757,
+   "mean_b": 0.033612621362902446,
+   "relative_difference": -0.4430652519775005,
+   "a_lower_seeds_per_dataset": {
+    "1": "2/3",
+    "2": "1/3",
+    "3": "0/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5b.simple_oracle",
+   "mode": "box",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "FF given the data base frequency (prior knowledge TF does not get)",
+   "metric": "box_worst",
+   "mean_a": 0.0491771228678516,
+   "mean_b": 0.10307361949426448,
+   "relative_difference": -0.5228932183701179,
+   "a_lower_seeds_per_dataset": {
+    "1": "2/3",
+    "2": "1/3",
+    "3": "0/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5b.tower_oracle",
+   "mode": "box",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "FF given the data base frequency (prior knowledge TF does not get)",
+   "metric": "box_mean",
+   "mean_a": 0.018720036809123757,
+   "mean_b": 0.0035910633824534363,
+   "relative_difference": 4.212950821362032,
+   "a_lower_seeds_per_dataset": {
+    "1": "3/3",
+    "2": "3/3",
+    "3": "3/3",
+    "4": "0/3",
+    "5": "0/3",
+    "6": "1/3",
+    "7": "0/3"
+   },
+   "decision": "B_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5b.tower_oracle",
+   "mode": "box",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "FF given the data base frequency (prior knowledge TF does not get)",
+   "metric": "box_worst",
+   "mean_a": 0.0491771228678516,
+   "mean_b": 0.025090077301913195,
+   "relative_difference": 0.9600227721937586,
+   "a_lower_seeds_per_dataset": {
+    "1": "3/3",
+    "2": "3/3",
+    "3": "3/3",
+    "4": "0/3",
+    "5": "0/3",
+    "6": "1/3",
+    "7": "0/3"
+   },
+   "decision": "B_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5b.exponential_oracle",
+   "mode": "box",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "FF given the data base frequency (prior knowledge TF does not get)",
+   "metric": "box_mean",
+   "mean_a": 0.018720036809123757,
+   "mean_b": 2.9962779989192245e-05,
+   "relative_difference": 623.7763664077961,
+   "a_lower_seeds_per_dataset": {
+    "1": "2/3",
+    "2": "3/3",
+    "3": "3/3",
+    "4": "0/3",
+    "5": "0/3",
+    "6": "0/3",
+    "7": "0/3"
+   },
+   "decision": "B_LOWER"
+  },
+  {
+   "claim": "C3",
+   "a": "E5.tf",
+   "b": "E5b.exponential_oracle",
+   "mode": "box",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "FF given the data base frequency (prior knowledge TF does not get)",
+   "metric": "box_worst",
+   "mean_a": 0.0491771228678516,
+   "mean_b": 0.00019884818893413443,
+   "relative_difference": 246.30988565423047,
+   "a_lower_seeds_per_dataset": {
+    "1": "2/3",
+    "2": "3/3",
+    "3": "3/3",
+    "4": "0/3",
+    "5": "0/3",
+    "6": "0/3",
+    "7": "0/3"
+   },
+   "decision": "B_LOWER"
+  },
+  {
+   "claim": "C7",
+   "a": "E5.tf.lr3e-3",
+   "b": "E5.simple.lr3e-3",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "box_mean",
+   "mean_a": 0.008530362898945806,
+   "mean_b": 0.025133498323190253,
+   "relative_difference": -0.6605978686590165,
+   "a_lower_seeds_per_dataset": {
+    "1": "1/3",
+    "2": "0/3",
+    "3": "1/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C7",
+   "a": "E5.tf.lr3e-3",
+   "b": "E5.simple.lr3e-3",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "box_worst",
+   "mean_a": 0.03807263979089726,
+   "mean_b": 0.06638191276397976,
+   "relative_difference": -0.42646063956812813,
+   "a_lower_seeds_per_dataset": {
+    "1": "1/3",
+    "2": "0/3",
+    "3": "1/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C7",
+   "a": "E5.tf.lr3e-3",
+   "b": "E5.tower.lr3e-3",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "box_mean",
+   "mean_a": 0.008530362898945806,
+   "mean_b": 0.025676185703585867,
+   "relative_difference": -0.6677714128795041,
+   "a_lower_seeds_per_dataset": {
+    "1": "1/3",
+    "2": "0/3",
+    "3": "0/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C7",
+   "a": "E5.tf.lr3e-3",
+   "b": "E5.tower.lr3e-3",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "box_worst",
+   "mean_a": 0.03807263979089726,
+   "mean_b": 0.06718292063209118,
+   "relative_difference": -0.43329882903734385,
+   "a_lower_seeds_per_dataset": {
+    "1": "1/3",
+    "2": "0/3",
+    "3": "0/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C7",
+   "a": "E5.tf.lr3e-3",
+   "b": "E5.exponential.lr3e-3",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "box_mean",
+   "mean_a": 0.008530362898945806,
+   "mean_b": 0.025888922993829482,
+   "relative_difference": -0.6705014379710201,
+   "a_lower_seeds_per_dataset": {
+    "1": "1/3",
+    "2": "0/3",
+    "3": "3/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C7",
+   "a": "E5.tf.lr3e-3",
+   "b": "E5.exponential.lr3e-3",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "box_worst",
+   "mean_a": 0.03807263979089726,
+   "mean_b": 0.0673200403356616,
+   "relative_difference": -0.4344531048842976,
+   "a_lower_seeds_per_dataset": {
+    "1": "1/3",
+    "2": "0/3",
+    "3": "3/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C7",
+   "a": "E5.tf.lr1e-2",
+   "b": "E5.simple.lr1e-2",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "box_mean",
+   "mean_a": 0.024381048267121997,
+   "mean_b": 0.028245085664251292,
+   "relative_difference": -0.13680388309177116,
+   "a_lower_seeds_per_dataset": {
+    "1": "1/3",
+    "2": "2/3",
+    "3": "0/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C7",
+   "a": "E5.tf.lr1e-2",
+   "b": "E5.simple.lr1e-2",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "box_worst",
+   "mean_a": 0.10874967333116715,
+   "mean_b": 0.07385284032016409,
+   "relative_difference": 0.4725184956965718,
+   "a_lower_seeds_per_dataset": {
+    "1": "1/3",
+    "2": "2/3",
+    "3": "0/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "B_LOWER"
+  },
+  {
+   "claim": "C7",
+   "a": "E5.tf.lr1e-2",
+   "b": "E5.tower.lr1e-2",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "box_mean",
+   "mean_a": 0.024381048267121997,
+   "mean_b": 0.029622575849789674,
+   "relative_difference": -0.17694368002453417,
+   "a_lower_seeds_per_dataset": {
+    "1": "2/3",
+    "2": "2/3",
+    "3": "1/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C7",
+   "a": "E5.tf.lr1e-2",
+   "b": "E5.tower.lr1e-2",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "box_worst",
+   "mean_a": 0.10874967333116715,
+   "mean_b": 0.07494814783334303,
+   "relative_difference": 0.45099881017722043,
+   "a_lower_seeds_per_dataset": {
+    "1": "2/3",
+    "2": "2/3",
+    "3": "1/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "B_LOWER"
+  },
+  {
+   "claim": "C7",
+   "a": "E5.tf.lr1e-2",
+   "b": "E5.exponential.lr1e-2",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "box_mean",
+   "mean_a": 0.024381048267121997,
+   "mean_b": 0.03739695289488484,
+   "relative_difference": -0.3480471969025893,
+   "a_lower_seeds_per_dataset": {
+    "1": "2/3",
+    "2": "2/3",
+    "3": "2/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C7",
+   "a": "E5.tf.lr1e-2",
+   "b": "E5.exponential.lr1e-2",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "lr robustness, 3 seeds",
+   "metric": "box_worst",
+   "mean_a": 0.10874967333116715,
+   "mean_b": 0.08423281588484617,
+   "relative_difference": 0.29106064173181306,
+   "a_lower_seeds_per_dataset": {
+    "1": "2/3",
+    "2": "2/3",
+    "3": "2/3",
+    "4": "3/3",
+    "5": "3/3",
+    "6": "3/3",
+    "7": "3/3"
+   },
+   "decision": "B_LOWER"
+  },
+  {
+   "claim": "C4",
+   "a": "E6.tf",
+   "b": "E6.ff",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "u_mean_maerm",
+   "n_paired": 10,
+   "mean_a": 9.015719106095915,
+   "mean_b": 20.10770959823405,
+   "relative_difference": -0.5516287391136921,
+   "paired_difference_std_rel": 0.07452731821383259,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C4",
+   "a": "E6.tf",
+   "b": "E6.ff",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "v_mean_maerm",
+   "n_paired": 10,
+   "mean_a": 30.403841578014237,
+   "mean_b": 61.018724698368146,
+   "relative_difference": -0.5017293178723654,
+   "paired_difference_std_rel": 0.03944868195559833,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C4",
+   "a": "E6.tf",
+   "b": "E6.ff",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "p_mean_maerm",
+   "n_paired": 10,
+   "mean_a": 45.61524743370792,
+   "mean_b": 76.24223500458021,
+   "relative_difference": -0.4017063189324446,
+   "paired_difference_std_rel": 0.054272333436070595,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C4",
+   "a": "E6.tf",
+   "b": "E6.ffs",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "separate launch, same machine and code state",
+   "metric": "u_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 9.09181635771656,
+   "mean_b": 11.204359816993065,
+   "relative_difference": -0.18854655632109577,
+   "paired_difference_std_rel": 0.1868204541996021,
+   "a_lower_seeds": 5,
+   "wilcoxon_p": 0.0625,
+   "decision": "A_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "C4",
+   "a": "E6.tf",
+   "b": "E6.ffs",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "separate launch, same machine and code state",
+   "metric": "v_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 30.14989884433602,
+   "mean_b": 35.58932083599935,
+   "relative_difference": -0.1528386005658541,
+   "paired_difference_std_rel": 0.08802334669160249,
+   "a_lower_seeds": 5,
+   "wilcoxon_p": 0.0625,
+   "decision": "A_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "C4",
+   "a": "E6.tf",
+   "b": "E6.ffs",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "separate launch, same machine and code state",
+   "metric": "p_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 45.57176686774219,
+   "mean_b": 49.929147004337686,
+   "relative_difference": -0.08727127135212102,
+   "paired_difference_std_rel": 0.08197795009991915,
+   "a_lower_seeds": 5,
+   "wilcoxon_p": 0.0625,
+   "decision": "A_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "C4",
+   "a": "E6.tf_minmax",
+   "b": "E6.ff_minmax",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "both with min\u2013max inputs (A7)",
+   "metric": "u_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 7.554791309367391,
+   "mean_b": 14.567457777598946,
+   "relative_difference": -0.4813926064035179,
+   "paired_difference_std_rel": 0.11785578264325935,
+   "a_lower_seeds": 5,
+   "wilcoxon_p": 0.0625,
+   "decision": "A_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "C4",
+   "a": "E6.tf_minmax",
+   "b": "E6.ff_minmax",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "both with min\u2013max inputs (A7)",
+   "metric": "v_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 28.464605798065833,
+   "mean_b": 87.6815353059753,
+   "relative_difference": -0.6753637387993361,
+   "paired_difference_std_rel": 0.027358577653264247,
+   "a_lower_seeds": 5,
+   "wilcoxon_p": 0.0625,
+   "decision": "A_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "C4",
+   "a": "E6.tf_minmax",
+   "b": "E6.ff_minmax",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "both with min\u2013max inputs (A7)",
+   "metric": "p_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 41.80680791857726,
+   "mean_b": 86.39544284193985,
+   "relative_difference": -0.5160993850675357,
+   "paired_difference_std_rel": 0.025242356261413544,
+   "a_lower_seeds": 5,
+   "wilcoxon_p": 0.0625,
+   "decision": "A_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "C4",
+   "a": "E6.tf",
+   "b": "E6.mlp",
+   "mode": "paired",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "classical context; not circuit-matched",
+   "metric": "u_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 9.09181635771656,
+   "mean_b": 3.959953405187271,
+   "relative_difference": 1.2959402365206862,
+   "paired_difference_std_rel": 0.41768639708004796,
+   "a_lower_seeds": 0,
+   "wilcoxon_p": 0.0625,
+   "decision": "B_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "C4",
+   "a": "E6.tf",
+   "b": "E6.mlp",
+   "mode": "paired",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "classical context; not circuit-matched",
+   "metric": "v_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 30.14989884433602,
+   "mean_b": 17.145700875521346,
+   "relative_difference": 0.7584523994222112,
+   "paired_difference_std_rel": 0.17726426674814755,
+   "a_lower_seeds": 0,
+   "wilcoxon_p": 0.0625,
+   "decision": "B_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "C4",
+   "a": "E6.tf",
+   "b": "E6.mlp",
+   "mode": "paired",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "classical context; not circuit-matched",
+   "metric": "p_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 45.57176686774219,
+   "mean_b": 30.703719897072,
+   "relative_difference": 0.4842425289350055,
+   "paired_difference_std_rel": 0.07264574791025388,
+   "a_lower_seeds": 0,
+   "wilcoxon_p": 0.0625,
+   "decision": "B_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "C5",
+   "a": "E7.tf",
+   "b": "E7.ff",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "u_mean_maerm",
+   "n_paired": 10,
+   "mean_a": 6.618446905578848,
+   "mean_b": 31.486747685658752,
+   "relative_difference": -0.7898021424234506,
+   "paired_difference_std_rel": 0.17416177551234024,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C5",
+   "a": "E7.tf",
+   "b": "E7.ff",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "v_mean_maerm",
+   "n_paired": 10,
+   "mean_a": 20.086480621036653,
+   "mean_b": 73.15045482243018,
+   "relative_difference": -0.7254086708032672,
+   "paired_difference_std_rel": 0.12255673974518044,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C5",
+   "a": "E7.tf",
+   "b": "E7.ff",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "",
+   "metric": "p_mean_maerm",
+   "n_paired": 10,
+   "mean_a": 34.752690592666966,
+   "mean_b": 123.3446968638799,
+   "relative_difference": -0.7182473873925916,
+   "paired_difference_std_rel": 0.10555962622729487,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "C5",
+   "a": "E7.tf",
+   "b": "E7.ffs",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "code states S1/S2 shown equivalent",
+   "metric": "u_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 6.317467462947134,
+   "mean_b": 6.085480227648214,
+   "relative_difference": 0.03812143440133624,
+   "paired_difference_std_rel": 0.17741019579359243,
+   "a_lower_seeds": 2,
+   "wilcoxon_p": 0.625,
+   "decision": "NO_SEPARATION"
+  },
+  {
+   "claim": "C5",
+   "a": "E7.tf",
+   "b": "E7.ffs",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "code states S1/S2 shown equivalent",
+   "metric": "v_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 20.12331039316731,
+   "mean_b": 20.592873409985618,
+   "relative_difference": -0.02280220965135517,
+   "paired_difference_std_rel": 0.09335757110748275,
+   "a_lower_seeds": 3,
+   "wilcoxon_p": 0.8125,
+   "decision": "NO_SEPARATION"
+  },
+  {
+   "claim": "C5",
+   "a": "E7.tf",
+   "b": "E7.ffs",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "code states S1/S2 shown equivalent",
+   "metric": "p_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 34.42782856197681,
+   "mean_b": 32.40189598948073,
+   "relative_difference": 0.06252512424438991,
+   "paired_difference_std_rel": 0.10617409791269597,
+   "a_lower_seeds": 2,
+   "wilcoxon_p": 0.3125,
+   "decision": "NO_SEPARATION"
+  },
+  {
+   "claim": "C5",
+   "a": "E7.tf",
+   "b": "E7.ff_minmax",
+   "mode": "paired",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "preprocessing differs by design: tests whether normalised FF closes the gap",
+   "metric": "u_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 6.317467462947134,
+   "mean_b": 4.927539261974946,
+   "relative_difference": 0.28207349085943306,
+   "paired_difference_std_rel": 0.23661806302132063,
+   "a_lower_seeds": 0,
+   "wilcoxon_p": 0.0625,
+   "decision": "B_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "C5",
+   "a": "E7.tf",
+   "b": "E7.ff_minmax",
+   "mode": "paired",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "preprocessing differs by design: tests whether normalised FF closes the gap",
+   "metric": "v_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 20.12331039316731,
+   "mean_b": 21.211478707087558,
+   "relative_difference": -0.05130091725083981,
+   "paired_difference_std_rel": 0.05153775941988337,
+   "a_lower_seeds": 4,
+   "wilcoxon_p": 0.125,
+   "decision": "NO_SEPARATION"
+  },
+  {
+   "claim": "C5",
+   "a": "E7.tf",
+   "b": "E7.ff_minmax",
+   "mode": "paired",
+   "commensurability": "PARTIALLY_COMMENSURABLE",
+   "note": "preprocessing differs by design: tests whether normalised FF closes the gap",
+   "metric": "p_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 34.42782856197681,
+   "mean_b": 31.70023693217153,
+   "relative_difference": 0.08604325688926114,
+   "paired_difference_std_rel": 0.08676547418037396,
+   "a_lower_seeds": 1,
+   "wilcoxon_p": 0.125,
+   "decision": "NO_SEPARATION"
+  },
+  {
+   "claim": "C5",
+   "a": "E7.tf_minmax",
+   "b": "E7.ff_minmax",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "both with min\u2013max inputs",
+   "metric": "u_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 4.435753576581498,
+   "mean_b": 4.927539261974946,
+   "relative_difference": -0.09980350419295114,
+   "paired_difference_std_rel": 0.08444123730086772,
+   "a_lower_seeds": 5,
+   "wilcoxon_p": 0.0625,
+   "decision": "A_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "C5",
+   "a": "E7.tf_minmax",
+   "b": "E7.ff_minmax",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "both with min\u2013max inputs",
+   "metric": "v_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 18.19178232241643,
+   "mean_b": 21.211478707087558,
+   "relative_difference": -0.14236142733708299,
+   "paired_difference_std_rel": 0.04032779363538065,
+   "a_lower_seeds": 5,
+   "wilcoxon_p": 0.0625,
+   "decision": "A_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "C5",
+   "a": "E7.tf_minmax",
+   "b": "E7.ff_minmax",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "both with min\u2013max inputs",
+   "metric": "p_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 24.998257149292147,
+   "mean_b": 31.70023693217153,
+   "relative_difference": -0.21141734041986812,
+   "paired_difference_std_rel": 0.051274843824715,
+   "a_lower_seeds": 5,
+   "wilcoxon_p": 0.0625,
+   "decision": "A_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M2.tf",
+   "b": "M2.ff",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "train_mse",
+   "n_paired": 10,
+   "mean_a": 0.05662285367442482,
+   "mean_b": 0.10052685440891873,
+   "relative_difference": -0.4367390285177246,
+   "paired_difference_std_rel": 0.039896245785280185,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M2.tf",
+   "b": "M2.ffs",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "train_mse",
+   "n_paired": 10,
+   "mean_a": 0.05662285367442482,
+   "mean_b": 0.06734986634623362,
+   "relative_difference": -0.15927296153288772,
+   "paired_difference_std_rel": 0.028357747182913524,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M5.tf",
+   "b": "M5.simple",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "box_mean",
+   "mean_a": 0.058479420366078026,
+   "mean_b": 0.06050456110814527,
+   "relative_difference": -0.03347087731861282,
+   "a_lower_seeds_per_dataset": {
+    "1": "1/5",
+    "2": "4/5",
+    "3": "4/5",
+    "4": "3/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "TIE"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M5.tf",
+   "b": "M5.simple",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "box_worst",
+   "mean_a": 0.11721338794459324,
+   "mean_b": 0.11727384026513274,
+   "relative_difference": -0.0005154800115936308,
+   "a_lower_seeds_per_dataset": {
+    "1": "1/5",
+    "2": "4/5",
+    "3": "4/5",
+    "4": "3/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "TIE"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M5.tf",
+   "b": "M5.simple",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "box_best",
+   "mean_a": 1.3029447516470436e-05,
+   "mean_b": 1.2588170169060584e-05,
+   "relative_difference": 0.03505492390740248,
+   "a_lower_seeds_per_dataset": {
+    "1": "1/5",
+    "2": "4/5",
+    "3": "4/5",
+    "4": "3/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "TIE"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M5.tf",
+   "b": "M5.tower",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "box_mean",
+   "mean_a": 0.058479420366078026,
+   "mean_b": 0.02421112358740374,
+   "relative_difference": 1.415394731886915,
+   "a_lower_seeds_per_dataset": {
+    "1": "5/5",
+    "2": "0/5",
+    "3": "0/5",
+    "4": "0/5",
+    "5": "0/5",
+    "6": "0/5",
+    "7": "4/5"
+   },
+   "decision": "B_LOWER"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M5.tf",
+   "b": "M5.tower",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "box_worst",
+   "mean_a": 0.11721338794459324,
+   "mean_b": 0.06368281690854846,
+   "relative_difference": 0.8405810803394141,
+   "a_lower_seeds_per_dataset": {
+    "1": "5/5",
+    "2": "0/5",
+    "3": "0/5",
+    "4": "0/5",
+    "5": "0/5",
+    "6": "0/5",
+    "7": "4/5"
+   },
+   "decision": "B_LOWER"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M5.tf",
+   "b": "M5.tower",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "box_best",
+   "mean_a": 1.3029447516470436e-05,
+   "mean_b": 0.00019908095671642844,
+   "relative_difference": -0.9345520147613635,
+   "a_lower_seeds_per_dataset": {
+    "1": "5/5",
+    "2": "0/5",
+    "3": "0/5",
+    "4": "0/5",
+    "5": "0/5",
+    "6": "0/5",
+    "7": "4/5"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M5.tf",
+   "b": "M5.exponential",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "box_mean",
+   "mean_a": 0.058479420366078026,
+   "mean_b": 0.026404339628542085,
+   "relative_difference": 1.214765496458923,
+   "a_lower_seeds_per_dataset": {
+    "1": "5/5",
+    "2": "0/5",
+    "3": "0/5",
+    "4": "0/5",
+    "5": "0/5",
+    "6": "0/5",
+    "7": "4/5"
+   },
+   "decision": "B_LOWER"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M5.tf",
+   "b": "M5.exponential",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "box_worst",
+   "mean_a": 0.11721338794459324,
+   "mean_b": 0.06489262962695513,
+   "relative_difference": 0.8062665763186314,
+   "a_lower_seeds_per_dataset": {
+    "1": "5/5",
+    "2": "0/5",
+    "3": "0/5",
+    "4": "0/5",
+    "5": "0/5",
+    "6": "0/5",
+    "7": "4/5"
+   },
+   "decision": "B_LOWER"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M5.tf",
+   "b": "M5.exponential",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "box_best",
+   "mean_a": 1.3029447516470436e-05,
+   "mean_b": 0.0009981949622438612,
+   "relative_difference": -0.986946991310013,
+   "a_lower_seeds_per_dataset": {
+    "1": "5/5",
+    "2": "0/5",
+    "3": "0/5",
+    "4": "0/5",
+    "5": "0/5",
+    "6": "0/5",
+    "7": "4/5"
+   },
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M5.tf",
+   "b": "M5.ffs",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "box_mean",
+   "mean_a": 0.058479420366078026,
+   "mean_b": 0.06050287170798905,
+   "relative_difference": -0.033443889269868125,
+   "a_lower_seeds_per_dataset": {
+    "1": "4/5",
+    "2": "4/5",
+    "3": "3/5",
+    "4": "2/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "TIE"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M5.tf",
+   "b": "M5.ffs",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "box_worst",
+   "mean_a": 0.11721338794459324,
+   "mean_b": 0.11727608559424245,
+   "relative_difference": -0.0005346158113269083,
+   "a_lower_seeds_per_dataset": {
+    "1": "4/5",
+    "2": "4/5",
+    "3": "3/5",
+    "4": "2/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "TIE"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M5.tf",
+   "b": "M5.ffs",
+   "mode": "box",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "box_best",
+   "mean_a": 1.3029447516470436e-05,
+   "mean_b": 1.333701664109493e-05,
+   "relative_difference": -0.02306131370315534,
+   "a_lower_seeds_per_dataset": {
+    "1": "4/5",
+    "2": "4/5",
+    "3": "3/5",
+    "4": "2/5",
+    "5": "5/5",
+    "6": "5/5",
+    "7": "5/5"
+   },
+   "decision": "TIE"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M6.tf",
+   "b": "M6.ff",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "u_mean_maerm",
+   "n_paired": 10,
+   "mean_a": 21.686119501516345,
+   "mean_b": 96.75036123688892,
+   "relative_difference": -0.7758548988936708,
+   "paired_difference_std_rel": 0.07689539840080226,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M6.tf",
+   "b": "M6.ff",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "v_mean_maerm",
+   "n_paired": 10,
+   "mean_a": 94.92856835645509,
+   "mean_b": 90.76247630775278,
+   "relative_difference": 0.045901039925091265,
+   "paired_difference_std_rel": 0.31201903287444915,
+   "a_lower_seeds": 3,
+   "wilcoxon_p": 0.4921875,
+   "decision": "NO_SEPARATION"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M6.tf",
+   "b": "M6.ff",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "p_mean_maerm",
+   "n_paired": 10,
+   "mean_a": 81.20413606064155,
+   "mean_b": 124.84162111634018,
+   "relative_difference": -0.34954276198506556,
+   "paired_difference_std_rel": 0.11250911561930116,
+   "a_lower_seeds": 10,
+   "wilcoxon_p": 0.001953125,
+   "decision": "A_LOWER"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M6.tf",
+   "b": "M6.ffs",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "u_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 24.072134375964282,
+   "mean_b": 22.63082863372162,
+   "relative_difference": 0.0636877140280674,
+   "paired_difference_std_rel": 0.44347324949743827,
+   "a_lower_seeds": 4,
+   "wilcoxon_p": 0.625,
+   "decision": "NO_SEPARATION"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M6.tf",
+   "b": "M6.ffs",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "v_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 93.26350507693483,
+   "mean_b": 113.20665982951445,
+   "relative_difference": -0.17616591446663438,
+   "paired_difference_std_rel": 0.2677617650790162,
+   "a_lower_seeds": 5,
+   "wilcoxon_p": 0.0625,
+   "decision": "A_LOWER_CONSISTENT"
+  },
+  {
+   "claim": "MerLin",
+   "a": "M6.tf",
+   "b": "M6.ffs",
+   "mode": "paired",
+   "commensurability": "COMMENSURABLE",
+   "note": "adaptation scope",
+   "metric": "p_mean_maerm",
+   "n_paired": 5,
+   "mean_a": 80.90657899151367,
+   "mean_b": 105.14424713004908,
+   "relative_difference": -0.23051825278235835,
+   "paired_difference_std_rel": 0.14810270220045182,
+   "a_lower_seeds": 5,
+   "wilcoxon_p": 0.0625,
+   "decision": "A_LOWER_CONSISTENT"
+  }
+ ],
+ "cost": [
+  {
+   "a": "E6.tf",
+   "b": "E6.ff",
+   "a_s_per_iter": 0.24252502480409105,
+   "b_s_per_iter": 0.2325429970394075,
+   "ratio": 1.0429255143855911,
+   "cost_factor_c_f": 1.0333333333333334,
+   "context": "same launch, 4 workers"
+  },
+  {
+   "a": "E7.tf",
+   "b": "E7.ff",
+   "a_s_per_iter": 0.8713723459869623,
+   "b_s_per_iter": 0.8926577015740611,
+   "ratio": 0.9761550754006094,
+   "cost_factor_c_f": 1.0149253731343284,
+   "context": "TF partly from the retry launch (different contention)"
+  },
+  {
+   "a": "M6.tf",
+   "b": "M6.ff",
+   "a_s_per_iter": 1.7706360159716756,
+   "b_s_per_iter": 1.7433719230364495,
+   "ratio": 1.0156387128730053,
+   "cost_factor_c_f": 1.0666666666666667,
+   "context": "separate sequential launches, 4 workers each"
+  },
+  {
+   "a": "E2.tf",
+   "b": "E2.ff",
+   "a_s_per_iter": 0.0038500648534666657,
+   "b_s_per_iter": 0.003917509313866655,
+   "ratio": 0.9827838417227857,
+   "cost_factor_c_f": null,
+   "context": "same sweep, 6 local workers"
+  }
+ ],
+ "not_ranked": [
+  [
+   "M2.tf",
+   "E2.tf",
+   "photonic vs qubit TF: different model class; reported side by side, not ranked"
+  ],
+  [
+   "M6.tf",
+   "E6.tf",
+   "photonic vs qubit TF: different model class; reported side by side, not ranked"
+  ],
+  [
+   "E6.tf",
+   "E6.paper.tf",
+   "local vs paper: unstated normalisation and batch composition (A7, A8)"
+  ],
+  [
+   "E7.ff",
+   "E7.paper.ff",
+   "local vs paper: FF input-scale plateau (G1)"
+  ]
+ ],
+ "run_accounting": {
+  "successful": 817,
+  "expected": 817,
+  "coverage": "COMPLETE"
+ }
+}

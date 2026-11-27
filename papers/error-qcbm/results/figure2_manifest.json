@@ -1,0 +1,194 @@
+{
+  "schema": "error_qcbm.figure2.v1",
+  "reference": {
+    "doi": "10.1103/PhysRevA.111.L030401",
+    "arxiv": "2405.02277v3",
+    "author_commit": "d593d209128e403644b9aee595c474ce551391ae"
+  },
+  "scope": "Historical MerLin local simulations; financial ECB adaptation and Belenos-characteristic controls, no QPU results",
+  "history_schema_normalization": "The frozen financial campaign predates generic loss names: finite_shot_tvd/exact_lossless_tvd are mapped to the explicitly labeled TVD columns on export only. Raw artifacts are unchanged; all 60 final TVD values were recomputed from probabilities.",
+  "shot_accounting": {
+    "uninterrupted_committed_calls": 2103,
+    "retry_inherited_committed_calls": 1437,
+    "new_retry_calls_without_replays": 666,
+    "scope": "Per-run committed call counts include inherited prefixes. Original/retry physical ledgers must be counted separately; see TRAINING.md for replay and unknown-interruption costs."
+  },
+  "metric": "Finite-shot KL(model||target), log2, for Gaussian/Belenos; finite-shot TVD for financial. Exact lossless-at-same-I is diagnostic only.",
+  "recording": {
+    "updates": 1000,
+    "record_every": 10,
+    "initial_history_included": true,
+    "plotted_updates": "10,20,...,1000",
+    "plotted_iteration": "update/10",
+    "population_std_ddof": 0,
+    "band": "mean +/- population SD, lower bound clipped at zero; not SEM or CI"
+  },
+  "input_sha256": {
+    "runs.csv": "449b84fd8ef3bebb91e3831dfd94f401c74a487c45f05da4399ae3418a6cdb62",
+    "curves.csv": "4d697ea235ad47378dd382151ee05a504e57849f0cdb3a4864c5d404faf531bc",
+    "financial_histogram.csv": "47a347c33b9065d87cec477201d40f6fdec4ec80cbe7151cdfc89585737b611c"
+  },
+  "panels": {
+    "a": {
+      "experiment": "gaussian",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "conditions": [
+        "lossless",
+        "postselection",
+        "recycling"
+      ],
+      "display": "mean and population SD"
+    },
+    "b": {
+      "experiment": "gaussian",
+      "conditions": [
+        "lossless",
+        "recycling"
+      ],
+      "selection": "Five lowest final finite-shot KL separately per condition; seed is the stable tie-break. Reproduction choice: author criterion unpublished.",
+      "display": "ten learning curves, not a histogram"
+    },
+    "c": {
+      "experiment": "financial",
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19
+      ],
+      "conditions": [
+        "lossless",
+        "postselection",
+        "recycling"
+      ],
+      "display": "mean and population SD"
+    },
+    "d": {
+      "experiment": "financial",
+      "condition": "lossless",
+      "seed": 0,
+      "selection": "Fixed independently of performance",
+      "source_final_sha256": "01b9e0952fbb09d2428d71e21c25ae2bf0506054a4a3fca093c0dcf8a2bfe823",
+      "available_native_four_click_samples": 39219,
+      "samples_per_histogram": 5123,
+      "subsample_seed": 20261018,
+      "subsampling": "multivariate hypergeometric without replacement from stored counts; no new photonic draws",
+      "model_bins": 495,
+      "display_group_size": 5,
+      "display_bins": 99,
+      "binning_scope": "Visualization choice; original paper financial provider/dates/bin edges unavailable"
+    },
+    "e": {
+      "experiment": "belenos",
+      "seeds": [
+        0,
+        1,
+        2
+      ],
+      "conditions": [
+        "belenos_postselection",
+        "belenos_recycling"
+      ],
+      "selection": "Fixed seed identifiers independent of performance",
+      "display": "three individual curves per condition, no band or failed partial dashed curve",
+      "deviation": "Different initializations; paper experimental repeats used one common initialization"
+    },
+    "f": {
+      "experiment": "belenos",
+      "seed": 6,
+      "conditions": [
+        "belenos_recycling",
+        "lossless_partial",
+        "lossless_ideal",
+        "belenos_loss_recycling",
+        "belenos_overlap084_recycling",
+        "lossless_overlap084"
+      ],
+      "selection": "Best original noisy recycling I=.729 final finite-shot KL among 19 complete originals; same seed for all added controls, retries excluded",
+      "excluded_curves": [
+        "actual QPU Experiment",
+        "unmitigated post-selection"
+      ],
+      "scope": "Six simulated controls; a single selected seed, not a population comparison"
+    }
+  },
+  "data_sources": {
+    "gaussian": "Known discrete Gaussian mixture, means141/353,std61/61,495 bins",
+    "financial": {
+      "source": "European Central Bank, EXR.D.USD.EUR.SP00.A, 2004-2023",
+      "raw_csv_sha256": "2d45d8e704309af8ec25f53bdaab38f17b7d731022662b5708cbeedebca89794",
+      "transformation": "Successive-available natural-log returns and histogram calculated by reproduction authors; not ECB-produced derived data"
+    },
+    "belenos_snapshot_sha256": "e94ff99c712f0f844a55ea709c98b261bd033a283171c625584dceecbcbaa90e"
+  },
+  "limitations": [
+    "No original author numerical runs or financial raw observations supplied",
+    "No actual Altair/Belenos hardware output",
+    "I=.84 is a model choice; HOM measurement definition is not confirmed equivalent",
+    "Original failures and separate sampling retries remain distinct",
+    "Attribution/permission and live ECB acquisition limits remain in DATA_SOURCES.md"
+  ],
+  "figure_sha256": {
+    "figure2_combined": {
+      "png": "545901b514e98e4f7fc7c2bf64eef5fc16810557bb05c12336933cbe8df4e69d"
+    }
+  },
+  "combined_layout": {
+    "stem": "figure2_combined",
+    "rows": 3,
+    "columns": 2,
+    "panel_order": [
+      [
+        "a",
+        "b"
+      ],
+      [
+        "c",
+        "d"
+      ],
+      [
+        "e",
+        "f"
+      ]
+    ],
+    "scope": "Same plot artists and historical values as the three panel-pair exports; no new sampling or training",
+    "financial_credit": "ECB source and reproduction-author processing notice retained in row c,d"
+  }
+}

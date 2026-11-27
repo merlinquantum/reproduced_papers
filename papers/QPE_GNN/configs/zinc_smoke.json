@@ -1,0 +1,21 @@
+{
+  "description": "Reduced ZINC smoke: 200 train samples, 2 epochs, tiny model. Downloads the ZINC-subset (~150 MB) on first run.",
+  "dataset": "zinc",
+  "dataset_kwargs": {"subset": true, "limit": 200},
+  "model": "grit_lite",
+  "encoding": "rrwp+qirw2",
+  "rrwp_dim": 4,
+  "qpe_dim": 4,
+  "qpe_initial_distribution": "adjacency",
+  "node_dim": 16,
+  "depth": 1,
+  "num_heads": 2,
+  "head": "graph_reg",
+  "epochs": 2,
+  "batch_size": 8,
+  "lr": 1e-3,
+  "weight_decay": 0.0,
+  "train_frac": 0.7,
+  "val_frac": 0.15,
+  "device": "cpu"
+}

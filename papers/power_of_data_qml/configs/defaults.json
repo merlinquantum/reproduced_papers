@@ -1,0 +1,129 @@
+{
+  "description": "Smoke defaults: real Fashion-MNIST, n=3, 1 seed, embeddings E1 and E3, every study component, tiny 'smoke' model grids; sized to finish within the repository smoke test's 120 s limit (not for reported results).",
+  "experiment": "study",
+  "seed": 0,
+  "dtype": "float64",
+  "device": "cpu",
+  "outdir": "outdir",
+  "logging": {
+    "level": "info"
+  },
+  "dataset": {
+    "name": "fashion_mnist",
+    "batch_size": 64
+  },
+  "study": {
+    "embeddings": [
+      "E1",
+      "E3"
+    ],
+    "system_sizes": [
+      3
+    ],
+    "seeds": [
+      0
+    ],
+    "components": [
+      "dimension_geometry",
+      "quantum_dataset",
+      "classical_dataset",
+      "bound",
+      "engineered_pqk",
+      "engineered_qk"
+    ],
+    "subsample_size": 800,
+    "quantum_dataset_train_size": 600,
+    "classical_dataset_train_size": 600,
+    "classical_dataset_classes": [
+      3,
+      6
+    ],
+    "engineered_train_sizes": [
+      100,
+      600
+    ],
+    "bound_max_system_size": 12,
+    "quantum_kernel_max_qubits": 17,
+    "cv_system_sizes": [
+      3
+    ]
+  },
+  "conventions": {
+    "e2_pair_coefficient": 2.0,
+    "e2_phase_sign": 1.0,
+    "e3_register": "n_plus_one",
+    "e3_time": "n_plus_one_over_3",
+    "e3_trotter_steps": 20,
+    "qnn_trotter_steps": 10,
+    "qnn_total_time": 10.0,
+    "qnn_boundary": "open",
+    "qnn_observable_qubit": 0,
+    "input_scale": 0.3
+  },
+  "kernels": {
+    "pqk_gamma_scale_geometry": 0.1,
+    "geometry_gamma_scales": [
+      0.25,
+      0.5,
+      1.0,
+      2.0,
+      4.0,
+      8.0,
+      16.0,
+      32.0,
+      64.0
+    ],
+    "lambdas": [
+      1e-05,
+      0.0001,
+      0.001,
+      0.01,
+      0.025,
+      0.05,
+      0.1
+    ],
+    "g_tra_threshold": 0.045
+  },
+  "engineered": {
+    "random_label_probability": 0.1,
+    "label_threshold": "median"
+  },
+  "models": {
+    "grid": "smoke",
+    "protocols": [
+      "paper",
+      "cv"
+    ],
+    "cv_folds": 5,
+    "include_polynomial_extension": true,
+    "n_jobs": 4,
+    "mlp_max_iter": 2000,
+    "svr_epsilon": 0.1
+  },
+  "photonic": {
+    "max_photons": null
+  },
+  "photonic_scaling": {
+    "subsample_seed": 0,
+    "points": []
+  },
+  "simulation": {
+    "batch_memory_mb": 512,
+    "gram_memory_mb": 512,
+    "e1_analytic": true
+  },
+  "training_size": {
+    "embedding": "E2",
+    "train_sizes": [
+      100,
+      200,
+      400,
+      800,
+      1600
+    ],
+    "test_size": 200
+  },
+  "convention_check": {
+    "variants": []
+  }
+}

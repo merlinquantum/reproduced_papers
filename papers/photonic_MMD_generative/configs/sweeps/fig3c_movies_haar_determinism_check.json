@@ -1,0 +1,34 @@
+{
+    "sweep_id": "fig3c_movies_haar_determinism_check",
+    "description": "Determinism / cross-machine check (audit P3-08, P3-12): two fig3c_movies_haar candidates, seed 0, rerun on gpu-reproduced-papers-1 with code fingerprint; compared value by value with the original runs on gpu-reproduced-papers-2.",
+    "seeds": [
+        0
+    ],
+    "candidates": [
+        {
+            "label": "identity_sigma2.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "identity",
+                "kernel.sigma": 2.5,
+                "evaluation.rbm.score_sigma": 2.5
+            }
+        },
+        {
+            "label": "random_sigma3.5",
+            "config": "configs/fig3c_movies_original.json",
+            "overrides": {
+                "init.strategy": "random",
+                "kernel.sigma": 3.5,
+                "evaluation.rbm.score_sigma": 3.5
+            }
+        }
+    ],
+    "metric": "primary: sample_metrics.<model>.walsh_mmd; also test_mmd_estimator and gaussian_mmd_raw/binarized",
+    "direction": "minimize",
+    "split": "test",
+    "checkpoint": "final parameters",
+    "aggregation": "mean and std (ddof=1) over seeds",
+    "tie_rule": "differences within one pooled std are reported as not separated",
+    "selection": "none (comparison sweep)"
+}

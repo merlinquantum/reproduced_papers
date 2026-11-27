@@ -1,0 +1,51 @@
+{
+  "description": "E1b: variability Var_u[<R_i>] of weight-1 and nearest-neighbour weight-2 Paulis over u ~ Unif(-1,1)^(N/2) for N = [8, 12, 16] and [4, 8, 16] layers, at Table I versus a scrambling kicked-Ising point (J = b = pi/4, h = 0.6, no disorder). 3 reservoir seeds, 256 inputs. Local tier.",
+  "task": "concentration",
+  "reservoir": {
+    "input_shift": 4,
+    "chunk_size": 256
+  },
+  "dataset": {
+    "name": "uniform_inputs"
+  },
+  "concentration": {
+    "n_qubits": [
+      8,
+      12,
+      16
+    ],
+    "n_layers": [
+      4,
+      8,
+      16
+    ],
+    "reservoir_seeds": [
+      0,
+      1,
+      2
+    ],
+    "n_samples": 256,
+    "parameter_settings": {
+      "table_I": {
+        "input_strength": 0.2,
+        "b_mean": 0.707,
+        "b_std": 0.031,
+        "h_mean": 0.683,
+        "h_std": 0.034,
+        "J_mean": 0.237,
+        "J_std": 0.038,
+        "h_min": 0.1
+      },
+      "scrambling": {
+        "input_strength": 0.2,
+        "b_mean": 0.7853981633974483,
+        "b_std": 0.0,
+        "h_mean": 0.6,
+        "h_std": 0.0,
+        "J_mean": 0.7853981633974483,
+        "J_std": 0.0,
+        "h_min": 0.1
+      }
+    }
+  }
+}

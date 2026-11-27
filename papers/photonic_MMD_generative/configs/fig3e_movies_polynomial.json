@@ -1,0 +1,54 @@
+{
+    "description": "Fig. 3e polynomial bar: degree 2. Paper says 'polynomial kernel degree 2' without type or c; the original kernel study uses c=15.5; standard polynomial chosen (c + n - m/4 = 0.5 >= 0). RBM score_sigma=2.5 (internal only).",
+    "experiment": {
+        "name": "fig3e_movies_polynomial",
+        "paper_reference": "Fig. 3e"
+    },
+    "dataset": {
+        "name": "movies",
+        "m": 100,
+        "n": 10,
+        "n_train": 10000,
+        "n_test": 10000,
+        "seed": 42,
+        "min_date": "2005-01-01"
+    },
+    "model": {
+        "ansatz": "haar",
+        "butterfly_variant": "reference",
+        "input_state": "middle_alternating",
+        "photon_model": "indistinguishable"
+    },
+    "kernel": {
+        "type": "polynomial_standard",
+        "degree": 2,
+        "c": 15.5
+    },
+    "init": {
+        "strategy": "identity",
+        "perturbation": 0.01
+    },
+    "training": {
+        "steps": 2000,
+        "learning_rate": 0.01,
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "convergence_interval": 200,
+        "log_every": 1
+    },
+    "evaluation": {
+        "n_operators": 2000,
+        "n_gurvits": 5000,
+        "sample_metrics": true,
+        "num_model_samples": 2000,
+        "baselines": [
+            "random",
+            "marginal",
+            "rbm",
+            "test_to_test"
+        ],
+        "rbm": {
+            "score_sigma": 2.5
+        }
+    }
+}

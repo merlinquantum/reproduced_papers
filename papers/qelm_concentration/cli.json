@@ -1,0 +1,48 @@
+{
+  "description": "QELM concentration-barrier reproduction runner (arXiv:2603.13005)",
+  "arguments": [
+    {
+      "flags": ["--task"],
+      "help": "Experiment family: landsat_readouts, landsat_classical, narma_scaling, pareto_search or concentration",
+      "type": "str",
+      "choices": ["landsat_readouts", "landsat_classical", "narma_scaling", "pareto_search", "concentration"],
+      "default": null,
+      "apply": {"kind": "config_path", "path": "task"}
+    },
+    {
+      "flags": ["--n-qubits"],
+      "help": "Override the reservoir qubit count (even, >= 4)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "reservoir.n_qubits"}
+    },
+    {
+      "flags": ["--n-layers"],
+      "help": "Override the total number of brickwall layers",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "reservoir.n_layers"}
+    },
+    {
+      "flags": ["--chunk-size"],
+      "help": "Samples simulated at once (bounds statevector memory)",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "reservoir.chunk_size"}
+    },
+    {
+      "flags": ["--batch-size"],
+      "help": "Override the data loader batch size",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "dataset.batch_size"}
+    },
+    {
+      "flags": ["--n-trials"],
+      "help": "Override the number of optuna trials of pareto_search",
+      "type": "int",
+      "default": null,
+      "apply": {"kind": "config_path", "path": "pareto_search.n_trials"}
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "sweep_id": "e1_fig2a",
+  "description": "E1 / Fig. 2a: FF on {1,2,3}, paper settings; N=3 primary and N=4 (App. B reading, A1).",
+  "candidates": [
+    {
+      "name": "ff_n3",
+      "config": "configs/fig2a_ff_original.json"
+    },
+    {
+      "name": "ff_n4",
+      "config": "configs/fig2a_ff_original.json",
+      "overrides": {
+        "model.n_qubits": 4
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "max_workers": 6,
+  "selection": {
+    "metric": "train_mse",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}

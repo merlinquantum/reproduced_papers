@@ -1,0 +1,47 @@
+{
+  "sweep_id": "e5_vqe_noiseless",
+  "description": "Fair Baseline Plan for C5: noiseless VQE ceiling of the ansatz.",
+  "base_config": "configs/e5_vqe_noiseless.json",
+  "axes": {
+    "--half-distance": [
+      0.4,
+      0.45,
+      0.5,
+      0.6,
+      0.7,
+      0.8,
+      0.9,
+      1.0,
+      1.25,
+      1.7
+    ]
+  },
+  "repetitions": [
+    {
+      "--seed": 1
+    },
+    {
+      "--seed": 2
+    },
+    {
+      "--seed": 3
+    }
+  ],
+  "progress_total": 300,
+  "plan": {
+    "metrics": [
+      "energy",
+      "abs_error_fci",
+      "abs_error_hf"
+    ],
+    "direction": "minimize",
+    "split": "n/a",
+    "checkpoint": "final iteration (no early stopping)",
+    "aggregation": "per candidate: mean and population std (ddof=0) over repetitions; min and max also reported (best-of-repetitions is a secondary view because the reference code hints at best-of-N restarts)",
+    "tie_tolerance": "n/a (descriptive sweep)",
+    "selection_rule": "none: descriptive curve over the swept axis; no candidate is selected",
+    "note": "Fair Baseline Plan for C5: noiseless VQE ceiling of the ansatz."
+  },
+  "fixed_args": {},
+  "max_workers": 6
+}

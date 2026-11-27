@@ -1,0 +1,8 @@
+{
+    "description": "E1 control: same federated pipeline on an i.i.d. equal-size partition",
+    "experiment": "e1_vqtn_0v9_iid",
+    "label": "i.i.d. partition control",
+    "federation": {
+        "partition": "iid"
+    }
+}

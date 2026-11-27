@@ -1,0 +1,394 @@
+{
+  "candidates": [
+    {
+      "best_epochs": [
+        198,
+        159,
+        183,
+        180
+      ],
+      "candidate": "zinc_rrwp",
+      "config": "configs/zinc_rrwp_reduced.json",
+      "epochs": 200,
+      "expected_runs": 4,
+      "mean": 0.09045682850060985,
+      "mean_wall_clock_s": 17327.536185264587,
+      "missing_seeds": [],
+      "num_params": 473473,
+      "observed_runs": 4,
+      "resumed_runs": [],
+      "run_dirs": [
+        "sweep_zinc_reduced_seeds01/zinc_rrwp_seed0/run_20261108-134040",
+        "sweep_zinc_reduced_seeds01/zinc_rrwp_seed1/run_20261108-183012",
+        "sweep_zinc_reduced_seeds23/zinc_rrwp_seed2/run_20261108-231758",
+        "sweep_zinc_reduced_seeds23/zinc_rrwp_seed3/run_20261109-040500"
+      ],
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "status": "COMPLETE",
+      "std": 0.009782663565831077,
+      "values": [
+        0.08721558726578951,
+        0.08796138497535139,
+        0.08205765429139138,
+        0.1045926874699071
+      ]
+    },
+    {
+      "best_epochs": [
+        181,
+        181,
+        196,
+        192
+      ],
+      "candidate": "zinc_cqrw1",
+      "config": "configs/zinc_cqrw1_reduced.json",
+      "epochs": 200,
+      "expected_runs": 4,
+      "mean": 0.08658417695225216,
+      "mean_wall_clock_s": 17335.101132392883,
+      "missing_seeds": [],
+      "num_params": 476033,
+      "observed_runs": 4,
+      "resumed_runs": [],
+      "run_dirs": [
+        "sweep_zinc_reduced_seeds01/zinc_cqrw1_seed0/run_20261108-134040",
+        "sweep_zinc_reduced_seeds01/zinc_cqrw1_seed1/run_20261108-183022",
+        "sweep_zinc_reduced_seeds23/zinc_cqrw1_seed2/run_20261108-231758",
+        "sweep_zinc_reduced_seeds23/zinc_cqrw1_seed3/run_20261109-040510"
+      ],
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "status": "COMPLETE",
+      "std": 0.00502968487625871,
+      "values": [
+        0.0905613038702868,
+        0.08051971305906773,
+        0.0908774178121239,
+        0.08437827306753025
+      ]
+    },
+    {
+      "best_epochs": [
+        181,
+        187,
+        190,
+        169
+      ],
+      "candidate": "zinc_qirw2",
+      "config": "configs/zinc_qirw2_reduced.json",
+      "epochs": 200,
+      "expected_runs": 4,
+      "mean": 0.08703611331363209,
+      "mean_wall_clock_s": 17355.328543186188,
+      "missing_seeds": [],
+      "num_params": 476033,
+      "observed_runs": 4,
+      "resumed_runs": [],
+      "run_dirs": [
+        "sweep_zinc_reduced_seeds01/zinc_qirw2_seed0/run_20261108-134040",
+        "sweep_zinc_reduced_seeds01/zinc_qirw2_seed1/run_20261108-183032",
+        "sweep_zinc_reduced_seeds23/zinc_qirw2_seed2/run_20261108-231758",
+        "sweep_zinc_reduced_seeds23/zinc_qirw2_seed3/run_20261109-040520"
+      ],
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "status": "COMPLETE",
+      "std": 0.005166888438861723,
+      "values": [
+        0.08755825465684756,
+        0.08088651473820209,
+        0.08623280745744705,
+        0.09346687640203163
+      ]
+    },
+    {
+      "best_epochs": [
+        170,
+        199,
+        193,
+        192
+      ],
+      "candidate": "zinc_rrwp41",
+      "config": "configs/zinc_rrwp41_reduced.json",
+      "epochs": 200,
+      "expected_runs": 4,
+      "mean": 0.1039865436576074,
+      "mean_wall_clock_s": 17316.571213424206,
+      "missing_seeds": [],
+      "num_params": 476033,
+      "observed_runs": 4,
+      "resumed_runs": [],
+      "run_dirs": [
+        "sweep_zinc_reduced_seeds01/zinc_rrwp41_seed0/run_20261108-134040",
+        "sweep_zinc_reduced_seeds01/zinc_rrwp41_seed1/run_20261108-183102",
+        "sweep_zinc_reduced_seeds23/zinc_rrwp41_seed2/run_20261108-231758",
+        "sweep_zinc_reduced_seeds23/zinc_rrwp41_seed3/run_20261109-040540"
+      ],
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "status": "COMPLETE",
+      "std": 0.0027618977787713535,
+      "values": [
+        0.10174992756266146,
+        0.10237048013182357,
+        0.10393190454132854,
+        0.10789386239461601
+      ]
+    },
+    {
+      "best_epochs": [
+        174,
+        171,
+        161,
+        195
+      ],
+      "candidate": "zinc_photon2",
+      "config": "configs/zinc_photon2_reduced.json",
+      "epochs": 200,
+      "expected_runs": 4,
+      "mean": 0.08424146590742748,
+      "mean_wall_clock_s": 18393.15512573719,
+      "missing_seeds": [],
+      "num_params": 476033,
+      "observed_runs": 4,
+      "resumed_runs": [],
+      "run_dirs": [
+        "sweep_zinc_photon2_reduced/zinc_photon2_seed0/run_20261108-205945",
+        "sweep_zinc_photon2_reduced/zinc_photon2_seed1/run_20261108-205945",
+        "sweep_zinc_photon2_reduced/zinc_photon2_seed2/run_20261108-205945",
+        "sweep_zinc_photon2_reduced/zinc_photon2_seed3/run_20261108-205945"
+      ],
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "status": "COMPLETE",
+      "std": 0.004619120687800512,
+      "values": [
+        0.07831652325764299,
+        0.0829849661514163,
+        0.088709265565034,
+        0.08695510865561665
+      ]
+    }
+  ],
+  "comparisons": [
+    {
+      "a": "zinc_rrwp",
+      "b": "zinc_cqrw1",
+      "margin_threshold": 0.019565327131662154,
+      "mean_margin_b_minus_a": -0.0038726515483576834,
+      "num_pairs": 1000,
+      "p_value": 0.013874502806611037,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "wilcoxon_signed_rank_seed_averaged_absolute_errors",
+      "verdict": "not distinguishable"
+    },
+    {
+      "a": "zinc_rrwp",
+      "b": "zinc_qirw2",
+      "margin_threshold": 0.019565327131662154,
+      "mean_margin_b_minus_a": -0.0034207151869777574,
+      "num_pairs": 1000,
+      "p_value": 0.4346009386171745,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "wilcoxon_signed_rank_seed_averaged_absolute_errors",
+      "verdict": "not distinguishable"
+    },
+    {
+      "a": "zinc_rrwp",
+      "b": "zinc_rrwp41",
+      "margin_threshold": 0.019565327131662154,
+      "mean_margin_b_minus_a": 0.013529715156997552,
+      "num_pairs": 1000,
+      "p_value": 0.17216820095356833,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "wilcoxon_signed_rank_seed_averaged_absolute_errors",
+      "verdict": "not distinguishable"
+    },
+    {
+      "a": "zinc_rrwp",
+      "b": "zinc_photon2",
+      "margin_threshold": 0.019565327131662154,
+      "mean_margin_b_minus_a": -0.006215362593182366,
+      "num_pairs": 1000,
+      "p_value": 0.07258958142888745,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "wilcoxon_signed_rank_seed_averaged_absolute_errors",
+      "verdict": "not distinguishable"
+    },
+    {
+      "a": "zinc_cqrw1",
+      "b": "zinc_qirw2",
+      "margin_threshold": 0.010333776877723445,
+      "mean_margin_b_minus_a": 0.000451936361379926,
+      "num_pairs": 1000,
+      "p_value": 0.019113150475133546,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "wilcoxon_signed_rank_seed_averaged_absolute_errors",
+      "verdict": "not distinguishable"
+    },
+    {
+      "a": "zinc_cqrw1",
+      "b": "zinc_rrwp41",
+      "margin_threshold": 0.01005936975251742,
+      "mean_margin_b_minus_a": 0.017402366705355235,
+      "num_pairs": 1000,
+      "p_value": 0.0029041425993074285,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "wilcoxon_signed_rank_seed_averaged_absolute_errors",
+      "verdict": "zinc_cqrw1 better"
+    },
+    {
+      "a": "zinc_cqrw1",
+      "b": "zinc_photon2",
+      "margin_threshold": 0.01005936975251742,
+      "mean_margin_b_minus_a": -0.002342711044824683,
+      "num_pairs": 1000,
+      "p_value": 0.46331559593476934,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "wilcoxon_signed_rank_seed_averaged_absolute_errors",
+      "verdict": "not distinguishable"
+    },
+    {
+      "a": "zinc_qirw2",
+      "b": "zinc_rrwp41",
+      "margin_threshold": 0.010333776877723445,
+      "mean_margin_b_minus_a": 0.01695043034397531,
+      "num_pairs": 1000,
+      "p_value": 0.06357208814736258,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "wilcoxon_signed_rank_seed_averaged_absolute_errors",
+      "verdict": "not distinguishable"
+    },
+    {
+      "a": "zinc_qirw2",
+      "b": "zinc_photon2",
+      "margin_threshold": 0.010333776877723445,
+      "mean_margin_b_minus_a": -0.002794647406204609,
+      "num_pairs": 1000,
+      "p_value": 0.32162334321277275,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "wilcoxon_signed_rank_seed_averaged_absolute_errors",
+      "verdict": "not distinguishable"
+    },
+    {
+      "a": "zinc_rrwp41",
+      "b": "zinc_photon2",
+      "margin_threshold": 0.009238241375601024,
+      "mean_margin_b_minus_a": -0.019745077750179918,
+      "num_pairs": 1000,
+      "p_value": 0.005068059407484594,
+      "seeds": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "test": "wilcoxon_signed_rank_seed_averaged_absolute_errors",
+      "verdict": "zinc_photon2 better"
+    }
+  ],
+  "direction": "minimize",
+  "excluded_runs": [],
+  "expected_runs": 20,
+  "launches": [
+    {
+      "code_commit": "6c8861e93f56fccec9add8c3ac40c5084dbcf7c1",
+      "code_dirty": true,
+      "run_seeds": [
+        0,
+        1
+      ],
+      "status": "COMPLETED",
+      "sweep_dir": "sweep_zinc_reduced_seeds01"
+    },
+    {
+      "code_commit": "6c8861e93f56fccec9add8c3ac40c5084dbcf7c1",
+      "code_dirty": true,
+      "run_seeds": [
+        2,
+        3
+      ],
+      "status": "COMPLETED",
+      "sweep_dir": "sweep_zinc_reduced_seeds23"
+    },
+    {
+      "code_commit": "6c8861e93f56fccec9add8c3ac40c5084dbcf7c1",
+      "code_dirty": true,
+      "run_seeds": null,
+      "status": "COMPLETED",
+      "sweep_dir": "sweep_zinc_photon2_reduced"
+    }
+  ],
+  "metric": "test_mae",
+  "observed_runs": 20,
+  "schema_version": 1,
+  "sweep_id": "zinc_photonic_comparison",
+  "tie_rule": "no winner unless the margin exceeds twice the larger seed standard deviation and a Wilcoxon signed-rank test on seed-averaged per-graph absolute errors gives p < 0.05",
+  "verdict": "COMPLETE SWEEP"
+}

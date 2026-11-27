@@ -1,0 +1,21 @@
+{
+    "description": "Smoke overlay on defaults for the Phase 5 B6 tuned-RBM path: synthetic m=8, n=2, tiny grid and 5 epochs. Pipeline check only.",
+    "experiment": {
+        "name": "smoke_rbm_tuned",
+        "paper_reference": "none (pipeline check)"
+    },
+    "model": {
+        "backend": "rbm_tuned"
+    },
+    "tuning": {
+        "sigmas": [1.0, 2.0],
+        "hidden_units": [4, 8],
+        "learning_rates": [0.01],
+        "gibbs_steps": [2, 5],
+        "batch_size": 32,
+        "n_iter": 5,
+        "validation_size": 100,
+        "split_seed": 20261015,
+        "num_samples": 200
+    }
+}

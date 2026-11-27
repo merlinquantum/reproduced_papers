@@ -1,0 +1,26 @@
+{
+    "description": "E4 VQE H2 STO-3G over 54 bond lengths 0.25-2.85 angstrom, B=16, E=1, 180 rounds; angle as Chebyshev series in bond length (assumption)",
+    "label": "paper settings; angle parametrisation and client split inferred",
+    "experiment": "e4_vqe_h2",
+    "metric_direction": "minimize",
+    "dataset": {
+        "name": "h2",
+        "n_bond_lengths": 54,
+        "bond_length_min": 0.25,
+        "bond_length_max": 2.85,
+        "data_seed": 0
+    },
+    "model": {
+        "name": "vqe",
+        "degree": 5
+    },
+    "federation": {
+        "rounds": 180,
+        "n_clients": 2,
+        "min_client_size": 3
+    },
+    "training": {
+        "lr": 0.05,
+        "batch_size": 16
+    }
+}

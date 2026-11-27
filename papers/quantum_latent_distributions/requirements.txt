@@ -1,0 +1,13 @@
+# Core reproduction (experiments: sampler_validation, mixture_of_gaussians,
+# synthetic_datasets)
+merlinquantum>=0.4.0
+perceval-quandela>=1.2.4
+torch>=2.0
+numpy>=1.24
+matplotlib>=3.7
+pytest
+
+# Optional: only needed for `--experiment qm9` (paper Table II)
+# rdkit>=2024.3
+# fcd-torch>=1.0
+# torch-geometric>=2.5

@@ -1,0 +1,19 @@
+{
+  "description": "E3 / paper Fig. 5: Fourier coefficients c_0..c_5 of 100 random L = 1 models with RX on 4 parallel qubits and <Z_0> (reference notebook settings, LOG.md D3). Circuit A = StronglyEntanglingLayers, Circuit B = BasicEntanglerLayers (RX + CNOT ring), each with l = 1 and l = 5 ansatz layers, plus the notebook's 'no unitary' control. Angles from U[0, 2 pi); coefficients from rfft on 11 points of [0, 2 pi).",
+  "experiment": "coefficients",
+  "coefficients": {
+    "n_qubits": 4,
+    "encoding_scaling": 1.0,
+    "n_samples": 100,
+    "max_frequency": 5,
+    "init_high": 6.283185307179586,
+    "zero_tolerance": 1e-9,
+    "settings": [
+      {"ansatz": "strongly", "ansatz_layers": 1},
+      {"ansatz": "strongly", "ansatz_layers": 5},
+      {"ansatz": "basic", "ansatz_layers": 1},
+      {"ansatz": "basic", "ansatz_layers": 5},
+      {"ansatz": "none", "ansatz_layers": 0}
+    ]
+  }
+}

@@ -1,0 +1,116 @@
+{
+    "description": "Virtual quantum neural networks (arXiv:2609.11327). Lightweight runnable default: a shallow VQEM Alg. 1 run (depolarizing p=0.1, depth 2, 40 iterations). Named configs in this folder hold the paper settings; every section below lists all keys a task requires.",
+    "seed": 42,
+    "dtype": "float64",
+    "device": "cpu",
+    "outdir": "outdir",
+    "experiment": {
+        "task": "vqem",
+        "id": "defaults_smoke",
+        "repetition": 0,
+        "sweep_id": null,
+        "run_id": null,
+        "candidate": null
+    },
+    "sdp": {
+        "solver": "CLARABEL",
+        "channels": [
+            {
+                "noise_model": "depolarizing",
+                "noise_level": 0.1
+            }
+        ]
+    },
+    "vqem": {
+        "algorithm": "penalty",
+        "noise_model": "depolarizing",
+        "noise_level": 0.1,
+        "depth": 2,
+        "penalty": 1000.0,
+        "initial_t": 2.0,
+        "budget": 1.0,
+        "gate_noise": [
+            0.0,
+            0.0
+        ]
+    },
+    "vqc": {
+        "n_qubits": 2,
+        "depth": 2,
+        "budget": 1.0,
+        "gate_noise": [
+            0.02,
+            0.05
+        ]
+    },
+    "classical": {
+        "kind": "mlp",
+        "lr_grid": [
+            0.001,
+            0.01,
+            0.1
+        ],
+        "validation_fraction": 0.2
+    },
+    "vvqe": {
+        "half_distance_bohr": 0.8,
+        "n_qubits": 6,
+        "depth": 5,
+        "budget": 1.5,
+        "gate_noise": [
+            0.01,
+            0.02
+        ],
+        "penalty": 10.0,
+        "chebyshev_order": 100
+    },
+    "data": {
+        "source": "generated",
+        "file": null,
+        "n_train": 200,
+        "n_test": 100,
+        "seed_data": 1,
+        "boundary_gap": 0.0,
+        "batch_size": null
+    },
+    "training": {
+        "iterations": 40,
+        "lr": 0.05,
+        "scheduler_factor": 0.5,
+        "scheduler_patience": 10
+    },
+    "logging": {
+        "level": "info",
+        "save_config_snapshot": true
+    },
+    "vqc_merlin": {
+        "n_modes": 4,
+        "input_state": [
+            1,
+            0,
+            1,
+            0
+        ],
+        "encoding_modes": [
+            0,
+            1
+        ],
+        "encoding_scale": 3.141592653589793,
+        "computation_space": "fock",
+        "indistinguishability": 0.9,
+        "budget": 1.0
+    },
+    "equal_shot": {
+        "experiment": "e5",
+        "sweeps": {},
+        "shot_grid": [
+            100,
+            1000,
+            10000,
+            100000,
+            1000000,
+            10000000
+        ],
+        "tie_tolerance_ha": 0.0001
+    }
+}

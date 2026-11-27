@@ -1,0 +1,160 @@
+{
+  "description": "Phase 5 extensions X1-X3 (declared in LOG.md amendment 2026-10-29T13:39:06Z). Not part of the Phase 5 claim outcomes.",
+  "group_titles": {
+    "X1": "X1 \u2014 Fixed-readout ceiling: Fig. 4 published target, P5 (L-BFGS, 500 steps, full batch), 20 seeds",
+    "X2": "X2 \u2014 Multi-scale photonic encodings: square-wave target (degree-31 truncation), P2 and P5",
+    "X3": "X3 \u2014 Optimiser protocols P4 (cosine Adam, lr 0.05, 1000 steps) and P5 (L-BFGS, 500 steps) on the G1 systems"
+  },
+  "runs": [
+    {
+      "group": "X1",
+      "protocol": "P5",
+      "run": "outdir/run_20261029-144312",
+      "role": "MerLin adaptation, fixed readout",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 20 seeds; simulation",
+      "modality": "photonic",
+      "cases": null
+    },
+    {
+      "group": "X1",
+      "protocol": "P5",
+      "run": "outdir/run_20261029-144440",
+      "role": "reproduced paper model, <Z_0>",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 20 seeds",
+      "modality": "qubit",
+      "cases": null
+    },
+    {
+      "group": "X1",
+      "protocol": "P5",
+      "run": "outdir/run_20261029-144617",
+      "role": "fair classical baseline B2 (zero init)",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 20 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "X2",
+      "protocol": "P2",
+      "run": "outdir/run_20261029-145457",
+      "role": "MerLin adaptation, multi-scale encodings",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 6 seeds; simulation",
+      "modality": "photonic",
+      "cases": null
+    },
+    {
+      "group": "X2",
+      "protocol": "P2",
+      "run": "outdir/run_20261029-144633",
+      "role": "fair classical baseline B2 (zero init)",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "X2",
+      "protocol": "P5",
+      "run": "outdir/run_20261029-150245",
+      "role": "MerLin adaptation, multi-scale encodings",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 6 seeds; simulation",
+      "modality": "photonic",
+      "cases": null
+    },
+    {
+      "group": "X2",
+      "protocol": "P5",
+      "run": "outdir/run_20261029-144641",
+      "role": "fair classical baseline B2 (zero init)",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "X3",
+      "protocol": "P4",
+      "run": "outdir/run_20261029-144719",
+      "role": "fair classical baseline B2 (uniform init, original plan)",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "X3",
+      "protocol": "P4",
+      "run": "outdir/run_20261029-144735",
+      "role": "fair classical baseline B2 (zero init, Phase 5 amendment)",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "X3",
+      "protocol": "P4",
+      "run": "outdir/run_20261029-144752",
+      "role": "reproduced paper model (r = 5), with paper or trainable observable",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 6 seeds",
+      "modality": "qubit",
+      "cases": null
+    },
+    {
+      "group": "X3",
+      "protocol": "P4",
+      "run": "outdir/run_20261029-145100",
+      "role": "MerLin adaptation",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 6 seeds; simulation",
+      "modality": "photonic",
+      "cases": null
+    },
+    {
+      "group": "X3",
+      "protocol": "P5",
+      "run": "outdir/run_20261029-144728",
+      "role": "fair classical baseline B2 (uniform init, original plan)",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "X3",
+      "protocol": "P5",
+      "run": "outdir/run_20261029-144745",
+      "role": "fair classical baseline B2 (zero init, Phase 5 amendment)",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 6 seeds",
+      "modality": "classical",
+      "cases": null
+    },
+    {
+      "group": "X3",
+      "protocol": "P5",
+      "run": "outdir/run_20261029-144952",
+      "role": "reproduced paper model (r = 5), with paper or trainable observable",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 6 seeds",
+      "modality": "qubit",
+      "cases": null
+    },
+    {
+      "group": "X3",
+      "protocol": "P5",
+      "run": "outdir/run_20261029-145321",
+      "role": "MerLin adaptation",
+      "provenance": "local, Phase 5 extension",
+      "scope": "advantage evidence label; non-paper protocol; 6 seeds; simulation",
+      "modality": "photonic",
+      "cases": null
+    }
+  ]
+}

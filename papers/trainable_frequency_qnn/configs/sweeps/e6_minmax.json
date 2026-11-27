@@ -1,0 +1,36 @@
+{
+  "sweep_id": "e6_minmax",
+  "description": "E6 input-normalisation variant (A7): TF vs FF with min-max coordinates in [-1, 1], 5 paired seeds.",
+  "candidates": [
+    {
+      "name": "ff_minmax",
+      "config": "configs/ns_table1_ff_original.json",
+      "overrides": {
+        "dataset.coordinate_transform": "minmax"
+      }
+    },
+    {
+      "name": "tf_minmax",
+      "config": "configs/ns_table1_tf_original.json",
+      "overrides": {
+        "dataset.coordinate_transform": "minmax"
+      }
+    }
+  ],
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "max_workers": 4,
+  "selection": {
+    "metric": "final_loss",
+    "direction": "minimize",
+    "split": "train",
+    "checkpoint": "final_iteration",
+    "aggregation": "mean over seeds",
+    "tie_tolerance_rel": 0.05
+  }
+}

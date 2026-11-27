@@ -1,0 +1,71 @@
+{
+  "description": "E4 (claim C3): classical and frozen replacements of the quantum layer, L=336, T in {96,720}, seeds 2021-2023, QuLTSF budget.",
+  "sweep_id": "ablations",
+  "max_epochs": 100,
+  "entries": [
+    {
+      "name": "identity_circuit",
+      "config": "configs/ablation_identity_circuit_classical.json",
+      "seeds": [
+        2021,
+        2022,
+        2023
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        720
+      ]
+    },
+    {
+      "name": "frozen_circuit",
+      "config": "configs/ablation_frozen_circuit_original.json",
+      "seeds": [
+        2021,
+        2022,
+        2023
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        720
+      ]
+    },
+    {
+      "name": "rank_bottleneck",
+      "config": "configs/ablation_rank_bottleneck_classical.json",
+      "seeds": [
+        2021,
+        2022,
+        2023
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        720
+      ]
+    },
+    {
+      "name": "mlp",
+      "config": "configs/ablation_mlp_classical.json",
+      "seeds": [
+        2021,
+        2022,
+        2023
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        720
+      ]
+    }
+  ]
+}

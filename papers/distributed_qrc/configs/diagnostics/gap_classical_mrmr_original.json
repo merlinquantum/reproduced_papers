@@ -1,0 +1,11 @@
+{
+  "description": "Gap diagnosis B: classical reservoir + linear ridge only, paper grid of mrmr, for many seeds (seed spread of the paper's baseline).",
+  "experiment": {
+    "id": "GAP-CLASSICAL-MRMR",
+    "variant": "original",
+    "architecture": "mrmr",
+    "sizes": ["2x5", "2x10", "2x20", "3x5", "3x10", "3x20", "5x5", "5x10"],
+    "reservoir_types": ["classical"],
+    "readout_types": ["linear"]
+  }
+}

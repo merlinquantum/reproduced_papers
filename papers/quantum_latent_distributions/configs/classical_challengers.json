@@ -1,0 +1,47 @@
+{
+  "description": "NOT IN THE PAPER. Asks whether the paper's distinguishable-photon control is a strong enough classical baseline. Boson sampling is super-Poissonian (Fano ~1.28) while the distinguishable control is sub-Poissonian (~0.89), so the two differ in their single-mode marginals as well as in their multi-photon correlations -- the paper's gap is not attributable to interference alone. This config runs four classical challengers that each keep more of the boson distribution's structure, against the same target and settings.",
+
+  "experiment": "synthetic_datasets",
+  "seed": 0,
+  "torch_threads": 1,
+
+  "latent": {
+    "dim": 16,
+    "architecture": "haar",
+    "normalize": "center",
+    "bank_size": 200000,
+    "kinds": [
+      "boson",
+      "distinguishable",
+      "shuffled_boson",
+      "copula_boson",
+      "negative_binomial",
+      "dirichlet_multinomial"
+    ]
+  },
+
+  "dataset": {
+    "name": "synthetic",
+    "targets": ["quantum"],
+    "size": 50000,
+    "batch_size": 500
+  },
+
+  "model": {
+    "generator_hidden": [512, 512],
+    "critic_hidden": [512, 512],
+    "activation": "relu",
+    "latent_reinjection": false
+  },
+
+  "training": {
+    "iterations": 5000,
+    "optimizer": "rmsprop",
+    "lr": 5e-4,
+    "betas": [0.0, 0.9],
+    "n_critic": 5,
+    "gp_weight": 10.0
+  },
+
+  "evaluation": {"repeats": 3, "n_samples": 10000}
+}

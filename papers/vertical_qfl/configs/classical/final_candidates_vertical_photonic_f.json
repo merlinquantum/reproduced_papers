@@ -1,0 +1,75 @@
+[
+  {
+    "model.size": "photonic_f",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 7,
+    "model.central_hidden": 10,
+    "training.epochs": 100,
+    "training.lr": 0.002
+  },
+  {
+    "model.size": "photonic_f",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0
+    ],
+    "model.server_encoding": "server_narrow",
+    "model.client_hidden": 7,
+    "model.server_hidden": 14,
+    "model.central_hidden": 10,
+    "training.epochs": 100,
+    "training.lr": 0.002
+  },
+  {
+    "model.size": "photonic_f",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 7,
+    "model.central_hidden": 10,
+    "training.epochs": 100,
+    "training.lr": 0.002
+  },
+  {
+    "model.size": "photonic_f",
+    "model.architecture": "vertical",
+    "model.client_slices": [
+      0,
+      1,
+      2,
+      3,
+      0,
+      1,
+      2,
+      3
+    ],
+    "model.server_encoding": "server_wide",
+    "model.client_hidden": 7,
+    "model.server_hidden": 7,
+    "model.central_hidden": 10,
+    "training.epochs": 100,
+    "training.lr": 0.002
+  }
+]

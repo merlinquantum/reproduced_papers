@@ -1,0 +1,61 @@
+{
+  "description": "Budget sensitivity: Linear/NLinear/DLinear under LTSF-Linear's own budget (10 epochs, patience 3, type1), L=336, all horizons, seeds 2021-2023.",
+  "sweep_id": "budget",
+  "max_epochs": 10,
+  "entries": [
+    {
+      "name": "linear_ltsf_budget",
+      "config": "configs/budget_linear_ltsf_classical.json",
+      "seeds": [
+        2021,
+        2022,
+        2023
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        192,
+        336,
+        720
+      ]
+    },
+    {
+      "name": "nlinear_ltsf_budget",
+      "config": "configs/budget_nlinear_ltsf_classical.json",
+      "seeds": [
+        2021,
+        2022,
+        2023
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        192,
+        336,
+        720
+      ]
+    },
+    {
+      "name": "dlinear_ltsf_budget",
+      "config": "configs/budget_dlinear_ltsf_classical.json",
+      "seeds": [
+        2021,
+        2022,
+        2023
+      ],
+      "sequence_lengths": [
+        336
+      ],
+      "prediction_horizons": [
+        96,
+        192,
+        336,
+        720
+      ]
+    }
+  ]
+}

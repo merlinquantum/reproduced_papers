@@ -1,0 +1,5 @@
+{
+  "description": "Validate and redraw the curated Figure 2 counterparts; no training, data download or new photonic samples",
+  "task": "plot_results",
+  "results": {"directory": "results"}
+}

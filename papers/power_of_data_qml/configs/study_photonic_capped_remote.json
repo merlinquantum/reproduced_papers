@@ -1,0 +1,48 @@
+{
+  "description": "Step 4 (separate regime): PA and PB with the photon number capped at k=min(floor(m/2), 8), n=17-20, 10 seeds, CV at n=20. Not merged with the k=floor(m/2) results. MerLin photonic adaptation on gpu-reproduced-papers-1 (NVIDIA L4), FOCK, threshold detectors, float32 on cuda:0; all study components, paper grids, paper + 5-fold CV; fidelity kernel at every size. batch_memory_mb counts output amplitudes only (MerLin peaks at about 22x on the device); gram_memory_mb is per Gram block. Limits from the photonic scaling probe (LOG.md).",
+  "dtype": "float32",
+  "device": "cuda:0",
+  "study": {
+    "embeddings": [
+      "PA",
+      "PB"
+    ],
+    "system_sizes": [
+      17,
+      18,
+      19,
+      20
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "cv_system_sizes": [
+      20
+    ],
+    "quantum_kernel_max_qubits": 21
+  },
+  "models": {
+    "grid": "paper",
+    "protocols": [
+      "paper",
+      "cv"
+    ],
+    "n_jobs": 8
+  },
+  "photonic": {
+    "max_photons": 8
+  },
+  "simulation": {
+    "batch_memory_mb": 192,
+    "gram_memory_mb": 4096
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "sweep_id": "zinc_photonic_comparison",
+  "description": "Analysis plan only (not launched): combines the Phase 3 reduced ZINC sweep (outdir/sweep_zinc_reduced_seeds01 and outdir/sweep_zinc_reduced_seeds23, reproduced-papers-1) with the Phase 4 photonic sweep (outdir/sweep_zinc_photon2_reduced) to compare the two-photon encoding with RRWP, 1-CQRW, 2-QiRW and the RRWP-41 control under one tie rule. Fixed 2026-11-08 before any photonic result. MAE only; wall-clock and GPU memory are not compared across machines.",
+  "machine": "reproduced-papers-1 (Phase 3 candidates) and the machine named in zinc_photon2_reduced.json",
+  "max_epochs": 200,
+  "metric": "test_mae",
+  "direction": "minimize",
+  "split": "test (official ZINC 12k subset, 1,000 graphs)",
+  "checkpoint_rule": "model with the lowest validation MAE over the 200 epochs, evaluated once on the test split",
+  "aggregation": "mean and sample standard deviation over the four seeds",
+  "tie_rule": "no winner unless the margin exceeds twice the larger seed standard deviation and a Wilcoxon signed-rank test on seed-averaged per-graph absolute errors gives p < 0.05",
+  "selection_rule": "none: fixed configurations. The photonic encoding preserves the paper's behaviour if it is not worse than zinc_cqrw1 or zinc_qirw2 under the tie rule.",
+  "entries": [
+    {"name": "zinc_rrwp", "config": "configs/zinc_rrwp_reduced.json", "seeds": [0, 1, 2, 3]},
+    {"name": "zinc_cqrw1", "config": "configs/zinc_cqrw1_reduced.json", "seeds": [0, 1, 2, 3]},
+    {"name": "zinc_qirw2", "config": "configs/zinc_qirw2_reduced.json", "seeds": [0, 1, 2, 3]},
+    {"name": "zinc_rrwp41", "config": "configs/zinc_rrwp41_reduced.json", "seeds": [0, 1, 2, 3]},
+    {"name": "zinc_photon2", "config": "configs/zinc_photon2_reduced.json", "seeds": [0, 1, 2, 3]}
+  ]
+}

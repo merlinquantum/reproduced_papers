@@ -1,0 +1,25 @@
+{
+  "description": "Bosonic Binary Solver (arXiv:2510.08274) reproduction runner",
+  "arguments": [
+    {"flags": ["--instances"], "help": "Number of problem instances to solve", "type": "int", "default": null,
+     "apply": {"kind": "config_path", "path": "problem.instances"}},
+    {"flags": ["--size"], "help": "Number of binary variables m", "type": "int", "default": null,
+     "apply": {"kind": "config_path", "path": "problem.m"}},
+    {"flags": ["--family"], "help": "Problem family: knapsack or tsp", "type": "str", "default": null,
+     "apply": {"kind": "config_path", "path": "problem.family"}},
+    {"flags": ["--updates"], "help": "Gradient updates N (paper: 200)", "type": "int", "default": null,
+     "apply": {"kind": "config_path", "path": "training.updates"}},
+    {"flags": ["--samples"], "help": "Shots S per expectation value (paper: 50)", "type": "int", "default": null,
+     "apply": {"kind": "config_path", "path": "training.samples"}},
+    {"flags": ["--lr-theta"], "help": "Learning rate for beamsplitter angles (paper: 0.01)", "type": "float", "default": null,
+     "apply": {"kind": "config_path", "path": "training.lr_theta"}},
+    {"flags": ["--lr-alpha"], "help": "Learning rate for bit-flip logits (paper: 0.05)", "type": "float", "default": null,
+     "apply": {"kind": "config_path", "path": "training.lr_alpha"}},
+    {"flags": ["--method"], "help": "bbs, simulated_annealing, hill_climbing or random_search", "type": "str", "default": null,
+     "apply": {"kind": "config_path", "path": "method.name"}},
+    {"flags": ["--source"], "help": "Click source for bbs: boson, shuffled_boson, distinguishable, bernoulli", "type": "str", "default": null,
+     "apply": {"kind": "config_path", "path": "method.source"}},
+    {"flags": ["--rate-scale"], "help": "Click-rate multiplier for the bernoulli source", "type": "float", "default": null,
+     "apply": {"kind": "config_path", "path": "method.rate_scale"}}
+  ]
+}
