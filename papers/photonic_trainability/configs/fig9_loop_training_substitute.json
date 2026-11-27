@@ -1,0 +1,67 @@
+{
+  "experiment": "training",
+  "seed": 0,
+  "methods": [
+    "gpsr_shots",
+    "gpsr_exact",
+    "spsa_equal_shots"
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "learning_rate_grid": [
+    0.01,
+    0.03,
+    0.1,
+    0.3
+  ],
+  "selection_seed": 100,
+  "spsa_perturbation": 0.1,
+  "shot_interpretation": "per_shift",
+  "max_fock_dimension": 60000,
+  "selection": {
+    "name": "learning_rate by final exact loss of gpsr_exact on selection_seed",
+    "direction": "minimize",
+    "split": "selection_seed=100",
+    "checkpoint": "last_iteration"
+  },
+  "description": "E9 / paper Fig. 9, SUBSTITUTE: simulated two-loop (one-bin delays, assumed) beam-splitter chain on M=16 modes with 6 photons in a dilute Fock input (substitute for PT-2's 48 modes with heralded squeezed light), 100-term PNP of order <=2 with weights U[-5,5], parameter-shift (R=2) with 1000 shots per shifted loss, 90 iterations. Angles start uniform in [0, pi) (assumption).",
+  "modes": 16,
+  "input": [
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "circuit": {
+    "type": "loop",
+    "loops": 2
+  },
+  "observable": {
+    "type": "random_pnp",
+    "terms": 100,
+    "min_order": 1,
+    "max_order": 2,
+    "coefficient_range": [
+      -5,
+      5
+    ]
+  },
+  "gpsr_order": 2,
+  "shots": 1000,
+  "iterations": 90
+}

@@ -1,0 +1,57 @@
+{
+  "description": "Phase 04 smoke run of the MerLin adaptation (not evidence): M=4 only, 100 Haar draws, ideal, indistinguishability 0.9, loss 0.7 post-selected and threshold conditions, one observable.",
+  "experiment": "merlin_variance",
+  "seed": 41,
+  "observable_seed": 3,
+  "input": "alternating",
+  "modes": [
+    4
+  ],
+  "observables": [
+    {
+      "label": "n0^2",
+      "observable": {
+        "type": "monomial",
+        "exponents_by_mode": {
+          "0": 2
+        }
+      }
+    }
+  ],
+  "conditions": [
+    {
+      "name": "ideal",
+      "noise": {},
+      "detector": "pnr",
+      "postselect": false
+    },
+    {
+      "name": "indistinguishability_0.9",
+      "noise": {
+        "indistinguishability": 0.9
+      },
+      "detector": "pnr",
+      "postselect": false
+    },
+    {
+      "name": "loss_0.7_postselected",
+      "noise": {
+        "transmittance": 0.7
+      },
+      "detector": "pnr",
+      "postselect": true
+    },
+    {
+      "name": "threshold_detection",
+      "noise": {},
+      "detector": "threshold",
+      "postselect": false
+    }
+  ],
+  "monte_carlo": {
+    "unitaries": 100,
+    "batch_size": 100,
+    "batches": 5
+  },
+  "z_threshold": 4.0
+}

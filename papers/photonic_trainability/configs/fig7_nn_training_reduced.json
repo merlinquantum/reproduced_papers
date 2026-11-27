@@ -1,0 +1,45 @@
+{
+  "experiment": "training",
+  "seed": 0,
+  "methods": [
+    "gpsr_shots",
+    "gpsr_exact",
+    "spsa_equal_shots"
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "learning_rate_grid": [
+    0.01,
+    0.03,
+    0.1,
+    0.3
+  ],
+  "selection_seed": 100,
+  "spsa_perturbation": 0.1,
+  "shot_interpretation": "per_shift",
+  "max_fock_dimension": 60000,
+  "selection": {
+    "name": "learning_rate by final exact loss of gpsr_exact on selection_seed",
+    "direction": "minimize",
+    "split": "selection_seed=100",
+    "checkpoint": "last_iteration"
+  },
+  "description": "E8 / paper Fig. 7, partial RED-tier run: Clements mesh at Haar init, random quadratic NN observable with 3 squaring hidden layers, biases and a linear read-out (PNP order 8), rescaled to unit standard deviation under the maximally mixed state (assumption), GPSR with R=8 and 10,000 shots per shifted loss, 100 iterations. Reduced from the paper's M=20, n=10 and M=26, n=13 to M=8, n=4 (paper scale needs a 2e7-dimensional state per evaluation).",
+  "modes": 8,
+  "input": "alternating",
+  "circuit": {
+    "type": "clements"
+  },
+  "observable": {
+    "type": "network",
+    "hidden_layers": 3,
+    "bias": true,
+    "normalise": "uniform_std"
+  },
+  "gpsr_order": 8,
+  "shots": 10000,
+  "iterations": 100
+}

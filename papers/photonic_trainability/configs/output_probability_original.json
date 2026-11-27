@@ -1,0 +1,63 @@
+{
+  "description": "E6 / paper Sec. 3.2.4, Eqs. 21-26 (no figure): single-outcome projectors and constant-fraction coarse-grained bins. Exact irrep second moments versus Eqs. 21-22 with P2 (Mhiri et al. Eq. 40), Eq. 25 identity, Eq. 152/26 bin averages, a structured-bin control, and Haar Monte Carlo of random-bin circuit variances. Collision-free inputs only (paper assumption).",
+  "experiment": "output_probability",
+  "seed": 7,
+  "monte_carlo": {
+    "unitaries": 2000,
+    "batch_size": 200,
+    "batches": 20
+  },
+  "cases": [
+    {
+      "name": "M=4, n=2 alternating",
+      "modes": 4,
+      "input": "alternating",
+      "bin_fraction_K": 2,
+      "random_bins": 3
+    },
+    {
+      "name": "M=6, n=3 alternating",
+      "modes": 6,
+      "input": "alternating",
+      "bin_fraction_K": 2,
+      "random_bins": 3
+    },
+    {
+      "name": "M=6, n=3 alternating, K=4",
+      "modes": 6,
+      "input": "alternating",
+      "bin_fraction_K": 4,
+      "random_bins": 3
+    },
+    {
+      "name": "M=8, n=4 alternating",
+      "modes": 8,
+      "input": "alternating",
+      "bin_fraction_K": 2,
+      "random_bins": 3
+    },
+    {
+      "name": "M=8, n=2 dilute",
+      "modes": 8,
+      "input": [
+        1,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "bin_fraction_K": 2,
+      "random_bins": 3
+    },
+    {
+      "name": "M=10, n=5 alternating",
+      "modes": 10,
+      "input": "alternating",
+      "bin_fraction_K": 2,
+      "random_bins": 3
+    }
+  ]
+}

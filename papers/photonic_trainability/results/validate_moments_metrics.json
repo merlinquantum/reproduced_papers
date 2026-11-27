@@ -1,0 +1,545 @@
+{
+  "all_passed": true,
+  "cases": [
+    {
+      "comparisons": {
+        "circuit_variance": {
+          "exact": 0.15249433106575963,
+          "monte_carlo": 0.14963194762266857,
+          "relative_error": 0.01877042525506554,
+          "standard_error": 0.0028963088388463593,
+          "z_score": -0.9882866787891266
+        },
+        "mu1": {
+          "exact": 0.7857142857142857,
+          "monte_carlo": 0.7855348847796608,
+          "relative_error": 0.0002283284622498393,
+          "standard_error": 0.004659412355748301,
+          "z_score": -0.03850291000828621
+        },
+        "mu2": {
+          "exact": 0.7698412698412699,
+          "monte_carlo": 0.7666595948415581,
+          "relative_error": 0.004132897422306024,
+          "standard_error": 0.008949456030618018,
+          "z_score": -0.3555160211778889
+        },
+        "sample_variance": {
+          "exact": 2.373015873015873,
+          "monte_carlo": 2.3686108101278087,
+          "relative_error": 0.001856314126742817,
+          "standard_error": 0.02320416848116781,
+          "z_score": -0.1898392907998144
+        }
+      },
+      "identity_checks": {
+        "first_moment_matches_bruteforce": true,
+        "irrep_dimensions_sum_to_dim_squared": true,
+        "irrep_norms_sum_to_trace_square": true,
+        "irrep_norms_vanish_beyond_order": true,
+        "truncated_mu2_matches_full_sum": true
+      },
+      "input": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "modes": 6,
+      "name": "n0^2, M=6, nu=0.5",
+      "observable": "PNM {0: 2}",
+      "order": 2,
+      "passed": true,
+      "photons": 3,
+      "unitaries": 4000
+    },
+    {
+      "comparisons": {
+        "circuit_variance": {
+          "exact": 0.013576410362124649,
+          "monte_carlo": 0.013661579484517794,
+          "relative_error": 0.006273316739949874,
+          "standard_error": 0.0004297838163893299,
+          "z_score": 0.19816735564559512
+        },
+        "mu1": {
+          "exact": 0.17857142857142858,
+          "monte_carlo": 0.17880973281933984,
+          "relative_error": 0.0013345037883031095,
+          "standard_error": 0.0019666772681340232,
+          "z_score": 0.12117099829875588
+        },
+        "mu2": {
+          "exact": 0.045464165464165464,
+          "monte_carlo": 0.04563108464057036,
+          "relative_error": 0.0036714448555415285,
+          "standard_error": 0.001059202665670529,
+          "z_score": 0.15758946027503698
+        },
+        "sample_variance": {
+          "exact": 0.3831072631072631,
+          "monte_carlo": 0.384406138374873,
+          "relative_error": 0.0033903697285065414,
+          "standard_error": 0.0051799001438955815,
+          "z_score": 0.25075295498515676
+        }
+      },
+      "identity_checks": {
+        "first_moment_matches_bruteforce": true,
+        "irrep_dimensions_sum_to_dim_squared": true,
+        "irrep_norms_sum_to_trace_square": true,
+        "irrep_norms_vanish_beyond_order": true,
+        "truncated_mu2_matches_full_sum": true
+      },
+      "input": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "modes": 6,
+      "name": "n0^2 n1, M=6, nu=0.5",
+      "observable": "PNM {0: 2, 1: 1}",
+      "order": 3,
+      "passed": true,
+      "photons": 3,
+      "unitaries": 4000
+    },
+    {
+      "comparisons": {
+        "circuit_variance": {
+          "exact": 0.00034490311276025564,
+          "monte_carlo": 0.0003374995819767702,
+          "relative_error": 0.02146553773967145,
+          "standard_error": 1.803222200797214e-05,
+          "z_score": -0.4105722955391901
+        },
+        "mu1": {
+          "exact": 0.017857142857142856,
+          "monte_carlo": 0.017953837396089634,
+          "relative_error": 0.005414894181019536,
+          "standard_error": 0.0003032487277631691,
+          "z_score": 0.3188621421762199
+        },
+        "mu2": {
+          "exact": 0.0006637806637806638,
+          "monte_carlo": 0.0006597554843265026,
+          "relative_error": 0.006064020351595061,
+          "standard_error": 2.784373839613254e-05,
+          "z_score": -0.14456318317946545
+        },
+        "sample_variance": {
+          "exact": 0.017193362193362195,
+          "monte_carlo": 0.01729408191176313,
+          "relative_error": 0.005858058317402266,
+          "standard_error": 0.0002776393997751897,
+          "z_score": 0.3627717048894713
+        }
+      },
+      "identity_checks": {
+        "first_moment_matches_bruteforce": true,
+        "irrep_dimensions_sum_to_dim_squared": true,
+        "irrep_norms_sum_to_trace_square": true,
+        "irrep_norms_vanish_beyond_order": true,
+        "truncated_mu2_matches_full_sum": true
+      },
+      "input": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "modes": 6,
+      "name": "n0 n1 n2, M=6, nu=0.5",
+      "observable": "PNM {0: 1, 1: 1, 2: 1}",
+      "order": 3,
+      "passed": true,
+      "photons": 3,
+      "unitaries": 4000
+    },
+    {
+      "comparisons": {
+        "circuit_variance": {
+          "exact": 0.998966588966589,
+          "monte_carlo": 0.965570488911163,
+          "relative_error": 0.03343064765556727,
+          "standard_error": 0.022118685175566723,
+          "z_score": -1.5098591887512705
+        },
+        "mu1": {
+          "exact": 1.7,
+          "monte_carlo": 1.6892131241165786,
+          "relative_error": 0.006345221107894888,
+          "standard_error": 0.013654922224175015,
+          "z_score": -0.7899624550276789
+        },
+        "mu2": {
+          "exact": 3.8889665889665888,
+          "monte_carlo": 3.8187700749766273,
+          "relative_error": 0.018050171526059488,
+          "standard_error": 0.05949947748590917,
+          "z_score": -1.1797837049339726
+        },
+        "sample_variance": {
+          "exact": 29.671639471639473,
+          "monte_carlo": 29.07116192370157,
+          "relative_error": 0.02023742397220237,
+          "standard_error": 0.32279276006972474,
+          "z_score": -1.8602571749384862
+        }
+      },
+      "identity_checks": {
+        "first_moment_matches_bruteforce": true,
+        "irrep_dimensions_sum_to_dim_squared": true,
+        "irrep_norms_sum_to_trace_square": true,
+        "irrep_norms_vanish_beyond_order": true,
+        "truncated_mu2_matches_full_sum": true
+      },
+      "input": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "modes": 8,
+      "name": "n0^3, M=8, nu=0.5",
+      "observable": "PNM {0: 3}",
+      "order": 3,
+      "passed": true,
+      "photons": 4,
+      "unitaries": 4000
+    },
+    {
+      "comparisons": {
+        "circuit_variance": {
+          "exact": 25.65343228200371,
+          "monte_carlo": 25.120689954177383,
+          "relative_error": 0.020766902532572767,
+          "standard_error": 0.5326583740477379,
+          "z_score": -1.0001576128015242
+        },
+        "mu1": {
+          "exact": 17.285714285714285,
+          "monte_carlo": 17.331159518068326,
+          "relative_error": 0.0026290630287461652,
+          "standard_error": 0.07657553995430325,
+          "z_score": 0.5934693033984543
+        },
+        "mu2": {
+          "exact": 324.44935064935066,
+          "monte_carlo": 325.4835000224191,
+          "relative_error": 0.0031873984984056563,
+          "standard_error": 2.602101670145823,
+          "z_score": 0.3974285036335557
+        },
+        "sample_variance": {
+          "exact": 2154.5506493506496,
+          "monte_carlo": 2169.0151763610243,
+          "relative_error": 0.006713477362314084,
+          "standard_error": 18.47875869027055,
+          "z_score": 0.782765079236116
+        }
+      },
+      "identity_checks": {
+        "first_moment_matches_bruteforce": true,
+        "irrep_dimensions_sum_to_dim_squared": true,
+        "irrep_norms_sum_to_trace_square": true,
+        "irrep_norms_vanish_beyond_order": true,
+        "truncated_mu2_matches_full_sum": true
+      },
+      "input": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "modes": 4,
+      "name": "n0^4, M=4, nu=1",
+      "observable": "PNM {0: 4}",
+      "order": 4,
+      "passed": true,
+      "photons": 4,
+      "unitaries": 4000
+    },
+    {
+      "comparisons": {
+        "circuit_variance": {
+          "exact": 0.03637142857142857,
+          "monte_carlo": 0.035425334853910834,
+          "relative_error": 0.02601200323104534,
+          "standard_error": 0.000832056111711931,
+          "z_score": -1.137055186784428
+        },
+        "mu1": {
+          "exact": 0.6399999999999999,
+          "monte_carlo": 0.6379188469070033,
+          "relative_error": 0.0032518017078072077,
+          "standard_error": 0.0027251933927228715,
+          "z_score": -0.7636717080534358
+        },
+        "mu2": {
+          "exact": 0.4459714285714285,
+          "monte_carlo": 0.4423569337593581,
+          "relative_error": 0.008104767661122765,
+          "standard_error": 0.0035878508137204487,
+          "z_score": -1.0074261723057423
+        },
+        "sample_variance": {
+          "exact": 0.5780285714285713,
+          "monte_carlo": 0.574836651314882,
+          "relative_error": 0.005522080172958595,
+          "standard_error": 0.0018780099632774003,
+          "z_score": -1.699628956237767
+        }
+      },
+      "identity_checks": {
+        "first_moment_matches_bruteforce": true,
+        "irrep_dimensions_sum_to_dim_squared": true,
+        "irrep_norms_sum_to_trace_square": true,
+        "irrep_norms_vanish_beyond_order": true,
+        "truncated_mu2_matches_full_sum": true
+      },
+      "input": [
+        1,
+        1,
+        0,
+        1,
+        0
+      ],
+      "modes": 5,
+      "name": "explicit PNP, M=5, input [1,1,0,1,0]",
+      "observable": "PNP with 3 terms",
+      "order": 2,
+      "passed": true,
+      "photons": 3,
+      "unitaries": 4000
+    },
+    {
+      "comparisons": {
+        "circuit_variance": {
+          "exact": 0.2090035915773312,
+          "monte_carlo": 0.21082934094073277,
+          "relative_error": 0.008735492771309855,
+          "standard_error": 0.0034458911447212987,
+          "z_score": 0.5298337314567839
+        },
+        "mu1": {
+          "exact": -0.23372512686131758,
+          "monte_carlo": -0.22123089390297526,
+          "relative_error": 0.05345695230173458,
+          "standard_error": 0.005245483462348328,
+          "z_score": 2.3819030310599487
+        },
+        "mu2": {
+          "exact": 0.2636310265036702,
+          "monte_carlo": 0.25971974202260706,
+          "relative_error": 0.014836207000880819,
+          "standard_error": 0.004363041295821767,
+          "z_score": -0.8964582766632899
+        },
+        "sample_variance": {
+          "exact": 3.4900863663516843,
+          "monte_carlo": 3.5009233242839857,
+          "relative_error": 0.0031050686988097656,
+          "standard_error": 0.01179766568512661,
+          "z_score": 0.9185679795930772
+        }
+      },
+      "identity_checks": {
+        "first_moment_matches_bruteforce": true,
+        "irrep_dimensions_sum_to_dim_squared": true,
+        "irrep_norms_sum_to_trace_square": true,
+        "irrep_norms_vanish_beyond_order": true,
+        "truncated_mu2_matches_full_sum": true
+      },
+      "input": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "modes": 6,
+      "name": "random PNP all |alpha|<=2, c~U[-1,1], M=6, nu=0.5",
+      "observable": "random PNP |alpha| in [1, 2], 27 terms",
+      "order": 2,
+      "passed": true,
+      "photons": 3,
+      "unitaries": 4000
+    },
+    {
+      "comparisons": {
+        "circuit_variance": {
+          "exact": 4.398182930459374,
+          "monte_carlo": 4.496130979005596,
+          "relative_error": 0.022270117022165685,
+          "standard_error": 0.0946531232498464,
+          "z_score": 1.0348105290480292
+        },
+        "mu1": {
+          "exact": -7.622661241154978,
+          "monte_carlo": -7.6042610855037855,
+          "relative_error": 0.0024138755572462194,
+          "standard_error": 0.04074643722783948,
+          "z_score": 0.4515770433695847
+        },
+        "mu2": {
+          "exact": 62.50314732786572,
+          "monte_carlo": 62.319793602768065,
+          "relative_error": 0.0029335118779836057,
+          "standard_error": 0.562121560515699,
+          "z_score": -0.32618162685210267
+        },
+        "sample_variance": {
+          "exact": 857.7976338636387,
+          "monte_carlo": 855.3028079530108,
+          "relative_error": 0.0029084084778724373,
+          "standard_error": 7.275464327484633,
+          "z_score": -0.3429095104216485
+        }
+      },
+      "identity_checks": {
+        "first_moment_matches_bruteforce": true,
+        "irrep_dimensions_sum_to_dim_squared": true,
+        "irrep_norms_sum_to_trace_square": true,
+        "irrep_norms_vanish_beyond_order": true,
+        "truncated_mu2_matches_full_sum": true
+      },
+      "input": [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "modes": 5,
+      "name": "random PNP 10 terms |alpha|<=4, c~U[-1,1], M=5, nu=1",
+      "observable": "random PNP |alpha| in [1, 4], 10 terms",
+      "order": 4,
+      "passed": true,
+      "photons": 5,
+      "unitaries": 4000
+    },
+    {
+      "comparisons": {
+        "circuit_variance": {
+          "exact": 0.00034490311276025564,
+          "monte_carlo": 0.00033427322210148613,
+          "relative_error": 0.030819932512926945,
+          "standard_error": 2.2358621913588138e-05,
+          "z_score": -0.47542691583819596
+        },
+        "mu1": {
+          "exact": 0.017857142857142856,
+          "monte_carlo": 0.01763512594871694,
+          "relative_error": 0.012432946871851314,
+          "standard_error": 0.00035056892868325947,
+          "z_score": -0.6333045808132914
+        },
+        "mu2": {
+          "exact": 0.0006637806637806638,
+          "monte_carlo": 0.0006451873210230704,
+          "relative_error": 0.028011275067417844,
+          "standard_error": 3.333822862717746e-05,
+          "z_score": -0.5577183768676902
+        },
+        "sample_variance": {
+          "exact": 0.017193362193362195,
+          "monte_carlo": 0.016989938627693872,
+          "relative_error": 0.011831517499634696,
+          "standard_error": 0.0003201261049677204,
+          "z_score": -0.6354482265319613
+        }
+      },
+      "identity_checks": {
+        "first_moment_matches_bruteforce": true,
+        "irrep_dimensions_sum_to_dim_squared": true,
+        "irrep_norms_sum_to_trace_square": true,
+        "irrep_norms_vanish_beyond_order": true,
+        "truncated_mu2_matches_full_sum": true
+      },
+      "input": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "modes": 6,
+      "name": "projector collision-free |0,1,0,1,0,1>, M=6, nu=0.5",
+      "observable": "projector |(0, 1, 0, 1, 0, 1)><(0, 1, 0, 1, 0, 1)|",
+      "order": 3,
+      "passed": true,
+      "photons": 3,
+      "unitaries": 4000
+    },
+    {
+      "comparisons": {
+        "circuit_variance": {
+          "exact": 0.00041224318010032296,
+          "monte_carlo": 0.0004242906252244265,
+          "relative_error": 0.02922412232792229,
+          "standard_error": 2.3880434433114718e-05,
+          "z_score": 0.5044901991982813
+        },
+        "mu1": {
+          "exact": 0.017857142857142856,
+          "monte_carlo": 0.018089795091033322,
+          "relative_error": 0.01302852509786609,
+          "standard_error": 0.000416503210152141,
+          "z_score": 0.5585844915948721
+        },
+        "mu2": {
+          "exact": 0.0007311207311207312,
+          "monte_carlo": 0.0007514252390036937,
+          "relative_error": 0.02777175782149941,
+          "standard_error": 3.815007465976614e-05,
+          "z_score": 0.5322272122412407
+        },
+        "sample_variance": {
+          "exact": 0.017126022126022124,
+          "monte_carlo": 0.017338369852029634,
+          "relative_error": 0.012399127155444788,
+          "standard_error": 0.00038102351124625315,
+          "z_score": 0.5573087217451791
+        }
+      },
+      "identity_checks": {
+        "first_moment_matches_bruteforce": true,
+        "irrep_dimensions_sum_to_dim_squared": true,
+        "irrep_norms_sum_to_trace_square": true,
+        "irrep_norms_vanish_beyond_order": true,
+        "truncated_mu2_matches_full_sum": true
+      },
+      "input": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0
+      ],
+      "modes": 6,
+      "name": "projector bunched |2,1,0,0,0,0>, M=6, nu=0.5",
+      "observable": "projector |(2, 1, 0, 0, 0, 0)><(2, 1, 0, 0, 0, 0)|",
+      "order": 3,
+      "passed": true,
+      "photons": 3,
+      "unitaries": 4000
+    }
+  ],
+  "experiment": "validate_moments",
+  "z_threshold": 4.0
+}

@@ -1,0 +1,36 @@
+{
+  "description": "Phase 05 fair comparison for C9 (E13): samples to estimate a PNP loss to additive error eps, quantum sampling (exact single-shot variance) versus B1 term-wise Lim-Oh with Neyman allocation versus B2 exact classical evaluation. Haar U in U(16), input |1,0,...> (n=8), PNPs from the 152 PNMs of order 1-2, |A| in {10,20,40,80,150}, 3 unitaries x 5 draws, balanced U[-1,1] and positive U[0,1] coefficients. Protocol: LOG.md Phase 5 Comparison Plan.",
+  "experiment": "estimator_scaling",
+  "seed": 51,
+  "modes": 16,
+  "input": "alternating",
+  "pool_orders": [
+    1,
+    2
+  ],
+  "term_counts": [
+    10,
+    20,
+    40,
+    80,
+    150
+  ],
+  "draws_per_size": 5,
+  "unitaries": 3,
+  "families": {
+    "balanced": [
+      -1,
+      1
+    ],
+    "positive": [
+      0,
+      1
+    ]
+  },
+  "lim_oh_samples": 20000,
+  "epsilon": 0.1,
+  "unbiased_z_threshold": 5.0,
+  "monte_carlo": {
+    "batch_size": 3
+  }
+}

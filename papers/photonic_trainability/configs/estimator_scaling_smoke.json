@@ -1,0 +1,34 @@
+{
+  "description": "Phase 05 smoke run of the C9 comparison (not evidence): M=6, 2 unitaries, 2 draws, |A| in {5,10,20}, 2000 Lim-Oh samples.",
+  "experiment": "estimator_scaling",
+  "seed": 51,
+  "modes": 6,
+  "input": "alternating",
+  "pool_orders": [
+    1,
+    2
+  ],
+  "term_counts": [
+    5,
+    10,
+    20
+  ],
+  "draws_per_size": 2,
+  "unitaries": 2,
+  "families": {
+    "balanced": [
+      -1,
+      1
+    ],
+    "positive": [
+      0,
+      1
+    ]
+  },
+  "lim_oh_samples": 2000,
+  "epsilon": 0.1,
+  "unbiased_z_threshold": 5.0,
+  "monte_carlo": {
+    "batch_size": 2
+  }
+}

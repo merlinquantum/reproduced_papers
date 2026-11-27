@@ -1,0 +1,26 @@
+{
+  "experiment": "pnp_variances",
+  "seed": 5,
+  "instances": 20,
+  "coefficient_range": [
+    -1,
+    1
+  ],
+  "description": "Gap diagnosis H5 (LOG.md): as fig5cd_pnp_variances_original.json but each term's exponent pattern is drawn uniformly from the 11 integer partitions of orders 1-4 and placed on random distinct modes.",
+  "input": "alternating",
+  "modes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60
+  ],
+  "terms": {
+    "mode": "sampled",
+    "min_order": 1,
+    "max_order": 4,
+    "terms_per_mode": 5,
+    "scheme": "uniform_pattern"
+  }
+}

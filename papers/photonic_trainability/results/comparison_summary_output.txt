@@ -1,0 +1,66 @@
+C9 | quantum sampling (simulated exact single-shot variance) | balanced | |A|=10 | 15/15 | mean=342.0608464918487 std=391.73440014050385
+C9 | B1 Lim-Oh term-wise, Neyman allocation | balanced | |A|=10 | 15/15 | mean=17864990.268578485 std=7623522.146368221
+C9 | B1 Lim-Oh classical wall-clock | balanced | |A|=10 | 15/15 | mean=6.932152422985462 std=2.951032982076238
+C9 | B2 exact classical evaluation wall-clock | balanced | |A|=10 | 15/15 | mean=0.0033037167275324466 std=0.0003399256472459599
+C9 | quantum sampling (simulated exact single-shot variance) | balanced | |A|=20 | 15/15 | mean=757.2802395749557 std=436.4382788462809
+C9 | B1 Lim-Oh term-wise, Neyman allocation | balanced | |A|=20 | 15/15 | mean=74920795.24463524 std=14502910.716018122
+C9 | B1 Lim-Oh classical wall-clock | balanced | |A|=20 | 15/15 | mean=29.08736148829492 std=5.621548329395044
+C9 | B2 exact classical evaluation wall-clock | balanced | |A|=20 | 15/15 | mean=0.006333247215176622 std=0.0004032932326153867
+C9 | quantum sampling (simulated exact single-shot variance) | balanced | |A|=40 | 15/15 | mean=1188.7917938284072 std=265.18758561860733
+C9 | B1 Lim-Oh term-wise, Neyman allocation | balanced | |A|=40 | 15/15 | mean=332590573.79571944 std=68476334.45628716
+C9 | B1 Lim-Oh classical wall-clock | balanced | |A|=40 | 15/15 | mean=129.17809155947464 std=26.820709067212224
+C9 | B2 exact classical evaluation wall-clock | balanced | |A|=40 | 15/15 | mean=0.012393710995092988 std=0.0004786419304847693
+C9 | quantum sampling (simulated exact single-shot variance) | balanced | |A|=80 | 15/15 | mean=3049.4819592033477 std=1168.9734700677452
+C9 | B1 Lim-Oh term-wise, Neyman allocation | balanced | |A|=80 | 15/15 | mean=1213900982.293991 std=134867844.2288885
+C9 | B1 Lim-Oh classical wall-clock | balanced | |A|=80 | 15/15 | mean=471.27878800662336 std=52.030353280519634
+C9 | B2 exact classical evaluation wall-clock | balanced | |A|=80 | 15/15 | mean=0.024836788997830202 std=0.00039861027534100166
+C9 | quantum sampling (simulated exact single-shot variance) | balanced | |A|=150 | 15/15 | mean=5478.546374326682 std=1156.2813012305564
+C9 | B1 Lim-Oh term-wise, Neyman allocation | balanced | |A|=150 | 15/15 | mean=4183135229.773668 std=392660970.2220856
+C9 | B1 Lim-Oh classical wall-clock | balanced | |A|=150 | 15/15 | mean=1624.3468240959996 std=155.14748956011977
+C9 | B2 exact classical evaluation wall-clock | balanced | |A|=150 | 15/15 | mean=0.046336661201591293 std=0.0004468421741324789
+C9 | quantum sampling (simulated exact single-shot variance) | positive | |A|=10 | 15/15 | mean=495.1096750249013 std=403.91612896207647
+C9 | B1 Lim-Oh term-wise, Neyman allocation | positive | |A|=10 | 15/15 | mean=17651240.39742749 std=8581046.083333898
+C9 | B1 Lim-Oh classical wall-clock | positive | |A|=10 | 15/15 | mean=6.861226817169809 std=3.3549292279711467
+C9 | B2 exact classical evaluation wall-clock | positive | |A|=10 | 15/15 | mean=0.0029959639340328675 std=0.00035813681627896017
+C9 | quantum sampling (simulated exact single-shot variance) | positive | |A|=20 | 15/15 | mean=549.6788315954923 std=245.8394801971824
+C9 | B1 Lim-Oh term-wise, Neyman allocation | positive | |A|=20 | 15/15 | mean=66243693.278024726 std=19365939.947925493
+C9 | B1 Lim-Oh classical wall-clock | positive | |A|=20 | 15/15 | mean=25.734473476287278 std=7.586186197231189
+C9 | B2 exact classical evaluation wall-clock | positive | |A|=20 | 15/15 | mean=0.005897719595426073 std=0.0004949424584311125
+C9 | quantum sampling (simulated exact single-shot variance) | positive | |A|=40 | 15/15 | mean=1070.7747706085675 std=313.03003882611074
+C9 | B1 Lim-Oh term-wise, Neyman allocation | positive | |A|=40 | 15/15 | mean=291684087.69821435 std=88759695.94949868
+C9 | B1 Lim-Oh classical wall-clock | positive | |A|=40 | 15/15 | mean=113.22129840583634 std=34.31476369829089
+C9 | B2 exact classical evaluation wall-clock | positive | |A|=40 | 15/15 | mean=0.012330191869599124 std=0.0005985372200349057
+C9 | quantum sampling (simulated exact single-shot variance) | positive | |A|=80 | 15/15 | mean=1731.9899218723885 std=516.7074216437378
+C9 | B1 Lim-Oh term-wise, Neyman allocation | positive | |A|=80 | 15/15 | mean=1246043681.702204 std=156404621.13325322
+C9 | B1 Lim-Oh classical wall-clock | positive | |A|=80 | 15/15 | mean=483.7287625862131 std=60.14726517503329
+C9 | B2 exact classical evaluation wall-clock | positive | |A|=80 | 15/15 | mean=0.024556558140708753 std=0.0006591648151112981
+C9 | quantum sampling (simulated exact single-shot variance) | positive | |A|=150 | 15/15 | mean=1606.9883921005337 std=408.4542097704604
+C9 | B1 Lim-Oh term-wise, Neyman allocation | positive | |A|=150 | 15/15 | mean=4157391017.640154 std=511920556.6954071
+C9 | B1 Lim-Oh classical wall-clock | positive | |A|=150 | 15/15 | mean=1614.3393573226679 std=200.3657691921399
+C9 | B2 exact classical evaluation wall-clock | positive | |A|=150 | 15/15 | mean=0.046088041729914646 std=0.0003691087148848258
+SLOPES | {"family": "balanced", "slope_quantum_mean": 1.0729086888743176, "slope_quantum_std": 0.2730968514795412, "slope_lim_oh_mean": 2.017368812043405, "slope_lim_oh_std": 0.06774180980294393, "slope_difference_mean": 0.9444601231690873, "slope_difference_std": 0.22710556152660497, "unitaries": 3, "outcome_vs_lim_oh_predeclared_rule": "SUPPORTED", "lim_oh_unbiased": true, "b2_max_abs_error": 2.1316282072803006e-14}
+SLOPES | {"family": "positive", "slope_quantum_mean": 0.5349162796696968, "slope_quantum_std": 0.08263872588014316, "slope_lim_oh_mean": 2.050780164715848, "slope_lim_oh_std": 0.11865922453045248, "slope_difference_mean": 1.5158638850461514, "slope_difference_std": 0.16439398718413295, "unitaries": 3, "outcome_vs_lim_oh_predeclared_rule": "SUPPORTED", "lim_oh_unbiased": true, "b2_max_abs_error": 2.1316282072803006e-14}
+TRAIN | fig7_m8 | gpsr_exact | 3/3 | improvement=0.15970858427687537 ± 0.104996834695401 | wall=61.0s
+TRAIN | fig7_m8 | gpsr_shots | 3/3 | improvement=0.16000316534045664 ± 0.10590198322570571 | wall=61.0s
+TRAIN | fig7_m8 | spsa_equal_shots | 3/3 | improvement=0.1477764011728619 ± 0.10088779267717696 | wall=61.0s
+TRAIN | fig7_m12 | gpsr_exact | 3/3 | improvement=1.6948121848439912 ± 0.033150716128252454 | wall=991.0s
+TRAIN | fig7_m12 | gpsr_shots | 3/3 | improvement=1.3160186058891379 ± 0.09801078146997888 | wall=991.0s
+TRAIN | fig7_m12 | spsa_equal_shots | 3/3 | improvement=0.23345818863151221 ± 0.12901055851076976 | wall=991.0s
+TRAIN | fig9_substitute | gpsr_exact | 3/3 | improvement=31.511711624829037 ± 4.1033304856176445 | wall=273.0s
+TRAIN | fig9_substitute | gpsr_shots | 3/3 | improvement=30.48267221034781 ± 4.459117474663278 | wall=273.0s
+TRAIN | fig9_substitute | spsa_equal_shots | 3/3 | improvement=4.784449623104028 ± 6.823527777277554 | wall=273.0s
+TRAIN | fig7_m8_pergradient | gpsr_exact | 3/3 | improvement=0.15970858427687537 ± 0.104996834695401 | wall=13.0s
+TRAIN | fig7_m8_pergradient | gpsr_shots | 3/3 | improvement=0.16079257805163016 ± 0.10707456640093177 | wall=13.0s
+TRAIN | fig7_m8_pergradient | spsa_equal_shots | 3/3 | improvement=0.15067757659379238 ± 0.10430445403932878 | wall=13.0s
+TRAIN | fig9_substitute_pergradient | gpsr_exact | 3/3 | improvement=31.511711624829037 ± 4.1033304856176445 | wall=91.0s
+TRAIN | fig9_substitute_pergradient | gpsr_shots | 3/3 | improvement=29.249821152545653 ± 6.890072358709574 | wall=91.0s
+TRAIN | fig9_substitute_pergradient | spsa_equal_shots | 3/3 | improvement=1.5200336649068997 ± 2.629498623139243 | wall=91.0s
+TRAIN | merlin_ideal | gpsr_exact | 3/3 | improvement=0.7826734352824589 ± 0.868462732494141 | wall=1.0s
+TRAIN | merlin_ideal | gpsr_shots | 3/3 | improvement=0.781821311764558 ± 0.8686070078683918 | wall=1.0s
+TRAIN | merlin_indist0.9 | gpsr_exact | 3/3 | improvement=0.7171018326158433 ± 0.7821820084221489 | wall=2.0s
+TRAIN | merlin_indist0.9 | gpsr_shots | 3/3 | improvement=0.7151711425342769 ± 0.7796165726717413 | wall=2.0s
+TRAIN | merlin_threshold | gpsr_exact | 3/3 | improvement=0.027257725745612246 ± 0.034130870130448014 | wall=1.0s
+TRAIN | merlin_threshold | gpsr_shots | 3/3 | improvement=0.027094439204484896 ± 0.03391812129627697 | wall=1.0s
+TRAIN | merlin_loss0.7 | gpsr_exact | 3/3 | improvement=0.286996433963354 ± 0.3434821769393705 | wall=1.0s
+TRAIN | merlin_loss0.7 | gpsr_shots | 3/3 | improvement=0.28660046556634694 ± 0.34318171875629266 | wall=1.0s
+PROBLEMS | none

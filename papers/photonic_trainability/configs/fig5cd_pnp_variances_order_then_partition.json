@@ -1,0 +1,26 @@
+{
+  "experiment": "pnp_variances",
+  "seed": 5,
+  "instances": 20,
+  "coefficient_range": [
+    -1,
+    1
+  ],
+  "description": "Gap diagnosis H5 alternative (LOG.md): as fig5cd_pnp_variances_original.json but order uniform in 1-4, then a uniform integer partition of that order, placed on random distinct modes.",
+  "input": "alternating",
+  "modes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60
+  ],
+  "terms": {
+    "mode": "sampled",
+    "min_order": 1,
+    "max_order": 4,
+    "terms_per_mode": 5,
+    "scheme": "order_then_partition"
+  }
+}

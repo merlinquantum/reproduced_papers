@@ -1,0 +1,83 @@
+{
+  "description": "E4 / paper Fig. 4: Var_circ of n_0^alpha, alpha in {2,3,4,5,8,10}, input |1,0,1,0,...> (nu=0.5), M=10..340.",
+  "experiment": "variance_scaling",
+  "seed": 0,
+  "input": "alternating",
+  "modes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90,
+    100,
+    110,
+    120,
+    130,
+    140,
+    150,
+    160,
+    170,
+    180,
+    190,
+    200,
+    210,
+    220,
+    230,
+    240,
+    250,
+    260,
+    270,
+    280,
+    290,
+    300,
+    310,
+    320,
+    330,
+    340
+  ],
+  "observables": [
+    {
+      "label": "alpha=2",
+      "exponents": [
+        2
+      ]
+    },
+    {
+      "label": "alpha=3",
+      "exponents": [
+        3
+      ]
+    },
+    {
+      "label": "alpha=4",
+      "exponents": [
+        4
+      ]
+    },
+    {
+      "label": "alpha=5",
+      "exponents": [
+        5
+      ]
+    },
+    {
+      "label": "alpha=8",
+      "exponents": [
+        8
+      ]
+    },
+    {
+      "label": "alpha=10",
+      "exponents": [
+        10
+      ]
+    }
+  ],
+  "fit": {
+    "min_points": 5
+  }
+}

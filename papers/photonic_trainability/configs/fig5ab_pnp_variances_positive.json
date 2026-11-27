@@ -1,0 +1,27 @@
+{
+  "experiment": "pnp_variances",
+  "seed": 5,
+  "instances": 20,
+  "coefficient_range": [
+    0,
+    1
+  ],
+  "description": "E5 control (paper Eq. 17): as Fig. 5a,b but with positive coefficients c~U[0,1], removing the off-diagonal cancellation; expected O(|A|^2) sample variance.",
+  "input": "alternating",
+  "modes": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    60,
+    70,
+    80,
+    90
+  ],
+  "terms": {
+    "mode": "all",
+    "min_order": 1,
+    "max_order": 2
+  }
+}

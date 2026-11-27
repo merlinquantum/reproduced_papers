@@ -1,0 +1,24 @@
+run,role,provenance,method,modes,hardware,successful_runs,expected_runs,improvement_mean,improvement_std,fraction_decreasing_steps_mean,shots_per_iteration,learning_rate,wall_clock_seconds
+fig7_m8,control (Phase 1 plan),locally executed,gpsr_exact,8,ideal PNR,3,3,0.15970858427687537,0.104996834695401,1.0,8960000,0.1,61.0
+fig7_m8,reproduced method,locally executed,gpsr_shots,8,ideal PNR,3,3,0.16000316534045664,0.10590198322570571,1.0,8960000,0.1,61.0
+fig7_m8,control (Phase 1 plan),locally executed,spsa_equal_shots,8,ideal PNR,3,3,0.1477764011728619,0.10088779267717696,0.9700000000000001,8960000,0.1,61.0
+fig7_m12,control (Phase 1 plan),locally executed,gpsr_exact,12,ideal PNR,3,3,1.6948121848439912,0.033150716128252454,0.6066666666666666,21120000,0.3,991.0
+fig7_m12,reproduced method,locally executed,gpsr_shots,12,ideal PNR,3,3,1.3160186058891379,0.09801078146997888,0.5133333333333333,21120000,0.3,991.0
+fig7_m12,control (Phase 1 plan),locally executed,spsa_equal_shots,12,ideal PNR,3,3,0.23345818863151221,0.12901055851076976,0.6633333333333333,21120000,0.3,991.0
+fig9_substitute,control (Phase 1 plan),locally executed,gpsr_exact,16,ideal PNR,3,3,31.511711624829037,4.1033304856176445,0.8962962962962964,120000,0.03,273.0
+fig9_substitute,reproduced method,locally executed,gpsr_shots,16,ideal PNR,3,3,30.48267221034781,4.459117474663278,0.7444444444444445,120000,0.03,273.0
+fig9_substitute,control (Phase 1 plan),locally executed,spsa_equal_shots,16,ideal PNR,3,3,4.784449623104028,6.823527777277554,0.5962962962962962,120000,0.03,273.0
+fig7_m8_pergradient,control (Phase 1 plan),locally executed,gpsr_exact,8,ideal PNR,3,3,0.15970858427687537,0.104996834695401,1.0,560000,0.1,13.0
+fig7_m8_pergradient,reproduced method,locally executed,gpsr_shots,8,ideal PNR,3,3,0.16079257805163016,0.10707456640093177,0.9733333333333333,560000,0.1,13.0
+fig7_m8_pergradient,control (Phase 1 plan),locally executed,spsa_equal_shots,8,ideal PNR,3,3,0.15067757659379238,0.10430445403932878,0.94,560000,0.1,13.0
+fig9_substitute_pergradient,control (Phase 1 plan),locally executed,gpsr_exact,16,ideal PNR,3,3,31.511711624829037,4.1033304856176445,0.8962962962962964,30000,0.03,91.0
+fig9_substitute_pergradient,reproduced method,locally executed,gpsr_shots,16,ideal PNR,3,3,29.249821152545653,6.890072358709574,0.6555555555555556,30000,0.03,91.0
+fig9_substitute_pergradient,control (Phase 1 plan),locally executed,spsa_equal_shots,16,ideal PNR,3,3,1.5200336649068997,2.629498623139243,0.5962962962962962,30000,0.03,91.0
+merlin_ideal,control (Phase 1 plan),locally executed,gpsr_exact,6,ideal,3,3,0.7826734352824589,0.868462732494141,1.0,1800000,0.1,1.0
+merlin_ideal,reproduced method,locally executed,gpsr_shots,6,ideal,3,3,0.781821311764558,0.8686070078683918,1.0,1800000,0.1,1.0
+merlin_indist0.9,control (Phase 1 plan),locally executed,gpsr_exact,6,indistinguishability_0.9,3,3,0.7171018326158433,0.7821820084221489,1.0,1800000,0.1,2.0
+merlin_indist0.9,reproduced method,locally executed,gpsr_shots,6,indistinguishability_0.9,3,3,0.7151711425342769,0.7796165726717413,1.0,1800000,0.1,2.0
+merlin_threshold,control (Phase 1 plan),locally executed,gpsr_exact,6,threshold_detection,3,3,0.027257725745612246,0.034130870130448014,1.0,1800000,0.1,1.0
+merlin_threshold,reproduced method,locally executed,gpsr_shots,6,threshold_detection,3,3,0.027094439204484896,0.03391812129627697,1.0,1800000,0.1,1.0
+merlin_loss0.7,control (Phase 1 plan),locally executed,gpsr_exact,6,loss_0.7_unpostselected,3,3,0.286996433963354,0.3434821769393705,1.0,1800000,0.1,1.0
+merlin_loss0.7,reproduced method,locally executed,gpsr_shots,6,loss_0.7_unpostselected,3,3,0.28660046556634694,0.34318171875629266,1.0,1800000,0.1,1.0
