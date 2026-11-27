@@ -96,11 +96,6 @@ papers/QNN_STOCK/
 `-- models/     empty (.gitkeep)
 ```
 
-The working log, workflow feedback, Confluence draft and MerLin team notes
-(`LOG.md`, `FEEDBACK.md`, `CONFLUENCE.md`,
-`ACTION_REQUIRED_SEND_TO_MERLIN_TEAM.md`) are kept locally and are not
-committed, following the repository `.gitignore`.
-
 ## Install and How to Run
 
 ```bash
@@ -316,7 +311,7 @@ direction.
 
 ## Photonic Assessment and MerLin Extension
 
-Status `PARTIAL_MERLIN_TRANSLATION`: an adaptation of the prediction task of
+An adaptation of the prediction task of
 C1 only, simulated. The QBGU input (a superposition with data-defined
 amplitudes), the gate circuit and the SWAP test have no passive
 linear-optics counterpart, so they are not translated.
