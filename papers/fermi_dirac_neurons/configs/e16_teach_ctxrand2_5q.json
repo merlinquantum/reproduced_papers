@@ -1,0 +1,175 @@
+{
+  "description": "E16b: Fig. 7a protocol with teacher term set ctxrand2 (tanh target, zeta ~ U[-2, 2]), all 9 term sets as students, 5 qubits",
+  "experiment": {
+    "task": "train",
+    "id": "e16_teach_ctxrand2_5q"
+  },
+  "data": {
+    "n_qubits": 5,
+    "train_states": {
+      "set": "code_squared_loss"
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "regression",
+    "target": {
+      "term_set": "explicit",
+      "include_identity": false,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "tanh",
+      "term_labels": [
+        "IXIIZ",
+        "XIIIX",
+        "IIYYI",
+        "IYYII",
+        "IIIZZ",
+        "YYIII",
+        "IYIYI",
+        "IIIIZ",
+        "YIXII"
+      ]
+    }
+  },
+  "models": [
+    {
+      "name": "student_ising",
+      "kind": "hamiltonian",
+      "term_set": "ising",
+      "include_identity": false,
+      "activation": "tanh"
+    },
+    {
+      "name": "student_ising_x0",
+      "kind": "hamiltonian",
+      "term_set": "ising_x0",
+      "include_identity": false,
+      "activation": "tanh"
+    },
+    {
+      "name": "student_tfim",
+      "kind": "hamiltonian",
+      "term_set": "tfim",
+      "include_identity": false,
+      "activation": "tanh"
+    },
+    {
+      "name": "student_ncrand0",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "IIIIZ",
+        "ZIIIY",
+        "IIIYX",
+        "IZYII",
+        "IYZII",
+        "IIIYI",
+        "ZIIYI",
+        "IXXII",
+        "ZIIII"
+      ]
+    },
+    {
+      "name": "student_ctxrand0",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "ZXIII",
+        "IYIZI",
+        "IZYII",
+        "XIIII",
+        "YXIII",
+        "IIIXY",
+        "IIYXI",
+        "IIIYI",
+        "IIXIZ"
+      ]
+    },
+    {
+      "name": "student_ncrand1",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "YIIII",
+        "ZZIII",
+        "IIXIY",
+        "IIIIY",
+        "IIXYI",
+        "IZXII",
+        "IZIYI",
+        "IIXII",
+        "IIIYI"
+      ]
+    },
+    {
+      "name": "student_ctxrand1",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "IIZXI",
+        "XZIII",
+        "IYIXI",
+        "ZIIII",
+        "IIIIX",
+        "YIIIY",
+        "IZIIX",
+        "IIYZI",
+        "XIIII"
+      ]
+    },
+    {
+      "name": "student_ncrand2",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "IIIZZ",
+        "IIZIX",
+        "IIYIX",
+        "YXIII",
+        "IIIZI",
+        "IXIZI",
+        "IXIII",
+        "IIXIZ",
+        "YIIII"
+      ]
+    },
+    {
+      "name": "student_ctxrand2",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "IXIIZ",
+        "XIIIX",
+        "IIYYI",
+        "IYYII",
+        "IIIZZ",
+        "YYIII",
+        "IYIYI",
+        "IIIIZ",
+        "YIXII"
+      ]
+    }
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 0.1,
+    "epochs": 2000,
+    "eval_every": 100,
+    "init_low": -0.5,
+    "init_high": 0.5
+  }
+}

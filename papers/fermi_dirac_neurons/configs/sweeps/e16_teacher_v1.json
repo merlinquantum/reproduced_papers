@@ -1,0 +1,47 @@
+{
+  "sweep_id": "e16_teacher_v1",
+  "description": "E16b: cross-class teacher-student learning, Fig. 7a protocol, 9 teachers x 9 students, n = 3, 5, 7.",
+  "configs": [
+    "e16_teach_ctxrand0_3q",
+    "e16_teach_ctxrand0_5q",
+    "e16_teach_ctxrand0_7q",
+    "e16_teach_ctxrand1_3q",
+    "e16_teach_ctxrand1_5q",
+    "e16_teach_ctxrand1_7q",
+    "e16_teach_ctxrand2_3q",
+    "e16_teach_ctxrand2_5q",
+    "e16_teach_ctxrand2_7q",
+    "e16_teach_ising_3q",
+    "e16_teach_ising_5q",
+    "e16_teach_ising_7q",
+    "e16_teach_ising_x0_3q",
+    "e16_teach_ising_x0_5q",
+    "e16_teach_ising_x0_7q",
+    "e16_teach_ncrand0_3q",
+    "e16_teach_ncrand0_5q",
+    "e16_teach_ncrand0_7q",
+    "e16_teach_ncrand1_3q",
+    "e16_teach_ncrand1_5q",
+    "e16_teach_ncrand1_7q",
+    "e16_teach_ncrand2_3q",
+    "e16_teach_ncrand2_5q",
+    "e16_teach_ncrand2_7q",
+    "e16_teach_tfim_3q",
+    "e16_teach_tfim_5q",
+    "e16_teach_tfim_7q"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "max_workers": 3,
+  "plan": {
+    "decision_rule": "see LOG.md 'Pre-declared design: E16' (contextual-minus-noncontextual student advantage per teacher class, sign counts over 4 teachers x 5 seeds)",
+    "selection": "none",
+    "expected_runs": 135,
+    "memory_budget_gib": 4
+  }
+}

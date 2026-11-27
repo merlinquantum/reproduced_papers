@@ -1,0 +1,69 @@
+{
+  "description": "Phase 5 stage B: fig9_heis_3q, each model at its selected learning rate (b2_pauli_features 0.03, classical_fcim 0.01, quantum_heis_linear 1, quantum_heis_tanh 10)",
+  "experiment": {
+    "task": "train",
+    "id": "p5_final_fig9_heis_3q"
+  },
+  "data": {
+    "n_qubits": 3,
+    "train_states": {
+      "set": "code_squared_loss"
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "regression",
+    "target": {
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "tanh"
+    },
+    "selection_fraction": 0.2
+  },
+  "models": [
+    {
+      "name": "quantum_heis_tanh",
+      "kind": "hamiltonian",
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "activation": "tanh",
+      "learning_rate": 10.0
+    },
+    {
+      "name": "quantum_heis_linear",
+      "kind": "hamiltonian",
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "activation": "linear",
+      "learning_rate": 1.0
+    },
+    {
+      "name": "classical_fcim",
+      "kind": "hamiltonian",
+      "term_set": "fcim",
+      "include_identity": false,
+      "activation": "tanh",
+      "learning_rate": 0.01
+    },
+    {
+      "name": "b2_pauli_features",
+      "kind": "pauli_features",
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "activation": "tanh",
+      "learning_rate": 0.03
+    }
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 1,
+    "epochs": 10000,
+    "eval_every": 1000,
+    "init_low": -0.5,
+    "init_high": 0.5,
+    "on_nonfinite": "freeze"
+  }
+}

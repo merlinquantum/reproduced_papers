@@ -1,0 +1,59 @@
+{
+  "description": "E0a-E0d: classical reduction, Theorems 1, 2, 5, 6, 8, 13, Corollary 1, convolution identities, Monte Carlo of Algorithms 1, 2, 4, 5, 7",
+  "experiment": {
+    "task": "theory_checks",
+    "id": "e0_theory_checks"
+  },
+  "checks": {
+    "activations": [
+      "tanh",
+      "softplus",
+      "silu"
+    ],
+    "classical_reduction_qubits": [
+      2,
+      3,
+      4
+    ],
+    "problems": [
+      {
+        "n_qubits": 2,
+        "term_set": "tfim",
+        "include_identity": true
+      },
+      {
+        "n_qubits": 2,
+        "term_set": "heisenberg",
+        "include_identity": false
+      },
+      {
+        "n_qubits": 3,
+        "term_set": "tfim",
+        "include_identity": true
+      }
+    ],
+    "convolution": {
+      "t1": 0.7,
+      "t2": 1.3,
+      "points": [
+        -4.0,
+        -2.0,
+        -0.5,
+        0.0,
+        0.5,
+        2.0,
+        4.0
+      ]
+    },
+    "monte_carlo": {
+      "n_qubits": 2,
+      "term_set": "tfim",
+      "single_shot_shots": 200000,
+      "shot_counts": [
+        100,
+        1000,
+        10000
+      ]
+    }
+  }
+}

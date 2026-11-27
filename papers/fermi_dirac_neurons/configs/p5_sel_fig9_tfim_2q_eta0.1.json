@@ -1,0 +1,65 @@
+{
+  "description": "Phase 5 stage A: fig9_tfim_2q (original protocol) with B1, B2, B3 at learning rate 0.1, 20 % of the training states held out for selection",
+  "experiment": {
+    "task": "train",
+    "id": "p5_sel_fig9_tfim_2q_eta0.1"
+  },
+  "data": {
+    "n_qubits": 2,
+    "train_states": {
+      "set": "code_squared_loss"
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "regression",
+    "target": {
+      "term_set": "tfim",
+      "include_identity": true,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "tanh"
+    },
+    "selection_fraction": 0.2
+  },
+  "models": [
+    {
+      "name": "quantum_tfim_tanh",
+      "kind": "hamiltonian",
+      "term_set": "tfim",
+      "include_identity": true,
+      "activation": "tanh"
+    },
+    {
+      "name": "quantum_tfim_linear",
+      "kind": "hamiltonian",
+      "term_set": "tfim",
+      "include_identity": true,
+      "activation": "linear"
+    },
+    {
+      "name": "classical_ising",
+      "kind": "hamiltonian",
+      "term_set": "ising",
+      "include_identity": true,
+      "activation": "tanh"
+    },
+    {
+      "name": "b2_pauli_features",
+      "kind": "pauli_features",
+      "term_set": "tfim",
+      "include_identity": true,
+      "activation": "tanh"
+    }
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 0.1,
+    "epochs": 10000,
+    "eval_every": 1000,
+    "init_low": -0.5,
+    "init_high": 0.5,
+    "on_nonfinite": "freeze"
+  }
+}

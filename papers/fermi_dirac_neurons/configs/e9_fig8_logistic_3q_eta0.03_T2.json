@@ -1,0 +1,53 @@
+{
+  "description": "E9a: fig8_logistic_3q original protocol with learning rate 0.03 and temperature 2",
+  "experiment": {
+    "task": "train",
+    "id": "e9_fig8_logistic_3q_eta0.03_T2"
+  },
+  "data": {
+    "n_qubits": 3,
+    "train_states": {
+      "set": "haar",
+      "n_states": 1000
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "sign_linear",
+    "target": {
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "linear"
+    }
+  },
+  "models": [
+    {
+      "name": "quantum_heisenberg",
+      "kind": "hamiltonian",
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "activation": "tanh"
+    },
+    {
+      "name": "classical_fcim",
+      "kind": "hamiltonian",
+      "term_set": "fcim",
+      "include_identity": false,
+      "activation": "tanh"
+    }
+  ],
+  "training": {
+    "loss": "logistic",
+    "learning_rate": 0.03,
+    "epochs": 500,
+    "eval_every": 20,
+    "init_low": -0.5,
+    "init_high": 0.5
+  },
+  "physics": {
+    "temperature": 2.0
+  }
+}

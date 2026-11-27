@@ -1,0 +1,39 @@
+{
+  "sweep_id": "p4_trainability_v1",
+  "description": "Phase 4 E13: MerLin gradient variance of the photonic neuron and the photon-count neuron vs Fock dimension.",
+  "configs": [
+    "p4_grad_m10_n2",
+    "p4_grad_m10_n3",
+    "p4_grad_m10_n5",
+    "p4_grad_m12_n2",
+    "p4_grad_m12_n3",
+    "p4_grad_m14_n2",
+    "p4_grad_m14_n3",
+    "p4_grad_m16_n2",
+    "p4_grad_m16_n3",
+    "p4_grad_m18_n2",
+    "p4_grad_m18_n3",
+    "p4_grad_m20_n2",
+    "p4_grad_m20_n3",
+    "p4_grad_m2_n2",
+    "p4_grad_m3_n2",
+    "p4_grad_m3_n3",
+    "p4_grad_m4_n2",
+    "p4_grad_m4_n3",
+    "p4_grad_m6_n2",
+    "p4_grad_m6_n3",
+    "p4_grad_m8_n2",
+    "p4_grad_m8_n3",
+    "p4_grad_m8_n4"
+  ],
+  "seeds": [
+    0
+  ],
+  "max_workers": 2,
+  "plan": {
+    "decision_rule": "see LOG.md 'Phase 4 Adaptation Plan' (slope of log10 Var vs log10 d; X2(a), X2(b) rules)",
+    "selection": "none",
+    "expected_runs": 23,
+    "memory_budget_gib": 2.5
+  }
+}

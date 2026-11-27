@@ -1,0 +1,39 @@
+{
+  "sweep_id": "p5_reference_v1",
+  "description": "Phase 5 B4 reference: ridge / logistic regression on Pauli expectations, 14 tasks, seeds 0-9.",
+  "configs": [
+    "p5_ref_fig7_softplus_2q",
+    "p5_ref_fig7_softplus_7q",
+    "p5_ref_fig7_tanh_2q",
+    "p5_ref_fig7_tanh_7q",
+    "p5_ref_fig8_logistic_2q",
+    "p5_ref_fig8_logistic_3q",
+    "p5_ref_fig8_logistic_4q",
+    "p5_ref_fig8_logistic_5q",
+    "p5_ref_fig8_logistic_6q",
+    "p5_ref_fig8_logistic_7q",
+    "p5_ref_fig9_heis_2q",
+    "p5_ref_fig9_heis_3q",
+    "p5_ref_fig9_tfim_2q",
+    "p5_ref_fig9_tfim_3q"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "max_workers": 1,
+  "plan": {
+    "decision_rule": "see LOG.md 'Phase 5 Comparison Plan \u2014 2026-11-10T13:44:36Z'",
+    "selection": "none",
+    "expected_runs": 140,
+    "memory_budget_gib": 1.2
+  }
+}

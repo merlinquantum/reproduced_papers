@@ -1,0 +1,27 @@
+{
+  "sweep_id": "e15_learning_v1",
+  "description": "E15 part 1: Fig. 7 and Fig. 8 tasks at n = 3, 5, 7 with commuting, noncontextual and contextual term sets of equal size J = 2n - 1.",
+  "configs": [
+    "e15_learn_fig7_3q",
+    "e15_learn_fig7_5q",
+    "e15_learn_fig7_7q",
+    "e15_learn_fig8_3q",
+    "e15_learn_fig8_5q",
+    "e15_learn_fig8_7q"
+  ],
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "max_workers": 3,
+  "plan": {
+    "metrics": "final training loss and validation metric per term set",
+    "comparison_rule": "paired by seed, contextual minus noncontextual term sets, medians and seed counts only (5 pairs: no significance test)",
+    "selection": "none",
+    "expected_runs": 30,
+    "memory_budget_gib": 4
+  }
+}

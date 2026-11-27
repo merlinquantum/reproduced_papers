@@ -1,0 +1,35 @@
+{
+  "description": "E12b (extension X3, amended): epsilon-support size, Kirby-Love flag and greedy contextual fraction of tanh(H/T) vs T, tfim, n = 2..5",
+  "experiment": {
+    "task": "contextuality_scan",
+    "id": "e12_graded_tfim"
+  },
+  "contextuality": {
+    "temperatures": {
+      "low": 0.03,
+      "high": 100.0,
+      "count": 25
+    },
+    "invariance": null,
+    "graded": {
+      "families": [
+        "tfim"
+      ],
+      "n_qubits": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "draws": 20,
+      "theta_range": 2.0,
+      "epsilons": [
+        0.01,
+        0.001,
+        0.0001
+      ],
+      "activation": "tanh",
+      "graded_max_support": 300
+    }
+  }
+}

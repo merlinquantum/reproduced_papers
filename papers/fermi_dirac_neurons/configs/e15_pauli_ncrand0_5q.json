@@ -1,0 +1,33 @@
+{
+  "description": "E15 part 3: Pauli strings needed for tanh(H/T), term set ncrand0, 5 qubits, T = 2",
+  "experiment": {
+    "task": "pauli_compressibility",
+    "id": "e15_pauli_ncrand0_5q"
+  },
+  "pauli_compressibility": {
+    "term_set": "explicit",
+    "n_qubits": 5,
+    "temperature": 2.0,
+    "activation": "tanh",
+    "theta_ranges": [
+      0.5,
+      2.0
+    ],
+    "draws": 20,
+    "epsilons": [
+      0.01,
+      0.001
+    ],
+    "term_labels": [
+      "IIIIZ",
+      "ZIIIY",
+      "IIIYX",
+      "IZYII",
+      "IYZII",
+      "IIIYI",
+      "ZIIYI",
+      "IXXII",
+      "ZIIII"
+    ]
+  }
+}

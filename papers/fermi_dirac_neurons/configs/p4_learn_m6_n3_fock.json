@@ -1,0 +1,66 @@
+{
+  "description": "Phase 4 MerLin adaptation (P4-L): photonic Fermi-Dirac neuron vs baselines, N=3 photons in m=6 modes, fock training states, Fig. 7a protocol (squared loss, T = 2, eta = 0.1)",
+  "experiment": {
+    "task": "photonic_train",
+    "id": "p4_learn_m6_n3_fock"
+  },
+  "physics": {
+    "temperature": 2.0
+  },
+  "photonic": {
+    "n_modes": 6,
+    "n_photons": 3,
+    "target_range": 2.0,
+    "train_states": {
+      "set": "fock",
+      "n_states": null
+    },
+    "validation_states": {
+      "set": "haar_interferometer",
+      "n_states": 500
+    },
+    "evaluation": {
+      "readouts": [
+        "pnr",
+        "threshold",
+        "unbunched"
+      ],
+      "shots": [
+        100,
+        1000
+      ]
+    }
+  },
+  "models": [
+    {
+      "name": "photonic_tanh",
+      "kind": "merlin_passive",
+      "activation": "tanh"
+    },
+    {
+      "name": "photonic_linear",
+      "kind": "merlin_passive",
+      "activation": "linear"
+    },
+    {
+      "name": "photon_count_tanh",
+      "kind": "photon_count"
+    },
+    {
+      "name": "correlation_tanh",
+      "kind": "correlation"
+    }
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 0.1,
+    "epochs": 2000,
+    "eval_every": 100,
+    "init_low": -0.5,
+    "init_high": 0.5,
+    "phase_init": [
+      0.0,
+      6.283185307179586
+    ]
+  }
+}

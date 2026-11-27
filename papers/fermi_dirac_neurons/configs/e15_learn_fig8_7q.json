@@ -1,0 +1,189 @@
+{
+  "description": "E15 part 1: fig8 task, 7 qubits, term sets with J = 13 (commuting, noncontextual, contextual, random noncontextual and contextual)",
+  "experiment": {
+    "task": "train",
+    "id": "e15_learn_fig8_7q"
+  },
+  "data": {
+    "n_qubits": 7,
+    "train_states": {
+      "set": "haar",
+      "n_states": 1000
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "sign_linear",
+    "target": {
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "linear"
+    }
+  },
+  "models": [
+    {
+      "name": "model_ising",
+      "kind": "hamiltonian",
+      "term_set": "ising",
+      "include_identity": false,
+      "activation": "tanh"
+    },
+    {
+      "name": "model_ising_x0",
+      "kind": "hamiltonian",
+      "term_set": "ising_x0",
+      "include_identity": false,
+      "activation": "tanh"
+    },
+    {
+      "name": "model_tfim",
+      "kind": "hamiltonian",
+      "term_set": "tfim",
+      "include_identity": false,
+      "activation": "tanh"
+    },
+    {
+      "name": "model_ncrand0",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "IXIIIZI",
+        "IIIIZYI",
+        "IIIIIIY",
+        "YIIYIII",
+        "IIYIIIY",
+        "IIIYIIY",
+        "YIIIIIY",
+        "IIYIZII",
+        "IXIYIII",
+        "IIIIZIY",
+        "IIIYZII",
+        "IXIIIII",
+        "IXIIZII"
+      ]
+    },
+    {
+      "name": "model_ctxrand0",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "IZIIIII",
+        "IIYIYII",
+        "IIXIZII",
+        "IIIZIIY",
+        "IIIIXIX",
+        "XIZIIII",
+        "ZIIIIYI",
+        "IIXIIXI",
+        "XIIIZII",
+        "IIIZIIX",
+        "IIZZIII",
+        "YIIIXII",
+        "IXIIIIX"
+      ]
+    },
+    {
+      "name": "model_ncrand1",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "ZIIIZII",
+        "YIIIIIZ",
+        "XIIIZII",
+        "IZIXIII",
+        "IZIIIIZ",
+        "IIIXIZI",
+        "IIIXIII",
+        "IIXIIIZ",
+        "IIIIIZZ",
+        "IIXIIII",
+        "IIIIIIZ",
+        "YIIIXII",
+        "IZIIIZI"
+      ]
+    },
+    {
+      "name": "model_ctxrand1",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "IYYIIII",
+        "IIIIZIX",
+        "IIIYXII",
+        "IIIIIIX",
+        "IZIIIZI",
+        "IIIZIXI",
+        "XIIIIXI",
+        "IZIZIII",
+        "YIIIIIX",
+        "IIIIZIZ",
+        "IIIYIYI",
+        "IIYIYII",
+        "IIYIIXI"
+      ]
+    },
+    {
+      "name": "model_ncrand2",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "XIIZIII",
+        "XIIYIII",
+        "IIIXIIZ",
+        "IIYIIZI",
+        "IYYIIII",
+        "IIYIZII",
+        "IIIIIZI",
+        "XIYIIII",
+        "XYIIIII",
+        "IYIIIIZ",
+        "XIIIIII",
+        "IIIIZZI",
+        "IIYIIIZ"
+      ]
+    },
+    {
+      "name": "model_ctxrand2",
+      "kind": "hamiltonian",
+      "term_set": "explicit",
+      "include_identity": false,
+      "activation": "tanh",
+      "term_labels": [
+        "IYIIIXI",
+        "IIIYXII",
+        "XIZIIII",
+        "IIZZIII",
+        "IIYIYII",
+        "YIIIXII",
+        "IIIZIYI",
+        "IIIIIYY",
+        "YIIIIIY",
+        "IIXIZII",
+        "IIIIIIZ",
+        "ZIIIIXI",
+        "IIIXZII"
+      ]
+    }
+  ],
+  "training": {
+    "loss": "logistic",
+    "learning_rate": 0.05,
+    "epochs": 500,
+    "eval_every": 20,
+    "init_low": -0.5,
+    "init_high": 0.5
+  }
+}

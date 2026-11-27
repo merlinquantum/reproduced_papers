@@ -1,0 +1,53 @@
+{
+  "description": "Fermi-Dirac machines as quantizations of neurons (arXiv:2605.24386) reproduction runner",
+  "arguments": [
+    {
+      "flags": [
+        "--task"
+      ],
+      "help": "Experiment task to run (see lib/runner.py for the supported tasks)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.task"
+      }
+    },
+    {
+      "flags": [
+        "--sweep-id"
+      ],
+      "help": "Sweep identifier recorded in run_status.json (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.sweep_id"
+      }
+    },
+    {
+      "flags": [
+        "--run-id"
+      ],
+      "help": "Planned-run identifier recorded in run.log and run_status.json (set by utils/run_sweep.py)",
+      "type": "str",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.run_id"
+      }
+    },
+    {
+      "flags": [
+        "--repetition"
+      ],
+      "help": "Repetition index of this run within its sweep candidate (set by utils/run_sweep.py)",
+      "type": "int",
+      "default": null,
+      "apply": {
+        "kind": "config_path",
+        "path": "experiment.repetition"
+      }
+    }
+  ]
+}

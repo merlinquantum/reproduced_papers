@@ -1,0 +1,28 @@
+{
+  "description": "Phase 4 E13-K (X2c, NOT MerLin): dense Fock-space gradient variance, passive H + cross-Kerr chain, N=3 photons in m=8 modes",
+  "experiment": {
+    "task": "kerr_gradient_variance",
+    "id": "p4_kerr_m8_n3"
+  },
+  "kerr_gradient_variance": {
+    "n_modes": 8,
+    "n_photons": 3,
+    "draws": 200,
+    "init_range": 0.5,
+    "kerr": [
+      0.0,
+      0.5,
+      2.0
+    ],
+    "temperature": 2.0,
+    "inputs": [
+      "fock_first",
+      "haar_interferometer",
+      "haar_full"
+    ],
+    "parameters": [
+      "n0",
+      "X0,1"
+    ]
+  }
+}

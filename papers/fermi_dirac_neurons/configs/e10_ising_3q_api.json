@@ -1,0 +1,41 @@
+{
+  "description": "E10 (extension X1): gradient variance, ising, 3 qubits, theta ~ U[-a, a] with a = 3.14159",
+  "experiment": {
+    "task": "gradient_variance",
+    "id": "e10_ising_3q_api"
+  },
+  "gradient_variance": {
+    "term_set": "ising",
+    "include_identity": false,
+    "n_qubits": 3,
+    "init_range": 3.141592653589793,
+    "temperatures": {
+      "fixed": [
+        0.25,
+        0.5,
+        1.0,
+        2.0,
+        4.0
+      ],
+      "sqrt_n_factors": [
+        0.5,
+        1.0
+      ]
+    },
+    "inputs": [
+      "zero",
+      "product",
+      "ghz",
+      "haar",
+      "ginibre"
+    ],
+    "parameter_positions": [
+      "first",
+      "middle",
+      "last"
+    ],
+    "draws": 200,
+    "target_range": 2.0,
+    "data_variance_check": null
+  }
+}

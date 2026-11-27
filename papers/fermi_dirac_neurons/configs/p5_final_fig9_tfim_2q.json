@@ -1,0 +1,69 @@
+{
+  "description": "Phase 5 stage B: fig9_tfim_2q, each model at its selected learning rate (b2_pauli_features 3, classical_ising 0.01, quantum_tfim_linear 0.3, quantum_tfim_tanh 3)",
+  "experiment": {
+    "task": "train",
+    "id": "p5_final_fig9_tfim_2q"
+  },
+  "data": {
+    "n_qubits": 2,
+    "train_states": {
+      "set": "code_squared_loss"
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "regression",
+    "target": {
+      "term_set": "tfim",
+      "include_identity": true,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "tanh"
+    },
+    "selection_fraction": 0.2
+  },
+  "models": [
+    {
+      "name": "quantum_tfim_tanh",
+      "kind": "hamiltonian",
+      "term_set": "tfim",
+      "include_identity": true,
+      "activation": "tanh",
+      "learning_rate": 3.0
+    },
+    {
+      "name": "quantum_tfim_linear",
+      "kind": "hamiltonian",
+      "term_set": "tfim",
+      "include_identity": true,
+      "activation": "linear",
+      "learning_rate": 0.3
+    },
+    {
+      "name": "classical_ising",
+      "kind": "hamiltonian",
+      "term_set": "ising",
+      "include_identity": true,
+      "activation": "tanh",
+      "learning_rate": 0.01
+    },
+    {
+      "name": "b2_pauli_features",
+      "kind": "pauli_features",
+      "term_set": "tfim",
+      "include_identity": true,
+      "activation": "tanh",
+      "learning_rate": 3.0
+    }
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 1,
+    "epochs": 10000,
+    "eval_every": 1000,
+    "init_low": -0.5,
+    "init_high": 0.5,
+    "on_nonfinite": "freeze"
+  }
+}

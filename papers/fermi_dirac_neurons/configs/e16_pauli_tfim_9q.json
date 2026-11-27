@@ -1,0 +1,22 @@
+{
+  "description": "E16a: Pauli strings needed for tanh(H/T), term set tfim, 9 qubits, T = 2",
+  "experiment": {
+    "task": "pauli_compressibility",
+    "id": "e16_pauli_tfim_9q"
+  },
+  "pauli_compressibility": {
+    "term_set": "tfim",
+    "n_qubits": 9,
+    "temperature": 2.0,
+    "activation": "tanh",
+    "theta_ranges": [
+      0.5,
+      2.0
+    ],
+    "draws": 20,
+    "epsilons": [
+      0.01,
+      0.001
+    ]
+  }
+}

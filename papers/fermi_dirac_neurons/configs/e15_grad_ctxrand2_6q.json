@@ -1,0 +1,45 @@
+{
+  "description": "E15 part 2: gradient variance, term set ctxrand2, 6 qubits, T = 2",
+  "experiment": {
+    "task": "gradient_variance",
+    "id": "e15_grad_ctxrand2_6q"
+  },
+  "gradient_variance": {
+    "term_set": "explicit",
+    "include_identity": false,
+    "n_qubits": 6,
+    "init_range": 0.5,
+    "temperatures": {
+      "fixed": [
+        2.0
+      ],
+      "sqrt_n_factors": []
+    },
+    "inputs": [
+      "zero",
+      "product",
+      "haar"
+    ],
+    "parameter_positions": [
+      "first",
+      "middle",
+      "last"
+    ],
+    "draws": 200,
+    "target_range": 2.0,
+    "data_variance_check": null,
+    "term_labels": [
+      "IYIIYI",
+      "IIZIYI",
+      "IIZZII",
+      "IIXIZI",
+      "IIIZIX",
+      "XIIIXI",
+      "IXIIYI",
+      "YIYIII",
+      "ZYIIII",
+      "IYIZII",
+      "IIIIYX"
+    ]
+  }
+}

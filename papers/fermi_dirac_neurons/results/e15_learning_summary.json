@@ -1,0 +1,1310 @@
+{
+  "sweep_dir": "papers/fermi_dirac_neurons/outdir/sweeps/e15_learning_v1",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "per_term_set": [
+    {
+      "task": "fig7_3q",
+      "term_set": "ctxrand0",
+      "metric": "train_loss",
+      "median": 0.20869086821046728,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ctxrand1",
+      "metric": "train_loss",
+      "median": 0.15592816409361696,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ctxrand2",
+      "metric": "train_loss",
+      "median": 0.1450795753420853,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ising",
+      "metric": "train_loss",
+      "median": 0.15052137603410082,
+      "kirby_love_noncontextual": true,
+      "commuting": true
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ising_x0",
+      "metric": "train_loss",
+      "median": 0.11345688524198298,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ncrand0",
+      "metric": "train_loss",
+      "median": 0.22724510006760407,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ncrand1",
+      "metric": "train_loss",
+      "median": 0.10349482922024159,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ncrand2",
+      "metric": "train_loss",
+      "median": 0.20320017902423354,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "tfim",
+      "metric": "train_loss",
+      "median": 0.006485791104504089,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ctxrand0",
+      "metric": "validation_mse",
+      "median": 0.09243849597220898,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ctxrand1",
+      "metric": "validation_mse",
+      "median": 0.0695787195779172,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ctxrand2",
+      "metric": "validation_mse",
+      "median": 0.07380793955505374,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ising",
+      "metric": "validation_mse",
+      "median": 0.044755928549046455,
+      "kirby_love_noncontextual": true,
+      "commuting": true
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ising_x0",
+      "metric": "validation_mse",
+      "median": 0.037809938705648735,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ncrand0",
+      "metric": "validation_mse",
+      "median": 0.07704013961082869,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ncrand1",
+      "metric": "validation_mse",
+      "median": 0.03975426223261862,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "ncrand2",
+      "metric": "validation_mse",
+      "median": 0.06679070141497306,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_3q",
+      "term_set": "tfim",
+      "metric": "validation_mse",
+      "median": 0.0056061862133610285,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ctxrand0",
+      "metric": "train_loss",
+      "median": 0.29392761412427537,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ctxrand1",
+      "metric": "train_loss",
+      "median": 0.26905492202377046,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ctxrand2",
+      "metric": "train_loss",
+      "median": 0.22254420518933266,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ising",
+      "metric": "train_loss",
+      "median": 0.19203784625141138,
+      "kirby_love_noncontextual": true,
+      "commuting": true
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ising_x0",
+      "metric": "train_loss",
+      "median": 0.15569139307492677,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ncrand0",
+      "metric": "train_loss",
+      "median": 0.27530254597304094,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ncrand1",
+      "metric": "train_loss",
+      "median": 0.2149049545326652,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ncrand2",
+      "metric": "train_loss",
+      "median": 0.24741442065276661,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "tfim",
+      "metric": "train_loss",
+      "median": 0.10377668207960525,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ctxrand0",
+      "metric": "validation_mse",
+      "median": 0.10275370667894791,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ctxrand1",
+      "metric": "validation_mse",
+      "median": 0.10764931848880922,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ctxrand2",
+      "metric": "validation_mse",
+      "median": 0.031198047025893592,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ising",
+      "metric": "validation_mse",
+      "median": 0.09879667402536557,
+      "kirby_love_noncontextual": true,
+      "commuting": true
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ising_x0",
+      "metric": "validation_mse",
+      "median": 0.09586173383424872,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ncrand0",
+      "metric": "validation_mse",
+      "median": 0.04251864282746267,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ncrand1",
+      "metric": "validation_mse",
+      "median": 0.028900589407166926,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "ncrand2",
+      "metric": "validation_mse",
+      "median": 0.036083520787343205,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_5q",
+      "term_set": "tfim",
+      "metric": "validation_mse",
+      "median": 0.09447739362451597,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ctxrand0",
+      "metric": "train_loss",
+      "median": 0.22982758733049127,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ctxrand1",
+      "metric": "train_loss",
+      "median": 0.31189472461103884,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ctxrand2",
+      "metric": "train_loss",
+      "median": 0.2624330609035218,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ising",
+      "metric": "train_loss",
+      "median": 0.1641265827978356,
+      "kirby_love_noncontextual": true,
+      "commuting": true
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ising_x0",
+      "metric": "train_loss",
+      "median": 0.13885442370644008,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ncrand0",
+      "metric": "train_loss",
+      "median": 0.2667814267506225,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ncrand1",
+      "metric": "train_loss",
+      "median": 0.253756952623474,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ncrand2",
+      "metric": "train_loss",
+      "median": 0.24712131074298752,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "tfim",
+      "metric": "train_loss",
+      "median": 0.031750519954623246,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ctxrand0",
+      "metric": "validation_mse",
+      "median": 0.0354928575314581,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ctxrand1",
+      "metric": "validation_mse",
+      "median": 0.03373974530081108,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ctxrand2",
+      "metric": "validation_mse",
+      "median": 0.0344849700092563,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ising",
+      "metric": "validation_mse",
+      "median": 0.03202217577488423,
+      "kirby_love_noncontextual": true,
+      "commuting": true
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ising_x0",
+      "metric": "validation_mse",
+      "median": 0.03119098294532853,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ncrand0",
+      "metric": "validation_mse",
+      "median": 0.008772812394005555,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ncrand1",
+      "metric": "validation_mse",
+      "median": 0.03288382508186591,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "ncrand2",
+      "metric": "validation_mse",
+      "median": 0.01164876248279788,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig7_7q",
+      "term_set": "tfim",
+      "metric": "validation_mse",
+      "median": 0.027770482749465933,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ctxrand0",
+      "metric": "validation_accuracy_linear",
+      "median": 0.53,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ctxrand1",
+      "metric": "validation_accuracy_linear",
+      "median": 0.604,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ctxrand2",
+      "metric": "validation_accuracy_linear",
+      "median": 0.66,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ising",
+      "metric": "validation_accuracy_linear",
+      "median": 0.67,
+      "kirby_love_noncontextual": true,
+      "commuting": true
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ising_x0",
+      "metric": "validation_accuracy_linear",
+      "median": 0.688,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ncrand0",
+      "metric": "validation_accuracy_linear",
+      "median": 0.68,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ncrand1",
+      "metric": "validation_accuracy_linear",
+      "median": 0.682,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ncrand2",
+      "metric": "validation_accuracy_linear",
+      "median": 0.688,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "tfim",
+      "metric": "validation_accuracy_linear",
+      "median": 0.658,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ctxrand0",
+      "metric": "train_loss",
+      "median": 1.3850015471092028,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ctxrand1",
+      "metric": "train_loss",
+      "median": 1.3790719017950206,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ctxrand2",
+      "metric": "train_loss",
+      "median": 1.369001253028105,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ising",
+      "metric": "train_loss",
+      "median": 1.3697349841045035,
+      "kirby_love_noncontextual": true,
+      "commuting": true
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ising_x0",
+      "metric": "train_loss",
+      "median": 1.370453056948465,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ncrand0",
+      "metric": "train_loss",
+      "median": 1.364443832535054,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ncrand1",
+      "metric": "train_loss",
+      "median": 1.3666603605279741,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "ncrand2",
+      "metric": "train_loss",
+      "median": 1.3610597423353665,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_3q",
+      "term_set": "tfim",
+      "metric": "train_loss",
+      "median": 1.3691831802041232,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ctxrand0",
+      "metric": "validation_accuracy_linear",
+      "median": 0.576,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ctxrand1",
+      "metric": "validation_accuracy_linear",
+      "median": 0.596,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ctxrand2",
+      "metric": "validation_accuracy_linear",
+      "median": 0.612,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ising",
+      "metric": "validation_accuracy_linear",
+      "median": 0.696,
+      "kirby_love_noncontextual": true,
+      "commuting": true
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ising_x0",
+      "metric": "validation_accuracy_linear",
+      "median": 0.692,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ncrand0",
+      "metric": "validation_accuracy_linear",
+      "median": 0.606,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ncrand1",
+      "metric": "validation_accuracy_linear",
+      "median": 0.63,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ncrand2",
+      "metric": "validation_accuracy_linear",
+      "median": 0.602,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "tfim",
+      "metric": "validation_accuracy_linear",
+      "median": 0.704,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ctxrand0",
+      "metric": "train_loss",
+      "median": 1.3849486573136263,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ctxrand1",
+      "metric": "train_loss",
+      "median": 1.384021293446755,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ctxrand2",
+      "metric": "train_loss",
+      "median": 1.3841255821978276,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ising",
+      "metric": "train_loss",
+      "median": 1.3799331310683194,
+      "kirby_love_noncontextual": true,
+      "commuting": true
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ising_x0",
+      "metric": "train_loss",
+      "median": 1.3806842001653084,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ncrand0",
+      "metric": "train_loss",
+      "median": 1.3831631414452317,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ncrand1",
+      "metric": "train_loss",
+      "median": 1.3834956167672878,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "ncrand2",
+      "metric": "train_loss",
+      "median": 1.3836623465135802,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_5q",
+      "term_set": "tfim",
+      "metric": "train_loss",
+      "median": 1.380037116353681,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ctxrand0",
+      "metric": "validation_accuracy_linear",
+      "median": 0.53,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ctxrand1",
+      "metric": "validation_accuracy_linear",
+      "median": 0.574,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ctxrand2",
+      "metric": "validation_accuracy_linear",
+      "median": 0.578,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ising",
+      "metric": "validation_accuracy_linear",
+      "median": 0.646,
+      "kirby_love_noncontextual": true,
+      "commuting": true
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ising_x0",
+      "metric": "validation_accuracy_linear",
+      "median": 0.64,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ncrand0",
+      "metric": "validation_accuracy_linear",
+      "median": 0.538,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ncrand1",
+      "metric": "validation_accuracy_linear",
+      "median": 0.594,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ncrand2",
+      "metric": "validation_accuracy_linear",
+      "median": 0.594,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "tfim",
+      "metric": "validation_accuracy_linear",
+      "median": 0.668,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ctxrand0",
+      "metric": "train_loss",
+      "median": 1.3860957816146078,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ctxrand1",
+      "metric": "train_loss",
+      "median": 1.3860934550210078,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ctxrand2",
+      "metric": "train_loss",
+      "median": 1.385930999942588,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ising",
+      "metric": "train_loss",
+      "median": 1.3848738003118561,
+      "kirby_love_noncontextual": true,
+      "commuting": true
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ising_x0",
+      "metric": "train_loss",
+      "median": 1.3848606031053357,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ncrand0",
+      "metric": "train_loss",
+      "median": 1.3862423141040612,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ncrand1",
+      "metric": "train_loss",
+      "median": 1.385826463167502,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "ncrand2",
+      "metric": "train_loss",
+      "median": 1.3856383764659088,
+      "kirby_love_noncontextual": true,
+      "commuting": false
+    },
+    {
+      "task": "fig8_7q",
+      "term_set": "tfim",
+      "metric": "train_loss",
+      "median": 1.3847123275884698,
+      "kirby_love_noncontextual": false,
+      "commuting": false
+    }
+  ],
+  "contrasts": [
+    {
+      "task": "fig7_3q",
+      "metric": "train_loss",
+      "contrast": "tfim (contextual) vs ising_x0 (noncontextual)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 1.0006423151785138,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_3q",
+      "metric": "train_loss",
+      "contrast": "tfim (contextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 1.23461561582083,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_3q",
+      "metric": "train_loss",
+      "contrast": "ising_x0 (noncontextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.10612221134918631,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_3q",
+      "metric": "train_loss",
+      "contrast": "random contextual vs random noncontextual (means of 3 sets)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.0039880437995899465,
+      "seeds_favouring_first": 3,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_3q",
+      "metric": "validation_mse",
+      "contrast": "tfim (contextual) vs ising_x0 (noncontextual)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.5991864211848061,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_3q",
+      "metric": "validation_mse",
+      "contrast": "tfim (contextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.7823119757880272,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_3q",
+      "metric": "validation_mse",
+      "contrast": "ising_x0 (noncontextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.06261616621471022,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_3q",
+      "metric": "validation_mse",
+      "contrast": "random contextual vs random noncontextual (means of 3 sets)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": -0.032584285827941706,
+      "seeds_favouring_first": 1,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_5q",
+      "metric": "train_loss",
+      "contrast": "tfim (contextual) vs ising_x0 (noncontextual)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.19815322882080888,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_5q",
+      "metric": "train_loss",
+      "contrast": "tfim (contextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.30952900598684085,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_5q",
+      "metric": "train_loss",
+      "contrast": "ising_x0 (noncontextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.018718730166725983,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_5q",
+      "metric": "train_loss",
+      "contrast": "random contextual vs random noncontextual (means of 3 sets)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": -0.04127545494309737,
+      "seeds_favouring_first": 0,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_5q",
+      "metric": "validation_mse",
+      "contrast": "tfim (contextual) vs ising_x0 (noncontextual)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.01595598283308386,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_5q",
+      "metric": "validation_mse",
+      "contrast": "tfim (contextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.02423432300714079,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_5q",
+      "metric": "validation_mse",
+      "contrast": "ising_x0 (noncontextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.00827834017405693,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_5q",
+      "metric": "validation_mse",
+      "contrast": "random contextual vs random noncontextual (means of 3 sets)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": -0.18526037595303335,
+      "seeds_favouring_first": 0,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_7q",
+      "metric": "train_loss",
+      "contrast": "tfim (contextual) vs ising_x0 (noncontextual)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.6284960821475882,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_7q",
+      "metric": "train_loss",
+      "contrast": "tfim (contextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.6918211130889483,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_7q",
+      "metric": "train_loss",
+      "contrast": "ising_x0 (noncontextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.0633250309413601,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_7q",
+      "metric": "train_loss",
+      "contrast": "random contextual vs random noncontextual (means of 3 sets)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": -0.03521245277434748,
+      "seeds_favouring_first": 1,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_7q",
+      "metric": "validation_mse",
+      "contrast": "tfim (contextual) vs ising_x0 (noncontextual)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.050445631833342386,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_7q",
+      "metric": "validation_mse",
+      "contrast": "tfim (contextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.06186740771217902,
+      "seeds_favouring_first": 5,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_7q",
+      "metric": "validation_mse",
+      "contrast": "ising_x0 (noncontextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.0036241196996364966,
+      "seeds_favouring_first": 3,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig7_7q",
+      "metric": "validation_mse",
+      "contrast": "random contextual vs random noncontextual (means of 3 sets)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": -0.22272210300494355,
+      "seeds_favouring_first": 0,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_3q",
+      "metric": "validation_accuracy_linear",
+      "contrast": "tfim (contextual) vs ising_x0 (noncontextual)",
+      "unit": "accuracy points",
+      "median_advantage_of_first": -3.5999999999999943,
+      "seeds_favouring_first": 2,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_3q",
+      "metric": "validation_accuracy_linear",
+      "contrast": "tfim (contextual) vs ising (commuting)",
+      "unit": "accuracy points",
+      "median_advantage_of_first": -0.6000000000000085,
+      "seeds_favouring_first": 2,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_3q",
+      "metric": "validation_accuracy_linear",
+      "contrast": "ising_x0 (noncontextual) vs ising (commuting)",
+      "unit": "accuracy points",
+      "median_advantage_of_first": 0.4000000000000057,
+      "seeds_favouring_first": 3,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_3q",
+      "metric": "validation_accuracy_linear",
+      "contrast": "random contextual vs random noncontextual (means of 3 sets)",
+      "unit": "accuracy points",
+      "median_advantage_of_first": -6.79999999999999,
+      "seeds_favouring_first": 0,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_3q",
+      "metric": "train_loss",
+      "contrast": "tfim (contextual) vs ising_x0 (noncontextual)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": -0.001358814145430376,
+      "seeds_favouring_first": 2,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_3q",
+      "metric": "train_loss",
+      "contrast": "tfim (contextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": -5.399862571697778e-06,
+      "seeds_favouring_first": 2,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_3q",
+      "metric": "train_loss",
+      "contrast": "ising_x0 (noncontextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.0013534142828586782,
+      "seeds_favouring_first": 3,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_3q",
+      "metric": "train_loss",
+      "contrast": "random contextual vs random noncontextual (means of 3 sets)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": -0.0047076507490481645,
+      "seeds_favouring_first": 0,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_5q",
+      "metric": "validation_accuracy_linear",
+      "contrast": "tfim (contextual) vs ising_x0 (noncontextual)",
+      "unit": "accuracy points",
+      "median_advantage_of_first": 1.2000000000000028,
+      "seeds_favouring_first": 3,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_5q",
+      "metric": "validation_accuracy_linear",
+      "contrast": "tfim (contextual) vs ising (commuting)",
+      "unit": "accuracy points",
+      "median_advantage_of_first": 2.999999999999986,
+      "seeds_favouring_first": 3,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_5q",
+      "metric": "validation_accuracy_linear",
+      "contrast": "ising_x0 (noncontextual) vs ising (commuting)",
+      "unit": "accuracy points",
+      "median_advantage_of_first": 1.6000000000000085,
+      "seeds_favouring_first": 4,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_5q",
+      "metric": "validation_accuracy_linear",
+      "contrast": "random contextual vs random noncontextual (means of 3 sets)",
+      "unit": "accuracy points",
+      "median_advantage_of_first": -0.5333333333333456,
+      "seeds_favouring_first": 2,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_5q",
+      "metric": "train_loss",
+      "contrast": "tfim (contextual) vs ising_x0 (noncontextual)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.00020358804938655495,
+      "seeds_favouring_first": 4,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_5q",
+      "metric": "train_loss",
+      "contrast": "tfim (contextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 0.00010154871193457371,
+      "seeds_favouring_first": 3,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_5q",
+      "metric": "train_loss",
+      "contrast": "ising_x0 (noncontextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": -2.0701913601539612e-05,
+      "seeds_favouring_first": 2,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_5q",
+      "metric": "train_loss",
+      "contrast": "random contextual vs random noncontextual (means of 3 sets)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": -0.0001863462420313433,
+      "seeds_favouring_first": 2,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_7q",
+      "metric": "validation_accuracy_linear",
+      "contrast": "tfim (contextual) vs ising_x0 (noncontextual)",
+      "unit": "accuracy points",
+      "median_advantage_of_first": 1.2000000000000028,
+      "seeds_favouring_first": 3,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_7q",
+      "metric": "validation_accuracy_linear",
+      "contrast": "tfim (contextual) vs ising (commuting)",
+      "unit": "accuracy points",
+      "median_advantage_of_first": 1.8000000000000043,
+      "seeds_favouring_first": 3,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_7q",
+      "metric": "validation_accuracy_linear",
+      "contrast": "ising_x0 (noncontextual) vs ising (commuting)",
+      "unit": "accuracy points",
+      "median_advantage_of_first": -1.000000000000007,
+      "seeds_favouring_first": 2,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_7q",
+      "metric": "validation_accuracy_linear",
+      "contrast": "random contextual vs random noncontextual (means of 3 sets)",
+      "unit": "accuracy points",
+      "median_advantage_of_first": -1.9333333333333371,
+      "seeds_favouring_first": 1,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_7q",
+      "metric": "train_loss",
+      "contrast": "tfim (contextual) vs ising_x0 (noncontextual)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 6.405507073362071e-05,
+      "seeds_favouring_first": 4,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_7q",
+      "metric": "train_loss",
+      "contrast": "tfim (contextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": 1.1766143368979742e-05,
+      "seeds_favouring_first": 3,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_7q",
+      "metric": "train_loss",
+      "contrast": "ising_x0 (noncontextual) vs ising (commuting)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": -1.4169725168489133e-05,
+      "seeds_favouring_first": 2,
+      "n_seeds": 5
+    },
+    {
+      "task": "fig8_7q",
+      "metric": "train_loss",
+      "contrast": "random contextual vs random noncontextual (means of 3 sets)",
+      "unit": "decades of loss",
+      "median_advantage_of_first": -4.599402324134694e-05,
+      "seeds_favouring_first": 0,
+      "n_seeds": 5
+    }
+  ]
+}

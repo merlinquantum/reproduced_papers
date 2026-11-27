@@ -1,0 +1,13 @@
+# Dependencies of the fermi_dirac_neurons reproduction (arXiv:2605.24386).
+# Versions are those of the environment used for the reproduction (2026-11-09).
+# The paper code itself imports only numpy and scipy; torch is required by the
+# shared runtime (runtime_lib.dtypes); matplotlib is used by plotting utilities;
+# pytest runs the tests. merlinquantum (with perceval-quandela) is the photonic
+# simulator of the Phase 4 adaptation (lib/photonic.py).
+numpy>=2.0  # used: 2.5.3
+scipy>=1.11  # used: 1.18.1
+torch  # used: 2.14.1 (shared runtime; autograd of the MerLin models)
+merlinquantum==0.4.1  # used: 0.4.1 (Phase 4 photonic neuron)
+perceval-quandela>=1.2.1  # used: 1.2.4 (required by merlinquantum)
+matplotlib  # used: 3.11.1
+pytest  # used: 9.1.1

@@ -1,0 +1,26 @@
+{
+  "description": "Phase 4 E13 (X2): MerLin gradient variance, N=3 photons in m=20 modes",
+  "experiment": {
+    "task": "photonic_gradient_variance",
+    "id": "p4_grad_m20_n3"
+  },
+  "photonic_gradient_variance": {
+    "n_modes": 20,
+    "n_photons": 3,
+    "draws": 200,
+    "energy_ranges": [
+      0.5,
+      3.141592653589793
+    ],
+    "temperatures": [
+      0.5,
+      2.0
+    ],
+    "inputs": [
+      "fock_first",
+      "haar_interferometer",
+      "haar_full"
+    ],
+    "target_range": 2.0
+  }
+}

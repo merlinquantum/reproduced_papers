@@ -1,0 +1,44 @@
+{
+  "description": "Lightweight smoke default: Fig. 7a setup (squared loss, tanh, TFIM vs IM, 2 qubits, notebook state set) for 50 epochs instead of 2000",
+  "seed": 0,
+  "dtype": "float64",
+  "outdir": "outdir",
+  "data_root": "../../data",
+  "device": "cpu",
+  "experiment": {
+    "task": "train",
+    "id": "smoke_fig7_tanh_2q",
+    "run_id": null,
+    "sweep_id": null,
+    "repetition": 0
+  },
+  "physics": {
+    "temperature": 2.0
+  },
+  "data": {
+    "n_qubits": 2,
+    "train_states": {"set": "code_squared_loss"},
+    "validation_states": {"set": "haar", "n_states": 500},
+    "label_rule": "regression",
+    "target": {
+      "term_set": "tfim",
+      "include_identity": true,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "tanh"
+    }
+  },
+  "models": [
+    {"name": "quantum_tfim", "kind": "hamiltonian", "term_set": "tfim", "include_identity": true, "activation": "tanh"},
+    {"name": "classical_im", "kind": "hamiltonian", "term_set": "ising", "include_identity": true, "activation": "tanh"}
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 0.1,
+    "epochs": 50,
+    "eval_every": 10,
+    "init_low": -0.5,
+    "init_high": 0.5
+  },
+  "logging": {"level": "info", "save_config_snapshot": true}
+}

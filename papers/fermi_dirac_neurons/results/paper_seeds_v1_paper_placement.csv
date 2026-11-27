@@ -1,0 +1,57 @@
+config,model,metric,paper_value,paper_source,our_median,our_min,our_max,our_seeds_below_paper,inside_our_range
+fig7_tanh_2q_original,quantum_tfim,train_loss,3.822446684739061e-05,released CSV,1.2466843266260943e-05,1.0328209973501117e-16,0.00032029974800034153,7,True
+fig7_tanh_2q_original,classical_im,train_loss,0.011726541376201436,released CSV,0.08255719553653289,0.03195800168197791,0.13378500976255678,0,False
+fig7_tanh_7q_original,quantum_tfim,train_loss,0.0007408840424217868,released CSV,0.0011883720393791638,0.0006523523638916481,0.0020530795292514597,1,True
+fig7_tanh_7q_original,classical_im,train_loss,0.16336747487159878,released CSV,0.14318322430556318,0.11125148241109874,0.19642747193272242,7,True
+fig7_softplus_2q_original,quantum_tfim,train_loss,0.00010828548310926838,released CSV,0.003925521920242755,0.00011996504234373473,0.021590382126622322,0,False
+fig7_softplus_2q_original,classical_im,train_loss,0.8167294244894907,released CSV,0.15905673592114317,0.03749961878321724,7.050420757071383,8,True
+fig7_softplus_7q_original,quantum_tfim,train_loss,5.170230972805625,released CSV,7.476515787744046,0.6959799051947422,194.34269928165816,2,True
+fig7_softplus_7q_original,classical_im,train_loss,16.202685775524007,released CSV,62.23460266374814,5.240033005524717,1078.8922038496457,2,True
+fig8_logistic_2q_original,quantum_heisenberg,train_loss,1.2540106854712207,released CSV,1.2459264751926789,1.237364168499649,1.2665576248467443,7,True
+fig8_logistic_2q_original,quantum_heisenberg,validation_accuracy_linear,0.95,"released CSV, last logged",0.961,0.946,0.976,1,True
+fig8_logistic_2q_original,quantum_heisenberg,validation_accuracy_linear,0.9520000000000001,Table II,0.961,0.946,0.976,3,True
+fig8_logistic_2q_original,classical_fcim,train_loss,1.3210036005048196,released CSV,1.3402359973987052,1.3185183062746706,1.3667542411254672,1,True
+fig8_logistic_2q_original,classical_fcim,validation_accuracy_linear,0.772,"released CSV, last logged",0.7050000000000001,0.632,0.76,10,False
+fig8_logistic_2q_original,classical_fcim,validation_accuracy_linear,0.64,Table II,0.7050000000000001,0.632,0.76,2,True
+fig8_logistic_3q_original,quantum_heisenberg,train_loss,1.30765156924156,released CSV,1.3117271777701682,1.3080909289172933,1.3144543113327587,0,False
+fig8_logistic_3q_original,quantum_heisenberg,validation_accuracy_linear,0.936,"released CSV, last logged",0.95,0.936,0.972,0,True
+fig8_logistic_3q_original,quantum_heisenberg,validation_accuracy_linear,0.976,Table II,0.95,0.936,0.972,10,False
+fig8_logistic_3q_original,classical_fcim,train_loss,1.339296886875163,released CSV,1.3634522788517007,1.344009282549686,1.3770593329709122,0,False
+fig8_logistic_3q_original,classical_fcim,validation_accuracy_linear,0.772,"released CSV, last logged",0.6779999999999999,0.59,0.768,10,False
+fig8_logistic_3q_original,classical_fcim,validation_accuracy_linear,0.6579999999999999,Table II,0.6779999999999999,0.59,0.768,2,True
+fig8_logistic_4q_original,quantum_heisenberg,train_loss,1.3457353789432263,released CSV,1.3485354090141155,1.345758816311121,1.3511192781955566,0,False
+fig8_logistic_4q_original,quantum_heisenberg,validation_accuracy_linear,0.964,"released CSV, last logged",0.944,0.908,0.96,10,False
+fig8_logistic_4q_original,quantum_heisenberg,validation_accuracy_linear,0.968,Table II,0.944,0.908,0.96,10,False
+fig8_logistic_4q_original,classical_fcim,train_loss,1.369312559265601,released CSV,1.373940163955396,1.369350156577175,1.3803749564094483,0,False
+fig8_logistic_4q_original,classical_fcim,validation_accuracy_linear,0.718,"released CSV, last logged",0.698,0.602,0.76,8,True
+fig8_logistic_4q_original,classical_fcim,validation_accuracy_linear,0.6859999999999999,Table II,0.698,0.602,0.76,4,True
+fig8_logistic_5q_original,quantum_heisenberg,train_loss,1.3670703122495766,released CSV,1.3665445734949624,1.3652187220326115,1.3675044060777624,8,True
+fig8_logistic_5q_original,quantum_heisenberg,validation_accuracy_linear,0.924,"released CSV, last logged",0.928,0.902,0.952,4,True
+fig8_logistic_5q_original,quantum_heisenberg,validation_accuracy_linear,0.922,Table II,0.928,0.902,0.952,4,True
+fig8_logistic_5q_original,classical_fcim,train_loss,1.3797457470330419,released CSV,1.3797471833854555,1.3776038943212394,1.3829827465952211,5,True
+fig8_logistic_5q_original,classical_fcim,validation_accuracy_linear,0.7239999999999999,"released CSV, last logged",0.697,0.618,0.758,9,True
+fig8_logistic_5q_original,classical_fcim,validation_accuracy_linear,0.638,Table II,0.697,0.618,0.758,1,True
+fig8_logistic_6q_original,quantum_heisenberg,train_loss,1.3760605979766862,released CSV,1.3765206753309407,1.3758531140693968,1.3769967105364929,3,True
+fig8_logistic_6q_original,quantum_heisenberg,validation_accuracy_linear,0.932,"released CSV, last logged",0.91,0.894,0.94,8,True
+fig8_logistic_6q_original,quantum_heisenberg,validation_accuracy_linear,0.912,Table II,0.91,0.894,0.94,6,True
+fig8_logistic_6q_original,classical_fcim,train_loss,1.3823550928483663,released CSV,1.3830706070783856,1.3818702677536008,1.3840166446303952,1,True
+fig8_logistic_6q_original,classical_fcim,validation_accuracy_linear,0.69,"released CSV, last logged",0.668,0.616,0.718,8,True
+fig8_logistic_6q_original,classical_fcim,validation_accuracy_linear,0.736,Table II,0.668,0.616,0.718,10,False
+fig8_logistic_7q_original,quantum_heisenberg,train_loss,1.381844321033742,released CSV,1.3816479500488554,1.3813778896832656,1.3822141123642475,9,True
+fig8_logistic_7q_original,quantum_heisenberg,validation_accuracy_linear,0.878,"released CSV, last logged",0.883,0.858,0.904,2,True
+fig8_logistic_7q_original,quantum_heisenberg,validation_accuracy_linear,0.91,Table II,0.883,0.858,0.904,10,False
+fig8_logistic_7q_original,classical_fcim,train_loss,1.3852636257974653,released CSV,1.384816392855757,1.3843358107225319,1.3852262581315236,10,False
+fig8_logistic_7q_original,classical_fcim,validation_accuracy_linear,0.616,"released CSV, last logged",0.664,0.598,0.7,1,True
+fig8_logistic_7q_original,classical_fcim,validation_accuracy_linear,0.696,Table II,0.664,0.598,0.7,9,True
+fig9_tfim_2q_original,quantum_tfim_tanh,train_loss,8.4e-30,Fig. 9 pixel reading,1.85244027509966e-13,4.9161584057343106e-30,1.4374648129928946e-05,1,True
+fig9_tfim_2q_original,quantum_tfim_linear,train_loss,0.0013,Fig. 9 pixel reading,0.0023393744351803305,1.2819483658551615e-05,0.024702286232874897,5,True
+fig9_tfim_2q_original,classical_ising,train_loss,0.042,Fig. 9 pixel reading,0.08255719439690892,0.031957985288572,0.13378500976255678,2,True
+fig9_tfim_3q_original,quantum_tfim_tanh,train_loss,3.9e-23,Fig. 9 pixel reading,3.155672835475453e-07,2.337317493324667e-15,7.046168857744657e-06,0,False
+fig9_tfim_3q_original,quantum_tfim_linear,train_loss,0.0037,Fig. 9 pixel reading,0.00275259068188605,0.0011836538083786082,0.01947592533384727,6,True
+fig9_tfim_3q_original,classical_ising,train_loss,0.11,Fig. 9 pixel reading,0.12498105629949866,0.059099297871683776,0.18649251621175203,4,True
+fig9_heis_2q_original,quantum_heis_tanh,train_loss,2.3e-05,Fig. 9 pixel reading,8.657099146703496e-05,3.1800263643361436e-05,0.0004984253604984946,0,False
+fig9_heis_2q_original,quantum_heis_linear,train_loss,4.6e-05,Fig. 9 pixel reading,0.004731016240896193,8.711192867865642e-05,0.017639382090733673,0,False
+fig9_heis_2q_original,classical_fcim,train_loss,0.12,Fig. 9 pixel reading,0.08712291257359374,0.06185916134753089,0.1302744586152734,9,True
+fig9_heis_3q_original,quantum_heis_tanh,train_loss,2.6e-05,Fig. 9 pixel reading,0.0003210782390644457,9.36290107504362e-05,0.0009003395541647599,0,False
+fig9_heis_3q_original,quantum_heis_linear,train_loss,0.0012,Fig. 9 pixel reading,0.00795216500858563,0.0046267518199179635,0.017774242186417686,0,False
+fig9_heis_3q_original,classical_fcim,train_loss,0.055,Fig. 9 pixel reading,0.09668619846718463,0.022221174972579832,0.14071017322284174,2,True

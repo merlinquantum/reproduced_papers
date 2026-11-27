@@ -1,0 +1,30 @@
+{
+  "sweep_id": "p4_kerr_v1",
+  "description": "Phase 4 E13-K (NOT MerLin): dense Fock-space gradient variance, passive H plus cross-Kerr chain, kappa in {0, 0.5, 2}.",
+  "configs": [
+    "p4_kerr_m10_n2",
+    "p4_kerr_m10_n3",
+    "p4_kerr_m10_n5",
+    "p4_kerr_m12_n2",
+    "p4_kerr_m12_n3",
+    "p4_kerr_m3_n2",
+    "p4_kerr_m3_n3",
+    "p4_kerr_m4_n2",
+    "p4_kerr_m4_n3",
+    "p4_kerr_m6_n2",
+    "p4_kerr_m6_n3",
+    "p4_kerr_m8_n2",
+    "p4_kerr_m8_n3",
+    "p4_kerr_m8_n4"
+  ],
+  "seeds": [
+    0
+  ],
+  "max_workers": 1,
+  "plan": {
+    "decision_rule": "see LOG.md 'Phase 4 Adaptation Plan' (X2(c): slope difference kappa vs 0 > 2 combined SE); NOT MerLin",
+    "selection": "none",
+    "expected_runs": 14,
+    "memory_budget_gib": 1.5
+  }
+}

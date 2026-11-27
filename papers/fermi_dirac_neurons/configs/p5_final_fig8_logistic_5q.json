@@ -1,0 +1,62 @@
+{
+  "description": "Phase 5 stage B: fig8_logistic_5q, each model at its selected learning rate (b2_pauli_features 100, classical_fcim 0.1, quantum_heisenberg 1)",
+  "experiment": {
+    "task": "train",
+    "id": "p5_final_fig8_logistic_5q"
+  },
+  "data": {
+    "n_qubits": 5,
+    "train_states": {
+      "set": "haar",
+      "n_states": 1000
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "sign_linear",
+    "target": {
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "linear"
+    },
+    "selection_fraction": 0.2
+  },
+  "models": [
+    {
+      "name": "quantum_heisenberg",
+      "kind": "hamiltonian",
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "activation": "tanh",
+      "learning_rate": 1.0
+    },
+    {
+      "name": "classical_fcim",
+      "kind": "hamiltonian",
+      "term_set": "fcim",
+      "include_identity": false,
+      "activation": "tanh",
+      "learning_rate": 0.1
+    },
+    {
+      "name": "b2_pauli_features",
+      "kind": "pauli_features",
+      "term_set": "heisenberg",
+      "include_identity": false,
+      "activation": "tanh",
+      "learning_rate": 100.0
+    }
+  ],
+  "training": {
+    "loss": "logistic",
+    "learning_rate": 1,
+    "epochs": 500,
+    "eval_every": 20,
+    "init_low": -0.5,
+    "init_high": 0.5,
+    "on_nonfinite": "freeze"
+  }
+}

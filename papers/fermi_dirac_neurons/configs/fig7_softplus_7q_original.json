@@ -1,0 +1,49 @@
+{
+  "description": "Fig. 7d: squared loss, softplus, TFIM (quantum) vs IM (classical), 7 qubits, notebook protocol",
+  "experiment": {
+    "task": "train",
+    "id": "fig7_softplus_7q"
+  },
+  "data": {
+    "n_qubits": 7,
+    "train_states": {
+      "set": "code_squared_loss"
+    },
+    "validation_states": {
+      "set": "haar",
+      "n_states": 500
+    },
+    "label_rule": "regression",
+    "target": {
+      "term_set": "tfim",
+      "include_identity": true,
+      "low": -2.0,
+      "high": 2.0,
+      "function": "exp"
+    }
+  },
+  "models": [
+    {
+      "name": "quantum_tfim",
+      "kind": "hamiltonian",
+      "term_set": "tfim",
+      "include_identity": true,
+      "activation": "softplus_code"
+    },
+    {
+      "name": "classical_im",
+      "kind": "hamiltonian",
+      "term_set": "ising",
+      "include_identity": true,
+      "activation": "softplus_code"
+    }
+  ],
+  "training": {
+    "loss": "squared",
+    "learning_rate": 0.1,
+    "epochs": 2000,
+    "eval_every": 100,
+    "init_low": -0.5,
+    "init_high": 0.5
+  }
+}

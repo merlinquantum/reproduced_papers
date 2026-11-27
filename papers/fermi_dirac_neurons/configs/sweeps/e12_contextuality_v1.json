@@ -1,0 +1,19 @@
+{
+  "sweep_id": "e12_contextuality_v1",
+  "description": "E12 (extension X3, amended): Kirby-Love invariance test and graded contextual fraction vs temperature.",
+  "configs": [
+    "e12_graded_heisenberg",
+    "e12_graded_tfim",
+    "e12_invariance"
+  ],
+  "seeds": [
+    0
+  ],
+  "max_workers": 2,
+  "plan": {
+    "expected_runs": 3,
+    "metric": "(a) whether the Kirby-Love flag of the 1e-8 support of phi(H) ever differs from the flag of the term set over the T grid; (b) epsilon-support size, flag and greedy contextual fraction vs T",
+    "decision_rule": "(a) the invariance claim is refuted by a single noncontextual set whose support becomes contextual at some T, for any activation; (b) report medians over 20 draws per (family, n, epsilon, T); the contextual fraction is an upper bound (greedy)",
+    "selection": "none"
+  }
+}
